@@ -1,0 +1,180 @@
+## ICE
+
+Ralph Mor, of the X Consortium is the original author.
+OS/2 support, Holger Veit, bug fixes by Keith Packard, Petter Reinholdtsen,
+others.
+
+## Xtrans
+
+Contributors to this package include The Open Group (another words, the
+X Consortium), NCR Corporation, Sebastien Marineau and Holger Veit
+(OS/2 support), Sun Microsystems, David Dawes, Egbert Eich, Alan Coopersmith
+Marc La France, J. Kean Johnston, Frank Giessler, Jean-Claude Michot, and
+Matthieu Herrb.
+
+## Xdmcp
+
+Keith Packard, MIT X Consortium
+Significant contributions by David Rosenthal of Sun who examined the protocol
+for security issues.
+GNU/Hurd support, Marcus Brinkmann
+
+## Xcursor
+
+Keith Packard, HP
+
+## Xpm
+
+Xpm was originally written by Groupe Bull, but maintenance has since passed
+through the hands of XFree86, and to freedesktop.org; Daniel Stone is the
+current maintainer.
+
+## SM
+
+Author: Ralph Mor, X Consortium.
+Some bug fixes by Keith Packard.
+OS/2 support, Frank Giessler
+IPv6 support, Alan Coopersmith
+David Dawes and Dirk Hohndel - bug fixes
+
+## Xft
+
+Keith Packard, of SuSE and HP
+Automake work by Noah Levitt
+Frank Giessler - OS/2
+Jungshik Shin - UTF-16 api's
+Ralf Habacker, Suhaib Siddiqi - Cygwin port
+Marc La France - Sun port
+David Dawes - bug fixes, maintenance.
+
+## Xau
+
+Keith Packard, X Consortium
+Some bug fixes, but not clear from where.
+
+## X11
+
+Once upon a midnight hour, long ago, in a galaxy, far, far, away, Xlib
+was originally developed by Jim Gettys, of Digital Equipment
+Corporation (now part of HP).
+
+Warren Turkal did the autotooling in October, 2003.
+
+Josh Triplett, Jamey Sharp, and the XCB team (xcb@lists.freedesktop.org)
+maintain the XCB support.
+
+Individual developers include (in no particular order): Sebastien
+Marineau, Holger Veit, Bruno Haible, Keith Packard, Bob Scheifler,
+Takashi Fujiwara, Kazunori Nishihara, Hideki Hiura, Hiroyuki Miyamoto,
+Katsuhisi Yano, Shigeru Yamada, Stephen Gildea, Li Yuhong, Seiji Kuwari.
+
+The specifications and documentation contain extensive credits.
+Conversion of those documents from troff to DocBook/XML was performed
+by Matt Dew, with assistance in editing & formatting tool setup from
+Gaetan Nadon and Alan Coopersmith.
+
+This work was supported by many organizations (in no particular
+order), including the X Consortium, Digital Equipment Corporation,
+Tektronix, The Open Group, OMRON, Wyse Technology, Fujitsu Limited,
+Sun Microsystems, Fuji Xerox, Sony Corporation, Toshiba Corporation,
+Massachusetts Institute of Technology, Silicon Graphics, the XFree86
+Project, among others.  Patches/fixes came from all over.
+
+## Xdamage
+
+Keith Packard, HP
+Eric Anholt, Intel
+
+## Xrender
+
+Keith Packard, of SuSE, XFree86 and Hewlett-Packard
+Noah Levitt, autotooling.
+
+## Xext
+
+Extension	Authors/Affiliation
+---------	-------------------
+DPMS: 		Rob Lembree, Digital Equipment Corporation
+MITMisc: 	Bob Scheifler, MIT
+XAppgroup: 	Kaleb S. Keithley, X Consortium
+Xcup: 		Kaleb S, Keithley, The Open Group
+Xdbe: 		Ian Elliot, Hewlett-Packard, David Wiggens, X Consortium
+XEVI: 		Peter Daifuku, Silicon Graphics
+XLbx: 		D. Converse, J Fulton, C. Kantarjiev, D. Lemke, R. Mor,
+		    Keith Packard, NCD (who now believes lbx should be nuked),
+		    R. Tice, D. Tonogai
+XMultibuf: 	Jeffrey Friedberg, Larry Seiler, Jeff Vroom, Digital Equipment
+XSecurity: 	Dave Wiggens, X Consortium
+XShape: 	Jonathan Corbet, NCAR, Keith Packard, MIT X Consortium
+Xshm: 		Bob Scheifler and Keith Packard, MIT X Consortium
+XSync: 		Tim Glauert, Olivetti Research, DAve Carver, Jim Gettys,
+		    Digital Equipment, Dave Wiggens, X Consortium
+XTestExt: 	Kieron Drake, UniSoft, Ltd.
+
+## Xrandr
+
+Jim Gettys, Compaq and Hewlett-Packard
+Keith Packard, SuSE and Hewlett-Packard
+
+## Xfixes
+
+Keith Packard, HP and XFree86.
+
+## Xv
+
+David Carver (Digital Workstation Engineering/Project Athena)
+Mark Vojkovich (XFree86 Project)
+
+## Xcomposite
+
+Keith Packard, HP
+
+## Xres
+
+Mark Vojkovich, XFree86
+
+## Xfont
+
+Keith Packard, MIT X Consortium and SuSE, Inc.
+Dave Lemke, Network Computing Devices (font server)
+Mark Leisher, Juliusz Chroboczek, (Freetype)
+Digital Equipment Corporation (bitmap) (Phil Karlton or Susan Angebrandt???)
+Shunsuke Akiyama (TrueType)
+
+## Xproto
+
+The architect of the X11 core protocol was Bob Scheifler of MIT LCS, with
+significant contributions from Jim Gettys, Phil Karlton and Scott
+McGregor of Digital, Dave Rosenthal of Sun, and many others of
+the xpert mailing list.
+
+The original sample server implementation of the X11 protocol was
+implemented by Phil Karlton and Susan Angebrandt doing the device
+independent part of the server, with Raymond Drewry and Todd Newman of
+Digital Equipment Corporation, doing the mi and original ddx
+implementation; their feedback was vital to a good design, along with
+that of the more than 100 alpha and beta testers who bravely tested
+the X11 core design.
+
+The X11 protocol library (Xlib) was built principally by Jim Gettys of
+Digital and MIT Project Athena, with assistance from Ron Newman of MIT
+Project Athena.
+
+Our thanks to those at MIT, Digital Equipment Corporation, Hewlett-Packard,
+IBM, and many others who had faith in us reimplementing X from first
+principles.
+
+If there are mistakes here, they are mine; entirely possible after
+over 15 years. - Jim Gettys
+
+The above is a description of the core protocol, inherited from the merge of
+the various per-protocol repos into this unified project. The LG3D protocol was
+by Deron Johnson at Sun Microsystems. XFIXES, DAMAGE and COMPOSITE were by
+Keith Packard at HP; DAMAGE had additional contributions from Eric Anholt at
+Intel. The remaining extensions had no AUTHORS file; contributions for correct
+attribution here would be most welcome. - Adam Jackson
+
+
+P.S. Our apologies if there are any mistakes in the abovehave or we are 
+inadvertently overlooked anyone. No doubt we've missed credits.
+Please let us know who should be credited.

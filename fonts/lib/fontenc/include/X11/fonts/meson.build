@@ -1,0 +1,1 @@
+inc_fonts_fontenc += include_directories('.')
