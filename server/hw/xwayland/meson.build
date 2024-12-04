@@ -141,7 +141,7 @@ xwayland_server = executable(
         common_dep,
         epoll_dep,
         xwayland_dep,
-        xwaylandproto_dep,
+        xproto,
     ],
     link_with: [
         libxserver_main,
