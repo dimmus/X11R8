@@ -1,9 +1,6 @@
 
 
-		     A Sample Authorization Protocol for X
-
-
-Overview
+# A Sample Authorization Protocol for X
 
 The following note describes a very simple mechanism for providing individual
 access to an X Window System display.  It uses existing core protocol and
@@ -42,7 +39,7 @@ This mechanism assumes that the superuser and the transport layer between
 the client and the server is secure.
 
 
-Description
+## Description
 
 The sample implementation will use the xdm Display Manager to set up and
 control the server's authorization file.  Sites that do not run xdm will
@@ -98,7 +95,7 @@ the link will fail, indicating failure to obtain the lock.  Linking is used
 instead of just creating the file read-only since link will fail even for
 the superuser.
 
-Problems and Solutions
+## Problems and Solutions
 
 There are a few problems with .Xauthority as described.  If no home directory
 exists, or if xdm cannot create a file there (disk full), xdm stores the
@@ -111,7 +108,7 @@ as a last resort, provides a function key binding that allows a user to log
 in without having the authorization data stored, and with host-based access
 control disabled.
 
-Xlib
+## Xlib
 
 XOpenDisplay in Xlib was enhanced to allow specification of authorization
 information.  As implied above, Xlib looks for the data in the
