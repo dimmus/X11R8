@@ -1,6 +1,6 @@
-project('xorg', 'c', 
+project('X Window System', 'c', 
     license : 'MIT', 
-    version : '21.1.99.1', # xserver
+    version : '11.8.1',
     meson_version : '>=0.59.0',
     # 0.56.0
     # 0.58.0: {'format strings'}
