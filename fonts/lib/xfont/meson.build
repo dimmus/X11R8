@@ -19,10 +19,6 @@ f_check += ['poll', 'readlink', 'strlcat']
 h_check += ['endian.h', 'poll.h', 'sys/poll.h', 'err.h', 'float.h']
 # TODO: AC_REPLACE_FUNCS([reallocarray realpath strlcat strlcpy])
 
-# dep_hypot = dependency('hypot', required: false)
-dep_zlib = dependency('zlib')
-dep_bzip2 = dependency('bzip2')
-dep_freetype2 = dependency('freetype2')
 dep_ext_xfont = [dep_m, dep_freetype2, dep_zlib, dep_bzip2]
 dep_int_xfont = [xproto, libxtrans, libfontenc]
 

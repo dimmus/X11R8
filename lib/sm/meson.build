@@ -8,7 +8,6 @@ inc_sm = [
 
 f_check += ['uuid_create']
 
-dep_uuid = dependency('uuid', required: false)
 dep_ext_sm = [dep_uuid]
 dep_int_sm = [xproto, libxtrans, libice]
 

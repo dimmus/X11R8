@@ -15,9 +15,6 @@ inc_xft = [
   include_directories('include/X11/Xft'),
 ]
 
-dep_freetype2 = dependency('freetype2', version: '>= 2.1.6')
-dep_fontconfig = dependency('fontconfig', version: '>= 2.5.92')
-
 dep_ext_xft = [dep_freetype2, dep_fontconfig]
 dep_int_xft = [libxrender, libx11, xproto]
 

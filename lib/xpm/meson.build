@@ -41,8 +41,7 @@ if get_option('stat-zfile')
   lib_args += ['-DSTAT_ZFILE']
 endif
 
-dep_xt = dependency('xt')
-dep_ext_xpm = [libx11, xproto, dep_xt, libxext]
+dep_int_xpm = [libx11, xproto, libxext, libxt]
 
 dep_gettext = dependency('gettext', required: false)
 if dep_gettext.found()
@@ -84,21 +83,21 @@ src = files(
 lib = library('Xpm', src,
   c_args : lib_args,
   include_directories : inc_xpm,
-  dependencies : dep_ext_xpm,
+  dependencies : dep_int_xpm,
   version : '4.11.0',
   install : true,
 )
 
 executable('cxpm', 'cxpm/cxpm.c',
-  dependencies : dep_ext_xpm,
+  dependencies : dep_int_xpm,
   c_args : lib_args,
   include_directories : inc_xpm,
-  # link_with : lib,
 )
 
 if get_option('build-sxpm')
-  executable('sxpm', 'sxpm/sxpm.c',
-    dependencies : dep_ext_xpm,
+  executable('sxpm',
+    'sxpm/sxpm.c',
+    dependencies : dep_int_xpm,
     c_args : lib_args,
     include_directories : inc_xpm,
     link_with : lib,
@@ -124,5 +123,4 @@ pkg.generate(lib,
   requires : 'x11',
 )
 
-# TODO: implement
-# subdir('test')
+# subdir('test') # TODO: implement

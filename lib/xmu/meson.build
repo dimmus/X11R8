@@ -8,8 +8,8 @@ inc_xmu = [
 
 f_check += ['uname']
 
-dep_ext_xmu = [libxt, libxext, libx11, xproto]
-dep_ext_xmuu = [libx11]
+dep_int_xmu = [libxt, libxext, libx11, xproto]
+dep_int_xmuu = [libx11]
 
 # TODO: need?
 # AC_REPLACE_FUNCS([reallocarray])
@@ -103,7 +103,7 @@ src_mu = src_muu + files(
 lib_muu = library('Xmuu', src_muu,
   c_args : lib_args,
   include_directories : inc_xmu,
-  dependencies : dep_ext_xmu,
+  dependencies : dep_int_xmu,
   version : '1.0.0',
   install : true,
 )
@@ -116,7 +116,7 @@ libxmuu = declare_dependency(
 lib_mu = library('Xmu', src_mu,
   c_args : lib_args,
   include_directories : inc_xmu,
-  dependencies : dep_ext_xmu,
+  dependencies : dep_int_xmu,
   version : '6.2.0',
   install : true,
 )

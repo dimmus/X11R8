@@ -42,7 +42,6 @@ if get_option('composecache')
   lib_args += '-DCOMPOSECACHE' # Include compose table cache support
 endif
 
-dep_xcb = dependency('xcb', version: '>= 1.11.1')
 dep_ext_x11 = [dep_xcb]
 dep_int_x11 = [xproto, libxtrans]
 

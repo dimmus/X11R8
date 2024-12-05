@@ -78,13 +78,21 @@ dir_include = dir_prefix / get_option('includedir')
 dir_lib     = dir_prefix / get_option('libdir')
 dir_man     = dir_prefix / get_option('mandir')
 
-dep_m  = cc.find_library('m',  required : false) # libxcvt
-dep_dl = cc.find_library('dl', required : false) # xvmc, xserver
+dep_m           = cc.find_library('m',  required : false) # libxcvt
+dep_dl          = cc.find_library('dl', required : false) # xvmc, xserver
+dep_zlib        = dependency('zlib') # xfont
+dep_bzip2       = dependency('bzip2') # xfont
+dep_freetype2   = dependency('freetype2') # xfont
+dep_zlib        = dependency('zlib') # fontenc
+dep_xcb         = dependency('xcb', version: '>= 1.11.1') # x11
+dep_uuid        = dependency('uuid', required: false) # sm
+dep_freetype2   = dependency('freetype2', version: '>= 2.1.6') # xft
+dep_fontconfig  = dependency('fontconfig', version: '>= 2.5.92') # xft
 
 WITH_UNIT_TESTS = false
 
 python = import('python').find_installation()
-pkg = import('pkgconfig')
+pkg    = import('pkgconfig')
 
 conf = configuration_data()
 inc_config = include_directories('.')
@@ -120,25 +128,14 @@ subdir('lib' / 'xaw') # <- xext
 subdir('extensions')
 subdir('server')
 
-MESON_NEWER_053 = meson.version().version_compare('>=0.53.0')
-MESON_NEWER_056 = meson.version().version_compare('>=0.56.0')
+dir_build  = meson.project_build_root()
+dir_source = meson.project_source_root()
 
-if MESON_NEWER_056
-    dir_build  = meson.project_build_root()
-    dir_source = meson.project_source_root()
-else
-    dir_build  = meson.build_root()
-    dir_source = meson.source_root()
-endif
-
-FIRST_RUN = false
-if MESON_NEWER_053
-  fs = import('fs')
-  FIRST_RUN = not fs.is_dir(dir_build / 'src')
-endif
+fs = import('fs')
+FIRST_RUN = not fs.is_dir(dir_build / 'src')
 
 # switch that off when run meson reconfigure
-if (FIRST_RUN and MESON_NEWER_053) or not MESON_NEWER_053
+if FIRST_RUN
   f_unique = []
   foreach f : f_check
     if not f_unique.contains(f)

@@ -8,7 +8,7 @@ inc_ice = [
 
 f_check += ['asprintf', 'arc4random_buf', 'getentropy']
 
-dep_ext_ice = [xproto, libxtrans]
+dep_int_ice = [xproto, libxtrans]
 
 lib_args = ['-DICE_t', '-DTRANS_CLIENT', '-DTRANS_SERVER']
 
@@ -39,7 +39,7 @@ src = files(
 lib = library('ICE', src,
   c_args : lib_args,
   include_directories : inc_ice,
-  dependencies : dep_ext_ice,
+  dependencies : dep_int_ice,
   version : '6.3.0',
   install : true,
 )

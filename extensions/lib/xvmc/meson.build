@@ -10,8 +10,6 @@ if cc.has_function('shmat')
   conf.set('HAVE_SHMAT', true)
 endif
 
-dep_dl = cc.find_library('dl', required : false)
-
 dep_ext_xvmc = [dep_dl]
 dep_int_xvmc = [xproto, libx11, libxv, libxext]
 

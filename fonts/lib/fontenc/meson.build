@@ -14,7 +14,6 @@ h_check += ['zlib.h']
 # TODO: add checking for gzclose in -lz. Need?
 # TODO: AC_REPLACE_FUNCS([reallocarray])
 
-dep_zlib = dependency('zlib')
 dep_ext_fontenc = [dep_zlib]
 dep_int_fontenc = [xproto]
 

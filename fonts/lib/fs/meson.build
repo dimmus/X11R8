@@ -11,7 +11,7 @@ lib_args = ['-DFS_t', '-DTRANS_CLIENT']
 f_check += ['strlcpy', 'strnlen']
 # TODO: AC_REPLACE_FUNCS([reallocarray])
 
-dep_ext_xfs = [xproto, libxtrans]
+dep_int_xfs = [xproto, libxtrans]
 
 src = files(
   'src/FSCloseFt.c',
@@ -47,7 +47,7 @@ src = files(
 lib = library('FS', src,
   c_args : lib_args,
   include_directories : [inc_fonts, inc_fonts_fs],
-  dependencies : dep_ext_xfs,
+  dependencies : dep_int_xfs,
   version : '6.0.0',
   install : true,
 )
