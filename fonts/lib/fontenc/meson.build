@@ -1,5 +1,11 @@
 ver_fontenc = '1.1.8'
 
+inc_fonts_fontenc = [
+    include_directories('include'),
+    include_directories('include' / 'X11'),
+    include_directories('include' / 'X11' / 'fonts'),
+]
+
 # TODO: make path with $prefix defined
 conf.set_quoted('FONT_ENCODINGS_DIRECTORY', '/usr/share/fonts/X11/encodings')
 
@@ -12,10 +18,11 @@ dep_zlib = dependency('zlib')
 dep_ext_fontenc = [dep_zlib]
 dep_int_fontenc = [xproto]
 
-inc_fonts_fontenc = []
-
-subdir('include')
-subdir('src')
+src = files(
+  'src/encparse.c',
+  'src/fontenc.c',
+  'src/reallocarray.c',
+)
 
 lib = library('fontenc', src,
   include_directories : [inc_fonts, inc_fonts_fontenc],

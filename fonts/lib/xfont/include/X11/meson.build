@@ -1,1 +1,0 @@
-inc_fonts += include_directories('.')

@@ -1,17 +1,19 @@
 ver_xfont = '2.0.7'
 
-subdir('include')
+inc_fonts_xfont = [
+  include_directories('include'),
+  include_directories('include' / 'X11'),
+  include_directories('include' / 'X11' / 'fonts'),
+  include_directories('src' / 'bitmap'),
+  include_directories('src' / 'builtins'),
+  include_directories('src' / 'fc'),
+  include_directories('src' / 'fontfile'),
+  include_directories('src' / 'FreeType'),
+  include_directories('src' / 'stubs'),
+  include_directories('src' / 'util'),
+]
 
 lib_args = ['-fvisibility=hidden']
-
-inc_fonts += [
-  include_directories('src/bitmap'),
-  include_directories('src/builtins'),
-  include_directories('src/fc'),
-  include_directories('src/FreeType'),
-  include_directories('src/stubs'),
-  include_directories('src/util'),
-]
 
 f_check += ['poll', 'readlink', 'strlcat']
 h_check += ['endian.h', 'poll.h', 'sys/poll.h', 'err.h', 'float.h']
@@ -61,9 +63,24 @@ src = files(
   'src/util/utilbitmap.c',
 )
 
-subdir('src' / 'fontfile')
-
 # if XFONT_FONTFILE
+src += files(
+  'src/fontfile/bitsource.c',
+  'src/fontfile/bufio.c',
+  'src/fontfile/decompress.c',
+  'src/fontfile/defaults.c',
+  'src/fontfile/dirfile.c',
+  'src/fontfile/fileio.c',
+  'src/fontfile/filewr.c',
+  'src/fontfile/fontdir.c',
+  'src/fontfile/fontencc.c',
+  'src/fontfile/fontfile.c',
+  'src/fontfile/fontscale.c',
+  'src/fontfile/gunzip.c',
+  'src/fontfile/register.c',
+  'src/fontfile/renderers.c',
+  'src/fontfile/catalogue.c',
+)
 
 # if X_BZIP2_FONT_COMPRESSION
 src += files(
@@ -145,7 +162,7 @@ src += files(
 
 lib = library('Xfont', src,
   c_args : lib_args,
-  include_directories : inc_fonts,
+  include_directories : [inc_fonts, inc_fonts_xfont],
   dependencies : [dep_int_xfont, dep_ext_xfont],
   version : '2.0.0',
   install : true,
@@ -153,7 +170,7 @@ lib = library('Xfont', src,
 
 libxfont = declare_dependency(
   link_with : lib,
-  include_directories : inc_fonts,
+  include_directories : [inc_fonts, inc_fonts_xfont],
 )
 
 meson.override_dependency('xfont', libxfont)
