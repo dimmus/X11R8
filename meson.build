@@ -8,6 +8,52 @@ project('X Window System', 'c',
     # 0.62.0: {'dep 'dl' custom lookup'}
 )
 
+cc = meson.get_compiler('c')
+
+# if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
+#     test_wflags = [
+#         '-Wall',
+#         '-Wpointer-arith',
+#         '-Wmissing-declarations',
+#         '-Wformat=2',
+#         '-Wstrict-prototypes',
+#         '-Wmissing-prototypes',
+#         '-Wnested-externs',
+#         '-Wbad-function-cast',
+#         '-Wold-style-definition',
+#         '-Wunused',
+#         '-Wuninitialized',
+#         '-Wshadow',
+#         '-Wmissing-noreturn',
+#         '-Wmissing-format-attribute',
+#         '-Wredundant-decls',
+#         '-Werror=implicit',
+#         '-Werror=nonnull',
+#         '-Werror=init-self',
+#         '-Werror=main',
+#         '-Werror=missing-braces',
+#         '-Werror=sequence-point',
+#         '-Werror=return-type',
+#         '-Werror=trigraphs',
+#         '-Werror=array-bounds',
+#         '-Werror=write-strings',
+#         '-Werror=address',
+#         '-Werror=int-to-pointer-cast',
+#         '-Werror=pointer-to-int-cast',
+#     ]
+# else
+    test_wflags = []
+# endif
+
+common_wflags = []
+foreach wflag: test_wflags
+    if cc.has_argument(wflag)
+        common_wflags += [ wflag ]
+    endif
+endforeach
+
+add_project_arguments(common_wflags, language : 'c')
+
 add_project_arguments(
   '-DHAVE_CONFIG_H',
   '-D_GNU_SOURCE',
@@ -25,10 +71,7 @@ add_project_link_arguments(
   language : 'c'
 )
 
-cc = meson.get_compiler('c')
-
 dir_prefix  = get_option('prefix')
-# dir_sysconf = dir_prefix / get_option('sysconfdir')
 dir_bin     = dir_prefix / get_option('bindir')
 dir_data    = dir_prefix / get_option('datadir')
 dir_include = dir_prefix / get_option('includedir')
