@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 				   NULL);
 
     for (i = 0; i < 10; i++){
-	sprintf(buf, "label%02d", i);
+	snprintf(buf, sizeof(buf), "label%02d", i);
 	cmd=XtVaCreateManagedWidget("cmd",
 				    commandWidgetClass,
 				    box, XtNlabel, buf, NULL);

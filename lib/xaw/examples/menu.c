@@ -28,7 +28,7 @@ static void setupmenu(Widget top)
 				button, NULL);
 
     for (i = 1; i < 6; i++) {
-	sprintf(buf, "menuEntry%d", i );
+	snprintf(buf, sizeof(buf), "menuEntry%d", i );
 	(void) XtVaCreateManagedWidget(buf, smeBSBObjectClass, menu, NULL);
 	if (i == 2)
 	    (void) XtVaCreateManagedWidget("menuButton", smeLineObjectClass,

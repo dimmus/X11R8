@@ -704,7 +704,7 @@ GetBitmapInfo(Widget w, Boolean is_left)
 	    if (!XGetGeometry(XtDisplayOfObject(w),
 			    entry->sme_bsb.left_bitmap, &root, &x, &y,
 			    &width, &height, &bw, &entry->sme_bsb.left_depth)) {
-		(void) sprintf(buf, "Xaw SmeBSB Object: %s %s \"%s\".",
+		(void) snprintf(buf, sizeof(buf), "Xaw SmeBSB Object: %s %s \"%s\".",
 			"Could not get Left Bitmap",
 			"geometry information for menu entry",
 			XtName(w));
@@ -712,7 +712,7 @@ GetBitmapInfo(Widget w, Boolean is_left)
 	    }
 #ifdef NEVER
 	    if (entry->sme_bsb.left_depth != 1) {
-		(void) sprintf(buf, "Xaw SmeBSB Object: %s \"%s\" %s.",
+		(void) snprintf(buf, sizeof(buf), "Xaw SmeBSB Object: %s \"%s\" %s.",
 			"Left Bitmap of entry",  XtName(w),
 			"is not one bit deep");
 		XtAppError(XtWidgetToApplicationContext(w), buf);
@@ -729,7 +729,7 @@ GetBitmapInfo(Widget w, Boolean is_left)
 	    if (!XGetGeometry(XtDisplayOfObject(w),
 			    entry->sme_bsb.right_bitmap, &root, &x, &y,
 			    &width, &height, &bw, &entry->sme_bsb.right_depth)) {
-		(void) sprintf(buf, "Xaw SmeBSB Object: %s %s \"%s\".",
+		(void) snprintf(buf, sizeof(buf), "Xaw SmeBSB Object: %s %s \"%s\".",
 			"Could not get Right Bitmap",
 			"geometry information for menu entry",
 			XtName(w));
@@ -737,7 +737,7 @@ GetBitmapInfo(Widget w, Boolean is_left)
 	    }
 #ifdef NEVER
 	    if (entry->sme_bsb.right_depth != 1) {
-		(void) sprintf(buf, "Xaw SmeBSB Object: %s \"%s\" %s.",
+		(void) snprintf(buf, sizeof(buf), "Xaw SmeBSB Object: %s \"%s\" %s.",
 			"Right Bitmap of entry", XtName(w),
 			"is not one bit deep");
 		XtAppError(XtWidgetToApplicationContext(w), buf);

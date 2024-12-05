@@ -1643,7 +1643,7 @@ Multiply(Widget w, XEvent *event, String *params, Cardinal *num_params)
 
   if ( ( mult = atoi( params[0] ) ) == 0 ) {
       char buf[ BUFSIZ ];
-      sprintf(buf, "%s %s", "Xaw Text Widget: multiply() argument",
+      snprintf(buf, sizeof(buf), "%s %s", "Xaw Text Widget: multiply() argument",
 	    "must be a number greater than zero, or 'Reset'." );
       XtAppError( XtWidgetToApplicationContext( w ), buf );
       XBell( XtDisplay( w ), 50 );

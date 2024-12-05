@@ -80,7 +80,7 @@ char *__XOS2RedirRoot1(char *format, char *arg1, char *arg2, char *arg3)
      * components, then adds a path
      */
     char buf[300];
-    sprintf(buf,format,arg1,arg2,arg3);
+    snprintf(buf, sizeof(buf),format,arg1,arg2,arg3);
     return __XOS2RedirRoot(buf);
 }
 

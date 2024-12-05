@@ -132,7 +132,7 @@ XpmCreateBufferFromXpmImage(
 #ifndef VOID_SPRINTF
     used_size =
 #endif
-    sprintf(buf, "/* XPM */\nstatic char * image_name[] = {\n");
+    snprintf(buf, sizeof(buf), "/* XPM */\nstatic char * image_name[] = {\n");
 #ifdef VOID_SPRINTF
     used_size = strlen(buf);
 #endif
@@ -161,7 +161,7 @@ XpmCreateBufferFromXpmImage(
 #ifndef VOID_SPRINTF
     l =
 #endif
-    sprintf(buf, "\"%d %d %d %d", image->width, image->height,
+    snprintf(buf, sizeof(buf), "\"%d %d %d %d", image->width, image->height,
 	    image->ncolors, image->cpp);
 #ifdef VOID_SPRINTF
     l = strlen(buf);

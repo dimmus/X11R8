@@ -20,7 +20,7 @@ getnumsub_cb(Widget w, XtPointer client_data _X_UNUSED, XtPointer call_data _X_U
     int min, max;
     XawPanedGetMinMax(w, &min, &max);
 
-    sprintf(buf, "%d number\n%d min %d max\n", XawPanedGetNumSub(p), min, max);
+    snprintf(buf, sizeof(buf), "%d number\n%d min %d max\n", XawPanedGetNumSub(p), min, max);
     XtVaSetValues(w, XtNlabel, buf, NULL);
 }
 

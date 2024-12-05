@@ -506,7 +506,7 @@ ScanOtherColors(
 	    else {
 		/* at last store the rgb value */
 		char buf[BUFSIZ];
-		sprintf(buf, "#%04X%04X%04X",
+		snprintf(buf, sizeof(buf), "#%04X%04X%04X",
 			xcolor->red, xcolor->green, xcolor->blue);
 		color->c_color = strdup(buf);
 	    }

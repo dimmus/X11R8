@@ -18,7 +18,7 @@ static void update(XtPointer client_data _X_UNUSED, XtIntervalId * id _X_UNUSED)
     char buf[28];
     static int i = 1;
 
-    sprintf(buf, "% 2d%%", i);
+    snprintf(buf, sizeof(buf), "% 2d%%", i);
     XtVaSetValues(command, XtNlabel, buf, NULL);
     XawScrollbarSetThumb(scrollbar, 0.0, (float) (i / 100.0));
     i++;

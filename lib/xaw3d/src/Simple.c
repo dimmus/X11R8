@@ -155,7 +155,7 @@ ClassPartInitialize(WidgetClass class)
     if (c->simple_class.change_sensitive == NULL) {
 	char buf[BUFSIZ];
 
-	(void) sprintf(buf,
+	(void) snprintf(buf, sizeof(buf),
 		"%s Widget: The Simple Widget class method 'change_sensitive' is undefined.\nA function must be defined or inherited.",
 		c->core_class.class_name);
 	XtWarning(buf);

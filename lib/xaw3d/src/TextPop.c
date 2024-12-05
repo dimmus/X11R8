@@ -245,7 +245,7 @@ DoInsert(Widget w, XtPointer closure, XtPointer call_data)
   char buf[BUFSIZ], msg[BUFSIZ];
   Widget temp_widget;
 
-  (void) sprintf(buf, "%s.%s", FORM_NAME, TEXT_NAME);
+  (void) snprintf(buf, sizeof(buf), "%s.%s", FORM_NAME, TEXT_NAME);
   if ( (temp_widget = XtNameToWidget(ctx->text.file_insert, buf)) == NULL ) {
     (void) strcpy(msg,
 	   "*** Error: Could not get text widget from file insert popup");
@@ -512,7 +512,7 @@ _XawTextSearch(Widget w, XEvent *event, String *params, Cardinal *num_params)
 #endif
 
   if ( (*num_params < 1) || (*num_params > 2) ) {
-    (void) sprintf(buf, "%s %s\n%s", SEARCH_HEADER,
+    (void) snprintf(buf, sizeof(buf), "%s %s\n%s", SEARCH_HEADER,
 	    "This action must have only",
 	    "one or two parameters");
     XtAppWarning(XtWidgetToApplicationContext(w), buf);
@@ -541,7 +541,7 @@ _XawTextSearch(Widget w, XEvent *event, String *params, Cardinal *num_params)
     dir = XawsdRight;
     break;
   default:
-    (void) sprintf(buf, "%s %s\n%s", SEARCH_HEADER,
+    (void) snprintf(buf, sizeof(buf), "%s %s\n%s", SEARCH_HEADER,
 	    "The first parameter must be",
 	    "Either 'backward' or 'forward'");
     XtAppWarning(XtWidgetToApplicationContext(w), buf);
@@ -1125,7 +1125,7 @@ SetResourceByName(Widget shell, char *name, char *res_name, XtArgVal value)
   Widget temp_widget;
   char buf[BUFSIZ];
 
-  (void) sprintf(buf, "%s.%s", FORM_NAME, name);
+  (void) snprintf(buf, sizeof(buf), "%s.%s", FORM_NAME, name);
 
   if ( (temp_widget = XtNameToWidget(shell, buf)) != NULL) {
     SetResource(temp_widget, res_name, value);
