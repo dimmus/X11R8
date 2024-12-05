@@ -5,8 +5,7 @@ srcs = [
     '../../mi/miinitext.h',
 ]
 
-xvfb_server = executable(
-    'Xvfb',
+xvfb_server = executable('Xvfb',
     srcs,
     include_directories: inc,
     dependencies: common_dep,
@@ -21,9 +20,3 @@ xvfb_server = executable(
     ],
     install: true,
 )
-
-install_man(configure_file(
-    input: 'man/Xvfb.man',
-    output: 'Xvfb.1',
-    configuration: manpage_config,
-))

@@ -16,7 +16,7 @@ libxpbproxy = static_library('xpbproxy',
      'x-input.m',
      'x-selection.m'],
     include_directories: ['..'],
-    dependencies: [xproto, libapplewm_dep, libxfixes, x11_dep],
+    dependencies: [xproto, libapplewm_dep, libxfixes, libx11],
     objc_args: pbproxy_defs,
 )
 
@@ -27,7 +27,7 @@ if build_standalone_pbproxy
     executable('xpbproxy',
         'app-main.m',
         link_with: libxpbproxy,
-        dependencies: [cocoa, x11_dep],
+        dependencies: [cocoa, libx11],
         objc_args: pbproxy_defs,
         install: true,
     )

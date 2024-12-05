@@ -224,7 +224,7 @@ conf_data.set('SHAPE', '1')
 conf_data.set('XACE', build_xace ? '1' : false)
 conf_data.set('XCMISC', '1')
 conf_data.set('XCSECURITY', build_xsecurity ? '1' : false)
-conf_data.set('XDMCP', xdmcp_dep.found() ? '1' : false)
+conf_data.set('XDMCP', build_xdmcp ? '1' : false)
 conf_data.set('XF86BIGFONT', build_xf86bigfont ? '1' : false)
 conf_data.set('XF86DRI', build_dri1 ? '1' : false)
 conf_data.set('XF86VIDMODE', 1)
@@ -290,11 +290,12 @@ if host_machine.system() == 'freebsd' or host_machine.system() == 'dragonfly'
   csrg_based = true
 endif
 
-if host_machine.system() == 'kfreebsd'
-  supports_pccons = true
-  supports_pcvt = true
-  supports_syscons = true
-endif
+# Meson warning: Unknown OS family
+# if host_machine.system() == 'kfreebsd'
+#   supports_pccons = true
+#   supports_pcvt = true
+#   supports_syscons = true
+# endif
 
 if host_machine.system() == 'netbsd'
   supports_pccons = true

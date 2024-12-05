@@ -20,7 +20,7 @@ mach_startup_dep = declare_dependency(
 xquartz_defs = [
     bundle_id_def,
     '-DXSERVER_VERSION="@0@"'.format(meson.project_version()),
-    '-DX11BINDIR="@0@"'.format(join_paths(get_option('prefix'), get_option('bindir'))),
+    '-DX11BINDIR="@0@"'.format(dir_bin),
 ]
 
 # X11.bin
@@ -62,7 +62,7 @@ x11_bin = executable('X11.bin',
       mach_startup[3], # mach_startupUser.c
      ],
      link_with: x11_bin_libs,
-     dependencies: [xproto_dep, x11_bin_deps, mach_startup_dep],
+     dependencies: [xproto, x11_bin_deps, mach_startup_dep],
      include_directories: [inc, '..', top_dir_inc],
      c_args: xquartz_defs,
      link_args: ['-Objc'],

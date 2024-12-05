@@ -23,7 +23,7 @@ endif
 bundle_id_def = '-DBUNDLE_ID_PREFIX="@0@"'.format(bundle_id_prefix)
 
 bundle_root = join_paths(apple_applications_dir, apple_application_name + '.app')
-xquartz_data_dir = join_paths(get_option('prefix'), get_option('datadir'),'X11', 'XQuartz')
+xquartz_data_dir = dir_data / 'X11' / 'XQuartz'
 
 # using sparkle update framework?
 build_sparkle = xquartz_sparkle_feed_url != '' and xquartz_sparkle_public_edkey != ''
@@ -76,7 +76,7 @@ libXquartz = static_library('Xquartz',
     c_args: libxquartz_defs,
     objc_args: libxquartz_defs,
     include_directories: [inc, '../../pseudoramiX', '../../miext/rootless', top_dir_inc],
-    dependencies: [xproto_dep, pixman_dep],
+    dependencies: [xproto, pixman_dep],
     link_with: [libxserver_pseudoramix, libxserver_miext_rootless],
 )
 

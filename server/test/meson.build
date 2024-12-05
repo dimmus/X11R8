@@ -2,7 +2,7 @@ simple_xinit = executable(
     'simple-xinit',
     'simple-xinit.c',
     include_directories: inc,
-    dependencies: [ xproto_dep ],
+    dependencies: [ xproto ],
 )
 
 piglit_env = environment()
@@ -233,7 +233,7 @@ if build_xorg
     unit = executable('tests',
          unit_sources,
          c_args: unit_c_args,
-         dependencies: [x11_dep, pixman_dep, xproto],
+         dependencies: [libx11, pixman_dep, xproto],
          include_directories: unit_includes,
          link_args: ldwraps,
          link_with: [xorg_link, libxcvt],

@@ -87,13 +87,13 @@ xorg_deps = [
     dep_dl,
     pciaccess_dep,
     sha1_dep,
-    libxau, # dependency('xau'),
-    libxcomposite, # libxserver_composite,
-    libxrandr, # libxserver_randr,
-    libxrender, # libxserver_render,
-    libxfixes, # libxserver_xfixes,
-    xdmcp_dep,
-    xfont2_dep,
+    libxau,
+    libxcomposite,
+    libxrandr,
+    libxrender,
+    libxfixes,
+    libxdmcp,
+    libxfont,
     xshmfence_dep,
     config_dep,
     libdrm_dep,
@@ -146,7 +146,9 @@ meson.add_install_script(
     'sh', '-c',
     'ln -fs Xorg @0@@1@'.format(
         '${DESTDIR}',
-        join_paths(get_option('prefix'), get_option('bindir'), 'X')))
+        dir_bin / 'X'
+    )
+)
 
 if get_option('suid_wrapper')
     executable('Xorg.wrap',
@@ -170,7 +172,7 @@ if get_option('suid_wrapper')
     install_data(
         xorg_sh,
         install_mode: 'rwxr-xr-x',
-        install_dir: join_paths(get_option('prefix'), get_option('bindir')),
+        install_dir: dir_bin,
         rename: ['Xorg']
     )
 endif
@@ -196,5 +198,3 @@ xorgserver_lib = shared_library(
 )
 
 xorgserver_dep = declare_dependency(link_with: xorgserver_lib)
-
-subdir('doc')

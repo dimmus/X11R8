@@ -74,7 +74,7 @@ if srcs_libc.length() > 0
         srcs_libc,
         include_directories: inc,
         dependencies: [
-            xproto_dep,
+            xproto,
         ],
     )
 endif
