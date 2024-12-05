@@ -1204,7 +1204,7 @@ XkmReadFileSection(FILE *           file,
 char *
 XkmReadFileSectionName(FILE *file, xkmSectionInfo *toc)
 {
-    xkmSectionInfo tmpTOC;
+    xkmSectionInfo tmpTOC = {0};
     char name[100];
 
     if ((!file) || (!toc))
@@ -1219,18 +1219,23 @@ XkmReadFileSectionName(FILE *file, xkmSectionInfo *toc)
     case XkmSymbolsIndex:
     case XkmGeometryIndex:
         fseek(file, toc->offset, SEEK_SET);
-        fread(&tmpTOC, SIZEOF(xkmSectionInfo), 1, file);
+        if (fread(&tmpTOC, SIZEOF(xkmSectionInfo), 1, file) != 1) {
+            _XkbLibError(_XkbErrIllegalContents, "XkmReadFileSectionName", 0);
+            return NULL;
+        }
+
         if ((tmpTOC.type != toc->type) || (tmpTOC.format != toc->format) ||
             (tmpTOC.size != toc->size) || (tmpTOC.offset != toc->offset)) {
             _XkbLibError(_XkbErrIllegalContents, "XkmReadFileSectionName", 0);
             return NULL;
         }
-        if (XkmGetCountedString(file, name, 100) > 0)
+
+        if (XkmGetCountedString(file, name, sizeof(name)) > 0)
             return _XkbDupString(name);
         break;
     default:
         _XkbLibError(_XkbErrBadImplementation,
-                     XkbConfigText(tmpTOC.type, XkbMessage), 0);
+                     XkbConfigText(toc->type, XkbMessage), 0);
         break;
     }
     return NULL;
