@@ -62,7 +62,6 @@ option('pciaccess',             type: 'boolean', value: true,   description: 'Xo
 option('udev',                  type: 'boolean', value: true)
 option('udev_kms',              type: 'boolean', value: true)
 option('dpms',                  type: 'boolean', value: true,   description: 'Xorg DPMS extension')
-option('xf86bigfont',           type: 'boolean', value: false,  description: 'XF86 Big Font extension')
 option('screensaver',           type: 'boolean', value: true,   description: 'ScreenSaver extension')
 option('xres',                  type: 'boolean', value: true,   description: 'XRes extension')
 option('xace',                  type: 'boolean', value: true,   description: 'X-ACE extension')
