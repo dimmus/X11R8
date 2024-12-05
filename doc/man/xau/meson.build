@@ -18,6 +18,6 @@ foreach man : ['Xau', 'XauDisposeAuth', 'XauFileName', 'XauGetAuthByAddr',
     ],
     capture : true,
     install : true,
-    install_dir : get_option('prefix') / get_option('mandir') / 'man3',
+    install_dir : dir_man / 'man3',
   )
 endforeach

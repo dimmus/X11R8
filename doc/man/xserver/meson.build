@@ -29,8 +29,10 @@ manpage_config.set('modulepath', module_dir)
 manpage_config.set('suid_wrapper_dir', join_paths(get_option('prefix'), 'libexec'))
 manpage_config.set('default_font_path', default_font_path)
 
-install_man(configure_file(
-    input: 'Xserver.man',
-    output: 'Xserver.1',
-    configuration: manpage_config,
-))
+install_man(
+    configure_file(
+        input: 'Xserver.man',
+        output: 'Xserver.1',
+        configuration: manpage_config,
+    )
+)
