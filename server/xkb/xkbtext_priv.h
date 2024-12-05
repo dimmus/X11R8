@@ -24,7 +24,7 @@ char *XkbModMaskText(unsigned mask, unsigned format);
 char *XkbVModIndexText(XkbDescPtr xkb, unsigned ndx, unsigned format);
 char *XkbVModMaskText(XkbDescPtr xkb, unsigned modMask, unsigned mask,
                       unsigned format);
-char *XkbConfigText(unsigned config, unsigned format);
+const char *XkbConfigText(unsigned config, unsigned format);
 const char *XkbSIMatchText(unsigned type, unsigned format);
 char *XkbIMWhichStateMaskText(unsigned use_which, unsigned format);
 char *XkbControlsMaskText(unsigned ctrls, unsigned format);

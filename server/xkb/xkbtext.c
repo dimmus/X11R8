@@ -301,12 +301,15 @@ XkbModMaskText(unsigned mask, unsigned format)
 
 /***====================================================================***/
 
- /*ARGSUSED*/ char *
+ /*ARGSUSED*/ const char *
 XkbConfigText(unsigned config, unsigned format)
 {
-    static char *buf;
+    static char *buf = NULL;
 
     buf = tbGetBuffer(32);
+    if (!buf) {
+        return "Error: Buffer allocation failed";
+    }
     switch (config) {
     case XkmSemanticsFile:
         strcpy(buf, "Semantics");
@@ -340,7 +343,7 @@ XkbConfigText(unsigned config, unsigned format)
         strcpy(buf, "VirtualMods");
         break;
     default:
-        sprintf(buf, "unknown(%d)", config);
+        snprintf(buf, 32, "unknown(%d)", config);
         break;
     }
     return buf;
@@ -619,17 +622,20 @@ XkbGeomFPText(int val, unsigned format)
     int whole, frac;
     char *buf;
 
-    buf = tbGetBuffer(13);
+    buf = tbGetBuffer(14);
+    if (!buf) {
+        return "Error: Buffer allocation failed";
+    }
     if (format == XkbCFile) {
-        sprintf(buf, "%d", val);
+        snprintf(buf, 14, "%d", val);
     }
     else {
         whole = val / XkbGeomPtsPerMM;
         frac = val % XkbGeomPtsPerMM;
         if (frac != 0)
-            sprintf(buf, "%d.%d", whole, frac);
+            snprintf(buf, 14, "%d.%d", whole, frac);
         else
-            sprintf(buf, "%d", whole);
+            snprintf(buf, 14, "%d", whole);
     }
     return buf;
 }
@@ -652,10 +658,13 @@ XkbDoodadTypeText(unsigned type, unsigned format)
         else if (type == XkbLogoDoodad)
             strcpy(buf, "XkbLogoDoodad");
         else
-            sprintf(buf, "UnknownDoodad%d", type);
+            snprintf(buf, 24, "UnknownDoodad%d", type);
     }
     else {
         buf = tbGetBuffer(12);
+        if (!buf) {
+            return "Error: Buffer allocation failed";
+        }
         if (type == XkbOutlineDoodad)
             strcpy(buf, "outline");
         else if (type == XkbSolidDoodad)
@@ -667,7 +676,7 @@ XkbDoodadTypeText(unsigned type, unsigned format)
         else if (type == XkbLogoDoodad)
             strcpy(buf, "logo");
         else
-            sprintf(buf, "unknown%d", type);
+            snprintf(buf, 24, "unknown%d", type);
     }
     return buf;
 }
