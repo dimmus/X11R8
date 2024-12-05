@@ -1,5 +1,3 @@
-inc_ext += inc_config
-
 # xext in main
 # xrender in main
 # xfixes in main
