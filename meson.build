@@ -92,6 +92,7 @@ inc_config = include_directories('.')
 f_check = []
 h_check = []
 
+inc_ext = []
 inc_x11 = []
 inc_lib = []
 inc_fonts = []
@@ -107,11 +108,11 @@ subdir('lib' / 'ice')
 subdir('lib' / 'sm')
 subdir('lib' / 'xt')
 subdir('lib' / 'xcvt')
-subdir('extensions' / 'xrender')
+subdir('extensions' / 'lib' / 'xrender')
 subdir('lib' / 'xft') # <- xrender
-subdir('extensions' / 'xfixes')
+subdir('extensions' / 'lib' / 'xfixes')
 subdir('lib' / 'xcursor') # <- xrender, xfixes
-subdir('extensions' / 'xext')
+subdir('extensions' / 'lib' / 'xext')
 subdir('lib' / 'xpm') # <- xext
 subdir('lib' / 'xmu') # <- xext
 subdir('lib' / 'xaw') # <- xext
