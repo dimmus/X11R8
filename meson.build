@@ -78,6 +78,9 @@ dir_include = dir_prefix / get_option('includedir')
 dir_lib     = dir_prefix / get_option('libdir')
 dir_man     = dir_prefix / get_option('mandir')
 
+dir_build  = meson.project_build_root()
+dir_source = meson.project_source_root()
+
 dep_m           = cc.find_library('m',  required : false) # libxcvt
 dep_dl          = cc.find_library('dl', required : false) # xvmc, xserver
 dep_zlib        = dependency('zlib') # xfont
@@ -97,12 +100,11 @@ pkg    = import('pkgconfig')
 conf = configuration_data()
 inc_config = include_directories('.')
 
-f_check = []
-h_check = []
-
-inc_ext = []
-inc_x11 = []
-inc_lib = []
+f_check   = []
+h_check   = []
+inc_ext   = []
+inc_x11   = []
+inc_lib   = []
 inc_fonts = []
 
 subdir('include')
@@ -117,19 +119,16 @@ subdir('lib' / 'sm')
 subdir('lib' / 'xt')
 subdir('lib' / 'xcvt')
 subdir('extensions' / 'lib' / 'xrender')
-subdir('lib' / 'xft') # <- xrender
 subdir('extensions' / 'lib' / 'xfixes')
-subdir('lib' / 'xcursor') # <- xrender, xfixes
 subdir('extensions' / 'lib' / 'xext')
-subdir('lib' / 'xpm') # <- xext
-subdir('lib' / 'xmu') # <- xext
-subdir('lib' / 'xaw') # <- xext
+subdir('lib' / 'xft')     # <- xrender
+subdir('lib' / 'xcursor') # <- xrender, xfixes
+subdir('lib' / 'xpm')     # <- xext
+subdir('lib' / 'xmu')     # <- xext
+subdir('lib' / 'xaw')     # <- xext
 # subdir('xaw3d')
 subdir('extensions')
 subdir('server')
-
-dir_build  = meson.project_build_root()
-dir_source = meson.project_source_root()
 
 fs = import('fs')
 FIRST_RUN = not fs.is_dir(dir_build / 'src')
@@ -147,7 +146,6 @@ if FIRST_RUN
     endif
   endforeach
 
-  # TODO: sort h_check to check only unique headers 
   h_unique = []
   foreach h : h_check
     if not h_unique.contains(h)
@@ -156,7 +154,6 @@ if FIRST_RUN
     endif
   endforeach
 
-  # strcasecmp is spelled '_stricmp' on Windows
   if not cc.has_function('strcasecmp')
     if cc.has_function('_stricmp')
       conf.set('strcasecmp', '_stricmp', description: 'Replacement for strcasecmp, if necessary')
@@ -166,7 +163,7 @@ if FIRST_RUN
   endif
 endif
 
-## from extension/xkbfile
+## extension/xkbfile
 conf.set('HAVE_REALLOCF', cc.has_function('reallocf'))
 conf.set('HAVE_STRNDUP', cc.has_function('strndup') and cc.has_header_symbol('string.h', 'strndup'))
 conf.set('HAVE_UNLOCKED_STDIO', cc.has_function('getc_unlocked'))
