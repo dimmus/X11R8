@@ -45,12 +45,7 @@ cc = meson.get_compiler('c')
     test_wflags = []
 # endif
 
-common_wflags = []
-foreach wflag: test_wflags
-    if cc.has_argument(wflag)
-        common_wflags += [ wflag ]
-    endif
-endforeach
+common_wflags = cc.get_supported_arguments(test_wflags)
 
 add_project_arguments(common_wflags, language : 'c')
 
