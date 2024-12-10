@@ -40,18 +40,9 @@ lib = library('Xau',
   install : true,
 )
 
-test('autest',
-  executable('autest',
-    'Autest.c',
-    link_with : lib,
-    include_directories : inc_lib,
-    dependencies : xproto,
-  )
-)
-
 libxau = declare_dependency(
   link_with : lib,
-  include_directories : inc_xau,
+  include_directories : inc_lib,
 )
 
 pkg.generate(lib,
@@ -59,4 +50,13 @@ pkg.generate(lib,
   version: ver_xau,
   filebase : 'xau',
   requires : 'xproto',
+)
+
+test('autest',
+  executable('autest',
+    'Autest.c',
+    link_with : lib,
+    include_directories : inc_lib,
+    dependencies : xproto,
+  )
 )
