@@ -1,11 +1,5 @@
 ver_xau = '1.0.11'
 
-inc_xau = [
-  inc_config,
-  include_directories('include'),
-  include_directories('include/X11'),
-]
-
 f_check += ['explicit_bzero', 'explicit_memset', 'pathconf']
 h_check += ['unistd.h']
 
@@ -40,7 +34,7 @@ lib = library('Xau',
     'AuUnlock.c',
     'AuWrite.c',
   ],
-  include_directories : inc_xau,
+  include_directories : inc_lib,
   dependencies : xproto,
   version : '6.0.0',
   install : true,
@@ -50,7 +44,7 @@ test('autest',
   executable('autest',
     'Autest.c',
     link_with : lib,
-    include_directories : inc_xau,
+    include_directories : inc_lib,
     dependencies : xproto,
   )
 )
@@ -58,13 +52,6 @@ test('autest',
 libxau = declare_dependency(
   link_with : lib,
   include_directories : inc_xau,
-)
-
-meson.override_dependency('xau', libxau)
-
-install_headers(
-  'include/X11/Xauth.h',
-  subdir : 'X11',
 )
 
 pkg.generate(lib,

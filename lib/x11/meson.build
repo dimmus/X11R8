@@ -1,10 +1,7 @@
 ver_x11 = '1.8.10'
 
 inc_x11 = [
-  inc_config,
-  include_directories('include'),
-  include_directories('include/X11'),
-  include_directories('include/X11/extensions'),
+  inc_lib,
   include_directories('src'),
   include_directories('src/util'),
   include_directories('src/xcms'),
@@ -85,7 +82,7 @@ subdir('src/xcms')
 subdir('src/xkb')
 subdir('src/xlibi18n')
 
-# START: Generate ks_table.h
+## START: Generate ks_table.h
 subdir('src' / 'util')
 keysym_path = meson.project_source_root() / 'include' / 'X11'
 keysym_h = [
@@ -105,7 +102,7 @@ ks_table = declare_dependency(
   include_directories: inc_x11,
   sources : ks_table_h,
 )
-#  END: Generate ks_table.h
+##  END: Generate ks_table.h
 
 subdir('src')
 
@@ -133,26 +130,6 @@ lib_x11_xcb = library('X11-xcb', src_x11_xcb,
 libx11_xcb = declare_dependency(
   link_with : lib_x11_xcb,
   include_directories : inc_x11,
-)
-
-meson.override_dependency('x11', libx11)
-meson.override_dependency('x11-xcb', libx11_xcb)
-
-install_headers(
-  files(
-    'include/X11/XKBlib.h',
-    'include/X11/Xcms.h',
-    'include/X11/Xlib.h',
-    'include/X11/Xlibint.h',
-    'include/X11/Xlocale.h',
-    'include/X11/Xresource.h',
-    'include/X11/Xutil.h',
-    'include/X11/cursorfont.h',
-    'include/X11/Xregion.h',
-    'include/X11/ImUtil.h',
-    'include/X11/Xlib-xcb.h',
-  ),
-  subdir : 'X11',
 )
 
 # TODO: need?
