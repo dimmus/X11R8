@@ -104,6 +104,7 @@ inc_fonts = []
 
 subdir('include')
 subdir('proto')
+subdir('lib' / 'include')
 subdir('lib' / 'xtrans')
 subdir('fonts') # <- xtrans
 subdir('lib' / 'x11')
