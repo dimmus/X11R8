@@ -8,6 +8,7 @@ inc_lib += [
     include_directories('X11' / 'Xaw'),
     include_directories('X11' / 'Xcursor'),
     include_directories('X11' / 'Xft'),
+    include_directories('X11' / 'Xmu'),
 ]
 
 install_headers(
