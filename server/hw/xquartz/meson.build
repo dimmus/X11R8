@@ -88,14 +88,6 @@ subdir('pbproxy')
 subdir('xpr')
 subdir('mach-startup')
 
-# manpage
-xquartz_man = configure_file(
-    input: 'man/Xquartz.man',
-    output: 'Xquartz.1',
-    configuration: manpage_config,
-)
-install_man(xquartz_man)
-
 install_data('defaults.plist',
     install_dir: xquartz_data_dir,
     install_mode: 'rw-r--r--')

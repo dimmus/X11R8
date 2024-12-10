@@ -37,8 +37,7 @@ if build_xv
     xephyr_dep += dependency('xcb-xv')
 endif
 
-xephyr_server = executable(
-    'Xephyr',
+xephyr_server = executable('Xephyr',
     srcs,
     include_directories: [
         inc,
@@ -60,10 +59,3 @@ xephyr_server = executable(
     ],
     install: true,
 )
-
-xephyr_man = configure_file(
-    input: 'man/Xephyr.man',
-    output: 'Xephyr.1',
-    configuration: manpage_config,
-)
-install_man(xephyr_man)

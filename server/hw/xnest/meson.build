@@ -19,8 +19,7 @@ srcs = [
     '../../mi/miinitext.h',
 ]
 
-executable(
-    'Xnest',
+executable('Xnest',
     srcs,
     include_directories: inc,
     dependencies: [
@@ -36,9 +35,3 @@ executable(
     c_args: '-DHAVE_XNEST_CONFIG_H',
     install: true,
 )
-
-install_man(configure_file(
-    input: 'man/Xnest.man',
-    output: 'Xnest.1',
-    configuration: manpage_config,
-))

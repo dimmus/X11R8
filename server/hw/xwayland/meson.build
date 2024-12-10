@@ -190,13 +190,6 @@ pkgconfig.generate(
     ] + xwayland_vars,
 )
 
-xwayland_manpage = configure_file(
-    input: 'man/Xwayland.man',
-    output: 'Xwayland.1',
-    configuration: manpage_config,
-)
-install_man(xwayland_manpage)
-
 desktop_data = configuration_data()
 desktop_data.set('XWAYLAND', xwayland_path / xwayland_server.name())
 desktop_data.set('DECORATE', have_libdecor ? '-decorate': '')
