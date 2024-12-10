@@ -4,23 +4,23 @@ dep_int_dmx = [xproto, libx11, libxext]
 
 lib = library('dmx', 
   'dmx.c',
-  include_directories : inc_ext,
-  dependencies : dep_int_dmx,
-  version : '1.0.0',
-  install : true,
+  include_directories: inc_ext,
+  dependencies: dep_int_dmx,
+  version: '1.0.0',
+  install: true,
 )
 
 libdmx = declare_dependency(
-  link_with : lib,
-  include_directories : inc_ext,
+  link_with: lib,
+  include_directories: inc_ext,
 )
 
 meson.override_dependency('dmx', libdmx)
 
 pkg.generate(lib,
-  description : 'The dmx Library',
+  description: 'The dmx Library',
   version: ver_dmx,
-  filebase : 'dmx',
-  requires : 'xproto',
+  filebase: 'dmx',
+  requires: 'xproto',
   requires_private: ['x11', 'xext']
 )

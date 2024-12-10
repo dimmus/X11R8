@@ -45,26 +45,26 @@ src = files(
 )
 
 lib = library('FS', src,
-  c_args : lib_args,
-  include_directories : [inc_fonts, inc_fonts_fs],
-  dependencies : dep_int_xfs,
-  version : '6.0.0',
-  install : true,
+  c_args: lib_args,
+  include_directories: [inc_fonts, inc_fonts_fs],
+  dependencies: dep_int_xfs,
+  version: '6.0.0',
+  install: true,
 )
 
 libfs = declare_dependency(
-  link_with : lib,
-  include_directories : [inc_fonts, inc_fonts_fs],
+  link_with: lib,
+  include_directories: [inc_fonts, inc_fonts_fs],
 )
 
 install_headers(
   'include/X11/fonts/FSlib.h',
-  subdir : 'X11/fonts',
+  subdir: 'X11/fonts',
 )
 
 pkg.generate(lib,
-  description : 'Library Interface to the X Font Server',
-  filebase : 'fs',
+  description: 'Library Interface to the X Font Server',
+  filebase: 'fs',
   version: ver_fs,
   requires: 'xproto',
 )

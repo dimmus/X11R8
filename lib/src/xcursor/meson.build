@@ -49,10 +49,10 @@ libxcursor = declare_dependency(
 )
 
 pkg.generate(lib,
-  description : 'X Cursor Library',
+  description: 'X Cursor Library',
   version: ver_xcursor,
-  filebase : 'xcursor',
-  requires : 'xproto',
+  filebase: 'xcursor',
+  requires: 'xproto',
   requires_private: ['x11', 'xrender', 'xfixes']
 )
 

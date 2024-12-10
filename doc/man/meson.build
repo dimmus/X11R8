@@ -23,7 +23,7 @@ build_docs_pdf = (get_option('docs-pdf') != 'false' and
     fop.found())
 
 if build_docs or build_docs_devel
-    doc_sgml_path = sgml_doctools_dep.get_variable(pkgconfig : 'sgmlrootdir')
+    doc_sgml_path = sgml_doctools_dep.get_variable(pkgconfig: 'sgmlrootdir')
     doc_stylesheet_srcdir = doc_sgml_path / 'X11'
 
     # Meson does not and will not support functions so we are copy-pasting

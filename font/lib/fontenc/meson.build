@@ -24,26 +24,26 @@ src = files(
 )
 
 lib = library('fontenc', src,
-  include_directories : [inc_fonts, inc_fonts_fontenc],
-  dependencies : [dep_int_fontenc, dep_ext_fontenc],
-  version : '1.0.0',
-  install : true,
+  include_directories: [inc_fonts, inc_fonts_fontenc],
+  dependencies: [dep_int_fontenc, dep_ext_fontenc],
+  version: '1.0.0',
+  install: true,
 )
 
 libfontenc = declare_dependency(
-  link_with : lib,
-  include_directories : [inc_fonts, inc_fonts_fontenc],
+  link_with: lib,
+  include_directories: [inc_fonts, inc_fonts_fontenc],
 )
 
 meson.override_dependency('fontenc', libfontenc)
 
 install_headers(
   'include/X11/fonts/fontenc.h',
-  subdir : 'X11/fonts',
+  subdir: 'X11/fonts',
 )
 
 pkg.generate(lib,
-  description : 'The fontenc Library',
+  description: 'The fontenc Library',
   version: ver_fontenc,
-  filebase : 'fontenc',
+  filebase: 'fontenc',
 )

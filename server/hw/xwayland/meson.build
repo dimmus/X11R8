@@ -31,10 +31,10 @@ srcs = [
 ]
 
 scanner_dep = dependency('wayland-scanner', native: true)
-scanner = find_program(scanner_dep.get_variable(pkgconfig : 'wayland_scanner'))
+scanner = find_program(scanner_dep.get_variable(pkgconfig: 'wayland_scanner'))
 
 protocols_dep = dependency('wayland-protocols', version: wayland_protocols_req)
-protodir = protocols_dep.get_variable(pkgconfig : 'pkgdatadir')
+protodir = protocols_dep.get_variable(pkgconfig: 'pkgdatadir')
 
 pointer_xml = join_paths(protodir, 'unstable', 'pointer-constraints', 'pointer-constraints-unstable-v1.xml')
 relative_xml = join_paths(protodir, 'unstable', 'relative-pointer', 'relative-pointer-unstable-v1.xml')
@@ -71,8 +71,8 @@ proto_xml = [
 ]
 
 client_header = generator(scanner,
-    output : '@BASENAME@-client-protocol.h',
-    arguments : ['client-header', '@INPUT@', '@OUTPUT@']
+    output: '@BASENAME@-client-protocol.h',
+    arguments: ['client-header', '@INPUT@', '@OUTPUT@']
 )
 
 if scanner_dep.version().version_compare('>= 1.14.91')
@@ -82,11 +82,11 @@ else
 endif
 
 code = generator(scanner,
-    output : '@BASENAME@-protocol.c',
-    arguments : [scanner_argument, '@INPUT@', '@OUTPUT@']
+    output: '@BASENAME@-protocol.c',
+    arguments: [scanner_argument, '@INPUT@', '@OUTPUT@']
 )
 
-foreach xml : proto_xml
+foreach xml: proto_xml
     srcs += client_header.process(xml)
     srcs += code.process(xml)
 endforeach
@@ -199,13 +199,13 @@ install_man(xwayland_manpage)
 
 desktop_data = configuration_data()
 desktop_data.set('XWAYLAND', xwayland_path / xwayland_server.name())
-desktop_data.set('DECORATE', have_libdecor ? '-decorate' : '')
+desktop_data.set('DECORATE', have_libdecor ? '-decorate': '')
 desktop_file = configure_file(
     input: 'desktop/org.freedesktop.Xwayland.desktop.in',
     output: 'org.freedesktop.Xwayland.desktop',
     configuration: desktop_data,
 )
-install_data(desktop_file, install_dir : dir_data / 'applications')
+install_data(desktop_file, install_dir: dir_data / 'applications')
 
 meson.override_find_program('Xwayland', xwayland_server)
 meson.override_dependency('xwayland', declare_dependency(

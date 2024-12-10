@@ -29,21 +29,21 @@ src = files(
 )
 
 lib = library('ICE', src,
-  c_args : lib_args,
-  include_directories : inc_lib,
-  dependencies : dep_int_ice,
-  version : '6.3.0',
-  install : true,
+  c_args: lib_args,
+  include_directories: inc_lib,
+  dependencies: dep_int_ice,
+  version: '6.3.0',
+  install: true,
 )
 
 libice = declare_dependency(
-  link_with : lib,
-  include_directories : inc_lib,
+  link_with: lib,
+  include_directories: inc_lib,
 )
 
 pkg.generate(lib,
-  description : 'X Inter Client Exchange Library',
+  description: 'X Inter Client Exchange Library',
   version: ver_ice,
-  filebase : 'ice',
-  requires : 'xproto',
+  filebase: 'ice',
+  requires: 'xproto',
 )

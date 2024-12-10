@@ -32,23 +32,23 @@ src = files(
 )
 
 lib = library('Xft', src,
-  c_args : lib_args,
-  include_directories : inc_lib,
-  dependencies : [dep_ext_xft, dep_int_xft],
-  version : '1.0.0',
-  install : true,
+  c_args: lib_args,
+  include_directories: inc_lib,
+  dependencies: [dep_ext_xft, dep_int_xft],
+  version: '1.0.0',
+  install: true,
 )
 
 libxft = declare_dependency(
-  link_with : lib,
-  include_directories : inc_lib,
+  link_with: lib,
+  include_directories: inc_lib,
 )
 
 pkg.generate(lib,
-  description : 'X FreeType library',
+  description: 'X FreeType library',
   version: ver_xft,
-  filebase : 'xft',
-  requires : 'xproto',
+  filebase: 'xft',
+  requires: 'xproto',
   requires_private: ['xrender', 'fontconfig', 'freetype2']
 )
 

@@ -157,30 +157,30 @@ src += files(
 )
 
 lib = library('Xfont', src,
-  c_args : lib_args,
-  include_directories : [inc_fonts, inc_fonts_xfont],
-  dependencies : [dep_int_xfont, dep_ext_xfont],
-  version : '2.0.0',
-  install : true,
+  c_args: lib_args,
+  include_directories: [inc_fonts, inc_fonts_xfont],
+  dependencies: [dep_int_xfont, dep_ext_xfont],
+  version: '2.0.0',
+  install: true,
 )
 
 libxfont = declare_dependency(
-  link_with : lib,
-  include_directories : [inc_fonts, inc_fonts_xfont],
+  link_with: lib,
+  include_directories: [inc_fonts, inc_fonts_xfont],
 )
 
 meson.override_dependency('xfont', libxfont)
 
 install_headers(
   'include/X11/fonts/libxfont2.h',
-  subdir : 'X11/Xfont',
+  subdir: 'X11/Xfont',
 )
 
 pkg.generate(lib,
   name: 'Xfont2',
-  description : 'X font Library version 2',
+  description: 'X font Library version 2',
   version: ver_xfont,
-  filebase : 'xfont2',
-  requires : 'xproto',
+  filebase: 'xfont2',
+  requires: 'xproto',
   requires_private: ['fontenc', 'freetype', 'zlib']
 )

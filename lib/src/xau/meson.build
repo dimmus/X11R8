@@ -34,29 +34,29 @@ lib = library('Xau',
     'AuUnlock.c',
     'AuWrite.c',
   ],
-  include_directories : inc_lib,
-  dependencies : xproto,
-  version : '6.0.0',
-  install : true,
+  include_directories: inc_lib,
+  dependencies: xproto,
+  version: '6.0.0',
+  install: true,
 )
 
 libxau = declare_dependency(
-  link_with : lib,
-  include_directories : inc_lib,
+  link_with: lib,
+  include_directories: inc_lib,
 )
 
 pkg.generate(lib,
-  description : 'X authorization file management library',
+  description: 'X authorization file management library',
   version: ver_xau,
-  filebase : 'xau',
-  requires : 'xproto',
+  filebase: 'xau',
+  requires: 'xproto',
 )
 
 test('autest',
   executable('autest',
     'Autest.c',
-    link_with : lib,
-    include_directories : inc_lib,
-    dependencies : xproto,
+    link_with: lib,
+    include_directories: inc_lib,
+    dependencies: xproto,
   )
 )

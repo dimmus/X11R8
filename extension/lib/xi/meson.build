@@ -69,24 +69,24 @@ src = files(
 src += src_xi2
 
 lib = library('Xi', src,
-  include_directories : inc_ext,
-  dependencies : dep_int_xi,
-  version : '6.1.0',
-  install : true,
+  include_directories: inc_ext,
+  dependencies: dep_int_xi,
+  version: '6.1.0',
+  install: true,
 )
 
 libxi = declare_dependency(
-  link_with : lib,
-  include_directories : inc_ext,
+  link_with: lib,
+  include_directories: inc_ext,
 )
 
 meson.override_dependency('xi', libxi)
 
 pkg.generate(lib,
-  description : 'X Input Extension Library',
+  description: 'X Input Extension Library',
   version: ver_xi,
-  filebase : 'xinput',
-  requires : 'xproto',
+  filebase: 'xinput',
+  requires: 'xproto',
   requires_private: ['x11', 'xext', 'xfixes']
 )
 

@@ -1,4 +1,4 @@
-# version : 1.6.6
+# version: 1.6.6
 
 lib_args = ['-fvisibility=hidden']
 
@@ -33,16 +33,16 @@ subdir('src')
 # )
 
 lib = library('xaw3d', src,
-  c_args : lib_args,
-  include_directories : inc_xaw3d,
-  dependencies : dep_int_xaw3d,
-  version : '8.0.0',
-  install : true,
+  c_args: lib_args,
+  include_directories: inc_xaw3d,
+  dependencies: dep_int_xaw3d,
+  version: '8.0.0',
+  install: true,
 )
 
 libxaw3d = declare_dependency(
-  link_with : lib,
-  include_directories : inc_xaw3d,
+  link_with: lib,
+  include_directories: inc_xaw3d,
 )
 
 meson.override_dependency('xaw3d', libxaw3d)
@@ -128,14 +128,14 @@ hdr = files(
 )
 
 install_headers(hdr,
-  subdir : 'X11/xaw3d',
+  subdir: 'X11/xaw3d',
 )
 
 pkg.generate(lib,
-  description : 'X 3D Athena Widgets Library',
+  description: 'X 3D Athena Widgets Library',
   version: '1.6.6',
-  filebase : 'xrender',
-  requires : ['xproto', 'xmu', 'xt'],
+  filebase: 'xrender',
+  requires: ['xproto', 'xmu', 'xt'],
   requires_private: ['x11', 'xext']
 )
 

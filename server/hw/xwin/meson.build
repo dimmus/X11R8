@@ -119,8 +119,8 @@ bison = find_program('bison')
 
 lgen = generator(
     flex,
-    output : '@PLAINNAME@.yy.c',
-    arguments : ['-i', '-o', '@OUTPUT@', '@INPUT@']
+    output: '@PLAINNAME@.yy.c',
+    arguments: ['-i', '-o', '@OUTPUT@', '@INPUT@']
 )
 
 lfiles = lgen.process('winprefslex.l')
@@ -128,8 +128,8 @@ srcs_windows += lfiles
 
 pgen = generator(
     bison,
-    output : ['@BASENAME@.c', '@BASENAME@.h'],
-    arguments : ['@INPUT@', '--defines=@OUTPUT1@', '--output=@OUTPUT0@']
+    output: ['@BASENAME@.c', '@BASENAME@.h'],
+    arguments: ['@INPUT@', '--defines=@OUTPUT1@', '--output=@OUTPUT0@']
 )
 
 pfiles = pgen.process('winprefsyacc.y')

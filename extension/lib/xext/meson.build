@@ -37,21 +37,21 @@ src = files(
 )
 
 lib = library('Xext', src,
-  include_directories : inc_ext,
-  dependencies : libx11,
-  version : '6.4.0',
-  install : true,
+  include_directories: inc_ext,
+  dependencies: libx11,
+  version: '6.4.0',
+  install: true,
 )
 
 libxext = declare_dependency(
-  link_with : lib,
-  include_directories : inc_ext,
+  link_with: lib,
+  include_directories: inc_ext,
 )
 
 pkg.generate(
-  name : 'Xext',
-  description : 'Misc X Extension Library.',
+  name: 'Xext',
+  description: 'Misc X Extension Library.',
   version: ver_xext,
-  filebase : 'xext',
-  requires : 'x11',
+  filebase: 'xext',
+  requires: 'x11',
 )

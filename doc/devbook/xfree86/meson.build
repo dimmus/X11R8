@@ -16,7 +16,7 @@ if build_docs_devel
     )
 
     if build_docs_pdf
-        foreach format : ['ps', 'pdf']
+        foreach format: ['ps', 'pdf']
             output_fn = basename + '.' + format
             custom_target(
                 output_fn,

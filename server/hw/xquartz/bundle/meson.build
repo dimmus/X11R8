@@ -19,7 +19,7 @@ localities = [
     'ar','ca','cs','da','el','fi','he','hr','hu','ko','no','pl','pt','pt_PT',
     'ro','ru','sk','sv','th','tr','uk','zh_CN','zh_TW'
 ]
-foreach lang : localities
+foreach lang: localities
     install_data(join_paths('Resources', lang + '.lproj', 'Localizable.strings'),
         install_dir: join_paths(bundle_root, 'Contents/Resources', lang + '.lproj'),
         install_mode: 'rw-r--r--')

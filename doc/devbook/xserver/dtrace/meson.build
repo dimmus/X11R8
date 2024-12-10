@@ -20,7 +20,7 @@ if build_docs
     )
 
     if build_docs_pdf
-        foreach format : ['ps', 'pdf']
+        foreach format: ['ps', 'pdf']
             output_fn = basename + '.' + format
             custom_target(
                 output_fn,
@@ -40,7 +40,7 @@ if build_docs
         endforeach
     endif
 
-    foreach format_data : [['html', 'xorg-xhtml.xsl'], ['pdf', 'xorg-fo.xsl']]
+    foreach format_data: [['html', 'xorg-xhtml.xsl'], ['pdf', 'xorg-fo.xsl']]
         format = format_data[0]
         stylesheet = format_data[1]
         output_fn = basename + '.' + format + '.db'

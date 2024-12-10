@@ -1,7 +1,7 @@
 project('X Window System', 'c', 
-    license : 'MIT', 
-    version : '11.8.1',
-    meson_version : '>=0.59.0',
+    license: 'MIT', 
+    version: '11.8.1',
+    meson_version: '>=0.59.0',
     # 0.56.0
     # 0.58.0: {'format strings'}
     # 0.59.0: {'feed arg in custom_target'}
@@ -47,7 +47,7 @@ cc = meson.get_compiler('c')
 
 common_wflags = cc.get_supported_arguments(test_wflags)
 
-add_project_arguments(common_wflags, language : 'c')
+add_project_arguments(common_wflags, language: 'c')
 
 add_project_arguments(
   '-DHAVE_CONFIG_H',
@@ -57,13 +57,13 @@ add_project_arguments(
   '-D_CONST_X_STRING',
   '-D_DEFAULT_SOURCE',
   '-DHAVE_DIX_CONFIG_H',
-  language : 'c'
+  language: 'c'
 )
 
 add_project_link_arguments(
   '-fvisibility=hidden',
   '-fno-strict-aliasing',
-  language : 'c'
+  language: 'c'
 )
 
 dir_prefix  = get_option('prefix')
@@ -76,8 +76,8 @@ dir_man     = dir_prefix / get_option('mandir')
 dir_build  = meson.project_build_root()
 dir_source = meson.project_source_root()
 
-dep_m           = cc.find_library('m',  required : false) # libxcvt
-dep_dl          = cc.find_library('dl', required : false) # xvmc, xserver
+dep_m           = cc.find_library('m',  required: false) # libxcvt
+dep_dl          = cc.find_library('dl', required: false) # xvmc, xserver
 dep_zlib        = dependency('zlib') # xfont
 dep_bzip2       = dependency('bzip2') # xfont
 dep_freetype2   = dependency('freetype2') # xfont
@@ -134,7 +134,7 @@ FIRST_RUN = not fs.is_dir(dir_build / 'src')
 # switch that off when run meson reconfigure
 if FIRST_RUN
   f_unique = []
-  foreach f : f_check
+  foreach f: f_check
     if not f_unique.contains(f)
       conf.set('HAVE_@0@'.format(f.to_upper()), cc.has_function(f))
       if f == 'arc4random_buf'
@@ -145,7 +145,7 @@ if FIRST_RUN
   endforeach
 
   h_unique = []
-  foreach h : h_check
+  foreach h: h_check
     if not h_unique.contains(h)
       conf.set('HAVE_@0@'.format(h.underscorify().to_upper()), cc.has_header(h))
       h_unique += h

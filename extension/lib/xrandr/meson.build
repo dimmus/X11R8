@@ -16,23 +16,23 @@ src = files(
 )
 
 lib = library('Xrandr', src,
-  include_directories : inc_ext,
-  dependencies : dep_int_xrandr,
-  version : '2.2.0',
-  install : true,
+  include_directories: inc_ext,
+  dependencies: dep_int_xrandr,
+  version: '2.2.0',
+  install: true,
 )
 
 libxrandr = declare_dependency(
-  link_with : lib,
-  include_directories : inc_ext,
+  link_with: lib,
+  include_directories: inc_ext,
 )
 
 meson.override_dependency('xrandr', libxrandr)
 
 pkg.generate(lib,
-  description : 'X RandR Library',
+  description: 'X RandR Library',
   version: ver_xrandr,
-  filebase : 'xrandr',
-  requires : 'xproto',
+  filebase: 'xrandr',
+  requires: 'xproto',
   requires_private: ['x11', 'xext', 'xrender']
 )

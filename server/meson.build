@@ -30,7 +30,7 @@ build_hashtable = false
 xkb_dir = get_option('xkb_dir')
 if xkb_dir == ''
     if xkbcomp_dep.found() and xkbcomp_dep.type_name() == 'pkgconfig'
-        xkb_dir = xkbcomp_dep.get_variable(pkgconfig : 'xkbconfigdir')
+        xkb_dir = xkbcomp_dep.get_variable(pkgconfig: 'xkbconfigdir')
     endif
     if xkb_dir == ''
         xkb_dir = dir_prefix / 'share' / 'X11' / 'xkb'
@@ -45,7 +45,7 @@ endif
 xkb_bin_dir = get_option('xkb_bin_dir')
 if xkb_bin_dir == ''
     if xkbcomp_dep.found() and xkbcomp_dep.type_name() == 'pkgconfig'
-        xkb_bin_dir = xkbcomp_dep.get_variable(pkgconfig : 'bindir')
+        xkb_bin_dir = xkbcomp_dep.get_variable(pkgconfig: 'bindir')
     endif
     if xkb_bin_dir == ''
         xkb_bin_dir = dir_bin
@@ -58,7 +58,7 @@ if dfp == ''
     if fontrootdir == ''
         fontutil_dep = dependency('fontutil', required: false)
         if fontutil_dep.found()
-            fontrootdir = fontutil_dep.get_variable(pkgconfig : 'fontrootdir')
+            fontrootdir = fontutil_dep.get_variable(pkgconfig: 'fontrootdir')
         else
             fontrootdir = dir_data / 'fonts' / 'X11'
         endif
@@ -208,7 +208,7 @@ endif
 if build_ipv6 and not have_AF_INET6
     error('ipv6 support needs AF_INET6')
 endif
-message('IPv6 support: ' + (build_ipv6 ? 'YES' : 'NO'))
+message('IPv6 support: ' + (build_ipv6 ? 'YES': 'NO'))
 
 int10 = get_option('int10')
 if int10 == 'auto'
@@ -313,7 +313,7 @@ if get_option('sha1') != 'auto'
 endif
 
 sha1_found = false
-foreach t : test_sha1
+foreach t: test_sha1
     if t == 'libc'
         if cc.has_function('SHA1Init')
             sha1_found = true

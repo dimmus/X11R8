@@ -90,7 +90,7 @@ install_headers(
     'XvMCproto.h',
     'Xvproto.h',
     'xwaylandproto.h',
-    subdir : 'X11/extensions'
+    subdir: 'X11/extensions'
 )
 
 if get_option('legacy') == true
@@ -120,6 +120,6 @@ if get_option('legacy') == true
         'xf86rush.h',
         'xf86rushstr.h',
         'XKBgeom.h',
-        subdir : 'X11/extensions'
+        subdir: 'X11/extensions'
     )
 endif

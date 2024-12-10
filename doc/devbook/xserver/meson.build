@@ -1,6 +1,6 @@
 
 if build_docs_devel
-    foreach basename : ['Xserver-spec', 'Xinput']
+    foreach basename: ['Xserver-spec', 'Xinput']
 
         input_xml = basename + '.xml'
 
@@ -17,7 +17,7 @@ if build_docs_devel
         )
 
         if build_docs_pdf
-            foreach format : ['ps', 'pdf']
+            foreach format: ['ps', 'pdf']
                 output_fn = basename + '.' + format
                 custom_target(
                     output_fn,

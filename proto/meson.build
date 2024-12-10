@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# version : '2024.1'
+# version: '2024.1'
 
 pcs = [
     'applewmproto',
@@ -57,12 +57,12 @@ pc_data.set('prefix', get_option('prefix'))
 # meson does not allow installing the includedir outside of the prefix
 pc_data.set('includedir', '${prefix}' / get_option('includedir'))
 
-foreach pc : pcs
+foreach pc: pcs
     configure_file(
-        input : pc + '.pc.in',
-        output : pc + '.pc',
-        install_dir : get_option('datadir') / 'pkgconfig',
-        configuration : pc_data,
+        input: pc + '.pc.in',
+        output: pc + '.pc',
+        install_dir: get_option('datadir') / 'pkgconfig',
+        configuration: pc_data,
     )
 endforeach
 
@@ -95,12 +95,12 @@ if get_option('legacy') == true
         'xf86rushproto',
         'xproxymngproto',
     ]
-    foreach pc : legacy_pcs
+    foreach pc: legacy_pcs
         configure_file(
-            input : pc + '.pc.in',
-            output : pc + '.pc',
-            install_dir : get_option('datadir') / 'pkgconfig',
-            configuration : pc_data,
+            input: pc + '.pc.in',
+            output: pc + '.pc',
+            install_dir: get_option('datadir') / 'pkgconfig',
+            configuration: pc_data,
         )
     endforeach
     legacy_docs = files('PM_spec')
@@ -109,7 +109,7 @@ if get_option('legacy') == true
 endif
 
 xproto = declare_dependency(
-    include_directories : inc_x11
+    include_directories: inc_x11
 )
 
 keysymfile = meson.project_source_root() / 'include' / 'X11' / 'XF86keysym.h'

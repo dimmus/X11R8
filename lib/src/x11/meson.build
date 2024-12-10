@@ -47,7 +47,7 @@ if get_option('xthreads')
   # This define is not in libXau specific code, but is part of the xproto header
   # This may be only required by HP-UX.
   if cc.has_function('gethostbyname_r') or \
-     cc.has_function('gethostbyname_r', dependencies : cc.find_library('nls'))
+     cc.has_function('gethostbyname_r', dependencies: cc.find_library('nls'))
     lib_args += '-DXUSE_MTSAFE_API=1'
   endif
   # if host_machine.system() == 'sunos'
@@ -100,36 +100,36 @@ ks_table_h = custom_target('makekeystable',
 )
 ks_table = declare_dependency(
   include_directories: inc_x11,
-  sources : ks_table_h,
+  sources: ks_table_h,
 )
 ##  END: Generate ks_table.h
 
 subdir('src')
 
 lib_x11 = library('X11', src_x11,
-  c_args : lib_args,
-  include_directories : inc_x11,
-  dependencies : [dep_int_x11, dep_ext_x11, ks_table, libxcms, libxkb, libi18n],
-  version : '6.4.0',
-  install : true,
+  c_args: lib_args,
+  include_directories: inc_x11,
+  dependencies: [dep_int_x11, dep_ext_x11, ks_table, libxcms, libxkb, libi18n],
+  version: '6.4.0',
+  install: true,
 )
 
 libx11 = declare_dependency(
-  link_with : lib_x11,
-  include_directories : inc_x11,
+  link_with: lib_x11,
+  include_directories: inc_x11,
 )
 
 lib_x11_xcb = library('X11-xcb', src_x11_xcb,
-  c_args : lib_args,
-  include_directories : inc_x11,
-  dependencies : dep_ext_x11,
-  version : '1.0.0',
-  install : true,
+  c_args: lib_args,
+  include_directories: inc_x11,
+  dependencies: dep_ext_x11,
+  version: '1.0.0',
+  install: true,
 )
 
 libx11_xcb = declare_dependency(
-  link_with : lib_x11_xcb,
-  include_directories : inc_x11,
+  link_with: lib_x11_xcb,
+  include_directories: inc_x11,
 )
 
 # TODO: need?
@@ -137,21 +137,21 @@ libx11_xcb = declare_dependency(
 #   files(
 #     'include/X11/extenstions/XKBgeom.h',
 #   ),
-#   subdir : 'X11/extensions',
+#   subdir: 'X11/extensions',
 # )
 
 pkg.generate(lib_x11,
-  description : 'X library',
-  filebase : 'x11',
-  requires : ['xproto'],
+  description: 'X library',
+  filebase: 'x11',
+  requires: ['xproto'],
   requires_private: 'xcb >= 1.11.1',
   version: ver_x11,
 )
 
 pkg.generate(lib_x11_xcb,
-  description : 'X Library XCB interface',
-  filebase : 'x11-xcb',
-  requires : ['x11', 'x11-xcb'],
+  description: 'X Library XCB interface',
+  filebase: 'x11-xcb',
+  requires: ['x11', 'x11-xcb'],
   version: ver_x11,
 )
 

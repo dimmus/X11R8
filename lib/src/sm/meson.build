@@ -15,20 +15,20 @@ src = files(
 )
 
 lib = library('SM', src,
-  include_directories : inc_lib,
-  dependencies : [dep_int_sm, dep_ext_sm],
-  version : '6.0.1',
-  install : true,
+  include_directories: inc_lib,
+  dependencies: [dep_int_sm, dep_ext_sm],
+  version: '6.0.1',
+  install: true,
 )
 
 libsm = declare_dependency(
-  link_with : lib,
-  include_directories : inc_lib,
+  link_with: lib,
+  include_directories: inc_lib,
 )
 
 pkg.generate(lib,
-  description : 'X Session Management Library',
+  description: 'X Session Management Library',
   version: ver_sm,
-  filebase : 'sm',
-  requires_private : ['xproto', 'ice', 'uuid'],
+  filebase: 'sm',
+  requires_private: ['xproto', 'ice', 'uuid'],
 )

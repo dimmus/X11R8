@@ -103,7 +103,7 @@ if get_option('xvfb')
     endif
 
     if get_option('xephyr') and build_glamor
-        foreach testsuite : ['','-gles2','-gles3']
+        foreach testsuite: ['','-gles2','-gles3']
             test_env = piglit_env
             if(testsuite == '-gles2')
                 test_env = gles20_env
@@ -123,8 +123,8 @@ if get_option('xvfb')
             ]
 
         if rendercheck.found()
-            foreach testsuite : test_parameters
-                foreach rctest : testsuite[0]
+            foreach testsuite: test_parameters
+                foreach rctest: testsuite[0]
                     test(rctest[0],
                         simple_xinit,
                         args: [simple_xinit.full_path(),

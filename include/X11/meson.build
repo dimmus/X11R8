@@ -6,7 +6,7 @@ fd_set_maybe_headers = [ 'sys/param.h',
                          'sys/select.h'
 ]
 fd_set_headers = ''
-foreach h : fd_set_maybe_headers
+foreach h: fd_set_maybe_headers
     if cc.has_header(h)
         fd_set_headers += '#include <' + h + '>\n'
     endif
@@ -23,10 +23,10 @@ endif
 
 xpoll_config = configuration_data()
 xpoll_config.set('USE_FDS_BITS', fds_bits)
-configure_file(input : 'Xpoll.h.in',
-               output : 'Xpoll.h',
-               install : true,
-               install_dir : get_option('includedir') + '/X11',
+configure_file(input: 'Xpoll.h.in',
+               output: 'Xpoll.h',
+               install: true,
+               install_dir: get_option('includedir') + '/X11',
                configuration: xpoll_config)
 
 install_headers(
@@ -55,7 +55,7 @@ install_headers(
     'XWDFile.h',
     'Xwindows.h',
     'Xwinsock.h',
-    subdir : 'X11')
+    subdir: 'X11')
 
 subdir('dri')
 subdir('extensions')

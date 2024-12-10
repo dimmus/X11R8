@@ -221,5 +221,5 @@ install_headers(
 	'X11/Xtrans/Xtranssock.c',
 	'X11/Xtrans/Xtransutil.c',
 	'X11/Xtrans/transport.c',
-    subdir : 'X11/Xtrans',
+    subdir: 'X11/Xtrans',
 )

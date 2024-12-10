@@ -22,20 +22,20 @@ src = files(
 )
 
 lib = library('Xdmcp', src,
-  c_args : lib_args,
-  include_directories : inc_lib,
-  dependencies : xproto,
-  version : '6.0.0',
-  install : true,
+  c_args: lib_args,
+  include_directories: inc_lib,
+  dependencies: xproto,
+  version: '6.0.0',
+  install: true,
 )
 
 libxdmcp = declare_dependency(
-  link_with : lib,
-  include_directories : inc_lib,
+  link_with: lib,
+  include_directories: inc_lib,
 )
 
 pkg.generate(lib,
-  description : 'X Display Manager Control Protocol library',
-  filebase : 'xdmcp',
-  requires : 'xproto',
+  description: 'X Display Manager Control Protocol library',
+  filebase: 'xdmcp',
+  requires: 'xproto',
 )

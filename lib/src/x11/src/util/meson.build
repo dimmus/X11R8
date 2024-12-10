@@ -1,10 +1,10 @@
 makekeys_exe = executable('makekeys', 'makekeys.c',
-  include_directories : inc_config,
+  include_directories: inc_config,
   install: false
 )
 
 # if meson.is_cross_build()
-#   _makekeys_exe = find_program('makekeys', native : true)
+#   _makekeys_exe = find_program('makekeys', native: true)
 # else
 #   _makekeys_exe = makekeys_exe
 # endif

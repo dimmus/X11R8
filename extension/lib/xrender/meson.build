@@ -20,23 +20,23 @@ src = files(
 )
 
 lib = library('Xrender', src,
-  include_directories : inc_ext,
-  dependencies : dep_int_xrender,
-  version : '1.3.0',
-  install : true,
+  include_directories: inc_ext,
+  dependencies: dep_int_xrender,
+  version: '1.3.0',
+  install: true,
 )
 
 libxrender = declare_dependency(
-  link_with : lib,
-  include_directories : inc_ext,
+  link_with: lib,
+  include_directories: inc_ext,
 )
 
 meson.override_dependency('xrender', libxrender)
 
 pkg.generate(lib,
-  description : 'X Render Library',
+  description: 'X Render Library',
   version: ver_xrender,
-  filebase : 'xrender',
-  requires : ['xproto', 'x11'],
+  filebase: 'xrender',
+  requires: ['xproto', 'x11'],
   requires_private: 'x11'
 )
