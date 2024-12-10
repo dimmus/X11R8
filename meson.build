@@ -105,24 +105,26 @@ inc_fonts = []
 subdir('include')
 subdir('proto')
 subdir('lib' / 'include')
-subdir('lib' / 'xtrans')
+subdir('lib' / 'src' / 'xtrans')
 subdir('fonts') # <- xtrans
-subdir('lib' / 'x11')
-subdir('lib' / 'xau')
-subdir('lib' / 'xdmcp')
-subdir('lib' / 'ice')
-subdir('lib' / 'sm')
-subdir('lib' / 'xt')
-subdir('lib' / 'xcvt')
+subdir('lib' / 'src' / 'x11')
+subdir('lib' / 'src' / 'xau')
+subdir('lib' / 'src' / 'xdmcp')
+subdir('lib' / 'src' / 'ice')
+subdir('lib' / 'src' / 'sm')
+subdir('lib' / 'src' / 'xt')
+subdir('lib' / 'src' / 'xcvt')
 subdir('extensions' / 'lib' / 'xrender')
 subdir('extensions' / 'lib' / 'xfixes')
 subdir('extensions' / 'lib' / 'xext')
-subdir('lib' / 'xft')     # <- xrender
-subdir('lib' / 'xcursor') # <- xrender, xfixes
-subdir('lib' / 'xpm')     # <- xext
-subdir('lib' / 'xmu')     # <- xext
-subdir('lib' / 'xaw')     # <- xext
-# subdir('xaw3d')
+subdir('lib' / 'src' / 'xft')     # <- xrender
+subdir('lib' / 'src' / 'xcursor') # <- xrender, xfixes
+subdir('lib' / 'src' / 'xpm')     # <- xext
+subdir('lib' / 'src' / 'xmu')     # <- xext
+subdir('lib' / 'src' / 'xaw')     # <- xext
+# subdir('lib' / 'src' / 'xaw3d')   # TODO: implement 
+# subdir('lib' / 'test')    # TODO: implement
+# subdir('lib' / 'example') # TODO: implement
 subdir('extensions')
 subdir('server')
 

@@ -109,5 +109,3 @@ if get_option('build-sxpm')
     link_with: lib,
   )
 endif
-
-# subdir('test') # TODO: implement

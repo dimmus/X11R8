@@ -101,6 +101,3 @@ pkg.generate(lib,
   requires_private: ['ice', 'sm'],
   version: ver_xt,
 )
-
-# implement
-# subdir('test')

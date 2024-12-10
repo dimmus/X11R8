@@ -104,6 +104,3 @@ pkg.generate(name: 'Xmu',
   requires_private: ['x11', 'xt', 'xext'],
   version: ver_xmu,
 )
-
-# TODO: implement
-# subdir('test')

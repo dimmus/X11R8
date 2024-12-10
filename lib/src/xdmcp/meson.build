@@ -39,15 +39,3 @@ pkg.generate(lib,
   filebase : 'xdmcp',
   requires : 'xproto',
 )
-
-test('array',
-  executable('array',
-    'test/Array.c',
-    link_with : lib,
-    include_directories : inc_lib,
-    dependencies : xproto,
-  )
-)
-
-# TODO: implement
-# subdir('test')
