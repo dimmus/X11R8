@@ -106,7 +106,7 @@ subdir('include')
 subdir('proto')
 subdir('lib' / 'include')
 subdir('lib' / 'src' / 'xtrans')
-subdir('fonts') # <- xtrans
+subdir('font') # <- xtrans
 subdir('lib' / 'src' / 'x11')
 subdir('lib' / 'src' / 'xau')
 subdir('lib' / 'src' / 'xdmcp')
@@ -114,9 +114,9 @@ subdir('lib' / 'src' / 'ice')
 subdir('lib' / 'src' / 'sm')
 subdir('lib' / 'src' / 'xt')
 subdir('lib' / 'src' / 'xcvt')
-subdir('extensions' / 'lib' / 'xrender')
-subdir('extensions' / 'lib' / 'xfixes')
-subdir('extensions' / 'lib' / 'xext')
+subdir('extension' / 'lib' / 'xrender')
+subdir('extension' / 'lib' / 'xfixes')
+subdir('extension' / 'lib' / 'xext')
 subdir('lib' / 'src' / 'xft')     # <- xrender
 subdir('lib' / 'src' / 'xcursor') # <- xrender, xfixes
 subdir('lib' / 'src' / 'xpm')     # <- xext
@@ -125,7 +125,7 @@ subdir('lib' / 'src' / 'xaw')     # <- xext
 # subdir('lib' / 'src' / 'xaw3d')   # TODO: implement 
 # subdir('lib' / 'test')    # TODO: implement
 # subdir('lib' / 'example') # TODO: implement
-subdir('extensions')
+subdir('extension')
 subdir('server')
 
 fs = import('fs')
