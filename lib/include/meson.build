@@ -6,6 +6,7 @@ inc_lib += [
     include_directories('X11' / 'SM'),
     include_directories('X11' / 'extensions'),
     include_directories('X11' / 'Xaw'),
+    include_directories('X11' / 'Xcursor'),
 ]
 
 install_headers(
@@ -128,4 +129,14 @@ install_headers(
         'X11/Xaw/XawInit.h',
     ),
     subdir : 'X11/Xaw',
+)
+
+install_headers(
+    'X11/Xcursor/Xcursor.h',
+    subdir : 'X11/Xcursor',
+)
+
+install_headers(
+    'X11/Xdmcp.h',
+    subdir : 'X11',
 )

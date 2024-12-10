@@ -4,13 +4,6 @@ conf.set('XCURSOR_LIB_MAJOR', 1)
 conf.set('XCURSOR_LIB_MINOR', 2)
 conf.set('XCURSOR_LIB_REVISION', 3)
 
-inc_xcursor = [
-  inc_config,
-  include_directories('include'),
-  include_directories('include/X11'),
-  include_directories('include/X11/Xcursor'),
-]
-
 dep_int_xcursor = [xproto, libx11, libxrender, libxfixes]
 
 conf.set('HAVE_XFIXES', 1)
@@ -35,31 +28,24 @@ conf.set('HAVE_XFIXES', 1)
 # AC_SUBST([XCURSORPATH])
 
 src = files(
-  'src/xcursorint.h',
-  'src/cursor.c',
-  'src/display.c',
-  'src/file.c',
-  'src/library.c',
-  'src/xlib.c',
+  'xcursorint.h',
+  'cursor.c',
+  'display.c',
+  'file.c',
+  'library.c',
+  'xlib.c',
 )
 
 lib = library('Xcursor', src,
-  include_directories : inc_xcursor,
-  dependencies : dep_int_xcursor,
-  version : '1.0.2',
-  install : true,
+  include_directories: inc_lib,
+  dependencies: dep_int_xcursor,
+  version: '1.0.2',
+  install: true,
 )
 
 libxcursor = declare_dependency(
-  link_with : lib,
-  include_directories : inc_xcursor,
-)
-
-meson.override_dependency('xcursor', libxcursor)
-
-install_headers(
-  'include/X11/Xcursor/Xcursor.h',
-  subdir : 'X11/Xcursor',
+  link_with: lib,
+  include_directories: inc_lib,
 )
 
 pkg.generate(lib,
