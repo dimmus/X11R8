@@ -8,39 +8,32 @@ lib_args = [
   '-DXFT_REVISION=@0@'.format(xft_version[2]),
 ]
 
-inc_xft = [
-  inc_config,
-  include_directories('include'),
-  include_directories('include/X11'),
-  include_directories('include/X11/Xft'),
-]
-
 dep_ext_xft = [dep_freetype2, dep_fontconfig]
 dep_int_xft = [libxrender, libx11, xproto]
 
 src = files(
-  'src/xftint.h',
-  'src/xftcolor.c',
-  'src/xftcore.c',
-  'src/xftdbg.c',
-  'src/xftdpy.c',
-  'src/xftdraw.c',
-  'src/xftextent.c',
-  'src/xftfont.c',
-  'src/xftfreetype.c',
-  'src/xftglyphs.c',
-  'src/xftinit.c',
-  'src/xftlist.c',
-  'src/xftname.c',
-  'src/xftrender.c',
-  'src/xftstr.c',
-  'src/xftswap.c',
-  'src/xftxlfd.c',
+  'xftint.h',
+  'xftcolor.c',
+  'xftcore.c',
+  'xftdbg.c',
+  'xftdpy.c',
+  'xftdraw.c',
+  'xftextent.c',
+  'xftfont.c',
+  'xftfreetype.c',
+  'xftglyphs.c',
+  'xftinit.c',
+  'xftlist.c',
+  'xftname.c',
+  'xftrender.c',
+  'xftstr.c',
+  'xftswap.c',
+  'xftxlfd.c',
 )
 
 lib = library('Xft', src,
   c_args : lib_args,
-  include_directories : inc_xft,
+  include_directories : inc_lib,
   dependencies : [dep_ext_xft, dep_int_xft],
   version : '1.0.0',
   install : true,
@@ -48,15 +41,7 @@ lib = library('Xft', src,
 
 libxft = declare_dependency(
   link_with : lib,
-  include_directories : inc_xft,
-)
-
-meson.override_dependency('xft', libxft)
-
-install_headers(
-  'include/X11/Xft/XftCompat.h',
-  'include/X11/Xft/Xft.h',
-  subdir : 'X11/Xft',
+  include_directories : inc_lib,
 )
 
 pkg.generate(lib,
