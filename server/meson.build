@@ -514,7 +514,7 @@ common_dep = [
 inc = [
     inc_x11,
     inc_lib,
-    inc_fonts,
+    inc_font,
     include_directories(
         '.',
         'Xext',

@@ -63,13 +63,13 @@ endif
 
 libxserver_xext = static_library('libxserver_xext',
     srcs_xext,
-    include_directories: [inc, inc_fonts],
+    include_directories: [inc, inc_font],
     dependencies: common_dep,
 )
 
 libxserver_xext_vidmode = static_library('libxserver_xext_vidmode',
     'vidmode.c',
-    include_directories: [inc, inc_fonts],
+    include_directories: [inc, inc_font],
     dependencies: common_dep,
 )
 

@@ -1,6 +1,6 @@
 ver_fs = '1.0.10'
 
-inc_fonts_fs = [
+inc_font_fs = [
   include_directories('include'),
   include_directories('include' / 'X11'),
   include_directories('include' / 'X11' / 'fonts'),
@@ -46,7 +46,7 @@ src = files(
 
 lib = library('FS', src,
   c_args: lib_args,
-  include_directories: [inc_fonts, inc_fonts_fs],
+  include_directories: [inc_font, inc_font_fs],
   dependencies: dep_int_xfs,
   version: '6.0.0',
   install: true,
@@ -54,7 +54,7 @@ lib = library('FS', src,
 
 libfs = declare_dependency(
   link_with: lib,
-  include_directories: [inc_fonts, inc_fonts_fs],
+  include_directories: [inc_font, inc_font_fs],
 )
 
 install_headers(

@@ -36,7 +36,7 @@ in this Software without prior written authorization from The Open Group.
 #include    <X11/keysym.h>
 #include "src/util/replace.h"
 
-#if HAVE_STDINT_H
+#ifdef HAVE_STDINT_H
 #include <stdint.h>
 #elif !defined(INT32_MAX)
 #define INT32_MAX 0x7fffffff

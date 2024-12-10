@@ -1,11 +1,11 @@
-inc_fonts += inc_config
+inc_font += inc_config
 
 subdir('fontenc')
 subdir('fs')
 subdir('xfont')
 
-inc_fonts += [
-    inc_fonts_fontenc,
-    inc_fonts_fs,
-    inc_fonts_xfont,
+inc_font += [
+    inc_font_fontenc,
+    inc_font_fs,
+    inc_font_xfont,
 ]

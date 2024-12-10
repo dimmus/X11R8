@@ -62,7 +62,7 @@ from The Open Group.
 #include <X11/fonts/bitmap.h>
 #include <X11/fonts/bdfint.h>
 
-#if HAVE_STDINT_H
+#ifdef HAVE_STDINT_H
 #include <stdint.h>
 #else
 # ifndef INT32_MAX

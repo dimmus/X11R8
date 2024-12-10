@@ -95,12 +95,12 @@ pkg    = import('pkgconfig')
 conf = configuration_data()
 inc_config = include_directories('.')
 
-f_check   = []
-h_check   = []
-inc_ext   = []
-inc_x11   = []
-inc_lib   = []
-inc_fonts = []
+f_check  = []
+h_check  = []
+inc_ext  = []
+inc_x11  = []
+inc_lib  = []
+inc_font = []
 
 subdir('include')
 subdir('proto')

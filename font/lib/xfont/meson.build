@@ -1,6 +1,6 @@
 ver_xfont = '2.0.7'
 
-inc_fonts_xfont = [
+inc_font_xfont = [
   include_directories('include'),
   include_directories('include' / 'X11'),
   include_directories('include' / 'X11' / 'fonts'),
@@ -158,7 +158,7 @@ src += files(
 
 lib = library('Xfont', src,
   c_args: lib_args,
-  include_directories: [inc_fonts, inc_fonts_xfont],
+  include_directories: [inc_font, inc_font_xfont],
   dependencies: [dep_int_xfont, dep_ext_xfont],
   version: '2.0.0',
   install: true,
@@ -166,7 +166,7 @@ lib = library('Xfont', src,
 
 libxfont = declare_dependency(
   link_with: lib,
-  include_directories: [inc_fonts, inc_fonts_xfont],
+  include_directories: [inc_font, inc_font_xfont],
 )
 
 meson.override_dependency('xfont', libxfont)

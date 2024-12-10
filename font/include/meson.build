@@ -1,4 +1,4 @@
-inc_fonts += [
+inc_font += [
     include_directories('.'),
     include_directories('X11'),
     include_directories('X11' / 'fonts'),
