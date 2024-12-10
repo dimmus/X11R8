@@ -9,6 +9,7 @@ inc_lib += [
     include_directories('X11' / 'Xcursor'),
     include_directories('X11' / 'Xft'),
     include_directories('X11' / 'Xmu'),
+    include_directories('X11' / 'Xtrans'),
 ]
 
 install_headers(
@@ -169,6 +170,7 @@ install_headers(
     subdir: 'X11/Xmu',
 )
 
+# xpm
 install_headers(
     'X11/xpm.h',
     subdir: 'X11',
@@ -210,3 +212,14 @@ install_headers(
     subdir: 'X11',
 )
 
+# xtrans
+install_headers(
+    'X11/Xtrans/Xtrans.h',
+	'X11/Xtrans/Xtrans.c',
+	'X11/Xtrans/Xtransint.h',
+	'X11/Xtrans/Xtranslcl.c',
+	'X11/Xtrans/Xtranssock.c',
+	'X11/Xtrans/Xtransutil.c',
+	'X11/Xtrans/transport.c',
+    subdir : 'X11/Xtrans',
+)

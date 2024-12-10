@@ -11,7 +11,7 @@ lib_args = ['-DFS_t', '-DTRANS_CLIENT']
 f_check += ['strlcpy', 'strnlen']
 # TODO: AC_REPLACE_FUNCS([reallocarray])
 
-dep_int_xfs = [xproto, libxtrans]
+dep_int_xfs = [xproto]
 
 src = files(
   'src/FSCloseFt.c',

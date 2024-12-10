@@ -2,7 +2,7 @@ ver_ice = '1.1.1'
 
 f_check += ['asprintf', 'arc4random_buf', 'getentropy']
 
-dep_int_ice = [xproto, libxtrans]
+dep_int_ice = [xproto]
 
 lib_args = ['-DICE_t', '-DTRANS_CLIENT', '-DTRANS_SERVER']
 

@@ -3,7 +3,7 @@ ver_sm = '1.2.4'
 f_check += ['uuid_create']
 
 dep_ext_sm = [dep_uuid]
-dep_int_sm = [xproto, libxtrans, libice]
+dep_int_sm = [xproto, libice]
 
 src = files(
   'sm_client.c',

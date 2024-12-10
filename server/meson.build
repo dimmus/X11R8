@@ -503,7 +503,6 @@ endif
 
 common_dep = [
     xproto,
-    libxtrans,
     libsystemd_daemon_dep,
     pixman_dep,
     libbsd_dep,

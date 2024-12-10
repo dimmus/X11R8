@@ -20,7 +20,7 @@ h_check += ['endian.h', 'poll.h', 'sys/poll.h', 'err.h', 'float.h']
 # TODO: AC_REPLACE_FUNCS([reallocarray realpath strlcat strlcpy])
 
 dep_ext_xfont = [dep_m, dep_freetype2, dep_zlib, dep_bzip2]
-dep_int_xfont = [xproto, libxtrans, libfontenc]
+dep_int_xfont = [xproto, libfontenc]
 
 if dep_zlib.found()
   conf.set('X_GZIP_FONT_COMPRESSION', 1)

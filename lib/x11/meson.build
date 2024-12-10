@@ -40,7 +40,7 @@ if get_option('composecache')
 endif
 
 dep_ext_x11 = [dep_xcb]
-dep_int_x11 = [xproto, libxtrans]
+dep_int_x11 = [xproto]
 
 if get_option('xthreads')
   lib_args += '-DXTHREADS'
