@@ -22,7 +22,7 @@ hdrs_render = [
 libxserver_render = static_library('libxserver_render',
     srcs_render,
     include_directories: inc,
-    dependencies: common_dep,
+    dependencies: dep_common,
 )
 
 if build_xorg

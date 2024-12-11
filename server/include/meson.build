@@ -6,7 +6,7 @@ patch = version_split[2].to_int()
 # convert to the old-style 1.x.y version scheme used up to 1.20.x for backwards compatibility
 release = 1 * 10000000 + major * 100000 + minor * 1000 + patch
 
-dri_dep = dependency('dri', required: build_glx)
+dep_dri = dependency('dri', required: build_glx)
 
 conf_data = configuration_data()
 conf_data.set('_DIX_CONFIG_H_', '1')
@@ -88,7 +88,7 @@ elif cc.compiles('''
     conf_data.set('HAVE_PTHREAD_SETNAME_NP_WITHOUT_TID', 1)
 endif
 
-conf_data.set('HAVE_LIBBSD', libbsd_dep.found() ? '1': false)
+conf_data.set('HAVE_LIBBSD', dep_libbsd.found() ? '1': false)
 # Note: this symbol is used by libXtrans.
 conf_data.set('HAVE_SYSTEMD_DAEMON', build_systemd ? '1': false)
 conf_data.set('CONFIG_UDEV', build_udev ? '1': false)
@@ -99,23 +99,23 @@ conf_data.set('SYSTEMD_LOGIND', build_systemd_logind ? '1': false)
 conf_data.set('NEED_DBUS', build_systemd_logind or build_hal ? '1': false)
 conf_data.set('CONFIG_WSCONS', host_machine.system() in ['openbsd', 'netbsd'] ? '1': false)
 
-conf_data.set('HAVE_XSHMFENCE', xshmfence_dep.found() ? '1': false)
+conf_data.set('HAVE_XSHMFENCE', dep_xshmfence.found() ? '1': false)
 conf_data.set('WITH_LIBDRM', libdrm_required ? '1': false)
 conf_data.set('GLAMOR_HAS_EGL_QUERY_DMABUF',
-              epoxy_dep.found() and epoxy_dep.version().version_compare('>= 1.4.4') ? '1': false)
+              dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.4.4') ? '1': false)
 conf_data.set('GLAMOR_HAS_EGL_QUERY_DRIVER',
-              epoxy_dep.found() and epoxy_dep.version().version_compare('>= 1.5.4') ? '1': false)
+              dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.5.4') ? '1': false)
 conf_data.set('GLXEXT', build_glx ? '1': false)
 conf_data.set('GLAMOR', build_glamor ? '1': false)
-conf_data.set('GLAMOR_HAS_GBM', gbm_dep.found() ? '1': false)
+conf_data.set('GLAMOR_HAS_GBM', dep_gbm.found() ? '1': false)
 conf_data.set('GLAMOR_HAS_GBM_LINEAR',
-              build_glamor and gbm_dep.found() and gbm_dep.version().version_compare('>= 10.6') ? '1': false)
+              build_glamor and dep_gbm.found() and dep_gbm.version().version_compare('>= 10.6') ? '1': false)
 conf_data.set('GBM_BO_WITH_MODIFIERS',
-              build_glamor and gbm_dep.found() and gbm_dep.version().version_compare('>= 17.1') ? '1': false)
+              build_glamor and dep_gbm.found() and dep_gbm.version().version_compare('>= 17.1') ? '1': false)
 conf_data.set('GBM_BO_FD_FOR_PLANE',
-              build_glamor and gbm_dep.found() and gbm_dep.version().version_compare('>= 21.1') ? '1': false)
+              build_glamor and dep_gbm.found() and dep_gbm.version().version_compare('>= 21.1') ? '1': false)
 conf_data.set('GBM_BO_WITH_MODIFIERS2',
-              build_glamor and gbm_dep.found() and gbm_dep.version().version_compare('>= 21.3') ? '1': false)
+              build_glamor and dep_gbm.found() and dep_gbm.version().version_compare('>= 21.3') ? '1': false)
 
 conf_data.set_quoted('SERVER_MISC_CONFIG_PATH', serverconfigdir)
 conf_data.set_quoted('PROJECTROOT', get_option('prefix'))
@@ -138,7 +138,7 @@ conf_data.set('HAVE_SYS_UN_H', cc.has_header('sys/un.h') ? '1': false)
 conf_data.set('HAVE_SYS_UTSNAME_H', cc.has_header('sys/utsname.h') ? '1': false)
 conf_data.set('HAVE_SYS_SYSMACROS_H', cc.has_header('sys/sysmacros.h') ? '1': false)
 
-conf_data.set('HAVE_ARC4RANDOM_BUF', cc.has_function('arc4random_buf', dependencies: libbsd_dep) ? '1': false)
+conf_data.set('HAVE_ARC4RANDOM_BUF', cc.has_function('arc4random_buf', dependencies: dep_libbsd) ? '1': false)
 conf_data.set('HAVE_BACKTRACE', cc.has_function('backtrace') ? '1': false)
 conf_data.set('HAVE_CBRT', cc.has_function('cbrt') ? '1': false)
 conf_data.set('HAVE_EPOLL_CREATE1', cc.has_function('epoll_create1') ? '1': false)
@@ -159,7 +159,7 @@ conf_data.set('HAVE_POLL', cc.has_function('poll') ? '1': false)
 conf_data.set('HAVE_POLLSET_CREATE', cc.has_function('pollset_create') ? '1': false)
 conf_data.set('HAVE_POSIX_FALLOCATE', cc.has_function('posix_fallocate') ? '1': false)
 conf_data.set('HAVE_PORT_CREATE', cc.has_function('port_create') ? '1': false)
-conf_data.set('HAVE_REALLOCARRAY', cc.has_function('reallocarray', dependencies: libbsd_dep) ? '1': false)
+conf_data.set('HAVE_REALLOCARRAY', cc.has_function('reallocarray', dependencies: dep_libbsd) ? '1': false)
 conf_data.set('HAVE_SETEUID', cc.has_function('seteuid') ? '1': false)
 conf_data.set('HAVE_SETITIMER', cc.has_function('setitimer') ? '1': false)
 conf_data.set('HAVE_SHMCTL64', cc.has_function('shmctl64') ? '1': false)
@@ -169,8 +169,8 @@ conf_data.set('HAVE_SIGPROCMASK', cc.has_function('sigprocmask') ? '1': false)
 conf_data.set('HAVE_SOCKLEN_T', cc.has_type('socklen_t', prefix: '#include <sys/socket.h>') ? '1': false)
 conf_data.set('HAVE_STRCASECMP', cc.has_function('strcasecmp') ? '1': false)
 conf_data.set('HAVE_STRCASESTR', cc.has_function('strcasestr') ? '1': false)
-conf_data.set('HAVE_STRLCAT', cc.has_function('strlcat', dependencies: libbsd_dep) ? '1': false)
-conf_data.set('HAVE_STRLCPY', cc.has_function('strlcpy', dependencies: libbsd_dep) ? '1': false)
+conf_data.set('HAVE_STRLCAT', cc.has_function('strlcat', dependencies: dep_libbsd) ? '1': false)
+conf_data.set('HAVE_STRLCPY', cc.has_function('strlcpy', dependencies: dep_libbsd) ? '1': false)
 conf_data.set('HAVE_STRNCASECMP', cc.has_function('strncasecmp') ? '1': false)
 conf_data.set('HAVE_STRNDUP', cc.has_function('strndup') and cc.has_header_symbol('string.h', 'strndup') ? '1': false)
 conf_data.set('HAVE_TIMINGSAFE_MEMCMP', cc.has_function('timingsafe_memcmp') ? '1': false)
@@ -211,7 +211,7 @@ conf_data.set('DPMSExtension', build_dpms ? '1': false)
 conf_data.set('DRI2', build_dri2 ? '1': false)
 conf_data.set('DRI3', build_dri3 ? '1': false)
 if build_glx
-    conf_data.set_quoted('DRI_DRIVER_PATH', dri_dep.get_variable(pkgconfig: 'dridriverdir'))
+    conf_data.set_quoted('DRI_DRIVER_PATH', dep_dri.get_variable(pkgconfig: 'dridriverdir'))
 endif
 conf_data.set('MITSHM', build_mitshm ? '1': false)
 conf_data.set('PANORAMIX', build_xinerama ? '1': false)
@@ -415,7 +415,7 @@ configure_file(output: 'xwin-config.h',
                input: 'xwin-config.h.meson.in',
                configuration: xwin_data)
 
-build_xwayland_glamor = build_glamor and gbm_dep.found()
+build_xwayland_glamor = build_glamor and dep_gbm.found()
 
 xwayland_data = configuration_data()
 xwayland_data.set('XWL_HAS_GLAMOR', build_xwayland_glamor ? '1': false)

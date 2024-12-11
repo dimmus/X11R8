@@ -40,14 +40,14 @@ if build_xv
     srcs_glamor += 'glamor_xv.c'
 endif
 
-epoxy_dep = dependency('epoxy')
+dep_epoxy = dependency('epoxy')
 
 glamor = static_library('glamor',
     srcs_glamor,
     include_directories: [inc, glx_inc],
     dependencies: [
-        common_dep,
-        epoxy_dep,
+        dep_common,
+        dep_epoxy,
     ],
 )
 

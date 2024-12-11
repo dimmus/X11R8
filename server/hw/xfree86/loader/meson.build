@@ -6,7 +6,7 @@ srcs_xorg_loader = [
 xorg_loader = static_library('xorg_loader',
     srcs_xorg_loader,
     include_directories: [inc, xorg_inc],
-    dependencies: [common_dep, dep_dl],
+    dependencies: [dep_common, dep_dl],
     c_args: xorg_c_args,
 )
 

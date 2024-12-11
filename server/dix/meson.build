@@ -45,18 +45,18 @@ if with_dtrace
     dtrace_src += dtrace_object.process(dtrace_tmpl)
 endif
 
-dtrace_dep = declare_dependency(sources: [dtrace_src, dtrace_hdr])
+dep_dtrace = declare_dependency(sources: [dtrace_src, dtrace_hdr])
 
 libxserver_dix = static_library('libxserver_dix',
     srcs_dix,
     include_directories: inc,
-    dependencies: [ dtrace_dep, common_dep, ]
+    dependencies: [ dep_dtrace, dep_common, ]
 )
 
 libxserver_main = static_library('libxserver_main',
     'stubmain.c',
     include_directories: inc,
-    dependencies: common_dep,
+    dependencies: dep_common,
 )
 
 install_data(

@@ -17,9 +17,9 @@ xorg_c_args = []
 xorg_c_args += '-DHAVE_XORG_CONFIG_H'
 xorg_c_args += '-DXORG_NO_SDKSYMS'
 
-pciaccess_dep = []
+dep_pciaccess = []
 if get_option('pciaccess')
-    pciaccess_dep = dependency('pciaccess', version: '>= 0.12.901')
+    dep_pciaccess = dependency('pciaccess', version: '>= 0.12.901')
 endif
 
 # subdirs for convenience libraries statically linked into Xorg
@@ -82,11 +82,11 @@ else
 endif
 
 xorg_deps = [
-    pixman_dep,
+    dep_pixman,
     dep_m,
     dep_dl,
-    pciaccess_dep,
-    sha1_dep,
+    dep_pciaccess,
+    dep_sha1,
     libxau,
     libxcomposite,
     libxrandr,
@@ -94,9 +94,9 @@ xorg_deps = [
     libxfixes,
     libxdmcp,
     libxfont,
-    xshmfence_dep,
-    config_dep,
-    libdrm_dep,
+    dep_xshmfence,
+    dep_config,
+    dep_libdrm,
 ]
 
 if get_option('suid_wrapper')
@@ -122,7 +122,7 @@ e = executable(
 subdir('dixmods')
 subdir('exa')
 subdir('fbdevhw')
-if gbm_dep.found()
+if dep_gbm.found()
     subdir('glamor_egl')
 endif
 if int10 != 'false'
@@ -197,4 +197,4 @@ xorgserver_lib = shared_library(
     install: false,
 )
 
-xorgserver_dep = declare_dependency(link_with: xorgserver_lib)
+dep_xorgserver = declare_dependency(link_with: xorgserver_lib)

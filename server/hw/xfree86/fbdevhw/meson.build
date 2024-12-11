@@ -7,7 +7,7 @@ endif
 shared_module('fbdevhw',
     srcs_fbdevhw,
     include_directories: [ inc, xorg_inc ],
-    dependencies: common_dep,
+    dependencies: dep_common,
     c_args: xorg_c_args,
     install: true,
     install_dir: module_dir,

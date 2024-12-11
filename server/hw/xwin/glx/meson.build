@@ -75,7 +75,7 @@ xwin_glx = static_library(
         top_dir_inc,
         include_directories('../'),
     ],
-    dependencies: common_dep,
+    dependencies: dep_common,
     c_args: xwin_glx_c_args,
 )
 

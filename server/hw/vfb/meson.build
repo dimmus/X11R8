@@ -8,7 +8,7 @@ srcs = [
 xvfb_server = executable('Xvfb',
     srcs,
     include_directories: inc,
-    dependencies: common_dep,
+    dependencies: dep_common,
     link_with: [
         libxserver_main,
         libxserver_fb,

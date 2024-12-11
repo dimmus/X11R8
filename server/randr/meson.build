@@ -28,7 +28,7 @@ endif
 libxserver_randr = static_library('libxserver_randr',
     srcs_randr,
     include_directories: inc,
-    dependencies: common_dep,
+    dependencies: dep_common,
 )
 
 if build_xorg

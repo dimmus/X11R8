@@ -51,7 +51,7 @@ xorg_int10 = shared_module('int10',
         xorg_inc,
         include_directories('../x86emu')
     ],
-    dependencies: common_dep,
+    dependencies: dep_common,
     link_with: int10_link,
     c_args: int10_c_args,
 

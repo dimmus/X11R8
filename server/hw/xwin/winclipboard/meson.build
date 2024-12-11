@@ -16,7 +16,7 @@ xwin_clipboard = static_library(
         dependency('xcb-aux'),
         dependency('xcb-icccm'),
         dependency('xcb-xfixes'),
-        socket_dep,
+        dep_socket,
     ],
 )
 

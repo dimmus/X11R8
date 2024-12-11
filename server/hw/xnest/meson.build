@@ -23,8 +23,8 @@ executable('Xnest',
     srcs,
     include_directories: inc,
     dependencies: [
-        common_dep,
-        xnest_dep,
+        dep_common,
+        dep_xnest,
     ],
     link_with: [
         libxserver_main,

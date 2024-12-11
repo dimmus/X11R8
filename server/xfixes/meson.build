@@ -10,5 +10,5 @@ srcs_xfixes = [
 libxserver_xfixes = static_library('libxserver_xfixes',
     srcs_xfixes,
     include_directories: inc,
-    dependencies: common_dep,
+    dependencies: dep_common,
 )

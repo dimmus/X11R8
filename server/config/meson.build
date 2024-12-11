@@ -2,21 +2,21 @@ srcs_config = [
     'config.c',
 ]
 
-config_dep = [common_dep]
+dep_config = [dep_common]
 
 if build_dbus
     srcs_config += 'dbus-core.c'
-    config_dep += dbus_dep
+    dep_config += dep_dbus
 endif
 
 if build_hal
     srcs_config += 'hal.c'
-    config_dep += hal_dep
+    dep_config += dep_hal
 endif
 
 if build_udev
     srcs_config += 'udev.c'
-    config_dep += udev_dep
+    dep_config += dep_udev
 endif
 
 if host_machine.system() == 'netbsd' or host_machine.system() == 'openbsd'
@@ -31,5 +31,5 @@ endif
 libxserver_config = static_library('libxserver_config',
     srcs_config,
     include_directories: inc,
-    dependencies: config_dep,
+    dependencies: dep_config,
 )

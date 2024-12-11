@@ -14,5 +14,5 @@ libXquartzXpr = static_library('XquartzXpr',
     ],
     include_directories: [inc, '..', '../../../pseudoramiX', '../../../miext/rootless'],
     c_args: [bundle_id_def, '-DXQUARTZ'],
-    dependencies: [xproto, pixman_dep],
+    dependencies: [xproto, dep_pixman],
 )

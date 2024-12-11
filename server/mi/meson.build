@@ -45,7 +45,7 @@ libxserver_mi = static_library('libxserver_mi',
     include_directories: inc,
     link_with: libxserver_os,
     dependencies: [
-        common_dep,
+        dep_common,
         dep_m,
     ],
 )

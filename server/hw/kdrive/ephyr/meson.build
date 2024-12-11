@@ -6,8 +6,8 @@ srcs = [
     'hostx.c',
 ]
 
-xephyr_dep = [
-    common_dep,
+dep_xephyr = [
+    dep_common,
     dependency('xcb'),
     dependency('xcb-shape'),
     dependency('xcb-render'),
@@ -28,13 +28,13 @@ if build_glamor
         srcs += 'ephyr_glamor_xv.c'
     endif
     xephyr_glamor += glamor
-    xephyr_dep += epoxy_dep
-    xephyr_dep += dependency('xcb-glx')
+    dep_xephyr += dep_epoxy
+    dep_xephyr += dependency('xcb-glx')
 endif
 
 if build_xv
     srcs += 'ephyrvideo.c'
-    xephyr_dep += dependency('xcb-xv')
+    dep_xephyr += dependency('xcb-xv')
 endif
 
 xephyr_server = executable('Xephyr',
@@ -43,7 +43,7 @@ xephyr_server = executable('Xephyr',
         inc,
         include_directories('../src')
     ],
-    dependencies: xephyr_dep,
+    dependencies: dep_xephyr,
     link_with: [
         libxserver_main,
         libxserver_exa,

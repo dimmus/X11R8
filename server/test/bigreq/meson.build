@@ -1,10 +1,10 @@
-xcb_dep = dependency('xcb', required: false)
-xcb_xinput_dep = dependency('xcb-xinput', required: false)
+dep_xcb = dependency('xcb', required: false)
+dep_xcb_xinput = dependency('xcb-xinput', required: false)
 
 if get_option('xvfb')
-    if xcb_dep.found() and xcb_xinput_dep.found()
+    if dep_xcb.found() and dep_xcb_xinput.found()
         requestlength = executable('request-length', 'request-length.c',
-                                   dependencies: [xcb_dep, xcb_xinput_dep])
+                                   dependencies: [dep_xcb, dep_xcb_xinput])
         test('request-length', simple_xinit, args: [requestlength, '--', xvfb_server])
     endif
 endif

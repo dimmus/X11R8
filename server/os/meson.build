@@ -57,14 +57,14 @@ if get_option('xdmcp')
     srcs_os += 'xdmcp.c'
 endif
 
-os_dep = []
+dep_os = []
 os_c_args = []
 
 if get_option('xres')
     # Only the XRes extension cares about the client ID.
     os_c_args += '-DCLIENTIDS'
     if host_machine.system() == 'openbsd'
-        os_dep += cc.find_library('kvm')
+        dep_os += cc.find_library('kvm')
     endif
 endif
 
@@ -80,18 +80,18 @@ if srcs_libc.length() > 0
 endif
 
 if enable_input_thread
-    os_dep += cc.find_library('pthread')
+    dep_os += cc.find_library('pthread')
 endif
 
 libxserver_os = static_library('libxserver_os',
     srcs_os,
     include_directories: inc,
     dependencies: [
-        dtrace_dep,
-        common_dep,
+        dep_dtrace,
+        dep_common,
         dep_dl,
-        sha1_dep,
-        os_dep,
+        dep_sha1,
+        dep_os,
         libxau, # dependency('xau'),
     ],
     c_args: os_c_args,

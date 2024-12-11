@@ -11,5 +11,5 @@ srcs_xorg_x86emu = [
 xorg_x86emu = static_library('x86emu',
     srcs_xorg_x86emu,
     include_directories: [inc, xorg_inc],
-    dependencies: common_dep,
+    dependencies: dep_common,
 )

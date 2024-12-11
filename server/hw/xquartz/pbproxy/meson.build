@@ -8,7 +8,7 @@ if build_standalone_pbproxy
     pbproxy_defs += ['-DSTANDALONE_XPBPROXY']
 endif
 
-libapplewm_dep = dependency('applewm', version: '>=1.4')
+dep_libapplewm = dependency('applewm', version: '>=1.4')
 
 libxpbproxy = static_library('xpbproxy',
     ['../NSUserDefaults+XQuartzDefaults.m',
@@ -16,7 +16,7 @@ libxpbproxy = static_library('xpbproxy',
      'x-input.m',
      'x-selection.m'],
     include_directories: ['..'],
-    dependencies: [xproto, libapplewm_dep, libxfixes, libx11],
+    dependencies: [xproto, dep_libapplewm, libxfixes, libx11],
     objc_args: pbproxy_defs,
 )
 

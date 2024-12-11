@@ -64,13 +64,13 @@ endif
 libxserver_xext = static_library('libxserver_xext',
     srcs_xext,
     include_directories: [inc, inc_font],
-    dependencies: common_dep,
+    dependencies: dep_common,
 )
 
 libxserver_xext_vidmode = static_library('libxserver_xext_vidmode',
     'vidmode.c',
     include_directories: [inc, inc_font],
-    dependencies: common_dep,
+    dependencies: dep_common,
 )
 
 if build_xorg

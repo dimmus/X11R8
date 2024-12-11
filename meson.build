@@ -131,7 +131,7 @@ subdir('server')
 fs = import('fs')
 FIRST_RUN = not fs.is_dir(dir_build / 'src')
 
-# switch that off when run meson reconfigure
+# speed up when run meson reconfigure
 if FIRST_RUN
   f_unique = []
   foreach f: f_check

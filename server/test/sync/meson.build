@@ -1,9 +1,9 @@
-xcb_dep = dependency('xcb', required: false)
-xcb_sync_dep = dependency('xcb-sync', required: false)
+dep_xcb = dependency('xcb', required: false)
+dep_xcb_sync = dependency('xcb-sync', required: false)
 
 if get_option('xvfb')
-    if xcb_dep.found() and xcb_sync_dep.found()
-        sync = executable('sync', 'sync.c', dependencies: [xcb_dep, xcb_sync_dep])
+    if dep_xcb.found() and dep_xcb_sync.found()
+        sync = executable('sync', 'sync.c', dependencies: [dep_xcb, dep_xcb_sync])
         test('sync', simple_xinit, args: [sync, '--', xvfb_server])
     endif
 endif

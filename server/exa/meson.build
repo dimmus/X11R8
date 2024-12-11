@@ -15,7 +15,7 @@ srcs_exa = [
 libxserver_exa = static_library('libxserver_exa',
     srcs_exa,
     include_directories: inc,
-    dependencies: common_dep,
+    dependencies: dep_common,
     c_args: '-DHAVE_XORG_CONFIG_H'
 )
 

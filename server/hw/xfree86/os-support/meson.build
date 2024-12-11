@@ -11,7 +11,7 @@ hdrs_xorg_os_support = [
     'xf86_OSproc.h'
 ]
 
-os_dep = []
+dep_os = []
 os_c_args = []
 
 if get_option('pciaccess')
@@ -100,14 +100,14 @@ elif host_machine.system().endswith('bsd')
     if host_machine.cpu_family() == 'x86_64'
         srcs_xorg_os_support += 'bsd/i386_video.c'
         if host_machine.system() == 'netbsd'
-            os_dep += cc.find_library('x86_64')
+            dep_os += cc.find_library('x86_64')
         elif host_machine.system() == 'openbsd'
-            os_dep += cc.find_library('amd64')
+            dep_os += cc.find_library('amd64')
         endif
     elif host_machine.cpu_family() == 'x86'
         srcs_xorg_os_support += 'bsd/i386_video.c'
         if host_machine.system() == 'netbsd' or host_machine.system() == 'openbsd'
-            os_dep += cc.find_library('i386')
+            dep_os += cc.find_library('i386')
         endif
     elif host_machine.cpu_family() == 'arm' or host_machine.cpu_family() == 'aarch64'
         srcs_xorg_os_support += 'bsd/arm_video.c'
@@ -119,7 +119,7 @@ elif host_machine.system().endswith('bsd')
     elif host_machine.cpu_family() == 'alpha'
         srcs_xorg_os_support += 'bsd/alpha_video.c'
         if host_machine.system() == 'freebsd'
-            os_dep += cc.find_library('io')
+            dep_os += cc.find_library('io')
         elif host_machine.system() == 'netbsd'
             os_c_args += '-DUSE_ALPHA_PIO'
         endif
@@ -157,10 +157,10 @@ xorg_os_support = static_library('xorg_os_support',
     srcs_xorg_os_support,
     include_directories: [inc, xorg_inc],
     dependencies: [
-        common_dep,
-        dbus_dep,
-        libdrm_dep,
-        os_dep,
+        dep_common,
+        dep_dbus,
+        dep_libdrm,
+        dep_os,
     ],
     c_args: xorg_c_args + os_c_args,
 )

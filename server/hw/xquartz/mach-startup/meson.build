@@ -12,7 +12,7 @@ mach_startup = custom_target('mach_startup',
              'mach_startupUser.c'],
 )
 
-mach_startup_dep = declare_dependency(
+dep_mach_startup = declare_dependency(
     sources: mach_startup[2] # mach_startup.h
 )
 
@@ -62,7 +62,7 @@ x11_bin = executable('X11.bin',
       mach_startup[3], # mach_startupUser.c
      ],
      link_with: x11_bin_libs,
-     dependencies: [xproto, x11_bin_deps, mach_startup_dep],
+     dependencies: [xproto, x11_bin_deps, dep_mach_startup],
      include_directories: [inc, '..', top_dir_inc],
      c_args: xquartz_defs,
      link_args: ['-Objc'],
@@ -94,6 +94,6 @@ xquartz = executable('Xquartz',
     ],
     include_directories: inc,
     c_args: xquartz_defs,
-    dependencies: [xquartz_deps, mach_startup_dep],
+    dependencies: [xquartz_deps, dep_mach_startup],
     install: true,
 )

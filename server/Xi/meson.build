@@ -56,12 +56,12 @@ srcs_xi = [
 libxserver_xi = static_library('libxserver_xi',
     srcs_xi,
     include_directories: inc,
-    dependencies: common_dep,
+    dependencies: dep_common,
 )
 
 srcs_xi_stubs = ['stubs.c']
 libxserver_xi_stubs = static_library('libxserver_xi_stubs',
     srcs_xi_stubs,
     include_directories: inc,
-    dependencies: common_dep,
+    dependencies: dep_common,
 )

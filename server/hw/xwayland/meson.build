@@ -30,11 +30,11 @@ srcs = [
     '../../mi/miinitext.h',
 ]
 
-scanner_dep = dependency('wayland-scanner', native: true)
-scanner = find_program(scanner_dep.get_variable(pkgconfig: 'wayland_scanner'))
+dep_scanner = dependency('wayland-scanner', native: true)
+scanner = find_program(dep_scanner.get_variable(pkgconfig: 'wayland_scanner'))
 
-protocols_dep = dependency('wayland-protocols', version: wayland_protocols_req)
-protodir = protocols_dep.get_variable(pkgconfig: 'pkgdatadir')
+dep_protocols = dependency('wayland-protocols', version: wayland_protocols_req)
+protodir = dep_protocols.get_variable(pkgconfig: 'pkgdatadir')
 
 pointer_xml = join_paths(protodir, 'unstable', 'pointer-constraints', 'pointer-constraints-unstable-v1.xml')
 relative_xml = join_paths(protodir, 'unstable', 'relative-pointer', 'relative-pointer-unstable-v1.xml')
@@ -75,7 +75,7 @@ client_header = generator(scanner,
     arguments: ['client-header', '@INPUT@', '@OUTPUT@']
 )
 
-if scanner_dep.version().version_compare('>= 1.14.91')
+if dep_scanner.version().version_compare('>= 1.14.91')
     scanner_argument = 'private-code'
 else
     scanner_argument = 'code'
@@ -92,11 +92,11 @@ foreach xml: proto_xml
 endforeach
 
 if build_ei
-    xwayland_dep += libei_dep
+    dep_xwayland += dep_libei
     srcs += [ 'xwayland-xtest.c', 'xwayland-xtest.h' ]
 
     if build_ei_portal
-        xwayland_dep += liboeffis_dep
+        dep_xwayland += dep_liboeffis
     endif
 endif
 
@@ -116,7 +116,7 @@ if build_xwayland_glamor
 
     srcs += client_header.process('drm.xml')
     srcs += code.process('drm.xml')
-    xwayland_dep += gbm_dep
+    dep_xwayland += dep_gbm
     xwayland_glamor += glamor
 endif
 
@@ -125,12 +125,12 @@ if build_glx
     wayland_inc += glx_inc
 endif
 
-if libdrm_dep.found()
-    xwayland_dep += libdrm_dep
+if dep_libdrm.found()
+    dep_xwayland += dep_libdrm
 endif
 
 if have_libdecor
-    xwayland_dep += libdecor_dep
+    dep_xwayland += dep_libdecor
 endif
 
 xwayland_server = executable(
@@ -138,9 +138,9 @@ xwayland_server = executable(
     srcs,
     include_directories: wayland_inc,
     dependencies: [
-        common_dep,
-        epoll_dep,
-        xwayland_dep,
+        dep_common,
+        dep_epoll,
+        dep_xwayland,
         xproto,
     ],
     link_with: [

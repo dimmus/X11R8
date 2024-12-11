@@ -36,9 +36,9 @@ if build_glx
         srcs_glx,
         include_directories: inc,
         dependencies: [
-            common_dep,
+            dep_common,
             dep_dl,
-            dri_dep,
+            dep_dri,
             dependency('glproto', version: '>= 1.4.17'),
             dependency('gl', version: '>= 1.2'),
         ],
@@ -72,7 +72,7 @@ if build_glx
     srcs_vnd,
     include_directories: inc,
         dependencies: [
-            common_dep,
+            dep_common,
             dep_dl,
             dependency('glproto', version: '>= 1.4.17'),
             dependency('gl', version: '>= 1.2'),

@@ -6,5 +6,5 @@ srcs_dbe = [
 libxserver_dbe = static_library('libxserver_dbe',
 	srcs_dbe,
 	include_directories: inc,
-	dependencies: common_dep,
+	dependencies: dep_common,
 )

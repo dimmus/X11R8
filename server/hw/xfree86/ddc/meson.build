@@ -8,7 +8,7 @@ srcs_xorg_ddc = [
 xorg_ddc = static_library('xorg_ddc',
     srcs_xorg_ddc,
     include_directories: [inc, xorg_inc],
-    dependencies: common_dep,
+    dependencies: dep_common,
     c_args: xorg_c_args,
 )
 

@@ -9,7 +9,7 @@ shared_module(
 
     include_directories: [inc, xorg_inc],
     c_args: xorg_c_args,
-    dependencies: [common_dep],
+    dependencies: [dep_common],
 
     install: true,
     install_dir: join_paths(module_dir, 'input'),

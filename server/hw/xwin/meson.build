@@ -1,8 +1,8 @@
 windows = import('windows')
 
-windowsdri_dep = dependency('windowsdriproto', required: false)
+dep_windowsdri = dependency('windowsdriproto', required: false)
 
-build_windowsdri = windowsdri_dep.found()
+build_windowsdri = dep_windowsdri.found()
 
 xwin_sys_libs = []
 xwin_sys_libs += '-ldxguid'
@@ -135,8 +135,8 @@ pgen = generator(
 pfiles = pgen.process('winprefsyacc.y')
 srcs_windows += pfiles
 
-xwin_dep = [
-    common_dep,
+dep_xwin = [
+    dep_common,
     dependency('xcb-aux'),
     dependency('xcb-image'),
     dependency('xcb-ewmh'),
@@ -148,7 +148,7 @@ executable(
     server_name,
     srcs_windows,
     include_directories: [inc, top_dir_inc],
-    dependencies: xwin_dep,
+    dependencies: dep_xwin,
     link_with: [
         xwin_windowsdri,
         xwin_glx,
