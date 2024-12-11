@@ -2,7 +2,7 @@ inc_font += inc_config
 
 subdir('fontenc')
 subdir('fs')
-subdir('xfont')
+subdir('font')
 
 inc_font += [
     inc_font_fontenc,

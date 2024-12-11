@@ -52,6 +52,7 @@ from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+
 #include <X11/fonts/libxfontint.h>
 #include "src/util/replace.h"
 

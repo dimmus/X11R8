@@ -32,7 +32,7 @@ endif
 conf.set('XFONT_BUILTINS', 1)  # Support built-in fonts
 conf.set('XFONT_PCFFORMAT', 1) # Support pcf format bitmap font files
 conf.set('XFONT_BDFFORMAT', 1) # Support bdf format bitmap font files
-conf.set('XFONT_SNFFORMAT', 1) # Support snf format bitmap font files
+conf.set('XFONT_SNFFORMAT', false) # Support snf format bitmap font files # TODO: error in linker with xfs, so set FALSE for now
 conf.set('XFONT_BITMAP', 1)    # Support bitmap font files
 conf.set('XFONT_FONTFILE', 1)  # Support fonts in files
 conf.set('XFONT_FC', 1)        # Support the X Font Services Protocol
@@ -85,9 +85,6 @@ src += files(
 
 # if XFONT_FREETYPE
 src += files(
-  'src/FreeType/ft.h',
-  'src/FreeType/ftfuncs.h',
-  'src/FreeType/xttcap.h',
   'src/FreeType/ftenc.c',
   'src/FreeType/ftfuncs.c',
   'src/FreeType/fttools.c',
@@ -122,12 +119,10 @@ src += files(
 # if XFONT_SNFFORMAT
 src += files(
   'src/bitmap/snfread.c',
-  'src/bitmap/snfstr.h',
 )
 
 # if XFONT_BUILTINS
 src += files(
-  'src/builtins/builtin.h',
   'src/builtins/dir.c',
   'src/builtins/file.c',
   'src/builtins/fonts.c',
@@ -139,24 +134,19 @@ src += files(
 src += files(
   'src/fc/fsconvert.c',
   'src/fc/fserve.c',
-  'src/fc/fserve.h',
-  'src/fc/fservestr.h',
   'src/fc/fsio.c',
-  'src/fc/fsio.h',
-  'src/fc/fslibos.h',
   'src/fc/fstrans.c',
 )
 
 # util
 src += files(
-  'src/util/replace.h',
   'src/util/strlcat.c',
   'src/util/strlcpy.c',
   'src/util/realpath.c',
   'src/util/reallocarray.c',
 )
 
-lib = library('Xfont', src,
+lib_xfont = library('Xfont', src,
   c_args: lib_args,
   include_directories: [inc_font, inc_font_xfont],
   dependencies: [dep_int_xfont, dep_ext_xfont],
@@ -165,11 +155,9 @@ lib = library('Xfont', src,
 )
 
 libxfont = declare_dependency(
-  link_with: lib,
+  link_with: lib_xfont,
   include_directories: [inc_font, inc_font_xfont],
 )
-
-meson.override_dependency('xfont', libxfont)
 
 install_headers(
   'include/X11/fonts/libxfont2.h',

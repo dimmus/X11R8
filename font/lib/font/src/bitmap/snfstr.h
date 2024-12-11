@@ -53,6 +53,7 @@ from The Open Group.
 #define SNFSTR_H 1
 
 #include <X11/fonts/fntfilio.h>
+#include <X11/fonts/libxfontint.h>
 
 /*-
  * This file describes the Server Natural Font format.
@@ -174,7 +175,7 @@ typedef struct _snfFontInfo {
     unsigned int version2;	/* version stamp double-check */
 }           snfFontInfoRec;
 
-extern void SnfSetFormat ( int bit, int byte, int glyph, int scan );
+void SnfSetFormat ( int bit, int byte, int glyph, int scan );
 extern int snfReadFont ( FontPtr pFont, FontFilePtr file,
 			 int bit, int byte, int glyph, int scan );
 extern int snfReadFontInfo ( FontInfoPtr pFontInfo, FontFilePtr file );
