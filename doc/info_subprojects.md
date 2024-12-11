@@ -733,3 +733,42 @@ Xorg mailing list: https://lists.x.org/mailman/listinfo/xorg
 Please submit bug reports and requests to merge patches there.
 
 For patch submission instructions, see: https://www.x.org/wiki/Development/Documentation/SubmittingPatches
+
+<!-- 
+libdmx          X11 Distributed Multihead extension library
+libfontenc      X11 font encoding library
+libfs           X11 Font Services library
+libice          X11 Inter-Client Exchange library
+libsm           X11 Session Management library
+libx11          X11 client-side library
+libxau          X11 authorisation library
+libxaw          X11 Athena Widget library
+libxcomposite   X11 Composite extension library
+libxcursor      X cursor management library
+libxdamage      X11 damaged region extension library
+libxcvt         X standalone version of VESA CVT standard timing modelines generator
+libxdmcp        X11 authorisation library
+libxext         X11 miscellaneous extensions library
+libxfixes       X11 miscellaneous 'fixes' extension library
+libxfont        X11 font rasterisation library
+libxft          FreeType-based font drawing library for X
+libxi           X11 Input extension library
+libxinerama     X11 Xinerama extension library
+libxkbfile      X11 keyboard file manipulation library
+libxmu          X11 miscellaneous utility library
+libxmuu         X11 miscellaneous micro-utility library
+libxpm          X11 pixmap library
+libxrandr       X11 RandR extension library
+libxrender      X Rendering Extension client library
+libxres         X11 Resource extension library
+libxss          X11 Screen Saver extension library
+libxt           X11 toolkit intrinsics library
+libxtst         X11 XTEST & RECORD extensions library
+libxv           X11 Video extension library
+libxvmc         X11 Video extension library
+libxxf86dga     X11 Direct Graphics Access extension library
+libxxf86vm      X11 XFree86 video mode extension library
+x11proto        X11 extension protocols and auxiliary headers
+xtrans          X transport library
+xserver         Xorg X server
+ -->
