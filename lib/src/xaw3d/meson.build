@@ -11,11 +11,13 @@ lib_args = [
 
 inc_xaw3d = [
   inc_config,
-  include_directories('.'),
-  include_directories('src'),
-  include_directories('include'),
-  include_directories('include/X11'),
-  include_directories('include/X11/Xaw3d'),
+  include_directories(
+    '.',
+    'src',
+    'include',
+    'include' / 'X11',
+    'include' / 'X11' / 'Xaw3d',
+  )
 ]
 
 f_check += ['iswspace']

@@ -1,17 +1,17 @@
 ver_xfont = '2.0.7'
 
-inc_font_xfont = [
-  include_directories('include'),
-  include_directories('include' / 'X11'),
-  include_directories('include' / 'X11' / 'fonts'),
-  include_directories('src' / 'bitmap'),
-  include_directories('src' / 'builtins'),
-  include_directories('src' / 'fc'),
-  include_directories('src' / 'fontfile'),
-  include_directories('src' / 'FreeType'),
-  include_directories('src' / 'stubs'),
-  include_directories('src' / 'util'),
-]
+inc_font_xfont = include_directories(
+  'include',
+  'include' / 'X11',
+  'include' / 'X11' / 'fonts',
+  'src' / 'bitmap',
+  'src' / 'builtins',
+  'src' / 'fc',
+  'src' / 'fontfile',
+  'src' / 'FreeType',
+  'src' / 'stubs',
+  'src' / 'util',
+)
 
 lib_args = ['-fvisibility=hidden']
 

@@ -2,12 +2,14 @@ ver_x11 = '1.8.10'
 
 inc_x11 = [
   inc_lib,
-  include_directories('src'),
-  include_directories('src/util'),
-  include_directories('src/xcms'),
-  include_directories('src/xkb'),
-  include_directories('src/xlibi18n'),
-  include_directories('src/xlibi18n/lcUniConv'),
+  include_directories(
+    'src',
+    'src' / 'util',
+    'src' / 'xcms',
+    'src' / 'xkb',
+    'src' / 'xlibi18n',
+    'src' / 'xlibi18n' / 'lcUniConv',
+  )
 ]
 
 lib_args = []

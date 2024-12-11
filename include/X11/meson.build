@@ -1,9 +1,10 @@
 inc_x11 += include_directories('.')
 
-fd_set_maybe_headers = [ 'sys/param.h',
-                         'sys/types.h',
-                         'sys/time.h',
-                         'sys/select.h'
+fd_set_maybe_headers = [
+    'sys/param.h',
+    'sys/types.h',
+    'sys/time.h',
+    'sys/select.h'
 ]
 fd_set_headers = ''
 foreach h: fd_set_maybe_headers

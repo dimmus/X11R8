@@ -1,8 +1,10 @@
 inc_ext += [
-    inc_config,
-    include_directories('.'),
-    include_directories('X11'),
-    include_directories('X11' / 'extensions'),
+  inc_config,
+  include_directories(
+    '.',
+    'X11',
+    'X11' / 'extensions',
+  )
 ]
 
 headers = files(

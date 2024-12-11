@@ -1,10 +1,10 @@
 ver_fs = '1.0.10'
 
-inc_font_fs = [
-  include_directories('include'),
-  include_directories('include' / 'X11'),
-  include_directories('include' / 'X11' / 'fonts'),
-]
+inc_font_fs = include_directories(
+  'include',
+  'include' / 'X11',
+  'include' / 'X11' / 'fonts',
+)
 
 lib_args = ['-DFS_t', '-DTRANS_CLIENT']
 

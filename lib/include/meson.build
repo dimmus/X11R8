@@ -1,15 +1,17 @@
 inc_lib += [
     inc_config,
-    include_directories('.'),
-    include_directories('X11'),
-    include_directories('X11' / 'ICE'),
-    include_directories('X11' / 'SM'),
-    include_directories('X11' / 'extensions'),
-    include_directories('X11' / 'Xaw'),
-    include_directories('X11' / 'Xcursor'),
-    include_directories('X11' / 'Xft'),
-    include_directories('X11' / 'Xmu'),
-    include_directories('X11' / 'Xtrans'),
+    include_directories(
+        '.',
+        'X11',
+        'X11' / 'ICE',
+        'X11' / 'SM',
+        'X11' / 'extensions',
+        'X11' / 'Xaw',
+        'X11' / 'Xcursor',
+        'X11' / 'Xft',
+        'X11' / 'Xmu',
+        'X11' / 'Xtrans',
+    )
 ]
 
 install_headers(

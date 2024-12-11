@@ -1,8 +1,8 @@
-inc_font += [
-    include_directories('.'),
-    include_directories('X11'),
-    include_directories('X11' / 'fonts'),
-]
+inc_font += include_directories(
+    '.',
+    'X11',
+    'X11' / 'fonts',
+)
 
 install_headers(
     'X11/fonts/font.h',

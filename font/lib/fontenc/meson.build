@@ -1,10 +1,10 @@
 ver_fontenc = '1.1.8'
 
-inc_font_fontenc = [
-    include_directories('include'),
-    include_directories('include' / 'X11'),
-    include_directories('include' / 'X11' / 'fonts'),
-]
+inc_font_fontenc = include_directories(
+  'include',
+  'include' / 'X11',
+  'include' / 'X11' / 'fonts',
+)
 
 # TODO: make path with $prefix defined
 conf.set_quoted('FONT_ENCODINGS_DIRECTORY', '/usr/share/fonts/X11/encodings')

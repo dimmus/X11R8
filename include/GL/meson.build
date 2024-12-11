@@ -5,6 +5,7 @@ install_headers(
     'glxmd.h',
     'glxproto.h',
     'glxtokens.h',
-    subdir: 'GL')
+    subdir: 'GL'
+)
 
 subdir('internal')
