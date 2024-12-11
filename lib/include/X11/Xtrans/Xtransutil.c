@@ -232,10 +232,13 @@ TRANS(GetMyNetworkId) (XtransConnInfo ciptr)
 
 {
     int		family = ciptr->family;
-    char 	*addr = ciptr->addr;
     char	hostnamebuf[256];
     char 	*networkId = NULL;
-    const char	*transName = ciptr->transptr->TransName;
+
+#if defined(UNIXCONN) || defined(LOCALCONN) || defined(TCPCONN)
+	const char *transName = ciptr->transptr->TransName;
+	char *addr = ciptr->addr;
+#endif
 
     if (gethostname (hostnamebuf, sizeof (hostnamebuf)) < 0)
     {
@@ -316,10 +319,16 @@ TRANS(GetPeerNetworkId) (XtransConnInfo ciptr)
 
 {
     int		family = ciptr->family;
-    char	*peer_addr = ciptr->peeraddr;
     char	*hostname;
-    char	addrbuf[256];
     const char	*addr = NULL;
+
+#if defined(UNIXCONN) || defined(LOCALCONN)
+	char addrbuf[256];
+#endif
+
+#if defined(TCPCONN)
+	char *peer_addr = ciptr->peeraddr;
+#endif
 
     switch (family)
     {

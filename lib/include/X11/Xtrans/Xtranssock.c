@@ -460,15 +460,16 @@ TRANS(SocketOpen) (int i, int type)
 #ifdef SO_SNDBUF
     if (Sockettrans2devtab[i].family == AF_UNIX)
     {
-	SOCKLEN_T len = sizeof (int);
+	socklen_t len;
 	int val;
 
+	len = sizeof(val);
 	if (getsockopt (ciptr->fd, SOL_SOCKET, SO_SNDBUF,
 	    (char *) &val, &len) == 0 && val < 64 * 1024)
 	{
 	    val = 64 * 1024;
 	    setsockopt (ciptr->fd, SOL_SOCKET, SO_SNDBUF,
-	        (char *) &val, sizeof (int));
+	        (char *) &val, sizeof (val));
 	}
     }
 #endif
