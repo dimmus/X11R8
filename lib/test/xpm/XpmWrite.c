@@ -293,7 +293,7 @@ TestWriteFileFromBuffer(const char *filepath)
         /* Read file ourselves and verify the data matches */
         assert_no_errno(fd = open(newfilepath, O_RDONLY | O_CLOEXEC));
         while ((rd = read(fd, readbuf, sizeof(readbuf))) > 0) {
-            /* g_assert_cmpmem(b, rd, readbuf, rd); */ /* TODO: test - cmpmem */
+            assert(memcmp(b, readbuf, rd) == 0);
             b += rd;
         }
         /* Verify we're at the end of the buffer */

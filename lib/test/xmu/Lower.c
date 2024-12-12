@@ -30,6 +30,7 @@
 #include <X11/Xmu/SysUtil.h>
 #define  XK_LATIN1
 #include <X11/keysymdef.h>
+
 #include <assert.h>
 #include <string.h>
 
@@ -201,7 +202,7 @@ test_XmuSnprintf(void)
     ret = XmuSnprintf(buf, 40, "%s", upper);
     assert(ret == sizeof(upper) - 1);
     assert(buf[39] == 0);
-    /* g_assert_cmpmem(buf, 39, upper, 39); */ /* TODO: test - cmpmem */
+    assert(memcmp(buf, upper, 39) == 0);
 
     ret = XmuSnprintf(buf, sizeof(buf), "%s", upper);
     assert(ret == sizeof(upper) - 1);

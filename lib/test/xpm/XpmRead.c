@@ -146,7 +146,7 @@ TestReadFileToBuffer(const char *filepath)
         /* Read file ourselves and verify the data matches */
         assert_no_errno(fd = open(filepath, O_RDONLY | O_CLOEXEC));
         while ((rd = read(fd, readbuf, sizeof(readbuf))) > 0) {
-            /* g_assert_cmpmem(b, rd, readbuf, rd); */ /* TODO: test - cmpmem */
+            assert(memcmp(b, readbuf, rd) == 0);
             b += rd;
         }
         /* Verify a nil terminator was added to the end */

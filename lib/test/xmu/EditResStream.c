@@ -97,7 +97,9 @@ test_EditResStream(void)
 
     res = _XEditResGetWidgetInfo(&ps, &out);
     assert(res == True);
-    /* g_assert_cmpmem(ids, sizeof(ids), out.ids, out.num_widgets * sizeof(long)); */ /* TODO: test cmpmem without glib */
+    assert(sizeof(ids) == out.num_widgets * sizeof(long));
+    assert(memcmp(ids, out.ids, sizeof(ids)) == 0);
+
     XtFree((char *) out.ids);
     out.ids = NULL;
 }

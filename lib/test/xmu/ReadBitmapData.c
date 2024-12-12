@@ -26,10 +26,13 @@
 #include <config.h>
 #endif
 
-#include <X11/Xmu/Drawing.h>
+#include "X11/Xmu/Drawing.h"
+
 #include <assert.h>
 #include <string.h>
 #include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 struct BitmapData {
     unsigned int        width;
@@ -79,17 +82,17 @@ static void
 CompareBitmapData(const struct BitmapData *readin,
                   const struct BitmapData *expected)
 {
-    /* size_t bytes_per_line; */
-    /* size_t total_bytes; */
+    size_t bytes_per_line;
+    size_t total_bytes;
 
     assert(readin->width == expected->width);
     assert(readin->height == expected->height);
     assert(readin->xhot == expected->xhot);
     assert(readin->yhot == expected->yhot);
 
-    /* bytes_per_line = (readin->width + 7) / 8; */
-    /* total_bytes = bytes_per_line * readin->height; */
-    /* g_assert_cmpmem(readin->datap, total_bytes, expected->datap, total_bytes); */ /* TODO: test - cmpmem */
+    bytes_per_line = (readin->width + 7) / 8;
+    total_bytes = bytes_per_line * readin->height;
+    assert(memcmp(readin->datap, expected->datap, total_bytes) == 0);
 }
 
 
@@ -97,11 +100,11 @@ static void
 test_ReadBitmapData(void)
 {
     for (unsigned int i = 0; i < testcount; i++) {
-        const char *filename;
+        char filename[1024];
         FILE *fp;
         int status;
         struct BitmapData readin;
- 
+
         snprintf(filename, sizeof(filename), 
             "%s/xmu/bitmaps/%s", TESTS_PATH, testdata[i].filename);
         printf("Testing XmuReadBitmapDataFromFile(\"%s\")", filename);
