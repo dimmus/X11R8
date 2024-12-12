@@ -1,5 +1,3 @@
-ver_xvmc = '1.0.14'
-
 lib_args = [
   '-DXVMC_CONFIGDIR=@0@/X11'.format(get_option('sysconfdir')),
   '-DXVMC_SOVERSION=".1.0"',

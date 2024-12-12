@@ -1,5 +1,3 @@
-ver_xkbfile = '1.1.3'
-
 dep_int_xkbfile = [xproto, libx11, libxkb]
 
 src = files(

@@ -1,5 +1,3 @@
-ver_xext = '1.3.6'
-
 # TODO: need?
 # Determine .so library version per platform
 # based on SharedXextRev in monolith xc/config/cf/*Lib.tmpl

@@ -1,5 +1,3 @@
-ver_xss = '1.2.4'
-
 dep_int_xss = [xproto, libx11, libxext]
 
 lib = library('Xss',

@@ -1,5 +1,3 @@
-ver_xt = '1.3.0'
-
 lib_args = ['-DXKB', '-DXT_GEO_TATTLER']
 
 f_check += ['reallocarray']

@@ -1,5 +1,3 @@
-ver_xv = '1.0.12'
-
 dep_int_xv = [xproto, libx11, libxext]
 
 lib = library('Xv',

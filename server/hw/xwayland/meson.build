@@ -33,7 +33,7 @@ srcs = [
 dep_scanner = dependency('wayland-scanner', native: true)
 scanner = find_program(dep_scanner.get_variable(pkgconfig: 'wayland_scanner'))
 
-dep_protocols = dependency('wayland-protocols', version: wayland_protocols_req)
+dep_protocols = dependency('wayland-protocols', version: wl_proto_req)
 protodir = dep_protocols.get_variable(pkgconfig: 'pkgdatadir')
 
 pointer_xml = join_paths(protodir, 'unstable', 'pointer-constraints', 'pointer-constraints-unstable-v1.xml')

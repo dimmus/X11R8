@@ -1,5 +1,3 @@
-ver_xrandr = '1.5.4'
-
 dep_int_xrandr = [xproto, libx11, libxext, libxrender]
 
 src = files(

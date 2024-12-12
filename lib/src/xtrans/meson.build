@@ -1,5 +1,3 @@
-ver_xtrans = '1.5.1'
-
 pkg.generate(
   name: 'xtrans',
   version: ver_xtrans,

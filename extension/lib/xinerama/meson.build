@@ -1,5 +1,3 @@
-ver_xinerama = '1.1.5'
-
 dep_int_xinerama = [xproto, libx11, libxext]
 
 lib = library('Xinerama',

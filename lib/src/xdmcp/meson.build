@@ -1,5 +1,3 @@
-ver_xdmcp = '1.1.5'
-
 h_check += ['sys/random.h']
 f_check += ['srand48', 'lrand48', 'arc4random_buf', 'getentropy']
 

@@ -1,5 +1,3 @@
-ver_xpm = '3.5.17'
-
 lib_args = []
 
 f_check += ['strlcat', 'fork', 'closefrom']

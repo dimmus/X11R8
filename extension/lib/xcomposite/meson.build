@@ -1,5 +1,3 @@
-ver_xcomposite = '0.4.6'
-
 dep_int_xcomposite = [xproto, libx11, libxfixes]
 
 lib = library('Xcomposite', 

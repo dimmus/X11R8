@@ -1,5 +1,3 @@
-ver_xdamage = '1.1.6'
-
 dep_int_xdamage = [xproto, libx11, libxfixes]
 
 lib = library('Xdamage', 

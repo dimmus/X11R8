@@ -1,5 +1,3 @@
-ver_xcvt = '0.1.2'
-
 inc_xcvt = include_directories('include')
 
 subdir('include')

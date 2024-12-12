@@ -1,21 +1,17 @@
-# version: '21.1.99.1'
-# release_date = '2021-07-05'
-
-libdrm_req = '>= 2.4.116'
-libselinux_req = '>= 2.0.86'
-xext_req = '>= 1.0.99.4'
-xproto_req = '>= 7.0.31'
-wayland_req = '>= 1.21.0'
-wayland_protocols_req = '>= 1.34'
-gbm_req = '>= 10.2'
-xf86dgaproto_req = '>= 2.0.99.1'
-xshmfence_req = '>= 1.1'
+libdrm_req      = '>= 2.4.116'
+libselinux_req  = '>= 2.0.86'
+xext_req        = '>= 1.0.99.4'
+xproto_req      = '>= 7.0.31'
+wl_req          = '>= 1.21.0'
+wl_proto_req    = '>= 1.34'
+gbm_req         = '>= 10.2'
+xshmfence_req   = '>= 1.1'
 
 dep_xshmfence = dependency('xshmfence', version: xshmfence_req, required: false)
-dep_pixman = dependency('pixman-1')
-dep_libbsd = dependency('libbsd-overlay', required: false)
-dep_xkbcomp = dependency('xkbcomp', required: false)
-dep_dbus = dependency('dbus-1', version: '>= 1.0', required: get_option('systemd_logind') == 'true')
+dep_pixman    = dependency('pixman-1')
+dep_libbsd    = dependency('libbsd-overlay', required: false)
+dep_xkbcomp   = dependency('xkbcomp', required: false)
+dep_dbus      = dependency('dbus-1', version: '>= 1.0', required: get_option('systemd_logind') == 'true')
 
 build_systemd = get_option('systemd_notify') == 'true'
 # libsystemd-daemon was moved into libsystemd in version 209
@@ -132,8 +128,8 @@ if (host_machine.system() != 'darwin' and
     endif
 
     dep_xwayland = [
-        dependency('wayland-client', version: wayland_req, required: xwayland_required),
-        dependency('wayland-protocols', version: wayland_protocols_req, required: xwayland_required),
+        dependency('wayland-client', version: wl_req, required: xwayland_required),
+        dependency('wayland-protocols', version: wl_proto_req, required: xwayland_required),
         dependency('libxcvt', fallback: ['libxcvt', 'libxcvt'], required: xwayland_required),
     ]
     if build_glamor

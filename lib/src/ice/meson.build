@@ -1,5 +1,3 @@
-ver_ice = '1.1.1'
-
 f_check += ['asprintf', 'arc4random_buf', 'getentropy']
 
 dep_int_ice = [xproto]

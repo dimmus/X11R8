@@ -1,5 +1,3 @@
-ver_sm = '1.2.4'
-
 f_check += ['uuid_create']
 
 dep_ext_sm = [dep_uuid]

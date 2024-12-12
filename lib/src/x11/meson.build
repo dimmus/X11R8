@@ -1,5 +1,3 @@
-ver_x11 = '1.8.10'
-
 inc_x11 = [
   inc_lib,
   include_directories(

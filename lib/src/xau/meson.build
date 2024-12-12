@@ -1,5 +1,3 @@
-ver_xau = '1.0.11'
-
 f_check += ['explicit_bzero', 'explicit_memset', 'pathconf']
 h_check += ['unistd.h']
 

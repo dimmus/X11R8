@@ -1,5 +1,3 @@
-ver_xf86vm = '1.1.5'
-
 dep_int_xxf86vm = [xproto, libx11, libxext]
 
 lib = library('Xxf86vm',

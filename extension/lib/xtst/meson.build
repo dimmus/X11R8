@@ -1,5 +1,3 @@
-ver_xtst = '1.2.5'
-
 dep_int_xtst = [xproto, libx11, libxext]
 
 src = files(

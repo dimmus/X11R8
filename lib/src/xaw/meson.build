@@ -1,5 +1,3 @@
-ver_xaw = '1.0.16'
-
 f_check += ['iswalnum', 'getpagesize']
 h_check += ['wctype.h', 'wchar.h', 'widec.h']
 

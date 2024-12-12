@@ -1,5 +1,3 @@
-ver_xmu = '1.2.1'
-
 f_check += ['uname']
 
 dep_int_xmu  = [libxt, libxext, libx11, xproto]

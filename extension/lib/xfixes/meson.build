@@ -1,5 +1,3 @@
-ver_xfixes = '6.0.1'
-
 dep_int_xfixes = [xproto, libx11]
 
 src = files(

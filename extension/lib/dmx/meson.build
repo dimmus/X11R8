@@ -1,5 +1,3 @@
-ver_dmx = '1.1.5'
-
 dep_int_dmx = [xproto, libx11, libxext]
 
 lib = library('dmx', 

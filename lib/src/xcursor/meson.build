@@ -1,5 +1,3 @@
-ver_xcursor = '1.2.3'
-
 conf.set('XCURSOR_LIB_MAJOR', 1)
 conf.set('XCURSOR_LIB_MINOR', 2)
 conf.set('XCURSOR_LIB_REVISION', 3)

@@ -1,5 +1,3 @@
-ver_xft = '2.3.8'
-
 xft_version = ver_xft.split('.')
 
 lib_args = [

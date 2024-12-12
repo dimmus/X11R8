@@ -1,5 +1,3 @@
-ver_xi = '1.8.2'
-
 dep_int_xi = [xproto, libx11, libxext, libxfixes]
 
 src_xi2 = files(

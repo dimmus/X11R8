@@ -1,5 +1,3 @@
-ver_xres = '1.2.2'
-
 dep_int_xres = [xproto, libx11, libxext]
 
 lib = library('Xres',

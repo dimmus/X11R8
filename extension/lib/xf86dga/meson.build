@@ -1,5 +1,3 @@
-ver_xf86dga = '1.1.6'
-
 dep_int_xxf86dga = [xproto, libx11, libxext]
 
 src = files(
