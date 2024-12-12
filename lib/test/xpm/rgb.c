@@ -53,7 +53,7 @@ static const struct rgbData testdata[] = {
 static void
 test_xpmReadRgbNames(void)
 {
-    const char *filename;
+    char filename[1024];
     xpmRgbName rgbn[MAX_RGBNAMES];
     int rgbn_max;
 
@@ -62,7 +62,8 @@ test_xpmReadRgbNames(void)
     assert(rgbn_max == 0);
 
     /* Verify our test file is read properly & contains expected data */
-    filename = "rgb.txt"; /* TODO: test - need full path here */
+    snprintf(filename, sizeof(filename), 
+            "%s/xpm/%s", TESTS_PATH, "rgb.txt");
     rgbn_max = xpmReadRgbNames(filename, rgbn);
     assert(rgbn_max == NUM_RGB);
 

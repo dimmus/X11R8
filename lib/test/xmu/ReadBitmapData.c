@@ -102,7 +102,8 @@ test_ReadBitmapData(void)
         int status;
         struct BitmapData readin;
  
-        filename = testdata[i].filename; /* TODO: need full path here */
+        snprintf(filename, sizeof(filename), 
+            "%s/xmu/bitmaps/%s", TESTS_PATH, testdata[i].filename);
         printf("Testing XmuReadBitmapDataFromFile(\"%s\")", filename);
 
         status = XmuReadBitmapDataFromFile(filename,
