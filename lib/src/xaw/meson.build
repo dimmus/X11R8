@@ -98,6 +98,3 @@ if BUILD_XAW7
     requires_private: ['x11', 'xext', 'xt', 'xmu', 'xpm']
   )
 endif
-
-# TODO: implement
-# subdir('examples')
