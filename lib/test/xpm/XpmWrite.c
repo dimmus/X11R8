@@ -113,7 +113,6 @@ TestWriteFileFromXpmImage(const char *filepath)
     XpmInfo infoA;
     int status;
     char *testdir, *filename, *newfilepath;
-    char *err = NULL;
 
 #ifndef NO_ZPIPE
     char *cmpfilepath;
@@ -122,22 +121,22 @@ TestWriteFileFromXpmImage(const char *filepath)
     status = XpmReadFileToXpmImage(filepath, &imageA, &infoA);
     assert(status == XpmSuccess);
 
-    testdir = g_dir_make_tmp("XpmWrite-test-XXXXXX", &err);
-    g_assert_no_error(err);
+    testdir = dir_make_tmp("XpmWrite-test-XXXXXX");
+    assert(testdir != NULL);
 
-    filename = g_path_get_basename(filepath);
+    filename = path_get_basename(filepath);
     strip_compress_ext(filename);
-    newfilepath = g_build_filename(testdir, filename, NULL);
+    newfilepath = build_filename(testdir, filename);
 
     test_WFFXI_helper(newfilepath, &imageA, &infoA);
 
 #ifndef NO_ZPIPE
-    cmpfilepath = g_strdup_printf("%s.gz", newfilepath);
+    cmpfilepath = strdup_printf("%s.gz", newfilepath);
     test_WFFXI_helper(cmpfilepath, &imageA, &infoA);
     free(cmpfilepath);
 
 #ifdef XPM_PATH_COMPRESS
-    cmpfilepath = g_strdup_printf("%s.Z", newfilepath);
+    cmpfilepath = strdup_printf("%s.Z", newfilepath);
     test_WFFXI_helper(cmpfilepath, &imageA, &infoA);
     free(cmpfilepath);
 #endif
@@ -146,7 +145,7 @@ TestWriteFileFromXpmImage(const char *filepath)
     XpmFreeXpmImage(&imageA);
     XpmFreeXpmInfo(&infoA);
 
-    assert_no_errno(g_rmdir(testdir));
+    assert_no_errno(rmdir(testdir));
 
     free(newfilepath);
     free(filename);
@@ -205,7 +204,6 @@ TestWriteFileFromData(const char *filepath)
     char **data = NULL;
     int status;
     char *testdir, *filename, *newfilepath;
-    char *err = NULL;
 
 #ifndef NO_ZPIPE
     char *cmpfilepath;
@@ -214,22 +212,22 @@ TestWriteFileFromData(const char *filepath)
     status = XpmReadFileToData(filepath, &data);
     assert(status == XpmSuccess);
 
-    testdir = g_dir_make_tmp("XpmWrite-test-XXXXXX", &err);
-    g_assert_no_error(err);
+    testdir = dir_make_tmp("XpmWrite-test-XXXXXX");
+    assert(testdir != NULL);
 
-    filename = g_path_get_basename(filepath);
+    filename = path_get_basename(filepath);
     strip_compress_ext(filename);
-    newfilepath = g_build_filename(testdir, filename, NULL);
+    newfilepath = build_filename(testdir, filename);
 
     test_WFFXD_helper(newfilepath, data);
 
 #ifndef NO_ZPIPE
-    cmpfilepath = g_strdup_printf("%s.gz", newfilepath);
+    cmpfilepath = strdup_printf("%s.gz", newfilepath);
     test_WFFXD_helper(cmpfilepath, data);
     free(cmpfilepath);
 
 #ifdef XPM_PATH_COMPRESS
-    cmpfilepath = g_strdup_printf("%s.Z", newfilepath);
+    cmpfilepath = strdup_printf("%s.Z", newfilepath);
     test_WFFXD_helper(cmpfilepath, data);
     free(cmpfilepath);
 #endif
@@ -237,7 +235,7 @@ TestWriteFileFromData(const char *filepath)
 
     XpmFree(data);
 
-    assert_no_errno(g_rmdir(testdir));
+    assert_no_errno(rmdir(testdir));
 
     free(newfilepath);
     free(filename);
@@ -266,19 +264,18 @@ TestWriteFileFromBuffer(const char *filepath)
 {
     char *buffer = NULL;
     char *testdir, *filename, *newfilepath;
-    GError *err = NULL;
     int status;
 
     status = XpmReadFileToBuffer(filepath, &buffer);
     assert(status == XpmSuccess);
     assert(buffer != NULL);
 
-    testdir = g_dir_make_tmp("XpmWrite-test-XXXXXX", &err);
-    g_assert_no_error(err);
+    testdir = dir_make_tmp("XpmWrite-test-XXXXXX");
+    assert(testdir != NULL);
 
-    filename = g_path_get_basename(filepath);
+    filename = path_get_basename(filepath);
     strip_compress_ext(filename);
-    newfilepath = g_build_filename(testdir, filename, NULL);
+    newfilepath = build_filename(testdir, filename);
     printf("...writing %s", newfilepath);
 
     status = XpmWriteFileFromBuffer(newfilepath, buffer);
@@ -304,7 +301,7 @@ TestWriteFileFromBuffer(const char *filepath)
     }
     XpmFree(buffer);
 
-    assert_no_errno(g_rmdir(testdir));
+    assert_no_errno(rmdir(testdir));
 
     free(newfilepath);
     free(filename);

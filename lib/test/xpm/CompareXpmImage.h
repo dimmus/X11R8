@@ -56,8 +56,7 @@ CompareXpmImage(const XpmImage *a, const XpmImage *b)
     }
 
 #if 0 /* this currently fails in image comparison - needs debugging */
-    for (size_t i = 0; i < datasize; i++)
-    {
+    for (size_t i = 0; i < datasize; i++) {
         CompareUintFields(data[i]);
     }
 #endif

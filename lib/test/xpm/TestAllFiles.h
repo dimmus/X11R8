@@ -25,6 +25,8 @@
 #include <config.h>
 #endif
 
+#include <X11/Xlib.h>
+
 #include <time.h>
 #include <errno.h>
 #include <limits.h>
@@ -34,12 +36,21 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
+#include <dirent.h>
+#include <stdarg.h>
 
 #ifndef assert_no_errno
 #define assert_no_errno(expr) assert((expr) >= 0)
 #endif
 
 #define DEFAULT_TIMEOUT 10 /* maximum seconds for each file */
+
+#ifdef _WIN32
+#define PATH_SEPARATOR "\\"
+#else
+#define PATH_SEPARATOR "/"
+#endif
 
 static sigjmp_buf jump_env;
 
@@ -50,23 +61,281 @@ static void sigalrm (int sig)
 
 typedef int (*testfilefunc)(const char *filepath);
 
+// Enum to represent test data locations
+typedef enum {
+    TEST_DIST,      // Distributed test files
+    TEST_BUILT,     // Built test files
+    TEST_INSTALLED  // Installed test files
+} TestFileType;
+
+// Function to construct the file path
+char *test_file_path(TestFileType file_type, const char *dir1, const char *dir2, const char *optional, const char *filename) {
+    // Allocate memory for the path. We need space for the directories and the filename
+    size_t total_len = 0;
+    total_len += strlen(dir1) + strlen(PATH_SEPARATOR) + strlen(dir2); // dir1 and dir2
+    if (optional) {
+        total_len += strlen(PATH_SEPARATOR) + strlen(optional); // optional component (e.g., "generated")
+    }
+    if (filename) {
+        total_len += strlen(PATH_SEPARATOR) + strlen(filename); // filename
+    }
+    total_len += 1; // Null terminator
+
+    // Allocate memory for the full path
+    char *full_path = malloc(total_len);
+    if (!full_path) {
+        perror("malloc");
+        return NULL;
+    }
+
+    // Start constructing the path
+    snprintf(full_path, total_len, "%s%s%s", dir1, PATH_SEPARATOR, dir2);
+
+    // If there's an optional component (e.g., "generated"), add it
+    if (optional) {
+        snprintf(full_path + strlen(full_path), total_len - strlen(full_path), "%s%s", PATH_SEPARATOR, optional);
+    }
+
+    // If a filename is provided, add it to the path
+    if (filename) {
+        snprintf(full_path + strlen(full_path), total_len - strlen(full_path), "%s%s", PATH_SEPARATOR, filename);
+    }
+
+    return full_path;
+}
+
+// Function to construct file path based on test location
+char *test_file_path_old(TestFileType location, const char *filename) {
+    const char *base_dir;
+
+    switch (location) {
+        case TEST_DIST:
+            base_dir = "./tests/data";  // Path for distributed test files
+            break;
+        case TEST_BUILT:
+            base_dir = "./build/tests"; // Path for built test files
+            break;
+        case TEST_INSTALLED:
+            base_dir = "/usr/share/myproject/tests"; // Path for installed test files
+            break;
+        default:
+            fprintf(stderr, "Unknown test location\n");
+            return NULL;
+    }
+
+    // Allocate memory for the full path
+    size_t base_len = strlen(base_dir);
+    size_t filename_len = strlen(filename);
+    size_t total_len = base_len + strlen(PATH_SEPARATOR) + filename_len + 1; // +1 for null terminator
+
+    char *result = malloc(total_len);
+    if (!result) {
+        perror("malloc");
+        return NULL;
+    }
+
+    // Construct the file path
+    snprintf(result, total_len, "%s%s%s", base_dir, PATH_SEPARATOR, filename);
+    return result;
+}
+
+// Structure to represent a pattern
+typedef struct {
+    char *pattern;  // Original pattern string
+} PatternSpec;
+
+// Function to create a new PatternSpec
+PatternSpec *pattern_spec_new(const char *pattern) {
+    PatternSpec *spec = malloc(sizeof(PatternSpec));
+    if (!spec) {
+        perror("malloc");
+        return NULL;
+    }
+    spec->pattern = strdup(pattern); // Copy the pattern
+    if (!spec->pattern) {
+        perror("strdup");
+        free(spec);
+        return NULL;
+    }
+    return spec;
+}
+
+// Function to match a string against the pattern
+Bool pattern_spec_match(const PatternSpec *spec, const char *str) {
+    const char *p = spec->pattern;
+    const char *s = str;
+
+    while (*p && *s) {
+        if (*p == '*') {
+            p++;
+            if (!*p) return True; // If '*' is the last character, it's a match
+            while (*s && *s != *p) s++;
+        } else if (*p == '?') {
+            p++;
+            s++;
+        } else if (*p == *s) {
+            p++;
+            s++;
+        } else {
+            return False;
+        }
+    }
+
+    // Check if the pattern and string are both consumed
+    return *p == '\0' && *s == '\0';
+}
+
+// Function to match a string (wrapper for simplicity, mimicking g_pattern_match_string)
+Bool pattern_match_string(const PatternSpec *spec, const char *string) {
+    if (!spec || !string) {
+        return False; // Handle null inputs gracefully
+    }
+    return pattern_spec_match(spec, string);
+}
+
+// Function to mimic g_dir_read_name
+const char *dir_read_name(DIR *datadir) {
+    struct dirent *entry = readdir(datadir);
+    if (entry == NULL) {
+        return NULL; // No more entries
+    }
+    return entry->d_name; // Return the name of the directory entry
+}
+
+// Function to mimic build_filename
+char *build_filename(const char *path, const char *filename) {
+    if (!path || !filename) {
+        return NULL; // Handle null inputs gracefully
+    }
+
+    // Allocate memory for the combined path
+    size_t path_len = strlen(path);
+    size_t filename_len = strlen(filename);
+    size_t total_len = path_len + strlen(PATH_SEPARATOR) + filename_len + 1; // +1 for null terminator
+
+    char *result = malloc(total_len);
+    if (!result) {
+        perror("malloc");
+        return NULL;
+    }
+
+    // Construct the file path
+    snprintf(result, total_len, "%s%s%s", path, PATH_SEPARATOR, filename);
+    return result;
+}
+
+// Function to free the PatternSpec
+void pattern_spec_free(PatternSpec *spec) {
+    if (spec) {
+        free(spec->pattern);
+        free(spec);
+    }
+}
+
+char *strdup_printf(const char *format, ...) {
+    va_list args;
+    va_list args_copy;
+    char *result = NULL;
+    int size;
+
+    // Start variadic argument processing
+    va_start(args, format);
+
+    // Create a copy of args for size estimation
+    va_copy(args_copy, args);
+
+    // Determine the required buffer size
+    size = vsnprintf(NULL, 0, format, args);
+    if (size < 0) {
+        va_end(args);
+        va_end(args_copy);
+        return NULL; // Encoding or other error
+    }
+
+    // Allocate memory for the resulting string (+1 for null terminator)
+    result = malloc(size + 1);
+    if (!result) {
+        va_end(args);
+        va_end(args_copy);
+        return NULL; // Memory allocation failed
+    }
+
+    // Format the string into the allocated buffer
+    vsnprintf(result, size + 1, format, args_copy);
+
+    // Clean up
+    va_end(args);
+    va_end(args_copy);
+
+    return result;
+}
+
+char *dir_make_tmp(const char *tmpl) {
+    char *template_path;
+    char *created_path = NULL;
+
+    // Check for a valid template
+    if (!tmpl || strstr(tmpl, "XXXXXX") == NULL) {
+        errno = EINVAL; // Invalid argument
+        return NULL;
+    }
+
+    // Duplicate the template since mkdtemp modifies the input
+    template_path = strdup(tmpl);
+    if (!template_path) {
+        return NULL; // Memory allocation failure
+    }
+
+    // Use mkdtemp to create the directory
+    if (mkdtemp(template_path)) {
+        // Directory was created successfully, duplicate the resulting path
+        created_path = strdup(template_path);
+    } else {
+        // Error occurred during mkdtemp
+        perror("mkdtemp");
+    }
+
+    // Clean up
+    free(template_path);
+
+    return created_path;
+}
+
+char *path_get_basename(const char *path) {
+    const char *base = NULL;
+
+    // Handle NULL or empty string
+    if (!path || *path == '\0') {
+        return strdup(".");
+    }
+
+    // Find the last occurrence of '/'
+    base = strrchr(path, '/');
+
+    // If '/' is found, return the part after it; otherwise, return the whole string
+    if (base) {
+        return strdup(base + 1);
+    } else {
+        return strdup(path);
+    }
+}
+
 /*
  * Test all files in a given subdir of either the build or source directory
  */
 static void
-TestAllFilesByType(GTestFileType file_type, gboolean compressed,
+TestAllFilesByType(TestFileType file_type, Bool compressed,
                    const char *subdir, int expected, testfilefunc testfunc)
 {
     const char *datadir_path, *filename;
-    char *datadir;
-    char *err = NULL;
+    DIR *datadir;
     int timeout = DEFAULT_TIMEOUT;
     char *timeout_env;
 
-    GPatternSpec *xpm_pattern = g_pattern_spec_new("*.xpm");
+    PatternSpec *xpm_pattern = pattern_spec_new("*.xpm");
 #ifndef NO_ZPIPE
-    GPatternSpec *z_pattern = compressed ? g_pattern_spec_new("*.xpm.Z") : NULL;
-    GPatternSpec *gz_pattern = compressed ? g_pattern_spec_new("*.xpm.gz") : NULL;
+    PatternSpec *z_pattern = compressed ? pattern_spec_new("*.xpm.Z") : NULL;
+    PatternSpec *gz_pattern = compressed ? pattern_spec_new("*.xpm.gz") : NULL;
 #endif
 
     /* Allow override when debugging tests */
@@ -78,22 +347,22 @@ TestAllFilesByType(GTestFileType file_type, gboolean compressed,
             timeout = from_env;
     }
 
-    datadir_path = g_test_get_filename(file_type, "pixmaps", subdir,
-                       (file_type == G_TEST_BUILT) ? "generated" : NULL, NULL);
+    datadir_path = test_file_path(file_type, "pixmaps", subdir,
+                       (file_type == TEST_BUILT) ? "generated" : NULL, NULL);
     assert(datadir_path != NULL);
     printf("Reading files from %s", datadir_path);
 
-    datadir = g_dir_open(datadir_path, 0, &err);
-    g_assert_no_error(err);
+    datadir = opendir(datadir_path); /* g_dir_open(datadir_path, 0, &err); */
+    assert(datadir != NULL);
 
     errno = 0;
-    while ((filename = g_dir_read_name(datadir)) != NULL) {
+    while ((filename = dir_read_name(datadir)) != NULL) {
 
-        if (!g_pattern_match_string(xpm_pattern, filename)) {
+        if (!pattern_match_string(xpm_pattern, filename)) {
 #ifndef NO_ZPIPE
                 if (!compressed ||
-                    (!g_pattern_match_string(z_pattern, filename) &&
-                     !g_pattern_match_string(gz_pattern, filename)))
+                    (!pattern_match_string(z_pattern, filename) &&
+                     !pattern_match_string(gz_pattern, filename)))
 #endif
                 {
                     printf("skipping \"%s\"", filename);
@@ -118,14 +387,14 @@ TestAllFilesByType(GTestFileType file_type, gboolean compressed,
             int status;
             char *filepath;
 
-            filepath = g_build_filename(datadir_path, filename, NULL);
+            filepath = build_filename(datadir_path, filename);
 
             printf("testing \"%s\", should return %d",
                            filename, expected);
             if (timeout > 0)
                 alarm(timeout);
             status = testfunc(filepath);
-            g_assert_cmpint(status, expected);
+            assert(status == expected);
 
             if (timeout > 0) {
                 status = alarm(0); /* cancel alarm */
@@ -137,15 +406,14 @@ TestAllFilesByType(GTestFileType file_type, gboolean compressed,
         }
         else {
             printf("timed out reading %s", filename);
-            g_assertion_message(G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC,
-                                "test timed out");
+            printf("test timed out: %s at %d", __FILE__, __LINE__);
         }
 
         errno = 0;
     }
     // g_assert_cmpint(errno, 0); - not sure why this sometimes fails
 
-    g_dir_close(datadir);
+    closedir(datadir);
 }
 
 /*
@@ -154,7 +422,7 @@ TestAllFilesByType(GTestFileType file_type, gboolean compressed,
 static void
 TestAllNormalFiles(const char *subdir, int expected, testfilefunc testfunc)
 {
-    TestAllFilesByType(G_TEST_DIST, FALSE, subdir, expected, testfunc);
+    TestAllFilesByType(TEST_DIST, False, subdir, expected, testfunc);
 }
 
 /*
@@ -166,6 +434,6 @@ TestAllCompressedFiles(const char *subdir, int expected, testfilefunc testfunc)
 #ifdef NO_ZPIPE
     printf("compression disabled, skipping compressed file tests");
 #else
-    TestAllFilesByType(G_TEST_BUILT, TRUE, subdir, expected, testfunc);
+    TestAllFilesByType(TEST_BUILT, True, subdir, expected, testfunc);
 #endif
 }
