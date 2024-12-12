@@ -1557,6 +1557,9 @@ winInitMultiWindowWM(WMInfoPtr pWMInfo, WMProcArgPtr pProcArg)
                     pWMInfo->ewmh._NET_WM_STATE_ABOVE,
                     pWMInfo->ewmh._NET_WM_STATE_BELOW,
                     pWMInfo->ewmh._NET_WM_STATE_SKIP_TASKBAR,
+                    pWMInfo->ewmh._NET_WM_NAME, /* Missing: setting the name of a window, typically used for the window manager's hidden top-level window */
+                    pWMInfo->ewmh._NET_WM_VISIBLE_NAME, /* Missing: provides the visible name of a window*/
+                    pWMInfo->ewmh._NET_WM_ICON, /* Missing: allows clients to provide an icon for their windows*/
                 };
 
             xcb_ewmh_set_supported(&pWMInfo->ewmh, pProcArg->dwScreen,
