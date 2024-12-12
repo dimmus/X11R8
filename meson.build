@@ -124,7 +124,7 @@ subdir('lib' / 'src' / 'xmu')     # <- xext
 subdir('lib' / 'src' / 'xaw')     # <- xext
 # subdir('lib' / 'src' / 'xaw3d')   # TODO: implement 
 subdir('lib' / 'test')
-# subdir('lib' / 'example') # TODO: implement
+subdir('lib' / 'example')
 subdir('extension')
 subdir('server')
 
