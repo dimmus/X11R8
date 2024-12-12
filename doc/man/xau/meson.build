@@ -3,16 +3,17 @@
 
 prog_sed = find_program('sed')
 
-foreach man: ['Xau', 'XauDisposeAuth', 'XauFileName', 'XauGetAuthByAddr',
-               'XauGetBestAuthByAddr', 'XauLockAuth', 'XauReadAuth', 'XauUnlockAuth',
-               'XauWriteAuth']
+foreach man: [
+  'Xau', 'XauDisposeAuth', 'XauFileName', 'XauGetAuthByAddr', 'XauGetBestAuthByAddr',
+  'XauLockAuth', 'XauReadAuth', 'XauUnlockAuth', 'XauWriteAuth'
+  ]
   custom_target(
-    f'@man@.man',
-    input: f'@man@.man',
-    output: f'@man@.3',
+    '@0@'.format(man),
+    input: '@0@'.format(man),
+    output: '@0@'.format(3),
     command: [
       prog_sed,
-      '-e', 's/__xorgversion__/"libXau @0@" "X Version 11"/'.format(meson.project_version()),
+      '-e', 's/__xorgversion__/"libXau @0@" "X Version 11"/'.format(ver_xau),
       '-e', 's/__libmansuffix__/3/',
       '@INPUT@',
     ],

@@ -202,6 +202,11 @@ conf.set('HAVE_REALLOCF', cc.has_function('reallocf'))
 conf.set('HAVE_STRNDUP', cc.has_function('strndup') and cc.has_header_symbol('string.h', 'strndup'))
 conf.set('HAVE_UNLOCKED_STDIO', cc.has_function('getc_unlocked'))
 
+WITH_MAN = get_option('docs-man')
+if WITH_MAN
+  subdir('doc' / 'man')
+endif
+
 configure_file(
   output: 'config.h',
   configuration: conf
