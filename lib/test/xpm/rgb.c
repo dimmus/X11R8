@@ -21,10 +21,13 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include "config.h"
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
-#include "../src/rgb.c"
-#include <glib.h>
+#include "../../lib/src/xpm/rgb.c"
+#include <assert.h>
+#include <time.h>
 
 /*
  * xpmReadRgbNames - reads a rgb text file
@@ -50,18 +53,18 @@ static const struct rgbData testdata[] = {
 static void
 test_xpmReadRgbNames(void)
 {
-    const gchar *filename;
+    const char *filename;
     xpmRgbName rgbn[MAX_RGBNAMES];
     int rgbn_max;
 
-    /* Verify NULL is returned if file can't be read */
+    /* Verify NULL is returned if file can't be reads */
     rgbn_max = xpmReadRgbNames("non-existent-file.txt", rgbn);
-    g_assert_cmpint(rgbn_max, ==, 0);
+    assert(rgbn_max == 0);
 
     /* Verify our test file is read properly & contains expected data */
-    filename = g_test_get_filename(G_TEST_DIST, "rgb.txt", NULL);
+    filename = "rgb.txt"; /* TODO: test - need full path here */
     rgbn_max = xpmReadRgbNames(filename, rgbn);
-    g_assert_cmpint(rgbn_max, ==, NUM_RGB);
+    assert(rgbn_max == NUM_RGB);
 
     for (unsigned int i = 0; i < NUM_RGB; i++) {
         int r = testdata[i].r * 257;
@@ -69,10 +72,10 @@ test_xpmReadRgbNames(void)
         int b = testdata[i].b * 257;
         char *name = xpmGetRgbName(rgbn, rgbn_max, r, g, b);
 
-        g_assert_cmpstr(name, ==, testdata[i].name);
+        assert(strcmp(name, testdata[i].name) == 0);
     }
 
-    g_assert_null(xpmGetRgbName(rgbn, rgbn_max, 11, 11, 11));
+    assert(xpmGetRgbName(rgbn, rgbn_max, 11, 11, 11) == NULL);
 
     xpmFreeRgbNames(rgbn, rgbn_max);
 }
@@ -81,11 +84,5 @@ test_xpmReadRgbNames(void)
 int
 main(int argc, char** argv)
 {
-    g_test_init(&argc, &argv, NULL);
-    g_test_bug_base(PACKAGE_BUGREPORT);
-
-    g_test_add_func("/rgb/xpmReadRgbNames",
-                    test_xpmReadRgbNames);
-
-    return g_test_run();
+    test_xpmReadRgbNames();
 }

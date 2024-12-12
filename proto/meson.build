@@ -114,6 +114,9 @@ xproto = declare_dependency(
 
 keysymfile = meson.project_source_root() / 'include' / 'X11' / 'XF86keysym.h'
 
-test('evdev-keysym-check',
-     find_program('scripts' / 'keysym-generator.py'),
-     args: ['-v', '--header', keysymfile, 'verify'])
+# XXX: needs python module 'libevdev'
+test('xproto - evdev-keysym',
+    find_program('scripts' / 'keysym-generator.py'),
+    args: ['-v', '--header', keysymfile, 'verify'],
+
+)

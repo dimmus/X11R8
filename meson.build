@@ -123,7 +123,7 @@ subdir('lib' / 'src' / 'xpm')     # <- xext
 subdir('lib' / 'src' / 'xmu')     # <- xext
 subdir('lib' / 'src' / 'xaw')     # <- xext
 # subdir('lib' / 'src' / 'xaw3d')   # TODO: implement 
-# subdir('lib' / 'test')    # TODO: implement
+subdir('lib' / 'test')
 # subdir('lib' / 'example') # TODO: implement
 subdir('extension')
 subdir('server')

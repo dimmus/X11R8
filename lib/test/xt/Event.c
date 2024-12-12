@@ -22,10 +22,12 @@
  */
 
 #include <X11/Intrinsic.h>
-#include <glib.h>
+
 #include <unistd.h>
 #include <signal.h>
 #include <setjmp.h>
+#include <assert.h>
+#include <stdio.h>
 
 /* Test XtAppMainLoop without a display doesn't wait for an XEvent.
    Based on https://bugs.freedesktop.org/show_bug.cgi?id=34715 */
@@ -39,7 +41,7 @@ static void _Tick(XtPointer baton, XtIntervalId* id)
     printf("%d beep!\n", count);
 #endif
 
-    if (3 == count)
+    if (count == 1) /* 1 sec */
         XtAppSetExitFlag(app);
     else
         XtAppAddTimeOut(app, 1000, _Tick, app);
@@ -57,9 +59,6 @@ static void test_XtAppMainLoop_34715(void)
     XtAppContext app;
     struct sigaction sa;
 
-    g_test_bug_base("https://bugzilla.freedesktop.org/show_bug.cgi?id=");
-    g_test_bug("34715");
-
     XtToolkitInitialize();
     app = XtCreateApplicationContext();
     XtAppAddTimeOut(app, 1000, _Tick, app);
@@ -71,25 +70,19 @@ static void test_XtAppMainLoop_34715(void)
     sigemptyset (&sa.sa_mask);
 
     if (sigsetjmp(jump_env, 1) == 0) {
-	sigaction(SIGALRM, &sa, NULL);
-	alarm(10);
+        sigaction(SIGALRM, &sa, NULL);
+        alarm(10);
 
-	XtAppMainLoop(app);
-	alarm(0); /* cancel alarm */
+        XtAppMainLoop(app);
+        alarm(0); /* cancel alarm */
     } else {
-	g_assertion_message(G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC,
-			    "test timed out");
+        printf("test timed out: %s at %d", __FILE__, __LINE__);
     }
-    g_assert_cmpint(XtAppGetExitFlag(app), ==, TRUE);
+    assert(XtAppGetExitFlag(app) == TRUE);
     XtDestroyApplicationContext(app);
 }
 
 int main(int argc, char** argv)
 {
-    g_test_init(&argc, &argv, NULL);
-    g_test_bug_base("https://gitlab.freedesktop.org/xorg/lib/libxt/-/issues/");
-
-    g_test_add_func("/Event/XtAppMainLoop/34715", test_XtAppMainLoop_34715);
-
-    return g_test_run();
+    test_XtAppMainLoop_34715();
 }

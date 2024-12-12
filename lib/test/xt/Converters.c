@@ -22,7 +22,7 @@
  */
 
 #include <X11/Intrinsic.h>
-#include <glib.h>
+#include <assert.h>
 
 /* Test for Solaris bug 4163152 XtCvtIntToPixmap() gets a SIGBUS in 64-bit
    Fixed by libXt commit 16d9941f3aa38dde115cbff639e131761c1b36d0
@@ -54,8 +54,8 @@ static void test_XtCvtIntToPixmap(void)
     status = XtCvtIntToPixmap(display, &args[0], &num_args,
 			      &fromVal, &toVal, closure_ret);
 
-    g_assert_cmpint(status, ==, True);
-    g_assert_cmpint(res, ==, num[0]);
+    assert(status == True);
+    assert(res == num[0]);
 
 
     num[0] = -1;
@@ -70,16 +70,11 @@ static void test_XtCvtIntToPixmap(void)
     status = XtCvtIntToPixmap(display, &args[0], &num_args,
 			      &fromVal, &toVal, closure_ret);
 
-    g_assert_cmpint(status, ==, True);
-    g_assert_cmpint(res, ==, num[1]);
+    assert(status == True);
+    assert(res == num[1]);
 }
 
 int main(int argc, char** argv)
 {
-    g_test_init(&argc, &argv, NULL);
-    g_test_bug_base("https://gitlab.freedesktop.org/xorg/lib/libxt/-/issues/");
-
-    g_test_add_func("/Converters/XtCvtIntToPixmap", test_XtCvtIntToPixmap);
-
-    return g_test_run();
+    test_XtCvtIntToPixmap();
 }

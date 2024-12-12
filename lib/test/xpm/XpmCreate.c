@@ -21,10 +21,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include "config.h"
-
 #include <X11/xpm.h>
-#include <glib.h>
 
 #include "TestAllFiles.h"
 
@@ -37,7 +34,7 @@
  *  - check with data other than read from XPM files
  */
 static int
-TestCreateXpmImageFromData(const gchar *filepath)
+TestCreateXpmImageFromData(const char *filepath)
 {
     char **data = NULL;
     int status;
@@ -48,10 +45,10 @@ TestCreateXpmImageFromData(const gchar *filepath)
         XpmImage image;
         XpmInfo info;
 
-        g_assert_nonnull(data);
+        assert(data != NULL);
 
         status = XpmCreateXpmImageFromData(data, &image, &info);
-        g_assert_cmpint(status, ==, XpmSuccess);
+        assert(status == XpmSuccess);
 
         XpmFreeXpmImage(&image);
         XpmFreeXpmInfo(&info);
@@ -83,7 +80,7 @@ test_XpmCreateXpmImageFromData(void)
  *  - check with data other than read from XPM files
  */
 static int
-TestCreateXpmImageFromBuffer(const gchar *filepath)
+TestCreateXpmImageFromBuffer(const char *filepath)
 {
     char *buffer = NULL;
     XpmImage image;
@@ -91,7 +88,7 @@ TestCreateXpmImageFromBuffer(const gchar *filepath)
     int status;
 
     status = XpmReadFileToBuffer(filepath, &buffer);
-    g_assert_cmpint(status, ==, XpmSuccess);
+    assert(status == XpmSuccess);
 
     status = XpmCreateXpmImageFromBuffer(buffer, &image, &info);
 
@@ -117,13 +114,6 @@ test_XpmCreateXpmImageFromBuffer(void)
 int
 main(int argc, char** argv)
 {
-    g_test_init(&argc, &argv, NULL);
-    g_test_bug_base(PACKAGE_BUGREPORT);
-
-    g_test_add_func("/XpmCreate/XpmCreateXpmImageFromData",
-                    test_XpmCreateXpmImageFromData);
-    g_test_add_func("/XpmCreate/XpmCreateXpmImageFromBuffer",
-                    test_XpmCreateXpmImageFromBuffer);
-
-    return g_test_run();
+    test_XpmCreateXpmImageFromData();
+    test_XpmCreateXpmImageFromBuffer();
 }

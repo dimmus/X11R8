@@ -27,7 +27,7 @@ shared_module(
 )
 
 # Test that we don't have any unresolved symbols from our module to Xorg.
-xorg_build_root = join_paths(meson.project_build_root(), 'hw', 'xfree86')
+xorg_build_root = join_paths(meson.project_build_root(), 'server', 'hw', 'xfree86')
 symbol_test_args = []
 symbol_test_args += join_paths(xorg_build_root, 'libxorgserver.so')
 symbol_test_args += join_paths(xorg_build_root, 'dixmods', 'libshadow.so')
@@ -36,7 +36,7 @@ if dep_gbm.found()
 endif
 symbol_test_args += join_paths(xorg_build_root, 'drivers', 'modesetting', 'modesetting_drv.so')
 
-test('modesetting symbol test',
+test('xserver - modesetting symbol',
     xorg_symbol_test,
     args: symbol_test_args,
 )

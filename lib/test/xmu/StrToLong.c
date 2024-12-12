@@ -22,10 +22,14 @@
  */
 
 /* Test code for functions in src/StrToLong.c */
-#include "config.h"
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <X11/Xmu/Converters.h>
 #include <X11/Xmd.h>
-#include <glib.h>
+#include <assert.h>
+#include <stdio.h>
 
 struct TestData {
     const char *name;
@@ -49,11 +53,9 @@ static int warning_count;
 static void
 xt_warning_handler(String message)
 {
-    g_test_message("Caught warning: %s", message ? message : "<NULL>");
+    printf("Caught warning: %s", message ? message : "<NULL>");
     warning_count++;
 }
-
-
 
 static void
 test_XmuCvtStringToLong(void)
@@ -64,39 +66,39 @@ test_XmuCvtStringToLong(void)
     char namebuf[32];
 
     for (unsigned int i = 0; i < DATA_ENTRIES; i++) {
-        g_test_message("StringToLong(%s)", data[i].name);
+        printf("StringToLong(%s)", data[i].name);
 
         strncpy(namebuf, data[i].name, sizeof(namebuf) - 1);
         namebuf[sizeof(namebuf) - 1] = 0;
         from.addr = namebuf;
         from.size = sizeof(char *);
         XmuCvtStringToLong(NULL, &nargs, &from, &to);
-        g_assert_cmpint(*(long *)to.addr, ==, data[i].value);
-        g_assert_cmpint(to.size, ==, sizeof(long));
+        assert(*(long *)to.addr == data[i].value);
+        assert(to.size == sizeof(long));
     }
 
     /* Verify warning is issued for unused args */
     warning_count = 0;
     nargs = 1;
-    g_test_message("StringToLong with extra args");
+    printf("StringToLong with extra args");
     XmuCvtStringToLong(&args, &nargs, &from, &to);
-    g_assert_cmpint(warning_count, >, 0);
+    assert(warning_count > 0);
 
     /* Verify warning issued for non-numeric string */
     warning_count = 0;
     from.addr = (char *) "DoesNotExist";
     nargs = 0;
-    g_test_message("StringToLong(%s)", from.addr);
+    printf("StringToLong(%s)", from.addr);
     XmuCvtStringToLong(NULL, &nargs, &from, &to);
-    g_assert_cmpint(warning_count, >, 0);
+    assert(warning_count > 0);
 
     /* Verify warning issued for empty string */
     warning_count = 0;
     from.addr = (char *) "";
     nargs = 0;
-    g_test_message("StringToLong(%s)", from.addr);
+    printf("StringToLong(%s)", from.addr);
     XmuCvtStringToLong(NULL, &nargs, &from, &to);
-    g_assert_cmpint(warning_count, >, 0);
+    assert(warning_count > 0);
 }
 
 static void
@@ -110,7 +112,7 @@ test_XmuCvtLongToString(void)
 
 
     for (unsigned int i = 0; i < DATA_ENTRIES; i++) {
-        g_test_message("LongToString(%ld)", data[i].value);
+        printf("LongToString(%ld)", data[i].value);
 
         value = data[i].value;
         from.addr = (XPointer) &value;
@@ -120,47 +122,39 @@ test_XmuCvtLongToString(void)
         to.addr = NULL;
         to.size = 0;
         ret = XmuCvtLongToString(NULL, NULL, &nargs, &from, &to, NULL);
-        g_assert_cmpint(ret, ==, True);
-        g_assert_cmpstr(to.addr, ==, data[i].name);
-        g_assert_cmpint(to.size, ==, sizeof(char *));
+        assert(ret == True);
+        assert(strcmp(to.addr, data[i].name) == 0);
+        assert(to.size == sizeof(char *));
 
         /* Then test with a buffer that's too small to copy the string into */
         to.addr = namebuf;
         to.size = 1;
         ret = XmuCvtLongToString(NULL, NULL, &nargs, &from, &to, NULL);
-        g_assert_cmpint(ret, ==, False);
-        g_assert_cmpint(to.size, ==, strlen(data[i].name) + 1);
+        assert(ret == False);
+        assert(to.size == strlen(data[i].name) + 1);
 
         /* Then test with a buffer that's big enough to copy the string into */
         to.addr = namebuf;
         to.size = sizeof(namebuf);
         ret = XmuCvtLongToString(NULL, NULL, &nargs, &from, &to, NULL);
-        g_assert_cmpint(ret, ==, True);
-        g_assert_cmpstr(to.addr, ==, data[i].name);
-        g_assert_cmpint(to.size, ==, sizeof(char *));
+        assert(ret == True);
+        assert(strcmp(to.addr, data[i].name) == 0);
+        assert(to.size == sizeof(char *));
     }
 
     /* Verify warning is issued for unused args */
     warning_count = 0;
     nargs = 1;
-    g_test_message("LongToString with extra args");
+    printf("LongToString with extra args");
     XmuCvtLongToString(NULL, &args, &nargs, &from, &to, NULL);
-    g_assert_cmpint(warning_count, >, 0);
+    assert(warning_count > 0);
 }
 
 int
 main(int argc, char** argv)
 {
-    g_test_init(&argc, &argv, NULL);
-    g_test_bug_base(PACKAGE_BUGREPORT);
-
     XtSetWarningHandler(xt_warning_handler);
 
-    g_test_add_func("/StrToLong/XmuCvtStringToLong",
-                    test_XmuCvtStringToLong);
-    g_test_add_func("/StrToLong/XmuCvtLongToString",
-                    test_XmuCvtLongToString);
-
-
-    return g_test_run();
+    test_XmuCvtStringToLong();
+    test_XmuCvtLongToString();
 }

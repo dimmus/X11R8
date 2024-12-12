@@ -21,7 +21,10 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include <glib.h>
+#include <assert.h>
+#include <string.h>
+
+#include "X11/xpm.h"
 
 static void
 CompareXpmImage(const XpmImage *a, const XpmImage *b)
@@ -30,7 +33,7 @@ CompareXpmImage(const XpmImage *a, const XpmImage *b)
     const size_t datasize = sizeof(unsigned int) * a->width * a->height;
 #endif
 
-#define CompareUintFields(f) g_assert_cmpuint(a->f, ==, b->f)
+#define CompareUintFields(f) assert(a->f == b->f)
 
     CompareUintFields(width);
     CompareUintFields(height);
@@ -42,7 +45,7 @@ CompareXpmImage(const XpmImage *a, const XpmImage *b)
     for (unsigned int i = 0; i < a->ncolors; i++)
     {
 #define CompareStringFields(f) \
-        g_assert_cmpstr(a->colorTable[i].f, ==, b->colorTable[i].f)
+        assert(strcmp(a->colorTable[i].f, b->colorTable[i].f) == 0)
 
         CompareStringFields(string);
         CompareStringFields(symbolic);

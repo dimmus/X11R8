@@ -22,14 +22,18 @@
  */
 
 /* Test code for XmuCursorNameToIndex() in src/CursorName.c */
-#include "config.h"
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <X11/Xmu/CurUtil.h>
 #include <X11/Xmu/CharSet.h>
-#include <glib.h>
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #define SKIP_WHITESPACE(p)  while (isspace(*p)) p++
 
@@ -44,7 +48,7 @@ test_CursorNameToIndex_goodnames(void)
 
     cursorfont = fopen("/usr/include/X11/cursorfont.h", "r");
     if (cursorfont == NULL) {
-        g_test_skip("Could not open /usr/include/X11/cursorfont.h");
+        /* Could not open /usr/include/X11/cursorfont.h */
         return;
     }
 
@@ -68,11 +72,11 @@ test_CursorNameToIndex_goodnames(void)
 
         if (strncmp(p, "num_glyphs", 10) == 0) {
             /* Use #define XC_num_glyphs to record the number we expect */
-            g_assert_cmpint(cursorsexpected, ==, 0);
+            assert(cursorsexpected == 0);
             p += strlen("num_glyphs");
             SKIP_WHITESPACE(p);
             cursorsexpected = (int) strtol(p, NULL, 0) / 2;
-            g_test_message("cursors expected = %d", cursorsexpected);
+            printf("cursors expected = %d", cursorsexpected);
             continue;
         }
         else {
@@ -87,14 +91,14 @@ test_CursorNameToIndex_goodnames(void)
             SKIP_WHITESPACE(p);
             expected_id = (int) strtol(p, NULL, 0);
 
-            g_test_message("%s = %d", name, expected_id);
+            printf("%s = %d", name, expected_id);
 
             returned_id = XmuCursorNameToIndex(name);
-            g_assert_cmpint(returned_id, ==, expected_id);
+            assert(returned_id == expected_id);
 
             XmuNCopyISOLatin1Uppered(upper_name, name, sizeof(upper_name));
             returned_id = XmuCursorNameToIndex(upper_name);
-            g_assert_cmpint(returned_id, ==, expected_id);
+            assert(returned_id == expected_id);
 
             cursorschecked++;
         }
@@ -102,7 +106,7 @@ test_CursorNameToIndex_goodnames(void)
 
     fclose(cursorfont);
 
-    g_assert_cmpint(cursorschecked, ==, cursorsexpected);
+    assert(cursorschecked == cursorsexpected);
 }
 
 static void
@@ -118,22 +122,17 @@ test_CursorNameToIndex_badnames(void)
 
     for (unsigned int i = 0; i < NUM_BAD_NAMES; i++) {
         int returned_id = XmuCursorNameToIndex(badnames[i]);
-        g_test_message("%s", badnames[i]);
-        g_assert_cmpint(returned_id, ==, -1);
+        printf("%s", badnames[i]);
+        assert(returned_id == -1);
     }
 }
 
 int
 main(int argc, char** argv)
 {
-    g_test_init(&argc, &argv, NULL);
-    g_test_bug_base(PACKAGE_BUGREPORT);
+    /* /CursorName/XmuCursorNameToIndex/good-names */
+    test_CursorNameToIndex_goodnames();
 
-    g_test_add_func("/CursorName/XmuCursorNameToIndex/good-names",
-                    test_CursorNameToIndex_goodnames);
-
-    g_test_add_func("/CursorName/XmuCursorNameToIndex/bad-names",
-                    test_CursorNameToIndex_badnames);
-
-    return g_test_run();
+    /* /CursorName/XmuCursorNameToIndex/bad-names */
+    test_CursorNameToIndex_badnames();
 }

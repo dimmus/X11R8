@@ -21,21 +21,22 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include <glib.h>
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
+#include <time.h>
 #include <errno.h>
 #include <limits.h>
 #include <setjmp.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
+#include <assert.h>
 
-#include "config.h"
-
-/* g_pattern_spec_match_string is available in glib 2.70 and later,
-   to replace the deprecated g_pattern_match_string */
-#ifdef HAVE_G_PATTERN_SPEC_MATCH_STRING
-#define g_pattern_match_string g_pattern_spec_match_string
+#ifndef assert_no_errno
+#define assert_no_errno(expr) assert((expr) >= 0)
 #endif
 
 #define DEFAULT_TIMEOUT 10 /* maximum seconds for each file */
@@ -47,7 +48,7 @@ static void sigalrm (int sig)
     siglongjmp(jump_env, 1);
 }
 
-typedef int (*testfilefunc)(const gchar *filepath);
+typedef int (*testfilefunc)(const char *filepath);
 
 /*
  * Test all files in a given subdir of either the build or source directory
@@ -56,9 +57,9 @@ static void
 TestAllFilesByType(GTestFileType file_type, gboolean compressed,
                    const char *subdir, int expected, testfilefunc testfunc)
 {
-    const gchar *datadir_path, *filename;
-    GDir *datadir;
-    GError *err = NULL;
+    const char *datadir_path, *filename;
+    char *datadir;
+    char *err = NULL;
     int timeout = DEFAULT_TIMEOUT;
     char *timeout_env;
 
@@ -79,8 +80,8 @@ TestAllFilesByType(GTestFileType file_type, gboolean compressed,
 
     datadir_path = g_test_get_filename(file_type, "pixmaps", subdir,
                        (file_type == G_TEST_BUILT) ? "generated" : NULL, NULL);
-    g_assert_nonnull(datadir_path);
-    g_test_message("Reading files from %s", datadir_path);
+    assert(datadir_path != NULL);
+    printf("Reading files from %s", datadir_path);
 
     datadir = g_dir_open(datadir_path, 0, &err);
     g_assert_no_error(err);
@@ -95,7 +96,7 @@ TestAllFilesByType(GTestFileType file_type, gboolean compressed,
                      !g_pattern_match_string(gz_pattern, filename)))
 #endif
                 {
-                    g_test_message("skipping \"%s\"", filename);
+                    printf("skipping \"%s\"", filename);
                     continue;
                 }
         }
@@ -115,34 +116,34 @@ TestAllFilesByType(GTestFileType file_type, gboolean compressed,
 
         if (sigsetjmp(jump_env, 1) == 0) {
             int status;
-            gchar *filepath;
+            char *filepath;
 
             filepath = g_build_filename(datadir_path, filename, NULL);
 
-            g_test_message("testing \"%s\", should return %d",
+            printf("testing \"%s\", should return %d",
                            filename, expected);
             if (timeout > 0)
                 alarm(timeout);
             status = testfunc(filepath);
-            g_assert_cmpint(status, ==, expected);
+            g_assert_cmpint(status, expected);
 
             if (timeout > 0) {
                 status = alarm(0); /* cancel alarm */
-                g_test_message("%d seconds left on %d second timer",
+                printf("%d seconds left on %d second timer",
                                status, timeout);
             }
 
-            g_free(filepath);
+            free(filepath);
         }
         else {
-            g_test_message("timed out reading %s", filename);
+            printf("timed out reading %s", filename);
             g_assertion_message(G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC,
                                 "test timed out");
         }
 
         errno = 0;
     }
-    // g_assert_cmpint(errno, ==, 0); - not sure why this sometimes fails
+    // g_assert_cmpint(errno, 0); - not sure why this sometimes fails
 
     g_dir_close(datadir);
 }
@@ -163,7 +164,7 @@ static void
 TestAllCompressedFiles(const char *subdir, int expected, testfilefunc testfunc)
 {
 #ifdef NO_ZPIPE
-    g_test_message("compression disabled, skipping compressed file tests");
+    printf("compression disabled, skipping compressed file tests");
 #else
     TestAllFilesByType(G_TEST_BUILT, TRUE, subdir, expected, testfunc);
 #endif

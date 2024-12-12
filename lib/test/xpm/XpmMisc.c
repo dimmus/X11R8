@@ -21,10 +21,14 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include "config.h"
+#include <time.h>
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include <X11/xpm.h>
-#include <glib.h>
+#include <assert.h>
+#include <string.h>
 
 /*
  * XpmAttributesSize - report size of XpmAttributes structure
@@ -34,7 +38,7 @@ static void
 test_XpmAttributesSize(void)
 {
     int size = XpmAttributesSize();
-    g_assert_cmpint(size, ==, sizeof(XpmAttributes));
+    assert(size == sizeof(XpmAttributes));
 }
 
 /*
@@ -48,8 +52,8 @@ test_XpmGetErrorString(void)
 
 #define TestErrorString(num, str) \
     es = XpmGetErrorString(num); \
-    g_assert_nonnull(es); \
-    g_assert_cmpstr(es, ==, str)
+    assert(es != NULL); \
+    assert(strcmp(es, str) == 0)
 
     TestErrorString(XpmColorError, "XpmColorError");
     TestErrorString(XpmSuccess, "XpmSuccess");
@@ -71,21 +75,13 @@ static void
 test_XpmLibraryVersion(void)
 {
     int version = XpmLibraryVersion();
-    g_assert_cmpint(version, ==, XpmIncludeVersion);
+    assert(version == XpmIncludeVersion);
 }
 
 int
 main(int argc, char** argv)
 {
-    g_test_init(&argc, &argv, NULL);
-    g_test_bug_base(PACKAGE_BUGREPORT);
-
-    g_test_add_func("/XpmMisc/XpmAttributesSize",
-                    test_XpmAttributesSize);
-    g_test_add_func("/XpmMisc/XpmGetErrorString",
-                    test_XpmGetErrorString);
-    g_test_add_func("/XpmMisc/XpmLibraryVersion",
-                    test_XpmLibraryVersion);
-
-    return g_test_run();
+    test_XpmAttributesSize();
+    test_XpmGetErrorString();
+    test_XpmLibraryVersion();
 }
