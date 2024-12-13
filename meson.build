@@ -45,9 +45,10 @@ cc = meson.get_compiler('c')
     test_wflags = []
 # endif
 
-common_wflags = cc.get_supported_arguments(test_wflags)
-
-add_project_arguments(common_wflags, language: 'c')
+add_project_arguments(
+  cc.get_supported_arguments(test_wflags), 
+  language: 'c'
+)
 
 add_project_arguments(
   '-DHAVE_CONFIG_H',
@@ -75,28 +76,30 @@ dir_include = dir_prefix / get_option('includedir')
 dir_lib     = dir_prefix / get_option('libdir')
 dir_man     = dir_prefix / get_option('mandir')
 
-dir_build  = meson.project_build_root()
-dir_source = meson.project_source_root()
+dir_build   = meson.project_build_root()
+dir_source  = meson.project_source_root()
 
-dep_m           = cc.find_library('m',  required: false) # libxcvt
-dep_dl          = cc.find_library('dl', required: false) # xvmc, xserver
-dep_zlib        = dependency('zlib') # xfont
-dep_bzip2       = dependency('bzip2') # xfont
-dep_freetype2   = dependency('freetype2') # xfont
-dep_zlib        = dependency('zlib') # fontenc
-dep_xcb         = dependency('xcb', version: '>= 1.11.1') # x11
-dep_uuid        = dependency('uuid', required: false) # sm
-dep_freetype2   = dependency('freetype2', version: '>= 2.1.6') # xft
-dep_fontconfig  = dependency('fontconfig', version: '>= 2.5.92') # xft
+dep_m            = cc.find_library('m',  required: false) # libxcvt
+dep_dl           = cc.find_library('dl', required: false) # xvmc, xserver
+dep_zlib         = dependency('zlib') # xfont
+dep_bzip2        = dependency('bzip2') # xfont
+dep_freetype2    = dependency('freetype2') # xfont
+dep_zlib         = dependency('zlib') # fontenc
+dep_xcb          = dependency('xcb', version: '>= 1.11.1') # x11
+dep_uuid         = dependency('uuid', required: false) # sm
+dep_freetype2    = dependency('freetype2', version: '>= 2.1.6') # xft
+dep_fontconfig   = dependency('fontconfig', version: '>= 2.5.92') # xft
 
 WITH_UNIT_TESTS  = false
-WITH_FONT_SERVER = get_option('build-font-server') == true
-WITH_TESTS       = get_option('build-tests') == true
+WITH_FONT_SERVER = get_option('build-font-server')
+WITH_TESTS       = get_option('build-tests')
+WITH_MAN         = get_option('docs-man')
 
 python = import('python').find_installation()
 pkg    = import('pkgconfig')
 
 conf = configuration_data()
+
 inc_config = include_directories('.')
 
 f_check  = []
@@ -208,7 +211,6 @@ conf.set('HAVE_REALLOCF', cc.has_function('reallocf'))
 conf.set('HAVE_STRNDUP', cc.has_function('strndup') and cc.has_header_symbol('string.h', 'strndup'))
 conf.set('HAVE_UNLOCKED_STDIO', cc.has_function('getc_unlocked'))
 
-WITH_MAN = get_option('docs-man')
 if WITH_MAN
   prog_sed = find_program('sed')
   subdir('doc' / 'man')
