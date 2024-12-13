@@ -57,6 +57,8 @@ add_project_arguments(
   '-D_CONST_X_STRING',
   '-D_DEFAULT_SOURCE',
   '-DHAVE_DIX_CONFIG_H',
+  '-D__USE_MISC', # test/xfont (used if HAVE_REALPATH true)
+  '-D__USE_XOPEN_EXTENDED', # test/xfont (used if HAVE_REALPATH true)
   language: 'c'
 )
 
@@ -87,7 +89,9 @@ dep_uuid        = dependency('uuid', required: false) # sm
 dep_freetype2   = dependency('freetype2', version: '>= 2.1.6') # xft
 dep_fontconfig  = dependency('fontconfig', version: '>= 2.5.92') # xft
 
-WITH_UNIT_TESTS = false
+WITH_UNIT_TESTS  = false
+WITH_FONT_SERVER = get_option('build-font-server') == true
+WITH_TESTS       = get_option('build-tests') == true
 
 python = import('python').find_installation()
 pkg    = import('pkgconfig')
@@ -158,8 +162,10 @@ subdir('lib' / 'src' / 'xcursor') # <- xrender, xfixes
 subdir('lib' / 'src' / 'xpm')     # <- xext
 subdir('lib' / 'src' / 'xmu')     # <- xext
 subdir('lib' / 'src' / 'xaw')     # <- xext
-# subdir('lib' / 'src' / 'xaw3d')   # TODO: implement 
+# subdir('lib' / 'src' / 'xaw3d')   # TODO: implement
+if WITH_TESTS
 subdir('lib' / 'test')
+endif
 subdir('lib' / 'example')
 subdir('extension')
 subdir('server')

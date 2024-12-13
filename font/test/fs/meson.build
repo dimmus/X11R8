@@ -1,7 +1,7 @@
-test('FSGetErrorText',
+test('font - fs - GetErrorText',
   executable('FSGetErrorText',
     'FSGetErrorText.c',
-    link_with: lib,
-    include_directories: inc_fs,
+    dependencies: [libxfont, libfs],
+    include_directories: inc_font,
   )
 )

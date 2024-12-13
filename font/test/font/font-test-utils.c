@@ -53,7 +53,7 @@ SOFTWARE.
  */
 
 #include "font-test-utils.h"
-#include "src/util/replace.h"
+#include "../../font/lib/font/src/util/replace.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -61,7 +61,7 @@ SOFTWARE.
 #ifdef HAVE_ERR_H
 #include <err.h>
 #endif
-#include "src/util/replace.h"
+#include "../../font/lib/font/src/util/replace.h"
 #include <X11/X.h>
 
 static unsigned long server_generation;

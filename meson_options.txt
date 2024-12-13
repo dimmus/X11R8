@@ -104,3 +104,6 @@ option('docs',                  type: 'combo',   value: 'false', choices: ['true
 option('devel-docs',            type: 'combo',   value: 'false', choices: ['true', 'false', 'auto'],  description: 'Build development documentation')
 option('docs-pdf',              type: 'combo',   value: 'false', choices: ['true', 'false', 'auto'],  description: 'Whether to build PDF version of documentation. Setting is ignored if documentation is not built.')
 option('docs-man',              type: 'boolean', value: false,   description: '')
+
+option('build-font-server',     type: 'boolean', value: false,   description: '')
+option('build-tests',           type: 'boolean', value: false,   description: '')

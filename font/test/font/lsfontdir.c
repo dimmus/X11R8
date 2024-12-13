@@ -33,7 +33,7 @@
 #ifdef HAVE_ERR_H
 #include <err.h>
 #endif
-#include "src/util/replace.h"
+#include "../../lib/font/src/util/replace.h"
 
 int
 main(int argc, char **argv)
