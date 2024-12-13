@@ -50,9 +50,13 @@ from The Open Group.
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+
 #ifdef HAVE_SYSTEMD_DAEMON
 #include <systemd/sd-daemon.h>
 #endif
+
+#include "X11/Xtrans/Xtrans.h"
+#include "X11/Xtrans/Xtransint.h"
 
 /*
  * The transport table contains a definition for every transport (protocol)
@@ -123,9 +127,10 @@ Xtransport_table Xtransports[] = {
 
 void
 TRANS(FreeConnInfo) (XtransConnInfo ciptr)
-
 {
+#ifdef XTRANS_TRANSPORT_C
     prmsg (3,"FreeConnInfo(%p)\n", ciptr);
+#endif
 
     if (ciptr->addr)
 	free (ciptr->addr);
@@ -149,8 +154,9 @@ TRANS(SelectTransport) (const char *protocol)
 #ifndef HAVE_STRCASECMP
     char 	protobuf[PROTOBUFSIZE];
 #endif
-
+#ifdef XTRANS_TRANSPORT_C
     prmsg (3,"SelectTransport(%s)\n", protocol);
+#endif
 
 #ifndef HAVE_STRCASECMP
     /*
@@ -206,9 +212,9 @@ TRANS(ParseAddress) (const char *address,
     char	hostnamebuf[256];
     char	*_host_buf;
     int		_host_len;
-
+#ifdef XTRANS_TRANSPORT_C
     prmsg (3,"ParseAddress(%s)\n", address);
-
+#endif
     /* First, check for AF_UNIX socket paths */
     if (address[0] == '/') {
         _protocol = "local";
@@ -411,9 +417,9 @@ TRANS(Open) (int type, const char *address)
     char 		*protocol = NULL, *host = NULL, *port = NULL;
     XtransConnInfo	ciptr = NULL;
     Xtransport		*thistrans;
-
+#ifdef XTRANS_TRANSPORT_C
     prmsg (2,"Open(%d,%s)\n", type, address);
-
+#endif
 #if defined(WIN32) && defined(TCPCONN)
     if (TRANS(WSAStartup)())
     {
@@ -426,7 +432,9 @@ TRANS(Open) (int type, const char *address)
 
     if (TRANS(ParseAddress) (address, &protocol, &host, &port) == 0)
     {
+#ifdef XTRANS_TRANSPORT_C
 	prmsg (1,"Open: Unable to Parse address %s\n", address);
+#endif
 	return NULL;
     }
 
@@ -434,8 +442,9 @@ TRANS(Open) (int type, const char *address)
 
     if ((thistrans = TRANS(SelectTransport) (protocol)) == NULL)
     {
-	prmsg (1,"Open: Unable to find transport for %s\n",
-	       protocol);
+#ifdef XTRANS_TRANSPORT_C
+	prmsg (1,"Open: Unable to find transport for %s\n", protocol);
+#endif
 
 	free (protocol);
 	free (host);
@@ -458,15 +467,19 @@ TRANS(Open) (int type, const char *address)
 #endif /* TRANS_SERVER */
 	break;
     default:
+#ifdef XTRANS_TRANSPORT_C
 	prmsg (1,"Open: Unknown Open type %d\n", type);
+#endif
     }
 
     if (ciptr == NULL)
     {
 	if (!(thistrans->flags & TRANS_DISABLED))
 	{
+#ifdef XTRANS_TRANSPORT_C
 	    prmsg (1,"Open: transport open failed for %s/%s:%s\n",
 	           protocol, host, port);
+#endif
 	}
 	free (protocol);
 	free (host);
@@ -482,7 +495,6 @@ TRANS(Open) (int type, const char *address)
 
     return ciptr;
 }
-
 
 #ifdef TRANS_REOPEN
 
@@ -568,7 +580,9 @@ XtransConnInfo
 TRANS(OpenCOTSClient) (const char *address)
 
 {
+#ifdef XTRANS_TRANSPORT_C
     prmsg (2,"OpenCOTSClient(%s)\n", address);
+#endif
     return TRANS(Open) (XTRANS_OPEN_COTS_CLIENT, address);
 }
 
@@ -581,7 +595,9 @@ XtransConnInfo
 TRANS(OpenCOTSServer) (const char *address)
 
 {
+#ifdef XTRANS_TRANSPORT_C
     prmsg (2,"OpenCOTSServer(%s)\n", address);
+#endif
     return TRANS(Open) (XTRANS_OPEN_COTS_SERVER, address);
 }
 
@@ -629,8 +645,9 @@ TRANS(SetOption) (XtransConnInfo ciptr, int option, int arg)
 {
     int	fd = ciptr->fd;
     int	ret = 0;
-
+#ifdef XTRANS_TRANSPORT_C
     prmsg (2,"SetOption(%d,%d,%d)\n", fd, option, arg);
+#endif
 
     /*
      * For now, all transport type use the same stuff for setting options.
@@ -826,9 +843,9 @@ TRANS(Accept) (XtransConnInfo ciptr, int *status)
 
 {
     XtransConnInfo	newciptr;
-
+#ifdef XTRANS_TRANSPORT_C
     prmsg (2,"Accept(%d)\n", ciptr->fd);
-
+#endif
     newciptr = ciptr->transptr->Accept (ciptr, status);
 
     if (newciptr)
@@ -850,13 +867,14 @@ TRANS(Connect) (XtransConnInfo ciptr, const char *address)
     char	*host;
     char	*port;
     int		ret;
-
+#ifdef XTRANS_TRANSPORT_C
     prmsg (2,"Connect(%d,%s)\n", ciptr->fd, address);
-
+#endif
     if (TRANS(ParseAddress) (address, &protocol, &host, &port) == 0)
     {
-	prmsg (1,"Connect: Unable to Parse address %s\n",
-	       address);
+#ifdef XTRANS_TRANSPORT_C
+	prmsg (1,"Connect: Unable to Parse address %s\n", address);
+#endif
 	return -1;
     }
 
@@ -866,8 +884,9 @@ TRANS(Connect) (XtransConnInfo ciptr, const char *address)
 
     if (!port || !*port)
     {
-	prmsg (1,"Connect: Missing port specification in %s\n",
-	      address);
+#ifdef XTRANS_TRANSPORT_C
+	prmsg (1,"Connect: Missing port specification in %s\n", address);
+#endif
 	if (protocol) free (protocol);
 	if (host) free (host);
 	return -1;
@@ -946,8 +965,9 @@ TRANS(Close) (XtransConnInfo ciptr)
 
 {
     int ret;
-
+#ifdef XTRANS_TRANSPORT_C
     prmsg (2,"Close(%d)\n", ciptr->fd);
+#endif
 
     ret = ciptr->transptr->Close (ciptr);
 
@@ -961,9 +981,9 @@ TRANS(CloseForCloning) (XtransConnInfo ciptr)
 
 {
     int ret;
-
+#ifdef XTRANS_TRANSPORT_C
     prmsg (2,"CloseForCloning(%d)\n", ciptr->fd);
-
+#endif
     ret = ciptr->transptr->CloseForCloning (ciptr);
 
     TRANS(FreeConnInfo) (ciptr);
@@ -983,14 +1003,17 @@ TRANS(GetPeerAddr) (XtransConnInfo ciptr, int *familyp, int *addrlenp,
 		    Xtransaddr **addrp)
 
 {
+#ifdef XTRANS_TRANSPORT_C
     prmsg (2,"GetPeerAddr(%d)\n", ciptr->fd);
-
+#endif
     *familyp = ciptr->family;
     *addrlenp = ciptr->peeraddrlen;
 
     if ((*addrp = malloc (ciptr->peeraddrlen)) == NULL)
     {
+#ifdef XTRANS_TRANSPORT_C
 	prmsg (1,"GetPeerAddr: malloc failed\n");
+#endif
 	return -1;
     }
     memcpy(*addrp, ciptr->peeraddr, ciptr->peeraddrlen);
@@ -1001,12 +1024,10 @@ TRANS(GetPeerAddr) (XtransConnInfo ciptr, int *familyp, int *addrlenp,
 
 int
 TRANS(GetConnectionNumber) (XtransConnInfo ciptr)
-
 {
     return ciptr->fd;
 }
 
-
 /*
  * These functions are really utility functions, but they require knowledge
  * of the internal data structures, so they have to be part of the Transport
