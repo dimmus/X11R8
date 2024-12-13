@@ -210,6 +210,7 @@ conf.set('HAVE_UNLOCKED_STDIO', cc.has_function('getc_unlocked'))
 
 WITH_MAN = get_option('docs-man')
 if WITH_MAN
+  prog_sed = find_program('sed')
   subdir('doc' / 'man')
 endif
 

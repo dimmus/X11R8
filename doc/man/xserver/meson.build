@@ -1,6 +1,6 @@
 manpage_config = configuration_data()
-manpage_config.set('vendorversion', '"xorg-server @0@" "X Version 11"'.format(meson.project_version()))
-manpage_config.set('xorgversion', '"xorg-server @0@" "X Version 11"'.format(meson.project_version()))
+manpage_config.set('vendorversion', '"xorg-server @0@" "X Version 11"'.format(ver_xserver))
+manpage_config.set('xorgversion', '"xorg-server @0@" "X Version 11"'.format(ver_xserver))
 manpage_config.set('xservername', 'Xorg')
 manpage_config.set('xconfigfile', 'xorg.conf')
 manpage_config.set('projectroot', get_option('prefix'))
@@ -12,9 +12,9 @@ manpage_config.set('libmansuffix', '3')
 manpage_config.set('miscmansuffix', '7')
 manpage_config.set('filemansuffix', '5')
 manpage_config.set('logdir', log_dir)
-manpage_config.set('datadir', join_paths(get_option('prefix'), get_option('datadir')))
-manpage_config.set('mandir', join_paths(get_option('prefix'), get_option('mandir')))
-manpage_config.set('sysconfdir', join_paths(get_option('prefix'), get_option('sysconfdir')))
+manpage_config.set('datadir', get_option('prefix') / get_option('datadir'))
+manpage_config.set('mandir', get_option('prefix') / get_option('mandir'))
+manpage_config.set('sysconfdir', get_option('prefix') / get_option('sysconfdir'))
 manpage_config.set('xconfigdir', 'xorg.conf.d')
 manpage_config.set('xkbdir', xkb_dir)
 manpage_config.set('XKB_DFLT_RULES', get_option('xkb_default_rules'))
@@ -24,9 +24,7 @@ manpage_config.set('XKB_DFLT_VARIANT', get_option('xkb_default_variant'))
 manpage_config.set('XKB_DFLT_OPTIONS', get_option('xkb_default_options'))
 manpage_config.set('bundle_id_prefix', '...')
 manpage_config.set('modulepath', module_dir)
-# wtf doesn't this work
-# manpage_config.set('suid_wrapper_dir', join_paths(get_option('prefix'), libexecdir))
-manpage_config.set('suid_wrapper_dir', join_paths(get_option('prefix'), 'libexec'))
+manpage_config.set('suid_wrapper_dir', get_option('prefix') / 'libexec')
 manpage_config.set('default_font_path', default_font_path)
 
 install_man(configure_file(
@@ -35,7 +33,7 @@ install_man(configure_file(
     configuration: manpage_config,
 ))
 
-if build_docs or build_docs_devel
+if WITH_MAN
     docxmlconfig = configuration_data()
     docxmlconfig.set('PACKAGE_VERSION', ver_xserver)
     docxmlconfig.set('RELEASE_DATE', '2021-07-05')

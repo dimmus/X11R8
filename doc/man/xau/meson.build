@@ -7,10 +7,9 @@ foreach man: [
   'Xau', 'XauDisposeAuth', 'XauFileName', 'XauGetAuthByAddr', 'XauGetBestAuthByAddr',
   'XauLockAuth', 'XauReadAuth', 'XauUnlockAuth', 'XauWriteAuth'
   ]
-  custom_target(
-    '@0@'.format(man),
-    input: '@0@'.format(man),
-    output: '@0@'.format(3),
+  custom_target('@0@'.format(man),
+    input: '@0@.man'.format(man),
+    output: '@0@.3'.format(man),
     command: [
       prog_sed,
       '-e', 's/__xorgversion__/"libXau @0@" "X Version 11"/'.format(ver_xau),
