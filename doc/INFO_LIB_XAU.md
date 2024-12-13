@@ -1,4 +1,9 @@
-
+---
+title: Xau - Sample Authorization Protocol for X
+category: Documentation for Developers
+layout: default
+SPDX-License-Identifier: LGPL-2.1-or-later
+---
 
 # A Sample Authorization Protocol for X
 

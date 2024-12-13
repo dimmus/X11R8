@@ -1,3 +1,10 @@
+---
+title: Structure of the X Sources
+category: Documentation for Developers
+layout: default
+SPDX-License-Identifier: LGPL-2.1-or-later
+---
+
 # Structure of the X Sources
 
 Sources  are  organized into the following subdirectories:
