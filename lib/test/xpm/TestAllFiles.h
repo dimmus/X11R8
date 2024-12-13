@@ -61,14 +61,8 @@ static void sigalrm (int sig)
 
 typedef int (*testfilefunc)(const char *filepath);
 
-// Enum to represent test data locations
-typedef enum {
-    TEST_DIST,      // Distributed test files
-    TEST_BUILT,     // Built test files
-    TEST_INSTALLED  // Installed test files
-} TestFileType;
-
 // Function to construct the file path
+#if 0
 char *test_file_path(TestFileType file_type, const char *dir1, const char *dir2, const char *optional, const char *filename) {
     // Allocate memory for the path. We need space for the directories and the filename
     size_t total_len = 0;
@@ -103,30 +97,19 @@ char *test_file_path(TestFileType file_type, const char *dir1, const char *dir2,
 
     return full_path;
 }
+#endif
 
 // Function to construct file path based on test location
-char *test_file_path_old(TestFileType location, const char *filename) {
-    const char *base_dir;
-
-    switch (location) {
-        case TEST_DIST:
-            base_dir = "./tests/data";  // Path for distributed test files
-            break;
-        case TEST_BUILT:
-            base_dir = "./build/tests"; // Path for built test files
-            break;
-        case TEST_INSTALLED:
-            base_dir = "/usr/share/myproject/tests"; // Path for installed test files
-            break;
-        default:
-            fprintf(stderr, "Unknown test location\n");
-            return NULL;
-    }
-
-    // Allocate memory for the full path
-    size_t base_len = strlen(base_dir);
-    size_t filename_len = strlen(filename);
-    size_t total_len = base_len + strlen(PATH_SEPARATOR) + filename_len + 1; // +1 for null terminator
+char *test_file_path(const char *filename) {
+    size_t total_len = strlen(TESTS_PATH) + 
+                       strlen(PATH_SEPARATOR) + 
+                       strlen("xpm") +
+                       strlen(PATH_SEPARATOR) +
+                       strlen("pixmaps") +
+                       strlen(PATH_SEPARATOR) +
+                       strlen(filename) + 
+                       strlen(PATH_SEPARATOR) +
+                       1;
 
     char *result = malloc(total_len);
     if (!result) {
@@ -134,8 +117,9 @@ char *test_file_path_old(TestFileType location, const char *filename) {
         return NULL;
     }
 
-    // Construct the file path
-    snprintf(result, total_len, "%s%s%s", base_dir, PATH_SEPARATOR, filename);
+    snprintf(result, total_len, 
+        "%s%sxpm%spixmaps%s%s%s", TESTS_PATH, PATH_SEPARATOR, PATH_SEPARATOR, PATH_SEPARATOR, filename, PATH_SEPARATOR);
+
     return result;
 }
 
@@ -194,7 +178,7 @@ Bool pattern_match_string(const PatternSpec *spec, const char *string) {
 }
 
 // Function to mimic g_dir_read_name
-const char *dir_read_name(DIR *datadir) {
+char *dir_read_name(DIR *datadir) {
     struct dirent *entry = readdir(datadir);
     if (entry == NULL) {
         return NULL; // No more entries
@@ -324,10 +308,9 @@ char *path_get_basename(const char *path) {
  * Test all files in a given subdir of either the build or source directory
  */
 static void
-TestAllFilesByType(TestFileType file_type, Bool compressed,
-                   const char *subdir, int expected, testfilefunc testfunc)
+TestAllFilesByType(Bool compressed, const char *subdir, int expected, testfilefunc testfunc)
 {
-    const char *datadir_path, *filename;
+    char *datadir_path, *filename;
     DIR *datadir;
     int timeout = DEFAULT_TIMEOUT;
     char *timeout_env;
@@ -347,12 +330,17 @@ TestAllFilesByType(TestFileType file_type, Bool compressed,
             timeout = from_env;
     }
 
-    datadir_path = test_file_path(file_type, "pixmaps", subdir,
-                       (file_type == TEST_BUILT) ? "generated" : NULL, NULL);
-    assert(datadir_path != NULL);
-    printf("Reading files from %s", datadir_path);
+    datadir_path = test_file_path(subdir);
 
-    datadir = opendir(datadir_path); /* g_dir_open(datadir_path, 0, &err); */
+    assert(datadir_path != NULL);
+#ifdef DEBUG
+    printf("Reading files from %s\n", datadir_path);
+#endif
+
+    datadir = opendir(datadir_path);
+    if (!datadir) {
+        perror(datadir_path);
+    }
     assert(datadir != NULL);
 
     errno = 0;
@@ -365,7 +353,9 @@ TestAllFilesByType(TestFileType file_type, Bool compressed,
                      !pattern_match_string(gz_pattern, filename)))
 #endif
                 {
-                    printf("skipping \"%s\"", filename);
+#ifdef DEBUG
+                    printf("skipping \"%s\"\n", filename);
+#endif
                     continue;
                 }
         }
@@ -388,9 +378,10 @@ TestAllFilesByType(TestFileType file_type, Bool compressed,
             char *filepath;
 
             filepath = build_filename(datadir_path, filename);
-
-            printf("testing \"%s\", should return %d",
+#ifdef DEBUG
+            printf("testing \"%s\", should return %d\n",
                            filename, expected);
+#endif
             if (timeout > 0)
                 alarm(timeout);
             status = testfunc(filepath);
@@ -398,20 +389,22 @@ TestAllFilesByType(TestFileType file_type, Bool compressed,
 
             if (timeout > 0) {
                 status = alarm(0); /* cancel alarm */
-                printf("%d seconds left on %d second timer",
+#ifdef DEBUG
+                printf("%d seconds left on %d second timer\n",
                                status, timeout);
+#endif
             }
 
             free(filepath);
         }
         else {
-            printf("timed out reading %s", filename);
-            printf("test timed out: %s at %d", __FILE__, __LINE__);
+            printf("timed out reading %s\n", filename);
+            printf("test timed out: %s at %d\n", __FILE__, __LINE__);
         }
 
         errno = 0;
     }
-    // g_assert_cmpint(errno, 0); - not sure why this sometimes fails
+    // assert(errno == 0); - not sure why this sometimes fails
 
     closedir(datadir);
 }
@@ -422,7 +415,7 @@ TestAllFilesByType(TestFileType file_type, Bool compressed,
 static void
 TestAllNormalFiles(const char *subdir, int expected, testfilefunc testfunc)
 {
-    TestAllFilesByType(TEST_DIST, False, subdir, expected, testfunc);
+    TestAllFilesByType(False, subdir, expected, testfunc);
 }
 
 /*
@@ -434,6 +427,6 @@ TestAllCompressedFiles(const char *subdir, int expected, testfilefunc testfunc)
 #ifdef NO_ZPIPE
     printf("compression disabled, skipping compressed file tests");
 #else
-    TestAllFilesByType(TEST_BUILT, True, subdir, expected, testfunc);
+    TestAllFilesByType(True, subdir, expected, testfunc);
 #endif
 }
