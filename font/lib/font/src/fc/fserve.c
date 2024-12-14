@@ -61,22 +61,22 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #define FONT_t
 #define TRANS_CLIENT
-#include	"X11/Xtrans/Xtrans.h"
-#include	"X11/Xpoll.h"
-#include	<X11/fonts/FS.h>
-#include	<X11/fonts/FSproto.h>
-#include	<X11/X.h>
-#include	<X11/Xos.h>
-#include	<X11/fonts/fontmisc.h>
-#include	<X11/fonts/fontstruct.h>
-#include	"fservestr.h"
-#include	<X11/fonts/fontutil.h>
-#include	<errno.h>
-#include	<limits.h>
+#include "X11/Xtrans/Xtrans.h"
+#include "X11/Xpoll.h"
+#include "X11/fonts/FS.h"
+#include "X11/fonts/FSproto.h"
+#include "X11/X.h"
+#include "X11/Xos.h"
+#include "X11/fonts/fontmisc.h"
+#include "X11/fonts/fontstruct.h"
+#include "X11/fonts/fontutil.h"
 
-#include	<time.h>
+#include "fservestr.h"
+
+#include <errno.h>
+#include <limits.h>
+#include <time.h>
 #define Time_t time_t
-
 #include <stddef.h>
 
 #ifndef MIN

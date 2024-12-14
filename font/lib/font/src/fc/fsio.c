@@ -29,7 +29,8 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/fonts/libxfontint.h>
+
+#include "X11/fonts/libxfontint.h"
 
 #ifdef WIN32
 #define _WILLWINSOCK_
@@ -38,28 +39,26 @@
 
 #define FONT_t
 #define TRANS_CLIENT
-#include 	"X11/Xtrans/Xtrans.h"
-#include	"X11/Xpoll.h"
-#include	<X11/fonts/FS.h>
-#include	<X11/fonts/FSproto.h>
-#include	<X11/fonts/fontmisc.h>
-#include	<X11/fonts/fontstruct.h>
-#include	"fservestr.h"
+#include "X11/Xtrans/Xtrans.h"
+#include "X11/Xpoll.h"
+#include "X11/fonts/FS.h"
+#include "X11/fonts/FSproto.h"
+#include "X11/fonts/fontmisc.h"
+#include "X11/fonts/fontstruct.h"
+#include "fservestr.h"
 
-#include	<stdio.h>
-#include	<signal.h>
-#include	<sys/types.h>
+#include <stdio.h>
+#include <signal.h>
+#include <sys/types.h>
 #if !defined(WIN32)
-#include	<sys/socket.h>
+#include <sys/socket.h>
 #endif
-#include	<errno.h>
+#include <errno.h>
 #ifdef WIN32
 #define EWOULDBLOCK WSAEWOULDBLOCK
 #undef EINTR
 #define EINTR WSAEINTR
 #endif
-
-
 
 static int  padlength[4] = {0, 3, 2, 1};
 

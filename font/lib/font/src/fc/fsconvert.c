@@ -28,18 +28,19 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/fonts/libxfontint.h>
+
+#include "X11/fonts/libxfontint.h"
+#include "X11/X.h"
+#include "X11/Xtrans/Xtrans.h"
+#include "X11/Xpoll.h"
+#include "X11/fonts/FS.h"
+#include "X11/fonts/FSproto.h"
+#include "X11/fonts/fontmisc.h"
+#include "X11/fonts/fontstruct.h"
+#include "X11/fonts/fontutil.h"
+#include "fslibos.h"
+#include "fservestr.h"
 #include "src/util/replace.h"
-#include        <X11/X.h>
-#include 	<X11/Xtrans/Xtrans.h>
-#include	<X11/Xpoll.h>
-#include	<X11/fonts/FS.h>
-#include	<X11/fonts/FSproto.h>
-#include	<X11/fonts/fontmisc.h>
-#include	<X11/fonts/fontstruct.h>
-#include	"fservestr.h"
-#include	<X11/fonts/fontutil.h>
-#include	"fslibos.h"
 
 extern char _fs_glyph_undefined;
 extern char _fs_glyph_requested;
