@@ -172,7 +172,7 @@ endif
 subdir('lib' / 'example')
 subdir('extension')
 subdir('server')
-subdir('demos')
+# subdir('demos')
 
 fs = import('fs')
 FIRST_RUN = not fs.is_dir(dir_build / 'src')
