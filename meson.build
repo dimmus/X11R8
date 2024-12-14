@@ -106,7 +106,7 @@ f_check  = []
 h_check  = []
 inc_ext  = []
 inc_x11  = []
-inc_lib  = []
+inc_lib  = [inc_config]
 inc_font = []
 
 # lib
@@ -172,6 +172,7 @@ endif
 subdir('lib' / 'example')
 subdir('extension')
 subdir('server')
+subdir('demos')
 
 fs = import('fs')
 FIRST_RUN = not fs.is_dir(dir_build / 'src')
