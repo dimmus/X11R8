@@ -53,9 +53,9 @@ in this Software without prior written authorization from The Open Group.
  * FSlib networking & os include file
  */
 
-#include <X11/Xfuncs.h>
-#include <X11/Xfuncproto.h>
-#include <X11/Xosdefs.h>
+#include "X11/Xfuncs.h"
+#include "X11/Xfuncproto.h"
+#include "X11/Xosdefs.h"
 
 #ifndef WIN32
 
@@ -226,8 +226,8 @@ typedef unsigned long FdSet[MSKCNT];
 
 #else
 
-# include <X11/Xwinsock.h>
-# include <X11/Xw32defs.h>
+# include "X11/Xwinsock.h"
+# include "X11/Xw32defs.h"
 
 typedef fd_set FdSet;
 
@@ -237,7 +237,8 @@ typedef fd_set FdSet;
 
 #endif
 
-#include <X11/Xtrans/Xtrans.h>
+#include "X11/Xtrans/Xtrans.h"
+
 #include <stdlib.h>
 #include <string.h>
 

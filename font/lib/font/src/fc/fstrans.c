@@ -23,8 +23,9 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+
 #define LIBXFONT_SKIP_ERRORF
-#include <X11/fonts/libxfontint.h>
+#include "X11/fonts/libxfontint.h"
 #define FONT_t
 #define TRANS_CLIENT
-#include <X11/Xtrans/transport.c>
+#include "X11/Xtrans/transport.c"

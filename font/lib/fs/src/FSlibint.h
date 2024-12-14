@@ -52,14 +52,14 @@ in this Software without prior written authorization from The Open Group.
 /*
  * FSlib internal decls
  */
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 #include <stdio.h>
 #include <sys/types.h>
 
-#include	"FSlib.h"
-#include	"FSlibos.h"
-#include	<errno.h>
-#include	<stddef.h>
+#include "FSlib.h"
+#include "FSlibos.h"
+#include <errno.h>
+#include <stddef.h>
 
 typedef int (* FSIOErrorHandler)(FSServer *) _X_NORETURN;
 typedef int (* FSErrorHandler)(FSServer *, FSErrorEvent *);
