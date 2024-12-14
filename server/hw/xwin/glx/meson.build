@@ -1,7 +1,5 @@
-python3 = import('python3')
-
 # XWin requires OpenGL spec files in order to generate wrapper code for native GL functions
-py3 = python3.find_python()
+py3 = find_program('python3')
 if run_command(py3, '-c', 'import lxml;', check: false).returncode() != 0
     error('python3 lxml module not found')
 endif
