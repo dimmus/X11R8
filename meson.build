@@ -89,6 +89,16 @@ dep_xcb          = dependency('xcb', version: '>= 1.11.1') # x11
 dep_uuid         = dependency('uuid', required: false) # sm
 dep_freetype2    = dependency('freetype2', version: '>= 2.1.6') # xft
 dep_fontconfig   = dependency('fontconfig', version: '>= 2.5.92') # xft
+dep_gettext      = dependency('gettext', required: false) # xpm
+# xserver
+dep_null         = dependency('', required: false)
+dep_xshmfence    = dependency('xshmfence', version: '>= 1.1', required: false)
+dep_pixman       = dependency('pixman-1')
+dep_libbsd       = dependency('libbsd-overlay', required: false)
+dep_xkbcomp      = dependency('xkbcomp', required: false)
+dep_dbus         = dependency('dbus-1', version: '>= 1.0', required: get_option('systemd_logind') == 'true')
+dep_fontutil     = dependency('fontutil', required: false)
+dep_drm          = dependency('libdrm', version: '>= 2.4.116')
 
 WITH_UNIT_TESTS  = false
 WITH_FONT_SERVER = get_option('build-font-server')
@@ -97,6 +107,7 @@ WITH_MAN         = get_option('docs-man')
 
 python = import('python').find_installation()
 pkg    = import('pkgconfig')
+fs     = import('fs')
 
 conf = configuration_data()
 
@@ -110,49 +121,53 @@ inc_lib  = [inc_config]
 inc_font = []
 
 # lib
-ver_ice      = '1.1.1'
-ver_sm       = '1.2.4'
-ver_x11      = '1.8.10'
-ver_xau      = '1.0.11'
-ver_xaw      = '1.0.16'
-ver_xcursor  = '1.2.3'
-ver_xcvt     = '0.1.2'
-ver_xdmcp    = '1.1.5'
-ver_xft      = '2.3.8'
-ver_xmu      = '1.2.1'
-ver_xpm      = '3.5.17'
-ver_xt       = '1.3.0'
-ver_xtrans   = '1.5.1'
+ver_ice        = '1.1.1'
+ver_sm         = '1.2.4'
+ver_x11        = '1.8.10'
+ver_xau        = '1.0.11'
+ver_xaw        = '1.0.16'
+ver_xcursor    = '1.2.3'
+ver_xcvt       = '0.1.2'
+ver_xdmcp      = '1.1.5'
+ver_xft        = '2.3.8'
+ver_xmu        = '1.2.1'
+ver_xpm        = '3.5.17'
+ver_xt         = '1.3.0'
+ver_xtrans     = '1.5.1'
+ver_xcb        = '1.17.0'
+ver_xshmfence  = '1.3.2'
 
 # ext
-ver_dmx      = '1.1.5'
+ver_dmx        = '1.1.5'
 ver_xcomposite = '0.4.6'
-ver_xdamage  = '1.1.6'
-ver_xext     = '1.3.6'
-ver_xf86dga  = '1.1.6'
-ver_xf86vm   = '1.1.5'
-ver_xfixes   = '6.0.1'
-ver_xi       = '1.8.2'
-ver_xinerama = '1.1.5'
-ver_xkbfile  = '1.1.3'
-ver_xrandr   = '1.5.4'
-ver_xrender  = '0.9.11'
-ver_xres     = '1.2.2'
-ver_xss      = '1.2.4'
-ver_xtst     = '1.2.5'
-ver_xv       = '1.0.12'
-ver_xvmc     = '1.0.14'
+ver_xdamage    = '1.1.6'
+ver_xext       = '1.3.6'
+ver_xf86dga    = '1.1.6'
+ver_xf86vm     = '1.1.5'
+ver_xfixes     = '6.0.1'
+ver_xi         = '1.8.2'
+ver_xinerama   = '1.1.5'
+ver_xkbfile    = '1.1.3'
+ver_xrandr     = '1.5.4'
+ver_xrender    = '0.9.11'
+ver_xres       = '1.2.2'
+ver_xss        = '1.2.4'
+ver_xtst       = '1.2.5'
+ver_xv         = '1.0.12'
+ver_xvmc       = '1.0.14'
 
-ver_xserver  = '21.1.99.1'
+ver_xserver    = '21.1.99.1'
 
 subdir('include')
 subdir('proto')
 subdir('lib' / 'include')
+subdir('lib' / 'src' / 'xshmfence')
 subdir('lib' / 'src' / 'xtrans')
 subdir('font') # <- xtrans
-subdir('lib' / 'src' / 'x11')
 subdir('lib' / 'src' / 'xau')
 subdir('lib' / 'src' / 'xdmcp')
+# subdir('lib' / 'src' / 'xcb')     # <- xdmcp, xau
+subdir('lib' / 'src' / 'x11')
 subdir('lib' / 'src' / 'ice')
 subdir('lib' / 'src' / 'sm')
 subdir('lib' / 'src' / 'xt')
@@ -174,7 +189,6 @@ subdir('extension')
 subdir('server')
 # subdir('demos')
 
-fs = import('fs')
 FIRST_RUN = not fs.is_dir(dir_build / 'src')
 
 # speed up when run meson reconfigure
