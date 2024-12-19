@@ -92,7 +92,6 @@ dep_fontconfig   = dependency('fontconfig', version: '>= 2.5.92') # xft
 dep_gettext      = dependency('gettext', required: false) # xpm
 # xserver
 dep_null         = dependency('', required: false)
-dep_xshmfence    = dependency('xshmfence', version: '>= 1.1', required: false)
 dep_pixman       = dependency('pixman-1')
 dep_libbsd       = dependency('libbsd-overlay', required: false)
 dep_xkbcomp      = dependency('xkbcomp', required: false)
@@ -100,6 +99,7 @@ dep_dbus         = dependency('dbus-1', version: '>= 1.0', required: get_option(
 dep_fontutil     = dependency('fontutil', required: false)
 dep_drm          = dependency('libdrm', version: '>= 2.4.116')
 
+WITH_XSHMFENCE   = get_option('xshmfence')
 WITH_UNIT_TESTS  = false
 WITH_FONT_SERVER = get_option('build-font-server')
 WITH_TESTS       = get_option('build-tests')
@@ -161,7 +161,9 @@ ver_xserver    = '21.1.99.1'
 subdir('include')
 subdir('proto')
 subdir('lib' / 'include')
+if WITH_XSHMFENCE
 subdir('lib' / 'src' / 'xshmfence')
+endif
 subdir('lib' / 'src' / 'xtrans')
 subdir('font') # <- xtrans
 subdir('lib' / 'src' / 'xau')

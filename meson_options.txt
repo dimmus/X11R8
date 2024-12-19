@@ -107,3 +107,6 @@ option('docs-man',              type: 'boolean', value: true,   description: '')
 
 option('build-font-server',     type: 'boolean', value: false,   description: '')
 option('build-tests',           type: 'boolean', value: false,   description: '')
+
+# Build libraries:
+option('xshmfence',             type: 'boolean', value: true)

@@ -19,7 +19,7 @@ libxserver_miext_sync = static_library('libxserver_miext_sync',
     include_directories: inc,
     dependencies: [
         dep_common,
-        dep_xshmfence,
+        libxshmfence,
     ],
 )
 

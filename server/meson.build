@@ -4,7 +4,6 @@ xproto_req      = '>= 7.0.31'
 wl_req          = '>= 1.21.0'
 wl_proto_req    = '>= 1.34'
 gbm_req         = '>= 10.2'
-xshmfence_req   = '>= 1.1'
 
 build_systemd = get_option('systemd_notify') == 'true'
 # libsystemd-daemon was moved into libsystemd in version 209
@@ -125,7 +124,7 @@ if (host_machine.system() != 'darwin' and
         libxcvt,
     ]
     if build_glamor
-        dep_xwayland += dependency('xshmfence', version: xshmfence_req, required: xwayland_required)
+        dep_xwayland += libxshmfence
         dep_xwayland += dep_drm
         dep_xwayland += dependency('epoxy', required: xwayland_required)
     endif
@@ -382,11 +381,11 @@ endif
 
 have_eventfd = cc.has_header('sys/eventfd.h', dependencies: dep_epoll)
 if get_option('dri3') == 'auto'
-    build_dri3 = xproto.found() and dep_xshmfence.found() and dep_drm.found() and have_eventfd
+    build_dri3 = xproto.found() and WITH_XSHMFENCE and dep_drm.found() and have_eventfd
 else
     build_dri3 = get_option('dri3') == 'true'
     if build_dri3
-       if not dep_xshmfence.found()
+       if not WITH_XSHMFENCE
            error('DRI3 requested, but xshmfence not found')
        endif
        if not have_eventfd
