@@ -54,12 +54,10 @@ srcs_windows_glx = [
     'wgl_ext_api.h',
 ]
 
-if build_windowsdri
-    srcs_windows_glx += [
-        'dri_helpers.c',
-        'dri_helpers.h',
-    ]
-endif
+srcs_windows_glx += [
+    'dri_helpers.c',
+    'dri_helpers.h',
+]
 
 xwin_glx_c_args = []
 xwin_glx_c_args += '-DHAVE_XWIN_CONFIG_H'

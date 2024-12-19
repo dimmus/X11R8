@@ -1,9 +1,5 @@
 windows = import('windows')
 
-dep_windowsdri = [xproto]
-
-build_windowsdri = dep_windowsdri.found()
-
 xwin_sys_libs = []
 xwin_sys_libs += '-ldxguid'
 
@@ -27,10 +23,8 @@ subdir('winclipboard')
 xwin_glx = []
 xwin_windowsdri = []
 if build_glx
-    if build_windowsdri
-        xwin_c_args += '-DXWIN_WINDOWS_DRI'
-        subdir('dri')
-    endif
+    xwin_c_args += '-DXWIN_WINDOWS_DRI'
+    subdir('dri')
     xwin_c_args += '-DXWIN_GLX_WINDOWS'
     xwin_sys_libs += '-lopengl32'
     subdir('glx')
