@@ -15,3 +15,6 @@ meson setup . build
 meson compile -C build
 meson install -C build
 ```
+
+### Error with "StringDefs.h"
+If you get an error `fatal error: StringDefs.h: No such file or directory`, no problem, simply **continue** the compilation. When you build on very fast PCs with ccache, Meson cannot find compile-time generated "StringDefs.h" file so quickly. Still search the way to avoid this problem.
