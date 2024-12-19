@@ -34,7 +34,6 @@ endif
 
 dep_int_xpm = [libx11, xproto, libxext, libxt]
 
-dep_gettext = dependency('gettext', required: false)
 if dep_gettext.found()
   lib_args += ['-DUSE_GETTEXT'] 
 endif
