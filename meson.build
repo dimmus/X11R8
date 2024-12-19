@@ -98,6 +98,8 @@ dep_xkbcomp      = dependency('xkbcomp', required: false)
 dep_dbus         = dependency('dbus-1', version: '>= 1.0', required: get_option('systemd_logind') == 'true')
 dep_fontutil     = dependency('fontutil', required: false)
 dep_drm          = dependency('libdrm', version: '>= 2.4.116')
+# static
+dep_threads      = dependency('threads')
 
 WITH_XSHMFENCE   = get_option('xshmfence')
 WITH_DEMOS       = get_option('demos')
@@ -114,12 +116,13 @@ conf = configuration_data()
 
 inc_config = include_directories('.')
 
-f_check  = []
-h_check  = []
-inc_ext  = []
-inc_x11  = []
-inc_lib  = [inc_config]
-inc_font = []
+f_check    = []
+h_check    = []
+inc_ext    = []
+inc_x11    = []
+inc_lib    = [inc_config]
+inc_font   = []
+inc_static = []
 
 # lib
 ver_ice        = '1.1.1'
@@ -159,6 +162,7 @@ ver_xvmc       = '1.0.14'
 
 ver_xserver    = '21.1.99.1'
 
+subdir('static')
 subdir('include')
 subdir('proto')
 subdir('lib' / 'include')

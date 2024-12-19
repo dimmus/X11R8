@@ -103,7 +103,7 @@ option('libdecor',              type: 'combo',   value: 'auto',  choices: ['true
 option('docs',                  type: 'combo',   value: 'false', choices: ['true', 'false', 'auto'],  description: 'Build documentation')
 option('devel-docs',            type: 'combo',   value: 'false', choices: ['true', 'false', 'auto'],  description: 'Build development documentation')
 option('docs-pdf',              type: 'combo',   value: 'false', choices: ['true', 'false', 'auto'],  description: 'Whether to build PDF version of documentation. Setting is ignored if documentation is not built.')
-option('docs-man',              type: 'boolean', value: true,   description: '')
+option('docs-man',              type: 'boolean', value: true,    description: '')
 
 option('build-font-server',     type: 'boolean', value: false,   description: '')
 option('build-tests',           type: 'boolean', value: false,   description: '')
@@ -114,3 +114,21 @@ option('xshmfence',             type: 'boolean', value: true)
 # Build demos:
 option('demos',                 type: 'boolean', value: true)
 option('x11perf',               type: 'boolean', value: true)
+
+# External static libraries
+# static/pixman
+option('loongson-mmi',          type: 'feature',                 description: 'Use Loongson MMI intrinsic optimized paths')
+option('mmx',                   type: 'feature',                 description: 'Use X86 MMX intrinsic optimized paths')
+option('sse2',                  type: 'feature',                 description: 'Use X86 SSE2 intrinsic optimized paths')
+option('ssse3',                 type: 'feature',                 description: 'Use X86 SSSE3 intrinsic optimized paths')
+option('vmx',                   type: 'feature',                 description: 'Use PPC VMX/Altivec intrinsic optimized paths')
+option('arm-simd',              type: 'feature',                 description: 'Use ARMv6 SIMD intrinsic optimized paths')
+option('neon',                  type: 'feature',                 description: 'Use ARM NEON intrinsic optimized paths')
+option('a64-neon',              type: 'feature',                 description: 'Use ARM A64 NEON intrinsic optimized paths')
+option('mips-dspr2',            type: 'feature',                 description: 'Use MIPS32 DSPr2 intrinsic optimized paths')
+option('rvv',                   type: 'feature',                 description: 'Use RISC-V Vector extension')
+option('gnu-inline-asm',        type: 'feature',                 description: 'Use GNU style inline assembler')
+option('tls',                   type: 'feature',                 description: 'Use compiler support for thread-local storage')
+option('openmp',                type: 'feature',                 description: 'Enable OpenMP for tests')
+option('cpu-features-path',     type: 'string',                  description: 'Path to platform-specific cpu-features.[ch] for systems that do not provide it (e.g. Android)')
+option('timers',                type: 'boolean', value : false,  description: 'Enable TIMER_* macros')
