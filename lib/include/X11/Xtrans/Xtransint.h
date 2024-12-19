@@ -353,7 +353,7 @@ static int TRANS(WriteV)(
 
 #endif /* WIN32 */
 
-#ifdef TRANS_SERVER
+#if defined (TRANS_SERVER) && (defined(LOCAL_TRANS_NAMED) || defined(UNIXCONN) || defined(NAMEDNODENAME))
 static int trans_mkdir (
     const char *,	/* path */
     int			/* mode */

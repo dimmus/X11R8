@@ -233,9 +233,6 @@ TRANS(FillAddrInfo)(XtransConnInfo ciptr,
 #endif
 
 
-
-
-
 #ifdef LOCAL_TRANS_NAMED
 
 /* NAMED */

@@ -304,6 +304,7 @@ static jmp_buf env;
 #ifdef SIGALRM
 static volatile int nameserver_timedout = 0;
 
+#ifdef TCPCONN
 static void
 nameserver_lost(int sig _X_UNUSED)
 {
@@ -311,6 +312,7 @@ nameserver_lost(int sig _X_UNUSED)
   longjmp (env, -1);
   /* NOTREACHED */
 }
+#endif /* TCPCONN */
 #endif /* SIGALARM */
 
 
@@ -439,7 +441,7 @@ TRANS(WSAStartup) (void)
 }
 #endif
 
-#ifdef TRANS_SERVER
+#if defined (TRANS_SERVER) && (defined(LOCAL_TRANS_NAMED) || defined(UNIXCONN) || defined(NAMEDNODENAME))
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
