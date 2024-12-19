@@ -100,6 +100,7 @@ dep_fontutil     = dependency('fontutil', required: false)
 dep_drm          = dependency('libdrm', version: '>= 2.4.116')
 
 WITH_XSHMFENCE   = get_option('xshmfence')
+WITH_DEMOS       = get_option('demos')
 WITH_UNIT_TESTS  = false
 WITH_FONT_SERVER = get_option('build-font-server')
 WITH_TESTS       = get_option('build-tests')
@@ -189,7 +190,7 @@ endif
 subdir('lib' / 'example')
 subdir('extension')
 subdir('server')
-# subdir('demos')
+subdir('demos')
 
 FIRST_RUN = not fs.is_dir(dir_build / 'src')
 
@@ -209,7 +210,11 @@ if FIRST_RUN
   h_unique = []
   foreach h: h_check
     if not h_unique.contains(h)
-      conf.set('HAVE_@0@'.format(h.underscorify().to_upper()), cc.has_header(h))
+      if h == 'unistd.h' and cc.has_header(h)
+        conf.set('HAVE_@0@'.format(h.underscorify().to_upper()), 1)
+      else
+        conf.set('HAVE_@0@'.format(h.underscorify().to_upper()), cc.has_header(h))
+      endif
       h_unique += h
     endif
   endforeach

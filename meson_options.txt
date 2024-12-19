@@ -110,3 +110,7 @@ option('build-tests',           type: 'boolean', value: false,   description: ''
 
 # Build libraries:
 option('xshmfence',             type: 'boolean', value: true)
+
+# Build demos:
+option('demos',                 type: 'boolean', value: true)
+option('x11perf',               type: 'boolean', value: true)
