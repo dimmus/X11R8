@@ -125,8 +125,8 @@ if build_glx
     wayland_inc += glx_inc
 endif
 
-if dep_libdrm.found()
-    dep_xwayland += dep_libdrm
+if dep_drm.found()
+    dep_xwayland += dep_drm
 endif
 
 if have_libdecor

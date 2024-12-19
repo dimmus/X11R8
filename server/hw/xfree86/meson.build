@@ -87,6 +87,9 @@ xorg_deps = [
     dep_dl,
     dep_pciaccess,
     dep_sha1,
+    dep_xshmfence,
+    dep_config,
+    dep_drm,
     libxau,
     libxcomposite,
     libxrandr,
@@ -94,9 +97,6 @@ xorg_deps = [
     libxfixes,
     libxdmcp,
     libxfont,
-    dep_xshmfence,
-    dep_config,
-    dep_libdrm,
 ]
 
 if get_option('suid_wrapper')

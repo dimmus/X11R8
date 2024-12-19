@@ -1,6 +1,6 @@
 windows = import('windows')
 
-dep_windowsdri = dependency('windowsdriproto', required: false)
+dep_windowsdri = [xproto]
 
 build_windowsdri = dep_windowsdri.found()
 

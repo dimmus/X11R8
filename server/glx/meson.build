@@ -39,7 +39,7 @@ if build_glx
             dep_common,
             dep_dl,
             dep_dri,
-            dependency('glproto', version: '>= 1.4.17'),
+            xproto,
             dependency('gl', version: '>= 1.2'),
         ],
         c_args: [
@@ -74,7 +74,7 @@ if build_glx
         dependencies: [
             dep_common,
             dep_dl,
-            dependency('glproto', version: '>= 1.4.17'),
+            xproto,
             dependency('gl', version: '>= 1.2'),
         ],
     )

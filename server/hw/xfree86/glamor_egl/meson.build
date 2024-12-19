@@ -12,7 +12,7 @@ shared_module(
     c_args: xorg_c_args,
     dependencies: [
         dep_common,
-        dependency('libdrm', version: '>= 2.4.46'),
+        dep_drm,
         dep_gbm,
     ],
     link_with: [glamor, libxserver_glx],

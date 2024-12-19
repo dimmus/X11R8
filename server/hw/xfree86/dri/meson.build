@@ -8,7 +8,7 @@ xorg_dri = static_library('xorg_dri',
     include_directories: [inc, inc_x11, xorg_inc],
     dependencies: [
         dep_common,
-        dep_libdrm,
+        dep_drm,
     ],
     c_args: xorg_c_args,
 )

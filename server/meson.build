@@ -1,4 +1,3 @@
-libdrm_req      = '>= 2.4.116'
 libselinux_req  = '>= 2.0.86'
 xext_req        = '>= 1.0.99.4'
 xproto_req      = '>= 7.0.31'
@@ -6,12 +5,6 @@ wl_req          = '>= 1.21.0'
 wl_proto_req    = '>= 1.34'
 gbm_req         = '>= 10.2'
 xshmfence_req   = '>= 1.1'
-
-dep_xshmfence = dependency('xshmfence', version: xshmfence_req, required: false)
-dep_pixman    = dependency('pixman-1')
-dep_libbsd    = dependency('libbsd-overlay', required: false)
-dep_xkbcomp   = dependency('xkbcomp', required: false)
-dep_dbus      = dependency('dbus-1', version: '>= 1.0', required: get_option('systemd_logind') == 'true')
 
 build_systemd = get_option('systemd_notify') == 'true'
 # libsystemd-daemon was moved into libsystemd in version 209
@@ -52,7 +45,6 @@ dfp = get_option('default_font_path')
 if dfp == ''
     fontrootdir = get_option('fontrootdir')
     if fontrootdir == ''
-        dep_fontutil = dependency('fontutil', required: false)
         if dep_fontutil.found()
             fontrootdir = dep_fontutil.get_variable(pkgconfig: 'fontrootdir')
         else
@@ -118,9 +110,9 @@ xorgsdkdir = dir_include / 'xorg'
 build_xwayland = false
 if (host_machine.system() != 'darwin' and
     host_machine.system() != 'windows' and
-    get_option('xwayland') != 'false')
-    xwayland_required = get_option('xwayland') == 'true'
-    build_glamor = glamor_option == 'true' or glamor_option == 'auto'
+    get_option('xwayland') == true)
+    xwayland_required = get_option('xwayland') == true
+    build_glamor = get_option('glamor')
 
     xwayland_path = get_option('xwayland-path')
     if (xwayland_path == '')
@@ -130,11 +122,11 @@ if (host_machine.system() != 'darwin' and
     dep_xwayland = [
         dependency('wayland-client', version: wl_req, required: xwayland_required),
         dependency('wayland-protocols', version: wl_proto_req, required: xwayland_required),
-        dependency('libxcvt', fallback: ['libxcvt', 'libxcvt'], required: xwayland_required),
+        libxcvt,
     ]
     if build_glamor
         dep_xwayland += dependency('xshmfence', version: xshmfence_req, required: xwayland_required)
-        dep_xwayland += dependency('libdrm', version: libdrm_req, required: xwayland_required)
+        dep_xwayland += dep_drm
         dep_xwayland += dependency('epoxy', required: xwayland_required)
     endif
 
@@ -148,21 +140,9 @@ if (host_machine.system() != 'darwin' and
 endif
 
 ## configure Xnest - nesting X server
-build_xnest = get_option('xnest') != 'false'
-xnest_required = get_option('xnest') == 'true'
-dep_xnest = [
-    dependency('xext', version: xext_req, required: xnest_required),
-    dependency('x11', required: xnest_required),
-    dependency('xau', required: xnest_required),
-]
-if get_option('xnest') == 'auto'
-    # check for all the deps being found, to handle 'auto' mode.
-    foreach d: dep_xnest
-        if not d.found()
-            build_xnest = false
-        endif
-    endforeach
-endif
+build_xnest = get_option('xnest')
+xnest_required = get_option('xnest')
+dep_xnest = [libxext, libx11, libxau]
 
 build_xwin = false
 if get_option('xwin') == 'auto'
@@ -238,7 +218,7 @@ endif
 
 build_dbus = build_hal or build_systemd_logind
 
-dep_udev = dependency('', required:false)
+dep_udev = dep_null
 if build_udev or build_udev_kms
     dep_udev = dependency('libudev', version: '>= 143')
 endif
@@ -250,14 +230,10 @@ endif
 
 module_dir = get_option('libdir') / get_option('module_dir')
 
-if glamor_option == 'auto'
-    build_glamor = build_xorg or build_xwayland
-else
-    build_glamor = glamor_option == 'true'
-endif
+build_glamor = get_option('glamor')
 
-dep_gbm = dependency('', required: false)
-dep_epoxy = dependency('', required: false)
+dep_gbm = dep_null
+dep_epoxy = dep_null
 if build_glamor
     dep_gbm = dependency('gbm', version: gbm_req, required: false)
     dep_epoxy = dependency('epoxy', required: false)
@@ -313,17 +289,17 @@ foreach t: test_sha1
     if t == 'libc'
         if cc.has_function('SHA1Init')
             sha1_found = true
-            dep_sha1 = dependency('', required: false)
+            dep_sha1 = dep_null
         endif
     elif t == 'CommonCrypto'
         if cc.has_function('CC_SHA1_Init')
             sha1_found = true
-            dep_sha1 = dependency('', required: false)
+            dep_sha1 = dep_null
         endif
     elif t == 'CryptoAPI'
         if cc.has_header('wincrypt.h')
             sha1_found = true
-            dep_sha1 = dependency('', required: false)
+            dep_sha1 = dep_null
         endif
     elif t == 'libmd'
         dep_md = cc.find_library('md', required: false)
@@ -386,16 +362,14 @@ if build_glx
     build_hashtable = true
 endif
 
-dep_libdrm = dependency('libdrm', version: libdrm_req, required: false)
-
 if get_option('dri1') == 'auto'
-    build_dri1 = xproto.found() and dep_libdrm.found()
+    build_dri1 = xproto.found() and dep_drm.found()
 else
     build_dri1 = get_option('dri1') == 'true'
 endif
 
 if get_option('dri2') == 'auto'
-    build_dri2 = xproto.found() and dep_libdrm.found()
+    build_dri2 = xproto.found() and dep_drm.found()
 else
     build_dri2 = get_option('dri2') == 'true'
 endif
@@ -408,7 +382,7 @@ endif
 
 have_eventfd = cc.has_header('sys/eventfd.h', dependencies: dep_epoll)
 if get_option('dri3') == 'auto'
-    build_dri3 = xproto.found() and dep_xshmfence.found() and dep_libdrm.found() and have_eventfd
+    build_dri3 = xproto.found() and dep_xshmfence.found() and dep_drm.found() and have_eventfd
 else
     build_dri3 = get_option('dri3') == 'true'
     if build_dri3
@@ -422,11 +396,11 @@ else
 endif
 
 libdrm_required = (build_dri1 or build_dri2 or build_dri3) and get_option('drm') == true
-if not dep_libdrm.found() and libdrm_required
+if not dep_drm.found() and libdrm_required
     error('DRI requested, but LIBDRM not found')
 endif
 
-build_modesetting = dep_libdrm.found() and xproto.found()
+build_modesetting = dep_drm.found() and xproto.found()
 
 build_vgahw = false
 if get_option('vgahw') == 'auto'

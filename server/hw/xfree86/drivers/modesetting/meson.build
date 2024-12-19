@@ -18,7 +18,7 @@ shared_module(
     dependencies: [
         dep_common,
         dep_udev,
-        dep_libdrm,
+        dep_drm,
         dep_gbm,
     ],
 

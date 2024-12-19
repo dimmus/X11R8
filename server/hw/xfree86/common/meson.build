@@ -92,7 +92,7 @@ xorg_common = static_library('xorg_common',
         dep_common,
         dep_dbus,
         dep_pciaccess,
-        dep_libdrm,
+        dep_drm,
     ],
     c_args: [
         xorg_c_args,
