@@ -7,8 +7,5 @@ xwin_windowsdri = static_library(
     'WindowsDRI',
     srcs_windows_dri,
     include_directories: [ inc, include_directories('../') ],
-    dependencies: [
-        dep_windowsdri,
-        dep_pixman,
-    ],
+    dependencies: dep_pixman,
 )
