@@ -225,3 +225,9 @@ install_headers(
 	'X11/Xtrans/transport.c',
     subdir: 'X11/Xtrans',
 )
+
+# xshmfence
+install_headers(
+    'X11/xshmfence.h',
+    subdir: 'X11',
+)

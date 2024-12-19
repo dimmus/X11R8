@@ -1,4 +1,5 @@
-h_check += ['sys/umtx.h', 'linux/futex.h', 'sys/memfd.h', 'pthread.h']
+# h_check += ['sys/umtx.h', 'linux/futex.h', 'sys/memfd.h', 'pthread.h']
+h_check += ['pthread.h']
 f_check += ['memfd_create', 'mkostemp']
 
 dep_int_xshmfence = [xproto]
@@ -15,15 +16,16 @@ endforeach
 
 src = files('xshmfence_alloc.c')
 
-WITH_PTHREAD = false
-WITH_FUTEX   = false
+# Enable only one of them!
+WITH_PTHREAD = true  # h_check += ['pthread.h']
+WITH_FUTEX   = false # h_check += ['sys/umtx.h', 'linux/futex.h']
 
 if WITH_PTHREAD
   src += files('xshmfence_pthread.c')
 endif
 
 if WITH_FUTEX
-  src += files('xshmfence_futex.c')
+  src += files('futex/xshmfence_futex.c')
 endif
 
 lib = library('xshmfence', src,

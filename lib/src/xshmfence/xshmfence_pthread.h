@@ -26,7 +26,6 @@
 #include <pthread.h>
 #include <sys/types.h>
 
-#ifdef HAVE_PTHREAD_H
 struct xshmfence {
     pthread_mutex_t lock;
     pthread_cond_t  wakeup;
@@ -36,6 +35,5 @@ struct xshmfence {
 
 void
 xshmfence_init(int fd);
-#endif
 
 #endif /* _XSHMFENCE_PTHREAD_H_ */
