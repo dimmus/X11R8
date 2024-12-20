@@ -112,7 +112,7 @@ option('build-tests',           type: 'boolean', value: false,   description: ''
 option('xshmfence',             type: 'boolean', value: true)
 
 # Build demos:
-option('build-demos',           type: 'boolean', value: false)
+option('build-demos',           type: 'boolean', value: true)
 option('demos-x11perf',         type: 'boolean', value: true)
 option('demos-xcmstest',        type: 'boolean', value: true)
 option('demos-ico',             type: 'boolean', value: true)
