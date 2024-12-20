@@ -1,4 +1,5 @@
 if WITH_DEMOS
+    # TODO: need PHIGS library
     # if BuildPexClients
     # subdir('auto_box')
     # subdir('beach_ball')
@@ -30,6 +31,6 @@ if WITH_DEMOS
         subdir('x11perf')
     endif
 
-    # subdir('xgc')
+    # subdir('xgc') # TODO: needs bison to be installed
     # subdir('xgas_old') # TODO: find XGas.h file
 endif
