@@ -13,12 +13,16 @@
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <errno.h>
+#include <stdlib.h>
 
 extern Display	*dpy;
 extern int	screen;
 extern int	errno;
 extern int	CreateNewColormap;
 extern Colormap PuzzleColormap;
+
+void swap_long(register char *bp, register unsigned n);
+int getColormapEntries(XColor *colorMap, int numColors);
 
 /*
  * This function reads a file that contains a color-mapped pixmap, in the
@@ -37,11 +41,9 @@ extern Colormap PuzzleColormap;
  *******************************************************
  */
 
-Pixmap PictureSetup(fname,width,height)
-char *fname;
-long *width, *height; /* RETURNS */
+Pixmap PictureSetup(char *fname, long *width, long *height)
 {
-int readcount;
+    /* int readcount; */
 
     int fd, i, cmapSize;
     unsigned char cmapSizeByte;
@@ -79,7 +81,7 @@ int readcount;
 		fname, errno);
 	exit(1);
     }
-    readcount = read(fd, (char *)data, (*width)*(*height));
+    /* readcount = read(fd, (char *)data, (*width)*(*height)); */
 
     /***********************************/
     /** allocate the colormap entries **/
@@ -121,9 +123,8 @@ int readcount;
     return(PicturePixmap);
 }
 
-getColormapEntries(colorMap, numColors)
-XColor *colorMap;
-int numColors;
+int
+getColormapEntries(XColor *colorMap, int numColors)
 {
     int i;
 
@@ -145,9 +146,8 @@ int numColors;
     return(0);
 }
 
-swap_long (bp, n)
-    register char *bp;
-    register unsigned n;
+void
+swap_long(register char *bp, register unsigned n)
 {
     register char c;
     register char *ep = bp + n;

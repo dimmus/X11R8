@@ -27,6 +27,7 @@
 
 #include <X11/Xos.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <setjmp.h>
 
 #define min(x,y)	(((x)>(y))?(x):(y))
@@ -97,12 +98,21 @@ int space_x, space_y;		/** location of space in the position matrix **/
 
 static jmp_buf solve_env;
 
+void move_space(int dir, int dist);
+int plan_move(int start_loc, int end_loc, int (*path)[]);
+void initialize(void);
+extern int PuzzlePending(void);
+extern void ProcessEvents(void);
+extern int LogMoveSpace(int first_x, int first_y, int last_x, int last_y, int dir);
+extern void flushLogging(void);
+extern void RepaintTiles(void);
+
 /**
  ** this piece of code needs to be fixed if you want to use it
  ** for non-square matrices;
  **/
-print_matrix(mat)
-int (*mat)[];
+void
+print_matrix(int (*mat)[])
 {
    int i,j;
 
@@ -115,8 +125,8 @@ int (*mat)[];
    printf("\n");
 }
 
-find_piece(piece)
-int piece;
+int
+find_piece(int piece)
 {
    int i;
 
@@ -128,13 +138,13 @@ int piece;
    exit(1);
 }
 
-move_space_to(loc)
-int loc;
+void
+move_space_to(int loc)
 {
    int i,current_dir,dist;
    int plan[MAX_PLAN];
 
-   plan_move(indx(space_x,space_y),loc,plan);
+   plan_move(indx(space_x,space_y),loc,&plan);
    current_dir = plan[1];
    dist = 0;
    for (i=1; i<=plan[0]; i++)
@@ -150,13 +160,13 @@ int loc;
    move_space(current_dir,dist);
 }
 
-move_piece(loc,targetm)
-int loc,targetm;
+void
+move_piece(int loc, int targetm)
 {
    int i;
    int plan[MAX_PLAN];
 
-   plan_move(loc,targetm,plan);
+   plan_move(loc,targetm,&plan);
    for (i=1; i<=plan[0]; i++)
       switch(plan[i]) {
       case LEFT:	locked[loc] = 1;
@@ -186,9 +196,8 @@ int loc,targetm;
       }
 }
 
-plan_move(start_loc,end_loc,path)
-int start_loc, end_loc;
-int (*path)[];
+int
+plan_move(int start_loc, int end_loc, int (*path)[])
 {
 
 #define QUEUE_SIZE	1000
@@ -242,14 +251,13 @@ int (*path)[];
       chosen = queue_head;
 
       for (i=queue_head+1; i<queue_tail; i++)
-         if (!loc_queue_used[i]                &&
-             (   loc_dist[i] < next_dist)         ||
-                 (      (loc_dist[i] == next_dist)    && 
-                        (tmp_matrix[loc_queue[i]] < tmp_matrix[next_loc])
-              )) {
-            next_loc = loc_queue[i];
-            next_dist = loc_dist[i];
-            chosen = i;
+         if ((!loc_queue_used[i] && 
+            (loc_dist[i] < next_dist)) || 
+            ((loc_dist[i] == next_dist) &&  
+            (tmp_matrix[loc_queue[i]] < tmp_matrix[next_loc]))) {
+               next_loc = loc_queue[i];
+               next_dist = loc_dist[i];
+               chosen = i;
          }
 
       if (next_dist == 0) {
@@ -337,10 +345,12 @@ broke:   if (queue_tail == QUEUE_SIZE) {
 			break;
       }
    }
+   
+   return 0;
 }
 
-move_space(dir,dist)
-int dir,dist;
+void
+move_space(int dir, int dist)
 {
    int i, step, count;
    int first_x,first_y;
@@ -428,7 +438,8 @@ int gettimeofday (tvp, tzp)
 }
 #endif
 
-initialize()
+void
+initialize(void)
 {
    /** Initialize the position and
     ** the targetm matrices;
@@ -494,7 +505,8 @@ initialize()
    }
 }
 
-Scramble()
+void
+Scramble(void)
 {
    int i;
    int new_x, new_y;
@@ -525,15 +537,15 @@ Scramble()
  ** (2) finish off the rest of the boundaries;
  ** (3) do the next layer in;
  **/
-
-solve_layer_0()
+void
+solve_layer_0(void)
 {
    move_piece(find_piece(targetm[UL(0)]),UL(0));
    move_space_to(LR(0));   
 }
 
-do_last_two_on_edge(ntlast,last,tmp,emergency)
-int ntlast,last,tmp,emergency;
+void
+do_last_two_on_edge(int ntlast, int last, int tmp, int emergency)
 {
    int last_piece, ntlast_piece;
    last_piece = targetm[last];
@@ -572,8 +584,8 @@ int ntlast,last,tmp,emergency;
    locked[last] = 1;
 }
 
-solve_layer(layer)
-int layer;
+void
+solve_layer(int layer)
 {
    int i, tmp, last, ntlast, emergency;
    int ul, ur, ll, lr;
@@ -665,8 +677,8 @@ int layer;
    }
 }
 
-solve_row(row)
-int row;
+void
+solve_row(int row)
 {
     int i, loc, last, ntlast, tmp, emergency;
 
@@ -683,8 +695,8 @@ int row;
     do_last_two_on_edge(ntlast,last,tmp,emergency);
 }
 
-solve_col(col)
-int col;
+void
+solve_col(int col)
 {
     int i, loc, last, ntlast, tmp, emergency;
 
@@ -701,18 +713,21 @@ int col;
     do_last_two_on_edge(ntlast,last,tmp,emergency);
 }
 
-AbortSolving()
+void
+AbortSolving(void)
 {
    if (SolvingFlag) 
       AbortSolvingFlag = 1;
 }
 
-SolvingStatus()
+int
+SolvingStatus(void)
 {
     return(SolvingFlag);
 }
 
-Solve()
+void
+Solve(void)
 {
    /** determine the position we want to be in when
     ** we are done; This position will have the space in 

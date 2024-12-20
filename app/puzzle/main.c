@@ -21,6 +21,8 @@
  **/
 
 #include <stdio.h>
+#include <stdlib.h>
+
 #include <X11/Xos.h>
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
@@ -125,11 +127,28 @@ int	HoriStepSize[MAX_STEPS];
 #define lly(x,y)	(((y)+1)*TileHeight - 1)
 #define lry(x,y)	(((y)+1)*TileHeight - 1)
 
+void ProcessEvent(XEvent *event);
+int PuzzlePending(void);
+int error(char *str);
+void CalculateSpeed(void);
+void CalculateStepsize(void);
+extern void initialize(void);
+extern void AbortSolving(void);
+extern void move_space_to(int loc);
+extern int SolvingStatus(void);
+extern void Solve(void);
+extern void Scramble(void);
+void displayLogMoveSpace(int first_x, int first_y, int last_x, int last_y, int dir);
+int usage(void);
+void flushLogging(void);
+void RepaintNumberTiles(void);
+void RepaintPictureTiles(void);
+
 /*
  * PuzzlePending - XPending entry point fo the other module.
  */
-
-PuzzlePending()
+int
+PuzzlePending(void)
 {
     return(XPending(dpy));
 }
@@ -137,9 +156,8 @@ PuzzlePending()
 /*
  * SetupDisplay - eastablish the connection to the X server.
  */
-
-SetupDisplay(server)
-char *server;
+int
+SetupDisplay(char *server)
 {
     dpy = XOpenDisplay(server);
     if (dpy == NULL) {
@@ -151,11 +169,11 @@ char *server;
 #ifdef DEBUG
     XSynchronize(dpy,1);
 #endif /* DEBUG */
+	return 0;
 }
 
-XQueryWindow(window,frame)
-Window window;
-WindowGeom *frame;
+void
+XQueryWindow(Window window, WindowGeom *frame)
 {
     XGetGeometry(dpy, window,
 		 &(frame->root),
@@ -165,28 +183,26 @@ WindowGeom *frame;
 		 &(frame->depth));
 }
 
-RectSet(W,x,y,w,h,pixel)
-Window W;
-int x,y;
-unsigned int w,h;
-unsigned long pixel;
+void
+RectSet(Window W, int x, int y, 
+		unsigned int w, unsigned int h, 
+		unsigned long pixel)
 {
     XSetForeground(dpy, rect_gc, pixel);
     XFillRectangle(dpy, W, rect_gc, x, y, w, h);
 }
 
-MoveArea(W,src_x,src_y,dst_x,dst_y,w,h)
-Window W;
-int src_x, src_y, dst_x, dst_y;
-unsigned int w, h;
+void
+MoveArea(Window W,
+	int src_x, int src_y, int dst_x, int dst_y,
+	unsigned int w, unsigned int h)
 {
     XCopyArea(dpy,W,W,gc,src_x,src_y,w,h,dst_x,dst_y);
 }
 
 /** RepaintTitle - puts the program title in the title bar **/
-
-RepaintTitle(method)
-int method;
+void
+RepaintTitle(int method)
 {
     int Twidth,Theight;
     int i,j, startColor,color2,tinyBoxSize;
@@ -271,7 +287,8 @@ int method;
  * RepaintBar - Repaint the bar between the title window and
  *              the tile window;
  */
-RepaintBar()
+void
+RepaintBar(void)
 {
     XFillRectangle(dpy, PuzzleRoot, gc,
 		   0, TitleWinHeight,
@@ -282,7 +299,8 @@ RepaintBar()
  ** RepaintTiles - draw the numbers in the tiles to match the
  **                locations array;
  **/
-RepaintTiles()
+void
+RepaintTiles(void)
 {
 #ifdef USE_PICTURE
    if (UsePicture)
@@ -292,7 +310,8 @@ RepaintTiles()
       RepaintNumberTiles();
 }
 
-RepaintNumberTiles()
+void
+RepaintNumberTiles(void)
 {
     int i,j,counter;
     int width,height;
@@ -341,7 +360,8 @@ RepaintNumberTiles()
 }
 
 #ifdef USE_PICTURE
-RepaintPictureTiles()
+void
+RepaintPictureTiles(void)
 {
     int i, j, counter;
     int tmp, orig_x,orig_y;
@@ -371,17 +391,14 @@ RepaintPictureTiles()
 /**
  ** Setup - Perform initial window creation, etc.
  **/
-
-Setup (geom,argc,argv)
-char *geom;
-int argc;
-char *argv[];
+void
+Setup (char *geom, int argc, char *argv[])
 {
     int minwidth, minheight;
     Pixmap PictureSetup();
-    Visual visual;
+    /* Visual visual; */
     XGCValues xgcv;
-    XSetWindowAttributes xswa;
+    /* XSetWindowAttributes xswa; */
     XSizeHints sizehints;
 
     /*******************************************/
@@ -507,8 +524,8 @@ char *argv[];
     /** create the puzzle main window and set its standard properties **/
     /*******************************************************************/
 
-    xswa.event_mask = ExposureMask;
-    visual.visualid = CopyFromParent;
+    /* xswa.event_mask = ExposureMask; */
+    /* visual.visualid = CopyFromParent; */
 
     PuzzleRoot = XCreateSimpleWindow(dpy, RootWindow(dpy,screen),
 			       sizehints.x, sizehints.y,
@@ -549,7 +566,7 @@ char *argv[];
 	ACCursor = XCreatePixmapCursor(dpy,ACPixmap,ACMask,
 				       &FGcolor,&BGcolor,
 				       ac_x_hot, ac_y_hot);
-	if (ACCursor == NULL)
+	if (ACCursor == 0)
 	    error("Unable to store ArrowCrossCursor.");
     
 	XDefineCursor(dpy,PuzzleRoot,ACCursor);
@@ -572,7 +589,8 @@ char *argv[];
 static short old_height = -1;
 static short old_width = -1;
 
-SizeChanged()
+int
+SizeChanged(void)
 {
     XQueryWindow(PuzzleRoot,&PuzzleWinInfo);
     
@@ -583,7 +601,8 @@ SizeChanged()
 	return(1);
 }
 
-Reset()
+void
+Reset(void)
 {
     int Box_x,Box_y;
     int TileBgPixel;
@@ -710,7 +729,8 @@ Reset()
     ( ((tv2.tv_sec  - tv1.tv_sec )*1000L)	\
      +((tv2.tv_usec - tv1.tv_usec)/1000L))
 
-CalculateSpeed()
+void
+CalculateSpeed(void)
 {
     struct timeval tv1, tv2;
     struct timezone tz;
@@ -763,7 +783,8 @@ CalculateSpeed()
 	MoveSteps = 1;
 }
 
-CalculateStepsize()
+void
+CalculateStepsize(void)
 {
     int i, rem;
     int error,sum;
@@ -814,8 +835,8 @@ CalculateStepsize()
     VertStepSize[0] += TileHeight - sum;
 }
 
-SlidePieces(event)
-XButtonEvent *event;
+void
+SlidePieces(XButtonEvent *event)
 {
     int x,y;
 
@@ -826,14 +847,14 @@ XButtonEvent *event;
     flushLogging();
 }
 
-ProcessVisibility(event)
-XVisibilityEvent *event;
+void
+ProcessVisibility(XVisibilityEvent *event)
 {
     if (event->state != VisibilityUnobscured) AbortSolving();
 }
 
-ProcessExpose(event)
-XExposeEvent *event;
+void
+ProcessExpose(XExposeEvent *event)
 {
     int loop  = 1;
     int reset = 0,
@@ -866,8 +887,8 @@ XExposeEvent *event;
     }
 }
 
-ProcessButton(event)
-XButtonEvent *event;
+void
+ProcessButton(XButtonEvent *event)
 {
     Window w;
 
@@ -889,17 +910,16 @@ XButtonEvent *event;
 	exit(0);
 }
 
-ProcessInput()
+void
+GetNextEvent(XEvent *event)
 {
-    XEvent event;
-
-    while(1) {
-	GetNextEvent(&event);  
-	ProcessEvent(&event);
-    }
+    if (!XCheckMaskEvent(dpy,VisibilityChangeMask,event) &&
+	!XCheckMaskEvent(dpy,ExposureMask,event))
+	XNextEvent(dpy,event);  
 }
 
-ProcessEvents()
+void
+ProcessEvents(void)
 {
     XEvent event;
 
@@ -909,16 +929,19 @@ ProcessEvents()
     }
 }
 
-GetNextEvent(event)
-XEvent *event;
+void
+ProcessInput(void)
 {
-    if (!XCheckMaskEvent(dpy,VisibilityChangeMask,event) &&
-	!XCheckMaskEvent(dpy,ExposureMask,event))
-	XNextEvent(dpy,event);  
+    XEvent event;
+
+    while(1) {
+	GetNextEvent(&event);  
+	ProcessEvent(&event);
+    }
 }
 
-ProcessEvent(event)
-XEvent *event;
+void
+ProcessEvent(XEvent *event)
 {
     switch(event->type) {
       case ButtonPress:
@@ -935,9 +958,8 @@ XEvent *event;
    }
 }
 
-main(argc,argv)
-int argc;
-char *argv[];
+int
+main(int argc, char *argv[])
 {
    int i;
    char *ServerName, *Geometry;
@@ -1048,8 +1070,8 @@ static char *help_message[] = {
 "    -colormap                        create a new colormap",
 NULL};
 
-
-usage()
+int
+usage(void)
 {
     char **cpp;
 
@@ -1061,8 +1083,8 @@ usage()
     exit (1);
 }
 
-error(str)
-char *str;
+int
+error(char *str)
 {
    fprintf(stderr,"Error %s\n",str);
    exit(1);
@@ -1071,15 +1093,17 @@ char *str;
 /**
  ** Output Routines -
  **/
-
-resetLogging()
+void
+resetLogging(void)
 { }
-flushLogging()
+void
+flushLogging(void)
 { }
-saveLoggingState()
+void
+saveLoggingState(void)
 { }
-LogMoveSpace(first_x,first_y,last_x,last_y,dir)
-int first_x,first_y,last_x,last_y,dir;
+void
+LogMoveSpace(int first_x, int first_y, int last_x, int last_y, int dir)
 {
     displayLogMoveSpace(first_x,first_y,last_x,last_y,dir);
 }
@@ -1131,8 +1155,8 @@ int first_x,first_y,last_x,last_y,dir;
 }
 #endif /* UNDEFINED */
 
-displayLogMoveSpace(first_x,first_y,last_x,last_y,dir)
-int first_x,first_y,last_x,last_y,dir;
+void
+displayLogMoveSpace(int first_x, int first_y, int last_x, int last_y, int dir)
 {
    int min_x,min_y,max_x,max_y;
    int x,y,w,h,dx,dy,x2,y2;
