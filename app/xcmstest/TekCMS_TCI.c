@@ -52,6 +52,7 @@
  *              program using this package.
  */
 #include <stdio.h>
+#include <string.h>
 #include <X11/Xlib.h>
 #include <X11/Xcms.h>
 #ifdef AUTOHEADER
@@ -78,11 +79,9 @@
  *		When using 'autohdr', these declaration will be placed
  *		in the resulting header file.
  */
-char	TekCMS_idir[BUFSIZ];
-char	TekCMS_vdir[BUFSIZ];
-char	TekCMS_rdir[BUFSIZ];
 
-
+#include "TekCMS_TCI.h"
+
 /************************************************************************
  *									*
  *			 PRIVATE ROUTINES				*

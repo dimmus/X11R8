@@ -54,6 +54,7 @@
  *              program using this package.
  */
 #include <stdio.h>
+#include <string.h>
 #include <X11/Xlib.h>
 #include <sys/stat.h>
 #include <X11/Xcms.h>
@@ -163,73 +164,73 @@ FuncTableEntry LibTstCmdTbl[] = {
     /*
      * Initialize Test
      */
-    "init",		Cmd_init,
+    {"init",		Cmd_init},
 
     /*
      * Quit
      */
-    "quit",		Cmd_quit,
-    "bye",		Cmd_quit,
-    "halt",		Cmd_quit,
-    "q",		Cmd_quit,
+    {"quit",		Cmd_quit},
+    {"bye",		Cmd_quit},
+    {"halt",		Cmd_quit},
+    {"q",		Cmd_quit},
 
     /*
      * List Commands
      */
-    "list",		Cmd_List,
-    "?",		Cmd_List,
+    {"list",		Cmd_List},
+    {"?",		Cmd_List},
 
     /*
      * Create Test Colormaps
      */
-    "CreateColormap",	Cmd_CreateColormap,
-    "FreeColormap",	Cmd_FreeColormap,
+    {"CreateColormap",	Cmd_CreateColormap},
+    {"FreeColormap",	Cmd_FreeColormap},
 
     /*
      * Set Input Directory
      */
-    "Set_idir",	Cmd_SetInputDir,
+    {"Set_idir",	Cmd_SetInputDir},
 
     /*
      * Set Verification Directory
      */
-    "Set_vdir",	Cmd_SetVerificationDir,
+    {"Set_vdir",	Cmd_SetVerificationDir},
 
     /*
      * Set Result Directory
      */
-    "Set_rdir",	Cmd_SetResultDir,
+    {"Set_rdir",	Cmd_SetResultDir},
 
     /*
      * Get Input Directory
      */
-    "Get_idir",	Cmd_GetInputDir,
+    {"Get_idir",	Cmd_GetInputDir},
 
     /*
      * Get Verification Directory
      */
-    "Get_vdir",	Cmd_GetVerificationDir,
+    {"Get_vdir",	Cmd_GetVerificationDir},
 
     /*
      * Get Results Directory
      */
-    "Get_rdir",	Cmd_GetResultDir,
+    {"Get_rdir",	Cmd_GetResultDir},
 
     /*
      * Set XSynchronize
      */
-    "XSynchronize",	Cmd_XSynchronize,
+    {"XSynchronize",	Cmd_XSynchronize},
 
     /*
      * Execute Test Case
      */
-    "TestCase",		TCI,
-    "tc",		TCI,
+    {"TestCase",		TCI},
+    {"tc",		TCI},
 
     /*
      * List Test Cases
      */
-    "ListTC",		Cmd_ListTC,
+    {"ListTC",		Cmd_ListTC},
 
 /*
  * API Testing Commands
@@ -238,112 +239,112 @@ FuncTableEntry LibTstCmdTbl[] = {
     /*
      * XcmsAllocColor
      */
-    "XcmsAllocColor",	Cmd_AllocColor,
-    "AllocColor",	Cmd_AllocColor,
+    {"XcmsAllocColor",	Cmd_AllocColor},
+    {"AllocColor",	Cmd_AllocColor},
 
     /*
      * XcmsAllocNamedColor
      */
-    "XcmsAllocNamedColor", Cmd_AllocNamedColor,
-    "AllocNamedColor",	Cmd_AllocNamedColor,
+    {"XcmsAllocNamedColor", Cmd_AllocNamedColor},
+    {"AllocNamedColor",	Cmd_AllocNamedColor},
 
     /*
      * XcmsConvertColors
      */
-    "XcmsConvertColor", Cmd_ConvertColor,
-    "ConvertColor",	Cmd_ConvertColor,
+    {"XcmsConvertColor", Cmd_ConvertColor},
+    {"ConvertColor",	Cmd_ConvertColor},
 
     /*
      * XcmsLookupColor
      */
-    "XcmsLookupColor",	Cmd_LookupColor,
-    "LookupColor",	Cmd_LookupColor,
+    {"XcmsLookupColor",	Cmd_LookupColor},
+    {"LookupColor",	Cmd_LookupColor},
 
     /*
      * XcmsQueryColor
      */
-    "XcmsQueryColor",	Cmd_QueryColor,
-    "QueryColor",	Cmd_QueryColor,
+    {"XcmsQueryColor",	Cmd_QueryColor},
+    {"QueryColor",	Cmd_QueryColor},
 
     /*
      * XcmsQueryColors
      */
-    "XcmsQueryColors",	Cmd_QueryColors,
-    "QueryColors",	Cmd_QueryColors,
+    {"XcmsQueryColors",	Cmd_QueryColors},
+    {"QueryColors",	Cmd_QueryColors},
 
 
     /*
      * XcmsStoreColor
      */
-    "XcmsStoreColor",	Cmd_StoreColor,
-    "StoreColor",	Cmd_StoreColor,
+    {"XcmsStoreColor",	Cmd_StoreColor},
+    {"StoreColor",	Cmd_StoreColor},
 
     /*
      * XcmsStoreColors
      */
-    "XcmsStoreColors",	Cmd_StoreColors,
-    "StoreColors",	Cmd_StoreColors,
+    {"XcmsStoreColors",	Cmd_StoreColors},
+    {"StoreColors",	Cmd_StoreColors},
 
 
     /*
      * Color Space Extension
      */
 
-	"XcmsAddColorSpace",	Cmd_AddDIColorSpace,
-	"AddDIColorSpace",	Cmd_AddDIColorSpace,
-	"XcmsFormatOfPrefix",	Cmd_FormatOfPrefix,
-	"FormatOfPrefix",		Cmd_FormatOfPrefix,
-	"XcmsPrefixOfFormat",	Cmd_PrefixOfId,
-	"PrefixOfId",		Cmd_PrefixOfId,
+	{"XcmsAddColorSpace",	Cmd_AddDIColorSpace},
+	{"AddDIColorSpace",	Cmd_AddDIColorSpace},
+	{"XcmsFormatOfPrefix",	Cmd_FormatOfPrefix},
+	{"FormatOfPrefix",		Cmd_FormatOfPrefix},
+	{"XcmsPrefixOfFormat",	Cmd_PrefixOfId},
+	{"PrefixOfId",		Cmd_PrefixOfId},
     /*
      * Query Gamut Boundaries
      */
 
 	/* TekHVC MaxChroma */
-	"XcmsTekHVCQueryMaxC",		Cmd_MaxChroma,
-	"MaxChroma",			Cmd_MaxChroma,
+	{"XcmsTekHVCQueryMaxC",		Cmd_MaxChroma},
+	{"MaxChroma",			Cmd_MaxChroma},
 
 	/* TekHVC MaxValue */
-	"XcmsTekHVCQueryMaxV",	Cmd_MaxValue,
-	"MaxValue",			Cmd_MaxValue,
+	{"XcmsTekHVCQueryMaxV",	Cmd_MaxValue},
+	{"MaxValue",			Cmd_MaxValue},
 
 	/* TekHVC MaxValueSamples */
-	"XcmsTekHVCQueryMaxVSamples", 	Cmd_MaxValueSamples,
-	"MaxValueSamples",		Cmd_MaxValueSamples,
+	{"XcmsTekHVCQueryMaxVSamples", 	Cmd_MaxValueSamples},
+	{"MaxValueSamples",		Cmd_MaxValueSamples},
 
 	/* TekHVC MaxValueChroma */
-	"XcmsTekHVCQueryMaxVC", Cmd_MaxValueChroma,
-	"MaxValueChroma",		Cmd_MaxValueChroma,
+	{"XcmsTekHVCQueryMaxVC", Cmd_MaxValueChroma},
+	{"MaxValueChroma",		Cmd_MaxValueChroma},
 
 	/* TekHVC MinValue */
-	"XcmsTekHVCQueryMinV",		Cmd_MinValue,
-	"MinValue",			Cmd_MinValue,
+	{"XcmsTekHVCQueryMinV",		Cmd_MinValue},
+	{"MinValue",			Cmd_MinValue},
 
 	/* TekHVC AdjustValue */
-	"XcmsTekHVCClipV",	Cmd_AdjustValue,
-	"AdjustValue",			Cmd_AdjustValue,
+	{"XcmsTekHVCClipV",	Cmd_AdjustValue},
+	{"AdjustValue",			Cmd_AdjustValue},
 
 	/* TekHVC ReduceChroma */
-	"XcmsTekHVCClipC",	Cmd_ReduceChroma,
-	"ReduceChroma",			Cmd_ReduceChroma,
+	{"XcmsTekHVCClipC",	Cmd_ReduceChroma},
+	{"ReduceChroma",			Cmd_ReduceChroma},
 
 	/* TekHVC ShortestValueChroma */
-	"XcmsTekHVCClipVC",	Cmd_ShortestValueChroma,
-	"ShortestValueChroma",		Cmd_ShortestValueChroma,
-	"ShortestVC",			Cmd_ShortestValueChroma,
-	"Shortest",			Cmd_ShortestValueChroma,
+	{"XcmsTekHVCClipVC",	Cmd_ShortestValueChroma},
+	{"ShortestValueChroma",		Cmd_ShortestValueChroma},
+	{"ShortestVC",			Cmd_ShortestValueChroma},
+	{"Shortest",			Cmd_ShortestValueChroma},
     /*
      * XLib Modifications
      */
-	"XAllocNamedColor",	Cmd_XAllocNamedColor,
-	"XLookupColor",	Cmd_XLookupColor,
-	"XParseColor",	Cmd_XParseColor,
-	"XStoreNamedColor",	Cmd_XStoreNamedColor,
+	{"XAllocNamedColor",	Cmd_XAllocNamedColor},
+	{"XLookupColor",	Cmd_XLookupColor},
+	{"XParseColor",	Cmd_XParseColor},
+	{"XStoreNamedColor",	Cmd_XStoreNamedColor},
 
-    "",			0
+    {"",			0},
 };
 
-
+
 /************************************************************************
  *									*
  *			PRIVATE ROUTINES				*
@@ -352,7 +353,7 @@ FuncTableEntry LibTstCmdTbl[] = {
  ************************************************************************/
 
 
-
+
 /*
  *	NAME
  *		StrToCmap - convert a string to a colormap
@@ -388,7 +389,7 @@ StrToCmap(pCmapTbl, pstring, pcmap)
     }
     return(0);
 }
-
+
 /*
  *	NAME
  *		NextFreeCmapEntry - convert a string to a define
@@ -416,7 +417,7 @@ NextFreeCmapEntry(pCmapTbl)
     }
     return(-1);
 }
-
+
 /*
  *      NAME
  *              CheckPrintRetVal - check the retval and print readable result
@@ -449,7 +450,7 @@ CheckPrintRetVal (pWord, retval, compFlag)
 		printf ("\n");
 		return(1);
 	} else if (retval != XcmsFailure) {
-	    printf ("%d\n");
+	    printf ("%d\n", retval);
 	} else {
 	    printf ("\n");
 	}
@@ -462,7 +463,7 @@ CheckPrintRetVal (pWord, retval, compFlag)
 	    printf ("\n");
 	    return(1);
 	} else if (retval != XcmsFailure) {
-	    printf ("%d\n");
+	    printf ("%d\n", retval);
 	} else {
 	    printf ("\n");
 	}
@@ -470,7 +471,7 @@ CheckPrintRetVal (pWord, retval, compFlag)
     }
 }
 
-
+
 /************************************************************************
  *									*
  *			 PUBLIC ROUTINES				*
@@ -514,7 +515,7 @@ Check_init()
 #endif /* NO_AUTO_INIT */
 }
 
-
+
 /************************************************************************
  *									*
  *			 ADMIN COMMANDS					*
@@ -557,7 +558,7 @@ Cmd_List(argbuf)
 
     return(1);
 }
-
+
 /*
  *	NAME
  *		Cmd_SetInputDir
@@ -601,7 +602,7 @@ SetInputDir_Usage:
 	return(0);
     }
 }
-
+
 /*
  *	NAME
  *		Cmd_SetVerificationDir
@@ -645,7 +646,7 @@ SetVerificationDir_Usage:
 	return(0);
     }
 }
-
+
 /*
  *	NAME
  *		Cmd_SetResultDir
@@ -689,7 +690,7 @@ SetResultDir_Usage:
 	return(0);
     }
 }
-
+
 /*
  *	NAME
  *		Cmd_GetInputDir
@@ -720,7 +721,7 @@ GetInputDir_Usage:
     printf("\tInput Directory = %s\n", TekCMS_idir);
     return(1);
 }
-
+
 /*
  *	NAME
  *		Cmd_GetVerificationDir
@@ -751,7 +752,7 @@ GetVerificationDir_Usage:
     printf("\tVerification Directory = %s\n", TekCMS_vdir);
     return(1);
 }
-
+
 /*
  *	NAME
  *		Cmd_GetResultDir
@@ -783,7 +784,7 @@ GetResultDir_Usage:
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_CreateColormap - LibTest "CreateColormap" command
@@ -840,7 +841,7 @@ CreateColormap_Usage:
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_FreeColormap - LibTest "FreeColormap" command
@@ -891,7 +892,7 @@ FreeColormap_Usage:
     return(0);
 }
 
-
+
 /*
 *	NAME
 *		Cmd_init - LibTest "init" command
@@ -931,7 +932,7 @@ Cmd_init(buf)
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_quit - "quit" command
@@ -964,7 +965,7 @@ Cmd_quit(buf)
     exit(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_XSynchronize - Set X synchronization
@@ -1019,7 +1020,7 @@ XSynchronize_Usage:
     XSynchronize(pDpy, setting);
     return(1);
 }
-
+
 /************************************************************************
  *									*
  *			 API TESTING COMMANDS				*
@@ -1124,7 +1125,7 @@ AllocColor_Usage:
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_StoreColor - LibTest "StoreColor" command
@@ -1170,7 +1171,7 @@ Cmd_StoreColor(buf)
     }
 
     color.pixel = 0;
-    if ((nargs = sscanf(buf, "%d %s %s %s %s %s",
+    if ((nargs = sscanf(buf, "%ld %s %s %s %s %s",
 	    &color.pixel,
 	    formatStr,
 	    stim1,
@@ -1219,7 +1220,7 @@ StoreColor_Usage:
 }
 
 
-
+
 /*
  *	NAME
  *		Cmd_QueryColor - LibTest "QueryColor" command
@@ -1266,7 +1267,7 @@ Cmd_QueryColor(buf)
     }
 
     color.pixel = 0;
-    if ((nargs = sscanf(buf, "%d %s %s",
+    if ((nargs = sscanf(buf, "%ld %s %s",
 	    &color.pixel,
 	    formatStr,
 	    cmapname
@@ -1303,7 +1304,7 @@ QueryColor_Usage:
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_QueryColors - LibTest "QueryColors" command
@@ -1380,7 +1381,7 @@ Cmd_QueryColors(buf)
 	if (!begin) {
 	    goto QueryColors_Usage;
 	} 
-	if (sscanf(buf, "%d",
+	if (sscanf(buf, "%ld",
 		&color[ncolors].pixel
 		) < 1) {
 	    printf("Invalid argument(s): %s\n", buf);
@@ -1413,7 +1414,7 @@ QueryColors_Usage:
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_ConvertColor - LibTest "ConvertColor" command
@@ -1497,7 +1498,7 @@ ConvertColor_Usage:
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_LookupColor - LibTest "LookupColor" command
@@ -1578,7 +1579,7 @@ LookupColor_Usage:
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_AllocNamedColor - LibTest "AllocNamedColor" command
@@ -1661,7 +1662,7 @@ AllocNamedColor_Usage:
     PrintXcmsColorSpec(&exactColor);
     return(1);
 }
-
+
     /****************************************************
      *							*
      *		QUERY GAMUT BOUNDARIES			*
@@ -1726,7 +1727,7 @@ MaxChroma_Usage:
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_MaxValue - LibTest "MaxValue" command
@@ -1785,7 +1786,7 @@ MaxValue_Usage:
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_MaxValueSamples - LibTest "MaxValueSamples" command
@@ -1843,7 +1844,7 @@ MaxValueSamples_Usage:
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_MaxValueChroma - LibTest "MaxValueChroma" command
@@ -1899,7 +1900,7 @@ MaxValueChroma_Usage:
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_MinValue - LibTest "MinValue" command
@@ -1958,7 +1959,7 @@ MinValue_Usage:
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_AdjustValue - LibTest "AdjustValue" command
@@ -2031,7 +2032,7 @@ AdjustValue_Usage:
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_ReduceChroma - LibTest "ReduceChroma" command
@@ -2103,7 +2104,7 @@ ReduceChroma_Usage:
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_ShortestValueChroma - LibTest "ShortestValueChroma" command
@@ -2176,7 +2177,7 @@ ShortestValueChroma_Usage:
     return(1);
 }
 
-
+
     /****************************************************
      *							*
      *		COLOR SPACE EXTENSION			*
@@ -2240,7 +2241,7 @@ PrefixOfId_Usage:
     printf("\tXcmsPrefixOfFormat() returned %s\n", prefix);
     return(1);
 }
-
+
 /*
  *	NAME
  *		Cmd_FormatOfPrefix - LibTest "FormatOfPrefix" command
@@ -2289,11 +2290,11 @@ FormatOfPrefix_Usage:
 
     printf("    RESULT:\n");
     formatID = XcmsFormatOfPrefix(prefix);
-    printf("\tXcmsFormatOfPrefix() returned %u\n", formatID);
+    printf("\tXcmsFormatOfPrefix() returned %lu\n", formatID);
     printf("\t    %s\n", LtDefineToStr(FormatTbl, (int)formatID));
     return(1);
 }
-
+
 /*
  *	NAME
  *		Cmd_AddDIColorSpace - LibTest "AddDIColorSpace" command
@@ -2352,7 +2353,7 @@ AddDIColorSpace_Usage:
     retval = XcmsAddColorSpace(pSCCFuncSet);
     return(CheckPrintRetVal("XcmsAddColorSpace", retval, NO_COMP_FLAG));
 }
-
+
 /*
  *	NAME
  *		Cmd_XAllocNamedColor - LibTest "XAllocNamedColor" command
@@ -2423,14 +2424,14 @@ XAllocNamedColor_Usage:
     printf("\t    rgb_db_def.red   = 0x%x\n", rgb_db_def.red);
     printf("\t    rgb_db_def.green = 0x%x\n", rgb_db_def.green);
     printf("\t    rgb_db_def.blue  = 0x%x\n", rgb_db_def.blue);
-    printf("\t    hardware_def.pixel   = %d\n", hardware_def.pixel);
+    printf("\t    hardware_def.pixel   = %lu\n", hardware_def.pixel);
     printf("\t    hardware_def.red   = 0x%x\n", hardware_def.red);
     printf("\t    hardware_def.green = 0x%x\n", hardware_def.green);
     printf("\t    hardware_def.blue  = 0x%x\n", hardware_def.blue);
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_XLookupColor - LibTest "XLookupColor" command
@@ -2469,7 +2470,7 @@ Cmd_XLookupColor(buf)
 	goto XLookupColor_Usage;
     }
 
-    if ((nargs = sscanf(buf, "%s %s %s", colorStr, cmapname)) < 1) {
+    if ((nargs = sscanf(buf, "%s %s", colorStr, cmapname)) < 1) {
 	printf("Invalid argument(s): %s\n", buf);
 XLookupColor_Usage:
 	printf("Usage:\n");
@@ -2504,7 +2505,7 @@ XLookupColor_Usage:
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_XParseColor - LibTest "XParseColor" command
@@ -2573,7 +2574,7 @@ XParseColor_Usage:
     return(1);
 }
 
-
+
 /*
  *	NAME
  *		Cmd_XStoreNamedColor - LibTest "StoreNamedColor" command
@@ -2611,7 +2612,7 @@ Cmd_XStoreNamedColor(buf)
 	goto XStoreNamedColor_Usage;
     }
 
-    if ((nargs = sscanf(buf, "%s %lu %s %s",
+    if ((nargs = sscanf(buf, "%s %lu %s",
 	    colorStr,
 	    &pixel,
 	    cmapname
@@ -2644,7 +2645,7 @@ XStoreNamedColor_Usage:
     printf("\t    Use QueryColor() to see what was stored\n");
     return(1);
 }
-
+
 /*
  *	NAME
  *		Cmd_StoreColors - LibTest "StoreColors" command
@@ -2727,7 +2728,7 @@ Cmd_StoreColors(buf)
 	if (!begin) {
 	    goto StoreColors_Usage;
 	} 
-	if (sscanf(buf, "%d %s %s %s %s",
+	if (sscanf(buf, "%ld %s %s %s %s",
 		&color[ncolors].pixel,
 		formatStr,
 		stim1,

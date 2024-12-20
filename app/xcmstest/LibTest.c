@@ -116,9 +116,8 @@ extern Display *pDpy ;
  *
  *	SYNOPSIS
  */
-main(argc, argv)
-    int argc;
-    char **argv;
+void
+main(int argc, char **argv)
 /*
  *	DESCRIPTION
  *		<complete external description of the function>
@@ -174,7 +173,6 @@ main(argc, argv)
     }
 }
 
-
 /************************************************************************
  *									*
  *			   PRIVATE ROUTINES				*

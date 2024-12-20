@@ -5,13 +5,14 @@ if WITH_DEMOS
     # subdir('gpc')
     # endif
 
-    # subdir('xcmstest')
-    # subdir('xgas')
-    # subdir('ico')
-    # subdir('maze')
-    # subdir('puzzle')
-    # subdir('xeyes')
-    # subdir('xev')
+    subdir('xcmstest')
+    subdir('ico')
+    subdir('maze')
+    subdir('puzzle')
+    subdir('xeyes')
+    subdir('xgamma')
+    # subdir('xgas_old') # TODO: find XGas.h file
+    subdir('xev')
     # subdir('xgc')
     if get_option('x11perf')
     subdir('x11perf')

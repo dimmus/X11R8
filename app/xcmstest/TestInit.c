@@ -41,6 +41,9 @@
  *              program using this package.
  */
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
 #include <sys/stat.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
@@ -105,7 +108,7 @@ static
 struct _winfo{
     XPoint pt;		/* window origin */
 } winfo[] = {
-	0,	0
+	{0,	0}
 };
 
 #define N_WINDOWS ( sizeof(winfo)/sizeof(XPoint) )
@@ -283,7 +286,6 @@ TestInit()
     }
 }
 
-
 /*
  *	NAME
  *		TestCleanup - Clean up X resources
