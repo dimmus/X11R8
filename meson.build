@@ -199,7 +199,7 @@ endif
 subdir('lib' / 'example')
 subdir('extension')
 subdir('server')
-subdir('app')
+subdir('demo')
 
 FIRST_RUN = not fs.is_dir(dir_build / 'src')
 
