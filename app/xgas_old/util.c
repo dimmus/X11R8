@@ -26,6 +26,8 @@
  */
 
 #include "xgas.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 /*
  * V EQUILIBRIUM

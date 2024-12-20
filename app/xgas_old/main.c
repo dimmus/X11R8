@@ -29,6 +29,7 @@
 #include "xgas.h"
 #include "xgas.icon"
 #include <X11/Shell.h>
+#include <stdlib.h>
 
 static String FallbackResources[] = {
 "*lab.height: 300",

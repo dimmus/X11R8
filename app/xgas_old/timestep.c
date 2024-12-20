@@ -4,7 +4,7 @@
  */
 
 #include "xgas.h"
-
+#include <stdio.h>
 /*
  * DO TIMESTEP
  *

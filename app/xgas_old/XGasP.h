@@ -24,7 +24,8 @@
 #ifndef _GasP_h
 #define _GasP_h
 
-#include "XGas.h"
+// #include "XGas.h"
+#include <X11/Intrinsic.h>
 /* include superclass private header file */
 #include <X11/CoreP.h>
 
