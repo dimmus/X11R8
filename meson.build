@@ -79,6 +79,14 @@ dir_man     = dir_prefix / get_option('mandir')
 dir_build   = meson.project_build_root()
 dir_source  = meson.project_source_root()
 
+WITH_XSHMFENCE   = get_option('xshmfence')
+WITH_DEMOS       = get_option('demos')
+WITH_UNIT_TESTS  = false
+WITH_FONT_SERVER = get_option('build-font-server')
+WITH_TESTS       = get_option('build-tests')
+WITH_MAN         = get_option('docs-man')
+WITH_INT_PIXMAN  = get_option('use-builtin-pixman')
+
 dep_m            = cc.find_library('m',  required: false) # libxcvt
 dep_dl           = cc.find_library('dl', required: false) # xvmc, xserver
 dep_zlib         = dependency('zlib') # xfont
@@ -101,13 +109,6 @@ dep_drm          = dependency('libdrm', version: '>= 2.4.116')
 # static
 dep_threads      = dependency('threads')
 
-WITH_XSHMFENCE   = get_option('xshmfence')
-WITH_DEMOS       = get_option('demos')
-WITH_UNIT_TESTS  = false
-WITH_FONT_SERVER = get_option('build-font-server')
-WITH_TESTS       = get_option('build-tests')
-WITH_MAN         = get_option('docs-man')
-
 python = import('python').find_installation()
 pkg    = import('pkgconfig')
 fs     = import('fs')
@@ -124,7 +125,7 @@ inc_lib    = [inc_config]
 inc_font   = []
 inc_static = []
 
-# lib
+# libraries
 ver_ice        = '1.1.1'
 ver_sm         = '1.2.4'
 ver_x11        = '1.8.10'
@@ -140,8 +141,7 @@ ver_xt         = '1.3.0'
 ver_xtrans     = '1.5.1'
 ver_xcb        = '1.17.0'
 ver_xshmfence  = '1.3.2'
-
-# ext
+# extensions
 ver_dmx        = '1.1.5'
 ver_xcomposite = '0.4.6'
 ver_xdamage    = '1.1.6'
@@ -159,10 +159,15 @@ ver_xss        = '1.2.4'
 ver_xtst       = '1.2.5'
 ver_xv         = '1.0.12'
 ver_xvmc       = '1.0.14'
-
+# xserver
 ver_xserver    = '21.1.99.1'
 
 subdir('static')
+# redefine dependencies with builtin static libs
+if WITH_INT_PIXMAN
+dep_pixman = pixman
+endif
+
 subdir('include')
 subdir('proto')
 subdir('lib' / 'include')

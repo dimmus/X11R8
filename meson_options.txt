@@ -117,6 +117,7 @@ option('x11perf',               type: 'boolean', value: true)
 
 # External static libraries
 # static/pixman
+option('use-builtin-pixman',    type: 'boolean', value: true)
 option('loongson-mmi',          type: 'feature',                 description: 'Use Loongson MMI intrinsic optimized paths')
 option('mmx',                   type: 'feature',                 description: 'Use X86 MMX intrinsic optimized paths')
 option('sse2',                  type: 'feature',                 description: 'Use X86 SSE2 intrinsic optimized paths')
