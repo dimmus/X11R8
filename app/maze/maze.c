@@ -40,10 +40,12 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xos.h>
-#include <stdio.h>
-
 #include <X11/bitmaps/gray1>
 #include <X11/bitmaps/xlogo64>
+
+#include <stdio.h>
+#include <stdlib.h>
+
 #define logo_width xlogo64_width
 #define logo_height xlogo64_height
 #define logo_bits xlogo64_bits
@@ -118,10 +120,21 @@ int	reverse = 0;
 int	width = DEF_W, height = DEF_H ;
 int	x = 0, y = 0, restart = 0, stop = 1, state = 1;
 
+void usage(char *cmd);
+void set_maze_sizes(int width, int height);
+int check_events(void);
+void initialize_maze(void);
+int backup(void);
+void draw_maze_border(void) ;
+void create_maze(void);
+void solve_maze(void);
+int choose_door(void);
+void draw_wall(int i, int j, int dir);
+void draw_solid_square(register int i, register int j, register int dir, GC gc);
+void enter_square(int n);
 
-main(argc,argv)                                               /* main module */
-     int argc;
-     char **argv;
+int
+main(int argc, char **argv)
 {
   extern int	optind;
   extern char	*optarg;
@@ -270,8 +283,8 @@ main(argc,argv)                                               /* main module */
   }
 }
 
-
-check_events()                                  /* X event handler [ rhess ] */
+int
+check_events(void)                                  /* X event handler [ rhess ] */
 {
   XEvent	e;
 
@@ -318,23 +331,21 @@ check_events()                                  /* X event handler [ rhess ] */
   return(0);
 }	  
 
-
-usage(cmd)
-     char	*cmd;
+void
+usage(char *cmd)
 {
   fprintf(stderr, "usage: %s -S -r [-g geometry] [-d display]\n", cmd);
 }
 
-
-set_maze_sizes(width, height)
+void
+set_maze_sizes(int width, int height)
 {
   maze_size_x = width / SQ_SIZE_X;
   maze_size_y = height / SQ_SIZE_Y;
-  
 }
 
-
-initialize_maze()         /* draw the surrounding wall and start/end squares */
+void
+initialize_maze(void)         /* draw the surrounding wall and start/end squares */
 {
   register int i, j, wall;
   
@@ -437,10 +448,10 @@ initialize_maze()         /* draw the surrounding wall and start/end squares */
     logo_y = logo_x = -1;
 }
 
-
-create_maze()             /* create a maze layout given the intiialized maze */
+void
+create_maze(void)             /* create a maze layout given the intiialized maze */
 {
-  register int i, newdoor;
+  register int i, newdoor = 0;
   
   do {
     move_list[sqnum].x = cur_sq_x;
@@ -448,7 +459,7 @@ create_maze()             /* create a maze layout given the intiialized maze */
     move_list[sqnum].dir = newdoor;
     while ( ( newdoor = choose_door() ) == -1 ) { /* pick a door */
       if ( backup() == -1 ) { /* no more doors ... backup */
-	return; /* done ... return */
+	      return; /* done ... return */
       }
     }
     
@@ -484,16 +495,14 @@ create_maze()             /* create a maze layout given the intiialized maze */
   
 }
 
-
-choose_door()                                            /* pick a new path */
+int
+choose_door(void)                                            /* pick a new path */
 {
   int candidates[3];
   register int num_candidates;
   
   num_candidates = 0;
-  
- topwall:
-  /* top wall */
+ 
   if ( maze[cur_sq_x][cur_sq_y] & DOOR_IN_TOP )
     goto rightwall;
   if ( maze[cur_sq_x][cur_sq_y] & DOOR_OUT_TOP )
@@ -508,65 +517,61 @@ choose_door()                                            /* pick a new path */
   }
   candidates[num_candidates++] = 0;
   
- rightwall:
-  /* right wall */
-  if ( maze[cur_sq_x][cur_sq_y] & DOOR_IN_RIGHT )
-    goto bottomwall;
-  if ( maze[cur_sq_x][cur_sq_y] & DOOR_OUT_RIGHT )
-    goto bottomwall;
-  if ( maze[cur_sq_x][cur_sq_y] & WALL_RIGHT )
-    goto bottomwall;
-  if ( maze[cur_sq_x + 1][cur_sq_y] & DOOR_IN_ANY ) {
-    maze[cur_sq_x][cur_sq_y] |= WALL_RIGHT;
-    maze[cur_sq_x + 1][cur_sq_y] |= WALL_LEFT;
-    draw_wall(cur_sq_x, cur_sq_y, 1);
-    goto bottomwall;
-  }
-  candidates[num_candidates++] = 1;
+  rightwall:
+    if ( maze[cur_sq_x][cur_sq_y] & DOOR_IN_RIGHT )
+      goto bottomwall;
+    if ( maze[cur_sq_x][cur_sq_y] & DOOR_OUT_RIGHT )
+      goto bottomwall;
+    if ( maze[cur_sq_x][cur_sq_y] & WALL_RIGHT )
+      goto bottomwall;
+    if ( maze[cur_sq_x + 1][cur_sq_y] & DOOR_IN_ANY ) {
+      maze[cur_sq_x][cur_sq_y] |= WALL_RIGHT;
+      maze[cur_sq_x + 1][cur_sq_y] |= WALL_LEFT;
+      draw_wall(cur_sq_x, cur_sq_y, 1);
+      goto bottomwall;
+    }
+    candidates[num_candidates++] = 1;
   
- bottomwall:
-  /* bottom wall */
-  if ( maze[cur_sq_x][cur_sq_y] & DOOR_IN_BOTTOM )
-    goto leftwall;
-  if ( maze[cur_sq_x][cur_sq_y] & DOOR_OUT_BOTTOM )
-    goto leftwall;
-  if ( maze[cur_sq_x][cur_sq_y] & WALL_BOTTOM )
-    goto leftwall;
-  if ( maze[cur_sq_x][cur_sq_y + 1] & DOOR_IN_ANY ) {
-    maze[cur_sq_x][cur_sq_y] |= WALL_BOTTOM;
-    maze[cur_sq_x][cur_sq_y + 1] |= WALL_TOP;
-    draw_wall(cur_sq_x, cur_sq_y, 2);
-    goto leftwall;
-  }
-  candidates[num_candidates++] = 2;
+  bottomwall:
+    if ( maze[cur_sq_x][cur_sq_y] & DOOR_IN_BOTTOM )
+      goto leftwall;
+    if ( maze[cur_sq_x][cur_sq_y] & DOOR_OUT_BOTTOM )
+      goto leftwall;
+    if ( maze[cur_sq_x][cur_sq_y] & WALL_BOTTOM )
+      goto leftwall;
+    if ( maze[cur_sq_x][cur_sq_y + 1] & DOOR_IN_ANY ) {
+      maze[cur_sq_x][cur_sq_y] |= WALL_BOTTOM;
+      maze[cur_sq_x][cur_sq_y + 1] |= WALL_TOP;
+      draw_wall(cur_sq_x, cur_sq_y, 2);
+      goto leftwall;
+    }
+    candidates[num_candidates++] = 2;
   
- leftwall:
-  /* left wall */
-  if ( maze[cur_sq_x][cur_sq_y] & DOOR_IN_LEFT )
-    goto donewall;
-  if ( maze[cur_sq_x][cur_sq_y] & DOOR_OUT_LEFT )
-    goto donewall;
-  if ( maze[cur_sq_x][cur_sq_y] & WALL_LEFT )
-    goto donewall;
-  if ( maze[cur_sq_x - 1][cur_sq_y] & DOOR_IN_ANY ) {
-    maze[cur_sq_x][cur_sq_y] |= WALL_LEFT;
-    maze[cur_sq_x - 1][cur_sq_y] |= WALL_RIGHT;
-    draw_wall(cur_sq_x, cur_sq_y, 3);
-    goto donewall;
-  }
-  candidates[num_candidates++] = 3;
+  leftwall:
+    if ( maze[cur_sq_x][cur_sq_y] & DOOR_IN_LEFT )
+      goto donewall;
+    if ( maze[cur_sq_x][cur_sq_y] & DOOR_OUT_LEFT )
+      goto donewall;
+    if ( maze[cur_sq_x][cur_sq_y] & WALL_LEFT )
+      goto donewall;
+    if ( maze[cur_sq_x - 1][cur_sq_y] & DOOR_IN_ANY ) {
+      maze[cur_sq_x][cur_sq_y] |= WALL_LEFT;
+      maze[cur_sq_x - 1][cur_sq_y] |= WALL_RIGHT;
+      draw_wall(cur_sq_x, cur_sq_y, 3);
+      goto donewall;
+    }
+    candidates[num_candidates++] = 3;
   
- donewall:
-  if (num_candidates == 0)
-    return ( -1 );
-  if (num_candidates == 1)
-    return ( candidates[0] );
-  return ( candidates[ get_random(num_candidates) ] );
-  
+  donewall:
+    if (num_candidates == 0)
+      return ( -1 );
+    if (num_candidates == 1)
+      return ( candidates[0] );
+    return ( candidates[ get_random(num_candidates) ] );
 }
 
-
-backup()                                                  /* back up a move */
+int
+backup(void)                                                  /* back up a move */
 {
   sqnum--;
   cur_sq_x = move_list[sqnum].x;
@@ -574,8 +579,8 @@ backup()                                                  /* back up a move */
   return ( sqnum );
 }
 
-
-draw_maze_border()                                  /* draw the maze outline */
+void
+draw_maze_border(void)                                  /* draw the maze outline */
 {
   register int i, j;
   
@@ -624,9 +629,8 @@ draw_maze_border()                                  /* draw the maze outline */
   draw_solid_square( end_x, end_y, end_dir, gc);
 }
 
-
-draw_wall(i, j, dir)                                   /* draw a single wall */
-     int i, j, dir;
+void
+draw_wall(int i, int j, int dir)                                   /* draw a single wall */
 {
   switch (dir) {
   case 0:
@@ -660,10 +664,8 @@ draw_wall(i, j, dir)                                   /* draw a single wall */
   }
 }
 
-
-draw_solid_square(i, j, dir, gc)          /* draw a solid square in a square */
-     register int i, j, dir;
-     GC	gc;
+void
+draw_solid_square(register int i, register int j, register int dir, GC gc)          /* draw a solid square in a square */
 {
   switch (dir) {
   case 0: XFillRectangle(dpy, win, gc,
@@ -693,8 +695,8 @@ draw_solid_square(i, j, dir, gc)          /* draw a solid square in a square */
 #endif
 }
 
-
-solve_maze()                             /* solve it with graphical feedback */
+void
+solve_maze(void)                             /* solve it with graphical feedback */
 {
   int i;
   
@@ -731,9 +733,8 @@ solve_maze()                             /* solve it with graphical feedback */
   }
 } 
 
-
-enter_square(n)                            /* move into a neighboring square */
-     int n;
+void
+enter_square(int n)                            /* move into a neighboring square */
 {
   draw_solid_square( (int)path[n].x, (int)path[n].y, 
 		    (int)path[n].dir, gc);
