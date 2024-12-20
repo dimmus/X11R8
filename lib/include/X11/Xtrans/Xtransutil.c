@@ -299,7 +299,9 @@ TRANS(GetMyNetworkId) (XtransConnInfo ciptr)
 }
 
 #include <setjmp.h>
+#if defined(TCPCONN) || defined(SIGALARM)
 static jmp_buf env;
+#endif
 
 #ifdef SIGALRM
 static volatile int nameserver_timedout = 0;

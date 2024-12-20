@@ -1147,7 +1147,7 @@ TRANS(MakeAllCOTSServerListeners) (const char *port, int *partial,
 
 {
     char		buffer[256]; /* ??? What size ?? */
-    XtransConnInfo	ciptr, temp_ciptrs[NUMTRANS] = { NULL };
+    XtransConnInfo	ciptr, temp_ciptrs[NUMTRANS];
     int			status, j;
 
 #if defined(IPv6) && defined(AF_INET6)
