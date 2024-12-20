@@ -1,4 +1,8 @@
-.TH XEYES 1 "Release 5" "X Version 11"
+.\" $XConsortium: xeyes.man,v 1.12 94/04/17 20:45:24 gildea Exp $
+.\"
+.\" $XFree86: xc/programs/xeyes/xeyes.man,v 1.3 2001/01/27 18:21:12 dawes Exp $
+.\"
+.TH XEYES 1 __xorgversion__
 .SH NAME
 xeyes \- a follow the mouse X demo
 .SH SYNOPSIS
@@ -25,10 +29,10 @@ choose a different color for the center of the eyes.
 selects an appropriate level of backing store.
 .TP 8
 .B \-geometry \fIgeometry\fB
-define the initial window geometry; see \fIX(1)\fP.
+define the initial window geometry; see \fIX(__miscmansuffix__)\fP.
 .TP 8
 .B \-display \fIdisplay\fB
-specify the display to use; see \fIX(1)\fP.
+specify the display to use; see \fIX(__miscmansuffix__)\fP.
 .TP 8
 .B \-bd \fIborder color\fB
 choose a different color for the window border.
@@ -42,13 +46,11 @@ uses the SHAPE extension to shape the window.  This is the default.
 .B \+shape
 Disables uses the SHAPE extension to shape the window.
 .SH "SEE ALSO"
-X(1), X Toolkit documentation
-.SH COPYRIGHT
-Copyright 1988, Massachusetts Institute of Technology.
+X(__miscmansuffix__), X Toolkit documentation
 .br
-See \fIX(1)\fP for a full statement of rights and permissions.
+See \fIX(__miscmansuffix__)\fP for a full statement of rights and permissions.
 .SH AUTHOR
 Keith Packard, MIT X Consortium
 .br
-Copied from the NeWS version written (apparantly) by Jeremy Huxtable as seen
+Copied from the NeWS version written (apparently) by Jeremy Huxtable as seen
 at SIGGRAPH '88

@@ -2,6 +2,7 @@
  * header file for transformed coordinate system.  No rotations
  * supported, as elipses cannot be rotated in X.
  */
+/* $XFree86$ */
 
 typedef struct _transform {
 	double	mx, bx;
@@ -24,3 +25,11 @@ typedef struct _TRectangle {
 # define Ty(x,y,t)	((((double) (y)) - (t)->by) / (t)->my)
 # define Twidth(w,h,t)	(((double) (w)) / (t)->mx)
 # define Theight(w,h,t)	(((double) (h)) / (t)->my)
+
+extern void TFillArc (Display *dpy, Drawable d, GC gc,
+                      Transform *t,
+                      double x, double y, double width, double height,
+                      int angle1, int angle2);
+extern void SetTransform (Transform *t,
+                          int xx1, int xx2, int xy1, int xy2,
+                          double tx1, double tx2, double ty1, double ty2);
