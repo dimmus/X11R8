@@ -5,16 +5,31 @@ if WITH_DEMOS
     # subdir('gpc')
     # endif
 
-    subdir('xcmstest')
-    subdir('ico')
-    subdir('maze')
-    subdir('puzzle')
-    subdir('xeyes')
-    subdir('xgamma')
-    # subdir('xgas_old') # TODO: find XGas.h file
-    subdir('xev')
-    # subdir('xgc')
-    if get_option('x11perf')
-    subdir('x11perf')
+    if get_option('demos-xcmstest')
+        subdir('xcmstest')
     endif
+    if get_option('demos-ico')
+        subdir('ico')
+    endif
+    if get_option('demos-maze')
+        subdir('maze')
+    endif
+    if get_option('demos-puzzle')
+        subdir('puzzle')
+    endif
+    if get_option('demos-xeyes')
+        subdir('xeyes')
+    endif
+    if get_option('demos-xgamma')
+        subdir('xgamma')
+    endif
+    if get_option('demos-xev')
+        subdir('xev')
+    endif
+    if get_option('demos-x11perf')
+        subdir('x11perf')
+    endif
+
+    # subdir('xgc')
+    # subdir('xgas_old') # TODO: find XGas.h file
 endif

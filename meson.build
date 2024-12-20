@@ -80,12 +80,12 @@ dir_build   = meson.project_build_root()
 dir_source  = meson.project_source_root()
 
 WITH_XSHMFENCE   = get_option('xshmfence')
-WITH_DEMOS       = get_option('demos')
 WITH_UNIT_TESTS  = false
 WITH_FONT_SERVER = get_option('build-font-server')
 WITH_TESTS       = get_option('build-tests')
 WITH_MAN         = get_option('docs-man')
 WITH_INT_PIXMAN  = get_option('use-builtin-pixman')
+WITH_DEMOS       = get_option('build-demos')
 
 dep_m            = cc.find_library('m',  required: false) # libxcvt
 dep_dl           = cc.find_library('dl', required: false) # xvmc, xserver
