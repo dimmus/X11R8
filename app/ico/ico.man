@@ -1,4 +1,6 @@
-.TH ICO 1 "Release 5" "X Version 11"
+.\" $XConsortium: ico.man,v 1.14 94/04/17 20:45:16 gildea Exp $
+.\" $XFree86: xc/programs/ico/ico.man,v 1.4 2003/03/19 01:49:28 dawes Exp $
+.TH ICO 1 __xorgversion__
 .SH NAME
 ico \- animate an icosahedron or other polyhedron
 .SH SYNOPSIS
@@ -54,6 +56,13 @@ about each object.
 .B -colors \fIcolor color ...\fP
 Specify what colors should be used to draw the filled faces of the object.
 If less colors than faces are given, the colors are reused.
+.SH PROGRAM TREMINATION
+.LP
+Pressing "q" will close a window. If compiled with threads support, the
+program will stop only when all threads terminate. You can also close an
+animation window using the ICCCM \fIdelete\fP message (depending on your
+window manager, you will have a decoration button or menu to send such
+message).
 .SH ADDING POLYHEDRA
 .LP
 If you have the source to ico, it is very easy to add more polyhedra.
@@ -69,14 +78,15 @@ This will recreate the file allobjs.h, which lists all of the objXXX.h
 files.
 Doing a 'make' after this will rebuild ico with the new object information.
 .SH "SEE ALSO"
-X(1)
+X(__miscmansuffix__)
 .SH BUGS
 .LP
 Pyramids and tetrahedrons with filled faces do not display correctly.
 .LP
-A separate color cell is allocated for each name in the -colors list,
-even when the same name may be specified twice.
+A separate color cell is allocated for each name in the -colors list, even
+when the same name may be specified twice.  Color allocation fails in
+TrueColor displays and option \fI-faces\fP does not work well.
 .SH COPYRIGHT
-Copyright 1988, Massachusetts Institute of Technology.
+Copyright 1994 X Consortium
 .br
-See \fIX(1)\fP for a full statement of rights and permissions.
+See \fIX(__miscmansuffix__)\fP for a full statement of rights and permissions.
