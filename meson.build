@@ -178,7 +178,7 @@ subdir('lib' / 'src' / 'xtrans')
 subdir('font') # <- xtrans
 subdir('lib' / 'src' / 'xau')
 subdir('lib' / 'src' / 'xdmcp')
-# subdir('lib' / 'src' / 'xcb')     # <- xdmcp, xau
+# subdir('lib' / 'src' / 'xcb')     # <- xdmcp, xau, server
 subdir('lib' / 'src' / 'x11')
 subdir('lib' / 'src' / 'ice')
 subdir('lib' / 'src' / 'sm')

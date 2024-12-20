@@ -16,5 +16,11 @@ meson compile -C build
 meson install -C build
 ```
 
-### Error with "StringDefs.h"
-If you get an error `fatal error: StringDefs.h: No such file or directory`, no problem, simply **continue** the compilation. When you build on very fast PCs with ccache, Meson cannot find compile-time generated "StringDefs.h" file so quickly. Still search the way to avoid this problem.
+## - **Monolithic X package (again).**
+It's quite annoying to gather a tenth of separate packages to get Xserver running. Moreover, all changes to separate libraries and extensions *should be* tested for regression for the *whole* X package.
+- **Complete picture of X Window System.** Especially for newcomers, it is very difficult to observe the whole system and their internal and external dependencies. The earlier decision to divide packages to force their individual progress failed in general.
+- **Common standards for all subpackages.** Let's apply equal development environments and build conditions to all system parts.
+
+## Error with "StringDefs.h"
+If you get a fatal error, `StringDefs.h: No such file or directory`, no problem; simply **continue** the compilation. When you build on very fast PCs with ccache, Meson cannot find the compile-time-generated "StringDefs.h" file so quickly. Still search for the way to avoid this problem.
+
