@@ -53,6 +53,7 @@ add_project_arguments(
 add_project_arguments(
   '-DHAVE_CONFIG_H',
   '-D_GNU_SOURCE',
+  '-D_BSD_SOURCE',
   '-D_XOPEN_SOURCE', # xfont
   '-D__EXTENSIONS__',
   '-D_CONST_X_STRING',
@@ -89,14 +90,12 @@ WITH_DEMOS       = get_option('build-demos')
 
 dep_m            = cc.find_library('m',  required: false) # libxcvt
 dep_dl           = cc.find_library('dl', required: false) # xvmc, xserver
-dep_zlib         = dependency('zlib') # xfont
+dep_zlib         = dependency('zlib') # xfont, fontenc
 dep_bzip2        = dependency('bzip2') # xfont
-dep_freetype2    = dependency('freetype2') # xfont
-dep_zlib         = dependency('zlib') # fontenc
+dep_freetype2    = dependency('freetype2') # xfont, xft
+dep_fontconfig   = dependency('fontconfig', version: '>= 2.5.92') # xft
 dep_xcb          = dependency('xcb', version: '>= 1.11.1') # x11
 dep_uuid         = dependency('uuid', required: false) # sm
-dep_freetype2    = dependency('freetype2', version: '>= 2.1.6') # xft
-dep_fontconfig   = dependency('fontconfig', version: '>= 2.5.92') # xft
 dep_gettext      = dependency('gettext', required: false) # xpm
 # xserver
 dep_null         = dependency('', required: false)
@@ -197,6 +196,7 @@ if WITH_TESTS
 subdir('lib' / 'test')
 endif
 subdir('lib' / 'example')
+subdir('font' / 'client')
 subdir('extension')
 subdir('server')
 subdir('demo')
