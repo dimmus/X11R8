@@ -59,45 +59,45 @@
 #define THOUSAND	1000
 
 LtDefineEntry ErrorTbl[] = {
-    "Success",		Success,
-    "BadRequest",	BadRequest,
-    "BadValue",		BadValue,
-    "BadWindow",	BadWindow,
-    "BadPixmap",	BadPixmap,
-    "BadAtom",		BadAtom,
-    "BadCursor",	BadCursor,
-    "BadFont",		BadFont,
-    "BadMatch",		BadMatch,
-    "BadDrawable",	BadDrawable,
-    "BadAccess",	BadAccess,
-    "BadAlloc",		BadAlloc,
-    "BadColor",		BadColor,
-    "BadGC",		BadGC,
-    "BadIDChoice",	BadIDChoice,
-    "BadName",		BadName,
-    "BadLength",	BadLength,
-    "BadImplementation",    BadImplementation,
-    "FirstExtensionError",  FirstExtensionError,
-    "LastExtensionError",   LastExtensionError,
-    "",			    0
+    {"Success",		Success},
+    {"BadRequest",	BadRequest},
+    {"BadValue",		BadValue},
+    {"BadWindow",	BadWindow},
+    {"BadPixmap",	BadPixmap},
+    {"BadAtom",		BadAtom},
+    {"BadCursor",	BadCursor},
+    {"BadFont",		BadFont},
+    {"BadMatch",		BadMatch},
+    {"BadDrawable",	BadDrawable},
+    {"BadAccess",	BadAccess},
+    {"BadAlloc",		BadAlloc},
+    {"BadColor",		BadColor},
+    {"BadGC",		BadGC},
+    {"BadIDChoice",	BadIDChoice},
+    {"BadName",		BadName},
+    {"BadLength",	BadLength},
+    {"BadImplementation",    BadImplementation},
+    {"FirstExtensionError",  FirstExtensionError},
+    {"LastExtensionError",   LastExtensionError},
+    {"",			    0}
 };
 
 LtDefineEntry AllocTbl[] = {
-    "AllocNone",	AllocNone,
-    "AllocAll",		AllocAll,
-    "illegala1",	THOUSAND,
-    "",			0
+    {"AllocNone",	AllocNone},
+    {"AllocAll",		AllocAll},
+    {"illegala1",	THOUSAND},
+    {"",			0}
 };
 
 LtDefineEntry FormatTbl[] = {
-    "RGBi",		XcmsRGBiFormat,
-    "RGB",		XcmsRGBFormat,
-    "UNDEFINED",	XcmsUndefinedFormat,
-    "CIEXYZ",		XcmsCIEXYZFormat,
-    "CIExyY",		XcmsCIExyYFormat,
-    "CIEuvY",		XcmsCIEuvYFormat,
-    "CIELab",		XcmsCIELabFormat,
-    "CIELuv",		XcmsCIELuvFormat,
-    "TekHVC",		XcmsTekHVCFormat,
-    "",			0
+    {"RGBi",		XcmsRGBiFormat},
+    {"RGB",		XcmsRGBFormat},
+    {"UNDEFINED",	XcmsUndefinedFormat},
+    {"CIEXYZ",		XcmsCIEXYZFormat},
+    {"CIExyY",		XcmsCIExyYFormat},
+    {"CIEuvY",		XcmsCIEuvYFormat},
+    {"CIELab",		XcmsCIELabFormat},
+    {"CIELuv",		XcmsCIELuvFormat},
+    {"TekHVC",		XcmsTekHVCFormat},
+    {"",			0}
 };
