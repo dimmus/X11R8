@@ -13,6 +13,12 @@ cc = meson.get_compiler('c')
 # if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
 #     test_wflags = [
 #         '-Wall',
+# 	      '-Wno-unused-parameter',
+# 	      '-Wno-sign-compare',	 # lots of work to get rid of this
+# 	      '-Wno-missing-field-initializers',
+# 	      '-Wlogical-op',
+# 	      '-Wimplicit-fallthrough',
+# 	      '-Wincompatible-pointer-types',
 #         '-Wpointer-arith',
 #         '-Wmissing-declarations',
 #         '-Wformat=2',
@@ -70,15 +76,15 @@ add_project_link_arguments(
   language: 'c'
 )
 
-dir_prefix  = get_option('prefix')
-dir_bin     = dir_prefix / get_option('bindir')
-dir_data    = dir_prefix / get_option('datadir')
-dir_include = dir_prefix / get_option('includedir')
-dir_lib     = dir_prefix / get_option('libdir')
-dir_man     = dir_prefix / get_option('mandir')
+dir_prefix       = get_option('prefix')
+dir_bin          = dir_prefix / get_option('bindir')
+dir_data         = dir_prefix / get_option('datadir')
+dir_include      = dir_prefix / get_option('includedir')
+dir_lib          = dir_prefix / get_option('libdir')
+dir_man          = dir_prefix / get_option('mandir')
 
-dir_build   = meson.project_build_root()
-dir_source  = meson.project_source_root()
+dir_build        = meson.project_build_root()
+dir_source       = meson.project_source_root()
 
 WITH_XSHMFENCE   = get_option('xshmfence')
 WITH_UNIT_TESTS  = false
@@ -108,58 +114,59 @@ dep_drm          = dependency('libdrm', version: '>= 2.4.116')
 # static
 dep_threads      = dependency('threads')
 
-python = import('python').find_installation()
-pkg    = import('pkgconfig')
-fs     = import('fs')
+python           = import('python').find_installation()
+pkg              = import('pkgconfig')
+fs               = import('fs')
 
-conf = configuration_data()
+conf             = configuration_data()
 
-inc_config = include_directories('.')
+inc_config       = include_directories('.')
 
-f_check    = []
-h_check    = []
-inc_ext    = []
-inc_x11    = []
-inc_lib    = [inc_config]
-inc_font   = []
-inc_static = []
+f_check          = []
+h_check          = []
+inc_ext          = []
+inc_x11          = []
+inc_lib          = [inc_config]
+inc_font         = []
+inc_static       = []
+inc_server       = []
 
 # libraries
-ver_ice        = '1.1.1'
-ver_sm         = '1.2.4'
-ver_x11        = '1.8.10'
-ver_xau        = '1.0.11'
-ver_xaw        = '1.0.16'
-ver_xcursor    = '1.2.3'
-ver_xcvt       = '0.1.2'
-ver_xdmcp      = '1.1.5'
-ver_xft        = '2.3.8'
-ver_xmu        = '1.2.1'
-ver_xpm        = '3.5.17'
-ver_xt         = '1.3.0'
-ver_xtrans     = '1.5.1'
-ver_xcb        = '1.17.0'
-ver_xshmfence  = '1.3.2'
+ver_ice          = '1.1.1'
+ver_sm           = '1.2.4'
+ver_x11          = '1.8.10'
+ver_xau          = '1.0.11'
+ver_xaw          = '1.0.16'
+ver_xcursor      = '1.2.3'
+ver_xcvt         = '0.1.2'
+ver_xdmcp        = '1.1.5'
+ver_xft          = '2.3.8'
+ver_xmu          = '1.2.1'
+ver_xpm          = '3.5.17'
+ver_xt           = '1.3.0'
+ver_xtrans       = '1.5.1'
+ver_xcb          = '1.17.0'
+ver_xshmfence    = '1.3.2'
 # extensions
-ver_dmx        = '1.1.5'
-ver_xcomposite = '0.4.6'
-ver_xdamage    = '1.1.6'
-ver_xext       = '1.3.6'
-ver_xf86dga    = '1.1.6'
-ver_xf86vm     = '1.1.5'
-ver_xfixes     = '6.0.1'
-ver_xi         = '1.8.2'
-ver_xinerama   = '1.1.5'
-ver_xkbfile    = '1.1.3'
-ver_xrandr     = '1.5.4'
-ver_xrender    = '0.9.11'
-ver_xres       = '1.2.2'
-ver_xss        = '1.2.4'
-ver_xtst       = '1.2.5'
-ver_xv         = '1.0.12'
-ver_xvmc       = '1.0.14'
+ver_dmx          = '1.1.5'
+ver_xcomposite   = '0.4.6'
+ver_xdamage      = '1.1.6'
+ver_xext         = '1.3.6'
+ver_xf86dga      = '1.1.6'
+ver_xf86vm       = '1.1.5'
+ver_xfixes       = '6.0.1'
+ver_xi           = '1.8.2'
+ver_xinerama     = '1.1.5'
+ver_xkbfile      = '1.1.3'
+ver_xrandr       = '1.5.4'
+ver_xrender      = '0.9.11'
+ver_xres         = '1.2.2'
+ver_xss          = '1.2.4'
+ver_xtst         = '1.2.5'
+ver_xv           = '1.0.12'
+ver_xvmc         = '1.0.14'
 # xserver
-ver_xserver    = '21.1.99.1'
+ver_xserver      = '21.1.99.1'
 
 subdir('static')
 # redefine dependencies with builtin static libs
@@ -199,6 +206,7 @@ subdir('lib' / 'example')
 subdir('font' / 'client')
 subdir('extension')
 subdir('server')
+subdir('driver')
 subdir('demo')
 
 FIRST_RUN = not fs.is_dir(dir_build / 'src')

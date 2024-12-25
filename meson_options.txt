@@ -108,11 +108,11 @@ option('docs-man',              type: 'boolean', value: true,    description: ''
 option('build-font-server',     type: 'boolean', value: false,   description: '')
 option('build-tests',           type: 'boolean', value: false,   description: '')
 
-# Build libraries:
+## Build libraries:
 option('xshmfence',             type: 'boolean', value: true)
 
-# Build demos:
-option('build-demos',           type: 'boolean', value: true)
+## Build demos:
+option('build-demos',           type: 'boolean', value: false)
 option('demos-x11perf',         type: 'boolean', value: true)
 option('demos-xcmstest',        type: 'boolean', value: true)
 option('demos-ico',             type: 'boolean', value: true)
@@ -122,9 +122,9 @@ option('demos-xeyes',           type: 'boolean', value: true)
 option('demos-xgamma',          type: 'boolean', value: true)
 option('demos-xev',             type: 'boolean', value: true)
 
-# External static libraries
-# static/pixman
-option('use-builtin-pixman',    type: 'boolean', value: true)
+## External static libraries
+#  static/pixman
+option('use-builtin-pixman',    type: 'boolean', value: false)
 option('loongson-mmi',          type: 'feature',                 description: 'Use Loongson MMI intrinsic optimized paths')
 option('mmx',                   type: 'feature',                 description: 'Use X86 MMX intrinsic optimized paths')
 option('sse2',                  type: 'feature',                 description: 'Use X86 SSE2 intrinsic optimized paths')
@@ -140,3 +140,9 @@ option('tls',                   type: 'feature',                 description: 'U
 option('openmp',                type: 'feature',                 description: 'Enable OpenMP for tests')
 option('cpu-features-path',     type: 'string',                  description: 'Path to platform-specific cpu-features.[ch] for systems that do not provide it (e.g. Android)')
 option('timers',                type: 'boolean', value : false,  description: 'Enable TIMER_* macros')
+
+## Drivers
+#  libinput
+option('sdkdir',                type: 'string',  value: '',      description: 'Directory to install header files in [default=from xorg-server pkgconf]')
+option('xorg-module-dir',       type: 'string',  value: '',      description: 'Default xorg module directory [default=from xorg-server pkgconf]')
+option('xorg-conf-dir',         type: 'string',  value: '',      description: 'Default xorg.conf.d directory [default=from xorg-server pkgconfig]')
