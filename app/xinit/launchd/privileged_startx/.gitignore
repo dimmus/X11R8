@@ -1,0 +1,9 @@
+10-tmpdirs
+20-font_cache
+*.privileged_startx.plist*
+privileged_startx
+privileged_startx.h
+privileged_startxServer.c
+privileged_startxServer.h
+privileged_startxUser.c
+

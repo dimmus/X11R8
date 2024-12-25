@@ -207,6 +207,7 @@ subdir('font' / 'client')
 subdir('extension')
 subdir('server')
 subdir('driver')
+subdir('app')
 subdir('demo')
 
 FIRST_RUN = not fs.is_dir(dir_build / 'src')
