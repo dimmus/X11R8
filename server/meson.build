@@ -480,32 +480,35 @@ dep_common = [
     libxdmcp,
 ]
 
-inc = [
+inc = [include_directories(
+    '.',
+    'Xext',
+    'Xi',
+    'composite',
+    'damageext',
+    'exa',
+    'fb',
+    'glamor',
+    'mi',
+    'miext/damage',
+    'miext/shadow',
+    'miext/sync',
+    'dbe',
+    'dix',
+    'dri3',
+    'include',
+    'present',
+    'randr',
+    'render',
+    'xfixes',
+)]
+
+inc_server += inc
+
+inc += [
     inc_x11,
     inc_lib,
-    inc_font,
-    include_directories(
-        '.',
-        'Xext',
-        'Xi',
-        'composite',
-        'damageext',
-        'exa',
-        'fb',
-        'glamor',
-        'mi',
-        'miext/damage',
-        'miext/shadow',
-        'miext/sync',
-        'dbe',
-        'dix',
-        'dri3',
-        'include',
-        'present',
-        'randr',
-        'render',
-        'xfixes',
-    )
+    inc_font,   
 ]
 
 build_xselinux = false
@@ -605,6 +608,8 @@ libxserver = [
     libxserver_os,
     libxserver_dri3,
 ]
+
+xserver = declare_dependency(link_with: libxserver)
 
 subdir('hw')
 

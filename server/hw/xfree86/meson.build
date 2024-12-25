@@ -13,6 +13,8 @@ xorg_inc = include_directories(
     'vgahw',
 )
 
+inc_server += xorg_inc
+
 xorg_c_args = []
 xorg_c_args += '-DHAVE_XORG_CONFIG_H'
 xorg_c_args += '-DXORG_NO_SDKSYMS'
