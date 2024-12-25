@@ -1,5 +1,5 @@
-ver_driver_libinput = '1.5.0'
-driver_version = ver_driver_libinput.split('.')
+ver_libinput = '1.5.0'
+driver_version = ver_libinput.split('.')
 
 dep_libinput = dependency('libinput', version: '>= 1.11.0')
 
