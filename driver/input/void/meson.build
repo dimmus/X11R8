@@ -1,4 +1,9 @@
 ver_void = '1.4.2'
+driver_version = ver_void.split('.')
+
+conf.set('VOID_VERSION_MAJOR', driver_version[0])
+conf.set('VOID_VERSION_MINOR', driver_version[1])
+conf.set('VOID_VERSION_PATCHLEVEL', driver_version[2])
 
 src_driver = files(
     'void.c',
