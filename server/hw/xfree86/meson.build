@@ -1,4 +1,6 @@
-xorg_inc = include_directories(
+xorg_inc = [
+    inc_static,
+    include_directories(
     'common',
     'ddc',
     'dri2',
@@ -11,7 +13,7 @@ xorg_inc = include_directories(
     'parser',
     'ramdac',
     'vgahw',
-)
+)]
 
 inc_server += xorg_inc
 

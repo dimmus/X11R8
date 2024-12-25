@@ -508,7 +508,8 @@ inc_server += inc
 inc += [
     inc_x11,
     inc_lib,
-    inc_font,   
+    inc_font,
+    inc_static
 ]
 
 build_xselinux = false
