@@ -1,0 +1,20 @@
+Author: Julien Cristau <jcristau@debian.org>
+Description: Change allowFontOps default
+ Default the allowFontOps resource to false, to prevent potential
+ security issues.
+
+---
+ xterm.man |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/xterm.man
++++ b/xterm.man
+@@ -2259,7 +2259,7 @@ The default is \*(``true\*(''.
+ .TP
+ .B "allowFontOps\fP (class\fB AllowFontOps\fP)"
+ Specifies whether control sequences that set/query the font should be allowed.
+-The default is \*(``true\*(''.
++The default is \*(``false\*(''.
+ .TP
+ .B "allowMouseOps\fP (class\fB AllowMouseOps\fP)"
+ Specifies whether control sequences that enable \fI\*n\fP to send

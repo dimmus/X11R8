@@ -1,0 +1,7 @@
+etc/X11/app-defaults/*
+usr/bin/*
+usr/share/doc
+usr/share/man/man1/*
+usr/share/pixmaps
+usr/share/applications/*
+usr/share/icons

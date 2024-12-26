@@ -1,0 +1,85 @@
+#!/usr/bin/make -f
+# Debian rules file for xterm source package
+
+# Copyright 2005 David Martínez Moreno
+#
+# Licensed under the GNU General Public License, version 2.  See the file
+# /usr/share/common-licenses/GPL or <http://www.gnu.org/copyleft/gpl.txt>.
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+CFLAGS = $(shell dpkg-buildflags --get CFLAGS)
+LDFLAGS = $(shell dpkg-buildflags --get LDFLAGS)
+CPPFLAGS = $(shell dpkg-buildflags --get CPPFLAGS)
+
+HTML2TEXT:=lynx -dump -nolist -display_charset=utf-8
+
+DEBTREEDIR:=$(CURDIR)/debian/tmp
+
+DESKTOP_FLAGS = --vendor debian \
+		--dir=$(DEBTREEDIR)/usr/share/applications
+
+# disable some unsafe operations
+CPPFLAGS += \
+	-DDEF_ALLOW_FONT=False \
+	-DDEF_ALLOW_TCAP=False \
+	-DDEF_DISALLOWED_WINDOW=\\\"1,2,3,4,5,6,7,8,9,11,13,14,18,19,20,21,GetSelection,SetSelection,SetWinLines,SetXprop\\\"
+
+override_dh_auto_clean:
+	if [ -f ctlseqs.txt.old ]; then mv -f ctlseqs.txt.old ctlseqs.txt; fi
+	dh_auto_clean
+
+override_dh_autoreconf:
+	dh_autoreconf autoreconf-dickey -- -f -i
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		--exec-prefix=/usr \
+		--with-app-defaults=/etc/X11/app-defaults \
+		--with-icondir=/usr/share/icons \
+		--with-icon-theme=yes \
+		--with-tty-group=tty \
+		--enable-warnings \
+		--enable-logging \
+		--enable-wide-chars \
+		--enable-luit \
+		--enable-256-color \
+		--disable-imake \
+		--enable-narrowproto \
+		--enable-exec-xterm \
+		--enable-dabbrev \
+		--enable-backarrow-is-erase \
+		--enable-sixel-graphics \
+		--with-utempter \
+		--with-desktop-category=System,TerminalEmulator, \
+		DESKTOP_FLAGS="$(DESKTOP_FLAGS)" \
+		CFLAGS="$(CFLAGS)" \
+		CPPFLAGS="$(CPPFLAGS)" \
+		LDFLAGS="$(LDFLAGS)" \
+		LUIT=/usr/bin/luit
+
+override_dh_auto_build:
+	if [ ! -f ctlseqs.txt.old ] && [ -f ctlseqs.txt ]; \
+	   then mv -f ctlseqs.txt ctlseqs.txt.old; \
+	   else rm -f ctlseqs.txt; \
+	fi
+	dh_auto_build -- all ../ctlseqs.txt
+	$(HTML2TEXT) debian/local/xterm.faq.html >debian/local/xterm.faq
+
+override_dh_auto_install:
+	dh_auto_install --destdir=debian/tmp -- install-desktop
+	## Install lxterm command and manual page.
+	install -m 755 debian/local/lxterm $(DEBTREEDIR)/usr/bin
+	install -m 755 debian/local/lxterm.1 $(DEBTREEDIR)/usr/share/man/man1
+	## Install terminfo and termcap precompiled definitions.
+	install -d $(DEBTREEDIR)/usr/share/doc/xterm
+	install -m 644 termcap  $(DEBTREEDIR)/usr/share/doc/xterm/xterm.termcap
+	install -m 644 terminfo $(DEBTREEDIR)/usr/share/doc/xterm/xterm.terminfo
+
+%:
+	dh $@ --builddirectory=build/
+
+debian/local/xterm.faq.html:
+	wget -O $@ https://invisible-island.net/xterm/xterm.faq.html
+
+.PHONY: debian/local/xterm.faq.html
