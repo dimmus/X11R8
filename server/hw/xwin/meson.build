@@ -108,11 +108,8 @@ rsrc = windows.compile_resources(
 )
 srcs_windows += rsrc
 
-flex = find_program('flex')
-bison = find_program('bison')
-
 lgen = generator(
-    flex,
+    exe_flex,
     output: '@PLAINNAME@.yy.c',
     arguments: ['-i', '-o', '@OUTPUT@', '@INPUT@']
 )
@@ -121,7 +118,7 @@ lfiles = lgen.process('winprefslex.l')
 srcs_windows += lfiles
 
 pgen = generator(
-    bison,
+    exe_bison,
     output: ['@BASENAME@.c', '@BASENAME@.h'],
     arguments: ['@INPUT@', '--defines=@OUTPUT1@', '--output=@OUTPUT0@']
 )

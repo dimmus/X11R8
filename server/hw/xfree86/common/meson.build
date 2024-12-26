@@ -81,7 +81,7 @@ srcs_xorg_common += custom_target(
     'xf86DefModeSet.c',
     output: 'xf86DefModeSet.c',
     input: ['modeline2c.awk', 'vesamodes', 'extramodes'],
-    command: [find_program('awk'), '-f', '@INPUT0@', '@INPUT1@', '@INPUT2@'],
+    command: [exe_awk, '-f', '@INPUT0@', '@INPUT1@', '@INPUT2@'],
     capture: true,
 )
 

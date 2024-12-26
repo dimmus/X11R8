@@ -89,11 +89,6 @@ else
     build_systemd_logind = get_option('systemd_logind') == 'true'
 endif
 
-with_dtrace = get_option('dtrace')
-if with_dtrace
-    dtrace = find_program('dtrace', required: true)
-endif
-
 build_xorg = false
 if (host_machine.system() != 'windows')
     if get_option('xorg') == 'auto'
@@ -620,8 +615,6 @@ endif
 
 if build_xorg
     sdkconfig = configuration_data()
-    awk = find_program('awk')
-
     sdkconfig.set('prefix', get_option('prefix'))
     sdkconfig.set('exec_prefix', '${prefix}')
     sdkconfig.set('libdir', '${exec_prefix}' / get_option('libdir'))
@@ -631,42 +624,37 @@ if build_xorg
     sdkconfig.set('sdkdir', '${prefix}' / get_option('includedir') / 'xorg')
     sdkconfig.set('sysconfigdir', '${datarootdir}' / 'X11' / 'xorg.conf.d')
     sdkconfig.set('abi_ansic',
-        run_command(awk, '-F', '[(,)]',
+        run_command(exe_awk, '-F', '[(,)]',
                     '/^#define ABI_ANSIC.*SET/ { printf "%d.%d", $2, $3 }',
                     files('hw/xfree86/common/xf86Module.h'),
                     check: false
         ).stdout()
     )
     sdkconfig.set('abi_videodrv',
-        run_command(awk, '-F', '[(,)]',
+        run_command(exe_awk, '-F', '[(,)]',
                     '/^#define ABI_VIDEODRV.*SET/ { printf "%d.%d", $2, $3 }',
                     files('hw/xfree86/common/xf86Module.h'),
                     check: false
         ).stdout()
     )
     sdkconfig.set('abi_xinput',
-        run_command(awk, '-F', '[(,)]',
+        run_command(exe_awk, '-F', '[(,)]',
                     '/^#define ABI_XINPUT.*SET/ { printf "%d.%d", $2, $3 }',
                     files('hw/xfree86/common/xf86Module.h'),
                     check: false
         ).stdout()
     )
     sdkconfig.set('abi_extension',
-        run_command(awk, '-F', '[(,)]',
+        run_command(exe_awk, '-F', '[(,)]',
                     '/^#define ABI_EXTENSION.*SET/ { printf "%d.%d", $2, $3 }',
                     files('hw/xfree86/common/xf86Module.h'),
                     check: false
         ).stdout()
     )
 
-    sdk_required_modules = [
-      'pixman-1 >= 0.27.2',
-      f'xproto @xproto_req@',
-    ]
-
     # XXX this isn't trying very hard, but hard enough.
-    sdkconfig.set('PACKAGE_VERSION', meson.project_version())
-    sdkconfig.set('SDK_REQUIRED_MODULES', ' '.join(sdk_required_modules))
+    sdkconfig.set('PACKAGE_VERSION', ver_xserver)
+    sdkconfig.set('SDK_REQUIRED_MODULES', 'pixman xproto')
     sdkconfig.set('symbol_visibility', '-fvisibility=hidden')
     sdkconfig.set('XORG_DRIVER_LIBS', '')
 

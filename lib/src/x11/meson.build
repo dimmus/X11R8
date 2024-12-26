@@ -55,22 +55,15 @@ if get_option('xthreads')
   # endif
 endif
 
-# Location of libX11 data
-X11_DATADIR = dir_data / 'X11'
-# Location of libX11 locale data
-X11_LOCALEDATADIR = X11_DATADIR / 'locale'
-# Location of libX11 library data
-X11_LIBDIR = dir_lib / 'X11'
-# Location of libX11 locale libraries
-X11_LOCALELIBDIR = X11_LIBDIR / 'locale'
-# Location of libX11 locale data
-X11_LOCALEDIR = X11_LOCALEDATADIR
-# Location of keysym database
-XKEYSYMDB = X11_DATADIR / 'XKeysymDB'
-# Location of error message database
-XERRORDB = X11_DATADIR / 'XErrorDB'
-
-conf.set_quoted('XLOCALELIBDIR', X11_LOCALELIBDIR)
+conf.set_quoted('X11_DATADIR'       , dir_data / 'X11')               # Location of libX11 data
+conf.set_quoted('X11_LOCALEDATADIR' , dir_data / 'X11' / 'locale')    # Location of libX11 locale data
+conf.set_quoted('X11_LIBDIR'        , dir_lib  / 'X11')               # Location of libX11 library data
+conf.set_quoted('X11_LOCALELIBDIR'  , dir_lib  / 'X11' / 'locale')    # Location of libX11 locale libraries
+conf.set_quoted('X11_LOCALEDIR'     , dir_lib  / 'X11' / 'locale')    # Location of libX11 locale data
+conf.set_quoted('XKEYSYMDB'         , dir_data / 'X11' / 'XKeysymDB') # Location of keysym database   
+conf.set_quoted('XERRORDB'          , dir_data / 'X11' / 'XErrorDB')  # Location of error message database
+conf.set_quoted('XLOCALELIBDIR'     , dir_lib  / 'X11' / 'locale')
+conf.set('USE_DYNAMIC_XCURSOR', 1)
 
 subdir('modules/im')
 subdir('modules/lc')

@@ -36,8 +36,8 @@ srcs_dix = [
 ]
 
 dtrace_src = []
-if with_dtrace
-    dtrace_object = generator(dtrace,
+if WITH_DTRACE
+    dtrace_object = generator(exe_dtrace,
         output: '@BASENAME@.o',
         arguments: ['-G', '-s', '@INPUT@', '-o', '@OUTPUT@']
     )

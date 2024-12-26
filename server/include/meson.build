@@ -31,7 +31,7 @@ cc.compiles('''
 ''',
     name: 'CLOCK_MONOTONIC') ? '1': false)
 
-conf_data.set('XSERVER_DTRACE', with_dtrace ? '1': false)
+conf_data.set('XSERVER_DTRACE', WITH_DTRACE ? '1': false)
 
 if host_machine.endian() == 'little'
     conf_data.set('X_BYTE_ORDER', 'X_LITTLE_ENDIAN')
@@ -243,7 +243,7 @@ conf_data.set('XvMCExtension', build_xvmc ? '1': false)
 # needed by several extensions
 build_registry_resource = (build_xselinux or build_res)
 conf_data.set('X_REGISTRY_RESOURCE', build_registry_resource ? '1': false)
-build_registry_request = (build_xselinux or build_xsecurity or with_dtrace)
+build_registry_request = (build_xselinux or build_xsecurity or WITH_DTRACE)
 conf_data.set('X_REGISTRY_REQUEST', build_registry_request ? '1': false)
 
 conf_data.set('HAVE_SHA1_IN_' + sha1.to_upper(), '1', description: 'Use @0@ SHA1 functions'.format(sha1))
@@ -430,8 +430,8 @@ configure_file(output: 'xwayland-config.h',
 
 dtrace_hdr = []
 dtrace_tmpl = files('Xserver.d')
-if with_dtrace
-    dtrace_header = generator(dtrace,
+if WITH_DTRACE
+    dtrace_header = generator(exe_dtrace,
         output: '@BASENAME@-dtrace.h',
         arguments: ['-h', '-s', '@INPUT@', '-o', '@OUTPUT@']
     )

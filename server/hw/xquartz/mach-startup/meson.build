@@ -1,7 +1,6 @@
 # mach interface
-mig = find_program('mig')
 mach_startup = custom_target('mach_startup',
-    command: [mig,
+    command: [exe_mig,
               '-sheader', '@OUTPUT0@', '-header', '@OUTPUT2@',
               '-server', '@OUTPUT1@', '-user', '@OUTPUT3@',
               '@INPUT@'],

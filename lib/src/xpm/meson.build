@@ -3,9 +3,8 @@ lib_args = []
 f_check += ['strlcat', 'fork', 'closefrom']
 
 if get_option('open-zfile')
-  gzip = find_program('gzip')
-  if gzip.found()
-    XPM_PATH_GZIP = gzip.full_path()
+  if exe_gzip.found()
+    XPM_PATH_GZIP = exe_gzip.full_path()
     conf.set_quoted('XPM_PATH_GZIP', XPM_PATH_GZIP)
   endif
 
