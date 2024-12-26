@@ -93,26 +93,35 @@ WITH_TESTS       = get_option('build-tests')
 WITH_MAN         = get_option('docs-man')
 WITH_INT_PIXMAN  = get_option('use-builtin-pixman')
 WITH_DEMOS       = get_option('build-demos')
+WITH_DTRACE      = get_option('dtrace')
 
-dep_m            = cc.find_library('m',  required: false) # libxcvt
-dep_dl           = cc.find_library('dl', required: false) # xvmc, xserver
-dep_zlib         = dependency('zlib') # xfont, fontenc
-dep_bzip2        = dependency('bzip2') # xfont
-dep_freetype2    = dependency('freetype2') # xfont, xft
-dep_fontconfig   = dependency('fontconfig', version: '>= 2.5.92') # xft
-dep_xcb          = dependency('xcb', version: '>= 1.11.1') # x11
-dep_uuid         = dependency('uuid', required: false) # sm
-dep_gettext      = dependency('gettext', required: false) # xpm
+dep_m            = cc.find_library('m',         required: false) # libxcvt
+dep_dl           = cc.find_library('dl',        required: false) # xvmc, xserver
+dep_zlib         = dependency('zlib',           required: false) # xfont, fontenc
+dep_bzip2        = dependency('bzip2',          required: false) # xfont
+dep_freetype2    = dependency('freetype2',      required: false) # xfont, xft
+dep_fontconfig   = dependency('fontconfig',     required: false, version: '>= 2.5.92') # xft
+dep_xcb          = dependency('xcb',            required: false, version: '>= 1.11.1') # x11
+dep_uuid         = dependency('uuid',           required: false) # sm
+dep_gettext      = dependency('gettext',        required: false) # xpm
 # xserver
-dep_null         = dependency('', required: false)
-dep_pixman       = dependency('pixman-1')
+dep_null         = dependency('',               required: false)
+dep_pixman       = dependency('pixman-1',       required: false)
 dep_libbsd       = dependency('libbsd-overlay', required: false)
-dep_xkbcomp      = dependency('xkbcomp', required: false)
-dep_dbus         = dependency('dbus-1', version: '>= 1.0', required: get_option('systemd_logind') == 'true')
-dep_fontutil     = dependency('fontutil', required: false)
-dep_drm          = dependency('libdrm', version: '>= 2.4.116')
+dep_xkbcomp      = dependency('xkbcomp',        required: false)
+dep_dbus         = dependency('dbus-1',         required: get_option('systemd_logind') == 'true', version: '>= 1.0')
+dep_fontutil     = dependency('fontutil',       required: false)
+dep_drm          = dependency('libdrm',         required: false, version: '>= 2.4.116')
 # static
 dep_threads      = dependency('threads')
+
+exe_bison        = find_program('bison',        required: false)
+exe_flex         = find_program('flex',         required: false)
+exe_gzip         = find_program('gzip',         required: false)
+exe_awk          = find_program('awk',          required: false)
+exe_dtrace       = find_program('dtrace',       required: WITH_DTRACE)
+exe_python       = find_program('python3',      required: false)
+exe_mig          = find_program('mig',          required: false) # xquarz, mach interface
 
 python           = import('python').find_installation()
 pkg              = import('pkgconfig')
@@ -252,7 +261,10 @@ conf.set('HAVE_STRNDUP', cc.has_function('strndup') and cc.has_header_symbol('st
 conf.set('HAVE_UNLOCKED_STDIO', cc.has_function('getc_unlocked'))
 
 if WITH_MAN
-  prog_sed = find_program('sed')
+  exe_sed  = find_program('sed',      required: false)
+  xmlto    = find_program('xmlto',    required: false)
+  xsltproc = find_program('xsltproc', required: false) # UNUSED, require_devel_docs
+  fop      = find_program('fop',      required: false) # require_docs_pdf
   subdir('doc' / 'man')
 endif
 
