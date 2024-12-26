@@ -4,9 +4,6 @@ require_docs_pdf = (require_docs or require_devel_docs) and get_option('docs-pdf
 
 dep_sgml_doctools = dependency('xorg-sgml-doctools',
                                required: require_docs or require_devel_docs)
-xmlto = find_program('xmlto', required: require_docs or require_devel_docs)
-# xsltproc = find_program('xsltproc', required: require_docs or require_devel_docs) # UNUSED
-fop = find_program('fop', required: require_docs_pdf)
 
 build_docs = (get_option('docs') != 'false' and
               dep_sgml_doctools.found() and xmlto.found())

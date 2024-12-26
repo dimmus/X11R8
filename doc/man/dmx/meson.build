@@ -9,7 +9,7 @@ foreach man: [
     input: '@0@.man'.format(man),
     output: '@0@.3'.format(man),
     command: [
-      prog_sed,
+      exe_sed,
       '-e', 's/__xorgversion__/"libdmx @0@" "X Version 11"/'.format(ver_dmx),
       '-e', 's/__libmansuffix__/3/',
       '-e', 's/__vendorversion__/1/',
