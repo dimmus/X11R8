@@ -581,7 +581,6 @@ Cmd_SetInputDir(argbuf)
     struct stat statbuf;
 
     if ((sscanf(argbuf, "%s", tmpstr) < 1) || (strcmp("-help", tmpstr) == 0)) {
-SetInputDir_Usage:
 	    printf("Usage:\n");
 	    printf("\tSet_idir dirname \n\n");
 	    return(0);
@@ -625,7 +624,6 @@ Cmd_SetVerificationDir(argbuf)
     struct stat statbuf;
 
     if ((sscanf(argbuf, "%s", tmpstr) < 1) || (strcmp("-help", tmpstr) == 0)) {
-SetVerificationDir_Usage:
 	    printf("Usage:\n");
 	    printf("\tSet_vdir dirname \n\n");
 	    return(0);
@@ -669,7 +667,6 @@ Cmd_SetResultDir(argbuf)
     struct stat statbuf;
 
     if ((sscanf(argbuf, "%s", tmpstr) < 1) || (strcmp("-help", tmpstr) == 0)) {
-SetResultDir_Usage:
 	    printf("Usage:\n");
 	    printf("\tSet_rdir dirname \n\n");
 	    return(0);
@@ -712,7 +709,6 @@ Cmd_GetInputDir(argbuf)
     char tmpstr[BUFSIZ];
 
     if (sscanf(argbuf, "%s", tmpstr) > 0) {
-GetInputDir_Usage:
 	    printf("Usage:\n");
 	    printf("\tGet_idir\n\n");
 	    return(0);
@@ -743,7 +739,6 @@ Cmd_GetVerificationDir(argbuf)
     char tmpstr[BUFSIZ];
 
     if (sscanf(argbuf, "%s", tmpstr) > 0) {
-GetVerificationDir_Usage:
 	    printf("Usage:\n");
 	    printf("\tGet_vdir\n\n");
 	    return(0);
@@ -774,7 +769,6 @@ Cmd_GetResultDir(argbuf)
     char tmpstr[BUFSIZ];
 
     if (sscanf(argbuf, "%s", tmpstr) > 0) {
-GetResultDir_Usage:
 	    printf("Usage:\n");
 	    printf("\tGet_rdir\n\n");
 	    return(0);
@@ -821,7 +815,6 @@ Cmd_CreateColormap(buf)
 	    allocStr
 	    ) < 2) {
 	printf("Invalid argument(s): %s\n", buf);
-CreateColormap_Usage:
 	printf("Usage:\n");
 	printf("    CreateColormap <Name> <AllocFlag>\n\n");
 	printf("\tWhere:\n");
@@ -873,7 +866,6 @@ Cmd_FreeColormap(buf)
 	    name
 	    ) < 1) {
 	printf("Invalid argument(s): %s\n", buf);
-FreeColormap_Usage:
 	printf("Usage:\n");
 	printf("    FreeColormap <Name>\n\n");
 	printf("\tWhere:\n");
@@ -1244,9 +1236,6 @@ Cmd_QueryColor(buf)
     char formatStr[BUFSIZ];
     XcmsColorFormat result_format;
     char cmapname[BUFSIZ];
-    char stim1[BUFSIZ];
-    char stim2[BUFSIZ];
-    char stim3[BUFSIZ];
     char tmpstr[BUFSIZ];
     int nargs;
     Status retval;
@@ -1257,9 +1246,6 @@ Cmd_QueryColor(buf)
 
     formatStr[0] = '\0';
     cmapname[0] = '\0';
-    stim1[0] = '\0';
-    stim2[0] = '\0';
-    stim3[0] = '\0';
     tmpstr[0] = '\0';
 
     if (sscanf(buf, "%s", tmpstr) && (strcmp("-help", tmpstr) == 0)) {
@@ -2376,7 +2362,6 @@ Cmd_XAllocNamedColor(buf)
     XColor hardware_def;
     XColor rgb_db_def;
     int nargs;
-    char exactFormatStr[BUFSIZ];
     char colorStr[BUFSIZ];
     char cmapname[BUFSIZ];
     char tmpstr[BUFSIZ];
@@ -2385,7 +2370,6 @@ Cmd_XAllocNamedColor(buf)
 	return(0);
     }
 
-    exactFormatStr[0] = '\0';
     colorStr[0] = '\0';
     cmapname[0] = '\0';
     tmpstr[0] = '\0';
@@ -2527,7 +2511,6 @@ Cmd_XParseColor(buf)
     Colormap cmap;
     XColor exactSpec;
     int nargs;
-    char exactFormatStr[BUFSIZ];
     char colorStr[BUFSIZ];
     char cmapname[BUFSIZ];
     char tmpstr[BUFSIZ];
@@ -2536,7 +2519,6 @@ Cmd_XParseColor(buf)
 	return(0);
     }
 
-    exactFormatStr[0] = '\0';
     colorStr[0] = '\0';
     cmapname[0] = '\0';
     tmpstr[0] = '\0';

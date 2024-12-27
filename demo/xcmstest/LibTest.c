@@ -116,7 +116,7 @@ extern Display *pDpy ;
  *
  *	SYNOPSIS
  */
-void
+int
 main(int argc, char **argv)
 /*
  *	DESCRIPTION
@@ -150,7 +150,7 @@ main(int argc, char **argv)
     for(;;) {
 	printf("%s", LIBTEST_PROMPT);
 	if (fgets(buf, BUFSIZ, stdin) == NULL) {
-	    return;
+	    return(1);
 	}
 	if (EchoInput) {
 	    printf("%s", buf);
@@ -171,6 +171,8 @@ main(int argc, char **argv)
 	    fflush(stdout);
 	}
     }
+	
+	return(0);
 }
 
 /************************************************************************

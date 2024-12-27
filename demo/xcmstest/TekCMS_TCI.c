@@ -296,7 +296,7 @@ TC_CompareResults(tc_id, vfile, rfile)
 	fclose(fp2);
     return(retval);
 }
-
+
 /*
  *	NAME
  *		Cmd_ListTC
@@ -317,6 +317,7 @@ Cmd_ListTC(argbuf)
 {
 #ifndef DONE
     fprintf(stderr, "ListTC not yet implemented\n");
+	return(0); 
 #else
     char tmpstr[BUFSIZ];
     FuncTableEntry	*pTCEntry;

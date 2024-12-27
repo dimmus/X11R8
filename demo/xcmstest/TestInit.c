@@ -104,17 +104,21 @@ extern int LtErrorHandler();
 
 
 /* include one entry for every window, add more members if desired */
-static
-struct _winfo{
+#ifdef NEED_WINDOW
+static struct _winfo{
     XPoint pt;		/* window origin */
 } winfo[] = {
 	{0,	0}
 };
-
+#endif
 #define N_WINDOWS ( sizeof(winfo)/sizeof(XPoint) )
+#if defined(NEED_WINDOW) || defined(NEED_GC)
 static Window	w[N_WINDOWS];
-static XImage   *wImage[N_WINDOWS];
+#endif
+/* static XImage   *wImage[N_WINDOWS]; */
 
+#define N_FONTS ( sizeof(fontname)/sizeof(char *) )
+#ifdef NEED_FONTS
 /*
  * Include any special fonts that you will want to use, two examples given
  * Access X font id as font[0..n]
@@ -124,11 +128,9 @@ char * fontname[] = {
 	"vtbold",
 	"9x15"
 };
-#define N_FONTS ( sizeof(fontname)/sizeof(char *) )
 static Font	font[N_FONTS];
+#endif
 
-
-
 /*
  *	NAME
  *		TestInit - Connect to X Server and init X globals
@@ -156,14 +158,20 @@ TestInit()
 {
 
     int		i;
+#ifdef NEED_WINDOW
     XSetWindowAttributes xswa;
     XEvent	event;
     Visual	visual;
     Colormap	cmap;
     XColor	xColor,xColorExact;
+#endif
+#ifdef NEED_GC
     XGCValues	xgcValues;
     unsigned long xgcValueMask;
+#endif
+#if defined(NEED_WINDOW) || defined(NEED_GC)
     Status	status;
+#endif
     struct stat statbuf;
     char *idir = "./IDIR";
     char *rdir = "./RDIR";
@@ -303,8 +311,6 @@ TestCleanup()
  *
  */
 {
-    int i;
-
     /*
      * Clean up X resources
      */
@@ -313,13 +319,13 @@ TestCleanup()
 #endif /* NEED_GC */
 
 #ifdef NEED_WINDOW
-    for( i = 0; i < N_WINDOWS; i++) {
+    for(int i = 0; i < N_WINDOWS; i++) {
 	XDestroyWindow(pDpy,w[i]);
     }
 #endif /* NEED_WINDOW */
 
 #ifdef NEED_FONTS
-    for( i = 0; i < N_FONTS; i++) {
+    for(int i = 0; i < N_FONTS; i++) {
 	XUnloadFont(pDpy,font[i]);
     }
 #endif /* NEED_FONTS */
