@@ -1,7 +1,5 @@
 # version: 1.6.6
 
-lib_args = ['-fvisibility=hidden']
-
 lib_args = [
   '-DXAW_INTERNATIONALIZATION',
   '-DXAW_MULTIPLANE_PIXMAPS',
@@ -28,26 +26,6 @@ dep_int_xaw3d = [libx11, xproto, libxext, libxt, libxmu, libxpm, libi18n]
 src = []
 
 subdir('src')
-
-# src_lex = files(
-#   'src/laygram.y',
-#   'src/laylex.l',
-# )
-
-lib = library('xaw3d', src,
-  c_args: lib_args,
-  include_directories: inc_xaw3d,
-  dependencies: dep_int_xaw3d,
-  version: '8.0.0',
-  install: true,
-)
-
-libxaw3d = declare_dependency(
-  link_with: lib,
-  include_directories: inc_xaw3d,
-)
-
-meson.override_dependency('xaw3d', libxaw3d)
 
 hdr = files(
   'include/X11/Xaw3d/MultiSrc.h',
@@ -140,5 +118,3 @@ pkg.generate(lib,
   requires: ['xproto', 'xmu', 'xt'],
   requires_private: ['x11', 'xext']
 )
-
-# subdir('doc')

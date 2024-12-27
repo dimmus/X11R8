@@ -1,5 +1,4 @@
 %option prefix="LayYY"
-%option outfile="lex.yy.c"
 %option noinput
 %option nounput
 %{
@@ -17,9 +16,10 @@
 #include    "laygram.h"
 #include    "LayYY.h"
 
-#define yylval LayYYlval
+#define yylex LayYYlex
 #define yyerror LayYYerror
 #define yysetsource LayYYsetsource
+#define yyparse LayYYparse
 
 static char *yysourcebase, *yysource;
 

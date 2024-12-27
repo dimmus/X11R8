@@ -111,7 +111,7 @@ SOFTWARE.
 #ifdef L_tmpnam
 #define TMPSIZ L_tmpnam
 #else
-#define TMPSIZ 32		/* bytes to allocate for tmpnam */
+#define TMPSIZ 32		/* bytes to allocate for mkstemp */
 #endif
 
 #define MAGIC_VALUE ((XawTextPosition) -1) /* Magic value. */

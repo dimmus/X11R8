@@ -1018,7 +1018,7 @@ InitStringOrFile(AsciiSrcObject src, Boolean newString)
     case XawtextEdit:
 	if (src->ascii_src.string == NULL) {
 	    src->ascii_src.string = fileName;
-	    (void) tmpnam(src->ascii_src.string);
+	    (void) mkstemp(src->ascii_src.string);
 	    src->ascii_src.is_tempfile = TRUE;
 	    open_mode = "w" FOPEN_CLOEXEC;
 	} else

@@ -12,12 +12,17 @@
 
 #include    "LayYY.h"
 
+#define yylex LayYYlex
+#define yysetsource LayYYsetsource
 #define yysetdest LayYYsetdest
 #define yywrap LayYYwrap
+#define yyparse LayYYparse
 
 static LayoutPtr    *dest;
 
-static void yyerror(const char *s);
+static void LaYYerror(const char *s);
+
+#define yyerror LayYYerror
 
 %}
 

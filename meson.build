@@ -207,7 +207,7 @@ subdir('lib' / 'src' / 'xcursor') # <- xrender, xfixes
 subdir('lib' / 'src' / 'xpm')     # <- xext
 subdir('lib' / 'src' / 'xmu')     # <- xext
 subdir('lib' / 'src' / 'xaw')     # <- xext
-# subdir('lib' / 'src' / 'xaw3d')   # TODO: implement
+subdir('lib' / 'src' / 'xaw3d')
 if WITH_TESTS
 subdir('lib' / 'test')
 endif

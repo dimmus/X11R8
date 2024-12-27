@@ -93,3 +93,8 @@ TemplateClassRec templateClassRec = {
 };
 
 WidgetClass templateWidgetClass = (WidgetClass)&templateClassRec;
+
+static void
+TemplateAction(void)
+{
+}

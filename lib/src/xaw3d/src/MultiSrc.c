@@ -58,6 +58,7 @@ in this Software without prior written authorization from the X Consortium.
  *
  */
 
+#include <stdlib.h>
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -1102,7 +1103,7 @@ InitStringOrFile(MultiSrcObject src, Boolean newString)
             src->multi_src.allocated_string = False;
 	    src->multi_src.string = fileName;
 
-	    (void) tmpnam(src->multi_src.string);
+	    (void) mkstemp(src->multi_src.string);
 	    src->multi_src.is_tempfile = TRUE;
 	    open_mode = "w" FOPEN_CLOEXEC;
 	} else
