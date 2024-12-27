@@ -143,7 +143,7 @@ create_text_choice(Widget w, int type, int length, int width)
 static void
 WriteText(Widget w, XEvent *event, String *params, Cardinal *num_params)
 {
-  char mbuf[80];
+  char mbuf[81];
   int type;			/* which string # to send */
 
   type = atoi(params[0]);

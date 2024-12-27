@@ -31,6 +31,6 @@ if WITH_DEMOS
         subdir('x11perf')
     endif
 
-    # subdir('xgc') # TODO: needs bison to be installed
+    subdir('xgc')
     # subdir('xgas_old') # TODO: find XGas.h file
 endif

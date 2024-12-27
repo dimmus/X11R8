@@ -1,29 +1,5 @@
 ver_xgc = '1.0.6'
 
-gram = custom_target('gram.[ch]',
-  input:   ['gram.y'],
-  output:  ['gram.c', 'gram.h'],
-  command: [
-    exe_bison,
-    '-y',
-    '-d',
-    '-o',
-    '@OUTPUT0@',
-    '@INPUT@',
-  ],
-)
-
-lex = custom_target('lex.c',
-  input:   ['lex.l', gram[1]],
-  output:  'lex.yy.c',
-  command: [
-    exe_flex,
-    '-o',
-    '@OUTPUT@',
-    '@INPUT0@',
-  ],
-)
-
 src = files(
     'choice.c',
     'dashlist.c',
@@ -35,9 +11,25 @@ src = files(
     'testfrac.c',
     'tests.c',
     'text.c',
-    lex,
-    gram,
 )
+
+lgen = generator(
+    exe_flex,
+    output: '@PLAINNAME@.yy.c',
+    arguments: ['-i', '-o', '@OUTPUT@', '@INPUT@']
+)
+
+lfiles = lgen.process('lex.l')
+src += lfiles
+
+pgen = generator(
+    exe_bison,
+    output:    ['@BASENAME@.c', '@BASENAME@.h'],
+    arguments: ['@INPUT@', '--defines=@OUTPUT1@', '--output=@OUTPUT0@']
+)
+
+pfiles = pgen.process('gram.y')
+src += pfiles
 
 executable('xgc', src,
     dependencies: [libxmu, libxext, libx11, libxt, libxaw, dep_m],

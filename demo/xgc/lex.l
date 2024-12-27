@@ -6,6 +6,9 @@
 
 %{
 
+#define YY_NO_INPUT	/* we have our own! */
+#define YY_NO_UNPUT
+
 #include <X11/X.h>
 #include <stdlib.h>
 #include "gram.h"
