@@ -75,10 +75,12 @@ SOFTWARE.
 /* $XFree86: xc/programs/xclock/Clock.c,v 3.25 2003/07/04 16:24:30 eich Exp $ */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+# include "config.h"
 #endif
 
-#define _GNU_SOURCE
+#ifndef _GNU_SOURCE
+# define _GNU_SOURCE
+#endif
 #include <X11/Xlib.h>
 #include <X11/StringDefs.h>
 #include <X11/IntrinsicP.h>
@@ -509,7 +511,7 @@ TimeString(ClockWidget w, struct tm *tm)
             return brief;
         }
         else {
-            static char brief[9];
+            static char brief[19];
             int hour = tm->tm_hour % 12;
 
             if (!hour)
@@ -742,7 +744,6 @@ Initialize(Widget request, Widget new, ArgList args, Cardinal * num_args)
 #endif
 }
 
-#ifdef XRENDER
 static void
 RenderPrepare(ClockWidget w, const XftColor *color)
 {
@@ -823,13 +824,17 @@ RenderTextBounds(ClockWidget w, char *str, int off, int len,
             free(utf8_str);
         }
         else
-            goto fallback;
+        {
+            XftTextExtents8(XtDisplay(w), w->clock.face, (FcChar8 *) str,
+                        off, &head);
+            XftTextExtents8(XtDisplay(w), w->clock.face, (FcChar8 *) str + off,
+                        len - off, &tail);
+        }
     }
 #endif
     else
 #endif
     {
- fallback:
         XftTextExtents8(XtDisplay(w), w->clock.face, (FcChar8 *) str,
                         off, &head);
         XftTextExtents8(XtDisplay(w), w->clock.face, (FcChar8 *) str + off,
@@ -1140,8 +1145,6 @@ RenderSec(ClockWidget w, const struct tm *tm, const struct timeval *tv,
         RenderUpdateBounds(poly, 10, &w->clock.damage);
     }
 }
-
-#endif
 
 static void
 Realize(Widget gw, XtValueMask * valueMask, XSetWindowAttributes * attrs)
