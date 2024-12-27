@@ -103,7 +103,7 @@ SOFTWARE.
 #ifdef PATH_MAX
 #define TMPSIZ PATH_MAX
 #else
-#define TMPSIZ 1024		/* bytes to allocate for tmpnam */
+#define TMPSIZ 1024		/* bytes to allocate for mkstemp */
 #endif
 #endif
 

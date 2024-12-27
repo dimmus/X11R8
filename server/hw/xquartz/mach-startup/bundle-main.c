@@ -271,7 +271,7 @@ create_socket(char *filename_out)
     size_t try, try_max;
 
     for (try = 0, try_max = 5; try < try_max; try++) {
-        tmpnam(filename_out);
+        mkstemp(filename_out);
 
         /* Setup servaddr_un */
         memset(&servaddr_un, 0, sizeof(struct sockaddr_un));
