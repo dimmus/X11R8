@@ -166,11 +166,11 @@ static void _XLockDisplayWarn(
     old_locker = locking_thread;
     if (xthread_have_id(old_locker)) {
 	if (xthread_equal(old_locker, self))
-	    printf("Xlib ERROR: %s line %d thread %x: locking display already locked at %s line %d\n",
+	    printf("Xlib ERROR: %s line %d thread %lx: locking display already locked at %s line %d\n",
 		   file, line, self, locking_file, locking_line);
 #ifdef XTHREADS_DEBUG
 	else
-	    printf("%s line %d: thread %x waiting on lock held by %s line %d thread %x\n",
+	    printf("%s line %d: thread %lx waiting on lock held by %s line %d thread %lx\n",
 		   file, line, self,
 		   locking_file, locking_line, old_locker);
 #endif /* XTHREADS_DEBUG */
@@ -180,7 +180,7 @@ static void _XLockDisplayWarn(
 
     if (strcmp(file, "XlibInt.c") == 0) {
 	if (!xlibint_unlock)
-	    printf("Xlib ERROR: XlibInt.c line %d thread %x locking display it did not unlock\n",
+	    printf("Xlib ERROR: XlibInt.c line %d thread %lx locking display it did not unlock\n",
 		   line, self);
 	xlibint_unlock = False;
     }
@@ -188,7 +188,7 @@ static void _XLockDisplayWarn(
 #ifdef XTHREADS_DEBUG
     /* if (old_locker  &&  old_locker != self) */
     if (strcmp("XClearArea.c", file) && strcmp("XDrSegs.c", file)) /* ico */
-	printf("%s line %d: thread %x got display lock\n", file, line, self);
+	printf("%s line %d: thread %lx got display lock\n", file, line, self);
 #endif /* XTHREADS_DEBUG */
 
     locking_thread = self;
@@ -216,11 +216,11 @@ static void _XUnlockDisplay(
 
 #ifdef XTHREADS_DEBUG
     if (strcmp("XClearArea.c", file) && strcmp("XDrSegs.c", file)) /* ico */
-	printf("%s line %d: thread %x unlocking display\n", file, line, self);
+	printf("%s line %d: thread %lx unlocking display\n", file, line, self);
 #endif /* XTHREADS_DEBUG */
 
     if (!xthread_have_id(locking_thread))
-	printf("Xlib ERROR: %s line %d thread %x: unlocking display that is not locked\n",
+	printf("Xlib ERROR: %s line %d thread %lx: unlocking display that is not locked\n",
 	       file, line, self);
     else if (strcmp(file, "XlibInt.c") == 0)
 	xlibint_unlock = True;
@@ -282,7 +282,7 @@ _XPushReader(
 
     cvl = _XCreateCVL(dpy);
 #ifdef XTHREADS_DEBUG
-    printf("_XPushReader called in thread %x, pushing %x\n",
+    printf("_XPushReader called in thread %lx, pushing %x\n",
 	   xthread_self(), cvl);
 #endif
     **tail = cvl;
@@ -300,7 +300,7 @@ static void _XPopReader(
     register struct _XCVList *front = *list;
 
 #ifdef XTHREADS_DEBUG
-    printf("_XPopReader called in thread %x, popping %x\n",
+    printf("_XPopReader called in thread %lx, popping %x\n",
 	   xthread_self(), front);
 #endif
 
@@ -343,7 +343,7 @@ static void _XConditionWait(
     int old_line = locking_line;
 
 #ifdef XTHREADS_DEBUG
-    printf("line %d thread %x in condition wait\n", line, self);
+    printf("line %d thread %lx in condition wait\n", line, self);
 #endif
     xthread_clear_id(locking_thread);
 
@@ -371,7 +371,7 @@ static void _XConditionWait(
     if (lock_hist_loc >= LOCK_HIST_SIZE)
 	lock_hist_loc = 0;
 #ifdef XTHREADS_DEBUG
-    printf("line %d thread %x was signaled\n", line, self);
+    printf("line %d thread %lx was signaled\n", line, self);
 #endif /* XTHREADS_DEBUG */
 #endif /* XTHREADS_WARN */
 }
@@ -383,7 +383,7 @@ static void _XConditionSignal(
 {
 #ifdef XTHREADS_WARN
 #ifdef XTHREADS_DEBUG
-    printf("line %d thread %x is signalling\n", line, xthread_self());
+    printf("line %d thread %lx is signalling\n", line, xthread_self());
 #endif
 #endif
     xcondition_signal(cv);
@@ -397,7 +397,7 @@ static void _XConditionBroadcast(
 {
 #ifdef XTHREADS_WARN
 #ifdef XTHREADS_DEBUG
-    printf("line %d thread %x is broadcasting\n", line, xthread_self());
+    printf("line %d thread %lx is broadcasting\n", line, xthread_self());
 #endif
 #endif
     xcondition_broadcast(cv);
@@ -471,7 +471,9 @@ static void _XLockDisplay(
 #endif
 
     if (dpy->lock->locking_level > 0)
-    _XDisplayLockWait(dpy);
+    {
+        _XDisplayLockWait(dpy);
+    }
 
     /*
      * Skip the two function calls below which may generate requests
