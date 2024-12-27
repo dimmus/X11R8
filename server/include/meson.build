@@ -181,7 +181,7 @@ conf_data.set('HAVE_XUCRED_CR_PID', cc.has_member('struct xucred', 'cr_pid', pre
 conf_data.set('LOCK_SERVER', host_machine.system() != 'windows' ? '1': false)
 
 # Don't let X dependencies typedef 'pointer'
-conf_data.set('_XTYPEDEF_POINTER', 1)
+conf_data.set('_XTYPEDEF_POINTER', true)
 conf_data.set('_XITYPEDEF_POINTER', '1')
 
 conf_data.set('LISTEN_TCP', get_option('listen_tcp'))
