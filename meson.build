@@ -94,9 +94,12 @@ WITH_MAN         = get_option('docs-man')
 WITH_INT_PIXMAN  = get_option('use-builtin-pixman')
 WITH_DEMOS       = get_option('build-demos')
 WITH_DTRACE      = get_option('dtrace')
+WITH_XTHREADS    = true
+WITH_XTHREADS_DBG = false
 
 dep_m            = cc.find_library('m',         required: false) # libxcvt
 dep_dl           = cc.find_library('dl',        required: false) # xvmc, xserver
+
 dep_zlib         = dependency('zlib',           required: false) # xfont, fontenc
 dep_bzip2        = dependency('bzip2',          required: false) # xfont
 dep_freetype2    = dependency('freetype2',      required: false) # xfont, xft
@@ -260,12 +263,19 @@ conf.set('HAVE_REALLOCF', cc.has_function('reallocf'))
 conf.set('HAVE_STRNDUP', cc.has_function('strndup') and cc.has_header_symbol('string.h', 'strndup'))
 conf.set('HAVE_UNLOCKED_STDIO', cc.has_function('getc_unlocked'))
 
+conf.set('XTHREADS',                WITH_XTHREADS ? '1' : false)
+conf.set('XUSE_MTSAFE_API',         WITH_XTHREADS ? '1' : false)
+conf.set('X_FORCE_USE_MTSAFE_API',  WITH_XTHREADS ? '1' : false)
+conf.set('XTHREADS_WARN',           WITH_XTHREADS_DBG ? '1' : false)
+conf.set('XTHREADS_FILE_LINE',      WITH_XTHREADS_DBG ? '1' : false)
+conf.set('XTHREADS_DEBUG',          WITH_XTHREADS_DBG ? '1' : false)
+
 if WITH_MAN
-  exe_sed  = find_program('sed',      required: false)
-  xmlto    = find_program('xmlto',    required: false)
-  xsltproc = find_program('xsltproc', required: false) # UNUSED, require_devel_docs
-  fop      = find_program('fop',      required: false) # require_docs_pdf
-  subdir('doc' / 'man')
+exe_sed  = find_program('sed',      required: false)
+xmlto    = find_program('xmlto',    required: false)
+xsltproc = find_program('xsltproc', required: false) # require_devel_docs
+fop      = find_program('fop',      required: false) # require_docs_pdf
+subdir('doc' / 'man')
 endif
 
 configure_file(
