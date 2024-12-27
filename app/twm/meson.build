@@ -14,6 +14,8 @@ twm_dependencies = [
     libice,
     libsm,
     libxrandr,
+    libi18n,
+    libxkbfile,
     xproto,
 ]
 

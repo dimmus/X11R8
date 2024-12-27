@@ -1,4 +1,4 @@
 subdir('xinit')
-# subdir('twm')
+subdir('twm')
 subdir('xclock')
 # subdir('xterm')

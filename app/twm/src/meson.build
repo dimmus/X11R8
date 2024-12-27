@@ -26,32 +26,6 @@ deftwmrc = custom_target(
 )
 src += deftwmrc
 
-# parser = custom_target(
-#     'gram.[ch]',
-#     input:   ['gram.y'],
-#     output:  ['gram.c', 'gram.h'],
-#     command: [
-#         exe_bison,
-#         '-y',
-#         '-d',
-#         '-o',
-#         '@OUTPUT0@',
-#         '@INPUT@',
-#     ],
-# )
-
-# lexer = custom_target(
-#     'lex.c',
-#     input:  ['lex.l', parser[1]],
-#     output: ['lex.c'],
-#     command: [
-#         exe_flex,
-#         '-o',
-#         '@OUTPUT@',
-#         '@INPUT0@',
-#     ],
-# )
-
 lgen = generator(
     exe_flex,
     output: '@PLAINNAME@.yy.c',
