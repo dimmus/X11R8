@@ -32,5 +32,5 @@ if WITH_DEMOS
     endif
 
     subdir('xgc')
-    # subdir('xgas_old') # TODO: find XGas.h file
+    subdir('xgas')
 endif

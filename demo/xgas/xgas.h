@@ -13,13 +13,13 @@
 #include <X11/Xaw/Box.h>
 #include <X11/Xaw/AsciiText.h>
 #include <X11/Xaw/Toggle.h>
-// #include "XGas.h"
+#include "Gas.h"
 #include <X11/Xutil.h>
 #include <X11/Xlib.h>
 #include <math.h>
 
 /* Force the numerical instability out into the open */
-#define double float
+/* #define double float */
 
 #define NWALLS 6
 #define MOLECULE_SIZE 4
@@ -105,6 +105,7 @@ typedef struct _labData {
     int timestep;		/* number of this timestep */
 
     /* Resources */
+    Boolean autoStart;  /* automatic initialization */
     float timestepSize;	/* resolution of simulated time in microseconds */
     int delay;		/* delay between calls to doTimestep */
     float randomBounce;	/* randomness of collision: 0 none, 1 all */
@@ -138,3 +139,5 @@ typedef struct _labData {
 	float frand();
 /* in util.c */
 	void quit_callback();
+    void createHelpWidgets(Widget parent);
+    void error(char *message, float time);

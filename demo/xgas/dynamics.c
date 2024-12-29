@@ -45,7 +45,7 @@ static void collide( mol, data)
     Molecule *mol;
     LabData *data;
 {
-    float vMagnitude, hypot;
+    float vMagnitude;
     float x, y;
     float theta, thetaRand;
     WallType *wallParams;
@@ -141,8 +141,8 @@ void findNextCollision( mol, data)
     }
 
     if( deltaT == -1) {
-	error("In findNextCollision(): couldn't find a wall to hit.",
-	    data->time);
+	    error("In findNextCollision(): couldn't find a wall to hit.",
+	        data->time);
     }
 
     /* Correct the equations of motion for the particle */

@@ -2,9 +2,10 @@
  * timestep.c
  *   xgas: Copyright 1990 Larry Medwin: @(#)timestep.c	1.1 2/9/90
  */
+#include <stdio.h>
 
 #include "xgas.h"
-#include <stdio.h>
+
 /*
  * DO TIMESTEP
  *

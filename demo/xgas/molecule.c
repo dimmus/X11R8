@@ -122,4 +122,3 @@ void addMolecules( w, data, event)
 			break;
     }
 }
-

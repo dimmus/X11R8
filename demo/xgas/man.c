@@ -1,4 +1,4 @@
-/* $XConsortium: man.c,v 1.3 91/08/26 13:31:22 rws Exp $ */
+/* $XConsortium: man.c,v 1.6 94/04/17 20:45:28 dave Exp $ */
 char *man[]={"\
 \n\
 \n\
@@ -30,8 +30,28 @@ OPTIONS\n\
      This is a toolkit program;\n\
              all the usual toolkit options are available.\n\
 \n\
-X DEFAULTS\n\
+     -as     Sets the autoStart resource.\n\
+\n\
+     -ts     Sets the timeStepSize resource.\n\
+\n\
+     -d      Sets the delay resource.\n\
+\n\
+     -rb     Sets the randomBounce resource.\n\
+\n\
+     -eq     Sets the equilibrium resource.\n\
+\n\
+     -mm     Sets the maxMolecules resource.\n\
+\n\
+     -fg     Sets the foreground.\n\
+\n\
+     -bg     Sets the background.\n\
+\n\
+RESOURCES\n\
      The xgas program uses the following X resources:\n\
+\n\
+     autoStart\n\
+             Starts  the  simulation  automatically.   Good   for\n\
+             canned demos.\n\
 \n\
      timeStepSize\n\
              Specifies   the   simulated   time    duration    in\n\
@@ -82,9 +102,6 @@ BUGS\n\
      When the chamber is resized, molecules should be  rearranged\n\
      appropriately.   Instead, the molecule arrays are reinitial-\n\
      ized.\n\
-\n\
-COPYRIGHT\n\
-     Copyright 1991, Massachusetts Institute of Technology.\n\
 \n\
 AUTHOR\n\
      Larry Medwin\n\

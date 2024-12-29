@@ -41,9 +41,8 @@ void pop_down(w, widget_to_popdown, call_data) /* ARGSUSED */
      XtPopdown( widget_to_popdown);
 }
 
-
-createHelpWidgets( parent )
-     Widget parent;
+void
+createHelpWidgets(Widget parent)
 {
   Widget helpShell, helpFrame, helpQuick, helpMan;
   Widget helpDoc, helpQuit;
@@ -118,4 +117,3 @@ createHelpWidgets( parent )
 				     /*XtNuseStringInPlace, True,*/
 				     NULL);
 }
-

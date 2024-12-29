@@ -1,23 +1,33 @@
 /*
- * Copyright 1989 Massachusetts Institute of Technology
- *
- * Permission to use, copy, modify, distribute, and sell this software and its
- * documentation for any purpose is hereby granted without fee, provided that
- * the above copyright notice appear in all copies and that both that
- * copyright notice and this permission notice appear in supporting
- * documentation, and that the name of M.I.T. not be used in advertising or
- * publicity pertaining to distribution of the software without specific,
- * written prior permission.  M.I.T. makes no representations about the
- * suitability of this software for any purpose.  It is provided "as is"
- * without express or implied warranty.
- *
- * M.I.T. DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL M.I.T.
- * BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
- * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
- * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
- * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- *
+
+Copyright (c) 1989  X Consortium
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE X CONSORTIUM BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+Except as contained in this notice, the name of the X Consortium shall
+not be used in advertising or otherwise to promote the sale, use or
+other dealings in this Software without prior written authorization
+from the X Consortium.
+
+*/
+/*
  * main.c
  *   xgas: Copyright 1990 Larry Medwin: @(#)xgas.c	1.9 2/9/90
  *   Larry Medwin -- Dec 18, 1989
@@ -29,7 +39,9 @@
 #include "xgas.h"
 #include "xgas.icon"
 #include <X11/Shell.h>
+
 #include <stdlib.h>
+#include <stdio.h>
 
 static String FallbackResources[] = {
 "*lab.height: 300",
@@ -41,6 +53,8 @@ NULL
 
 #define Offset(field) XtOffsetOf(LabData, field)
 static XtResource resources[] = {
+  { "autoStart", "AutoStart", XtRBoolean, sizeof(Boolean),
+      Offset(autoStart), XtRImmediate, (XtPointer)False},
   { "timestepSize", "TimestepSize", XtRFloat, sizeof(float),
       Offset(timestepSize), XtRString, "3.0" },
   { "delay", "Delay", XtRInt, sizeof(int),
@@ -57,6 +71,17 @@ static XtResource resources[] = {
       Offset(background), XtRString, XtDefaultBackground },
 };
 #undef Offset
+
+static XrmOptionDescRec optionDesc[] = {
+  { "-as", "*autoStart",    XrmoptionNoArg,  (XtPointer)"on"},
+  { "-ts", "*timestepSize", XrmoptionSepArg, (XtPointer)NULL },
+  { "-d",  "*delay",        XrmoptionSepArg, (XtPointer)NULL },
+  { "-rb", "*randomBounce", XrmoptionSepArg, (XtPointer)NULL },
+  { "-eq", "*equilibrium",  XrmoptionSepArg, (XtPointer)NULL },
+  { "-mm", "*maxMolecules", XrmoptionSepArg, (XtPointer)NULL },
+  { "-fg", "*foreground",   XrmoptionSepArg, (XtPointer)NULL },
+  { "-bg", "*background",   XrmoptionSepArg, (XtPointer)NULL },
+};
 
 /*
  *  Global array describing wall and corner geometry.
@@ -79,6 +104,20 @@ WallType WallParam[] =	{
   { 	{-1,-1}, {{0,1},{-1,0}},  {{0,-1},{1,0}}},	/* NE */
 };
 
+/*
+ * Report the syntax for calling xgas.
+ */
+int
+Syntax(char *call)
+{
+        (void) printf ("Usage: %s [-as] [-ts <microsec>] [-d <time>]\n", call);
+        (void) printf ("       [-rb <randomfac>] [-eq <equilibriumfac>]\n");
+        (void) printf ("       [-mm <numMolecules>] \n");
+	(void) printf ("       [-fg <color>] [-bg <color>]\n");
+        exit(1);
+}
+
+int
 main( argc, argv )
      int argc;
      char *argv[];
@@ -95,9 +134,13 @@ main( argc, argv )
   Pixmap icon;
   
   /* TOPLEVEL */
-  toplevel = XtAppInitialize(&app, "XGas", NULL, 0, &argc, argv,
-			     FallbackResources, NULL, (Cardinal)0);
+  toplevel = XtAppInitialize(&app, "XGas", optionDesc, XtNumber(optionDesc),
+			     &argc, argv, FallbackResources, NULL, 
+			     (Cardinal)0);
   
+  /* Check parameters */
+  if (argc != 1) Syntax(argv[0]);
+
   /* Get Resources */
   XtGetApplicationResources( toplevel, (XtPointer) &labData, resources,
 			    XtNumber( resources), (ArgList)NULL, 0);
@@ -222,6 +265,17 @@ main( argc, argv )
   /* Initialize temperature */
   XtCallCallbacks( labData.chamber[0].control, XtNscrollProc, (XtPointer)300);
   XtCallCallbacks( labData.chamber[1].control, XtNscrollProc, (XtPointer)300);
-  
+
+  if (labData.autoStart) {
+    XEvent ev;
+    Arg wargs[2];
+    Dimension labW, labH;
+    XtSetArg(wargs[0], XtNwidth, &labW);
+    XtSetArg(wargs[1], XtNheight, &labH);
+    XtGetValues(lab, wargs, 2);
+    ev.xbutton.x = labW/2; ev.xbutton.y = labH/2; ev.xbutton.button = 2;
+    addMolecules(lab, &labData, &ev);
+    XtCallCallbacks( run, XtNcallback, (XtPointer)NULL);
+  }
   XtAppMainLoop(app);
 }
