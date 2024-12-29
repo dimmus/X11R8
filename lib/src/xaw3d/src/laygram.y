@@ -20,8 +20,6 @@
 
 static LayoutPtr    *dest;
 
-static void LaYYerror(const char *s);
-
 #define yyerror LayYYerror
 
 %}
