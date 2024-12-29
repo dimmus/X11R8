@@ -56,6 +56,7 @@
 
 #include "xf86.h"
 
+#include <X11/Xdefs.h>
 #include <X11/extensions/XI.h>
 #include "extnsionst.h"
 #include "extinit.h"
@@ -3765,7 +3766,7 @@ static XF86ModuleVersionInfo xf86MouseVersionRec =
     MODINFOSTRING1,
     MODINFOSTRING2,
     XORG_VERSION_CURRENT,
-    PACKAGE_VERSION_MAJOR, PACKAGE_VERSION_MINOR, PACKAGE_VERSION_PATCHLEVEL,
+    MOUSE_VERSION_MAJOR, MOUSE_VERSION_MINOR, MOUSE_VERSION_PATCHLEVEL,
     ABI_CLASS_XINPUT,
     ABI_XINPUT_VERSION,
     MOD_CLASS_XINPUT,
