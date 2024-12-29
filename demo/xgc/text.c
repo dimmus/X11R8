@@ -182,7 +182,7 @@ change_text(Widget w, String newtext)
       newtext = "";
   text.firstPos = 0;
   text.length = strlen(newtext);
-  text.ptr = newtext;
+  text.ptr = (char *)newtext;
   text.format = FMT8BIT;
 
   /* Find the old text, so we can get its length, so we know how

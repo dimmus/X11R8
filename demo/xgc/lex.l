@@ -160,10 +160,6 @@ PieSlice			{ yylval.num = ArcPieSlice;
 {word}				{ yylval.ptr = (char *) yytext;
 				  return (STRING); }
 
-.				{ fprintf(stderr,
-					"xgc: bad character `%s', line %d\n",
-					yytext, yylineno); }
-
 %%
 
 #ifndef yywrap
