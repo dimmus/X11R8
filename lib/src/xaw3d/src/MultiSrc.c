@@ -742,7 +742,7 @@ SetValues(Widget current, Widget request, Widget new, ArgList args, Cardinal *nu
 
   if ( !total_reset && (old_src->multi_src.piece_size
       					!= src->multi_src.piece_size) ) {
-      String mb_string = StorePiecesInString( old_src );
+      char * mb_string = (char *)StorePiecesInString( old_src );
 
       if ( mb_string != 0 ) {
           FreeAllPieces( old_src );
@@ -864,7 +864,7 @@ _XawMultiSave(
       if (!src->multi_src.changes) 		/* No changes to save. */
           return(TRUE);
 
-      mb_string = StorePiecesInString( src );
+      mb_string = (char *)StorePiecesInString( src );
 
       if ( mb_string != 0 ) {
           if ( WriteToFile( mb_string, src->multi_src.string ) == FALSE ) {
@@ -887,7 +887,7 @@ _XawMultiSave(
   /* THIS FUNCTIONALITY IS UNDOCUMENTED, probably UNNEEDED?  The manual
   says this routine's only function is to save files to disk.  -Sheeran */
 
-      mb_string = StorePiecesInString( src );
+      mb_string = (char *)StorePiecesInString( src );
 
       if ( mb_string == 0 ) {
           /* If the buffer holds bad chars, don't touch it... */
@@ -924,10 +924,10 @@ _XawMultiSaveAsFile(
     _Xconst char* name)
 {
   MultiSrcObject src = (MultiSrcObject) w;
-  String mb_string;
+  char *mb_string;
   Boolean ret;
 
-  mb_string = StorePiecesInString( src );
+  mb_string = (char *)StorePiecesInString( src );
 
   if ( mb_string != 0 ) {
       ret = WriteToFile( mb_string, name );
@@ -1053,7 +1053,7 @@ InitStringOrFile(MultiSrcObject src, Boolean newString)
 
 	else if (! src->multi_src.use_string_in_place) {
 	    int length;
-            String temp = XtNewString(src->multi_src.string);
+            char *temp = XtNewString(src->multi_src.string);
             if ( src->multi_src.allocated_string )
                 XtFree( src->multi_src.string );
             src->multi_src.allocated_string = True;

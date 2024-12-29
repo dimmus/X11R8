@@ -660,7 +660,7 @@ SetValues(Widget current, Widget request, Widget new, ArgList args, Cardinal *nu
     }
 
     if (newlw->label.label == NULL)
-	newlw->label.label = newlw->core.name;
+	newlw->label.label = (char *)newlw->core.name;
     if (curlw->label.label != newlw->label.label) {
         if (curlw->label.label != curlw->core.name)
 	    XtFree((char *)curlw->label.label);

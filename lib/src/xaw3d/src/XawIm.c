@@ -402,7 +402,7 @@ OpenIM(XawVendorShellExtPart *ve)
 
 	if (pbuf == NULL) return;
 
-	for(ns=s=ve->im.input_method; ns && *s;) {
+	for(ns=s=(char *)ve->im.input_method; ns && *s;) {
 	    /* skip any leading blanks */
 	    while (*s && isspace(*s)) s++;
 	    if (!*s) break;
@@ -442,7 +442,7 @@ OpenIM(XawVendorShellExtPart *ve)
 	return;
     }
     found = False;
-    for(ns = s = ve->im.preedit_type; s && !found;) {
+    for(ns = s = (char *)ve->im.preedit_type; s && !found;) {
 	while (*s && isspace(*s)) s++;
 	if (!*s) break;
 	if ((ns = end = strchr(s, ',')) == NULL)

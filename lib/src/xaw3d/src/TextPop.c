@@ -94,7 +94,7 @@ static void DoInsert(Widget, XtPointer, XtPointer);
 static void _SetField(Widget, Widget);
 static void InitializeSearchWidget(struct SearchAndReplace *,
                                    XawTextScanDirection, Boolean);
-static void SetResource(Widget, char *, XtArgVal);
+static void SetResource(Widget, String, XtArgVal);
 static void SetSearchLabels(struct SearchAndReplace *, String, String, Boolean);
 static void DoReplaceOne(Widget, XtPointer, XtPointer);
 static void DoReplaceAll(Widget, XtPointer, XtPointer);
@@ -102,7 +102,7 @@ static Widget CreateDialog(Widget, String, String, void (*)(Widget, String, Widg
 static Widget GetShell(Widget);
 static void SetWMProtocolTranslations(Widget);
 static Boolean DoSearch(struct SearchAndReplace *);
-static Boolean SetResourceByName(Widget, char *, char *, XtArgVal);
+static Boolean SetResourceByName(Widget, char *, String, XtArgVal);
 static Boolean Replace(struct SearchAndReplace *, Boolean, Boolean);
 static String GetString(Widget);
 static String GetStringRaw(Widget);
@@ -195,7 +195,7 @@ _XawTextInsertFile(Widget w, XEvent *event, String *params, Cardinal *num_params
   if (*num_params == 0)
     ptr = "";
   else
-    ptr = params[0];
+    ptr = (char *)params[0];
 
   if (!ctx->text.file_insert) {
     ctx->text.file_insert = CreateDialog(w, ptr, "insertFile",
@@ -251,7 +251,7 @@ DoInsert(Widget w, XtPointer closure, XtPointer call_data)
 	   "*** Error: Could not get text widget from file insert popup");
   }
   else
-    if (InsertFileNamed( (Widget) ctx, GetString( temp_widget ))) {
+    if (InsertFileNamed( (Widget) ctx, (char *)GetString( temp_widget ))) {
       PopdownFileInsert(w, closure, call_data);
       return;
     }
@@ -520,7 +520,7 @@ _XawTextSearch(Widget w, XEvent *event, String *params, Cardinal *num_params)
   }
 
   if (*num_params == 2 )
-      ptr = params[1];
+      ptr = (char *)params[1];
   else
 #ifdef XAW_INTERNATIONALIZATION
       if (_XawTextFormat(ctx) == XawFmtWide) {
@@ -798,7 +798,7 @@ DoSearch(struct SearchAndReplace * search)
 
   TextWidget ctx = (TextWidget)tw;
 
-  text.ptr = GetStringRaw(search->search_text);
+  text.ptr = (char *)GetStringRaw(search->search_text);
   text.format = _XawTextFormat(ctx);
 #ifdef XAW_INTERNATIONALIZATION
   if (text.format == XawFmtWide)
@@ -922,7 +922,7 @@ Replace(struct SearchAndReplace *search, Boolean once_only, Boolean show_current
 
   TextWidget ctx = (TextWidget)tw;
 
-  find.ptr = GetStringRaw( search->search_text);
+  find.ptr = (char *)GetStringRaw( search->search_text);
   find.format = _XawTextFormat(ctx);
 #ifdef XAW_INTERNATIONALIZATION
   if (find.format == XawFmtWide)
@@ -932,7 +932,7 @@ Replace(struct SearchAndReplace *search, Boolean once_only, Boolean show_current
       find.length = strlen(find.ptr);
   find.firstPos = 0;
 
-  replace.ptr = GetStringRaw(search->rep_text);
+  replace.ptr = (char *)GetStringRaw(search->rep_text);
   replace.firstPos = 0;
   replace.format = _XawTextFormat(ctx);
 #ifdef XAW_INTERNATIONALIZATION
@@ -1120,7 +1120,7 @@ _SetField(Widget new, Widget old)
  */
 
 static Boolean
-SetResourceByName(Widget shell, char *name, char *res_name, XtArgVal value)
+SetResourceByName(Widget shell, char *name, String res_name, XtArgVal value)
 {
   Widget temp_widget;
   char buf[BUFSIZ];
@@ -1143,7 +1143,7 @@ SetResourceByName(Widget shell, char *name, char *res_name, XtArgVal value)
  */
 
 static void
-SetResource(Widget w, char *res_name, XtArgVal value)
+SetResource(Widget w, String res_name, XtArgVal value)
 {
   Arg args[1];
 

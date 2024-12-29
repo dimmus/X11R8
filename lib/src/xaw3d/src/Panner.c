@@ -834,9 +834,9 @@ ActionPage (Widget gw, XEvent *event, String *params, Cardinal *num_params)
 	return;
     }
 
-    x = parse_page_string (params[0], (int) pw->panner.knob_width,
+    x = parse_page_string ((char *)params[0], (int) pw->panner.knob_width,
 			   ((int) pw->core.width) - pad, &relx);
-    y = parse_page_string (params[1], (int) pw->panner.knob_height,
+    y = parse_page_string ((char *)params[1], (int) pw->panner.knob_height,
 			   ((int) pw->core.height) - pad, &rely);
 
     if (relx) x += pw->panner.knob_x;

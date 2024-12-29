@@ -1753,7 +1753,7 @@ LoseSelection(Widget w, Atom *selection)
   if (ctx->text.old_insert >= 0) /* Update in progress. */
     _XawTextExecuteUpdate(ctx);
 
-    prevSalt = 0;
+  prevSalt = 0;
     for (salt = ctx->text.salt; salt; salt = nextSalt)
     {
     	atomP = salt->s.selections;

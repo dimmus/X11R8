@@ -326,7 +326,7 @@ XawTipExpose(Widget w, XEvent *event, Region region)
 {
     TipWidget tip = (TipWidget)w;
     GC gc = tip->tip.gc;
-    char *nl, *label = tip->tip.label;
+    char *nl, *label = (char *)tip->tip.label;
     Position y = tip->tip.internal_height + tip->tip.font->max_bounds.ascent;
     int len;
 
@@ -409,7 +409,7 @@ TipLayout(XawTipInfo *info)
 {
     XFontStruct	*fs = info->tip->tip.font;
     int width = 0, height;
-    char *nl, *label = info->tip->tip.label;
+    char *nl, *label = (char *)info->tip->tip.label;
 
 #ifdef XAW_INTERNATIONALIZATION
     if (info->tip->tip.international == True) {

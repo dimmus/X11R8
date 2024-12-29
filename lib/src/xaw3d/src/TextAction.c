@@ -1063,7 +1063,7 @@ InsertNewLineAndIndent(Widget w, XEvent *event, String *p, Cardinal *n)
   XawTextPosition pos1;
   int length;
   TextWidget ctx = (TextWidget) w;
-  String line_to_ip;
+  char * line_to_ip;
 
   StartAction(ctx, event);
   pos1 = SrcScan(ctx->text.source, ctx->text.insertPos,
@@ -1524,7 +1524,7 @@ InsertString(Widget w, XEvent *event, String *params, Cardinal *num_params)
   StartAction(ctx, event);
   for ( i = *num_params; i; i--, params++ ) { /* DO FOR EACH PARAMETER */
 
-      text.ptr = IfHexConvertHexElseReturnParam( *params, &text.length );
+      text.ptr = IfHexConvertHexElseReturnParam( (char *)params, &text.length );
 
       if ( text.length == 0 ) continue;
 
@@ -1597,7 +1597,7 @@ DisplayCaret(Widget w, XEvent *event, String *params, Cardinal *num_params)
 
   if (*num_params > 0) {	/* default arg is "True" */
       XrmValue from, to;
-      from.size = strlen(from.addr = params[0]);
+      from.size = strlen(from.addr = (char *)params[0]);
       XtConvert( w, XtRString, &from, XtRBoolean, &to );
 
       if ( to.addr != NULL )

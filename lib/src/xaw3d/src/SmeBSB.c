@@ -232,7 +232,7 @@ Destroy(Widget w)
 	XFreePixmap(XtDisplayOfObject(w), entry->sme_bsb.right_stippled);
 #endif
     if (entry->sme_bsb.label != XtName(w))
-	XtFree(entry->sme_bsb.label);
+	XtFree((char *)entry->sme_bsb.label);
 }
 
 /*      Function Name: Redisplay
@@ -288,7 +288,7 @@ Redisplay(Widget w, XEvent * event, Region region)
 	int x_loc = entry->sme_bsb.left_margin;
 	int len = strlen(entry->sme_bsb.label);
 	int width, t_width;
-	char * label = entry->sme_bsb.label;
+	char * label = (char *)entry->sme_bsb.label;
 
 	switch(entry->sme_bsb.justify) {
 	    case XtJustifyCenter:

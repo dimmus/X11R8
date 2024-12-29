@@ -659,7 +659,7 @@ SetValues(Widget current, Widget request, Widget new, ArgList args,
 
   if ( !total_reset &&
       (old_src->ascii_src.piece_size != src->ascii_src.piece_size) ) {
-      String string = StorePiecesInString(old_src);
+      char *string = StorePiecesInString(old_src);
       FreeAllPieces(old_src);
       LoadPieces(src, NULL, string);
       XtFree(string);
@@ -827,7 +827,7 @@ Boolean
 XawAsciiSaveAsFile(Widget w, _Xconst char* name)
 {
   AsciiSrcObject src = (AsciiSrcObject) w;
-  String string;
+  char * string;
   Boolean ret;
 
   /* If the src is really a multi, call the multi save. - */
