@@ -54,6 +54,10 @@
 #  include "TekCMS_TCI.h"
 #endif
 
+static char TekCMS_idir[BUFSIZ];
+static char TekCMS_rdir[BUFSIZ];
+static char TekCMS_vdir[BUFSIZ];
+
 /*
  *	EXTERNALS
  *		Declarations that are needed by calling modules.

@@ -71,6 +71,10 @@
 #  include "TekCMSutil.h"
 #endif
 
+static char TekCMS_idir[BUFSIZ];
+static char TekCMS_rdir[BUFSIZ];
+static char TekCMS_vdir[BUFSIZ];
+
 /*
  *	INTERNALS
  *		Declarations that are local to this module.

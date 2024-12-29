@@ -5,10 +5,6 @@
 
 #include <stdio.h>
 
-static char TekCMS_idir[BUFSIZ];
-static char TekCMS_vdir[BUFSIZ];
-static char TekCMS_rdir[BUFSIZ];
-
 extern int TCI();
 extern int TC_CompareResults();
 extern int Cmd_ListTC();
