@@ -502,7 +502,7 @@ inc_server += inc
 
 inc += [
     inc_x11,
-    inc_lib,
+    inc_x11,
     inc_font,
     inc_static
 ]

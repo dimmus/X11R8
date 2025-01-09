@@ -67,8 +67,6 @@ RESOURCES\n\
              RandomBounce  varies from 0.0 (no randomness) to 1.0\n\
              (completely random angle of incidence).\n\
 \n\
-",
-"\
      equilibrium\n\
              During each wall  collision,  a  molecule's  kinetic\n\
              energy approaches that corresponding to the tempera-\n\

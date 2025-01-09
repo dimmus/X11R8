@@ -21,7 +21,7 @@ src = files(
 
 lib = library('Xdmcp', src,
   c_args: lib_args,
-  include_directories: inc_lib,
+  include_directories: inc_x11,
   dependencies: xproto,
   version: '6.0.0',
   install: true,
@@ -29,7 +29,7 @@ lib = library('Xdmcp', src,
 
 libxdmcp = declare_dependency(
   link_with: lib,
-  include_directories: inc_lib,
+  include_directories: inc_x11,
 )
 
 pkg.generate(lib,

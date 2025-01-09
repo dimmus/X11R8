@@ -1,5 +1,5 @@
 inc_x11 = [
-  inc_lib,
+  inc_x11,
   include_directories(
     'src',
     'src' / 'util',

@@ -71,7 +71,7 @@ src = files(
 
 lib = library('Xpm', src,
   c_args: lib_args,
-  include_directories: inc_lib,
+  include_directories: inc_x11,
   dependencies: dep_int_xpm,
   version: '4.11.0',
   install: true,
@@ -79,7 +79,7 @@ lib = library('Xpm', src,
 
 libxpm = declare_dependency(
   link_with: lib,
-  include_directories: inc_lib,
+  include_directories: inc_x11,
 )
 
 pkg.generate(lib,
@@ -93,7 +93,7 @@ executable('cxpm',
   'cxpm/cxpm.c',
   dependencies: dep_int_xpm,
   c_args: lib_args,
-  include_directories: inc_lib,
+  include_directories: inc_x11,
 )
 
 if get_option('build-sxpm')
@@ -101,7 +101,7 @@ if get_option('build-sxpm')
     'sxpm/sxpm.c',
     dependencies: dep_int_xpm,
     c_args: lib_args,
-    include_directories: inc_lib,
+    include_directories: inc_x11,
     link_with: lib,
   )
 endif

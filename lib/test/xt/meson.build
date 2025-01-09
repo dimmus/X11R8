@@ -7,7 +7,7 @@ src = [
 foreach test : src
   test('xt - ' + test,
     executable(test, test + '.c',
-      include_directories: inc_lib,
+      include_directories: inc_x11,
       dependencies: [xproto, libxmu, libxt],
     )
   )

@@ -138,7 +138,6 @@ f_check          = []
 h_check          = []
 inc_ext          = []
 inc_x11          = []
-inc_lib          = [inc_config]
 inc_font         = []
 inc_static       = []
 inc_server       = []
@@ -188,7 +187,6 @@ endif
 
 subdir('include')
 subdir('proto')
-subdir('lib' / 'include')
 if WITH_XSHMFENCE
 subdir('lib' / 'src' / 'xshmfence')
 endif

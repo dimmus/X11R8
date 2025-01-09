@@ -13,7 +13,7 @@ src = files(
 )
 
 lib = library('SM', src,
-  include_directories: inc_lib,
+  include_directories: inc_x11,
   dependencies: [dep_int_sm, dep_ext_sm],
   version: '6.0.1',
   install: true,
@@ -21,7 +21,7 @@ lib = library('SM', src,
 
 libsm = declare_dependency(
   link_with: lib,
-  include_directories: inc_lib,
+  include_directories: inc_x11,
 )
 
 pkg.generate(lib,

@@ -19,7 +19,7 @@ void labInit(w, data)
 {
     int i, k;
     Display *dpy = XtDisplay(w);
-    int scr = DefaultScreen(dpy);
+    /* int scr = DefaultScreen(dpy); XXX: UNUSED*/
     unsigned long valuemask;
     XGCValues values;
 

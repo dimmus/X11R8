@@ -1,3 +1,3 @@
-inc_lib += include_directories('.')
+inc_x11 += include_directories('.')
 
 subdir('libxcvt')

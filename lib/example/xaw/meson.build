@@ -13,7 +13,7 @@ src = [
 
 foreach name : src
   executable(name, name,
-    include_directories: inc_lib,
+    include_directories: inc_x11,
     dependencies: [xproto, libxaw, libxt, libxmu],
   )
 endforeach

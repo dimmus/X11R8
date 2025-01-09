@@ -148,7 +148,7 @@ src += files(
 
 lib_xfont = library('Xfont', src,
   c_args: lib_args,
-  include_directories: [inc_font, inc_font_xfont, inc_lib],
+  include_directories: [inc_font, inc_font_xfont, inc_x11],
   dependencies: [dep_int_xfont, dep_ext_xfont],
   version: '2.0.0',
   install: true,
@@ -156,7 +156,7 @@ lib_xfont = library('Xfont', src,
 
 libxfont = declare_dependency(
   link_with: lib_xfont,
-  include_directories: [inc_font, inc_font_xfont, inc_lib],
+  include_directories: [inc_font, inc_font_xfont, inc_x11],
 )
 
 install_headers(
