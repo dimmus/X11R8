@@ -1,11 +1,5 @@
 ver_fs = '1.0.10'
 
-inc_font_fs = include_directories(
-  'include',
-  'include' / 'X11',
-  'include' / 'X11' / 'fonts',
-)
-
 lib_args = ['-DFS_t', '-DTRANS_CLIENT']
 
 f_check += ['strlcpy', 'strnlen']
@@ -14,39 +8,39 @@ f_check += ['strlcpy', 'strnlen']
 dep_int_xfs = [xproto]
 
 src = files(
-  'src/FSCloseFt.c',
-  'src/FSClServ.c',
-  'src/FSConnServ.c',
-  'src/FSErrDis.c',
-  'src/FSErrHndlr.c',
-  'src/FSFlush.c',
-  'src/FSFontInfo.c',
-  'src/FSFtNames.c',
-  'src/FSGetCats.c',
-  'src/FSlibInt.c',
-  'src/FSlibint.h',
-  'src/FSlibos.h',
-  'src/FSListCats.c',
-  'src/FSListExt.c',
-  'src/FSMisc.c',
-  'src/FSNextEv.c',
-  'src/FSOpenFont.c',
-  'src/FSOpenServ.c',
-  'src/FSQGlyphs.c',
-  'src/FSQuExt.c',
-  'src/FSQXExt.c',
-  'src/FSQXInfo.c',
-  'src/FSServName.c',
-  'src/FSSetCats.c',
-  'src/FSSync.c',
-  'src/FSSynchro.c',
-  'src/fs_transport.c',
-  'src/reallocarray.c',
+  'FSCloseFt.c',
+  'FSClServ.c',
+  'FSConnServ.c',
+  'FSErrDis.c',
+  'FSErrHndlr.c',
+  'FSFlush.c',
+  'FSFontInfo.c',
+  'FSFtNames.c',
+  'FSGetCats.c',
+  'FSlibInt.c',
+  'FSlibint.h',
+  'FSlibos.h',
+  'FSListCats.c',
+  'FSListExt.c',
+  'FSMisc.c',
+  'FSNextEv.c',
+  'FSOpenFont.c',
+  'FSOpenServ.c',
+  'FSQGlyphs.c',
+  'FSQuExt.c',
+  'FSQXExt.c',
+  'FSQXInfo.c',
+  'FSServName.c',
+  'FSSetCats.c',
+  'FSSync.c',
+  'FSSynchro.c',
+  'fs_transport.c',
+  'reallocarray.c',
 )
 
 lib = library('FS', src,
   c_args: lib_args,
-  include_directories: [inc_font, inc_font_fs, inc_x11],
+  include_directories: [inc_x11, include_directories('.')],
   dependencies: dep_int_xfs,
   version: '6.0.0',
   install: true,
@@ -54,12 +48,7 @@ lib = library('FS', src,
 
 libfs = declare_dependency(
   link_with: lib,
-  include_directories: [inc_font, inc_font_fs, inc_x11],
-)
-
-install_headers(
-  'include/X11/fonts/FSlib.h',
-  subdir: 'X11/fonts',
+  include_directories: [inc_x11, include_directories('.')],
 )
 
 pkg.generate(lib,
