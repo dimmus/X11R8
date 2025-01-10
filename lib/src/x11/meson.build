@@ -1,14 +1,11 @@
-inc_x11 = [
-  inc_x11,
-  include_directories(
-    'src',
-    'src' / 'util',
-    'src' / 'xcms',
-    'src' / 'xkb',
-    'src' / 'xlibi18n',
-    'src' / 'xlibi18n' / 'lcUniConv',
-  )
-]
+inc_lib += include_directories(
+  'src',
+  'src' / 'util',
+  'src' / 'xcms',
+  'src' / 'xkb',
+  'src' / 'xlibi18n',
+  'src' / 'xlibi18n' / 'lcUniConv',
+)
 
 lib_args = []
 
@@ -92,7 +89,7 @@ ks_table_h = custom_target('makekeystable',
   output: 'ks_tables.h'
 )
 ks_table = declare_dependency(
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   sources: ks_table_h,
 )
 ##  END: Generate ks_table.h
@@ -101,7 +98,7 @@ subdir('src')
 
 lib_x11 = library('X11', src_x11,
   c_args: lib_args,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: [dep_int_x11, dep_ext_x11, ks_table, libxcms, libxkb, libi18n],
   version: '6.4.0',
   install: true,
@@ -109,12 +106,12 @@ lib_x11 = library('X11', src_x11,
 
 libx11 = declare_dependency(
   link_with: lib_x11,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
 )
 
 lib_x11_xcb = library('X11-xcb', src_x11_xcb,
   c_args: lib_args,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: dep_ext_x11,
   version: '1.0.0',
   install: true,
@@ -122,7 +119,7 @@ lib_x11_xcb = library('X11-xcb', src_x11_xcb,
 
 libx11_xcb = declare_dependency(
   link_with: lib_x11_xcb,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
 )
 
 # TODO: need?

@@ -7,6 +7,6 @@ test('font - xfont - lsfontdir',
       'lsfontdir.c'
     ],
     dependencies: libxfont,
-    include_directories: [inc_font, inc_x11],
+    include_directories: [inc_font, inc_lib],
   )
 )

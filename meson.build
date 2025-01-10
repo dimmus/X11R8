@@ -138,7 +138,7 @@ f_check          = []
 h_check          = []
 
 inc_font         = []
-inc_x11          = []
+inc_lib          = []
 inc_server       = []
 inc_static       = []
 

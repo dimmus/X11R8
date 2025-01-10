@@ -499,7 +499,7 @@ inc_server = [include_directories(
 )]
 
 inc_server += [
-    inc_x11,
+    inc_lib,
     inc_font,
     inc_static,
 ]

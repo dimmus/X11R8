@@ -20,7 +20,7 @@ shared_module(
 	'libevdev_drv',
 	src,
 	name_prefix: '', # we want libinput_drv.so, not liblibinput_drv.so
-	include_directories: [include_directories('include'), inc_config, inc_server, inc_x11],
+	include_directories: [include_directories('include'), inc_config, inc_server, inc_lib],
 	dependencies: dep_drivers,
 	install: true,
 	install_dir: dir_xorg_module,

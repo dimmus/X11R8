@@ -6,7 +6,7 @@ src = files(
 )
 
 lib = library('Xtst', src,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: dep_int_xtst,
   version: '6.1.0',
   install: true,
@@ -14,7 +14,7 @@ lib = library('Xtst', src,
 
 libxtst = declare_dependency(
   link_with: lib,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
 )
 
 meson.override_dependency('xtst', libxtst)

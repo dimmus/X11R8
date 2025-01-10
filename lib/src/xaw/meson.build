@@ -68,7 +68,7 @@ src = files(
 )
 
 lib = library('Xaw', src,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: dep_int_xaw,
   version: '7.0.0',
   install: true,
@@ -76,7 +76,7 @@ lib = library('Xaw', src,
 
 libxaw = declare_dependency(
   link_with: lib,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
 )
 
 if BUILD_XAW6

@@ -15,7 +15,7 @@ src = [
 foreach test : src
   test('xmu - ' + test,
     executable(test, test + '.c',
-      include_directories: inc_x11,
+      include_directories: inc_lib,
       dependencies: [libxmu, libxt],
     )
   )

@@ -30,6 +30,6 @@ src = files(
 
 executable('x11perf', src,
     dependencies: [dep_int_x11perf, dep_ext_x11perf],
-    include_directories: inc_x11,
+    include_directories: inc_lib,
     install: true
 )

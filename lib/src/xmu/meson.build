@@ -63,7 +63,7 @@ src_mu = src_muu + files(
 
 lib_muu = library('Xmuu', src_muu,
   c_args: lib_args,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: dep_int_xmu,
   version: '1.0.0',
   install: true,
@@ -71,12 +71,12 @@ lib_muu = library('Xmuu', src_muu,
 
 libxmuu = declare_dependency(
   link_with: lib_muu,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
 )
 
 lib_mu = library('Xmu', src_mu,
   c_args: lib_args,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: dep_int_xmu,
   version: '6.2.0',
   install: true,
@@ -84,7 +84,7 @@ lib_mu = library('Xmu', src_mu,
 
 libxmu = declare_dependency(
   link_with: lib_mu,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
 )
 
 pkg.generate(name: 'Xmuu',

@@ -109,7 +109,7 @@ if get_option('legacy') == true
 endif
 
 xproto = declare_dependency(
-    include_directories: inc_x11
+    include_directories: inc_lib
 )
 
 keysymfile = meson.project_source_root() / 'include' / 'X11' / 'XF86keysym.h'

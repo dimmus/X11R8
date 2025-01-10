@@ -11,7 +11,7 @@ src = files(
 )
 
 lib = library('Xfixes', src,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: dep_int_xfixes,
   version: '3.1.0',
   install: true,
@@ -19,7 +19,7 @@ lib = library('Xfixes', src,
 
 libxfixes = declare_dependency(
   link_with: lib,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
 )
 
 meson.override_dependency('xfixes', libxfixes)

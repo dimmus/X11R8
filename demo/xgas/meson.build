@@ -13,6 +13,6 @@ src = files(
 )
 executable('xgas', src,
     dependencies: [libxmu, libxext, libx11, libxt, libxaw, dep_m],
-    include_directories: inc_x11,
+    include_directories: inc_lib,
     install: false
 )

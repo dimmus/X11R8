@@ -9,7 +9,7 @@ src = [
 foreach test : src
   test('xpm - ' + test,
     executable(test, test + '.c',
-      include_directories: inc_x11,
+      include_directories: inc_lib,
       dependencies: [xproto, libxpm],
     )
   )

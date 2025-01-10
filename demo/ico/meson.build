@@ -6,6 +6,6 @@ conf.set('XTHREADS', 1)
 
 executable('ico', 'ico.c',
     dependencies: [libxmu, libxext, libx11, libxt, dep_m],
-    include_directories: inc_x11,
+    include_directories: inc_lib,
     install: false
 )

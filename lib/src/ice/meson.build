@@ -28,7 +28,7 @@ src = files(
 
 lib = library('ICE', src,
   c_args: lib_args,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: dep_int_ice,
   version: '6.3.0',
   install: true,
@@ -36,7 +36,7 @@ lib = library('ICE', src,
 
 libice = declare_dependency(
   link_with: lib,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
 )
 
 pkg.generate(lib,

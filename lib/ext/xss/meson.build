@@ -2,7 +2,7 @@ dep_int_xss = [xproto, libx11, libxext]
 
 lib = library('Xss',
   'XScrnSaver.c',
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: dep_int_xss,
   version: '1.0.0',
   install: true,
@@ -10,7 +10,7 @@ lib = library('Xss',
 
 libxss = declare_dependency(
   link_with: lib,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
 )
 
 meson.override_dependency('xss', libxss)

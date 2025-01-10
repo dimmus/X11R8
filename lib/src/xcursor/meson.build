@@ -35,7 +35,7 @@ src = files(
 )
 
 lib = library('Xcursor', src,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: dep_int_xcursor,
   version: '1.0.2',
   install: true,
@@ -43,7 +43,7 @@ lib = library('Xcursor', src,
 
 libxcursor = declare_dependency(
   link_with: lib,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
 )
 
 pkg.generate(lib,

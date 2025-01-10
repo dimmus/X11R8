@@ -92,12 +92,12 @@ src = files(
 
 lib = static_library('i18n', src,
   c_args: lib_args,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: [dep_ext_x11, dep_mod_x11],
   install: true,
 )
 
 libi18n = declare_dependency(
   link_with: lib,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
 )

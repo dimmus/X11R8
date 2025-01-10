@@ -30,7 +30,7 @@ endif
 
 lib = library('xshmfence', src,
   c_args: lib_args,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: dep_int_xshmfence,
   version: '1.0.0',
   install: true,
@@ -38,7 +38,7 @@ lib = library('xshmfence', src,
 
 libxshmfence = declare_dependency(
   link_with: lib,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
 )
 
 pkg.generate(lib,

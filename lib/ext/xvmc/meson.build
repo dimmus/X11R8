@@ -13,7 +13,7 @@ dep_int_xvmc = [xproto, libx11, libxv, libxext]
 
 xvmc = library('XvMC',
   'XvMC.c',
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: [dep_ext_xvmc, dep_int_xvmc],
   version: '1.0.0',
   darwin_versions : ['2.0.0', '2.0.0'],
@@ -22,13 +22,13 @@ xvmc = library('XvMC',
 
 libxvmc = declare_dependency(
   link_with: xvmc,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
 )
 
 xvmcw = library('XvMCW',
   'XvMCWrapper.c',
   c_args: lib_args,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: [dep_ext_xvmc, dep_int_xvmc],
   version: '1.0.0',
   darwin_versions : ['2.0.0', '2.0.0'],
@@ -37,7 +37,7 @@ xvmcw = library('XvMCW',
 
 libxvmcw = declare_dependency(
   link_with: xvmcw,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
 )
 
 meson.override_dependency('xvmc', libxvmc)

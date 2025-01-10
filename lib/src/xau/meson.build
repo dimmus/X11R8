@@ -32,7 +32,7 @@ lib = library('Xau',
     'AuUnlock.c',
     'AuWrite.c',
   ],
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: xproto,
   version: '6.0.0',
   install: true,
@@ -40,7 +40,7 @@ lib = library('Xau',
 
 libxau = declare_dependency(
   link_with: lib,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
 )
 
 pkg.generate(lib,
@@ -54,7 +54,7 @@ test('autest',
   executable('autest',
     'Autest.c',
     link_with: lib,
-    include_directories: inc_x11,
+    include_directories: inc_lib,
     dependencies: xproto,
   )
 )

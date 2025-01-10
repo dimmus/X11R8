@@ -2,7 +2,7 @@ dep_int_xxf86vm = [xproto, libx11, libxext]
 
 lib = library('Xxf86vm',
   'XF86VMode.c',
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: dep_int_xxf86vm,
   version: '1.0.0',
   install: true,
@@ -10,7 +10,7 @@ lib = library('Xxf86vm',
 
 libxxf86vm = declare_dependency(
   link_with: lib,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
 )
 
 meson.override_dependency('xxf86vm', libxxf86vm)

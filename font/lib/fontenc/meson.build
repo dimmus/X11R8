@@ -18,7 +18,7 @@ src = files(
 )
 
 lib = library('fontenc', src,
-  include_directories: [inc_x11, include_directories('.')],
+  include_directories: [inc_lib, include_directories('.')],
   dependencies: [dep_int_fontenc, dep_ext_fontenc],
   version: '1.0.0',
   install: true,
@@ -26,7 +26,7 @@ lib = library('fontenc', src,
 
 libfontenc = declare_dependency(
   link_with: lib,
-  include_directories: [inc_x11, include_directories('.')],
+  include_directories: [inc_lib, include_directories('.')],
 )
 
 pkg.generate(lib,

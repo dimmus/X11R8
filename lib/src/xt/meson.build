@@ -19,7 +19,7 @@ stringdefs_h = custom_target('makestrs',
 )
 
 stringdefs = declare_dependency(
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   sources: stringdefs_h,
 )
 
@@ -81,7 +81,7 @@ src = files(
 
 lib = library('Xt', src,
   c_args: lib_args,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: [dep_int_xt, stringdefs],
   version: '6.0.0',
   install: true,
@@ -89,7 +89,7 @@ lib = library('Xt', src,
 
 libxt = declare_dependency(
   link_with: lib,
-  include_directories: inc_x11
+  include_directories: inc_lib
 )
 
 pkg.generate(lib,

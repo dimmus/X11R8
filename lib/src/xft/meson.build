@@ -31,7 +31,7 @@ src = files(
 
 lib = library('Xft', src,
   c_args: lib_args,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
   dependencies: [dep_ext_xft, dep_int_xft],
   version: '1.0.0',
   install: true,
@@ -39,7 +39,7 @@ lib = library('Xft', src,
 
 libxft = declare_dependency(
   link_with: lib,
-  include_directories: inc_x11,
+  include_directories: inc_lib,
 )
 
 pkg.generate(lib,

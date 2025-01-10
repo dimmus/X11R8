@@ -1,4 +1,4 @@
-inc_x11 += [
+inc_lib += [
     inc_config,
     include_directories(
         '.',

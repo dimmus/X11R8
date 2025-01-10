@@ -1,4 +1,4 @@
-inc_x11 += include_directories('.')
+inc_lib += include_directories('.')
 
 install_headers(
     'glxint.h',
