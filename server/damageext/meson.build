@@ -4,6 +4,6 @@ srcs_damageext = [
 
 libxserver_damageext = static_library('libxserver_damageext',
 	srcs_damageext,
-	include_directories: inc,
+	include_directories: inc_server,
 	dependencies: dep_common,
 )

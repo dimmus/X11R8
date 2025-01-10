@@ -314,7 +314,7 @@ u8 inc_byte_asm(u32 * flags, u8 d);
 #pragma aux inc_byte_asm =			\
 	"push	[edi]"            		\
 	"popf"                         	\
-	"inc	al"                  	\
+	"inc_server	al"                  	\
 	"pushf"                         \
 	"pop	[edi]"            		\
 	parm [edi] [al]            		\
@@ -326,7 +326,7 @@ u16 inc_word_asm(u32 * flags, u16 d);
 #pragma aux inc_word_asm =			\
 	"push	[edi]"            		\
 	"popf"                         	\
-	"inc	ax"                  	\
+	"inc_server	ax"                  	\
 	"pushf"                         \
 	"pop	[edi]"            		\
 	parm [edi] [ax]            		\
@@ -338,7 +338,7 @@ u32 inc_long_asm(u32 * flags, u32 d);
 #pragma aux inc_long_asm =			\
 	"push	[edi]"            		\
 	"popf"                         	\
-	"inc	eax"                	\
+	"inc_server	eax"                	\
 	"pushf"                         \
 	"pop	[edi]"            		\
 	parm [edi] [eax]          		\

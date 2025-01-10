@@ -21,7 +21,7 @@ srcs_xorg_parser = [
 
 xorg_parser = static_library('xorg_parser',
     srcs_xorg_parser,
-    include_directories: [inc, xorg_inc],
+    include_directories: inc_server,
     dependencies: dep_common,
     c_args: [
         xorg_c_args,

@@ -72,7 +72,7 @@ libxlibc = []
 if srcs_libc.length() > 0
     libxlibc = static_library('libxlibc',
         srcs_libc,
-        include_directories: inc,
+        include_directories: inc_server,
         dependencies: [
             xproto,
         ],
@@ -85,7 +85,7 @@ endif
 
 libxserver_os = static_library('libxserver_os',
     srcs_os,
-    include_directories: inc,
+    include_directories: inc_server,
     dependencies: [
         dep_dtrace,
         dep_common,

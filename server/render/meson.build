@@ -21,7 +21,7 @@ hdrs_render = [
 
 libxserver_render = static_library('libxserver_render',
     srcs_render,
-    include_directories: inc,
+    include_directories: inc_server,
     dependencies: dep_common,
 )
 

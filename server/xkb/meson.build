@@ -25,7 +25,7 @@ srcs_xkb = [
 
 libxserver_xkb = static_library('libxserver_xkb',
     srcs_xkb,
-    include_directories: inc,
+    include_directories: inc_server,
     dependencies: dep_common,
 )
 
@@ -37,6 +37,6 @@ srcs_xkb_stubs = [
 
 libxserver_xkb_stubs = static_library('libxserver_xkb_stubs',
     srcs_xkb_stubs,
-    include_directories: inc,
+    include_directories: inc_server,
     dependencies: dep_common,
 )

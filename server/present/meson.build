@@ -18,7 +18,7 @@ hdrs_present = [
 
 libxserver_present = static_library('libxserver_present',
     srcs_present,
-    include_directories: inc,
+    include_directories: inc_server,
     dependencies: [
         dep_common,
 	    dep_epoll,

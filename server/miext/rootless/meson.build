@@ -8,6 +8,6 @@ srcs_miext_rootless = [
 
 libxserver_miext_rootless = static_library('libxserver_miext_rootless',
         srcs_miext_rootless,
-        include_directories: inc,
+        include_directories: inc_server,
         dependencies: dep_common,
 )

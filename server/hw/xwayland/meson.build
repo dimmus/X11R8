@@ -120,7 +120,7 @@ if build_xwayland_glamor
     xwayland_glamor += glamor
 endif
 
-wayland_inc = [ inc, ]
+wayland_inc = [ inc_server, ]
 if build_glx
     wayland_inc += glx_inc
 endif

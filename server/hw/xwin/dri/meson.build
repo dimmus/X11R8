@@ -6,6 +6,6 @@ srcs_windows_dri = [
 xwin_windowsdri = static_library(
     'WindowsDRI',
     srcs_windows_dri,
-    include_directories: [ inc, include_directories('../') ],
+    include_directories: [ inc_server, include_directories('../') ],
     dependencies: dep_pixman,
 )

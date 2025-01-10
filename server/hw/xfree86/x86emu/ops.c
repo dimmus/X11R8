@@ -7700,14 +7700,14 @@ x86emuOp_movs_byte(u8 X86EMU_UNUSED(op1))
 {
     u8 val;
     u32 count;
-    int inc;
+    int inc_server;
 
     START_OF_INSTR();
     DECODE_PRINTF("MOVS\tBYTE\n");
     if (ACCESS_FLAG(F_DF))      /* down */
-        inc = -1;
+        inc_server = -1;
     else
-        inc = 1;
+        inc_server = 1;
     TRACE_AND_STEP();
     count = 1;
     if (M.x86.mode & (SYSMODE_PREFIX_REPE | SYSMODE_PREFIX_REPNE)) {
@@ -7720,8 +7720,8 @@ x86emuOp_movs_byte(u8 X86EMU_UNUSED(op1))
     while (count--) {
         val = fetch_data_byte(M.x86.R_SI);
         store_data_byte_abs(M.x86.R_ES, M.x86.R_DI, val);
-        M.x86.R_SI += inc;
-        M.x86.R_DI += inc;
+        M.x86.R_SI += inc_server;
+        M.x86.R_DI += inc_server;
     }
     DECODE_CLEAR_SEGOVR();
     END_OF_INSTR();
@@ -7735,23 +7735,23 @@ static void
 x86emuOp_movs_word(u8 X86EMU_UNUSED(op1))
 {
     u32 val;
-    int inc;
+    int inc_server;
     u32 count;
 
     START_OF_INSTR();
     if (M.x86.mode & SYSMODE_PREFIX_DATA) {
         DECODE_PRINTF("MOVS\tDWORD\n");
         if (ACCESS_FLAG(F_DF))  /* down */
-            inc = -4;
+            inc_server = -4;
         else
-            inc = 4;
+            inc_server = 4;
     }
     else {
         DECODE_PRINTF("MOVS\tWORD\n");
         if (ACCESS_FLAG(F_DF))  /* down */
-            inc = -2;
+            inc_server = -2;
         else
-            inc = 2;
+            inc_server = 2;
     }
     TRACE_AND_STEP();
     count = 1;
@@ -7771,8 +7771,8 @@ x86emuOp_movs_word(u8 X86EMU_UNUSED(op1))
             val = fetch_data_word(M.x86.R_SI);
             store_data_word_abs(M.x86.R_ES, M.x86.R_DI, (u16) val);
         }
-        M.x86.R_SI += inc;
-        M.x86.R_DI += inc;
+        M.x86.R_SI += inc_server;
+        M.x86.R_DI += inc_server;
     }
     DECODE_CLEAR_SEGOVR();
     END_OF_INSTR();
@@ -7786,15 +7786,15 @@ static void
 x86emuOp_cmps_byte(u8 X86EMU_UNUSED(op1))
 {
     s8 val1, val2;
-    int inc;
+    int inc_server;
 
     START_OF_INSTR();
     DECODE_PRINTF("CMPS\tBYTE\n");
     TRACE_AND_STEP();
     if (ACCESS_FLAG(F_DF))      /* down */
-        inc = -1;
+        inc_server = -1;
     else
-        inc = 1;
+        inc_server = 1;
 
     if (M.x86.mode & SYSMODE_PREFIX_REPE) {
         /* REPE  */
@@ -7804,8 +7804,8 @@ x86emuOp_cmps_byte(u8 X86EMU_UNUSED(op1))
             val2 = fetch_data_byte_abs(M.x86.R_ES, M.x86.R_DI);
             cmp_byte(val1, val2);
             M.x86.R_CX -= 1;
-            M.x86.R_SI += inc;
-            M.x86.R_DI += inc;
+            M.x86.R_SI += inc_server;
+            M.x86.R_DI += inc_server;
             if (ACCESS_FLAG(F_ZF) == 0)
                 break;
         }
@@ -7819,8 +7819,8 @@ x86emuOp_cmps_byte(u8 X86EMU_UNUSED(op1))
             val2 = fetch_data_byte_abs(M.x86.R_ES, M.x86.R_DI);
             cmp_byte(val1, val2);
             M.x86.R_CX -= 1;
-            M.x86.R_SI += inc;
-            M.x86.R_DI += inc;
+            M.x86.R_SI += inc_server;
+            M.x86.R_DI += inc_server;
             if (ACCESS_FLAG(F_ZF))
                 break;          /* zero flag set means equal */
         }
@@ -7830,8 +7830,8 @@ x86emuOp_cmps_byte(u8 X86EMU_UNUSED(op1))
         val1 = fetch_data_byte(M.x86.R_SI);
         val2 = fetch_data_byte_abs(M.x86.R_ES, M.x86.R_DI);
         cmp_byte(val1, val2);
-        M.x86.R_SI += inc;
-        M.x86.R_DI += inc;
+        M.x86.R_SI += inc_server;
+        M.x86.R_DI += inc_server;
     }
     DECODE_CLEAR_SEGOVR();
     END_OF_INSTR();
@@ -7845,22 +7845,22 @@ static void
 x86emuOp_cmps_word(u8 X86EMU_UNUSED(op1))
 {
     u32 val1, val2;
-    int inc;
+    int inc_server;
 
     START_OF_INSTR();
     if (M.x86.mode & SYSMODE_PREFIX_DATA) {
         DECODE_PRINTF("CMPS\tDWORD\n");
         if (ACCESS_FLAG(F_DF))  /* down */
-            inc = -4;
+            inc_server = -4;
         else
-            inc = 4;
+            inc_server = 4;
     }
     else {
         DECODE_PRINTF("CMPS\tWORD\n");
         if (ACCESS_FLAG(F_DF))  /* down */
-            inc = -2;
+            inc_server = -2;
         else
-            inc = 2;
+            inc_server = 2;
     }
     TRACE_AND_STEP();
     if (M.x86.mode & SYSMODE_PREFIX_REPE) {
@@ -7878,8 +7878,8 @@ x86emuOp_cmps_word(u8 X86EMU_UNUSED(op1))
                 cmp_word((u16) val1, (u16) val2);
             }
             M.x86.R_CX -= 1;
-            M.x86.R_SI += inc;
-            M.x86.R_DI += inc;
+            M.x86.R_SI += inc_server;
+            M.x86.R_DI += inc_server;
             if (ACCESS_FLAG(F_ZF) == 0)
                 break;
         }
@@ -7900,8 +7900,8 @@ x86emuOp_cmps_word(u8 X86EMU_UNUSED(op1))
                 cmp_word((u16) val1, (u16) val2);
             }
             M.x86.R_CX -= 1;
-            M.x86.R_SI += inc;
-            M.x86.R_DI += inc;
+            M.x86.R_SI += inc_server;
+            M.x86.R_DI += inc_server;
             if (ACCESS_FLAG(F_ZF))
                 break;          /* zero flag set means equal */
         }
@@ -7918,8 +7918,8 @@ x86emuOp_cmps_word(u8 X86EMU_UNUSED(op1))
             val2 = fetch_data_word_abs(M.x86.R_ES, M.x86.R_DI);
             cmp_word((u16) val1, (u16) val2);
         }
-        M.x86.R_SI += inc;
-        M.x86.R_DI += inc;
+        M.x86.R_SI += inc_server;
+        M.x86.R_DI += inc_server;
     }
     DECODE_CLEAR_SEGOVR();
     END_OF_INSTR();
@@ -7981,14 +7981,14 @@ Handles opcode 0xaa
 static void
 x86emuOp_stos_byte(u8 X86EMU_UNUSED(op1))
 {
-    int inc;
+    int inc_server;
 
     START_OF_INSTR();
     DECODE_PRINTF("STOS\tBYTE\n");
     if (ACCESS_FLAG(F_DF))      /* down */
-        inc = -1;
+        inc_server = -1;
     else
-        inc = 1;
+        inc_server = 1;
     TRACE_AND_STEP();
     if (M.x86.mode & (SYSMODE_PREFIX_REPE | SYSMODE_PREFIX_REPNE)) {
         /* don't care whether REPE or REPNE */
@@ -7996,13 +7996,13 @@ x86emuOp_stos_byte(u8 X86EMU_UNUSED(op1))
         while (M.x86.R_CX != 0) {
             store_data_byte_abs(M.x86.R_ES, M.x86.R_DI, M.x86.R_AL);
             M.x86.R_CX -= 1;
-            M.x86.R_DI += inc;
+            M.x86.R_DI += inc_server;
         }
         M.x86.mode &= ~(SYSMODE_PREFIX_REPE | SYSMODE_PREFIX_REPNE);
     }
     else {
         store_data_byte_abs(M.x86.R_ES, M.x86.R_DI, M.x86.R_AL);
-        M.x86.R_DI += inc;
+        M.x86.R_DI += inc_server;
     }
     DECODE_CLEAR_SEGOVR();
     END_OF_INSTR();
@@ -8015,23 +8015,23 @@ Handles opcode 0xab
 static void
 x86emuOp_stos_word(u8 X86EMU_UNUSED(op1))
 {
-    int inc;
+    int inc_server;
     u32 count;
 
     START_OF_INSTR();
     if (M.x86.mode & SYSMODE_PREFIX_DATA) {
         DECODE_PRINTF("STOS\tDWORD\n");
         if (ACCESS_FLAG(F_DF))  /* down */
-            inc = -4;
+            inc_server = -4;
         else
-            inc = 4;
+            inc_server = 4;
     }
     else {
         DECODE_PRINTF("STOS\tWORD\n");
         if (ACCESS_FLAG(F_DF))  /* down */
-            inc = -2;
+            inc_server = -2;
         else
-            inc = 2;
+            inc_server = 2;
     }
     TRACE_AND_STEP();
     count = 1;
@@ -8049,7 +8049,7 @@ x86emuOp_stos_word(u8 X86EMU_UNUSED(op1))
         else {
             store_data_word_abs(M.x86.R_ES, M.x86.R_DI, M.x86.R_AX);
         }
-        M.x86.R_DI += inc;
+        M.x86.R_DI += inc_server;
     }
     DECODE_CLEAR_SEGOVR();
     END_OF_INSTR();
@@ -8062,28 +8062,28 @@ Handles opcode 0xac
 static void
 x86emuOp_lods_byte(u8 X86EMU_UNUSED(op1))
 {
-    int inc;
+    int inc_server;
 
     START_OF_INSTR();
     DECODE_PRINTF("LODS\tBYTE\n");
     TRACE_AND_STEP();
     if (ACCESS_FLAG(F_DF))      /* down */
-        inc = -1;
+        inc_server = -1;
     else
-        inc = 1;
+        inc_server = 1;
     if (M.x86.mode & (SYSMODE_PREFIX_REPE | SYSMODE_PREFIX_REPNE)) {
         /* don't care whether REPE or REPNE */
         /* move them until CX is ZERO. */
         while (M.x86.R_CX != 0) {
             M.x86.R_AL = fetch_data_byte(M.x86.R_SI);
             M.x86.R_CX -= 1;
-            M.x86.R_SI += inc;
+            M.x86.R_SI += inc_server;
         }
         M.x86.mode &= ~(SYSMODE_PREFIX_REPE | SYSMODE_PREFIX_REPNE);
     }
     else {
         M.x86.R_AL = fetch_data_byte(M.x86.R_SI);
-        M.x86.R_SI += inc;
+        M.x86.R_SI += inc_server;
     }
     DECODE_CLEAR_SEGOVR();
     END_OF_INSTR();
@@ -8096,23 +8096,23 @@ Handles opcode 0xad
 static void
 x86emuOp_lods_word(u8 X86EMU_UNUSED(op1))
 {
-    int inc;
+    int inc_server;
     u32 count;
 
     START_OF_INSTR();
     if (M.x86.mode & SYSMODE_PREFIX_DATA) {
         DECODE_PRINTF("LODS\tDWORD\n");
         if (ACCESS_FLAG(F_DF))  /* down */
-            inc = -4;
+            inc_server = -4;
         else
-            inc = 4;
+            inc_server = 4;
     }
     else {
         DECODE_PRINTF("LODS\tWORD\n");
         if (ACCESS_FLAG(F_DF))  /* down */
-            inc = -2;
+            inc_server = -2;
         else
-            inc = 2;
+            inc_server = 2;
     }
     TRACE_AND_STEP();
     count = 1;
@@ -8130,7 +8130,7 @@ x86emuOp_lods_word(u8 X86EMU_UNUSED(op1))
         else {
             M.x86.R_AX = fetch_data_word(M.x86.R_SI);
         }
-        M.x86.R_SI += inc;
+        M.x86.R_SI += inc_server;
     }
     DECODE_CLEAR_SEGOVR();
     END_OF_INSTR();
@@ -8144,15 +8144,15 @@ static void
 x86emuOp_scas_byte(u8 X86EMU_UNUSED(op1))
 {
     s8 val2;
-    int inc;
+    int inc_server;
 
     START_OF_INSTR();
     DECODE_PRINTF("SCAS\tBYTE\n");
     TRACE_AND_STEP();
     if (ACCESS_FLAG(F_DF))      /* down */
-        inc = -1;
+        inc_server = -1;
     else
-        inc = 1;
+        inc_server = 1;
     if (M.x86.mode & SYSMODE_PREFIX_REPE) {
         /* REPE  */
         /* move them until CX is ZERO. */
@@ -8160,7 +8160,7 @@ x86emuOp_scas_byte(u8 X86EMU_UNUSED(op1))
             val2 = fetch_data_byte_abs(M.x86.R_ES, M.x86.R_DI);
             cmp_byte(M.x86.R_AL, val2);
             M.x86.R_CX -= 1;
-            M.x86.R_DI += inc;
+            M.x86.R_DI += inc_server;
             if (ACCESS_FLAG(F_ZF) == 0)
                 break;
         }
@@ -8173,7 +8173,7 @@ x86emuOp_scas_byte(u8 X86EMU_UNUSED(op1))
             val2 = fetch_data_byte_abs(M.x86.R_ES, M.x86.R_DI);
             cmp_byte(M.x86.R_AL, val2);
             M.x86.R_CX -= 1;
-            M.x86.R_DI += inc;
+            M.x86.R_DI += inc_server;
             if (ACCESS_FLAG(F_ZF))
                 break;          /* zero flag set means equal */
         }
@@ -8182,7 +8182,7 @@ x86emuOp_scas_byte(u8 X86EMU_UNUSED(op1))
     else {
         val2 = fetch_data_byte_abs(M.x86.R_ES, M.x86.R_DI);
         cmp_byte(M.x86.R_AL, val2);
-        M.x86.R_DI += inc;
+        M.x86.R_DI += inc_server;
     }
     DECODE_CLEAR_SEGOVR();
     END_OF_INSTR();
@@ -8195,23 +8195,23 @@ Handles opcode 0xaf
 static void
 x86emuOp_scas_word(u8 X86EMU_UNUSED(op1))
 {
-    int inc;
+    int inc_server;
     u32 val;
 
     START_OF_INSTR();
     if (M.x86.mode & SYSMODE_PREFIX_DATA) {
         DECODE_PRINTF("SCAS\tDWORD\n");
         if (ACCESS_FLAG(F_DF))  /* down */
-            inc = -4;
+            inc_server = -4;
         else
-            inc = 4;
+            inc_server = 4;
     }
     else {
         DECODE_PRINTF("SCAS\tWORD\n");
         if (ACCESS_FLAG(F_DF))  /* down */
-            inc = -2;
+            inc_server = -2;
         else
-            inc = 2;
+            inc_server = 2;
     }
     TRACE_AND_STEP();
     if (M.x86.mode & SYSMODE_PREFIX_REPE) {
@@ -8227,7 +8227,7 @@ x86emuOp_scas_word(u8 X86EMU_UNUSED(op1))
                 cmp_word(M.x86.R_AX, (u16) val);
             }
             M.x86.R_CX -= 1;
-            M.x86.R_DI += inc;
+            M.x86.R_DI += inc_server;
             if (ACCESS_FLAG(F_ZF) == 0)
                 break;
         }
@@ -8246,7 +8246,7 @@ x86emuOp_scas_word(u8 X86EMU_UNUSED(op1))
                 cmp_word(M.x86.R_AX, (u16) val);
             }
             M.x86.R_CX -= 1;
-            M.x86.R_DI += inc;
+            M.x86.R_DI += inc_server;
             if (ACCESS_FLAG(F_ZF))
                 break;          /* zero flag set means equal */
         }
@@ -8261,7 +8261,7 @@ x86emuOp_scas_word(u8 X86EMU_UNUSED(op1))
             val = fetch_data_word_abs(M.x86.R_ES, M.x86.R_DI);
             cmp_word(M.x86.R_AX, (u16) val);
         }
-        M.x86.R_DI += inc;
+        M.x86.R_DI += inc_server;
     }
     DECODE_CLEAR_SEGOVR();
     END_OF_INSTR();
@@ -11599,7 +11599,7 @@ x86emuOp_opcFE_byte_RM(u8 X86EMU_UNUSED(op1))
         destoffset = decode_rm00_address(rl);
         DECODE_PRINTF("\n");
         switch (rh) {
-        case 0:                /* inc word ptr ... */
+        case 0:                /* inc_server word ptr ... */
             destval = fetch_data_byte(destoffset);
             TRACE_AND_STEP();
             destval = inc_byte(destval);
@@ -11736,7 +11736,7 @@ x86emuOp_opcFF_word_RM(u8 X86EMU_UNUSED(op1))
         destoffset = decode_rm00_address(rl);
         DECODE_PRINTF("\n");
         switch (rh) {
-        case 0:                /* inc word ptr ... */
+        case 0:                /* inc_server word ptr ... */
             if (M.x86.mode & SYSMODE_PREFIX_DATA) {
                 u32 destval32;
 

@@ -49,13 +49,13 @@ dep_dtrace = declare_dependency(sources: [dtrace_src, dtrace_hdr])
 
 libxserver_dix = static_library('libxserver_dix',
     srcs_dix,
-    include_directories: inc,
+    include_directories: inc_server,
     dependencies: [ dep_dtrace, dep_common, ]
 )
 
 libxserver_main = static_library('libxserver_main',
     'stubmain.c',
-    include_directories: inc,
+    include_directories: inc_server,
     dependencies: dep_common,
 )
 

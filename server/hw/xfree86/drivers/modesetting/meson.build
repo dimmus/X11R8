@@ -13,7 +13,7 @@ shared_module(
     modesetting_srcs,
     name_prefix: '',
 
-    include_directories: [inc, xorg_inc],
+    include_directories: inc_server,
     c_args: xorg_c_args,
     dependencies: [
         dep_common,

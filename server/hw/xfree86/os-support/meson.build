@@ -155,7 +155,7 @@ endif
 
 xorg_os_support = static_library('xorg_os_support',
     srcs_xorg_os_support,
-    include_directories: [inc, xorg_inc],
+    include_directories: inc_server,
     dependencies: [
         dep_common,
         dep_dbus,

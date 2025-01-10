@@ -34,7 +34,7 @@ libxserver_glx = []
 if build_glx
     libxserver_glx = static_library('libxserver_glx',
         srcs_glx,
-        include_directories: inc,
+        include_directories: inc_server,
         dependencies: [
             dep_common,
             dep_dl,
@@ -70,7 +70,7 @@ libglxvnd = []
 if build_glx
     libglxvnd = static_library('libglxvnd',
     srcs_vnd,
-    include_directories: inc,
+    include_directories: inc_server,
         dependencies: [
             dep_common,
             dep_dl,

@@ -5,7 +5,7 @@ srcs_xorg_ramdac = [
 
 xorg_ramdac = static_library('xorg_ramdac',
     srcs_xorg_ramdac,
-    include_directories: [inc, xorg_inc],
+    include_directories: inc_server,
     dependencies: dep_common,
     c_args: xorg_c_args,
 )

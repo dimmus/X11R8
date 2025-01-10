@@ -16,7 +16,7 @@ endif
 
 libxserver_miext_sync = static_library('libxserver_miext_sync',
     srcs_miext_sync,
-    include_directories: inc,
+    include_directories: inc_server,
     dependencies: [
         dep_common,
         libxshmfence,

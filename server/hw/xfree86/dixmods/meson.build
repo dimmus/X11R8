@@ -2,7 +2,7 @@ shared_module(
     'wfb',
     'fbmodule.c',
 
-    include_directories: [inc, xorg_inc],
+    include_directories: inc_server,
     c_args: [ xorg_c_args, wfb_args ],
     dependencies: dep_common,
     link_whole: libxserver_wfb,
@@ -16,7 +16,7 @@ shared_module(
     'shadow',
     'shmodule.c',
 
-    include_directories: [inc, xorg_inc],
+    include_directories: inc_server,
     c_args: xorg_c_args,
     dependencies: dep_common,
     link_whole: libxserver_miext_shadow,
@@ -31,7 +31,7 @@ if build_glx
         'glx',
         [ 'glxmodule.c', srcs_glxdri2 ],
 
-        include_directories: [ inc, xorg_inc, glx_inc ],
+        include_directories: [ inc_server, inc_server, glx_inc ],
         c_args: [ xorg_c_args, glx_align64 ],
         dependencies: [ dep_common, dep_dl, dep_dri ],
         link_whole: libxserver_glx,

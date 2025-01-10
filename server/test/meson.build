@@ -1,7 +1,7 @@
 simple_xinit = executable(
     'simple-xinit',
     'simple-xinit.c',
-    include_directories: inc,
+    include_directories: inc_server,
     dependencies: [ xproto ],
 )
 
@@ -189,7 +189,7 @@ if build_xorg
      'xtest.c',
     ]
     unit_c_args = ['-DXORG_TESTS']
-    unit_includes = [inc, xorg_inc]
+    unit_includes = inc_server
 
     if build_res
         unit_sources += ['hashtabletest.c']

@@ -14,7 +14,7 @@ endif
 
 kdrive = static_library('kdrive',
     srcs_kdrive,
-    include_directories: inc,
+    include_directories: inc_server,
     dependencies: dep_common,
     link_with: libxserver_miext_shadow,
 )

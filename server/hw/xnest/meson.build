@@ -21,7 +21,7 @@ srcs = [
 
 executable('Xnest',
     srcs,
-    include_directories: inc,
+    include_directories: inc_server,
     dependencies: [
         dep_common,
         dep_xnest,

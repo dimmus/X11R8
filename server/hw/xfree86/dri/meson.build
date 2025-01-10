@@ -5,7 +5,7 @@ srcs_xorg_dri = [
 
 xorg_dri = static_library('xorg_dri',
     srcs_xorg_dri,
-    include_directories: [inc, inc_x11, xorg_inc],
+    include_directories: [inc_server, inc_x11, inc_server],
     dependencies: [
         dep_common,
         dep_drm,

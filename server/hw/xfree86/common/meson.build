@@ -87,7 +87,7 @@ srcs_xorg_common += custom_target(
 
 xorg_common = static_library('xorg_common',
     srcs_xorg_common,
-    include_directories: [inc, xorg_inc, top_dir_inc],
+    include_directories: [inc_server, inc_server, top_dir_inc],
     dependencies: [
         dep_common,
         dep_dbus,

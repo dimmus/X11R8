@@ -40,7 +40,7 @@ endif
 xephyr_server = executable('Xephyr',
     srcs,
     include_directories: [
-        inc,
+        inc_server,
         include_directories('../src')
     ],
     dependencies: dep_xephyr,

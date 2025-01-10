@@ -12,7 +12,7 @@ hdrs_composite = [
 
 libxserver_composite = static_library('libxserver_composite',
 	srcs_composite,
-	include_directories: inc,
+	include_directories: inc_server,
 	dependencies: dep_common,
 )
 

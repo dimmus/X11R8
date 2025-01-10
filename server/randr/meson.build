@@ -27,7 +27,7 @@ endif
 
 libxserver_randr = static_library('libxserver_randr',
     srcs_randr,
-    include_directories: inc,
+    include_directories: inc_server,
     dependencies: dep_common,
 )
 

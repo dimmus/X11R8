@@ -475,7 +475,7 @@ dep_common = [
     libxdmcp,
 ]
 
-inc = [include_directories(
+inc_server = [include_directories(
     '.',
     'Xext',
     'Xi',
@@ -498,13 +498,10 @@ inc = [include_directories(
     'xfixes',
 )]
 
-inc_server += inc
-
-inc += [
-    inc_x11,
+inc_server += [
     inc_x11,
     inc_font,
-    inc_static
+    inc_static,
 ]
 
 build_xselinux = false

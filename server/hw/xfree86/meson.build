@@ -1,6 +1,4 @@
-xorg_inc = [
-    inc_static,
-    include_directories(
+inc_server += include_directories(
     'common',
     'ddc',
     'dri2',
@@ -13,9 +11,7 @@ xorg_inc = [
     'parser',
     'ramdac',
     'vgahw',
-)]
-
-inc_server += xorg_inc
+)
 
 xorg_c_args = []
 xorg_c_args += '-DHAVE_XORG_CONFIG_H'
@@ -112,7 +108,7 @@ endif
 e = executable(
     'Xorg',
     srcs_xorg,
-    include_directories: [inc, xorg_inc],
+    include_directories: inc_server,
     link_whole: xorg_link,
     dependencies: xorg_deps,
     link_args: linker_export_flags,
@@ -157,7 +153,7 @@ meson.add_install_script(
 if get_option('suid_wrapper')
     executable('Xorg.wrap',
         'xorg-wrapper.c',
-        include_directories: [inc, xorg_inc],
+        include_directories: inc_server,
         dependencies: xorg_deps,
         c_args: xorg_c_args,
         install: true,
@@ -183,7 +179,7 @@ endif
 
 executable('gtf',
     'utils/gtf/gtf.c',
-    include_directories: [inc, xorg_inc],
+    include_directories: inc_server,
     dependencies: xorg_deps,
     c_args: xorg_c_args,
     install: true,
@@ -193,7 +189,7 @@ executable('gtf',
 xorgserver_lib = shared_library(
     'xorgserver',
     srcs_xorg,
-    include_directories: [inc, xorg_inc],
+    include_directories: inc_server,
     link_whole: xorg_link,
     dependencies: xorg_deps,
     link_args: linker_export_flags,

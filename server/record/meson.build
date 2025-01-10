@@ -5,6 +5,6 @@ srcs_record = [
 
 libxserver_record = static_library('libxserver_record',
 	srcs_record,
-	include_directories: inc,
+	include_directories: inc_server,
 	dependencies: dep_common,
 )

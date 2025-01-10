@@ -136,10 +136,11 @@ inc_config       = include_directories('.')
 
 f_check          = []
 h_check          = []
-inc_x11          = []
+
 inc_font         = []
-inc_static       = []
+inc_x11          = []
 inc_server       = []
+inc_static       = []
 
 # libraries
 ver_ice          = '1.1.1'

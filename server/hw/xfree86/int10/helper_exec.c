@@ -226,7 +226,7 @@ int
 port_rep_inb(xf86Int10InfoPtr pInt,
              uint16_t port, uint32_t base, int d_f, uint32_t count)
 {
-    register int inc = d_f ? -1 : 1;
+    register int inc_server = d_f ? -1 : 1;
     uint32_t dst = base;
 
     if (PRINT_PORT && DEBUG_IO_TRACE())
@@ -234,7 +234,7 @@ port_rep_inb(xf86Int10InfoPtr pInt,
                port, (unsigned) count, (unsigned) base, d_f ? "up" : "down");
     while (count--) {
         MEM_WB(pInt, dst, x_inb(port));
-        dst += inc;
+        dst += inc_server;
     }
     return dst - base;
 }
@@ -243,7 +243,7 @@ int
 port_rep_inw(xf86Int10InfoPtr pInt,
              uint16_t port, uint32_t base, int d_f, uint32_t count)
 {
-    register int inc = d_f ? -2 : 2;
+    register int inc_server = d_f ? -2 : 2;
     uint32_t dst = base;
 
     if (PRINT_PORT && DEBUG_IO_TRACE())
@@ -251,7 +251,7 @@ port_rep_inw(xf86Int10InfoPtr pInt,
                port, (unsigned) count, (unsigned) base, d_f ? "up" : "down");
     while (count--) {
         MEM_WW(pInt, dst, x_inw(port));
-        dst += inc;
+        dst += inc_server;
     }
     return dst - base;
 }
@@ -260,7 +260,7 @@ int
 port_rep_inl(xf86Int10InfoPtr pInt,
              uint16_t port, uint32_t base, int d_f, uint32_t count)
 {
-    register int inc = d_f ? -4 : 4;
+    register int inc_server = d_f ? -4 : 4;
     uint32_t dst = base;
 
     if (PRINT_PORT && DEBUG_IO_TRACE())
@@ -268,7 +268,7 @@ port_rep_inl(xf86Int10InfoPtr pInt,
                port, (unsigned) count, (unsigned) base, d_f ? "up" : "down");
     while (count--) {
         MEM_WL(pInt, dst, x_inl(port));
-        dst += inc;
+        dst += inc_server;
     }
     return dst - base;
 }
@@ -277,7 +277,7 @@ int
 port_rep_outb(xf86Int10InfoPtr pInt,
               uint16_t port, uint32_t base, int d_f, uint32_t count)
 {
-    register int inc = d_f ? -1 : 1;
+    register int inc_server = d_f ? -1 : 1;
     uint32_t dst = base;
 
     if (PRINT_PORT && DEBUG_IO_TRACE())
@@ -285,7 +285,7 @@ port_rep_outb(xf86Int10InfoPtr pInt,
                port, (unsigned) count, (unsigned) base, d_f ? "up" : "down");
     while (count--) {
         x_outb(port, MEM_RB(pInt, dst));
-        dst += inc;
+        dst += inc_server;
     }
     return dst - base;
 }
@@ -294,7 +294,7 @@ int
 port_rep_outw(xf86Int10InfoPtr pInt,
               uint16_t port, uint32_t base, int d_f, uint32_t count)
 {
-    register int inc = d_f ? -2 : 2;
+    register int inc_server = d_f ? -2 : 2;
     uint32_t dst = base;
 
     if (PRINT_PORT && DEBUG_IO_TRACE())
@@ -302,7 +302,7 @@ port_rep_outw(xf86Int10InfoPtr pInt,
                port, (unsigned) count, (unsigned) base, d_f ? "up" : "down");
     while (count--) {
         x_outw(port, MEM_RW(pInt, dst));
-        dst += inc;
+        dst += inc_server;
     }
     return dst - base;
 }
@@ -311,7 +311,7 @@ int
 port_rep_outl(xf86Int10InfoPtr pInt,
               uint16_t port, uint32_t base, int d_f, uint32_t count)
 {
-    register int inc = d_f ? -4 : 4;
+    register int inc_server = d_f ? -4 : 4;
     uint32_t dst = base;
 
     if (PRINT_PORT && DEBUG_IO_TRACE())
@@ -319,7 +319,7 @@ port_rep_outl(xf86Int10InfoPtr pInt,
                port, (unsigned) count, (unsigned) base, d_f ? "up" : "down");
     while (count--) {
         x_outl(port, MEM_RL(pInt, dst));
-        dst += inc;
+        dst += inc_server;
     }
     return dst - base;
 }

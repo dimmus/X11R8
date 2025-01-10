@@ -128,7 +128,7 @@ ConstrainSize(WinXSizeHints hints, int *widthp, int *heightp)
         dheight = maxHeight;
 
     /*
-     * Second, fit to base + N * inc
+     * Second, fit to base + N * inc_server
      */
     dwidth = ((dwidth - baseWidth) / xinc * xinc) + baseWidth;
     dheight = ((dheight - baseHeight) / yinc * yinc) + baseHeight;

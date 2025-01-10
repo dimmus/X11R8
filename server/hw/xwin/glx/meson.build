@@ -66,7 +66,7 @@ xwin_glx = static_library(
     'XwinGLX',
     srcs_windows_glx,
     include_directories: [
-        inc,
+        inc_server,
         top_dir_inc,
         include_directories('../'),
     ],
@@ -83,7 +83,7 @@ WGLthunk = shared_library(
     'nativeGLthunk',
     srcs_wgl_thunk,
     include_directories: [
-        inc,
+        inc_server,
         top_dir_inc,
     ],
     c_args: xwin_glx_c_args + [

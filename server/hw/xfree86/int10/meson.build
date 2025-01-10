@@ -47,8 +47,8 @@ endif
 xorg_int10 = shared_module('int10',
     srcs_xorg_int10,
     include_directories: [
-        inc,
-        xorg_inc,
+        inc_server,
+        inc_server,
         include_directories('../x86emu')
     ],
     dependencies: dep_common,

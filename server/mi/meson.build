@@ -42,7 +42,7 @@ hdrs_mi = [
 
 libxserver_mi = static_library('libxserver_mi',
     srcs_mi,
-    include_directories: inc,
+    include_directories: inc_server,
     link_with: libxserver_os,
     dependencies: [
         dep_common,
