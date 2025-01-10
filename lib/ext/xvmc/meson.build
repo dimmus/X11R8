@@ -1,5 +1,5 @@
 lib_args = [
-  '-DXVMC_CONFIGDIR=@0@/X11'.format(get_option('sysconfdir')),
+  '-DXVMC_CONFIGDIR=@0@/X11'.format(dir_sysconf),
   '-DXVMC_SOVERSION=".1.0"',
   '-DXV_SOVERSION=".1.0"',
 ]

@@ -161,5 +161,5 @@ executable(
 
 install_data(
     'system.XWinrc',
-    install_dir: join_paths(get_option('sysconfdir'), 'X11')
+    install_dir: dir_sysconf / 'X11',
 )

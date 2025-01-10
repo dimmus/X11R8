@@ -55,7 +55,7 @@ pcs = [
 pc_data = configuration_data()
 pc_data.set('prefix', dir_prefix)
 # meson does not allow installing the includedir outside of the prefix
-pc_data.set('includedir', '${prefix}' / get_option('includedir'))
+pc_data.set('includedir', '${prefix}' / dir_include)
 
 foreach pc: pcs
     configure_file(

@@ -616,7 +616,7 @@ if build_xorg
     sdkconfig.set('includedir', dir_include)
     sdkconfig.set('datarootdir', dir_data)
     sdkconfig.set('moduledir', '${prefix}' / module_dir)
-    sdkconfig.set('sdkdir', '${prefix}' / get_option('includedir') / 'xorg')
+    sdkconfig.set('sdkdir', dir_include / 'xorg')
     sdkconfig.set('sysconfigdir', '${datarootdir}' / 'X11' / 'xorg.conf.d')
     sdkconfig.set('abi_ansic',
         run_command(exe_awk, '-F', '[(,)]',

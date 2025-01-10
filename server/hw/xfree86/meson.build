@@ -81,7 +81,7 @@ else
     linker_export_flags = '-Wl,--export-dynamic'
 endif
 
-xorg_deps = [
+dep_xorg = [
     dep_pixman,
     dep_m,
     dep_dl,
@@ -100,9 +100,9 @@ xorg_deps = [
 ]
 
 if get_option('suid_wrapper')
-    xorg_install_dir = get_option('libexecdir')
+    xorg_install_dir = dir_libexec
 else
-    xorg_install_dir = get_option('bindir')
+    xorg_install_dir = dir_bin
 endif
 
 e = executable(
@@ -110,7 +110,7 @@ e = executable(
     srcs_xorg,
     include_directories: inc_server,
     link_whole: xorg_link,
-    dependencies: xorg_deps,
+    dependencies: dep_xorg,
     link_args: linker_export_flags,
     c_args: xorg_c_args,
     install: true,
@@ -154,10 +154,10 @@ if get_option('suid_wrapper')
     executable('Xorg.wrap',
         'xorg-wrapper.c',
         include_directories: inc_server,
-        dependencies: xorg_deps,
+        dependencies: dep_xorg,
         c_args: xorg_c_args,
         install: true,
-        install_dir: get_option('libexecdir'),
+        install_dir: dir_libexec,
         install_mode: ['r-sr-xr-x', 0, 0],
     )
 
@@ -180,7 +180,7 @@ endif
 executable('gtf',
     'utils/gtf/gtf.c',
     include_directories: inc_server,
-    dependencies: xorg_deps,
+    dependencies: dep_xorg,
     c_args: xorg_c_args,
     install: true,
 )
@@ -191,7 +191,7 @@ xorgserver_lib = shared_library(
     srcs_xorg,
     include_directories: inc_server,
     link_whole: xorg_link,
-    dependencies: xorg_deps,
+    dependencies: dep_xorg,
     link_args: linker_export_flags,
     c_args: xorg_c_args,
     install: false,

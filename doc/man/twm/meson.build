@@ -5,7 +5,7 @@ custom_target(
     input: files('twm.man'),
     output: 'twm.1',
     install: true,
-    install_dir: get_option('mandir'),
+    install_dir: dir_man,
     command: [
         exe_sed,
         '@INPUT@',
