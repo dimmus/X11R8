@@ -84,13 +84,11 @@ if with_backlight_helper
 	     install : true)
 
   polkit_config = configuration_data()
-  polkit_config.set('LIBEXEC_PATH',
-		    join_paths(get_option('prefix'),
-			       get_option('libexecdir')))
+  polkit_config.set('LIBEXEC_PATH', dir_libexec)
 
   configure_file(input : 'org.x.xf86-video-intel.backlight-helper.policy.in',
 		 output : 'org.x.xf86-video-intel.backlight-helper.policy',
 		 configuration : polkit_config,
-		 install_dir : join_paths(get_option('datadir'), 'polkit-1/actions'),
+		 install_dir : join_paths(dir_data, 'polkit-1/actions'),
 		 install : true)
 endif

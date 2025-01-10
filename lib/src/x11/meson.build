@@ -122,14 +122,6 @@ libx11_xcb = declare_dependency(
   include_directories: inc_lib,
 )
 
-# TODO: need?
-# install_headers(
-#   files(
-#     'include/X11/extenstions/XKBgeom.h',
-#   ),
-#   subdir: 'X11/extensions',
-# )
-
 pkg.generate(lib_x11,
   description: 'X library',
   filebase: 'x11',

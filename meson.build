@@ -82,6 +82,8 @@ dir_data         = dir_prefix / get_option('datadir')
 dir_include      = dir_prefix / get_option('includedir')
 dir_lib          = dir_prefix / get_option('libdir')
 dir_man          = dir_prefix / get_option('mandir')
+dir_sysconf      = dir_prefix / get_option('sysconfdir')
+dir_libexec      = dir_prefix / get_option('libexecdir')
 
 dir_build        = meson.project_build_root()
 dir_source       = meson.project_source_root()
@@ -109,7 +111,7 @@ dep_uuid         = dependency('uuid',           required: false) # sm
 dep_gettext      = dependency('gettext',        required: false) # xpm
 # xserver
 dep_null         = dependency('',               required: false)
-dep_pixman       = dependency('pixman-1',       required: false)
+dep_pixman       = dependency('pixman-1',       required: not WITH_INT_PIXMAN)
 dep_libbsd       = dependency('libbsd-overlay', required: false)
 dep_xkbcomp      = dependency('xkbcomp',        required: false)
 dep_dbus         = dependency('dbus-1',         required: get_option('systemd_logind') == 'true', version: '>= 1.0')

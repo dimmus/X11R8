@@ -16,7 +16,7 @@ if build_docs
             'xhtml-nochunks', '@INPUT0@'],
         build_by_default: true,
         install: true,
-        install_dir: join_paths(get_option('datadir'), 'doc/xorg-server'),
+        install_dir: join_paths(dir_data, 'doc/xorg-server'),
     )
 
     if build_docs_pdf
@@ -35,7 +35,7 @@ if build_docs
                     '--with-fop', format, '@INPUT0@'],
                 build_by_default: true,
                 install: true,
-                install_dir: join_paths(get_option('datadir'), 'doc/xorg-server'),
+                install_dir: join_paths(dir_data, 'doc/xorg-server'),
             )
         endforeach
     endif
@@ -58,7 +58,7 @@ if build_docs
                 '@INPUT0@'],
             build_by_default: true,
             install: true,
-            install_dir: join_paths(get_option('datadir'), 'doc/xorg-server'),
+            install_dir: join_paths(dir_data, 'doc/xorg-server'),
         )
     endforeach
 endif

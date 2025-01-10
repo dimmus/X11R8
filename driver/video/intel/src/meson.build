@@ -25,7 +25,7 @@ if with_dri2
   if dri.found()
     dridriverdir = dri.get_pkgconfig_variable('dridriverdir')
   else
-    dridriverdir = join_paths(get_option('libdir'), 'dri')
+    dridriverdir = join_paths(dir_lib, 'dri')
   endif
 
   config.set('HAVE_DRI2', 1)
@@ -137,7 +137,7 @@ xorg_moduledir = get_option('xorg-module-dir')
 moduledir = ''
 foreach dir : xorg_moduledir.split('/')
   if dir == '@libdir@'
-    dir = get_option('libdir')
+    dir = dir_lib
   endif
   moduledir = join_paths(moduledir, dir)
 endforeach

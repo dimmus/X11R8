@@ -14,10 +14,7 @@ config.set('PACKAGE_VERSION_MAJOR', version[0])
 config.set('PACKAGE_VERSION_MINOR', version[1])
 config.set('PACKAGE_VERSION_PATCHLEVEL', version[2])
 
-config.set_quoted('LIBEXEC_PATH', join_paths(get_option('prefix'),
-					     get_option('libexecdir')))
-
-cc = meson.get_compiler('c')
+config.set_quoted('LIBEXEC_PATH', dir_libexec)
 
 xorg = dependency('xorg-server', version : '>= 1.6', required : true)
 pthreads = dependency('threads', required : true)
@@ -44,8 +41,6 @@ if cc.has_function('strcasecmp')
 endif
 
 dependency('xproto', required : true)
-dependency('fontsproto', required : true)
-dependency('damageproto', required : true)
 
 if cc.has_header_symbol('xorg-server.h', 'RANDR',
 			dependencies : xorg)

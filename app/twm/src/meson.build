@@ -59,5 +59,5 @@ install_data(
 #     output: 'system.twmrc',
 #     copy: true,
 #     install: true,
-#     install_dir: get_option('datadir') / 'X11/twm/',
+#     install_dir: dir_data / 'X11/twm/',
 # )

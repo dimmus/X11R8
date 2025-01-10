@@ -90,7 +90,7 @@ headers = files(
     'xwaylandproto.h',
 )
 
-if get_option('legacy') == true
+if get_option('legacy')
     headers += files(
         'evieproto.h',
         'fontcache.h',

@@ -11,14 +11,8 @@ custom_target(
         '@INPUT@',
         '-e', 's#__appmansuffix__#1#g',
         '-e', 's#__miscmansuffix__#7#g',
-        '-e', 's#__datadir__#@0@#g'.format(
-            get_option('prefix') / get_option('datadir')
-        ),
-        '-e', 's#__projectroot__#@0@#g'.format(
-            meson.project_source_root()
-        ),
-        '-e', 's#__xorgversion__#"twm @0@" "X Version 11"#g'.format(
-            meson.project_version()
-        ),
+        '-e', 's#__datadir__#@0@#g'.format(dir_data),
+        '-e', 's#__projectroot__#@0@#g'.format(dir_source),
+        '-e', 's#__xorgversion__#"twm @0@" "X Version 11"#g'.format(meson.project_version()),
     ],
 )

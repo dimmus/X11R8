@@ -53,7 +53,7 @@ pcs = [
 ]
 
 pc_data = configuration_data()
-pc_data.set('prefix', get_option('prefix'))
+pc_data.set('prefix', dir_prefix)
 # meson does not allow installing the includedir outside of the prefix
 pc_data.set('includedir', '${prefix}' / get_option('includedir'))
 
@@ -61,28 +61,32 @@ foreach pc: pcs
     configure_file(
         input: pc + '.pc.in',
         output: pc + '.pc',
-        install_dir: get_option('datadir') / 'pkgconfig',
+        install_dir: dir_data / 'pkgconfig',
         configuration: pc_data,
     )
 endforeach
 
 
-docs = files('compositeproto.txt',
-             'damageproto.txt',
-             'dri2proto.txt',
-             'dri3proto.txt',
-             'fixesproto.txt',
-             'presentproto.txt',
-             'randrproto.txt',
-             'renderproto.txt',
-             'resproto.txt',
-             'xv-protocol-v2.txt',
-             'xwaylandproto.txt')
+docs = files(
+    'compositeproto.txt',
+    'damageproto.txt',
+    'dri2proto.txt',
+    'dri3proto.txt',
+    'fixesproto.txt',
+    'presentproto.txt',
+    'randrproto.txt',
+    'renderproto.txt',
+    'resproto.txt',
+    'xv-protocol-v2.txt',
+    'xwaylandproto.txt'
+)
+
 install_data(docs,
-             install_dir: get_option('datadir') / 'doc' / 'xproto')
+    install_dir: dir_data / 'doc' / 'xproto'
+)
 
 
-if get_option('legacy') == true
+if get_option('legacy')
     legacy_pcs = [
         'evieproto',
         'fontcacheproto',
@@ -99,20 +103,20 @@ if get_option('legacy') == true
         configure_file(
             input: pc + '.pc.in',
             output: pc + '.pc',
-            install_dir: get_option('datadir') / 'pkgconfig',
+            install_dir: dir_data / 'pkgconfig',
             configuration: pc_data,
         )
     endforeach
     legacy_docs = files('PM_spec')
     install_data(legacy_docs,
-                 install_dir: get_option('datadir') / 'doc' / 'xproto')
+                 install_dir: dir_data / 'doc' / 'xproto')
 endif
 
 xproto = declare_dependency(
     include_directories: inc_lib
 )
 
-keysymfile = meson.project_source_root() / 'include' / 'X11' / 'XF86keysym.h'
+keysymfile = dir_source / 'include' / 'X11' / 'XF86keysym.h'
 
 if WITH_TESTS
 # XXX: needs python module 'libevdev'

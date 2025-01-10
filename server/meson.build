@@ -104,8 +104,8 @@ xorgsdkdir = dir_include / 'xorg'
 build_xwayland = false
 if (host_machine.system() != 'darwin' and
     host_machine.system() != 'windows' and
-    get_option('xwayland') == true)
-    xwayland_required = get_option('xwayland') == true
+    get_option('xwayland'))
+    xwayland_required = get_option('xwayland')
     build_glamor = get_option('glamor')
 
     xwayland_path = get_option('xwayland-path')
@@ -219,10 +219,10 @@ endif
 
 log_dir = get_option('log_dir')
 if log_dir == ''
-    log_dir = get_option('prefix') / get_option('localstatedir') / 'log'
+    log_dir = dir_prefix / get_option('localstatedir') / 'log'
 endif
 
-module_dir = get_option('libdir') / get_option('module_dir')
+module_dir = dir_lib / get_option('module_dir')
 
 build_glamor = get_option('glamor')
 
@@ -389,7 +389,7 @@ else
     endif
 endif
 
-libdrm_required = (build_dri1 or build_dri2 or build_dri3) and get_option('drm') == true
+libdrm_required = (build_dri1 or build_dri2 or build_dri3) and get_option('drm')
 if not dep_drm.found() and libdrm_required
     error('DRI requested, but LIBDRM not found')
 endif
@@ -452,8 +452,8 @@ endif
 build_acpi = false
 if get_option('linux_acpi') and host_machine.system() == 'linux'
     if (host_machine.cpu() == 'x86' or
-       host_machine.cpu() == 'x86_64' or
-       host_machine.cpu() == 'ia64')
+        host_machine.cpu() == 'x86_64' or
+        host_machine.cpu() == 'ia64')
         build_acpi = true
     endif
 endif
@@ -467,41 +467,40 @@ endif
 
 dep_common = [
     xproto,
-    dep_libsystemd_daemon,
-    dep_pixman,
-    dep_libbsd,
     libxkbfile,
     libxfont,
     libxdmcp,
+    dep_libsystemd_daemon,
+    dep_pixman,
+    dep_libbsd,
 ]
 
-inc_server = [include_directories(
-    '.',
-    'Xext',
-    'Xi',
-    'composite',
-    'damageext',
-    'exa',
-    'fb',
-    'glamor',
-    'mi',
-    'miext/damage',
-    'miext/shadow',
-    'miext/sync',
-    'dbe',
-    'dix',
-    'dri3',
-    'include',
-    'present',
-    'randr',
-    'render',
-    'xfixes',
-)]
-
-inc_server += [
+inc_server = [
     inc_lib,
     inc_font,
     inc_static,
+    include_directories(
+        '.',
+        'Xext',
+        'Xi',
+        'composite',
+        'damageext',
+        'exa',
+        'fb',
+        'glamor',
+        'mi',
+        'miext/damage',
+        'miext/shadow',
+        'miext/sync',
+        'dbe',
+        'dix',
+        'dri3',
+        'include',
+        'present',
+        'randr',
+        'render',
+        'xfixes',
+    )
 ]
 
 build_xselinux = false
@@ -612,12 +611,11 @@ endif
 
 if build_xorg
     sdkconfig = configuration_data()
-    sdkconfig.set('prefix', get_option('prefix'))
-    sdkconfig.set('exec_prefix', '${prefix}')
-    sdkconfig.set('libdir', '${exec_prefix}' / get_option('libdir'))
-    sdkconfig.set('includedir', '${prefix}' / get_option('includedir'))
-    sdkconfig.set('datarootdir', '${prefix}' / get_option('datadir'))
-    sdkconfig.set('moduledir', '${exec_prefix}' / module_dir)
+    sdkconfig.set('prefix', dir_prefix)
+    sdkconfig.set('libdir', dir_lib)
+    sdkconfig.set('includedir', dir_include)
+    sdkconfig.set('datarootdir', dir_data)
+    sdkconfig.set('moduledir', '${prefix}' / module_dir)
     sdkconfig.set('sdkdir', '${prefix}' / get_option('includedir') / 'xorg')
     sdkconfig.set('sysconfigdir', '${datarootdir}' / 'X11' / 'xorg.conf.d')
     sdkconfig.set('abi_ansic',

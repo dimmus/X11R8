@@ -118,9 +118,9 @@ conf_data.set('GBM_BO_WITH_MODIFIERS2',
               build_glamor and dep_gbm.found() and dep_gbm.version().version_compare('>= 21.3') ? '1': false)
 
 conf_data.set_quoted('SERVER_MISC_CONFIG_PATH', serverconfigdir)
-conf_data.set_quoted('PROJECTROOT', get_option('prefix'))
-conf_data.set_quoted('SYSCONFDIR', join_paths(get_option('prefix'), get_option('sysconfdir')))
-conf_data.set_quoted('SUID_WRAPPER_DIR', join_paths(get_option('prefix'), get_option('libexecdir')))
+conf_data.set_quoted('PROJECTROOT', dir_prefix)
+conf_data.set_quoted('SYSCONFDIR', dir_sysconf)
+conf_data.set_quoted('SUID_WRAPPER_DIR', dir_libexec)
 conf_data.set_quoted('COMPILEDDEFAULTFONTPATH', default_font_path)
 
 conf_data.set('XORG_VERSION_CURRENT', release)
@@ -362,7 +362,7 @@ configure_file(output: 'xkb-config.h',
 
 xorg_data = configuration_data()
 
-xorg_data.set_quoted('XORG_BIN_DIRECTORY', get_option('bindir'))
+xorg_data.set_quoted('XORG_BIN_DIRECTORY', dir_bin)
 xorg_data.set('XORG_VERSION_CURRENT', release)
 xorg_data.set_quoted('XF86CONFIGFILE', 'xorg.conf')
 xorg_data.set_quoted('XCONFIGFILE', 'xorg.conf')
@@ -371,8 +371,8 @@ xorg_data.set_quoted('DEFAULT_XDG_DATA_HOME', '.local/share')
 xorg_data.set_quoted('DEFAULT_XDG_DATA_HOME_LOGDIR', 'xorg')
 xorg_data.set_quoted('DEFAULT_LOGDIR', log_dir)
 xorg_data.set_quoted('DEFAULT_LOGPREFIX', 'Xorg.')
-xorg_data.set_quoted('DEFAULT_MODULE_PATH', join_paths(get_option('prefix'), module_dir))
-xorg_data.set_quoted('DEFAULT_LIBRARY_PATH', join_paths(get_option('prefix'), get_option('libdir')))
+xorg_data.set_quoted('DEFAULT_MODULE_PATH', dir_prefix / module_dir)
+xorg_data.set_quoted('DEFAULT_LIBRARY_PATH', dir_lib)
 xorg_data.set_quoted('__XSERVERNAME__', 'Xorg')
 xorg_data.set('XSERVER_LIBPCIACCESS', get_option('pciaccess') ? '1': false)
 xorg_data.set_quoted('PCI_TXT_IDS_PATH', '')

@@ -1,34 +1,19 @@
-srcs = [
+srcs = files(
     'xwayland.c',
     'xwayland-input.c',
-    'xwayland-input.h',
     'xwayland-cursor.c',
-    'xwayland-cursor.h',
-    'xwayland-drm-lease.h',
     'xwayland-drm-lease.c',
-    'xwayland-glamor.h',
     'xwayland-pixmap.c',
-    'xwayland-pixmap.h',
     'xwayland-present.c',
-    'xwayland-present.h',
     'xwayland-screen.c',
-    'xwayland-screen.h',
     'xwayland-shm.c',
-    'xwayland-shm.h',
-    'xwayland-types.h',
     'xwayland-output.c',
-    'xwayland-output.h',
     'xwayland-cvt.c',
-    'xwayland-cvt.h',
     'xwayland-vidmode.c',
-    'xwayland-vidmode.h',
     'xwayland-window.c',
-    'xwayland-window.h',
     'xwayland-window-buffers.c',
-    'xwayland-window-buffers.h',
     '../../mi/miinitext.c',
-    '../../mi/miinitext.h',
-]
+)
 
 dep_scanner = dependency('wayland-scanner', native: true)
 scanner = find_program(dep_scanner.get_variable(pkgconfig: 'wayland_scanner'))
@@ -36,21 +21,21 @@ scanner = find_program(dep_scanner.get_variable(pkgconfig: 'wayland_scanner'))
 dep_protocols = dependency('wayland-protocols', version: wl_proto_req)
 protodir = dep_protocols.get_variable(pkgconfig: 'pkgdatadir')
 
-pointer_xml = join_paths(protodir, 'unstable', 'pointer-constraints', 'pointer-constraints-unstable-v1.xml')
-relative_xml = join_paths(protodir, 'unstable', 'relative-pointer', 'relative-pointer-unstable-v1.xml')
-gestures_xml = join_paths(protodir, 'unstable', 'pointer-gestures', 'pointer-gestures-unstable-v1.xml')
-tablet_xml = join_paths(protodir, 'unstable', 'tablet', 'tablet-unstable-v2.xml')
-kbgrab_xml = join_paths(protodir, 'unstable', 'xwayland-keyboard-grab', 'xwayland-keyboard-grab-unstable-v1.xml')
-xdg_output_xml = join_paths(protodir, 'unstable', 'xdg-output', 'xdg-output-unstable-v1.xml')
-dmabuf_xml = join_paths(protodir, 'unstable', 'linux-dmabuf', 'linux-dmabuf-unstable-v1.xml')
-viewporter_xml = join_paths(protodir, 'stable', 'viewporter', 'viewporter.xml')
-xdg_shell_xml = join_paths(protodir, 'stable', 'xdg-shell', 'xdg-shell.xml')
-drm_lease_xml = join_paths(protodir, 'staging', 'drm-lease', 'drm-lease-v1.xml')
-shortcuts_inhibit_xml = join_paths(protodir, 'unstable', 'keyboard-shortcuts-inhibit', 'keyboard-shortcuts-inhibit-unstable-v1.xml')
-xwayland_shell_xml = join_paths(protodir, 'staging', 'xwayland-shell', 'xwayland-shell-v1.xml')
-tearing_xml = join_paths(protodir, 'staging', 'tearing-control', 'tearing-control-v1.xml')
-fractional_scale_xml = join_paths(protodir, 'staging', 'fractional-scale', 'fractional-scale-v1.xml')
-syncobj_xml = join_paths(protodir, 'staging', 'linux-drm-syncobj', 'linux-drm-syncobj-v1.xml')
+viewporter_xml          = join_paths(protodir, 'stable',   'viewporter', 'viewporter.xml')
+xdg_shell_xml           = join_paths(protodir, 'stable',   'xdg-shell', 'xdg-shell.xml')
+pointer_xml             = join_paths(protodir, 'unstable', 'pointer-constraints', 'pointer-constraints-unstable-v1.xml')
+relative_xml            = join_paths(protodir, 'unstable', 'relative-pointer', 'relative-pointer-unstable-v1.xml')
+gestures_xml            = join_paths(protodir, 'unstable', 'pointer-gestures', 'pointer-gestures-unstable-v1.xml')
+tablet_xml              = join_paths(protodir, 'unstable', 'tablet', 'tablet-unstable-v2.xml')
+kbgrab_xml              = join_paths(protodir, 'unstable', 'xwayland-keyboard-grab', 'xwayland-keyboard-grab-unstable-v1.xml')
+xdg_output_xml          = join_paths(protodir, 'unstable', 'xdg-output', 'xdg-output-unstable-v1.xml')
+dmabuf_xml              = join_paths(protodir, 'unstable', 'linux-dmabuf', 'linux-dmabuf-unstable-v1.xml')
+shortcuts_inhibit_xml   = join_paths(protodir, 'unstable', 'keyboard-shortcuts-inhibit', 'keyboard-shortcuts-inhibit-unstable-v1.xml')
+drm_lease_xml           = join_paths(protodir, 'staging',  'drm-lease', 'drm-lease-v1.xml')
+xwayland_shell_xml      = join_paths(protodir, 'staging',  'xwayland-shell', 'xwayland-shell-v1.xml')
+tearing_xml             = join_paths(protodir, 'staging',  'tearing-control', 'tearing-control-v1.xml')
+fractional_scale_xml    = join_paths(protodir, 'staging',  'fractional-scale', 'fractional-scale-v1.xml')
+syncobj_xml             = join_paths(protodir, 'staging',  'linux-drm-syncobj', 'linux-drm-syncobj-v1.xml')
 
 proto_xml = [
     relative_xml,
@@ -103,12 +88,12 @@ endif
 xwayland_glamor = []
 if build_xwayland_glamor
     srcs += [
-              'xwayland-glamor.c',
-              'xwayland-dmabuf.h',
-              'xwayland-dmabuf.c',
-              'xwayland-glamor-gbm.c',
-              'xwayland-glamor-gbm.h'
-            ]
+        'xwayland-glamor.c',
+        'xwayland-dmabuf.h',
+        'xwayland-dmabuf.c',
+        'xwayland-glamor-gbm.c',
+        'xwayland-glamor-gbm.h'
+    ]
 
     if build_xv
         srcs += 'xwayland-glamor-xv.c'
@@ -177,9 +162,7 @@ xwayland_vars = [
     'have_hidpi=true',
 ]
 
-pkgconfig = import('pkgconfig')
-
-pkgconfig.generate(
+pkg.generate(
     filebase: 'xwayland',
     name: 'Xwayland',
     description: 'X Server for Wayland',
