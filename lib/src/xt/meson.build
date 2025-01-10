@@ -7,7 +7,9 @@ dep_int_xt = [libsm, libice, libx11, xproto]
 
 # Generate StringDefs.h
 # Example
-# $ ./makestrs -i /home/dimmus/dev/c/xorg/src/lib/xt < /home/dimmus/dev/c/xorg/src/lib/xt/util/string.list > StringDefs.c
+# $ ./makestrs -i /home/dimmus/dev/c/X11R8/lib/src/xt < /home/dimmus/dev/c/X11R8/lib/src/xt/util/string.list > StringDefs.c
+# XXX: if you get compilation problem like "not found Shell.h" or "StringDefs.h" so
+# generate them manually with command above and put (replace) them into Xt source folder
 subdir('util')
 stringdefs_h = custom_target('makestrs',
   command: [makestrs_exe, '-i', meson.current_source_dir()],
