@@ -18,7 +18,7 @@ src = files(
 )
 
 lib = library('Xrender', src,
-  include_directories: inc_ext,
+  include_directories: inc_x11,
   dependencies: dep_int_xrender,
   version: '1.3.0',
   install: true,
@@ -26,7 +26,7 @@ lib = library('Xrender', src,
 
 libxrender = declare_dependency(
   link_with: lib,
-  include_directories: inc_ext,
+  include_directories: inc_x11,
 )
 
 meson.override_dependency('xrender', libxrender)

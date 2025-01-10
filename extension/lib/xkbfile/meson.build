@@ -17,7 +17,7 @@ src = files(
 )
 
 lib = library('xkbfile', src,
-  include_directories: inc_ext,
+  include_directories: inc_x11,
   dependencies: dep_int_xkbfile,
   version: '1.0.2',
   install: true,
@@ -25,7 +25,7 @@ lib = library('xkbfile', src,
 
 libxkbfile = declare_dependency(
   link_with: lib,
-  include_directories: inc_ext,
+  include_directories: inc_x11,
 )
 
 meson.override_dependency('xkbfile', libxkbfile)

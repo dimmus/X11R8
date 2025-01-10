@@ -2,7 +2,6 @@
 # xrender in main
 # xfixes in main
 
-subdir('include')
 subdir('lib' / 'xrandr')
 subdir('lib' / 'xdamage')
 subdir('lib' / 'xcomposite')

@@ -14,7 +14,7 @@ src = files(
 )
 
 lib = library('Xrandr', src,
-  include_directories: inc_ext,
+  include_directories: inc_x11,
   dependencies: dep_int_xrandr,
   version: '2.2.0',
   install: true,
@@ -22,7 +22,7 @@ lib = library('Xrandr', src,
 
 libxrandr = declare_dependency(
   link_with: lib,
-  include_directories: inc_ext,
+  include_directories: inc_x11,
 )
 
 meson.override_dependency('xrandr', libxrandr)

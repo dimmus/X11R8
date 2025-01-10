@@ -2,7 +2,7 @@ dep_int_dmx = [xproto, libx11, libxext]
 
 lib = library('dmx', 
   'dmx.c',
-  include_directories: inc_ext,
+  include_directories: inc_x11,
   dependencies: dep_int_dmx,
   version: '1.0.0',
   install: true,
@@ -10,7 +10,7 @@ lib = library('dmx',
 
 libdmx = declare_dependency(
   link_with: lib,
-  include_directories: inc_ext,
+  include_directories: inc_x11,
 )
 
 meson.override_dependency('dmx', libdmx)

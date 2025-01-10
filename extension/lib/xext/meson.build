@@ -35,7 +35,7 @@ src = files(
 )
 
 lib = library('Xext', src,
-  include_directories: inc_ext,
+  include_directories: inc_x11,
   dependencies: libx11,
   version: '6.4.0',
   install: true,
@@ -43,7 +43,7 @@ lib = library('Xext', src,
 
 libxext = declare_dependency(
   link_with: lib,
-  include_directories: inc_ext,
+  include_directories: inc_x11,
 )
 
 pkg.generate(

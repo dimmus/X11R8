@@ -2,7 +2,7 @@ dep_int_xdamage = [xproto, libx11, libxfixes]
 
 lib = library('Xdamage', 
   'Xdamage.c',
-  include_directories: inc_ext,
+  include_directories: inc_x11,
   dependencies: dep_int_xdamage,
   version: '1.1.0',
   install: true,
@@ -10,7 +10,7 @@ lib = library('Xdamage',
 
 libxdamage = declare_dependency(
   link_with: lib,
-  include_directories: inc_ext,
+  include_directories: inc_x11,
 )
 
 meson.override_dependency('xdamage', libxdamage)

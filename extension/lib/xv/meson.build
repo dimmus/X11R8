@@ -2,7 +2,7 @@ dep_int_xv = [xproto, libx11, libxext]
 
 lib = library('Xv',
   'Xv.c',
-  include_directories: inc_ext,
+  include_directories: inc_x11,
   dependencies: dep_int_xv,
   version: '1.0.0',
   install: true,
@@ -10,7 +10,7 @@ lib = library('Xv',
 
 libxv = declare_dependency(
   link_with: lib,
-  include_directories: inc_ext,
+  include_directories: inc_x11,
 )
 
 meson.override_dependency('xv', libxv)

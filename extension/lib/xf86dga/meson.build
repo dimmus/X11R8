@@ -6,7 +6,7 @@ src = files(
 )
 
 lib = library('Xxf86dga', src,
-  include_directories: inc_ext,
+  include_directories: inc_x11,
   dependencies: dep_int_xxf86dga,
   version: '1.0.0',
   install: true,
@@ -14,7 +14,7 @@ lib = library('Xxf86dga', src,
 
 libxxf86dga = declare_dependency(
   link_with: lib,
-  include_directories: inc_ext,
+  include_directories: inc_x11,
 )
 
 meson.override_dependency('xxf86dga', libxxf86dga)

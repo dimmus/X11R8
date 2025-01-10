@@ -2,7 +2,7 @@ dep_int_xinerama = [xproto, libx11, libxext]
 
 lib = library('Xinerama',
   'Xinerama.c',
-  include_directories: inc_ext,
+  include_directories: inc_x11,
   dependencies: dep_int_xinerama,
   version: '1.0.0',
   install: true,
@@ -10,7 +10,7 @@ lib = library('Xinerama',
 
 libxinerama = declare_dependency(
   link_with: lib,
-  include_directories: inc_ext,
+  include_directories: inc_x11,
 )
 
 meson.override_dependency('xinerama', libxinerama)

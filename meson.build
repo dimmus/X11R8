@@ -136,7 +136,6 @@ inc_config       = include_directories('.')
 
 f_check          = []
 h_check          = []
-inc_ext          = []
 inc_x11          = []
 inc_font         = []
 inc_static       = []

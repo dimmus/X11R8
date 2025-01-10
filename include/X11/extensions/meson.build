@@ -1,6 +1,4 @@
-inc_x11 += include_directories('.')
-
-install_headers(
+headers = files(
     'ag.h',
     'agproto.h',
     'applewmconst.h',
@@ -90,11 +88,10 @@ install_headers(
     'XvMCproto.h',
     'Xvproto.h',
     'xwaylandproto.h',
-    subdir: 'X11/extensions'
 )
 
 if get_option('legacy') == true
-    install_headers(
+    headers += files(
         'evieproto.h',
         'fontcache.h',
         'fontcacheP.h',
@@ -120,6 +117,74 @@ if get_option('legacy') == true
         'xf86rush.h',
         'xf86rushstr.h',
         'XKBgeom.h',
-        subdir: 'X11/extensions'
     )
 endif
+
+headers += files(
+  'dmxext.h',
+  'Xcomposite.h',
+  'Xdamage.h',
+  'xf86vmode.h',
+  'Xfixes.h',
+  'XInput.h',
+  'XInput2.h',
+  'Xinerama.h',
+  'panoramiXext.h',
+  'Xrandr.h',
+  'Xrender.h',
+  'XRes.h',
+  'scrnsaver.h',
+  'Xvlib.h',
+)
+
+# Xext
+headers += files(
+  'dpms.h',
+  'extutil.h',
+  'MITMisc.h',
+  'multibuf.h',
+  'security.h',
+  'shape.h',
+  'sync.h',
+  'Xag.h',
+  'Xcup.h',
+  'Xdbe.h',
+  'XEVI.h',
+  'Xext.h',
+  'Xge.h',
+  'XLbx.h',
+  'XShm.h',
+  'xtestext1.h',
+)
+
+# XF86dga
+headers += files(
+  'Xxf86dga.h',
+  'xf86dga1.h',
+)
+
+# XKBfile
+headers += files(
+  'XKM.h',
+  'XKBrules.h',
+  'XKBbells.h',
+  'XKBconfig.h',
+  'XKMformat.h',
+  'XKBfile.h',
+)
+
+# Xtst
+headers += files(
+  'XTest.h',
+  'record.h',
+)
+
+# XvMC
+headers += files(
+  'vldXvMC.h',
+  'XvMClib.h',
+)
+
+install_headers(headers,
+  subdir: 'X11/extensions',
+)
