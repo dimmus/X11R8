@@ -25,7 +25,7 @@ endif
 
 if build_xorg
     install_data('10-quirks.conf',
-                 install_dir: join_paths(dir_data, 'X11/xorg.conf.d'))
+                 install_dir: dir_data / 'X11' / 'xorg.conf.d')
 endif
 
 libxserver_config = static_library('libxserver_config',

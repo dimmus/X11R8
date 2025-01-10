@@ -21,21 +21,21 @@ scanner = find_program(dep_scanner.get_variable(pkgconfig: 'wayland_scanner'))
 dep_protocols = dependency('wayland-protocols', version: wl_proto_req)
 protodir = dep_protocols.get_variable(pkgconfig: 'pkgdatadir')
 
-viewporter_xml          = join_paths(protodir, 'stable',   'viewporter', 'viewporter.xml')
-xdg_shell_xml           = join_paths(protodir, 'stable',   'xdg-shell', 'xdg-shell.xml')
-pointer_xml             = join_paths(protodir, 'unstable', 'pointer-constraints', 'pointer-constraints-unstable-v1.xml')
-relative_xml            = join_paths(protodir, 'unstable', 'relative-pointer', 'relative-pointer-unstable-v1.xml')
-gestures_xml            = join_paths(protodir, 'unstable', 'pointer-gestures', 'pointer-gestures-unstable-v1.xml')
-tablet_xml              = join_paths(protodir, 'unstable', 'tablet', 'tablet-unstable-v2.xml')
-kbgrab_xml              = join_paths(protodir, 'unstable', 'xwayland-keyboard-grab', 'xwayland-keyboard-grab-unstable-v1.xml')
-xdg_output_xml          = join_paths(protodir, 'unstable', 'xdg-output', 'xdg-output-unstable-v1.xml')
-dmabuf_xml              = join_paths(protodir, 'unstable', 'linux-dmabuf', 'linux-dmabuf-unstable-v1.xml')
-shortcuts_inhibit_xml   = join_paths(protodir, 'unstable', 'keyboard-shortcuts-inhibit', 'keyboard-shortcuts-inhibit-unstable-v1.xml')
-drm_lease_xml           = join_paths(protodir, 'staging',  'drm-lease', 'drm-lease-v1.xml')
-xwayland_shell_xml      = join_paths(protodir, 'staging',  'xwayland-shell', 'xwayland-shell-v1.xml')
-tearing_xml             = join_paths(protodir, 'staging',  'tearing-control', 'tearing-control-v1.xml')
-fractional_scale_xml    = join_paths(protodir, 'staging',  'fractional-scale', 'fractional-scale-v1.xml')
-syncobj_xml             = join_paths(protodir, 'staging',  'linux-drm-syncobj', 'linux-drm-syncobj-v1.xml')
+viewporter_xml          = protodir / 'stable'   / 'viewporter' / 'viewporter.xml'
+xdg_shell_xml           = protodir / 'stable'   / 'xdg-shell' / 'xdg-shell.xml'
+pointer_xml             = protodir / 'unstable' / 'pointer-constraints' / 'pointer-constraints-unstable-v1.xml'
+relative_xml            = protodir / 'unstable' / 'relative-pointer' / 'relative-pointer-unstable-v1.xml'
+gestures_xml            = protodir / 'unstable' / 'pointer-gestures' / 'pointer-gestures-unstable-v1.xml'
+tablet_xml              = protodir / 'unstable' / 'tablet' / 'tablet-unstable-v2.xml'
+kbgrab_xml              = protodir / 'unstable' / 'xwayland-keyboard-grab' / 'xwayland-keyboard-grab-unstable-v1.xml'
+xdg_output_xml          = protodir / 'unstable' / 'xdg-output' / 'xdg-output-unstable-v1.xml'
+dmabuf_xml              = protodir / 'unstable' / 'linux-dmabuf' / 'linux-dmabuf-unstable-v1.xml'
+shortcuts_inhibit_xml   = protodir / 'unstable' / 'keyboard-shortcuts-inhibit' / 'keyboard-shortcuts-inhibit-unstable-v1.xml'
+drm_lease_xml           = protodir / 'staging'  / 'drm-lease' / 'drm-lease-v1.xml'
+xwayland_shell_xml      = protodir / 'staging'  / 'xwayland-shell' / 'xwayland-shell-v1.xml'
+tearing_xml             = protodir / 'staging'  / 'tearing-control' / 'tearing-control-v1.xml'
+fractional_scale_xml    = protodir / 'staging'  / 'fractional-scale' / 'fractional-scale-v1.xml'
+syncobj_xml             = protodir / 'staging'  / 'linux-drm-syncobj' / 'linux-drm-syncobj-v1.xml'
 
 proto_xml = [
     relative_xml,

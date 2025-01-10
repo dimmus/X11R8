@@ -22,7 +22,7 @@ endif
 
 bundle_id_def = '-DBUNDLE_ID_PREFIX="@0@"'.format(bundle_id_prefix)
 
-bundle_root = join_paths(apple_applications_dir, apple_application_name + '.app')
+bundle_root = apple_applications_dir / apple_application_name + '.app'
 xquartz_data_dir = dir_data / 'X11' / 'XQuartz'
 
 # using sparkle update framework?

@@ -23,7 +23,7 @@ xquartz_defs = [
 ]
 
 # X11.bin
-x11appdir = join_paths(bundle_root, 'Contents/MacOS')
+x11appdir = bundle_root / 'Contents' / 'MacOS'
 
 x11_bin_deps = [
      meson.get_compiler('c').find_library('Xplugin'),
