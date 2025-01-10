@@ -189,31 +189,10 @@ subdir('proto')
 if WITH_XSHMFENCE
 subdir('lib' / 'src' / 'xshmfence')
 endif
-subdir('lib' / 'src' / 'xtrans')
-subdir('font') # <- xtrans
-subdir('lib' / 'src' / 'xau')
-subdir('lib' / 'src' / 'xdmcp')
-# subdir('lib' / 'src' / 'xcb')     # <- xdmcp, xau, server
-subdir('lib' / 'src' / 'x11')
-subdir('lib' / 'src' / 'ice')
-subdir('lib' / 'src' / 'sm')
-subdir('lib' / 'src' / 'xt')
-subdir('lib' / 'src' / 'xcvt')
-subdir('extension' / 'lib' / 'xrender')
-subdir('extension' / 'lib' / 'xfixes')
-subdir('extension' / 'lib' / 'xext')
-subdir('lib' / 'src' / 'xft')     # <- xrender
-subdir('lib' / 'src' / 'xcursor') # <- xrender, xfixes
-subdir('lib' / 'src' / 'xpm')     # <- xext
-subdir('lib' / 'src' / 'xmu')     # <- xext
-subdir('lib' / 'src' / 'xaw')     # <- xext
-subdir('lib' / 'src' / 'xaw3d')
-if WITH_TESTS
-subdir('lib' / 'test')
-endif
-subdir('lib' / 'example')
+subdir('lib' / 'src' / 'xtrans') # <- lib/src/xshmfence
+subdir('font') # <- lib/src/xtrans
+subdir('lib')
 subdir('font' / 'client')
-subdir('extension')
 subdir('server')
 subdir('driver')
 subdir('app')
