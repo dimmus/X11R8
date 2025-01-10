@@ -2,9 +2,11 @@ inc_x11 += [
     inc_config,
     include_directories(
         '.',
+        'dri',
+        'extensions',
+        'fonts',
         'ICE',
         'SM',
-        'extensions',
         'Xaw',
         'Xcursor',
         'Xft',
@@ -13,35 +15,12 @@ inc_x11 += [
     )
 ]
 
-fd_set_maybe_headers = [
-    'sys/param.h',
-    'sys/types.h',
-    'sys/time.h',
-    'sys/select.h'
-]
-fd_set_headers = ''
-foreach h: fd_set_maybe_headers
-    if cc.has_header(h)
-        fd_set_headers += '#include <' + h + '>\n'
-    endif
-endforeach
-
-# generated headers. try not to make more of these, please.
-if cc.has_member('fd_set', 'fds_bits', prefix: fd_set_headers)
-    fds_bits = 'fds_bits'
-elif cc.has_member('fd_set', '__fds_bits', prefix: fd_set_headers)
-    fds_bits = '__fds_bits'
-else
-    error('Your fd_set is too weird.')
+subdir('dri')
+subdir('extensions')
+subdir('fonts')
+if get_option('legacy')
+subdir('PM')
 endif
-
-xpoll_config = configuration_data()
-xpoll_config.set('USE_FDS_BITS', fds_bits)
-configure_file(input: 'Xpoll.h.in',
-               output: 'Xpoll.h',
-               install: true,
-               install_dir: get_option('includedir') / 'X11',
-               configuration: xpoll_config)
 
 install_headers(
     'ap_keysym.h',
@@ -72,11 +51,81 @@ install_headers(
     subdir: 'X11'
 )
 
-subdir('dri')
-subdir('extensions')
-if get_option('legacy') == true
-    subdir('PM')
-endif
+# x11
+install_headers(
+    'XKBlib.h',
+    'Xcms.h',
+    'Xlib.h',
+    'Xlibint.h',
+    'Xlocale.h',
+    'Xresource.h',
+    'Xutil.h',
+    'cursorfont.h',
+    'Xregion.h',
+    'ImUtil.h',
+    'Xlib-xcb.h',
+    subdir: 'X11',
+)
+
+# xauth
+install_headers(
+    'Xauth.h',
+    subdir: 'X11',
+)
+
+# xdmcp
+install_headers(
+    'Xdmcp.h',
+    subdir: 'X11',
+)
+
+# xpm
+install_headers(
+    'xpm.h',
+    subdir: 'X11',
+)
+
+# xt
+install_headers(
+    'Composite.h',
+    'CompositeP.h',
+    'ConstrainP.h',
+    'Constraint.h',
+    'Core.h',
+    'CoreP.h',
+    'Intrinsic.h',
+    'IntrinsicP.h',
+    'Object.h',
+    'ObjectP.h',
+    'RectObj.h',
+    'RectObjP.h',
+    'ResConfigP.h',
+    'ShellP.h',
+    'Vendor.h',
+    'VendorP.h',
+    'CallbackI.h',
+    'ConvertI.h',
+    'CreateI.h',
+    'EventI.h',
+    'HookObjI.h',
+    'InitialI.h',
+    'IntrinsicI.h',
+    'PassivGraI.h',
+    'ResourceI.h',
+    'SelectionI.h',
+    'ShellI.h',
+    'ThreadsI.h',
+    'TranslateI.h',
+    'VarargsI.h',
+    'Xtos.h',
+    subdir: 'X11',
+)
+
+# xshmfence
+install_headers(
+    'xshmfence.h',
+    subdir: 'X11',
+)
 
 install_headers(
     'ICE/ICE.h',
@@ -220,78 +269,33 @@ install_headers(
     subdir: 'X11/Xtrans',
 )
 
-# x11
-install_headers(
-    'XKBlib.h',
-    'Xcms.h',
-    'Xlib.h',
-    'Xlibint.h',
-    'Xlocale.h',
-    'Xresource.h',
-    'Xutil.h',
-    'cursorfont.h',
-    'Xregion.h',
-    'ImUtil.h',
-    'Xlib-xcb.h',
-    subdir: 'X11',
-)
+# Xpoll.h
+fd_set_maybe_headers = [
+    'sys/param.h',
+    'sys/types.h',
+    'sys/time.h',
+    'sys/select.h'
+]
+fd_set_headers = ''
+foreach h: fd_set_maybe_headers
+    if cc.has_header(h)
+        fd_set_headers += '#include <' + h + '>\n'
+    endif
+endforeach
 
-# xauth
-install_headers(
-    'Xauth.h',
-    subdir: 'X11',
-)
+# generated headers. try not to make more of these, please.
+if cc.has_member('fd_set', 'fds_bits', prefix: fd_set_headers)
+    fds_bits = 'fds_bits'
+elif cc.has_member('fd_set', '__fds_bits', prefix: fd_set_headers)
+    fds_bits = '__fds_bits'
+else
+    error('Your fd_set is too weird.')
+endif
 
-# xdmcp
-install_headers(
-    'Xdmcp.h',
-    subdir: 'X11',
-)
-
-# xpm
-install_headers(
-    'xpm.h',
-    subdir: 'X11',
-)
-
-# xt
-install_headers(
-    'Composite.h',
-    'CompositeP.h',
-    'ConstrainP.h',
-    'Constraint.h',
-    'Core.h',
-    'CoreP.h',
-    'Intrinsic.h',
-    'IntrinsicP.h',
-    'Object.h',
-    'ObjectP.h',
-    'RectObj.h',
-    'RectObjP.h',
-    'ResConfigP.h',
-    'ShellP.h',
-    'Vendor.h',
-    'VendorP.h',
-    'CallbackI.h',
-    'ConvertI.h',
-    'CreateI.h',
-    'EventI.h',
-    'HookObjI.h',
-    'InitialI.h',
-    'IntrinsicI.h',
-    'PassivGraI.h',
-    'ResourceI.h',
-    'SelectionI.h',
-    'ShellI.h',
-    'ThreadsI.h',
-    'TranslateI.h',
-    'VarargsI.h',
-    'Xtos.h',
-    subdir: 'X11',
-)
-
-# xshmfence
-install_headers(
-    'xshmfence.h',
-    subdir: 'X11',
-)
+xpoll_config = configuration_data()
+xpoll_config.set('USE_FDS_BITS', fds_bits)
+configure_file(input: 'Xpoll.h.in',
+               output: 'Xpoll.h',
+               install: true,
+               install_dir: dir_include / 'X11',
+               configuration: xpoll_config)

@@ -1,4 +1,3 @@
-subdir('include')
 subdir('lib')
 if WITH_FONT_SERVER
 subdir('server')
