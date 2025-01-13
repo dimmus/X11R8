@@ -1279,7 +1279,6 @@ TRANS(MakeAllCOTSServerListeners) (const char *port, int *partial,
 #endif /* TRANS_SERVER */
 
 
-
 /*
  * These routines are not part of the X Transport Interface, but they
  * may be used by it.

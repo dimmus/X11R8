@@ -1151,9 +1151,8 @@ findpoly(const char *name)
 	icoFatal("can't find object %s", name);
 }
 
-int main(argc, argv)
-    int argc;
-    char **argv;
+int 
+main(int argc, char **argv)
 {
 	const char *display = NULL;
 #ifdef MULTIBUFFER

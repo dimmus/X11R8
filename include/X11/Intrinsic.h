@@ -50,10 +50,10 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XtIntrinsic_h
 #define _XtIntrinsic_h
 
-#include	<X11/Xlib.h>
-#include	<X11/Xutil.h>
-#include	<X11/Xresource.h>
-#include	<X11/Xfuncproto.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/Xresource.h>
+#include <X11/Xfuncproto.h>
 #ifdef XT_BC
 #include <X11/Xos.h>		/* for R4 compatibility */
 #else
@@ -115,29 +115,29 @@ typedef long		XtIntPtr;
 typedef unsigned long	XtUIntPtr;
 #endif
 
-#define XtNumber(arr)		((Cardinal) (sizeof(arr) / sizeof(arr[0])))
+#define XtNumber(arr) ((Cardinal) (sizeof(arr) / sizeof(arr[0])))
 
 typedef struct _WidgetRec *Widget;
 typedef Widget *WidgetList;
 typedef struct _WidgetClassRec *WidgetClass;
-typedef struct _CompositeRec *CompositeWidget;
-typedef struct _XtActionsRec *XtActionList;
-typedef struct _XtEventRec *XtEventTable;
+typedef struct _CompositeRec   *CompositeWidget;
+typedef struct _XtActionsRec   *XtActionList;
+typedef struct _XtEventRec     *XtEventTable;
+typedef struct _XtAppStruct    *XtAppContext;
 
-typedef struct _XtAppStruct *XtAppContext;
 typedef unsigned long	XtValueMask;
-typedef XtUIntPtr	XtIntervalId;
-typedef XtUIntPtr	XtInputId;
-typedef XtUIntPtr	XtWorkProcId;
-typedef XtUIntPtr	XtSignalId;
+typedef XtUIntPtr	    XtIntervalId;
+typedef XtUIntPtr	    XtInputId;
+typedef XtUIntPtr	    XtWorkProcId;
+typedef XtUIntPtr	    XtSignalId;
 typedef unsigned int	XtGeometryMask;
 typedef unsigned long	XtGCMask;   /* Mask of values that are used by widget*/
 typedef unsigned long	Pixel;	    /* Index into colormap		*/
-typedef int		XtCacheType;
-#define			XtCacheNone	  0x001
-#define			XtCacheAll	  0x002
-#define			XtCacheByDisplay  0x003
-#define			XtCacheRefCount	  0x100
+typedef int		        XtCacheType;
+#define	XtCacheNone	      0x001
+#define	XtCacheAll	      0x002
+#define	XtCacheByDisplay  0x003
+#define	XtCacheRefCount	  0x100
 
 /****************************************************************
  *
@@ -193,7 +193,7 @@ typedef void (*XtActionProc)(
     Widget 		/* widget */,
     XEvent*		/* event */,
     String*		/* params */,
-    Cardinal*		/* num_params */
+    Cardinal*	/* num_params */
 );
 
 typedef XtActionProc* XtBoundActions;
@@ -204,15 +204,15 @@ typedef struct _XtActionsRec{
 } XtActionsRec;
 
 typedef enum {
-/* address mode		parameter representation    */
-/* ------------		------------------------    */
-    XtAddress,		/* address		    */
-    XtBaseOffset,	/* offset		    */
-    XtImmediate,	/* constant		    */
-    XtResourceString,	/* resource name string	    */
-    XtResourceQuark,	/* resource name quark	    */
-    XtWidgetBaseOffset,	/* offset from ancestor	    */
-    XtProcedureArg	/* procedure to invoke	    */
+/* address mode         parameter representation    */
+/* ------------         ------------------------    */
+    XtAddress,          /* address		            */
+    XtBaseOffset,       /* offset		            */
+    XtImmediate,        /* constant		            */
+    XtResourceString,   /* resource name string	    */
+    XtResourceQuark,    /* resource name quark	    */
+    XtWidgetBaseOffset, /* offset from ancestor	    */
+    XtProcedureArg      /* procedure to invoke	    */
 } XtAddressMode;
 
 typedef struct {

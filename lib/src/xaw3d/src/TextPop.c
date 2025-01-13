@@ -1293,7 +1293,7 @@ static Widget
 GetShell(Widget w)
 {
     while ((w != NULL) && !XtIsShell(w))
-	w = XtParent(w);
+	    w = XtParent(w);
 
     return (w);
 }

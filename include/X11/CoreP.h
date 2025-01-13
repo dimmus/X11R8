@@ -70,35 +70,35 @@ externalref int _XtInheritTranslations;
  **************************************************************/
 
 typedef struct _CorePart {
-    Widget	    self;		/* pointer to widget itself	     */
-    WidgetClass	    widget_class;	/* pointer to Widget's ClassRec	     */
-    Widget	    parent;		/* parent widget	  	     */
-    XrmName         xrm_name;		/* widget resource name quarkified   */
-    Boolean         being_destroyed;	/* marked for destroy		     */
+    Widget	        self;		        /* pointer to widget itself	         */
+    WidgetClass	    widget_class;	    /* pointer to Widget's ClassRec	     */
+    Widget	        parent;		        /* parent widget	  	             */
+    XrmName         xrm_name;		    /* widget resource name quarkified   */
+    Boolean         being_destroyed;	/* marked for destroy		         */
     XtCallbackList  destroy_callbacks;	/* who to call when widget destroyed */
     XtPointer       constraints;        /* constraint record                 */
-    Position        x, y;		/* window position		     */
-    Dimension       width, height;	/* window dimensions		     */
-    Dimension       border_width;	/* window border width		     */
+    Position        x, y;		        /* window position		             */
+    Dimension       width, height;	    /* window dimensions		         */
+    Dimension       border_width;	    /* window border width		         */
     Boolean         managed;            /* is widget geometry managed?       */
-    Boolean	    sensitive;		/* is widget sensitive to user events*/
+    Boolean	        sensitive;		    /* is widget sensitive to user events*/
     Boolean         ancestor_sensitive;	/* are all ancestors sensitive?      */
-    XtEventTable    event_table;	/* private to event dispatcher       */
-    XtTMRec	    tm;                 /* translation management            */
+    XtEventTable    event_table;	    /* private to event dispatcher       */
+    XtTMRec	        tm;                 /* translation management            */
     XtTranslations  accelerators;       /* accelerator translations          */
-    Pixel	    border_pixel;	/* window border pixel		     */
-    Pixmap          border_pixmap;	/* window border pixmap or NULL      */
+    Pixel	        border_pixel;	    /* window border pixel		         */
+    Pixmap          border_pixmap;	    /* window border pixmap or NULL      */
     WidgetList      popup_list;         /* list of popups                    */
     Cardinal        num_popups;         /* how many popups                   */
-    String          name;		/* widget resource name		     */
-    Screen	    *screen;		/* window's screen		     */
+    String          name;		        /* widget resource name		         */
+    Screen	       *screen;		        /* window's screen		             */
     Colormap        colormap;           /* colormap                          */
-    Window	    window;		/* window ID			     */
-    Cardinal        depth;		/* number of planes in window        */
-    Pixel	    background_pixel;	/* window background pixel	     */
+    Window	        window;		        /* window ID			             */
+    Cardinal        depth;		        /* number of planes in window        */
+    Pixel	        background_pixel;	/* window background pixel	         */
     Pixmap          background_pixmap;	/* window background pixmap or NULL  */
-    Boolean         visible;		/* is window mapped and not occluded?*/
-    Boolean	    mapped_when_managed;/* map window if it's managed?       */
+    Boolean         visible;		    /* is window mapped and not occluded?*/
+    Boolean	        mapped_when_managed;/* map window if it's managed?       */
 } CorePart;
 
 typedef struct _WidgetRec {

@@ -83,13 +83,9 @@ TDrawArc (
 #endif
 
 void
-TFillArc (dpy, d, gc, t, x, y, width, height, angle1, angle2)
-    Display	*dpy;
-    Drawable	d;
-    GC		gc;
-    Transform	*t;
-    double	x, y, width, height;
-    int		angle1, angle2;
+TFillArc (Display *dpy, Drawable d, GC gc, Transform *t,
+    double	x, double y, double width, double height,
+    int	angle1, int angle2)
 {
 	int	xx, xy, xw, xh;
 

@@ -29,9 +29,7 @@
 extern Display	*pDpy;
 extern GC	gc;
 
-
-extern void
-TestInit();
+extern void TestInit();
 #ifdef XDEBUG
 #endif 
 #ifdef NEED_COLORMAP

@@ -101,7 +101,6 @@ extern XcmsColorSpace XcmsCIELabColorSpace;
 extern XcmsColorSpace XcmsCIELuvColorSpace;
 extern XcmsColorSpace XcmsTekHVCColorSpace;
 extern int EchoInput;
-extern void TestInit();
 Status Cmd_AddDIColorSpace();
 Status Cmd_AdjustValue();
 Status Cmd_AllocColor();
