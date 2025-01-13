@@ -6,6 +6,9 @@ patch = version_split[2].to_int()
 # convert to the old-style 1.x.y version scheme used up to 1.20.x for backwards compatibility
 release = 1 * 10000000 + major * 100000 + minor * 1000 + patch
 
+# In Ubuntu it can be mesa-common-dev.
+# It installs /usr/include/GL/internal/dri_interface.h)
+# We need libgl1-mesa-dri as well to have DRI_DRIVER_PATH=/usr/lib/x86_64-linux-gnu/dri.
 dep_dri = dependency('dri', required: false)
 
 conf_data = configuration_data()
