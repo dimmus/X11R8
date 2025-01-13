@@ -16,10 +16,10 @@ if cc.has_header('alloca.h')
 endif
 
 sna_deps = [
-  cc.find_library('m', required : true),
-  dependency('threads', required : true),
-  dependency('xorg-server', required : true),
-  dependency('libdrm', required : true),
+  dep_m,
+  dep_threads,
+  libxserver,
+  dep_drm,
 ]
 
 sna_sources = [

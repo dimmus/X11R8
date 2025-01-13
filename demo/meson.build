@@ -6,31 +6,34 @@ if WITH_DEMOS
     # subdir('gpc')
     # endif
 
-    if get_option('demos-xcmstest')
+    if get_option('demo-xcmstest')
         subdir('xcmstest')
     endif
-    if get_option('demos-ico')
+    if get_option('demo-ico')
         subdir('ico')
     endif
-    if get_option('demos-maze')
+    if get_option('demo-maze')
         subdir('maze')
     endif
-    if get_option('demos-puzzle')
+    if get_option('demo-puzzle')
         subdir('puzzle')
     endif
-    if get_option('demos-xeyes')
+    if get_option('demo-xeyes')
         subdir('xeyes')
     endif
-    if get_option('demos-xgamma')
+    if get_option('demo-xgamma')
         subdir('xgamma')
     endif
-    if get_option('demos-xev')
+    if get_option('demo-xev')
         subdir('xev')
     endif
-    if get_option('demos-x11perf')
+    if get_option('demo-x11perf')
         subdir('x11perf')
     endif
-
-    subdir('xgc')
-    subdir('xgas')
+    if get_option('demo-xgc')
+        subdir('xgc')
+    endif
+    if get_option('demo-xgas')
+        subdir('xgas')
+    endif
 endif

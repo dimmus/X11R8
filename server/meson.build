@@ -5,7 +5,7 @@ wl_req          = '>= 1.21.0'
 wl_proto_req    = '>= 1.34'
 gbm_req         = '>= 10.2'
 
-build_systemd = get_option('systemd_notify') == 'true'
+build_systemd_notify = get_option('systemd_notify') == 'true'
 # libsystemd-daemon was moved into libsystemd in version 209
 dep_libsystemd_daemon = dependency('libsystemd', version: '>= 209', required: false)
 if not dep_libsystemd_daemon.found()
@@ -69,8 +69,6 @@ else
     default_font_path = dfp
 endif
 
-glamor_option = get_option('glamor')
-
 hal_option = get_option('hal')
 if ['windows', 'darwin', 'cygwin'].contains(host_machine.system())
     hal_option = 'false'
@@ -119,6 +117,7 @@ if (host_machine.system() != 'darwin' and
         libxcvt,
     ]
     if build_glamor
+        build_xwayland_glamor = true
         dep_xwayland += libxshmfence
         dep_xwayland += dep_drm
         dep_xwayland += dependency('epoxy', required: xwayland_required)
@@ -132,11 +131,6 @@ if (host_machine.system() != 'darwin' and
         endif
     endforeach
 endif
-
-## configure Xnest - nesting X server
-build_xnest = get_option('xnest')
-xnest_required = get_option('xnest')
-dep_xnest = [libxext, libx11, libxau]
 
 build_xwin = false
 if get_option('xwin') == 'auto'
@@ -376,13 +370,10 @@ endif
 
 have_eventfd = cc.has_header('sys/eventfd.h', dependencies: dep_epoll)
 if get_option('dri3') == 'auto'
-    build_dri3 = xproto.found() and WITH_XSHMFENCE and dep_drm.found() and have_eventfd
+    build_dri3 = xproto.found() and dep_drm.found() and have_eventfd
 else
     build_dri3 = get_option('dri3') == 'true'
     if build_dri3
-       if not WITH_XSHMFENCE
-           error('DRI3 requested, but xshmfence not found')
-       endif
        if not have_eventfd
            error('DRI3 requested, but sys/eventfd.h not found')
        endif
@@ -522,7 +513,7 @@ endif
 
 dep_socket = []
 if host_machine.system() == 'windows'
-    dep_socket = meson.get_compiler('c').find_library('ws2_32')
+    dep_socket = cc.find_library('ws2_32')
     dep_common += dep_socket
 endif
 
@@ -611,12 +602,12 @@ endif
 
 if build_xorg
     sdkconfig = configuration_data()
-    sdkconfig.set('prefix', dir_prefix)
-    sdkconfig.set('libdir', dir_lib)
-    sdkconfig.set('includedir', dir_include)
+    sdkconfig.set('prefix',      dir_prefix)
+    sdkconfig.set('libdir',      dir_lib)
+    sdkconfig.set('includedir',  dir_include)
     sdkconfig.set('datarootdir', dir_data)
-    sdkconfig.set('moduledir', '${prefix}' / module_dir)
-    sdkconfig.set('sdkdir', dir_include / 'xorg')
+    sdkconfig.set('moduledir',   dir_prefix / module_dir)
+    sdkconfig.set('sdkdir',      dir_include / 'xorg')
     sdkconfig.set('sysconfigdir', '${datarootdir}' / 'X11' / 'xorg.conf.d')
     sdkconfig.set('abi_ansic',
         run_command(exe_awk, '-F', '[(,)]',

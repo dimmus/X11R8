@@ -90,7 +90,7 @@ endif
 
 conf_data.set('HAVE_LIBBSD', dep_libbsd.found() ? '1': false)
 # Note: this symbol is used by libXtrans.
-conf_data.set('HAVE_SYSTEMD_DAEMON', build_systemd ? '1': false)
+conf_data.set('HAVE_SYSTEMD_DAEMON', build_systemd_notify ? '1': false)
 conf_data.set('CONFIG_UDEV', build_udev ? '1': false)
 conf_data.set('CONFIG_UDEV_KMS', build_udev_kms ? '1': false)
 conf_data.set('HAVE_DBUS', build_dbus ? '1': false)
@@ -99,7 +99,7 @@ conf_data.set('SYSTEMD_LOGIND', build_systemd_logind ? '1': false)
 conf_data.set('NEED_DBUS', build_systemd_logind or build_hal ? '1': false)
 conf_data.set('CONFIG_WSCONS', host_machine.system() in ['openbsd', 'netbsd'] ? '1': false)
 
-conf_data.set('HAVE_XSHMFENCE', WITH_XSHMFENCE ? '1': false)
+conf_data.set('HAVE_XSHMFENCE', '1')
 conf_data.set('WITH_LIBDRM', libdrm_required ? '1': false)
 conf_data.set('GLAMOR_HAS_EGL_QUERY_DMABUF',
               dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.4.4') ? '1': false)
@@ -126,6 +126,29 @@ conf_data.set_quoted('COMPILEDDEFAULTFONTPATH', default_font_path)
 conf_data.set('XORG_VERSION_CURRENT', release)
 
 conf_data.set('HASXDMAUTH', has_xdm_auth ? '1': false)
+
+summary_srv += {'XSERVER_DTRACE': WITH_DTRACE}
+summary_srv += {'X_BYTE_ORDER': conf_data.get('X_BYTE_ORDER')}
+summary_srv += {'INPUTTHREAD': enable_input_thread}
+summary_srv += {'HASXDMAUTH': has_xdm_auth}
+summary_srv += {'HAVE_LIBBSD': dep_libbsd.found()}
+summary_srv += {'SYSTEMD_DAEMON': build_systemd_notify}
+summary_srv += {'SYSTEMD_LOGIND': build_systemd_logind}
+summary_srv += {'CONFIG_UDEV': build_udev}
+summary_srv += {'CONFIG_UDEV_KMS': build_udev_kms}
+summary_srv += {'HAVE_DBUS': build_dbus}
+summary_srv += {'CONFIG_HAL': build_hal}
+summary_srv += {'NEED_DBUS': build_systemd_logind or build_hal}
+summary_srv += {'WITH_LIBDRM': libdrm_required}
+summary_srv += {'GLXEXT': build_glx}
+summary_srv += {'GLAMOR': build_glamor}
+summary_srv += {'GLAMOR_HAS_EGL_QUERY_DMABUF': conf_data.get('GLAMOR_HAS_EGL_QUERY_DMABUF') == '1' ? true : false}
+summary_srv += {'GLAMOR_HAS_EGL_QUERY_DRIVER': conf_data.get('GLAMOR_HAS_EGL_QUERY_DRIVER') == '1' ? true : false}
+summary_srv += {'GLAMOR_HAS_GBM': dep_gbm.found()}
+summary_srv += {'GLAMOR_HAS_GBM_LINEAR': conf_data.get('GLAMOR_HAS_GBM_LINEAR') == '1' ? true : false}
+summary_srv += {'GBM_BO_WITH_MODIFIERS': conf_data.get('GBM_BO_WITH_MODIFIERS') == '1' ? true : false}
+summary_srv += {'GBM_BO_FD_FOR_PLANE': conf_data.get('GBM_BO_FD_FOR_PLANE') == '1' ? true : false}
+summary_srv += {'GBM_BO_WITH_MODIFIERS2': conf_data.get('GBM_BO_WITH_MODIFIERS2') == '1' ? true : false}
 
 conf_data.set('HAVE_DLFCN_H', cc.has_header('dlfcn.h') ? true : false)
 conf_data.set('HAVE_EXECINFO_H', cc.has_header('execinfo.h') ? '1': false)
@@ -268,6 +291,37 @@ if build_rootless
     conf_data.set('ROOTLESS_SAFEALPHA', 1)
 endif
 
+summary_srv += {'IPv6': build_ipv6}
+summary_srv += {'DGA': build_dga}
+summary_srv += {'DPMSExtension': build_dpms}
+summary_srv += {'DRI2': build_dri2}
+summary_srv += {'DRI3': build_dri3}
+if build_glx
+summary_srv += {'DRI_DRIVER_PATH': dep_dri.get_variable(pkgconfig: 'dridriverdir')}
+endif
+summary_srv += {'MITSHM': build_mitshm}
+summary_srv += {'PANORAMIX': build_xinerama}
+summary_srv += {'RES': build_res}
+summary_srv += {'SCREENSAVER': build_screensaver}
+summary_srv += {'XACE': build_xace}
+summary_srv += {'XCSECURITY': build_xsecurity}
+summary_srv += {'XDMCP': build_xdmcp}
+summary_srv += {'XF86BIGFONT': build_xf86bigfont}
+summary_srv += {'XF86DRI': build_dri1}
+summary_srv += {'XFreeXDGA': build_dga}
+summary_srv += {'XINERAMA': build_xinerama}
+summary_srv += {'XSELINUX': build_xselinux}
+summary_srv += {'XV': build_xv}
+summary_srv += {'XvExtension': build_xv}
+summary_srv += {'XvMCExtension': build_xvmc}
+summary_srv += {'X_REGISTRY_RESOURCE': build_registry_resource}
+summary_srv += {'X_REGISTRY_REQUEST': build_registry_request}
+summary_srv += {'HAVE_APM': build_apm or build_acpi}
+summary_srv += {'HAVE_ACPI': build_acpi}
+summary_srv += {'XWIN': build_xwin}
+summary_srv += {'DEBUG': enable_debugging}
+summary_srv += {'ROOTLESS': build_rootless}
+
 #
 # for xorg-server.h only
 #
@@ -328,6 +382,18 @@ conf_data.set('WSCONS_SUPPORT', supports_wscons ? '1': false)
 conf_data.set('XSERVER_LIBPCIACCESS', get_option('pciaccess') ? '1': false)
 conf_data.set('XSERVER_PLATFORM_BUS', build_udev_kms ? '1': false)
 
+summary_srv += {'XORGSERVER': build_xorg}
+summary_srv += {'XKB_DFLT_RULES': get_option('xkb_default_rules')}
+summary_srv += {'SVR4': cc.compiles(defines_svr4)}
+summary_srv += {'WITH_VGAHW': build_vgahw}
+summary_srv += {'CSRG_BASED': csrg_based}
+summary_srv += {'PCCONS_SUPPORT': supports_pccons}
+summary_srv += {'PCVT_SUPPORT': supports_pcvt}
+summary_srv += {'SYSCONS_SUPPORT': supports_syscons}
+summary_srv += {'WSCONS_SUPPORT': supports_wscons}
+summary_srv += {'XSERVER_LIBPCIACCESS': get_option('pciaccess')}
+summary_srv += {'XSERVER_PLATFORM_BUS': build_udev_kms}
+
 configure_file(output: 'dix-config.h',
                configuration: conf_data)
 
@@ -339,20 +405,19 @@ configure_file(output: 'xorg-server.h',
 
 version_data = configuration_data()
 version_data.set('VENDOR_RELEASE', '@0@'.format(release))
-version_data.set_quoted('VENDOR_NAME', get_option('vendor_name'))
+version_data.set_quoted('VENDOR_NAME',       get_option('vendor_name'))
 version_data.set_quoted('VENDOR_NAME_SHORT', get_option('vendor_name_short'))
-version_data.set_quoted('VENDOR_WEB', get_option('vendor_web'))
+version_data.set_quoted('VENDOR_WEB',        get_option('vendor_web'))
 version_data.set_quoted('VENDOR_MAN_VERSION', 'Version @0@.@1@.@2@'.format(major, minor, patch))
 configure_file(output: 'version-config.h',
                configuration: version_data)
 
 xkb_data = configuration_data()
-
 xkb_data.set_quoted('XKB_BIN_DIRECTORY', xkb_bin_dir)
 xkb_data.set_quoted('XKB_BASE_DIRECTORY', xkb_dir)
-xkb_data.set_quoted('XKB_DFLT_RULES', get_option('xkb_default_rules'))
-xkb_data.set_quoted('XKB_DFLT_MODEL', get_option('xkb_default_model'))
-xkb_data.set_quoted('XKB_DFLT_LAYOUT', get_option('xkb_default_layout'))
+xkb_data.set_quoted('XKB_DFLT_RULES',   get_option('xkb_default_rules'))
+xkb_data.set_quoted('XKB_DFLT_MODEL',   get_option('xkb_default_model'))
+xkb_data.set_quoted('XKB_DFLT_LAYOUT',  get_option('xkb_default_layout'))
 xkb_data.set_quoted('XKB_DFLT_VARIANT', get_option('xkb_default_variant'))
 xkb_data.set_quoted('XKB_DFLT_OPTIONS', get_option('xkb_default_options'))
 xkb_data.set_quoted('XKM_OUTPUT_DIR', xkb_output_dir + '/')
@@ -361,7 +426,6 @@ configure_file(output: 'xkb-config.h',
                configuration: xkb_data)
 
 xorg_data = configuration_data()
-
 xorg_data.set_quoted('XORG_BIN_DIRECTORY', dir_bin)
 xorg_data.set('XORG_VERSION_CURRENT', release)
 xorg_data.set_quoted('XF86CONFIGFILE', 'xorg.conf')
@@ -401,22 +465,34 @@ configure_file(output: 'xorg-config.h',
                input: 'xorg-config.h.meson.in',
                configuration: xorg_data)
 
+summary_org += {'XORG_BIN_DIRECTORY': xorg_data.get('XORG_BIN_DIRECTORY')}
+summary_org += {'XORG_VERSION_CURRENT': xorg_data.get('XORG_VERSION_CURRENT')}
+summary_org += {'XF86CONFIGFILE': xorg_data.get('XF86CONFIGFILE')}
+summary_org += {'XCONFIGFILE': xorg_data.get('XCONFIGFILE')}
+summary_org += {'XCONFIGDIR': xorg_data.get('XCONFIGDIR')}
+summary_org += {'DEFAULT_XDG_DATA_HOME': xorg_data.get('DEFAULT_XDG_DATA_HOME')}
+summary_org += {'DEFAULT_XDG_DATA_HOME_LOGDIR': xorg_data.get('DEFAULT_XDG_DATA_HOME_LOGDIR')}
+summary_org += {'DEFAULT_LOGDIR': xorg_data.get('DEFAULT_LOGDIR')}
+summary_org += {'DEFAULT_LOGPREFIX': xorg_data.get('DEFAULT_LOGPREFIX')}
+summary_org += {'DEFAULT_MODULE_PATH': xorg_data.get('DEFAULT_MODULE_PATH')}
+summary_org += {'DEFAULT_LIBRARY_PATH': xorg_data.get('DEFAULT_LIBRARY_PATH')}
+summary_org += {'__XSERVERNAME__': xorg_data.get('__XSERVERNAME__')}
+summary_org += {'HAVE_MODESETTING_DRIVER': build_modesetting}
+
+# XWin config
 xwin_data = configuration_data()
 xwin_data.set_quoted('DEFAULT_LOGDIR', log_dir)
-xwin_data.set('HAS_WINSOCK', host_machine.system() == 'windows' ? '1': false,
-              description: 'Use Windows sockets')
-xwin_data.set('HAS_DEVWINDOWS', host_machine.system() == 'cygwin' ? '1': false,
-              description: 'Has /dev/windows for signaling new win32 messages')
-xwin_data.set('RELOCATE_PROJECTROOT', host_machine.system() == 'windows' ? '1': false,
-              description: 'Make paths relative to the xserver installation location')
+xwin_data.set('HAS_WINSOCK', host_machine.system() == 'windows' ? '1': false, description: 'Use Windows sockets')
+xwin_data.set('HAS_DEVWINDOWS', host_machine.system() == 'cygwin' ? '1': false, description: 'Has /dev/windows for signaling new win32 messages')
+xwin_data.set('RELOCATE_PROJECTROOT', host_machine.system() == 'windows' ? '1': false, description: 'Make paths relative to the xserver installation location')
 xwin_data.set10('ENABLE_DEBUG', enable_debugging)
 
 configure_file(output: 'xwin-config.h',
                input: 'xwin-config.h.meson.in',
                configuration: xwin_data)
 
-build_xwayland_glamor = build_glamor and dep_gbm.found()
-
+# XWayland config
+if build_xwayland
 xwayland_data = configuration_data()
 xwayland_data.set('XWL_HAS_GLAMOR', build_xwayland_glamor ? '1': false)
 xwayland_data.set('XWL_HAS_LIBDECOR', have_libdecor ? '1': false)
@@ -427,6 +503,18 @@ xwayland_data.set('XWL_HAS_EI_PORTAL', build_ei_portal)
 configure_file(output: 'xwayland-config.h',
                input: 'xwayland-config.h.meson.in',
                configuration: xwayland_data)
+
+if WITH_SUMMARY
+summary_xwl += {'XWayland support': build_xwayland}
+summary_xwl += {'XWL_HAS_GLAMOR': build_xwayland_glamor}
+summary_xwl += {'XWL_HAS_LIBDECOR': have_libdecor}
+summary_xwl += {'XWL_HAS_XWAYLAND_EXTENSION': xproto.found()}
+summary_xwl += {'XWL_HAS_EI': build_ei}
+summary_xwl += {'XWL_HAS_EI_PORTAL': build_ei_portal}
+endif
+else
+summary_xwl += {'XWayland support': build_xwayland}
+endif
 
 dtrace_hdr = []
 dtrace_tmpl = files('Xserver.d')

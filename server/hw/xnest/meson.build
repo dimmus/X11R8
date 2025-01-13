@@ -24,7 +24,7 @@ executable('Xnest',
     include_directories: inc_server,
     dependencies: [
         dep_common,
-        dep_xnest,
+        libxext, libx11, libxau, libxkb,
     ],
     link_with: [
         libxserver_main,
