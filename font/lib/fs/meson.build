@@ -51,9 +51,10 @@ libfs = declare_dependency(
   include_directories: [inc_lib, include_directories('.')],
 )
 
-pkg.generate(lib,
-  description: 'Library Interface to the X Font Server',
-  filebase: 'fs',
-  version: ver_fs,
-  requires: 'xproto',
-)
+# Warning: already generated pkg-config for FS
+# pkg.generate(lib,
+#   description: 'Library Interface to the X Font Server',
+#   filebase: 'fs',
+#   version: ver_fs,
+#   requires: 'xproto',
+# )

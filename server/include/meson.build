@@ -320,7 +320,7 @@ summary_srv += {'HAVE_APM': build_apm or build_acpi}
 summary_srv += {'HAVE_ACPI': build_acpi}
 summary_srv += {'XWIN': build_xwin}
 summary_srv += {'DEBUG': enable_debugging}
-summary_srv += {'ROOTLESS': build_rootless}
+summary_srv += {'ROOTLESS (XQuartz)': build_rootless}
 
 #
 # for xorg-server.h only
@@ -382,15 +382,14 @@ conf_data.set('WSCONS_SUPPORT', supports_wscons ? '1': false)
 conf_data.set('XSERVER_LIBPCIACCESS', get_option('pciaccess') ? '1': false)
 conf_data.set('XSERVER_PLATFORM_BUS', build_udev_kms ? '1': false)
 
-summary_srv += {'XORGSERVER': build_xorg}
 summary_srv += {'XKB_DFLT_RULES': get_option('xkb_default_rules')}
 summary_srv += {'SVR4': cc.compiles(defines_svr4)}
 summary_srv += {'WITH_VGAHW': build_vgahw}
-summary_srv += {'CSRG_BASED': csrg_based}
-summary_srv += {'PCCONS_SUPPORT': supports_pccons}
-summary_srv += {'PCVT_SUPPORT': supports_pcvt}
-summary_srv += {'SYSCONS_SUPPORT': supports_syscons}
-summary_srv += {'WSCONS_SUPPORT': supports_wscons}
+summary_srv += {'CSRG_BASED (BSD)': csrg_based}
+summary_srv += {'PCCONS_SUPPORT (BSD)': supports_pccons}
+summary_srv += {'PCVT_SUPPORT (BSD)': supports_pcvt}
+summary_srv += {'SYSCONS_SUPPORT (BSD)': supports_syscons}
+summary_srv += {'WSCONS_SUPPORT (BSD)': supports_wscons}
 summary_srv += {'XSERVER_LIBPCIACCESS': get_option('pciaccess')}
 summary_srv += {'XSERVER_PLATFORM_BUS': build_udev_kms}
 

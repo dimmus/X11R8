@@ -42,18 +42,18 @@ endif
 
 dependency('xproto', required : true)
 
-if cc.has_header_symbol('xorg-server.h', 'RANDR',
-			dependencies : xorg)
-  dependency('randrproto', required : true)
-endif
-if cc.has_header_symbol('xorg-server.h', 'RENDER',
-			dependencies : xorg)
-  dependency('renderproto', required : true)
-endif
-if cc.has_header_symbol('xorg-server.h', 'DPMSExtension',
-			dependencies : xorg)
-  dependency('xextproto', required : true)
-endif
+# if cc.has_header_symbol('xorg-server.h', 'RANDR',
+# 			dependencies : xorg)
+#   dependency('randrproto', required : true)
+# endif
+# if cc.has_header_symbol('xorg-server.h', 'RENDER',
+# 			dependencies : xorg)
+#   dependency('renderproto', required : true)
+# endif
+# if cc.has_header_symbol('xorg-server.h', 'DPMSExtension',
+# 			dependencies : xorg)
+#   dependency('xextproto', required : true)
+# endif
 
 with_tools = get_option('tools')
 
