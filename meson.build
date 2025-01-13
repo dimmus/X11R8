@@ -1,6 +1,18 @@
 project('X Window System', 'c', 
     license: 'MIT', 
     version: '11.8.1',
+    default_options : [
+      'buildtype=debug', # plain,debug,debugoptimized,release,minsize,custom
+      # 'optimization=g',  # 0,g,1,2,3,s
+      # 'b_sanitize=none   # none,address,thread,undefined,memory,leak,address,undefined',
+      # 'b_coverage=true',
+      # 'b_lto=false',
+      # 'b_lto_threads=32',
+      # 'b_staticpic=true', 
+      # 'b_pie=false',
+      # 'b_lundef=true',
+      'c_std=gnu99' # we use typeof in server
+    ],
     meson_version: '>=0.59.0',
     # 0.56.0
     # 0.58.0: {'format strings'}
@@ -10,46 +22,41 @@ project('X Window System', 'c',
 
 cc = meson.get_compiler('c')
 
-# if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
-#     test_wflags = [
-#         '-Wall',
-# 	      '-Wno-unused-parameter',
-# 	      '-Wno-sign-compare',	 # lots of work to get rid of this
-# 	      '-Wno-missing-field-initializers',
-# 	      '-Wlogical-op',
-# 	      '-Wimplicit-fallthrough',
-# 	      '-Wincompatible-pointer-types',
-#         '-Wpointer-arith',
-#         '-Wmissing-declarations',
-#         '-Wformat=2',
-#         '-Wstrict-prototypes',
-#         '-Wmissing-prototypes',
-#         '-Wnested-externs',
-#         '-Wbad-function-cast',
-#         '-Wold-style-definition',
-#         '-Wunused',
-#         '-Wuninitialized',
-#         '-Wshadow',
-#         '-Wmissing-noreturn',
-#         '-Wmissing-format-attribute',
-#         '-Wredundant-decls',
-#         '-Werror=implicit',
-#         '-Werror=nonnull',
-#         '-Werror=init-self',
-#         '-Werror=main',
-#         '-Werror=missing-braces',
-#         '-Werror=sequence-point',
-#         '-Werror=return-type',
-#         '-Werror=trigraphs',
-#         '-Werror=array-bounds',
-#         '-Werror=write-strings',
-#         '-Werror=address',
-#         '-Werror=int-to-pointer-cast',
-#         '-Werror=pointer-to-int-cast',
-#     ]
-# else
-    test_wflags = []
-# endif
+if get_option('buildtype').startswith('debug')
+  if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
+    test_wflags = [
+      '-Wincompatible-pointer-types',
+      '-Wpointer-arith',
+      '-Wuninitialized',
+      '-Werror=implicit',
+      '-Werror=nonnull',
+      '-Werror=init-self',
+      '-Werror=main',
+      '-Werror=missing-braces',
+      '-Werror=sequence-point',
+      '-Werror=return-type',
+      '-Werror=trigraphs',
+      '-Werror=array-bounds',
+      # '-Werror=write-strings', # initialization discards ‘const’ qualifier from pointer target type
+      '-Werror=address',
+      '-Werror=int-to-pointer-cast',
+      '-Werror=pointer-to-int-cast',
+    ]
+  endif
+else
+  test_wflags = [
+    '-Wno-use-after-free',
+    '-Wno-stringop-truncation',
+    '-Wno-maybe-uninitialized',
+    '-Wno-unused-result',
+    '-Wno-format-truncation',
+    '-Wno-alloc-size-larger-than=',
+    '-Wno-stringop-overflow',
+    '-Wno-strict-aliasing',
+    '-Wno-array-bounds',
+    '-Wno-stringop-overread',
+  ]
+endif
 
 add_project_arguments(
   cc.get_supported_arguments(test_wflags), 
@@ -76,6 +83,17 @@ add_project_link_arguments(
   language: 'c'
 )
 
+WITH_SUMMARY = get_option('show_summary')
+if WITH_SUMMARY
+summary_dir  = {}
+summary_env  = {}
+summary_info = {}
+summary_mem  = {}
+summary_srv  = {}
+summary_org  = {}
+summary_xwl  = {}
+endif
+
 dir_prefix       = get_option('prefix')
 dir_bin          = dir_prefix / get_option('bindir')
 dir_data         = dir_prefix / get_option('datadir')
@@ -88,7 +106,6 @@ dir_libexec      = dir_prefix / get_option('libexecdir')
 dir_build        = meson.project_build_root()
 dir_source       = meson.project_source_root()
 
-WITH_XSHMFENCE   = get_option('xshmfence')
 WITH_UNIT_TESTS  = false
 WITH_FONT_SERVER = get_option('build-font-server')
 WITH_TESTS       = get_option('build-tests')
@@ -99,7 +116,7 @@ WITH_DTRACE      = get_option('dtrace')
 WITH_XTHREADS    = true
 WITH_XTHREADS_DBG = false
 
-dep_m            = cc.find_library('m',         required: false) # libxcvt
+dep_m            = cc.find_library('m',         required: get_option('driver_video_intel')) # libxcvt
 dep_dl           = cc.find_library('dl',        required: false) # xvmc, xserver
 
 dep_zlib         = dependency('zlib',           required: false) # xfont, fontenc
@@ -116,9 +133,9 @@ dep_libbsd       = dependency('libbsd-overlay', required: false)
 dep_xkbcomp      = dependency('xkbcomp',        required: false)
 dep_dbus         = dependency('dbus-1',         required: get_option('systemd_logind') == 'true', version: '>= 1.0')
 dep_fontutil     = dependency('fontutil',       required: false)
-dep_drm          = dependency('libdrm',         required: false, version: '>= 2.4.116')
+dep_drm          = dependency('libdrm',         required: get_option('driver_video_intel'), version: '>= 2.4.116')
 # static
-dep_threads      = dependency('threads')
+dep_threads      = dependency('threads',        required: get_option('driver_video_intel'))
 
 exe_bison        = find_program('bison',        required: false)
 exe_flex         = find_program('flex',         required: false)
@@ -189,9 +206,7 @@ endif
 
 subdir('include')
 subdir('proto')
-if WITH_XSHMFENCE
 subdir('lib' / 'src' / 'xshmfence')
-endif
 subdir('lib' / 'src' / 'xtrans') # <- lib/src/xshmfence
 subdir('font') # <- lib/src/xtrans
 subdir('lib')
@@ -261,3 +276,13 @@ configure_file(
   output: 'config.h',
   configuration: conf
 )
+
+if WITH_SUMMARY
+summary(summary_srv,  bool_yn: true, section: 'Server')
+summary(summary_org,  bool_yn: true, section: 'Server: Xorg')
+summary(summary_xwl,  bool_yn: true, section: 'Server: XWayland')
+summary(summary_dir,  bool_yn: true, section: 'Directories')
+summary(summary_env,  bool_yn: true, section: 'Build environment')
+summary(summary_mem,  bool_yn: true, section: 'Memory configuration')
+summary(summary_info, bool_yn: true, section: 'Information')
+endif
