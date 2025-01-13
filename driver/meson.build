@@ -3,3 +3,4 @@ dir_xorg_module = dir_include / 'xorg'
 dir_xorg_conf   = dir_data / 'X11' / 'xorg.conf.d'
 
 subdir('input')
+# subdir('video')
