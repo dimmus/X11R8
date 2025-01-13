@@ -6,7 +6,7 @@ patch = version_split[2].to_int()
 # convert to the old-style 1.x.y version scheme used up to 1.20.x for backwards compatibility
 release = 1 * 10000000 + major * 100000 + minor * 1000 + patch
 
-dep_dri = dependency('dri', required: build_glx)
+dep_dri = dependency('dri', required: false)
 
 conf_data = configuration_data()
 conf_data.set('_DIX_CONFIG_H_', '1')
@@ -234,7 +234,8 @@ conf_data.set('DPMSExtension', build_dpms ? '1': false)
 conf_data.set('DRI2', build_dri2 ? '1': false)
 conf_data.set('DRI3', build_dri3 ? '1': false)
 if build_glx
-    conf_data.set_quoted('DRI_DRIVER_PATH', dep_dri.get_variable(pkgconfig: 'dridriverdir'))
+    # conf_data.set_quoted('DRI_DRIVER_PATH', dep_dri.get_variable(pkgconfig: 'dridriverdir'))
+    conf_data.set_quoted('DRI_DRIVER_PATH', dir_lib / 'dri')
 endif
 conf_data.set('MITSHM', build_mitshm ? '1': false)
 conf_data.set('PANORAMIX', build_xinerama ? '1': false)
@@ -297,7 +298,7 @@ summary_srv += {'DPMSExtension': build_dpms}
 summary_srv += {'DRI2': build_dri2}
 summary_srv += {'DRI3': build_dri3}
 if build_glx
-summary_srv += {'DRI_DRIVER_PATH': dep_dri.get_variable(pkgconfig: 'dridriverdir')}
+summary_srv += {'DRI_DRIVER_PATH': dir_lib / 'dri'}
 endif
 summary_srv += {'MITSHM': build_mitshm}
 summary_srv += {'PANORAMIX': build_xinerama}

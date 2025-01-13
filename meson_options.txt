@@ -32,7 +32,7 @@ option('default_font_path',     type: 'string')
 option('fontrootdir',           type: 'string',                                                      description: 'Root directory for legacy fonts. Default: from font-utils.pc or $datadir/fonts/X11')
 option('serverconfigdir',       type: 'string',                                                      description: 'Miscellaneous server configuration files path. Default: $libdir/xorg')
 
-option('glx',                   type: 'boolean', value: false) # TODO: need dri !!!
+option('glx',                   type: 'boolean', value: true)
 option('xdmcp',                 type: 'boolean', value: true)
 option('xdm-auth-1',            type: 'boolean', value: true)
 option('ipv6',                  type: 'combo',   value: 'auto', choices: ['true', 'false', 'auto'])
