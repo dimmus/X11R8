@@ -1,0 +1,7 @@
+# subdir('amdgpu')
+# subdir('armsoc')
+# subdir('dummy')
+# subdir('fbdev')
+# subdir('intel')
+# subdir('nouveau')
+# subdir('vbox')
