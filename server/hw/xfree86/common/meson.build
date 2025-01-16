@@ -1,4 +1,4 @@
-srcs_xorg_common = [
+srcs_xorg_common = files(
     'xf86fbBus.c',
     'xf86noBus.c',
     'xf86Configure.c',
@@ -22,9 +22,9 @@ srcs_xorg_common = [
     'xf86Mode.c',
     'xorgHelper.c',
     'xf86Extensions.c',
-]
+)
 
-xorg_sdk_headers = [
+xorg_sdk_headers = files(
     'compiler.h',
     'xf86.h',
     'xf86Module.h',
@@ -44,7 +44,7 @@ xorg_sdk_headers = [
     'xf86platformBus.h',
     'xf86MatchDrivers.h',
     'xaarop.h',
-]
+)
 
 fallback_driver = get_option('fallback_input_driver')
 if fallback_driver == 'auto'
@@ -71,14 +71,12 @@ endif
 
 if get_option('pciaccess')
     srcs_xorg_common += ['xf86pciBus.c', 'xf86VGAarbiter.c']
-
     if host_machine.cpu() == 'sparc' or host_machine.cpu() == 'sparc64'
         srcs_xorg_common += 'xf86sbusBus.c'
     endif
 endif
 
-srcs_xorg_common += custom_target(
-    'xf86DefModeSet.c',
+srcs_xorg_common += custom_target('xf86DefModeSet.c',
     output: 'xf86DefModeSet.c',
     input: ['modeline2c.awk', 'vesamodes', 'extramodes'],
     command: [exe_awk, '-f', '@INPUT0@', '@INPUT1@', '@INPUT2@'],
