@@ -9,7 +9,7 @@ release = 1 * 10000000 + major * 100000 + minor * 1000 + patch
 # In Ubuntu it can be mesa-common-dev.
 # It installs /usr/include/GL/internal/dri_interface.h)
 # We need libgl1-mesa-dri as well to have DRI_DRIVER_PATH=/usr/lib/x86_64-linux-gnu/dri.
-dep_dri = dependency('dri', required: false)
+dep_dri = dependency('dri', required: true)
 
 conf_data = configuration_data()
 conf_data.set('_DIX_CONFIG_H_', '1')
@@ -237,8 +237,8 @@ conf_data.set('DPMSExtension', build_dpms ? '1': false)
 conf_data.set('DRI2', build_dri2 ? '1': false)
 conf_data.set('DRI3', build_dri3 ? '1': false)
 if build_glx
-    # conf_data.set_quoted('DRI_DRIVER_PATH', dep_dri.get_variable(pkgconfig: 'dridriverdir'))
-    conf_data.set_quoted('DRI_DRIVER_PATH', dir_lib / 'dri')
+    conf_data.set_quoted('DRI_DRIVER_PATH', dep_dri.get_variable(pkgconfig: 'dridriverdir'))
+    # conf_data.set_quoted('DRI_DRIVER_PATH', dir_lib / 'dri')
 endif
 conf_data.set('MITSHM', build_mitshm ? '1': false)
 conf_data.set('PANORAMIX', build_xinerama ? '1': false)
