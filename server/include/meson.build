@@ -145,13 +145,13 @@ summary_srv += {'NEED_DBUS': build_systemd_logind or build_hal}
 summary_srv += {'WITH_LIBDRM': libdrm_required}
 summary_srv += {'GLXEXT': build_glx}
 summary_srv += {'GLAMOR': build_glamor}
-summary_srv += {'GLAMOR_HAS_EGL_QUERY_DMABUF': conf_data.get('GLAMOR_HAS_EGL_QUERY_DMABUF') == '1' ? true : false}
-summary_srv += {'GLAMOR_HAS_EGL_QUERY_DRIVER': conf_data.get('GLAMOR_HAS_EGL_QUERY_DRIVER') == '1' ? true : false}
+summary_srv += {'GLAMOR_HAS_EGL_QUERY_DMABUF': dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.4.4')}
+summary_srv += {'GLAMOR_HAS_EGL_QUERY_DRIVER': dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.5.4')}
 summary_srv += {'GLAMOR_HAS_GBM': dep_gbm.found()}
-summary_srv += {'GLAMOR_HAS_GBM_LINEAR': conf_data.get('GLAMOR_HAS_GBM_LINEAR') == '1' ? true : false}
-summary_srv += {'GBM_BO_WITH_MODIFIERS': conf_data.get('GBM_BO_WITH_MODIFIERS') == '1' ? true : false}
-summary_srv += {'GBM_BO_FD_FOR_PLANE': conf_data.get('GBM_BO_FD_FOR_PLANE') == '1' ? true : false}
-summary_srv += {'GBM_BO_WITH_MODIFIERS2': conf_data.get('GBM_BO_WITH_MODIFIERS2') == '1' ? true : false}
+summary_srv += {'GLAMOR_HAS_GBM_LINEAR':  build_glamor and dep_gbm.found() and dep_gbm.version().version_compare('>= 10.6')}
+summary_srv += {'GBM_BO_WITH_MODIFIERS':  build_glamor and dep_gbm.found() and dep_gbm.version().version_compare('>= 17.1')}
+summary_srv += {'GBM_BO_FD_FOR_PLANE':    build_glamor and dep_gbm.found() and dep_gbm.version().version_compare('>= 21.1')}
+summary_srv += {'GBM_BO_WITH_MODIFIERS2': build_glamor and dep_gbm.found() and dep_gbm.version().version_compare('>= 21.3')}
 
 conf_data.set('HAVE_DLFCN_H', cc.has_header('dlfcn.h') ? true : false)
 conf_data.set('HAVE_EXECINFO_H', cc.has_header('execinfo.h') ? '1': false)
@@ -322,7 +322,7 @@ summary_srv += {'X_REGISTRY_RESOURCE': build_registry_resource}
 summary_srv += {'X_REGISTRY_REQUEST': build_registry_request}
 summary_srv += {'HAVE_APM': build_apm or build_acpi}
 summary_srv += {'HAVE_ACPI': build_acpi}
-summary_srv += {'XWIN': build_xwin}
+summary_srv += {'XWIN (Windows)': build_xwin}
 summary_srv += {'DEBUG': enable_debugging}
 summary_srv += {'ROOTLESS (XQuartz)': build_rootless}
 
