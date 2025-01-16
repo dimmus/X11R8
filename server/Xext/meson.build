@@ -20,7 +20,7 @@ endif
 
 if build_mitshm
     srcs_xext += 'shm.c'
-    hdrs_xext += ['shmint.h']
+    hdrs_xext += 'shmint.h'
 endif
 
 if build_hashtable
@@ -39,6 +39,14 @@ if build_xace
     srcs_xext += 'xace.c'
 endif
 
+if build_xsecurity
+    srcs_xext += 'security.c'
+endif
+
+if build_xselinux
+    srcs_xext += ['xselinux_ext.c', 'xselinux_hooks.c', 'xselinux_label.c']
+endif
+
 if build_xf86bigfont
     srcs_xext += 'xf86bigfont.c'
 endif
@@ -46,14 +54,6 @@ endif
 if build_xinerama
     srcs_xext += ['panoramiX.c', 'panoramiXprocs.c', 'panoramiXSwap.c']
     hdrs_xext += ['panoramiX.h', 'panoramiXsrv.h']
-endif
-
-if build_xsecurity
-    srcs_xext += ['security.c']
-endif
-
-if build_xselinux
-    srcs_xext += ['xselinux_ext.c', 'xselinux_hooks.c', 'xselinux_label.c']
 endif
 
 if build_xv

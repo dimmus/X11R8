@@ -68,7 +68,7 @@ option('screensaver',           type: 'boolean', value: true,   description: 'Sc
 option('xres',                  type: 'boolean', value: true,   description: 'XRes extension')
 option('xace',                  type: 'boolean', value: true,   description: 'X-ACE extension')
 option('xinerama',              type: 'boolean', value: true,   description: 'Xinerama extension')
-option('xcsecurity',            type: 'boolean', value: false,  description: 'Security extension')
+option('xcsecurity',            type: 'boolean', value: true,   description: 'Security extension')
 option('xv',                    type: 'boolean', value: true,   description: 'Xv extension')
 option('xvmc',                  type: 'boolean', value: true,   description: 'XvMC extension')
 option('linux_apm',             type: 'boolean', value: true,   description: 'APM support on Linux')
