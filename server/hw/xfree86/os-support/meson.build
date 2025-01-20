@@ -18,7 +18,7 @@ if get_option('pciaccess')
     srcs_xorg_os_support += 'bus/Pci.c'
     if host_machine.cpu() == 'sparc' or host_machine.cpu() == 'sparc64'
         srcs_xorg_os_support += 'bus/Sbus.c'
-        install_data('bus/xf86Sbus.h', install_dir: xorgsdkdir)
+        install_data('bus/xf86Sbus.h', install_dir: dir_xorg)
     endif
 endif
 
@@ -165,4 +165,4 @@ xorg_os_support = static_library('xorg_os_support',
     c_args: xorg_c_args + os_c_args,
 )
 
-install_data(hdrs_xorg_os_support, install_dir: xorgsdkdir)
+install_data(hdrs_xorg_os_support, install_dir: dir_xorg)

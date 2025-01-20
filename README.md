@@ -22,7 +22,7 @@ meson install -C build
 - Integrated X drivers
 - Integrated X apps like `twm`, `xinit`, `xclock`, `xterm` *
 - Revived font server
-- No Windows support *
-- No Wayland support *
+- No Windows support
+- No Wayland support
 
 `*` - work in progress

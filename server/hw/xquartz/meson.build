@@ -75,7 +75,7 @@ libXquartz = static_library('Xquartz',
     srcs_libxquartz,
     c_args: libxquartz_defs,
     objc_args: libxquartz_defs,
-    include_directories: [inc_server, '../../pseudoramiX', '../../miext/rootless', top_dir_inc],
+    include_directories: [inc_server, '../../pseudoramiX', '../../miext/rootless'],
     dependencies: [xproto, dep_pixman],
     link_with: [libxserver_pseudoramix, libxserver_miext_rootless],
 )

@@ -12,4 +12,4 @@ xorg_ddc = static_library('xorg_ddc',
     c_args: xorg_c_args,
 )
 
-install_data(['edid.h', 'xf86DDC.h'], install_dir: xorgsdkdir)
+install_data(['edid.h', 'xf86DDC.h'], install_dir: dir_xorg)

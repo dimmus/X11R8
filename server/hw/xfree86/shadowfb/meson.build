@@ -8,4 +8,4 @@ shared_module('shadowfb',
     link_with: e,
 )
 
-install_data('shadowfb.h', install_dir: xorgsdkdir)
+install_data('shadowfb.h', install_dir: dir_xorg)

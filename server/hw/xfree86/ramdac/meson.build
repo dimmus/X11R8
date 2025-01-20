@@ -14,5 +14,5 @@ install_data(
     [
         'xf86Cursor.h',
     ],
-    install_dir: xorgsdkdir,
+    install_dir: dir_xorg,
 )

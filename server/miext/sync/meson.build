@@ -10,7 +10,7 @@ hdrs_miext_sync = [
     'misyncstr.h',
 ]
 
-if build_dri3 or build_xwayland
+if build_dri3
     srcs_miext_sync += 'misyncshm.c'
 endif
 
@@ -23,6 +23,4 @@ libxserver_miext_sync = static_library('libxserver_miext_sync',
     ],
 )
 
-if build_xorg
-    install_data(hdrs_miext_sync, install_dir: xorgsdkdir)
-endif
+install_data(hdrs_miext_sync, install_dir: dir_xorg)

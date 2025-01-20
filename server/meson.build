@@ -87,57 +87,7 @@ else
     build_systemd_logind = get_option('systemd_logind') == 'true'
 endif
 
-build_xorg = false
-if (host_machine.system() != 'windows')
-    if get_option('xorg') == 'auto'
-        build_xorg = (host_machine.system() != 'darwin' and
-                      host_machine.system() != 'windows')
-    else
-        build_xorg = get_option('xorg') == 'true'
-    endif
-endif
-
-xorgsdkdir = dir_include / 'xorg'
-
-build_xwayland = false
-if (host_machine.system() != 'darwin' and
-    host_machine.system() != 'windows' and
-    get_option('xwayland'))
-    xwayland_required = get_option('xwayland')
-
-    xwayland_path = get_option('xwayland-path')
-    if (xwayland_path == '')
-        xwayland_path = dir_bin
-    endif
-
-    dep_xwayland = [
-        dependency('wayland-client', version: wl_req, required: xwayland_required),
-        dependency('wayland-protocols', version: wl_proto_req, required: xwayland_required),
-        libxcvt,
-    ]
-    build_xwayland_glamor = true
-    dep_xwayland += libxshmfence
-    dep_xwayland += dep_drm
-    dep_xwayland += dep_epoxy
-
-    build_xwayland = true
-    # check for all the deps being found, to handle 'auto' mode.
-    foreach d: dep_xwayland
-        if not d.found()
-            build_xwayland = false
-        endif
-    endforeach
-endif
-
-build_xwin = false
-if get_option('xwin') == 'auto'
-    if (host_machine.system() == 'cygwin' or
-        host_machine.system() == 'windows')
-            build_xwin = true
-    endif
-else
-    build_xwin = get_option('xwin') == 'true'
-endif
+dir_xorg = dir_include / 'xorg'
 
 build_xquartz = false
 if get_option('xquartz') == 'auto'
@@ -209,32 +159,6 @@ if log_dir == ''
 endif
 
 module_dir = dir_lib / get_option('module_dir')
-
-if build_xwayland
-    dep_libdecor = dependency('libdecor-0', required: false)
-    libdecor_option = get_option('libdecor')
-    if libdecor_option == 'auto'
-        have_libdecor = dep_libdecor.found()
-    else
-        have_libdecor = libdecor_option == 'true'
-        if have_libdecor and not dep_libdecor.found()
-            error('libdecor support requested but not found')
-        endif
-    endif
-else
-    have_libdecor = false
-endif
-
-if build_xwayland
-    dep_libei = dependency('libei-1.0', version: '>= 1.0.0', required: get_option('xwayland_ei') in ['portal', 'socket'])
-    dep_liboeffis = dependency('liboeffis-1.0', version: '>= 1.0.0', required: get_option('xwayland_ei') == 'portal')
-
-    build_ei = dep_libei.found() and get_option('xwayland_ei') != 'false'
-    build_ei_portal = dep_liboeffis.found() and get_option('xwayland_ei') in ['portal', 'auto']
-else
-    build_ei = false
-    build_ei_portal = false
-endif
 
 # Lots of sha1 options, because Linux is about choice :)
 
@@ -369,17 +293,7 @@ if not dep_drm.found() and libdrm_required
 endif
 
 build_modesetting = dep_drm.found() and xproto.found()
-
-build_vgahw = false
-if get_option('vgahw') == 'auto'
-    if (host_machine.system() != 'darwin' and
-        host_machine.system() != 'windows' and
-        host_machine.system() != 'cygwin')
-        build_vgahw = true
-    endif
-else
-    build_vgahw = get_option('vgahw') == 'true'
-endif
+build_vgahw = get_option('vgahw') == 'true'
 
 build_dpms = get_option('dpms')
 if build_xquartz
@@ -405,10 +319,6 @@ endif
 
 build_xv = get_option('xv')
 build_xvmc = get_option('xvmc')
-if not build_xv
-    build_xvmc = false
-endif
-
 build_xdmcp = get_option('xdmcp')
 
 build_dga = false
@@ -505,7 +415,6 @@ if get_option('libunwind')
 endif
 
 glx_inc = include_directories('glx')
-top_dir_inc = include_directories('.')
 
 serverconfigdir = get_option('serverconfigdir')
 if serverconfigdir == ''
@@ -536,7 +445,7 @@ if build_rootless
     subdir('miext' / 'rootless')
 endif
 subdir('present')
-if build_xwin or build_xquartz
+if build_xquartz
     subdir('pseudoramiX')
 endif
 subdir('randr')
@@ -548,9 +457,7 @@ subdir('Xi')
 
 # other
 subdir('glamor')
-if build_xorg or get_option('xephyr')
-    subdir('exa')
-endif
+subdir('exa')
 
 # Common static libraries of all X servers
 libxserver = [
@@ -581,61 +488,59 @@ if host_machine.system() != 'windows'
     # subdir('test')
 endif
 
-if build_xorg
-    sdkconfig = configuration_data()
-    sdkconfig.set('prefix',      dir_prefix)
-    sdkconfig.set('libdir',      dir_lib)
-    sdkconfig.set('includedir',  dir_include)
-    sdkconfig.set('datarootdir', dir_data)
-    sdkconfig.set('moduledir',   dir_prefix / module_dir)
-    sdkconfig.set('sdkdir',      dir_include / 'xorg')
-    sdkconfig.set('sysconfigdir', '${datarootdir}' / 'X11' / 'xorg.conf.d')
-    sdkconfig.set('abi_ansic',
-        run_command(exe_awk, '-F', '[(,)]',
-                    '/^#define ABI_ANSIC.*SET/ { printf "%d.%d", $2, $3 }',
-                    files('hw/xfree86/common/xf86Module.h'),
-                    check: false
-        ).stdout()
-    )
-    sdkconfig.set('abi_videodrv',
-        run_command(exe_awk, '-F', '[(,)]',
-                    '/^#define ABI_VIDEODRV.*SET/ { printf "%d.%d", $2, $3 }',
-                    files('hw/xfree86/common/xf86Module.h'),
-                    check: false
-        ).stdout()
-    )
-    sdkconfig.set('abi_xinput',
-        run_command(exe_awk, '-F', '[(,)]',
-                    '/^#define ABI_XINPUT.*SET/ { printf "%d.%d", $2, $3 }',
-                    files('hw/xfree86/common/xf86Module.h'),
-                    check: false
-        ).stdout()
-    )
-    sdkconfig.set('abi_extension',
-        run_command(exe_awk, '-F', '[(,)]',
-                    '/^#define ABI_EXTENSION.*SET/ { printf "%d.%d", $2, $3 }',
-                    files('hw/xfree86/common/xf86Module.h'),
-                    check: false
-        ).stdout()
-    )
+sdkconfig = configuration_data()
+sdkconfig.set('prefix',      dir_prefix)
+sdkconfig.set('libdir',      dir_lib)
+sdkconfig.set('includedir',  dir_include)
+sdkconfig.set('datarootdir', dir_data)
+sdkconfig.set('moduledir',   dir_prefix / module_dir)
+sdkconfig.set('sdkdir',      dir_include / 'xorg')
+sdkconfig.set('sysconfigdir', '${datarootdir}' / 'X11' / 'xorg.conf.d')
+sdkconfig.set('abi_ansic',
+    run_command(exe_awk, '-F', '[(,)]',
+                '/^#define ABI_ANSIC.*SET/ { printf "%d.%d", $2, $3 }',
+                files('hw/xfree86/common/xf86Module.h'),
+                check: false
+    ).stdout()
+)
+sdkconfig.set('abi_videodrv',
+    run_command(exe_awk, '-F', '[(,)]',
+                '/^#define ABI_VIDEODRV.*SET/ { printf "%d.%d", $2, $3 }',
+                files('hw/xfree86/common/xf86Module.h'),
+                check: false
+    ).stdout()
+)
+sdkconfig.set('abi_xinput',
+    run_command(exe_awk, '-F', '[(,)]',
+                '/^#define ABI_XINPUT.*SET/ { printf "%d.%d", $2, $3 }',
+                files('hw/xfree86/common/xf86Module.h'),
+                check: false
+    ).stdout()
+)
+sdkconfig.set('abi_extension',
+    run_command(exe_awk, '-F', '[(,)]',
+                '/^#define ABI_EXTENSION.*SET/ { printf "%d.%d", $2, $3 }',
+                files('hw/xfree86/common/xf86Module.h'),
+                check: false
+    ).stdout()
+)
 
-    # XXX this isn't trying very hard, but hard enough.
-    sdkconfig.set('PACKAGE_VERSION', ver_xserver)
-    sdkconfig.set('SDK_REQUIRED_MODULES', 'pixman xproto')
-    sdkconfig.set('symbol_visibility', '-fvisibility=hidden')
-    sdkconfig.set('XORG_DRIVER_LIBS', '')
+# XXX this isn't trying very hard, but hard enough.
+sdkconfig.set('PACKAGE_VERSION', ver_xserver)
+sdkconfig.set('SDK_REQUIRED_MODULES', 'pixman xproto')
+sdkconfig.set('symbol_visibility', '-fvisibility=hidden')
+sdkconfig.set('XORG_DRIVER_LIBS', '')
 
-    # On Windows, modules built with the SDK will need to link with server and
-    # module implibs to resolve symbols
-    if (host_machine.system() == 'cygwin' or
-        host_machine.system() == 'windows')
-        sdkconfig.set('XORG_DRIVER_LIBS', '-lXorg.exe -L\${moduledir} -lshadow -no-undefined')
-    endif
-
-    configure_file(
-        input: 'xorg-server.pc.in',
-        output: 'xorg-server.pc',
-        configuration: sdkconfig,
-        install_dir: dir_lib / 'pkgconfig',
-    )
+# On Windows, modules built with the SDK will need to link with server and
+# module implibs to resolve symbols
+if (host_machine.system() == 'cygwin' or
+    host_machine.system() == 'windows')
+    sdkconfig.set('XORG_DRIVER_LIBS', '-lXorg.exe -L\${moduledir} -lshadow -no-undefined')
 endif
+
+configure_file(
+    input: 'xorg-server.pc.in',
+    output: 'xorg-server.pc',
+    configuration: sdkconfig,
+    install_dir: dir_lib / 'pkgconfig',
+)

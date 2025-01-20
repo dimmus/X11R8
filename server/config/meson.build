@@ -23,10 +23,7 @@ if host_machine.system() == 'netbsd' or host_machine.system() == 'openbsd'
     srcs_config += 'wscons.c'
 endif
 
-if build_xorg
-    install_data('10-quirks.conf',
-                 install_dir: dir_data / 'X11' / 'xorg.conf.d')
-endif
+install_data('10-quirks.conf', install_dir: dir_data / 'X11' / 'xorg.conf.d')
 
 libxserver_config = static_library('libxserver_config',
     srcs_config,

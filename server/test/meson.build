@@ -149,95 +149,80 @@ if get_option('xvfb')
     endif
 endif
 
-if build_xwayland
-    xwayland_args = [
-        xwayland_server.full_path(),
-    ]
-
-    test('XTS',
-        find_program('scripts/xwayland-piglit.sh'),
-        env: piglit_env,
-        timeout: 1200,
-        suite: 'xwayland'
-    )
-endif
-
 subdir('bigreq')
 subdir('damage')
 subdir('sync')
 subdir('bugs')
 
-if build_xorg
 # Tests that require at least some DDX functions in order to fully link
 # For now, requires xf86 ddx, could be adjusted to use another
-    unit_sources = [
-     '../mi/miinitext.c',
-     '../mi/miinitext.h',
-     '../mi/micmap.c',
-     '../mi/micmap.h',
-     'fixes.c',
-     'input.c',
-     'list.c',
-     'misc.c',
-     'signal-logging.c',
-     'string.c',
-     'test_xkb.c',
-     'tests-common.c',
-     'tests.c',
-     'touch.c',
-     'xfree86.c',
-     'xtest.c',
-    ]
-    unit_c_args = ['-DXORG_TESTS']
-    unit_includes = inc_server
+unit_sources = [
+    '../mi/miinitext.c',
+    '../mi/miinitext.h',
+    '../mi/micmap.c',
+    '../mi/micmap.h',
+    'fixes.c',
+    'input.c',
+    'list.c',
+    'misc.c',
+    'signal-logging.c',
+    'string.c',
+    'test_xkb.c',
+    'tests-common.c',
+    'tests.c',
+    'touch.c',
+    'xfree86.c',
+    'xtest.c',
+]
+unit_c_args = ['-DXORG_TESTS']
+unit_includes = inc_server
 
-    if build_res
-        unit_sources += ['hashtabletest.c']
-        unit_c_args += ['-DRES_TESTS']
-    endif
-
-    if meson.get_compiler('c').has_link_argument('-Wl,-wrap')
-       # LTO breaks with -Wl,-wrap on certain configurations
-       unit_c_args += ['-fno-lto']
-       unit_sources += [
-        'xi1/protocol-xchangedevicecontrol.c',
-        'xi2/protocol-common.c',
-        'xi2/protocol-xiqueryversion.c',
-        'xi2/protocol-xiquerydevice.c',
-        'xi2/protocol-xiselectevents.c',
-        'xi2/protocol-xigetselectedevents.c',
-        'xi2/protocol-xisetclientpointer.c',
-        'xi2/protocol-xigetclientpointer.c',
-        'xi2/protocol-xiquerypointer.c',
-        'xi2/protocol-xipassivegrabdevice.c',
-        'xi2/protocol-xiwarppointer.c',
-        'xi2/protocol-eventconvert.c',
-        'xi2/xi2.c',
-       ]
-       unit_c_args += ['-DLDWRAP_TESTS']
-       unit_includes += [include_directories('xi1', 'xi2')]
-       ldwraps = [
-        '-Wl,-wrap,dixLookupWindow',
-        '-Wl,-wrap,dixLookupClient',
-        '-Wl,-wrap,WriteToClient',
-        '-Wl,-wrap,dixLookupWindow',
-        '-Wl,-wrap,XISetEventMask',
-        '-Wl,-wrap,AddResource',
-        '-Wl,-wrap,GrabButton',
-       ]
-    else
-       ldwraps = []
-       message('ld -wrap required for xi1 & xi2 unit tests, skipping')
-    endif
-
-    unit = executable('tests',
-         unit_sources,
-         c_args: unit_c_args,
-         dependencies: [libx11, dep_pixman, xproto],
-         include_directories: unit_includes,
-         link_args: ldwraps,
-         link_with: [xorg_link, libxcvt],
-    )
-
-    test('unit', unit)
+if build_res
+    unit_sources += ['hashtabletest.c']
+    unit_c_args += ['-DRES_TESTS']
 endif
+
+if cc.has_link_argument('-Wl,-wrap')
+    # LTO breaks with -Wl,-wrap on certain configurations
+    unit_c_args += ['-fno-lto']
+    unit_sources += [
+    'xi1/protocol-xchangedevicecontrol.c',
+    'xi2/protocol-common.c',
+    'xi2/protocol-xiqueryversion.c',
+    'xi2/protocol-xiquerydevice.c',
+    'xi2/protocol-xiselectevents.c',
+    'xi2/protocol-xigetselectedevents.c',
+    'xi2/protocol-xisetclientpointer.c',
+    'xi2/protocol-xigetclientpointer.c',
+    'xi2/protocol-xiquerypointer.c',
+    'xi2/protocol-xipassivegrabdevice.c',
+    'xi2/protocol-xiwarppointer.c',
+    'xi2/protocol-eventconvert.c',
+    'xi2/xi2.c',
+    ]
+    unit_c_args += ['-DLDWRAP_TESTS']
+    unit_includes += include_directories('xi1', 'xi2')
+    ldwraps = [
+    '-Wl,-wrap,dixLookupWindow',
+    '-Wl,-wrap,dixLookupClient',
+    '-Wl,-wrap,WriteToClient',
+    '-Wl,-wrap,dixLookupWindow',
+    '-Wl,-wrap,XISetEventMask',
+    '-Wl,-wrap,AddResource',
+    '-Wl,-wrap,GrabButton',
+    ]
+else
+    ldwraps = []
+    message('ld -wrap required for xi1 & xi2 unit tests, skipping')
+endif
+
+unit = executable('tests',
+        unit_sources,
+        c_args: unit_c_args,
+        dependencies: [libx11, dep_pixman, xproto],
+        include_directories: unit_includes,
+        link_args: ldwraps,
+        link_with: [xorg_link, libxcvt],
+)
+
+test('unit', unit)

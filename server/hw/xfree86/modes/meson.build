@@ -25,5 +25,5 @@ install_data(
         'xf86Modes.h',
         'xf86RandR12.h',
     ],
-    install_dir: xorgsdkdir,
+    install_dir: dir_xorg,
 )

@@ -29,4 +29,4 @@ xorg_parser = static_library('xorg_parser',
     ],
 )
 
-install_data(['xf86Parser.h', 'xf86Optrec.h'], install_dir: xorgsdkdir)
+install_data(['xf86Parser.h', 'xf86Optrec.h'], install_dir: dir_xorg)

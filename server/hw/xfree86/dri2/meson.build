@@ -13,4 +13,4 @@ xorg_dri2 = static_library('xorg_dri2',
     c_args: xorg_c_args,
 )
 
-install_data('dri2.h', install_dir: xorgsdkdir)
+install_data('dri2.h', install_dir: dir_xorg)

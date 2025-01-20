@@ -128,9 +128,6 @@
 /* Build DRI2 extension */
 #mesondefine DRI2
 
-/* Build Xorg server */
-#mesondefine XORGSERVER
-
 /* Current Xorg version */
 #mesondefine XORG_VERSION_CURRENT
 

@@ -85,7 +85,7 @@ srcs_xorg_common += custom_target('xf86DefModeSet.c',
 
 xorg_common = static_library('xorg_common',
     srcs_xorg_common,
-    include_directories: [inc_server, inc_server, top_dir_inc],
+    include_directories: inc_server,
     dependencies: [
         dep_common,
         dep_dbus,
@@ -98,4 +98,4 @@ xorg_common = static_library('xorg_common',
     ],
 )
 
-install_data(xorg_sdk_headers, install_dir: xorgsdkdir)
+install_data(xorg_sdk_headers, install_dir: dir_xorg)

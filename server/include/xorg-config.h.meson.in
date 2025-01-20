@@ -12,9 +12,6 @@
 #include <dix-config.h>
 #include <xkb-config.h>
 
-/* Building Xorg server. */
-#mesondefine XORGSERVER
-
 /* Current X.Org version. */
 #mesondefine XORG_VERSION_CURRENT
 

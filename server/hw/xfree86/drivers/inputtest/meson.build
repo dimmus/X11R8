@@ -17,4 +17,4 @@ shared_module(
     link_with: e,
 )
 
-install_data('xf86-input-inputtest-protocol.h', install_dir: xorgsdkdir)
+install_data('xf86-input-inputtest-protocol.h', install_dir: dir_xorg)

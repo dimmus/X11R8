@@ -272,7 +272,6 @@ conf_data.set('HAVE_LIBUNWIND', get_option('libunwind'))
 conf_data.set('HAVE_APM', (build_apm or build_acpi) ? '1': false)
 conf_data.set('HAVE_ACPI', build_acpi ? '1': false)
 
-conf_data.set('DDXBEFORERESET', build_xwin ? '1': false)
 enable_debugging = get_option('buildtype') == 'debug'
 conf_data.set('DEBUG', enable_debugging ? '1': false)
 
@@ -315,7 +314,6 @@ summary_srv += {'X_REGISTRY_RESOURCE': build_registry_resource}
 summary_srv += {'X_REGISTRY_REQUEST': build_registry_request}
 summary_srv += {'HAVE_APM': build_apm or build_acpi}
 summary_srv += {'HAVE_ACPI': build_acpi}
-summary_srv += {'XWIN (Windows)': build_xwin}
 summary_srv += {'DEBUG': enable_debugging}
 summary_srv += {'ROOTLESS (XQuartz)': build_rootless}
 
@@ -367,7 +365,6 @@ endif
 
 conf_data.set('SVR4', cc.compiles(defines_svr4) ? '1': false)
 conf_data.set_quoted('XKB_DFLT_RULES', get_option('xkb_default_rules'))
-conf_data.set('XORGSERVER', build_xorg ? '1': false)
 conf_data.set_quoted('XCONFIGFILE', 'xorg.conf')
 conf_data.set_quoted('__XSERVERNAME__', 'Xorg')
 conf_data.set('WITH_VGAHW', build_vgahw ? '1': false)
@@ -396,8 +393,8 @@ configure_file(output: 'dix-config.h',
 configure_file(output: 'xorg-server.h',
                input: 'xorg-server.h.meson.in',
                configuration: conf_data,
-               install: build_xorg,
-               install_dir: xorgsdkdir)
+               install: true,
+               install_dir: dir_xorg)
 
 version_data = configuration_data()
 version_data.set('VENDOR_RELEASE', '@0@'.format(release))
@@ -475,43 +472,6 @@ summary_org += {'DEFAULT_LIBRARY_PATH': xorg_data.get('DEFAULT_LIBRARY_PATH')}
 summary_org += {'__XSERVERNAME__': xorg_data.get('__XSERVERNAME__')}
 summary_org += {'HAVE_MODESETTING_DRIVER': build_modesetting}
 
-# XWin config
-xwin_data = configuration_data()
-xwin_data.set_quoted('DEFAULT_LOGDIR', log_dir)
-xwin_data.set('HAS_WINSOCK', host_machine.system() == 'windows' ? '1': false, description: 'Use Windows sockets')
-xwin_data.set('HAS_DEVWINDOWS', host_machine.system() == 'cygwin' ? '1': false, description: 'Has /dev/windows for signaling new win32 messages')
-xwin_data.set('RELOCATE_PROJECTROOT', host_machine.system() == 'windows' ? '1': false, description: 'Make paths relative to the xserver installation location')
-xwin_data.set10('ENABLE_DEBUG', enable_debugging)
-
-configure_file(output: 'xwin-config.h',
-               input: 'xwin-config.h.meson.in',
-               configuration: xwin_data)
-
-# XWayland config
-if build_xwayland
-xwayland_data = configuration_data()
-xwayland_data.set('XWL_HAS_GLAMOR', build_xwayland_glamor ? '1': false)
-xwayland_data.set('XWL_HAS_LIBDECOR', have_libdecor ? '1': false)
-xwayland_data.set('XWL_HAS_XWAYLAND_EXTENSION', xproto.found() ? '1': false)
-xwayland_data.set('XWL_HAS_EI', build_ei)
-xwayland_data.set('XWL_HAS_EI_PORTAL', build_ei_portal)
-
-configure_file(output: 'xwayland-config.h',
-               input: 'xwayland-config.h.meson.in',
-               configuration: xwayland_data)
-
-if WITH_SUMMARY
-summary_xwl += {'XWayland support': build_xwayland}
-summary_xwl += {'XWL_HAS_GLAMOR': build_xwayland_glamor}
-summary_xwl += {'XWL_HAS_LIBDECOR': have_libdecor}
-summary_xwl += {'XWL_HAS_XWAYLAND_EXTENSION': xproto.found()}
-summary_xwl += {'XWL_HAS_EI': build_ei}
-summary_xwl += {'XWL_HAS_EI_PORTAL': build_ei_portal}
-endif
-else
-summary_xwl += {'XWayland support': build_xwayland}
-endif
-
 dtrace_hdr = []
 dtrace_tmpl = files('Xserver.d')
 if WITH_DTRACE
@@ -523,68 +483,66 @@ if WITH_DTRACE
     dtrace_hdr += dtrace_header.process(dtrace_tmpl)
 endif
 
-if build_xorg
-    install_data(
-        [
-            'Xprintf.h',
-            'callback.h',
-            'client.h',
-            'closure.h',
-            'colormap.h',
-            'colormapst.h',
-            'hotplug.h',
-            'cursor.h',
-            'cursorstr.h',
-            'dix.h',
-            'dixaccess.h',
-            'dixevents.h',
-            'dixfont.h',
-            'dixfontstr.h',
-            'dixstruct.h',
-            'events.h',
-            'exevents.h',
-            'extension.h',
-            'extinit.h',
-            'extnsionst.h',
-            'fourcc.h',
-            'gc.h',
-            'gcstruct.h',
-            'globals.h',
-            'glxvndabi.h',
-            'input.h',
-            'inputstr.h',
-            'list.h',
-            'misc.h',
-            'miscstruct.h',
-            'opaque.h',
-            'nonsdk_extinit.h',
-            'optionstr.h',
-            'os.h',
-            'pixmap.h',
-            'pixmapstr.h',
-            'privates.h',
-            'property.h',
-            'propertyst.h',
-            'ptrveloc.h',
-            'region.h',
-            'regionstr.h',
-            'resource.h',
-            'rgb.h',
-            'screenint.h',
-            'scrnintstr.h',
-            'selection.h',
-            'servermd.h',
-            'validate.h',
-            'displaymode.h',
-            'window.h',
-            'windowstr.h',
-            'xkbfile.h',
-            'xkbsrv.h',
-            'xkbstr.h',
-            'xkbrules.h',
-            'Xprintf.h',
-            'xserver-properties.h',
-        ],
-        install_dir: xorgsdkdir,
-    )
-endif
+install_data(
+    [
+        'Xprintf.h',
+        'callback.h',
+        'client.h',
+        'closure.h',
+        'colormap.h',
+        'colormapst.h',
+        'hotplug.h',
+        'cursor.h',
+        'cursorstr.h',
+        'dix.h',
+        'dixaccess.h',
+        'dixevents.h',
+        'dixfont.h',
+        'dixfontstr.h',
+        'dixstruct.h',
+        'events.h',
+        'exevents.h',
+        'extension.h',
+        'extinit.h',
+        'extnsionst.h',
+        'fourcc.h',
+        'gc.h',
+        'gcstruct.h',
+        'globals.h',
+        'glxvndabi.h',
+        'input.h',
+        'inputstr.h',
+        'list.h',
+        'misc.h',
+        'miscstruct.h',
+        'opaque.h',
+        'nonsdk_extinit.h',
+        'optionstr.h',
+        'os.h',
+        'pixmap.h',
+        'pixmapstr.h',
+        'privates.h',
+        'property.h',
+        'propertyst.h',
+        'ptrveloc.h',
+        'region.h',
+        'regionstr.h',
+        'resource.h',
+        'rgb.h',
+        'screenint.h',
+        'scrnintstr.h',
+        'selection.h',
+        'servermd.h',
+        'validate.h',
+        'displaymode.h',
+        'window.h',
+        'windowstr.h',
+        'xkbfile.h',
+        'xkbsrv.h',
+        'xkbstr.h',
+        'xkbrules.h',
+        'Xprintf.h',
+        'xserver-properties.h',
+    ],
+    install_dir: dir_xorg,
+)

@@ -7,4 +7,4 @@ shared_module('vgahw',
     install_dir: module_dir,
 )
 
-install_data('vgaHW.h', install_dir: xorgsdkdir)
+install_data('vgaHW.h', install_dir: dir_xorg)

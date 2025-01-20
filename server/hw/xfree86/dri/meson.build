@@ -19,5 +19,5 @@ install_data(
         'sarea.h',
         'dristruct.h',
     ],
-    install_dir: xorgsdkdir,
+    install_dir: dir_xorg,
 )
