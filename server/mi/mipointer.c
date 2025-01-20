@@ -592,7 +592,7 @@ miPointerMoveNoEvent(DeviceIntPtr pDev, ScreenPtr pScreen, int x, int y)
  * Set the devices' cursor position to the given x/y position.
  *
  * This function is called during the pointer update path in
- * GetPointerEvents and friends (and the same in the xwin DDX).
+ * GetPointerEvents and friends.
  *
  * The coordinates provided are always absolute. The parameter mode whether
  * it was relative or absolute movement that landed us at those coordinates.

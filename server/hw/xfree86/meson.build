@@ -127,9 +127,7 @@ if int10 != 'false'
     subdir('int10')
 endif
 subdir('shadowfb')
-if build_vgahw
-    subdir('vgahw')
-endif
+subdir('vgahw')
 if build_modesetting
    subdir('drivers/modesetting')
 endif

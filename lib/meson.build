@@ -47,4 +47,8 @@ summary_lib += {'ZFILE-STAT': get_option('stat-zfile')}
 summary_lib += {'SXPM': get_option('build-sxpm')}
 summary_lib += {'PIXMAN': WITH_INT_PIXMAN ? 'internal' : 'external'}
 summary_lib += {'EPOXY':  WITH_INT_EPOXY  ? 'internal' : 'external'}
-summary_lib += {'TESTS': WITH_TESTS ? true : false}
+summary_lib += {'TEST': WITH_TESTS ? true : false}
+summary_lib += {'DOC': WITH_DOC ? true : false}
+if WITH_DOC
+summary_lib += {'MAN': WITH_DOC_MAN ? true : false}
+endif

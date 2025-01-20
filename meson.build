@@ -112,7 +112,8 @@ dir_source       = meson.project_source_root()
 WITH_UNIT_TESTS  = false
 WITH_FONT_SERVER = get_option('build-font-server')
 WITH_TESTS       = get_option('build-tests')
-WITH_MAN         = get_option('docs-man')
+WITH_DOC         = get_option('build-docs')
+WITH_DOC_MAN     = get_option('build-docs-man')
 WITH_INT_PIXMAN  = get_option('use-builtin-pixman')
 WITH_INT_EPOXY   = get_option('use-builtin-epoxy')
 WITH_DEMOS       = get_option('build-demos')
@@ -282,12 +283,14 @@ conf.set('XTHREADS_WARN',           WITH_XTHREADS_DBG ? '1' : false)
 conf.set('XTHREADS_FILE_LINE',      WITH_XTHREADS_DBG ? '1' : false)
 conf.set('XTHREADS_DEBUG',          WITH_XTHREADS_DBG ? '1' : false)
 
-if WITH_MAN
+if WITH_DOC
+if WITH_DOC_MAN
 exe_sed  = find_program('sed',      required: false)
 xmlto    = find_program('xmlto',    required: false)
 xsltproc = find_program('xsltproc', required: false) # require_devel_docs
 fop      = find_program('fop',      required: false) # require_docs_pdf
 subdir('doc' / 'man')
+endif
 endif
 
 configure_file(

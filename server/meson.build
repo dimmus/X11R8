@@ -1,8 +1,4 @@
 libselinux_req  = '>= 2.0.86'
-xext_req        = '>= 1.0.99.4'
-xproto_req      = '>= 7.0.31'
-wl_req          = '>= 1.21.0'
-wl_proto_req    = '>= 1.34'
 gbm_req         = '>= 10.2'
 
 build_systemd_notify = get_option('systemd_notify') == 'true'
@@ -160,8 +156,6 @@ endif
 
 module_dir = dir_lib / get_option('module_dir')
 
-# Lots of sha1 options, because Linux is about choice :)
-
 # The idea behind the ordering here is that we should first prefer system
 # builtin providers, and then smaller implementations of over larger ones.
 test_sha1 = [
@@ -292,8 +286,7 @@ if not dep_drm.found() and libdrm_required
     error('DRI requested, but LIBDRM not found')
 endif
 
-build_modesetting = dep_drm.found() and xproto.found()
-build_vgahw = get_option('vgahw') == 'true'
+build_modesetting = dep_drm.found()
 
 build_dpms = get_option('dpms')
 if build_xquartz

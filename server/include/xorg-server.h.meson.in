@@ -167,9 +167,6 @@
 /* Name of X server */
 #mesondefine __XSERVERNAME__
 
-/* Building vgahw module */
-#mesondefine WITH_VGAHW
-
 /* System is BSD-like */
 #mesondefine CSRG_BASED
 

@@ -14,11 +14,7 @@ option('stat-zfile',            type: 'boolean', value : true,                  
 option('build-sxpm',            type: 'boolean', value : true,                                       description: '[xpm] Build programm to show XPM files.')
 
 ## xserver
-option('xorg',                  type: 'combo',   value: 'true',  choices: ['true', 'false', 'auto'], description: 'Enable Xorg X Server')
-option('xwin',                  type: 'combo',   value: 'false', choices: ['true', 'false', 'auto'], description: 'Enable XWin X server')
 option('xquartz',               type: 'combo',   value: 'false', choices: ['true', 'false', 'auto'], description: 'Enable Xquartz X server')
-option('xwayland_ei',           type: 'combo',   value: 'false', choices: ['socket', 'portal', 'false', 'auto'], description: 'Enable emulated input support on Xwayland')
-option('xwayland',              type: 'boolean', value: false,                                       description: 'Enable Xwayland X server')
 option('xnest',                 type: 'boolean', value: true,                                        description: 'Enable Xnest nested X server')
 option('xephyr',                type: 'boolean', value: false,                                       description: 'Enable Xephyr nested X server')
 option('xvfb',                  type: 'boolean', value: true,                                        description: 'Enable Xvfb X server')
@@ -79,7 +75,6 @@ option('int10',                 type: 'combo',   value: 'auto', choices: ['stub'
 option('hal',                   type: 'combo',   value: 'auto', choices: ['true', 'false', 'auto'],   description: 'Enable HAL integration')
 option('systemd_notify',        type: 'combo',   value: 'true', choices: ['true', 'false', 'auto'],   description: 'Enable systemd-notify support')
 option('systemd_logind',        type: 'combo',   value: 'auto', choices: ['true', 'false', 'auto'],   description: 'Enable systemd-logind integration')
-option('vgahw',                 type: 'combo',   value: 'auto', choices: ['true', 'false', 'auto'],   description: 'Xorg VGA access module')
 option('xselinux',              type: 'combo',   value: 'auto', choices: ['true', 'false', 'auto'],   description: 'XSELINUX extension')
 option('dga',                   type: 'combo',   value: 'auto', choices: ['true', 'false', 'auto'],   description: 'DGA extension')
 option('mitshm',                type: 'combo',   value: 'auto', choices: ['true', 'false', 'auto'],   description: 'SHM extension')
@@ -99,10 +94,8 @@ option('bundle-version',        type: 'string',  value: 'auto',                 
 option('bundle-version-string', type: 'string',  value: 'auto',                                       description: 'The CFBundleShortVersionString for the application bundle')
 option('sparkle-feed-url',      type: 'string',                                                       description: 'Feed URL for autoupdating with the Sparkle Framework (default: disabled)')
 option('sparkle-public-edkey',  type: 'string',                                                       description: 'Public EdDSA key for verifying updates from the Sparkle feed (default: disabled)')
-option('xwayland-path',         type: 'string',                                                       description: 'Directory containing Xwayland executable')
 option('xpbproxy',              type: 'boolean', value: false,                                        description: 'Build a standalone X pasteboard proxy')
 option('libunwind',             type: 'boolean', value: true,                                         description: 'Use libunwind for backtrace reporting')
-option('libdecor',              type: 'combo',   value: 'auto',  choices: ['true', 'false', 'auto'],  description: 'Whether Xwayland should use libdecor when running rootful.')
 
 # xcb
 option('composite',             type: 'boolean', value: true)
@@ -125,10 +118,10 @@ option('selinux',               type: 'boolean', value: true)
 option('xtest',                 type: 'boolean', value: true)
 option('ge',                    type: 'boolean', value: true)
 
-option('docs',                  type: 'combo',   value: 'false', choices: ['true', 'false', 'auto'],  description: 'Build documentation')
-option('devel-docs',            type: 'combo',   value: 'false', choices: ['true', 'false', 'auto'],  description: 'Build development documentation')
-option('docs-pdf',              type: 'combo',   value: 'false', choices: ['true', 'false', 'auto'],  description: 'Whether to build PDF version of documentation. Setting is ignored if documentation is not built.')
-option('docs-man',              type: 'boolean', value: true,    description: '')
+option('build-docs',            type: 'boolean', value: false,   description: 'Build documentation')
+option('build-docs-guide',      type: 'boolean', value: false,   description: 'Build development guides')
+option('build-docs-pdf',        type: 'boolean', value: false,   description: 'Build documentation as pdf files')
+option('build-docs-man',        type: 'boolean', value: true,    description: 'Build manual pages')
 
 option('build-font-server',     type: 'boolean', value: false,   description: '')
 option('build-tests',           type: 'boolean', value: false,   description: '')
@@ -164,7 +157,7 @@ option('mips-dspr2',            type: 'feature',                 description: 'U
 option('rvv',                   type: 'feature',                 description: 'Use RISC-V Vector extension')
 option('gnu-inline-asm',        type: 'feature',                 description: 'Use GNU style inline assembler')
 option('tls',                   type: 'feature',                 description: 'Use compiler support for thread-local storage')
-option('openmp',                type: 'feature',                 description: 'Enable OpenMP for tests')
+option('openmp',                type: 'feature',                 description: 'Enable OpenMP')
 option('cpu-features-path',     type: 'string',                  description: 'Path to platform-specific cpu-features.[ch] for systems that do not provide it (e.g. Android)')
 option('timers',                type: 'boolean', value : false,  description: 'Enable TIMER_* macros')
 

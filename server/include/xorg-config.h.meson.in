@@ -73,9 +73,6 @@
    xorg_backtrace in hw/xfree86/common/xf86Events.c */
 #mesondefine HAVE_WALKCONTEXT
 
-/* Building vgahw module */
-#mesondefine WITH_VGAHW
-
 /* NetBSD PIO alpha IO */
 #mesondefine USE_ALPHA_PIO
 

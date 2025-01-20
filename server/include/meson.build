@@ -139,10 +139,10 @@ summary_srv += {'CONFIG_HAL': build_hal}
 summary_srv += {'NEED_DBUS': build_systemd_logind or build_hal}
 summary_srv += {'WITH_LIBDRM': libdrm_required}
 summary_srv += {'GLXEXT': build_glx}
-summary_srv += {'GLAMOR_HAS_EGL_QUERY_DMABUF': dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.4.4')}
-summary_srv += {'GLAMOR_HAS_EGL_QUERY_DRIVER': dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.5.4')}
-summary_srv += {'GLAMOR_HAS_GBM': dep_gbm.found()}
-summary_srv += {'GLAMOR_HAS_GBM_LINEAR':  dep_gbm.found() and dep_gbm.version().version_compare('>= 10.6')}
+summary_srv += {'EGL_QUERY_DMABUF': dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.4.4')}
+summary_srv += {'EGL_QUERY_DRIVER': dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.5.4')}
+summary_srv += {'GBM': dep_gbm.found()}
+summary_srv += {'GBM_LINEAR':  dep_gbm.found() and dep_gbm.version().version_compare('>= 10.6')}
 summary_srv += {'GBM_BO_WITH_MODIFIERS':  dep_gbm.found() and dep_gbm.version().version_compare('>= 17.1')}
 summary_srv += {'GBM_BO_FD_FOR_PLANE':    dep_gbm.found() and dep_gbm.version().version_compare('>= 21.1')}
 summary_srv += {'GBM_BO_WITH_MODIFIERS2': dep_gbm.found() and dep_gbm.version().version_compare('>= 21.3')}
@@ -315,7 +315,9 @@ summary_srv += {'X_REGISTRY_REQUEST': build_registry_request}
 summary_srv += {'HAVE_APM': build_apm or build_acpi}
 summary_srv += {'HAVE_ACPI': build_acpi}
 summary_srv += {'DEBUG': enable_debugging}
+if build_xquartz
 summary_srv += {'ROOTLESS (XQuartz)': build_rootless}
+endif
 
 #
 # for xorg-server.h only
@@ -367,7 +369,6 @@ conf_data.set('SVR4', cc.compiles(defines_svr4) ? '1': false)
 conf_data.set_quoted('XKB_DFLT_RULES', get_option('xkb_default_rules'))
 conf_data.set_quoted('XCONFIGFILE', 'xorg.conf')
 conf_data.set_quoted('__XSERVERNAME__', 'Xorg')
-conf_data.set('WITH_VGAHW', build_vgahw ? '1': false)
 conf_data.set('CSRG_BASED', csrg_based ? '1': false)
 conf_data.set('PCCONS_SUPPORT', supports_pccons ? '1': false)
 conf_data.set('PCVT_SUPPORT', supports_pcvt ? '1': false)
@@ -378,14 +379,15 @@ conf_data.set('XSERVER_PLATFORM_BUS', build_udev_kms ? '1': false)
 
 summary_srv += {'XKB_DFLT_RULES': get_option('xkb_default_rules')}
 summary_srv += {'SVR4': cc.compiles(defines_svr4)}
-summary_srv += {'WITH_VGAHW': build_vgahw}
+if ['freebsd', 'netbsd', 'openbsd', 'sunos'].contains(host_machine.system())
 summary_srv += {'CSRG_BASED (BSD)': csrg_based}
 summary_srv += {'PCCONS_SUPPORT (BSD)': supports_pccons}
 summary_srv += {'PCVT_SUPPORT (BSD)': supports_pcvt}
 summary_srv += {'SYSCONS_SUPPORT (BSD)': supports_syscons}
 summary_srv += {'WSCONS_SUPPORT (BSD)': supports_wscons}
-summary_srv += {'XSERVER_LIBPCIACCESS': get_option('pciaccess')}
-summary_srv += {'XSERVER_PLATFORM_BUS': build_udev_kms}
+endif
+summary_srv += {'LIBPCIACCESS': get_option('pciaccess')}
+summary_srv += {'UDEV_KMS': build_udev_kms}
 
 configure_file(output: 'dix-config.h',
                configuration: conf_data)
@@ -463,14 +465,14 @@ summary_org += {'XORG_VERSION_CURRENT': xorg_data.get('XORG_VERSION_CURRENT')}
 summary_org += {'XF86CONFIGFILE': xorg_data.get('XF86CONFIGFILE')}
 summary_org += {'XCONFIGFILE': xorg_data.get('XCONFIGFILE')}
 summary_org += {'XCONFIGDIR': xorg_data.get('XCONFIGDIR')}
-summary_org += {'DEFAULT_XDG_DATA_HOME': xorg_data.get('DEFAULT_XDG_DATA_HOME')}
-summary_org += {'DEFAULT_XDG_DATA_HOME_LOGDIR': xorg_data.get('DEFAULT_XDG_DATA_HOME_LOGDIR')}
-summary_org += {'DEFAULT_LOGDIR': xorg_data.get('DEFAULT_LOGDIR')}
-summary_org += {'DEFAULT_LOGPREFIX': xorg_data.get('DEFAULT_LOGPREFIX')}
-summary_org += {'DEFAULT_MODULE_PATH': xorg_data.get('DEFAULT_MODULE_PATH')}
-summary_org += {'DEFAULT_LIBRARY_PATH': xorg_data.get('DEFAULT_LIBRARY_PATH')}
+summary_org += {'XDG_DATA_HOME': xorg_data.get('DEFAULT_XDG_DATA_HOME')}
+summary_org += {'XDG_DATA_HOME_LOGDIR': xorg_data.get('DEFAULT_XDG_DATA_HOME_LOGDIR')}
+summary_org += {'LOGDIR': xorg_data.get('DEFAULT_LOGDIR')}
+summary_org += {'LOGPREFIX': xorg_data.get('DEFAULT_LOGPREFIX')}
+summary_org += {'MODULE_PATH': xorg_data.get('DEFAULT_MODULE_PATH')}
+summary_org += {'LIBRARY_PATH': xorg_data.get('DEFAULT_LIBRARY_PATH')}
 summary_org += {'__XSERVERNAME__': xorg_data.get('__XSERVERNAME__')}
-summary_org += {'HAVE_MODESETTING_DRIVER': build_modesetting}
+summary_org += {'MODESETTING_DRIVER': build_modesetting}
 
 dtrace_hdr = []
 dtrace_tmpl = files('Xserver.d')
