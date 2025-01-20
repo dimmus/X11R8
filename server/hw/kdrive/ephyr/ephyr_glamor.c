@@ -30,8 +30,8 @@
 
 #include <stdlib.h>
 #include <stdint.h>
-#include <xcb/xcb.h>
-#include <xcb/xcb_aux.h>
+#include "xcb/xcb.h"
+#include "xcb/xcb_aux.h"
 #include <pixman.h>
 #include "glamor_context.h"
 #include "glamor_egl.h"

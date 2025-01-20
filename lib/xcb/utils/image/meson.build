@@ -2,7 +2,7 @@ inc_xcb += include_directories('.')
 
 h_check += ['sys/shm.h']
 
-dep_int_image = [libxcb, util]
+dep_int_image = [libxcb, libxcb_util]
 
 src = files(
   'xcb_image.c',
@@ -15,7 +15,7 @@ lib = library('xcb-util-image', src,
   install: true,
 )
 
-image = declare_dependency(
+libxcb_image = declare_dependency(
   link_with: lib,
   include_directories: inc_xcb,
 )

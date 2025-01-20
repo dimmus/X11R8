@@ -29,8 +29,8 @@
 #include "ephyrlog.h"
 #include "hostx.h"
 #include "cursorstr.h"
-#include <xcb/render.h>
-#include <xcb/xcb_renderutil.h>
+#include "xcb/render.h"
+#include "xcb/xcb_renderutil.h"
 
 static DevPrivateKeyRec ephyrCursorPrivateKey;
 

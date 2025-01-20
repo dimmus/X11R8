@@ -16,7 +16,7 @@ option('build-sxpm',            type: 'boolean', value : true,                  
 ## xserver
 option('xquartz',               type: 'combo',   value: 'false', choices: ['true', 'false', 'auto'], description: 'Enable Xquartz X server')
 option('xnest',                 type: 'boolean', value: true,                                        description: 'Enable Xnest nested X server')
-option('xephyr',                type: 'boolean', value: false,                                       description: 'Enable Xephyr nested X server')
+option('xephyr',                type: 'boolean', value: true,                                        description: 'Enable Xephyr nested X server')
 option('xvfb',                  type: 'boolean', value: true,                                        description: 'Enable Xvfb X server')
 
 option('builder_addr',          type: 'string',  value: 'xorg@lists.freedesktop.org',                description: 'Builder address')

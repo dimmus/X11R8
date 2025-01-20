@@ -9,7 +9,7 @@ lib = library('xcb-util-keysyms', 'keysyms.c',
   install: true,
 )
 
-keysyms = declare_dependency(
+libxcb_keysyms = declare_dependency(
   link_with: lib,
   include_directories: inc_xcb,
 )

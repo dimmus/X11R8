@@ -25,8 +25,8 @@
 
 #include <dix-config.h>
 
-#include <xcb/xcb_keysyms.h>
-#include <X11/keysym.h>
+#include "xcb/xcb_keysyms.h"
+#include "X11/keysym.h"
 
 #include "os/osdep.h"
 

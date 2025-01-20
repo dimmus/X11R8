@@ -8,31 +8,22 @@ srcs = [
 
 dep_xephyr = [
     dep_common,
-    dependency('xcb'),
-    dependency('xcb-shape'),
-    dependency('xcb-render'),
-    dependency('xcb-renderutil'),
-    dependency('xcb-aux'),
-    dependency('xcb-image'),
-    dependency('xcb-icccm'),
-    dependency('xcb-shm', version: '>=1.9.3'),
-    dependency('xcb-keysyms'),
-    dependency('xcb-randr'),
-    dependency('xcb-xkb'),
+    libxcb,
+    libxcb_renderutil,
+    libxcb_image,
+    libxcb_iccm,
+    libxcb_keysyms,
+    libxcb_util,
 ]
 
-xephyr_glamor = []
 srcs += 'ephyr_glamor.c'
 if build_xv
     srcs += 'ephyr_glamor_xv.c'
 endif
-xephyr_glamor += glamor
 dep_xephyr += dep_epoxy
-dep_xephyr += dependency('xcb-glx')
 
 if build_xv
     srcs += 'ephyrvideo.c'
-    dep_xephyr += dependency('xcb-xv')
 endif
 
 xephyr_server = executable('Xephyr',
@@ -45,7 +36,7 @@ xephyr_server = executable('Xephyr',
     link_with: [
         libxserver_main,
         libxserver_exa,
-        xephyr_glamor,
+        glamor,
         kdrive,
         libxserver_fb,
         libxserver,

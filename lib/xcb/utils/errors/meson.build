@@ -30,7 +30,7 @@ lib = library('xcb-util-errors', src,
   install: true,
 )
 
-errors = declare_dependency(
+libxcb_errors = declare_dependency(
   link_with: lib,
   include_directories: inc_xcb,
 )

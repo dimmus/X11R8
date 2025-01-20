@@ -104,11 +104,10 @@ conf_data.set('CONFIG_WSCONS', host_machine.system() in ['openbsd', 'netbsd'] ? 
 
 conf_data.set('HAVE_XSHMFENCE', '1')
 conf_data.set('WITH_LIBDRM', libdrm_required ? '1': false)
-conf_data.set('GLAMOR_HAS_EGL_QUERY_DMABUF',
-              dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.4.4') ? '1': false)
-conf_data.set('GLAMOR_HAS_EGL_QUERY_DRIVER',
-              dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.5.4') ? '1': false)
 conf_data.set('GLXEXT', build_glx ? '1': false)
+conf_data.set('GLAMOR', '1')
+conf_data.set('GLAMOR_HAS_EGL_QUERY_DMABUF', dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.4.4') ? '1': false)
+conf_data.set('GLAMOR_HAS_EGL_QUERY_DRIVER', dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.5.4') ? '1': false)
 conf_data.set('GLAMOR_HAS_GBM', dep_gbm.found() ? '1': false)
 conf_data.set('GLAMOR_HAS_GBM_LINEAR',  dep_gbm.found() and dep_gbm.version().version_compare('>= 10.6') ? '1': false)
 conf_data.set('GBM_BO_WITH_MODIFIERS',  dep_gbm.found() and dep_gbm.version().version_compare('>= 17.1') ? '1': false)

@@ -10,7 +10,7 @@ lib_iccm = library('xcb-iccm',
   install: true,
 )
 
-iccm = declare_dependency(
+libxcb_iccm = declare_dependency(
   link_with: lib_iccm,
   include_directories: inc_xcb,
 )
@@ -50,7 +50,7 @@ lib_ewmh = library('xcb-ewmh',
   install: true,
 )
 
-ewmh = declare_dependency(
+libxcb_ewmh = declare_dependency(
   link_with: lib_ewmh,
   include_directories: inc_xcb,
 )

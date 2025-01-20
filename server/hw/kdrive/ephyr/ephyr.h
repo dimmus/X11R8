@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <libgen.h>
-#include <xcb/xcb_image.h>
+#include "xcb/xcb_image.h"
 
 #include "os.h"                 /* for OsSignal() */
 #include "kdrive.h"

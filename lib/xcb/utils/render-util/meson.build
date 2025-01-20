@@ -15,7 +15,7 @@ lib = library('xcb-util-renderutil', src,
   install: true,
 )
 
-renderutil = declare_dependency(
+libxcb_renderutil = declare_dependency(
   link_with: lib,
   include_directories: inc_xcb,
 )

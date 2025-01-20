@@ -21,7 +21,7 @@
  * IN THE SOFTWARE.
  */
 
-#include <xcb/xcb.h>
+#include "xcb/xcb.h"
 #include "dix-config.h"
 
 struct ephyr_glamor;

@@ -17,7 +17,7 @@ lib = library('xcb-util', src,
   install: true,
 )
 
-util = declare_dependency(
+libxcb_util = declare_dependency(
   link_with: lib,
   include_directories: inc_xcb,
 )

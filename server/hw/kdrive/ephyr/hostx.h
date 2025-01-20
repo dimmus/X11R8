@@ -28,8 +28,8 @@
 
 #include <X11/X.h>
 #include <X11/Xmd.h>
-#include <xcb/xcb.h>
-#include <xcb/render.h>
+#include "xcb/xcb.h"
+#include "xcb/render.h"
 #include "ephyr.h"
 
 #define EPHYR_WANT_DEBUG 0
