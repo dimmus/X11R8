@@ -185,11 +185,6 @@ foreach t: test_sha1
             sha1_found = true
             dep_sha1 = dep_null
         endif
-    elif t == 'CryptoAPI'
-        if cc.has_header('wincrypt.h')
-            sha1_found = true
-            dep_sha1 = dep_null
-        endif
     elif t == 'libmd'
         dep_md = cc.find_library('md', required: false)
         if dep_md.found()
