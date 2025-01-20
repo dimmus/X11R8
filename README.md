@@ -6,7 +6,7 @@
 
 This document describes how to build, install, and get started with Release 8 of the X Window System and gives a brief overview of the contents of the release.
 
-## For the Impatient Explorer
+## Build
 
 ```sh
 meson setup . build
@@ -17,11 +17,12 @@ meson install -C build
 ## Changes from mainstream
 - Monolithic X Window System package
 - Meson build system
+- Enabled 3D acceleration by default
 - Integrated XCB
 - Integrated X drivers
 - Integrated X apps like `twm`, `xinit`, `xclock`, `xterm` *
-- Font server revived
-- No Windows OS support *
+- Revived font server
+- No Windows support *
 - No Wayland support *
 
 `*` - work in progress
