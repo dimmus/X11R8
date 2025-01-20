@@ -25,7 +25,7 @@ foreach lang: localities
         install_mode: 'rw-r--r--')
 
     install_data('Resources' / lang + '.lproj' / 'main.nib' / 'keyedobjects.nib',
-        install_dir: bundle_root / 'Contents' / 'Resources' / lang + '.lproj', 'main.nib',
+        install_dir: bundle_root / 'Contents' / 'Resources' / lang + '.lproj' / 'main.nib',
         install_mode: 'rw-r--r--')
 endforeach
 
