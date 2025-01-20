@@ -71,7 +71,7 @@ conf.set_quoted('XCMSDIR', meson.project_source_root() / 'src' / 'lib' / 'x11' /
 lib = static_library('xcms', src,
   c_args: lib_args,
   include_directories: inc_lib,
-  dependencies: dep_ext_x11,
+  dependencies: dep_int_x11,
   install: true,
 )
 

@@ -86,7 +86,7 @@ add_project_link_arguments(
 WITH_SUMMARY = get_option('show_summary')
 if WITH_SUMMARY
 summary_dir  = {}
-summary_env  = {}
+summary_lib  = {}
 summary_info = {}
 summary_mem  = {}
 summary_srv  = {}
@@ -114,6 +114,7 @@ WITH_FONT_SERVER = get_option('build-font-server')
 WITH_TESTS       = get_option('build-tests')
 WITH_MAN         = get_option('docs-man')
 WITH_INT_PIXMAN  = get_option('use-builtin-pixman')
+WITH_INT_EPOXY   = get_option('use-builtin-epoxy')
 WITH_DEMOS       = get_option('build-demos')
 WITH_DTRACE      = get_option('dtrace')
 WITH_XTHREADS    = true
@@ -126,7 +127,6 @@ dep_zlib         = dependency('zlib',           required: false) # xfont, fonten
 dep_bzip2        = dependency('bzip2',          required: false) # xfont
 dep_freetype2    = dependency('freetype2',      required: false) # xfont, xft
 dep_fontconfig   = dependency('fontconfig',     required: false, version: '>= 2.5.92') # xft
-dep_xcb          = dependency('xcb',            required: false, version: '>= 1.11.1') # x11
 dep_uuid         = dependency('uuid',           required: false) # sm
 dep_gettext      = dependency('gettext',        required: false) # xpm
 # xserver
@@ -136,9 +136,25 @@ dep_libbsd       = dependency('libbsd-overlay', required: false)
 dep_xkbcomp      = dependency('xkbcomp',        required: false)
 dep_dbus         = dependency('dbus-1',         required: get_option('systemd_logind') == 'true', version: '>= 1.0')
 dep_fontutil     = dependency('fontutil',       required: false)
-dep_drm          = dependency('libdrm',         required: get_option('driver_video_intel'), version: '>= 2.4.116')
+dep_drm          = dependency('libdrm',         required: true, version: '>= 2.4.116') # server/hw/xfree86, driver/video/intel
+dep_gl           = dependency('gl',             required: true, version: '>= 1.2') # server/glx, static/epoxy
+dep_gbm          = dependency('gbm',            required: true) # server/glamor
+dep_epoxy        = dependency('epoxy',          required: not WITH_INT_EPOXY) # server/glamor
+dep_pciaccess    = dependency('pciaccess',      required: get_option('pciaccess'), version: '>= 0.12.901') # server/hw/xfree86
+dep_systemd      = dependency('libsystemd',     required: false, version: '>= 209') # server
+dep_libunwind    = dependency('libunwind',      required: get_option('libunwind')) # server
+dep_dri          = dependency('dri',            required: true) # server, driver/video/intel
+
 # static
-dep_threads      = dependency('threads',        required: get_option('driver_video_intel'))
+dep_threads      = dependency('threads',        required: get_option('driver_video_intel')) # pixman, driver/video/intel
+dep_openmp       = dependency('openmp',         required: get_option('openmp')) # pixman
+dep_egl          = dependency('egl',            required: WITH_INT_EPOXY) # epoxy
+dep_gles2        = dependency('glesv2',         required: WITH_INT_EPOXY) # epoxy
+dep_gles1        = dependency('glesv1_cm',      required: WITH_INT_EPOXY) # epoxy
+
+# drivers
+dep_udev         = dependency('libudev',        required: false) # input/evdev
+dep_evdev        = dependency('libevdev',       required: false) # input/evdev
 
 exe_bison        = find_program('bison',        required: false)
 exe_flex         = find_program('flex',         required: false)
@@ -161,6 +177,7 @@ h_check          = []
 
 inc_font         = []
 inc_lib          = []
+inc_xcb          = []
 inc_server       = []
 inc_static       = []
 
@@ -200,13 +217,10 @@ ver_xv           = '1.0.12'
 ver_xvmc         = '1.0.14'
 # xserver
 ver_xserver      = '21.1.99.1'
+# drivers
+ver_evdev = '2.11.0'
 
 subdir('static')
-# redefine dependencies with builtin static libs
-if WITH_INT_PIXMAN
-dep_pixman = pixman
-endif
-
 subdir('include')
 subdir('proto')
 subdir('lib' / 'src' / 'xshmfence')
@@ -281,11 +295,11 @@ configure_file(
 )
 
 if WITH_SUMMARY
-summary(summary_srv,  bool_yn: true, section: 'Server')
-summary(summary_org,  bool_yn: true, section: 'Server: Xorg')
-summary(summary_xwl,  bool_yn: true, section: 'Server: XWayland')
+summary(summary_lib,  bool_yn: true, section: 'X11 Library ')
+summary(summary_srv,  bool_yn: true, section: 'X11 Server')
+summary(summary_org,  bool_yn: true, section: 'X11 Server: Xorg')
+summary(summary_xwl,  bool_yn: true, section: 'X11 Server: XWayland')
 summary(summary_dir,  bool_yn: true, section: 'Directories')
-summary(summary_env,  bool_yn: true, section: 'Build environment')
 summary(summary_mem,  bool_yn: true, section: 'Memory configuration')
 summary(summary_info, bool_yn: true, section: 'Information')
 endif

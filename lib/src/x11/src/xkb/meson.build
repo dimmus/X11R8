@@ -26,7 +26,7 @@ src = files(
 lib = static_library('xkb', src,
   c_args: lib_args,
   include_directories: inc_lib,
-  dependencies: dep_ext_x11,
+  dependencies: dep_int_x11,
   install: true,
 )
 

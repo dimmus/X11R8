@@ -93,7 +93,7 @@ src = files(
 lib = static_library('i18n', src,
   c_args: lib_args,
   include_directories: inc_lib,
-  dependencies: [dep_ext_x11, dep_mod_x11],
+  dependencies: dep_mod_x11,
   install: true,
 )
 

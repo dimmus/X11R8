@@ -1,0 +1,7 @@
+subdir('util')
+subdir('errors')
+subdir('keysyms')
+subdir('render-util')
+subdir('image')
+# subdir('cursor')
+subdir('wm')

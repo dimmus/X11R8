@@ -1,7 +1,7 @@
 subdir('src' / 'xau')
 subdir('src' / 'xdmcp')
-# subdir('src' / 'xcb')     # <- xdmcp, xau, server
-subdir('src' / 'x11')
+subdir('xcb')
+subdir('src' / 'x11')     # <- xcb
 subdir('src' / 'ice')
 subdir('src' / 'sm')
 subdir('src' / 'xt')
@@ -33,3 +33,17 @@ if WITH_TESTS
 subdir('test')
 endif
 subdir('example')
+
+summary_lib += {'XTHREADS': WITH_XTHREADS}
+summary_lib += {'XTHREADS_DBG': WITH_XTHREADS_DBG}
+summary_lib += {'XCMS': get_option('xcms')}
+summary_lib += {'XLOCALE': get_option('xlocale')}
+summary_lib += {'XF86BIGFONT': get_option('xf86bigfont')}
+summary_lib += {'XKB': get_option('xkb')}
+summary_lib += {'COMPOSECACHE': get_option('composecache')}
+summary_lib += {'XDMAUTH': get_option('xdmauth')}
+summary_lib += {'ZFILE-OPEN': get_option('open-zfile')}
+summary_lib += {'ZFILE-STAT': get_option('stat-zfile')}
+summary_lib += {'SXPM': get_option('build-sxpm')}
+summary_lib += {'PIXMAN': WITH_INT_PIXMAN ? 'internal' : 'external'}
+summary_lib += {'TESTS': WITH_TESTS ? true : false}

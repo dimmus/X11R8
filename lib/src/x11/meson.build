@@ -36,8 +36,7 @@ if get_option('composecache')
   lib_args += '-DCOMPOSECACHE' # Include compose table cache support
 endif
 
-dep_ext_x11 = [dep_xcb]
-dep_int_x11 = [xproto]
+dep_int_x11 = [xproto, libxcb]
 
 if get_option('xthreads')
   lib_args += '-DXTHREADS'
@@ -99,7 +98,7 @@ subdir('src')
 lib_x11 = library('X11', src_x11,
   c_args: lib_args,
   include_directories: inc_lib,
-  dependencies: [dep_int_x11, dep_ext_x11, ks_table, libxcms, libxkb, libi18n],
+  dependencies: [dep_int_x11, ks_table, libxcms, libxkb, libi18n],
   version: '6.4.0',
   install: true,
 )
@@ -112,7 +111,7 @@ libx11 = declare_dependency(
 lib_x11_xcb = library('X11-xcb', src_x11_xcb,
   c_args: lib_args,
   include_directories: inc_lib,
-  dependencies: dep_ext_x11,
+  dependencies: dep_int_x11,
   version: '1.0.0',
   install: true,
 )
