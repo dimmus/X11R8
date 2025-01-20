@@ -399,7 +399,6 @@ if get_option('timers')
 endif
 
 if cc.get_id() != 'msvc'
-  dep_openmp = dependency('openmp', required : get_option('openmp'))
   if dep_openmp.found()
     conf_pixman.set10('USE_OPENMP', true)
   elif meson.version().version_compare('<0.51.0')

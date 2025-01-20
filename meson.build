@@ -155,6 +155,7 @@ dep_gles1        = dependency('glesv1_cm',      required: WITH_INT_EPOXY) # epox
 # drivers
 dep_udev         = dependency('libudev',        required: false) # input/evdev
 dep_evdev        = dependency('libevdev',       required: false) # input/evdev
+dep_input        = dependency('libinput',       required: true, version: '>= 1.11.0') # input/libinput
 
 exe_bison        = find_program('bison',        required: false)
 exe_flex         = find_program('flex',         required: false)

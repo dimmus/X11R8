@@ -1,31 +1,29 @@
 ver_libinput = '1.5.0'
 driver_version = ver_libinput.split('.')
 
-dep_libinput = dependency('libinput', version: '>= 1.11.0')
-
 conf.set('LIBINPUT_VERSION_MAJOR', driver_version[0])
 conf.set('LIBINPUT_VERSION_MINOR', driver_version[1])
 conf.set('LIBINPUT_VERSION_PATCHLEVEL', driver_version[2])
 conf.set('HAVE_INPUTPROTO24', 1)
 
 if cc.has_function('libinput_device_config_scroll_get_button_lock',
-		   dependencies: dep_libinput)
+		   dependencies: dep_input)
 	conf.set('HAVE_LIBINPUT_SCROLL_BUTTON_LOCK', 1)
 endif
 if cc.has_function('libinput_event_pointer_get_scroll_value_v120',
-	           dependencies: dep_libinput)
+	           dependencies: dep_input)
 	conf.set('HAVE_LIBINPUT_AXIS_VALUE_V120', 1)
 endif
 if cc.has_function('libinput_config_accel_create',
-		   dependencies: dep_libinput)
+		   dependencies: dep_input)
 	conf.set('HAVE_LIBINPUT_CUSTOM_ACCEL', 1)
 endif
 if cc.has_function('libinput_tablet_tool_config_pressure_range_set',
-		   dependencies: dep_libinput)
+		   dependencies: dep_input)
 	conf.set('HAVE_LIBINPUT_PRESSURE_RANGE', 1)
 endif
 if cc.has_function('libinput_device_config_click_set_clickfinger_button_map',
-		   dependencies: dep_libinput)
+		   dependencies: dep_input)
 	conf.set('HAVE_LIBINPUT_CLICKFINGER_BUTTON_MAP', 1)
 endif
 
@@ -42,7 +40,7 @@ draglock = declare_dependency(link_with: libdraglock, include_directories: inc_c
 dep_drivers = [
 	xproto,
 	xserver,
-  	dep_libinput,
+  	dep_input,
 	xserver,
   	bezier,
   	draglock,

@@ -7,8 +7,8 @@ gbm_req         = '>= 10.2'
 
 build_systemd_notify = get_option('systemd_notify') == 'true'
 # libsystemd-daemon was moved into libsystemd in version 209
-dep_libsystemd_daemon = dependency('libsystemd', version: '>= 209', required: false)
-if not dep_libsystemd_daemon.found()
+dep_libsystemd_daemon = dep_systemd
+if not dep_systemd.found()
     dep_libsystemd_daemon = dependency('libsystemd-daemon', required: false)
 endif
 
@@ -104,7 +104,6 @@ if (host_machine.system() != 'darwin' and
     host_machine.system() != 'windows' and
     get_option('xwayland'))
     xwayland_required = get_option('xwayland')
-    build_glamor = get_option('glamor')
 
     xwayland_path = get_option('xwayland-path')
     if (xwayland_path == '')
@@ -116,12 +115,10 @@ if (host_machine.system() != 'darwin' and
         dependency('wayland-protocols', version: wl_proto_req, required: xwayland_required),
         libxcvt,
     ]
-    if build_glamor
-        build_xwayland_glamor = true
-        dep_xwayland += libxshmfence
-        dep_xwayland += dep_drm
-        dep_xwayland += dependency('epoxy', required: xwayland_required)
-    endif
+    build_xwayland_glamor = true
+    dep_xwayland += libxshmfence
+    dep_xwayland += dep_drm
+    dep_xwayland += dep_epoxy
 
     build_xwayland = true
     # check for all the deps being found, to handle 'auto' mode.
@@ -206,26 +203,12 @@ endif
 
 build_dbus = build_hal or build_systemd_logind
 
-dep_udev = dep_null
-if build_udev or build_udev_kms
-    dep_udev = dependency('libudev', version: '>= 143')
-endif
-
 log_dir = get_option('log_dir')
 if log_dir == ''
     log_dir = dir_prefix / get_option('localstatedir') / 'log'
 endif
 
 module_dir = dir_lib / get_option('module_dir')
-
-build_glamor = get_option('glamor')
-
-dep_gbm = dep_null
-dep_epoxy = dep_null
-if build_glamor
-    dep_gbm = dependency('gbm', version: gbm_req, required: false)
-    dep_epoxy = dependency('epoxy', required: false)
-endif
 
 if build_xwayland
     dep_libdecor = dependency('libdecor-0', required: false)
@@ -518,7 +501,7 @@ if host_machine.system() == 'windows'
 endif
 
 if get_option('libunwind')
-    dep_common += dependency('libunwind', required: true)
+    dep_common += dep_libunwind
 endif
 
 glx_inc = include_directories('glx')
@@ -564,9 +547,7 @@ subdir('Xext')
 subdir('Xi')
 
 # other
-if build_glamor
-    subdir('glamor')
-endif
+subdir('glamor')
 if build_xorg or get_option('xephyr')
     subdir('exa')
 endif

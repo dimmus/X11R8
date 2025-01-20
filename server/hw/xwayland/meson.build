@@ -144,8 +144,8 @@ xwayland_server = executable(
 )
 
 xwayland_vars = [
-    'have_glamor=' + build_glamor.to_string(),
-    'have_glamor_api=' + build_glamor.to_string(),
+    'have_glamor=true',
+    'have_glamor_api=true',
     'have_eglstream=false',
     'have_initfd=true',
     'have_listenfd=true',

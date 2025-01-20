@@ -21,11 +21,10 @@ with_dri2 = get_option('dri2')
 if with_dri2
   dri2 = dependency('dri2proto', version : '>= 2.6', required : true)
 
-  dri = dependency('dri', required : false)
-  if dri.found()
-    dridriverdir = dri.get_pkgconfig_variable('dridriverdir')
+  if dep_dri.found()
+    dridriverdir = dep_dri.get_pkgconfig_variable('dridriverdir')
   else
-    dridriverdir = join_paths(dir_lib, 'dri')
+    dridriverdir = dir_lib / 'dri'
   endif
 
   config.set('HAVE_DRI2', 1)

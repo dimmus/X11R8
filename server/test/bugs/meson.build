@@ -1,7 +1,3 @@
-dep_xcb = dependency('xcb', required: false)
-dep_xcb_image = dependency('xcb-image', required: false)
-dep_xcb_util = dependency('xcb-util', required: false)
-
 if get_option('xvfb')
     xvfb_args = [
         xvfb_server.full_path(),
@@ -10,8 +6,8 @@ if get_option('xvfb')
         '1280x1024x24'
     ]
 
-    if dep_xcb.found() and dep_xcb_image.found() and dep_xcb_util.found() and get_option('xvfb') and get_option('xephyr') and build_glamor
-        bug1354 = executable('bug1354', 'bug1354.c', dependencies: [dep_xcb, dep_xcb_image, dep_xcb_util])
+    if get_option('xvfb') and get_option('xephyr')
+        bug1354 = executable('bug1354', 'bug1354.c', dependencies: dep_xcb)
         foreach testsuite: [
             ['-gl', ':201', ':200'],
             ['-gles2', ':199', ':198'],

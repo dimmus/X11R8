@@ -17,11 +17,6 @@ xorg_c_args = []
 xorg_c_args += '-DHAVE_XORG_CONFIG_H'
 xorg_c_args += '-DXORG_NO_SDKSYMS'
 
-dep_pciaccess = []
-if get_option('pciaccess')
-    dep_pciaccess = dependency('pciaccess', version: '>= 0.12.901')
-endif
-
 # subdirs for convenience libraries statically linked into Xorg
 subdir('common')
 subdir('ddc')

@@ -102,7 +102,7 @@ if get_option('xvfb')
         endforeach
     endif
 
-    if get_option('xephyr') and build_glamor
+    if get_option('xephyr')
         foreach testsuite: ['','-gles2','-gles3']
             test_env = piglit_env
             if(testsuite == '-gles2')

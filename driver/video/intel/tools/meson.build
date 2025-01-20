@@ -67,8 +67,8 @@ if with_tools and with_dri3
 	       libxrandr,
 	       libxxf86vm,
 	       xproto,
-	       dependency('dri', required : true),
-	       dependency('libdrm', required : true),
+		   dep_dri,
+		   dep_drm
 	     ],
 	     install : false)
 endif

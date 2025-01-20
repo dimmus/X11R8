@@ -22,15 +22,13 @@ dep_xephyr = [
 ]
 
 xephyr_glamor = []
-if build_glamor
-    srcs += 'ephyr_glamor.c'
-    if build_xv
-        srcs += 'ephyr_glamor_xv.c'
-    endif
-    xephyr_glamor += glamor
-    dep_xephyr += dep_epoxy
-    dep_xephyr += dependency('xcb-glx')
+srcs += 'ephyr_glamor.c'
+if build_xv
+    srcs += 'ephyr_glamor_xv.c'
 endif
+xephyr_glamor += glamor
+dep_xephyr += dep_epoxy
+dep_xephyr += dependency('xcb-glx')
 
 if build_xv
     srcs += 'ephyrvideo.c'

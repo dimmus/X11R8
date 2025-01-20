@@ -1,11 +1,4 @@
-project('xf86-video-intel', 'c',
-	version : '2.99.917',
-	default_options: [
-	  'warning_level=2',
-	  'c_std=gnu99',
-	],
-	license : 'MIT',
-	meson_version : '>0.40.0')
+ver_xf86-video-intel = '2.99.917'
 
 config = configuration_data()
 
@@ -16,13 +9,11 @@ config.set('PACKAGE_VERSION_PATCHLEVEL', version[2])
 
 config.set_quoted('LIBEXEC_PATH', dir_libexec)
 
-xorg = dependency('xorg-server', version : '>= 1.6', required : true)
+xorg = libx11
 pthreads = dependency('threads', required : true)
-pciaccess = dependency('pciaccess', version : '>= 0.10', required : true)
+pciaccess = dep_pciaccess
 
-x11 = dependency('x11', required : false)
-xfixes = dependency('xfixes', required : false)
-png = dependency('libpng', required : false)
+png = dep_png
 
 if not cc.has_function('clock_gettime', args : '-lrt')
   error('clock_gettime() missing')
@@ -39,8 +30,6 @@ endif
 if cc.has_function('strcasecmp')
   config.set('HAVE_STRCASECMP', 1)
 endif
-
-dependency('xproto', required : true)
 
 # if cc.has_header_symbol('xorg-server.h', 'RANDR',
 # 			dependencies : xorg)
@@ -86,8 +75,7 @@ if atomic_primitives == 'none'
   error('xf86-video-intel depends upon atomic operations, which were not found for your compiler/cpu. Try compiling with -march=native, or install the libatomics-op-dev package.')
 endif
 
-libudev = dependency('libudev', required : false)
-if libudev.found()
+if dep_udev.found()
   config.set('HAVE_UDEV', 1)
 endif
 
@@ -123,14 +111,8 @@ if cc.has_header('X11/extensions/dpmsconst.h')
   config.set('HAVE_X11_EXTENSIONS_DPMSCONST_H', 1)
 endif
 
-pixman = dependency('pixman-1', version : '>= 0.16.0', required : true)
-
-if pixman.version() >= '0.24.0'
-  config.set('HAS_PIXMAN_TRIANGLES', 1)
-endif
-if pixman.version() >= '0.27.1'
-  config.set('HAS_PIXMAN_GLYPHS', 1)
-endif
+config.set('HAS_PIXMAN_TRIANGLES', 1)
+config.set('HAS_PIXMAN_GLYPHS', 1)
 
 with_kms = get_option('kms')
 if with_kms

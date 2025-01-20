@@ -1,6 +1,6 @@
 ver_evdev = '2.11.0'
 
-dep_ext_evdev = [dependency('libudev'), dependency('libevdev')]
+dep_ext_evdev = [dep_udev, dep_evdev]
 dep_int_evdev = [xserver]
 dep_drivers   = [dep_int_evdev, dep_ext_evdev]
 
@@ -16,8 +16,7 @@ src = files(
 # src += fiels('src/apple.c',)
 # endif
 
-shared_module(
-	'libevdev_drv',
+shared_module('libevdev_drv',
 	src,
 	name_prefix: '', # we want libinput_drv.so, not liblibinput_drv.so
 	include_directories: [include_directories('include'), inc_config, inc_server, inc_lib],

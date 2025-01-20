@@ -9,7 +9,7 @@ release = 1 * 10000000 + major * 100000 + minor * 1000 + patch
 # For Ubuntu should be installed:
 # mesa-common-dev - to install /usr/include/GL/internal/dri_interface.h
 # libgl1-mesa-dri - to have DRI_DRIVER_PATH=/usr/lib/x86_64-linux-gnu/dri
-dep_dri = dependency('dri', required: true)
+# dep_dri = dependency('dri', required: true)
 
 conf_data = configuration_data()
 conf_data.set('_DIX_CONFIG_H_', '1')
@@ -109,16 +109,11 @@ conf_data.set('GLAMOR_HAS_EGL_QUERY_DMABUF',
 conf_data.set('GLAMOR_HAS_EGL_QUERY_DRIVER',
               dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.5.4') ? '1': false)
 conf_data.set('GLXEXT', build_glx ? '1': false)
-conf_data.set('GLAMOR', build_glamor ? '1': false)
 conf_data.set('GLAMOR_HAS_GBM', dep_gbm.found() ? '1': false)
-conf_data.set('GLAMOR_HAS_GBM_LINEAR',
-              build_glamor and dep_gbm.found() and dep_gbm.version().version_compare('>= 10.6') ? '1': false)
-conf_data.set('GBM_BO_WITH_MODIFIERS',
-              build_glamor and dep_gbm.found() and dep_gbm.version().version_compare('>= 17.1') ? '1': false)
-conf_data.set('GBM_BO_FD_FOR_PLANE',
-              build_glamor and dep_gbm.found() and dep_gbm.version().version_compare('>= 21.1') ? '1': false)
-conf_data.set('GBM_BO_WITH_MODIFIERS2',
-              build_glamor and dep_gbm.found() and dep_gbm.version().version_compare('>= 21.3') ? '1': false)
+conf_data.set('GLAMOR_HAS_GBM_LINEAR',  dep_gbm.found() and dep_gbm.version().version_compare('>= 10.6') ? '1': false)
+conf_data.set('GBM_BO_WITH_MODIFIERS',  dep_gbm.found() and dep_gbm.version().version_compare('>= 17.1') ? '1': false)
+conf_data.set('GBM_BO_FD_FOR_PLANE',    dep_gbm.found() and dep_gbm.version().version_compare('>= 21.1') ? '1': false)
+conf_data.set('GBM_BO_WITH_MODIFIERS2', dep_gbm.found() and dep_gbm.version().version_compare('>= 21.3') ? '1': false)
 
 conf_data.set_quoted('SERVER_MISC_CONFIG_PATH', serverconfigdir)
 conf_data.set_quoted('PROJECTROOT', dir_prefix)
@@ -144,14 +139,13 @@ summary_srv += {'CONFIG_HAL': build_hal}
 summary_srv += {'NEED_DBUS': build_systemd_logind or build_hal}
 summary_srv += {'WITH_LIBDRM': libdrm_required}
 summary_srv += {'GLXEXT': build_glx}
-summary_srv += {'GLAMOR': build_glamor}
 summary_srv += {'GLAMOR_HAS_EGL_QUERY_DMABUF': dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.4.4')}
 summary_srv += {'GLAMOR_HAS_EGL_QUERY_DRIVER': dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.5.4')}
 summary_srv += {'GLAMOR_HAS_GBM': dep_gbm.found()}
-summary_srv += {'GLAMOR_HAS_GBM_LINEAR':  build_glamor and dep_gbm.found() and dep_gbm.version().version_compare('>= 10.6')}
-summary_srv += {'GBM_BO_WITH_MODIFIERS':  build_glamor and dep_gbm.found() and dep_gbm.version().version_compare('>= 17.1')}
-summary_srv += {'GBM_BO_FD_FOR_PLANE':    build_glamor and dep_gbm.found() and dep_gbm.version().version_compare('>= 21.1')}
-summary_srv += {'GBM_BO_WITH_MODIFIERS2': build_glamor and dep_gbm.found() and dep_gbm.version().version_compare('>= 21.3')}
+summary_srv += {'GLAMOR_HAS_GBM_LINEAR':  dep_gbm.found() and dep_gbm.version().version_compare('>= 10.6')}
+summary_srv += {'GBM_BO_WITH_MODIFIERS':  dep_gbm.found() and dep_gbm.version().version_compare('>= 17.1')}
+summary_srv += {'GBM_BO_FD_FOR_PLANE':    dep_gbm.found() and dep_gbm.version().version_compare('>= 21.1')}
+summary_srv += {'GBM_BO_WITH_MODIFIERS2': dep_gbm.found() and dep_gbm.version().version_compare('>= 21.3')}
 
 conf_data.set('HAVE_DLFCN_H', cc.has_header('dlfcn.h') ? true : false)
 conf_data.set('HAVE_EXECINFO_H', cc.has_header('execinfo.h') ? '1': false)
@@ -238,7 +232,6 @@ conf_data.set('DRI2', build_dri2 ? '1': false)
 conf_data.set('DRI3', build_dri3 ? '1': false)
 if build_glx
     conf_data.set_quoted('DRI_DRIVER_PATH', dep_dri.get_variable(pkgconfig: 'dridriverdir'))
-    # conf_data.set_quoted('DRI_DRIVER_PATH', dir_lib / 'dri')
 endif
 conf_data.set('MITSHM', build_mitshm ? '1': false)
 conf_data.set('PANORAMIX', build_xinerama ? '1': false)

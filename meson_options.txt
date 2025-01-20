@@ -19,7 +19,6 @@ option('xwin',                  type: 'combo',   value: 'false', choices: ['true
 option('xquartz',               type: 'combo',   value: 'false', choices: ['true', 'false', 'auto'], description: 'Enable Xquartz X server')
 option('xwayland_ei',           type: 'combo',   value: 'false', choices: ['socket', 'portal', 'false', 'auto'], description: 'Enable emulated input support on Xwayland')
 option('xwayland',              type: 'boolean', value: false,                                       description: 'Enable Xwayland X server')
-option('glamor',                type: 'boolean', value: true,                                        description: 'Enable glamor (default yes for Xorg/Xwayland builds)')
 option('xnest',                 type: 'boolean', value: true,                                        description: 'Enable Xnest nested X server')
 option('xephyr',                type: 'boolean', value: false,                                       description: 'Enable Xephyr nested X server')
 option('xvfb',                  type: 'boolean', value: true,                                        description: 'Enable Xvfb X server')

@@ -39,8 +39,8 @@ if build_glx
             dep_common,
             dep_dl,
             dep_dri,
+            dep_gl,
             xproto,
-            dependency('gl', version: '>= 1.2'),
         ],
         c_args: [
             glx_align64,
@@ -74,8 +74,8 @@ if build_glx
         dependencies: [
             dep_common,
             dep_dl,
+            dep_gl,
             xproto,
-            dependency('gl', version: '>= 1.2'),
         ],
     )
 
