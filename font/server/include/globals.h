@@ -60,7 +60,7 @@ extern long ReapClientTime;
 
 extern int  currentMaxClients;
 extern long MaxClients;
-extern unsigned long  serverGeneration;
+extern int  serverGeneration;
 
 extern volatile char isItTimeToYield;
 extern volatile char dispatchException;

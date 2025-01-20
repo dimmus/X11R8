@@ -58,10 +58,10 @@ in this Software without prior written authorization from The Open Group.
 #include <stdio.h>
 #include <stdlib.h>
 
+#define  XK_LATIN1
 #include "X11/Xtrans/Xtrans.h"
 #include "X11/keysymdef.h"
 #include "osstruct.h"
-#define  XK_LATIN1
 #include "globals.h"
 #include "osdep.h"
 

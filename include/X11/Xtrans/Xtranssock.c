@@ -142,7 +142,9 @@ from the copyright holders.
 #define SocketInitOnce() /**/
 
 #ifdef __linux__
+#ifndef HAVE_ABSTRACT_SOCKETS
 #define HAVE_ABSTRACT_SOCKETS
+#endif
 #endif
 
 #define MIN_BACKLOG 128

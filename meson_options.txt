@@ -123,7 +123,7 @@ option('build-docs-guide',      type: 'boolean', value: false,   description: 'B
 option('build-docs-pdf',        type: 'boolean', value: false,   description: 'Build documentation as pdf files')
 option('build-docs-man',        type: 'boolean', value: true,    description: 'Build manual pages')
 
-option('build-font-server',     type: 'boolean', value: false,   description: '')
+option('build-font-server',     type: 'boolean', value: true,    description: '')
 option('build-tests',           type: 'boolean', value: false,   description: '')
 
 ## Demo
