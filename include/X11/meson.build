@@ -56,6 +56,7 @@ install_headers(
     'XKBlib.h',
     'Xcms.h',
     'Xlib.h',
+    'XlibConf.h',
     'Xlibint.h',
     'Xlocale.h',
     'Xresource.h',
@@ -136,7 +137,6 @@ install_headers(
     'ICE/ICEutil.h',
     subdir: 'X11/ICE',
 )
-
 
 install_headers(
     'SM/SM.h',
