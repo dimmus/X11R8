@@ -2,6 +2,7 @@ inc_xcb += include_directories('.')
 
 install_headers(
     'xcb.h',
+    'xcbext.h',
     'xcb_atom.h',
     'xcb_aux.h',
     'xcb_cursor.h',
