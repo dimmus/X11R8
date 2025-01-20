@@ -121,7 +121,7 @@ WITH_XTHREADS    = true
 WITH_XTHREADS_DBG = false
 
 dep_m            = cc.find_library('m',         required: get_option('driver_video_intel')) # libxcvt
-dep_dl           = cc.find_library('dl',        required: false) # xvmc, xserver
+dep_dl           = cc.find_library('dl',        required: false) # xvmc, xserver,static/epoxy
 
 dep_zlib         = dependency('zlib',           required: false) # xfont, fontenc
 dep_bzip2        = dependency('bzip2',          required: false) # xfont

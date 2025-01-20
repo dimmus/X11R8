@@ -109,30 +109,21 @@ option('libdecor',              type: 'combo',   value: 'auto',  choices: ['true
 option('composite',             type: 'boolean', value: true)
 option('damage',                type: 'boolean', value: true)
 option('dbe',                   type: 'boolean', value: true)
-# option('dpms',                  type: 'boolean', value: true)
-# option('dri2',                  type: 'boolean', value: true)
-# option('dri3',                  type: 'boolean', value: true)
-# option('glx',                   type: 'boolean', value: true)
 option('present',               type: 'boolean', value: true)
 option('randr',                 type: 'boolean', value: true)
 option('record',                type: 'boolean', value: true)
 option('render',                type: 'boolean', value: true)
 option('resource',              type: 'boolean', value: true)
-# option('screensaver',           type: 'boolean', value: true)
 option('shape',                 type: 'boolean', value: true)
 option('shm',                   type: 'boolean', value: true)
 option('sync',                  type: 'boolean', value: true)
 option('xevie',                 type: 'boolean', value: true)
 option('xfree86_dri',           type: 'boolean', value: true)
 option('xfixes',                type: 'boolean', value: true)
-# option('xinerama',              type: 'boolean', value: true)
 option('xinput',                type: 'boolean', value: true)
-# option('xkb',                   type: 'boolean', value: true)
 option('xprint',                type: 'boolean', value: true)
 option('selinux',               type: 'boolean', value: true)
 option('xtest',                 type: 'boolean', value: true)
-# option('xv',                    type: 'boolean', value: true)
-# option('xvmc',                  type: 'boolean', value: true)
 option('ge',                    type: 'boolean', value: true)
 
 option('docs',                  type: 'combo',   value: 'false', choices: ['true', 'false', 'auto'],  description: 'Build documentation')
@@ -143,7 +134,7 @@ option('docs-man',              type: 'boolean', value: true,    description: ''
 option('build-font-server',     type: 'boolean', value: false,   description: '')
 option('build-tests',           type: 'boolean', value: false,   description: '')
 
-## Build demos:
+## Demo
 option('build-demos',           type: 'boolean', value: true,   description: '')
 option('demo-x11perf',          type: 'boolean', value: true,   description: '')
 option('demo-xcmstest',         type: 'boolean', value: false,  description: 'Legacy')
@@ -156,7 +147,10 @@ option('demo-xev',              type: 'boolean', value: true,   description: '')
 option('demo-xgas',             type: 'boolean', value: false,  description: 'Legacy')
 option('demo-xgc',              type: 'boolean', value: true,   description: '')
 
-## External static libraries
+## Static libraries
+#  static/epoxy
+option('use-builtin-epoxy',     type: 'boolean', value: true)
+option('egl',                   type: 'boolean', value: true)
 #  static/pixman
 option('use-builtin-pixman',    type: 'boolean', value: true)
 option('loongson-mmi',          type: 'feature',                 description: 'Use Loongson MMI intrinsic optimized paths')
@@ -174,13 +168,11 @@ option('tls',                   type: 'feature',                 description: 'U
 option('openmp',                type: 'feature',                 description: 'Enable OpenMP for tests')
 option('cpu-features-path',     type: 'string',                  description: 'Path to platform-specific cpu-features.[ch] for systems that do not provide it (e.g. Android)')
 option('timers',                type: 'boolean', value : false,  description: 'Enable TIMER_* macros')
-#  static/pixman
-option('use-builtin-epoxy',     type: 'boolean', value: true)
 
 ## Drivers
-#  input: libinput
+#  input/libinput
 option('sdkdir',                type: 'string',  value: '',      description: 'Directory to install header files in [default=from xorg-server pkgconf]')
 option('xorg-module-dir',       type: 'string',  value: '',      description: 'Default xorg module directory [default=from xorg-server pkgconf]')
 option('xorg-conf-dir',         type: 'string',  value: '',      description: 'Default xorg.conf.d directory [default=from xorg-server pkgconfig]')
-#  video: intel
+#  video/intel
 option('driver_video_intel',    type: 'boolean', value: true)
