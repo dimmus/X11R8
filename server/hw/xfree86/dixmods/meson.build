@@ -23,7 +23,7 @@ shared_module('shadow',
 if build_glx
 shared_module('glx',
     [ 'glxmodule.c', srcs_glxdri2 ],
-    include_directories: [ inc_server, glx_inc ],
+    include_directories: [ inc_server, inc_server_glx ],
     c_args: [ xorg_c_args, glx_align64 ],
     dependencies: [ dep_common, dep_dl, dep_dri ],
     link_whole: libxserver_glx,

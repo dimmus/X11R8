@@ -402,7 +402,7 @@ if get_option('libunwind')
     dep_common += dep_libunwind
 endif
 
-glx_inc = include_directories('glx')
+inc_server_glx = include_directories('glx')
 
 serverconfigdir = get_option('serverconfigdir')
 if serverconfigdir == ''

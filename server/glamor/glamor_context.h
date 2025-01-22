@@ -24,7 +24,7 @@
 #ifndef GLAMOR_CONTEXT_H
 #define GLAMOR_CONTEXT_H
 
-#include <epoxy/egl.h>
+#include "epoxy/egl.h"
 
 /**
  * @file glamor_context.h

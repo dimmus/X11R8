@@ -34,11 +34,11 @@
 
 #define MESA_EGL_NO_X11_HEADERS
 #define EGL_NO_X11
-#include <epoxy/egl.h>
+#include "epoxy/egl.h"
 #include "glxserver.h"
 #include "glxutil.h"
 #include "compint.h"
-#include <X11/extensions/composite.h>
+#include "X11/extensions/composite.h"
 #include "glamor_priv.h"
 #include "glamor.h"
 

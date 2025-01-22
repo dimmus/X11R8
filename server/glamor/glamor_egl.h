@@ -29,8 +29,8 @@
 
 #define MESA_EGL_NO_X11_HEADERS
 #define EGL_NO_X11
-#include <epoxy/gl.h>
-#include <epoxy/egl.h>
+#include "epoxy/gl.h"
+#include "epoxy/egl.h"
 #include <glamor_egl_ext.h>
 
 /*
