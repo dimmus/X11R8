@@ -28,5 +28,7 @@ glx_registry = files('registry/glx.xml')
 
 epoxy_headers = []
 
-subdir('include')
+inc_epoxy += include_directories('include')
+
+subdir('include/epoxy')
 subdir('src')
