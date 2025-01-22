@@ -27,11 +27,11 @@
 # include "config.h"
 #endif
 
-#include <X11/Xfuncproto.h>
-#include <X11/fonts/font.h>
-#include <X11/fonts/fontstruct.h>
-#include <X11/fonts/fontmisc.h>
-#include <X11/fonts/libxfont2.h>
+#include "X11/Xfuncproto.h"
+#include "X11/fonts/font.h"
+#include "X11/fonts/fontstruct.h"
+#include "X11/fonts/fontmisc.h"
+#include "X11/fonts/libxfont2.h"
 
 /* Returns pointer to array of functions for each type of font_path_entry
  * handler, and puts count of entries in that array into fpe_function_count.
