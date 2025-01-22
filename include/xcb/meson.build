@@ -40,6 +40,7 @@ install_headers(
     'xinerama.h',
     'xinput.h',
     'xkb.h',
+    'xproto.h',
     'xprint.h',
     'xselinux.h',
     'xtest.h',
