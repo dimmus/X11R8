@@ -103,6 +103,7 @@ install_headers(
     'ResConfigP.h',
     'Shell.h',
     'ShellP.h',
+    'StringDefs.h',
     'Vendor.h',
     'VendorP.h',
     'CallbackI.h',
