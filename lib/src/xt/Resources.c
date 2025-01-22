@@ -73,7 +73,7 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #include "IntrinsicI.h"
 #include "VarargsI.h"
-#include "Shell.h"
+#include "X11/Shell.h"
 #include "ShellP.h"
 #include "StringDefs.h"
 #include <stdio.h>

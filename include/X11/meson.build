@@ -101,6 +101,7 @@ install_headers(
     'RectObj.h',
     'RectObjP.h',
     'ResConfigP.h',
+    'Shell.h',
     'ShellP.h',
     'Vendor.h',
     'VendorP.h',

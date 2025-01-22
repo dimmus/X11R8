@@ -54,7 +54,7 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #include "IntrinsicI.h"
 #include "StringDefs.h"
-#include "Shell.h"
+#include "X11/Shell.h"
 #include "VarargsI.h"
 #include "CreateI.h"
 

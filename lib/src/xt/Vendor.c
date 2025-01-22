@@ -51,7 +51,7 @@ SOFTWARE.
 #endif
 #include "IntrinsicI.h"
 #include "StringDefs.h"
-#include "Shell.h"
+#include "X11/Shell.h"
 #include "ShellP.h"
 #include "Vendor.h"
 #include "VendorP.h"

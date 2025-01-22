@@ -73,14 +73,14 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include        "IntrinsicI.h"
-#include        "StringDefs.h"
-#include        "Shell.h"
-#include        <stdio.h>
-#include        <X11/cursorfont.h>
-#include        <X11/keysym.h>
-#include        <X11/Xlocale.h>
-#include        <errno.h>       /* for StringToDirectoryString */
+#include "IntrinsicI.h"
+#include "StringDefs.h"
+#include "X11/Shell.h"
+#include <stdio.h>
+#include <X11/cursorfont.h>
+#include <X11/keysym.h>
+#include <X11/Xlocale.h>
+#include <errno.h>       /* for StringToDirectoryString */
 
 #define IsNewline(str) ((str) == '\n')
 #define IsWhitespace(str) ((str)== ' ' || (str) == '\t')

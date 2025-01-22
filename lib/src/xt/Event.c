@@ -72,7 +72,7 @@ in this Software without prior written authorization from The Open Group.
 #include <config.h>
 #endif
 #include "IntrinsicI.h"
-#include "Shell.h"
+#include "X11/Shell.h"
 #include "StringDefs.h"
 
 typedef struct _XtEventRecExt {
