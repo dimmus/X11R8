@@ -182,6 +182,7 @@ inc_lib          = []
 inc_xcb          = []
 inc_server       = []
 inc_static       = []
+inc_epoxy        = []
 
 # libraries
 ver_ice          = '1.1.1'

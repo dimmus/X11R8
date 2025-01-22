@@ -26,11 +26,7 @@ gl_registry  = files('registry/gl.xml')
 egl_registry = files('registry/egl.xml')
 glx_registry = files('registry/glx.xml')
 
-inc_libepoxy = [
-  inc_lib, # glx
-  include_directories('include'),
-  include_directories('src'),
-]
+epoxy_headers = []
 
-subdir('include/epoxy')
+subdir('include')
 subdir('src')

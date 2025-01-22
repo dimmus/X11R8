@@ -42,7 +42,7 @@ endif
 
 glamor = static_library('glamor',
     srcs_glamor,
-    include_directories: [inc_server, glx_inc],
+    include_directories: [inc_server, glx_inc, inc_epoxy],
     dependencies: [
         dep_common,
         dep_epoxy,

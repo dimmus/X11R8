@@ -1,3 +1,5 @@
+inc_epoxy = include_directories('.')
+
 # Configuration file
 configure_file(output: 'config_epoxy.h', configuration: conf_epoxy)
 
@@ -45,13 +47,13 @@ epoxy = static_library('epoxy',
   sources: epoxy_sources + epoxy_headers,
   install: true,
   dependencies: dep_ext_epoxy,
-  include_directories: inc_libepoxy,
+  include_directories: [inc_epoxy, inc_lib],
   link_args: common_ldflags,
 )
 
 libepoxy = declare_dependency(
   link_with: epoxy,
-  include_directories: inc_libepoxy,
+  include_directories: [inc_epoxy, inc_lib],
   dependencies: dep_ext_epoxy,
   sources: epoxy_headers,
   variables: {
