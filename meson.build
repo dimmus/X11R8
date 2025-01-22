@@ -222,8 +222,8 @@ ver_xserver      = '21.1.99.1'
 # drivers
 ver_evdev = '2.11.0'
 
-subdir('static')
 subdir('include')
+subdir('static')
 subdir('proto')
 subdir('lib' / 'src' / 'xshmfence')
 subdir('lib' / 'src' / 'xtrans') # <- lib/src/xshmfence
