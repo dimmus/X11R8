@@ -1,4 +1,4 @@
-inc_epoxy = include_directories('.')
+inc_epoxy += include_directories('.')
 
 # Configuration file
 configure_file(output: 'config_epoxy.h', configuration: conf_epoxy)
