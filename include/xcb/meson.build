@@ -16,6 +16,7 @@ install_headers(
 
 # proto
 install_headers(
+    'bigreq.h',
     'composite.h',
     'damage.h',
     'dbe.h',
