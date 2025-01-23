@@ -1,4 +1,4 @@
 subdir('evdev')
-# subdir('libinput')
+subdir('libinput')
 # subdir('mouse')
 subdir('void')

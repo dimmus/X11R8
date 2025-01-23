@@ -41,18 +41,16 @@ dep_drivers = [
 	xproto,
 	xserver,
   	dep_input,
-	xserver,
+	dep_pixman,
   	bezier,
   	draglock,
-	dep_pixman
 ]
 
 driver_src = ['src/xf86libinput.c', 'src/util-strings.c']
-shared_module(
-	'libinput_drv',
+shared_module('libinput_drv',
 	driver_src,
 	name_prefix: '', # we want libinput_drv.so, not liblibinput_drv.so
-	include_directories: [include_directories('include'), inc_config, inc_server],
+	include_directories: [include_directories('include'), inc_config, inc_server, inc_lib],
 	dependencies: dep_drivers,
 	install: true,
 	install_dir: dir_xorg_module,

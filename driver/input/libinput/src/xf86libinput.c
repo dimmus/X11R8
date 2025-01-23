@@ -2695,6 +2695,10 @@ xf86libinput_handle_event(struct libinput_event *event)
 							  type);
 #endif
 			break;
+		case LIBINPUT_EVENT_GESTURE_HOLD_BEGIN:
+		case LIBINPUT_EVENT_GESTURE_HOLD_END:
+			/* TODO: handle this */
+			break;
 		case LIBINPUT_EVENT_GESTURE_PINCH_BEGIN:
 		case LIBINPUT_EVENT_GESTURE_PINCH_UPDATE:
 		case LIBINPUT_EVENT_GESTURE_PINCH_END:
@@ -2731,6 +2735,10 @@ xf86libinput_handle_event(struct libinput_event *event)
 		case LIBINPUT_EVENT_TABLET_PAD_STRIP:
 			xf86libinput_handle_tablet_pad_strip(pInfo,
 							     libinput_event_get_tablet_pad_event(event));
+			break;
+		case LIBINPUT_EVENT_TABLET_PAD_KEY:
+		case LIBINPUT_EVENT_TABLET_PAD_DIAL:
+			/* TODO: handle this */
 			break;
 		case LIBINPUT_EVENT_SWITCH_TOGGLE:
 			break;
