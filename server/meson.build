@@ -66,13 +66,13 @@ else
 endif
 
 hal_option = get_option('hal')
-if ['windows', 'darwin', 'cygwin'].contains(host_machine.system())
+if host_machine.system() == 'darwin'
     hal_option = 'false'
 endif
 
 build_udev = get_option('udev')
 build_udev_kms = get_option('udev_kms')
-if ['windows', 'darwin', 'cygwin', 'freebsd', 'netbsd', 'openbsd', 'sunos'].contains(host_machine.system())
+if ['darwin', 'freebsd', 'netbsd', 'openbsd', 'sunos'].contains(host_machine.system())
     build_udev = false
     build_udev_kms = false
 endif
@@ -350,7 +350,8 @@ dep_common = [
 inc_server = [
     inc_lib,
     inc_font,
-    inc_static,
+    inc_pixman,
+    inc_epoxy,
     include_directories(
         '.',
         'Xext',
@@ -393,10 +394,6 @@ if get_option('xselinux') != 'false'
 endif
 
 dep_socket = []
-if host_machine.system() == 'windows'
-    dep_socket = cc.find_library('ws2_32')
-    dep_common += dep_socket
-endif
 
 if get_option('libunwind')
     dep_common += dep_libunwind
@@ -409,7 +406,6 @@ if serverconfigdir == ''
     serverconfigdir = dir_lib / 'xorg'
 endif
 
-# Include must come first, as it sets up dix-config.h
 subdir('include')
 
 # X server core
@@ -471,9 +467,8 @@ libxserver = [
 xserver = declare_dependency(link_with: libxserver)
 
 subdir('hw')
-
-if host_machine.system() != 'windows'
-    # subdir('test')
+if WITH_TESTS
+    subdir('test')
 endif
 
 sdkconfig = configuration_data()
@@ -518,13 +513,6 @@ sdkconfig.set('PACKAGE_VERSION', ver_xserver)
 sdkconfig.set('SDK_REQUIRED_MODULES', 'pixman xproto')
 sdkconfig.set('symbol_visibility', '-fvisibility=hidden')
 sdkconfig.set('XORG_DRIVER_LIBS', '')
-
-# On Windows, modules built with the SDK will need to link with server and
-# module implibs to resolve symbols
-if (host_machine.system() == 'cygwin' or
-    host_machine.system() == 'windows')
-    sdkconfig.set('XORG_DRIVER_LIBS', '-lXorg.exe -L\${moduledir} -lshadow -no-undefined')
-endif
 
 configure_file(
     input: 'xorg-server.pc.in',

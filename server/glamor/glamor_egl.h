@@ -31,7 +31,7 @@
 #define EGL_NO_X11
 #include "epoxy/gl.h"
 #include "epoxy/egl.h"
-#include <glamor_egl_ext.h>
+#include "glamor_egl_ext.h"
 
 /*
  * Create an EGLDisplay from a native display type. This is a little quirky

@@ -40,7 +40,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
-#include <xcb/damage.h>
+#include "xcb/damage.h"
 
 struct test_setup {
     xcb_connection_t *c;

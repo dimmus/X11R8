@@ -67,9 +67,6 @@ else
   if not enable_input_thread and get_option('input_thread') == 'true'
     error('Input thread enabled and PTHREAD_MUTEX_RECURSIVE not found')
   endif
-  if host_machine.system() == 'windows' and get_option('input_thread') == 'auto'
-      enable_input_thread = false
-  endif
 endif
 conf_data.set('INPUTTHREAD', enable_input_thread ? '1': false)
 
@@ -197,7 +194,7 @@ conf_data.set('HAVE_VASPRINTF', cc.has_function('vasprintf') ? true : false)
 conf_data.set('HAVE_VSNPRINTF', cc.has_function('vsnprintf') ? '1': false)
 conf_data.set('HAVE_WALKCONTEXT', cc.has_function('walkcontext') ? '1': false)
 conf_data.set('HAVE_XUCRED_CR_PID', cc.has_member('struct xucred', 'cr_pid', prefix: '#include <sys/ucred.h>') ? '1': false)
-conf_data.set('LOCK_SERVER', host_machine.system() != 'windows' ? '1': false)
+conf_data.set('LOCK_SERVER', '1')
 
 # Don't let X dependencies typedef 'pointer'
 conf_data.set('_XTYPEDEF_POINTER', true)
@@ -218,7 +215,7 @@ if conf_data.get('HAVE_GETPEEREID').to_int() == 0 and conf_data.get('HAVE_GETPEE
 endif
 
 conf_data.set('TCPCONN', '1')
-conf_data.set('UNIXCONN', host_machine.system() != 'windows' ? '1': false)
+conf_data.set('UNIXCONN', '1')
 conf_data.set('IPv6', build_ipv6 ? '1': false)
 
 conf_data.set('BIGREQS', '1')
