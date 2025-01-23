@@ -33,7 +33,7 @@ install_man(configure_file(
     configuration: manpage_config,
 ))
 
-if WITH_MAN
+if WITH_DOC_MAN
     docxmlconfig = configuration_data()
     docxmlconfig.set('PACKAGE_VERSION', ver_xserver)
     docxmlconfig.set('RELEASE_DATE', '2021-07-05')
