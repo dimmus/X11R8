@@ -8,15 +8,19 @@
 #endif
 
 #include <errno.h>
+
 #include <xorg-server.h>
+
 #include "X11/X.h"
+
 #include "xf86.h"
 #include "xf86Xinput.h"
-#include "mouse.h"
 #include "xf86_OSlib.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
+#include "mouse.h"
 
 static int
 SupportedInterfaces(void)
