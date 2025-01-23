@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-inc_static += include_directories('.') 
+inc_pixman += include_directories('.') 
 
 config_h = configure_file(
   configuration : conf_pixman,

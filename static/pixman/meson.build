@@ -443,11 +443,7 @@ if pthreads_found
   conf_pixman.set('HAVE_PTHREADS', 1)
 endif
 
-funcs = ['sigaction', 'alarm', 'mprotect', 'getpagesize', 'mmap', 'getisax', 'gettimeofday']
-# mingw claimes to have posix_memalign, but it doesn't
-if host_machine.system() != 'windows'
-  funcs += 'posix_memalign'
-endif
+funcs = ['sigaction', 'alarm', 'mprotect', 'getpagesize', 'mmap', 'getisax', 'gettimeofday', 'posix_memalign']
 
 foreach f : funcs
   if cc.has_function(f)
@@ -475,14 +471,7 @@ endforeach
 use_tls = get_option('tls')
 have_tls = ''
 if not use_tls.disabled()
-  # gcc on Windows only warns that __declspec(thread) isn't supported,
-  # passing -Werror=attributes makes it fail.
-  if (host_machine.system() == 'windows' and
-      cc.compiles('int __declspec(thread) foo;',
-                  args : cc.get_supported_arguments(['-Werror=attributes']),
-                  name : 'TLS via __declspec(thread)'))
-    have_tls = '__declspec(thread)'
-  elif cc.compiles('int __thread foo;', name : 'TLS via __thread')
+  if cc.compiles('int __thread foo;', name : 'TLS via __thread')
     have_tls = '__thread'
   endif
 endif

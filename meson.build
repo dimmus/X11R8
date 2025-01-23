@@ -181,7 +181,7 @@ inc_font         = []
 inc_lib          = []
 inc_xcb          = []
 inc_server       = []
-inc_static       = []
+inc_pixman       = []
 inc_epoxy        = []
 
 # libraries
