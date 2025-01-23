@@ -55,7 +55,7 @@
 /* input.c */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include "config_xterm.h"
 #endif
 
 #include <xterm.h>

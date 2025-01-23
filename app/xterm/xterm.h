@@ -41,7 +41,7 @@
 /* *INDENT-OFF* */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include "config_xterm.h"
 #endif
 
 #undef bcopy
