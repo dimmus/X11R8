@@ -46,30 +46,36 @@ src = [
 # 		$(C_CLIENT_PY_EXTRA_ARGS) \
 # 		$(XCBPROTO_XCBINCLUDEDIR)/$(@:.c=.xml)
 
-python_env = {
-  'PYTHONPATH': dir_source / 'proto' / 'xcb' / 'xcbgen'
-}
+# TODO: Solve problem described below!
+# XXX: Generated files (*.c, *.h) hard moved to lib/xcb/proto.
+# XXX: Custom_target below wrongly generates files in build root folders,
+# XXX: that interfer with server/miext/damage.h file,  
+# XXX: as 'inc_config' (=root folder) provided everywhere
+#
+# python_env = {
+#   'PYTHONPATH': dir_source / 'proto' / 'xcb' / 'xcbgen'
+# }
 
-src_proto = []
-foreach proto : src
-  file = custom_target(
-    'generate_' + proto,
-    input: 'src' / proto + '.xml',
-    output: proto + '.c',
-    command: [
-      python, dir_source / 'proto' / 'xcb' / 'xcbgen.py',
-      '-c', 'xcb-proto',
-      '-l', proto,
-      '-s', 'proto',
-      '-p', dir_build / 'proto',
-      '--server-side',
-      '@INPUT@',
-    ],
-    env: python_env,
-    build_by_default: true
-  )
-  src_proto += file
-endforeach
+# src_proto = []
+# foreach proto : src
+#   file = custom_target(
+#     'generate_' + proto,
+#     input: 'src' / proto + '.xml',
+#     output: proto + '.c',
+#     command: [
+#       python, dir_source / 'proto' / 'xcb' / 'xcbgen.py',
+#       '-c', 'xcb-proto',
+#       '-l', proto,
+#       '-s', 'proto',
+#       '-p', dir_build / 'proto',
+#       '--server-side',
+#       '@INPUT@',
+#     ],
+#     env: python_env,
+#     build_by_default: true
+#   )
+#   src_proto += file
+# endforeach
 
 # lib = library('xcb-proto', src_proto,
 #   include_directories: inc_xcb,

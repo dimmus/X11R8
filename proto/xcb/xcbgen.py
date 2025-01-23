@@ -275,7 +275,7 @@ def c_open(self):
     _h('#ifndef __%s_H', _ns.header.upper())
     _h('#define __%s_H', _ns.header.upper())
     _h('')
-    _h('#include "xcb.h"')
+    _h('#include "xcb/xcb.h"')
 
     _c('#ifdef HAVE_CONFIG_H')
     _c('#include "config.h"')
@@ -292,7 +292,7 @@ def c_open(self):
 
     if _ns.is_ext:
         for (n, h) in self.direct_imports:
-            _hc('#include "%s.h"', h)
+            _hc('#include "xcb/%s.h"', h)
 
     _h('')
     _h('#ifdef __cplusplus')
