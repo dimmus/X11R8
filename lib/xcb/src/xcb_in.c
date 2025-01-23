@@ -48,8 +48,8 @@
 #include "xcb_windefs.h"
 #endif /* _WIN32 */
 
-#include "xcb.h"
-#include "xcbext.h"
+#include "xcb/xcb.h"
+#include "xcb/xcbext.h"
 #include "xcbint.h"
 
 #define XCB_ERROR 0

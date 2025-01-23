@@ -31,10 +31,10 @@
 
 #include <assert.h>
 #include <stdlib.h>
-#include "xcb.h"
-#include "xcbext.h"
+#include "xcb/xcb.h"
+#include "xcb/xcbext.h"
+#include "xcb/xc_misc.h"
 #include "xcbint.h"
-#include "xc_misc.h"
 
 /* Public interface */
 

@@ -10,11 +10,11 @@
 #include <string.h>
 #include <assert.h>
 #include <stddef.h>  /* for offsetof() */
-#include "xcbext.h"
-#include "xvmc.h"
+#include "xcb/xcbext.h"
+#include "xcb/xvmc.h"
 
 #define ALIGNOF(type) offsetof(struct { char dummy; type member; }, member)
-#include "xv.h"
+#include "xcb/xv.h"
 
 xcb_extension_t xcb_xvmc_id = { "XVideo-MotionCompensation", 0 };
 

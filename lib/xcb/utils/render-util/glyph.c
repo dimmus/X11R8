@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "xcb_renderutil.h"
+#include "xcb/xcb_renderutil.h"
 
 typedef struct _glyph_header_t {
 	uint8_t count;

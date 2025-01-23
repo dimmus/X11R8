@@ -1,7 +1,7 @@
 #ifndef __XCB_KEYSYMS_H__
 #define __XCB_KEYSYMS_H__
 
-#include <xcb/xcb.h>
+#include "xcb/xcb.h"
 
 
 #ifdef __cplusplus

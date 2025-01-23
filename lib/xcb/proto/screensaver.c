@@ -10,11 +10,11 @@
 #include <string.h>
 #include <assert.h>
 #include <stddef.h>  /* for offsetof() */
-#include "xcbext.h"
-#include "screensaver.h"
+#include "xcb/xcbext.h"
+#include "xcb/screensaver.h"
 
 #define ALIGNOF(type) offsetof(struct { char dummy; type member; }, member)
-#include "xproto.h"
+#include "xcb/xproto.h"
 
 xcb_extension_t xcb_screensaver_id = { "MIT-SCREEN-SAVER", 0 };
 

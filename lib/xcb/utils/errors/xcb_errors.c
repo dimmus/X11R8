@@ -23,8 +23,9 @@
  * authorization from the authors.
  */
 
-#include "xcb_errors.h"
+#include "xcb/xcb_errors.h"
 #include "errors.h"
+
 #include <stdlib.h>
 #include <string.h>
 

@@ -12,8 +12,8 @@
 #ifndef __DRI3_H
 #define __DRI3_H
 
-#include "xcb.h"
-#include "xproto.h"
+#include "xcb/xcb.h"
+#include "xcb/xproto.h"
 
 #ifdef __cplusplus
 extern "C" {

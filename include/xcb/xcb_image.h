@@ -26,7 +26,7 @@
  * authorization from the authors.
  */
 
-#include <xcb/xcb.h>
+#include "xcb/xcb.h"
 #include <xcb/shm.h>
 
 

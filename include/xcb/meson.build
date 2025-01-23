@@ -1,5 +1,3 @@
-inc_xcb += include_directories('.')
-
 install_headers(
     'xcb.h',
     'xcbext.h',
@@ -34,6 +32,7 @@ install_headers(
     'shape.h',
     'shm.h',
     'sync.h',
+    'xc_misc.h',
     'xevie.h',
     'xf86dri.h',
     'xfixes.h',

@@ -40,8 +40,8 @@
 #include <assert.h>
 #include <stddef.h>
 
-#include <xcb/xcb.h>
-#include <xcb/xproto.h>
+#include "xcb/xcb.h"
+#include "xcb/xproto.h"
 
 #include <sys/types.h>
 

@@ -37,7 +37,7 @@
 #ifndef __XCB_EVENT_H__
 #define __XCB_EVENT_H__
 
-#include <xcb/xcb.h>
+#include "xcb/xcb.h"
 
 #ifdef __cplusplus
 extern "C" {

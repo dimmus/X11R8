@@ -51,8 +51,8 @@
 #include <netdb.h>
 #endif /* _WIN32 */
 
-#include "xcb.h"
-#include "xcbext.h"
+#include "xcb/xcb.h"
+#include "xcb/xcbext.h"
 #include "xcbint.h"
 
 #if defined(HAVE_TSOL_LABEL_H) && defined(HAVE_IS_SYSTEM_LABELED)

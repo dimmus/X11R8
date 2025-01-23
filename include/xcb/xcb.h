@@ -206,7 +206,7 @@ typedef struct {
 
 
 /* Include the generated xproto header. */
-#include "xproto.h"
+#include "xcb/xproto.h"
 
 
 /** XCB_NONE is the universal null resource or null atom parameter value for many core X requests */

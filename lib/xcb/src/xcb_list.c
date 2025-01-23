@@ -31,7 +31,7 @@
 
 #include <stdlib.h>
 
-#include "xcb.h"
+#include "xcb/xcb.h"
 #include "xcbint.h"
 
 typedef struct node {

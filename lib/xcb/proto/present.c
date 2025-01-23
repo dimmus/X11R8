@@ -10,15 +10,15 @@
 #include <string.h>
 #include <assert.h>
 #include <stddef.h>  /* for offsetof() */
-#include "xcbext.h"
-#include "present.h"
+#include "xcb/xcbext.h"
+#include "xcb/present.h"
 
 #define ALIGNOF(type) offsetof(struct { char dummy; type member; }, member)
-#include "xproto.h"
-#include "randr.h"
-#include "xfixes.h"
-#include "sync.h"
-#include "dri3.h"
+#include "xcb/xproto.h"
+#include "xcb/randr.h"
+#include "xcb/xfixes.h"
+#include "xcb/sync.h"
+#include "xcb/dri3.h"
 
 xcb_extension_t xcb_present_id = { "Present", 0 };
 

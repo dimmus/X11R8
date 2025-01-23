@@ -38,10 +38,10 @@
 #endif
 #include <string.h>
 
-#include "xcb.h"
-#include "xcbext.h"
+#include "xcb/xcb.h"
+#include "xcb/xcbext.h"
+#include "xcb/bigreq.h"
 #include "xcbint.h"
-#include "bigreq.h"
 
 static inline void send_request(xcb_connection_t *c, int isvoid, enum workarounds workaround, int flags, struct iovec *vector, int count)
 {

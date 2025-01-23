@@ -5,10 +5,10 @@
 
 #include <stdio.h>
 
-#include <xcb/xcb.h>
+#include "xcb/xcb.h"
 #include <stdlib.h>
 #include <stdarg.h>
-#include "xcb_atom.h"
+#include "xcb/xcb_atom.h"
 
 #ifndef __has_attribute
 # define __has_attribute(x) 0  /* Compatibility with older compilers. */

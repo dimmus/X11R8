@@ -35,7 +35,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include <xcb/xcb.h>
+#include "xcb/xcb.h"
 #include <xcb/xcb_renderutil.h>
 
 #include "cursor.h"

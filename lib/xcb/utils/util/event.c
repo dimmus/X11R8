@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "xcb_event.h"
+#include "xcb/xcb_event.h"
 
 #include <sys/types.h>
 

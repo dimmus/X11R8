@@ -13,7 +13,7 @@
 #define __XV_H
 
 #include "xcb.h"
-#include "xproto.h"
+#include "xcb/xproto.h"
 #include "shm.h"
 
 #ifdef __cplusplus

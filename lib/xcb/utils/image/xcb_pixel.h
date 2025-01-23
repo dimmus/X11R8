@@ -27,10 +27,11 @@
  */
 
 #include <inttypes.h>
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
+
 #ifndef BUILD
-#include <xcb/xcb_bitops.h>
-#include <xcb/xcb_image.h>
+#include "xcb_bitops.h"
+#include "xcb/xcb_image.h"
 #endif
 
 /**

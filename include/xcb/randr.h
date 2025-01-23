@@ -13,7 +13,7 @@
 #define __RANDR_H
 
 #include "xcb.h"
-#include "xproto.h"
+#include "xcb/xproto.h"
 #include "render.h"
 
 #ifdef __cplusplus

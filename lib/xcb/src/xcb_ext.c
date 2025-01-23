@@ -32,8 +32,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "xcb.h"
-#include "xcbext.h"
+#include "xcb/xcb.h"
+#include "xcb/xcbext.h"
 #include "xcbint.h"
 
 typedef struct lazyreply {

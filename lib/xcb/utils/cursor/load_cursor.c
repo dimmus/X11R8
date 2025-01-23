@@ -37,7 +37,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include <xcb/xcb.h>
+#include "xcb/xcb.h"
 #include <xcb/render.h>
 #include <xcb/xcb_image.h>
 

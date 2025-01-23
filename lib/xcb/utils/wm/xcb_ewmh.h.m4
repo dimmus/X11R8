@@ -46,7 +46,7 @@
  * @{
  */
 
-#include <xcb/xcb.h>
+#include "xcb/xcb.h"
 #include <stdlib.h>
 
 #ifdef __cplusplus

@@ -13,9 +13,9 @@
 #define __PRESENT_H
 
 #include "xcb.h"
-#include "xproto.h"
+#include "xcb/xproto.h"
 #include "randr.h"
-#include "xfixes.h"
+#include "xcb/xfixes.h"
 #include "sync.h"
 #include "dri3.h"
 

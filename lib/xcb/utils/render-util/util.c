@@ -23,7 +23,7 @@
 #include "config.h"
 #endif
 
-#include "xcb_renderutil.h"
+#include "xcb/xcb_renderutil.h"
 
 xcb_render_pictvisual_t *
 xcb_render_util_find_visual_format (const xcb_render_query_pict_formats_reply_t *formats,

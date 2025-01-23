@@ -28,7 +28,7 @@
 #ifndef __XCBINT_H
 #define __XCBINT_H
 
-#include "bigreq.h"
+#include "xcb/bigreq.h"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

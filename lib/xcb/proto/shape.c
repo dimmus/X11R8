@@ -10,11 +10,11 @@
 #include <string.h>
 #include <assert.h>
 #include <stddef.h>  /* for offsetof() */
-#include "xcbext.h"
-#include "shape.h"
+#include "xcb/xcbext.h"
+#include "xcb/shape.h"
 
 #define ALIGNOF(type) offsetof(struct { char dummy; type member; }, member)
-#include "xproto.h"
+#include "xcb/xproto.h"
 
 xcb_extension_t xcb_shape_id = { "SHAPE", 0 };
 

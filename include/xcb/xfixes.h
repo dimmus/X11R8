@@ -13,7 +13,7 @@
 #define __XFIXES_H
 
 #include "xcb.h"
-#include "xproto.h"
+#include "xcb/xproto.h"
 #include "render.h"
 #include "shape.h"
 

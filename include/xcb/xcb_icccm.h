@@ -39,7 +39,7 @@
  * @{
  */
 
-#include <xcb/xcb.h>
+#include "xcb/xcb.h"
 
 #ifdef __cplusplus
 extern "C" {

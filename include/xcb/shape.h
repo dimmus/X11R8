@@ -13,7 +13,7 @@
 #define __SHAPE_H
 
 #include "xcb.h"
-#include "xproto.h"
+#include "xcb/xproto.h"
 
 #ifdef __cplusplus
 extern "C" {

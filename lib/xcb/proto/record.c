@@ -10,8 +10,8 @@
 #include <string.h>
 #include <assert.h>
 #include <stddef.h>  /* for offsetof() */
-#include "xcbext.h"
-#include "record.h"
+#include "xcb/xcbext.h"
+#include "xcb/record.h"
 
 #define ALIGNOF(type) offsetof(struct { char dummy; type member; }, member)
 

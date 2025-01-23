@@ -53,7 +53,7 @@
 #define le32toh(x) OSSwapLittleToHostInt32(x)
 #endif
 
-#include <xcb/xcb.h>
+#include "xcb/xcb.h"
 
 #include "cursor.h"
 #include "xcb_cursor.h"

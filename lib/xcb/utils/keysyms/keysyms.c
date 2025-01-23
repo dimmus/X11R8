@@ -31,7 +31,8 @@
 
 #include <stdlib.h>
 
-#include <xcb/xcb.h>
+#include "xcb/xcb.h"
+
 #define XK_MISCELLANY
 #define XK_XKB_KEYS
 #define XK_LATIN1
@@ -41,9 +42,10 @@
 #define XK_CYRILLIC
 #define XK_GREEK
 #define XK_ARMENIAN
-#include <X11/keysymdef.h>
 
-#include "xcb_keysyms.h"
+#include "X11/keysymdef.h"
+
+#include "xcb/xcb_keysyms.h"
 
 /* Private declaration */
 enum tag_t {

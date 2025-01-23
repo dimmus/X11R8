@@ -31,11 +31,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <xcb/xcb.h>
-#include <xcb/shm.h>
+#include "xcb/xcb.h"
+#include "xcb/shm.h"
+#include "xcb/xcb_aux.h"
+#include "xcb/xcb_image.h"
 
-#include "xcb_aux.h"
-#include "xcb_image.h"
 #include "xcb_bitops.h"
 
 #define BUILD

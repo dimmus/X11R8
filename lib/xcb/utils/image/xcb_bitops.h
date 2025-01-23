@@ -28,8 +28,10 @@
 
 #include <assert.h>
 #include <inttypes.h>
-#include <X11/Xfuncproto.h>
 
+#include "X11/Xfuncproto.h"
+
+#include "xcb/xcb_image.h"
 /**
  * @defgroup xcb__bitops XCB Bit Operations
  *

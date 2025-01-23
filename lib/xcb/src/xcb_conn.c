@@ -37,7 +37,7 @@
 #include <errno.h>
 #include <limits.h>
 
-#include "xcb.h"
+#include "xcb/xcb.h"
 #include "xcbint.h"
 #if USE_POLL
 #include <poll.h>

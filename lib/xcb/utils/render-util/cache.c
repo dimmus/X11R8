@@ -26,7 +26,7 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include "xcb_renderutil.h"
+#include "xcb/xcb_renderutil.h"
 #include <stdlib.h>
 #include <pthread.h>
 

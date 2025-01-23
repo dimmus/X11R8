@@ -284,7 +284,7 @@ def c_open(self):
     _c('#include <string.h>')
     _c('#include <assert.h>')
     _c('#include <stddef.h>  /* for offsetof() */')
-    _c('#include "xcbext.h"')
+    _c('#include "xcb/xcbext.h"')
     _c('#include "%s.h"', _ns.header)
 
     _c('')

@@ -13,8 +13,8 @@
 #define __COMPOSITE_H
 
 #include "xcb.h"
-#include "xproto.h"
-#include "xfixes.h"
+#include "xcb/xproto.h"
+#include "xcb/xfixes.h"
 
 #ifdef __cplusplus
 extern "C" {

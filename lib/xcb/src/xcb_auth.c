@@ -55,7 +55,7 @@
 #include <sys/un.h>
 #endif /* _WIN32 */
 
-#include "xcb.h"
+#include "xcb/xcb.h"
 #include "xcbint.h"
 
 #ifdef HASXDMAUTH
