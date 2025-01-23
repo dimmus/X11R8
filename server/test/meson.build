@@ -78,7 +78,7 @@ if get_option('xvfb')
         '1280x1024x24',
     ]
 
-    test('XTS',
+    test('Server - XTS',
         find_program('scripts/xvfb-piglit.sh'),
         env: piglit_env,
         timeout: 1200,
@@ -108,7 +108,7 @@ if get_option('xvfb')
             if(testsuite == '-gles2')
                 test_env = gles20_env
             endif
-            test('XTS',
+            test('Server - XTS',
                 find_program('scripts/xephyr-glamor' + testsuite + '-piglit.sh'),
                 env: piglit_env,
                 timeout: 1200,
@@ -219,10 +219,10 @@ endif
 unit = executable('tests',
         unit_sources,
         c_args: unit_c_args,
-        dependencies: [libx11, dep_pixman, xproto],
+        dependencies: [libx11, libxcvt, dep_pixman, xproto],
         include_directories: unit_includes,
         link_args: ldwraps,
-        link_with: [xorg_link, libxcvt],
+        link_with: xorg_link,
 )
 
-test('unit', unit)
+test('Server - Unit', unit)
