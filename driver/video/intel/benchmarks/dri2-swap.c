@@ -26,16 +26,16 @@
 #include "config.h"
 #endif
 
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <X11/Xlib-xcb.h>
-#include <X11/Xutil.h>
-#include <X11/Xlibint.h>
-#include <X11/extensions/dpms.h>
-#include <X11/extensions/randr.h>
-#include <X11/extensions/Xcomposite.h>
-#include <X11/extensions/Xdamage.h>
-#include <X11/extensions/Xrandr.h>
+#include "X11/Xlib.h"
+#include "X11/Xatom.h"
+#include "X11/Xlib-xcb.h"
+#include "X11/Xutil.h"
+#include "X11/Xlibint.h"
+#include "X11/extensions/dpms.h"
+#include "X11/extensions/randr.h"
+#include "X11/extensions/Xcomposite.h"
+#include "X11/extensions/Xdamage.h"
+#include "X11/extensions/Xrandr.h"
 #include <xcb/xcb.h>
 #include <xcb/dri2.h>
 #include <xf86drm.h>
@@ -49,12 +49,12 @@
 #include <setjmp.h>
 #include <signal.h>
 
-#include <X11/Xlibint.h>
-#include <X11/extensions/Xext.h>
-#include <X11/extensions/extutil.h>
-#include <X11/extensions/dri2proto.h>
-#include <X11/extensions/dri2tokens.h>
-#include <X11/extensions/Xfixes.h>
+#include "X11/Xlibint.h"
+#include "X11/extensions/Xext.h"
+#include "X11/extensions/extutil.h"
+#include "X11/extensions/dri2proto.h"
+#include "X11/extensions/dri2tokens.h"
+#include "X11/extensions/Xfixes.h"
 
 static char dri2ExtensionName[] = DRI2_NAME;
 static XExtensionInfo *dri2Info;

@@ -54,12 +54,12 @@ SOFTWARE.
 #include <config.h>
 #endif
 
-#include <X11/extensions/XI.h>
-#include <X11/extensions/XIproto.h>
-#include <X11/Xlibint.h>
-#include <X11/Xlib.h>
-#include <X11/extensions/XInput.h>
-#include <X11/extensions/extutil.h>
+#include "X11/extensions/XI.h"
+#include "X11/extensions/XIproto.h"
+#include "X11/Xlibint.h"
+#include "X11/Xlib.h"
+#include "X11/extensions/XInput.h"
+#include "X11/extensions/extutil.h"
 #include "XIint.h"
 #include <limits.h>
 

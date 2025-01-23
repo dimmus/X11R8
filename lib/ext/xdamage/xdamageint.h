@@ -24,10 +24,10 @@
 #define _XDAMAGEINT_H_
 
 #include <stdio.h>
-#include <X11/Xlib.h>
-#include <X11/Xlibint.h>
-#include <X11/Xutil.h>
-#include <X11/extensions/damageproto.h>
+#include "X11/Xlib.h"
+#include "X11/Xlibint.h"
+#include "X11/Xutil.h"
+#include "X11/extensions/damageproto.h"
 #include "Xdamage.h"
 
 typedef struct _XDamageExtDisplayInfo {

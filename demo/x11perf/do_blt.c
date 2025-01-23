@@ -382,7 +382,7 @@ DoPutImage(XParms xp, Parms p, int64_t reps)
 #include <ipc.h>
 #include <shm.h>
 #endif
-#include <X11/extensions/XShm.h>
+#include "X11/extensions/XShm.h"
 
 static XImage		shm_image;
 static XShmSegmentInfo	shm_info;
@@ -648,7 +648,7 @@ DoCopyPlane(XParms xp, Parms p, int64_t reps)
     }
 }
 
-#include <X11/extensions/Xrender.h>
+#include "X11/extensions/Xrender.h"
 
 static Picture	winPict, pixPict;
 

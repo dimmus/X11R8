@@ -76,10 +76,10 @@ SOFTWARE.
 #include <dix-config.h>
 
 #include <string.h>
-#include <X11/X.h>
-#include <X11/Xproto.h>
-#include <X11/extensions/Xv.h>
-#include <X11/extensions/Xvproto.h>
+#include "X11/X.h"
+#include "X11/Xproto.h"
+#include "X11/extensions/Xv.h"
+#include "X11/extensions/Xvproto.h"
 
 #include "Xext/xvdix_priv.h"
 

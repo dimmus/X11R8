@@ -49,11 +49,11 @@ SOFTWARE.
 #include <config.h>
 #endif
 #include <stdio.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xfuncs.h>
-#include <X11/Xaw/StripCharP.h>
-#include <X11/Xaw/XawInit.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xfuncs.h"
+#include "X11/Xaw/StripCharP.h"
+#include "X11/Xaw/XawInit.h"
 #include "Private.h"
 
 #define MS_PER_SEC 1000

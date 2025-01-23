@@ -31,7 +31,7 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/SM/SMlib.h>
+#include "X11/SM/SMlib.h"
 #include "SMlibint.h"
 
 int 	_SmcOpcode = 0;

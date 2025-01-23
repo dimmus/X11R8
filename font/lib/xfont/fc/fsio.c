@@ -39,12 +39,12 @@
 
 #define FONT_t
 #define TRANS_CLIENT
-#include <X11/Xtrans/Xtrans.h>
-#include <X11/Xpoll.h>
-#include <X11/fonts/FS.h>
-#include <X11/fonts/FSproto.h>
+#include "X11/Xtrans/Xtrans.h"
+#include "X11/Xpoll.h"
+#include "X11/fonts/FS.h"
+#include "X11/fonts/FSproto.h"
 #include "fontmisc.h"
-#include <X11/fonts/fontstruct.h>
+#include "X11/fonts/fontstruct.h"
 #include "fservestr.h"
 
 #include <stdio.h>

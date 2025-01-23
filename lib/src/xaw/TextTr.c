@@ -40,7 +40,7 @@ The Japanese user typically hits their Kanji key when they want to do
 input.  This merely makes sure the input is connected.
 */
 
-#include <X11/Xaw/Text.h>
+#include "X11/Xaw/Text.h"
 
 char _XawDefaultTextTranslations[] =
 "c<Key>A:"		"beginning-of-line()\n"

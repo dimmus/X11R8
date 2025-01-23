@@ -66,13 +66,13 @@ from The Open Group.
 #include "config.h"
 #endif
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/cursorfont.h>
-#include <X11/extensions/shape.h>
-#include <X11/Xfuncs.h>
-#include <X11/StringDefs.h>
-#include <X11/Intrinsic.h>
+#include "X11/Xlib.h"
+#include "X11/Xutil.h"
+#include "X11/cursorfont.h"
+#include "X11/extensions/shape.h"
+#include "X11/Xfuncs.h"
+#include "X11/StringDefs.h"
+#include "X11/Intrinsic.h"
 
 #ifndef APP_NAME
 #define APP_NAME "twm"
@@ -348,7 +348,7 @@ typedef struct TWMWinConfigEntry {
 #define TBPM_MENU ":menu"       /* name of titlebar pixmap for menus */
 #define TBPM_QUESTION ":question"       /* name of unknown titlebar pixmap */
 
-#include <X11/Xosdefs.h>
+#include "X11/Xosdefs.h"
 #include <stdlib.h>
 extern void CreateFonts(void);
 extern void RestoreWithdrawnLocation(TwmWindow *tmp);

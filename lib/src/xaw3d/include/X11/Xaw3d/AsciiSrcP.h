@@ -68,8 +68,8 @@ SOFTWARE.
 #ifndef _XawAsciiSrcP_h
 #define _XawAsciiSrcP_h
 
-#include <X11/Xaw3d/TextSrcP.h>
-#include <X11/Xaw3d/AsciiSrc.h>
+#include "X11/Xaw3d/TextSrcP.h"
+#include "X11/Xaw3d/AsciiSrc.h"
 
 /************************************************************
  *

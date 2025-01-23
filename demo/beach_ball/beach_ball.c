@@ -30,7 +30,7 @@ SOFTWARE.
 #include <stdio.h>
 #include <errno.h>
 #include <ctype.h>
-#include <X11/Xosdefs.h>
+#include "X11/Xosdefs.h"
 #ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
 #else
@@ -38,11 +38,11 @@ extern int rand();
 #endif
 #include <math.h>
 #ifdef PEX_SI_PHIGS
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
+#include "X11/Xlib.h"
+#include "X11/Xatom.h"
 #endif /*PEX_SI_PHIGS*/
 #include <phigs/phigs.h>
-#include <X11/Xfuncs.h>
+#include "X11/Xfuncs.h"
 
 #ifdef USE_X_DRAWABLE
 extern void init_window();

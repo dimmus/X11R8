@@ -26,11 +26,11 @@
 
 #include <limits.h>
 #include <stdio.h>
-#include <X11/Xlib.h>
+#include "X11/Xlib.h"
 /* we need to be able to manipulate the Display structure on events */
-#include <X11/Xlibint.h>
-#include <X11/extensions/render.h>
-#include <X11/extensions/Xrender.h>
+#include "X11/Xlibint.h"
+#include "X11/extensions/render.h"
+#include "X11/extensions/Xrender.h"
 #include "Xrandrint.h"
 
 /*

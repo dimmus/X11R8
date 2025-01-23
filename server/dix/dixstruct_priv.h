@@ -14,7 +14,7 @@
 #include "pixmap.h"
 #include "privates.h"
 #include "dixstruct.h"
-#include <X11/Xmd.h>
+#include "X11/Xmd.h"
 
 static inline void
 SetReqFds(ClientPtr client, int req_fds) {

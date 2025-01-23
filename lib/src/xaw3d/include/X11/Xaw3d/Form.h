@@ -49,7 +49,7 @@ SOFTWARE.
 #ifndef _XawForm_h
 #define _XawForm_h
 
-#include <X11/Constraint.h>
+#include "X11/Constraint.h"
 
 /***********************************************************************
  *

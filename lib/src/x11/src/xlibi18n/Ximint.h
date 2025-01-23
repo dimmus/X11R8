@@ -34,7 +34,7 @@ PERFORMANCE OF THIS SOFTWARE.
 #define _XIMINT_H
 
 #include <stdio.h>
-#include <X11/Xutil.h>
+#include "X11/Xutil.h"
 
 typedef struct _Xim	*Xim;
 typedef struct _Xic	*Xic;

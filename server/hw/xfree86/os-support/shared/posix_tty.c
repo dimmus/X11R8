@@ -57,7 +57,7 @@
 #endif
 
 #include <errno.h>
-#include <X11/X.h>
+#include "X11/X.h"
 
 #include "os/xserver_poll.h"
 

@@ -42,7 +42,7 @@
 #include <libinput.h>
 #include <linux/input.h>
 
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 
 #include "bezier.h"
 #include "draglock.h"

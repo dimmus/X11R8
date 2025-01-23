@@ -58,7 +58,7 @@ in this Software without prior written authorization from the X Consortium.
 #endif
 #include <stdio.h>
 #include <stdlib.h>
-#include <X11/IntrinsicP.h>
+#include "X11/IntrinsicP.h"
 #include "XawI18n.h"
 
 wchar_t _Xaw_atowc(

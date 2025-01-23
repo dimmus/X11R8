@@ -26,9 +26,9 @@
 #include <config.h>
 #endif
 
-#include <X11/Xmu/Converters.h>
-#include <X11/Xmu/CharSet.h>
-#include <X11/ThreadsI.h>
+#include "X11/Xmu/Converters.h"
+#include "X11/Xmu/CharSet.h"
+#include "X11/ThreadsI.h"
 #include <assert.h>
 #include <setjmp.h>
 #include <stdio.h>

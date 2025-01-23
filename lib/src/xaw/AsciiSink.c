@@ -50,13 +50,13 @@ SOFTWARE.
 #endif
 #include <stdio.h>
 #include <stdlib.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xatom.h>
-#include <X11/Xaw/XawInit.h>
-#include <X11/Xaw/AsciiSinkP.h>
-#include <X11/Xaw/AsciiSrcP.h>
-#include <X11/Xaw/TextP.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xatom.h"
+#include "X11/Xaw/XawInit.h"
+#include "X11/Xaw/AsciiSinkP.h"
+#include "X11/Xaw/AsciiSrcP.h"
+#include "X11/Xaw/TextP.h"
 #include "Private.h"
 
 #ifdef GETLASTPOS

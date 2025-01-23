@@ -29,8 +29,8 @@ Author: Ralph Mor, X Consortium
 #ifndef _ICELIB_H_
 #define _ICELIB_H_
 
-#include <X11/ICE/ICE.h>
-#include <X11/Xfuncproto.h>
+#include "X11/ICE/ICE.h"
+#include "X11/Xfuncproto.h"
 
 #define Bool int
 #define Status int

@@ -49,7 +49,7 @@ in this Software without prior written authorization from The Open Group.
 #include	"config.h"
 
 #include	<stdio.h>
-#include	<X11/Xos.h>
+#include	"X11/Xos.h"
 #include	<stdlib.h>
 #include	"misc.h"
 #include	"globals.h"

@@ -48,7 +48,7 @@ SOFTWARE.
 #ifndef _XtConstraintP_h
 #define _XtConstraintP_h
 
-#include <X11/Constraint.h>
+#include "X11/Constraint.h"
 
 _XFUNCPROTOBEGIN
 

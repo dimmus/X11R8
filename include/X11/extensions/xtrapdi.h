@@ -45,14 +45,14 @@ SOFTWARE.
 
 #define NEED_REPLIES
 #define NEED_EVENTS
-#include <X11/X.h>
-#include <X11/Xmd.h>
+#include "X11/X.h"
+#include "X11/Xmd.h"
 #ifdef SMT
 #define NEED_EVENTS
 #define NEED_REPLIES
 #endif
-#include <X11/Xproto.h>
-#include <X11/extensions/xtrapbits.h>
+#include "X11/Xproto.h"
+#include "X11/extensions/xtrapbits.h"
 #define XTrapExtName "DEC-XTRAP"
 /* Current Release, Version, and Revision of the XTrap Extension */
 #define XETrapRelease      3L

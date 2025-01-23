@@ -6,7 +6,7 @@
 #define _XSERVER_OS_AUDIT_H
 
 #include <stdarg.h>
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 extern int auditTrailLevel;
 

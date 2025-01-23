@@ -78,8 +78,8 @@ SOFTWARE.
 #endif
 #endif
 
-#include <X11/Xos.h>
-#include <X11/Xpoll.h>
+#include "X11/Xos.h"
+#include "X11/Xpoll.h"
 
 _XFUNCPROTOBEGIN
 

@@ -40,7 +40,7 @@ from The Open Group.
 #include "Xlibint.h"
 #include "Xprivate.h"
 #include "reallocarray.h"
-#include <X11/Xpoll.h>
+#include "X11/Xpoll.h"
 #include <assert.h>
 #include <stdio.h>
 #ifdef WIN32

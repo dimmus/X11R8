@@ -58,7 +58,7 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <micmap.h>
 
 #if defined(HAVE_X11_EXTENSIONS_DPMSCONST_H)
-#include <X11/extensions/dpmsconst.h>
+#include "X11/extensions/dpmsconst.h"
 #else
 #define DPMSModeOn 0
 #define DPMSModeOff 3

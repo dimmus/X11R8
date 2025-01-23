@@ -35,12 +35,12 @@ from the X Consortium.
 ** Contains the bare minimum necessary to oversee the whole operation.
 */
 
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
-#include <X11/Xaw/Form.h>
-#include <X11/Xaw/Command.h>
-#include <X11/Xaw/AsciiText.h>
-#include <X11/Shell.h>
+#include "X11/Intrinsic.h"
+#include "X11/StringDefs.h"
+#include "X11/Xaw/Form.h"
+#include "X11/Xaw/Command.h"
+#include "X11/Xaw/AsciiText.h"
+#include "X11/Shell.h"
 #include <stdio.h>
 #include <stdlib.h>
 

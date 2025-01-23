@@ -48,7 +48,7 @@ SOFTWARE.
 #ifndef _XawTextSrc_h
 #define _XawTextSrc_h
 
-#include <X11/Xaw/Text.h>
+#include "X11/Xaw/Text.h"
 
 /* Resources:
 

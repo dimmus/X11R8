@@ -31,8 +31,8 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XmuWidgetNode_h
 #define _XmuWidgetNode_h
 
-#include <X11/Intrinsic.h>
-#include <X11/Xfuncproto.h>
+#include "X11/Intrinsic.h"
+#include "X11/Xfuncproto.h"
 
 /*
  * This is usually initialized by setting the first two fields and letting

@@ -31,7 +31,7 @@ Equipment Corporation.
 #ifndef _panoramiXext_h
 #define _panoramiXext_h
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 typedef struct {
     Window  window;         /* PanoramiX window - may not exist */

@@ -34,8 +34,8 @@
 #include <config.h>
 #endif
 
-#include <X11/Xfuncproto.h>
-#include <X11/extensions/extutil.h>
+#include "X11/Xfuncproto.h"
+#include "X11/extensions/extutil.h"
 
 /*
  * Extensions need to register callbacks for their events.

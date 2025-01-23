@@ -30,8 +30,8 @@
 #endif
 
 #include <math.h>
-#include <X11/X.h>
-#include <X11/Xproto.h>
+#include "X11/X.h"
+#include "X11/Xproto.h"
 
 #include "misc.h"
 
@@ -49,7 +49,7 @@
 #include "xf86Crtc.h"
 
 #ifdef XFreeXDGA
-#include <X11/extensions/xf86dgaproto.h>
+#include "X11/extensions/xf86dgaproto.h"
 #include "dgaproc.h"
 #include "dgaproc_priv.h"
 #endif

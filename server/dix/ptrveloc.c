@@ -30,7 +30,7 @@
 
 #include <ptrveloc.h>
 #include <exevents.h>
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 #include <os.h>
 
 #include <xserver-properties.h>

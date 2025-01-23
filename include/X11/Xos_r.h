@@ -69,8 +69,8 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XOS_R_H_
 # define _XOS_R_H_
 
-# include <X11/Xos.h>
-# include <X11/Xfuncs.h>
+# include "X11/Xos.h"
+# include "X11/Xfuncs.h"
 
 # ifndef X_NOT_POSIX
 #  ifdef _POSIX_SOURCE
@@ -104,7 +104,7 @@ extern LockInfoPtr _Xglobal_lock;
 #  endif
 #  if defined(XTHREADS_WARN) || defined(XTHREADS_FILE_LINE)
 #   ifndef XAllocIDs /* Xlibint.h does not have multiple include protection */
-#    include <X11/Xfuncproto.h>	/* for NeedFunctionPrototypes */
+#    include "X11/Xfuncproto.h"	/* for NeedFunctionPrototypes */
 extern void (*_XLockMutex_fn)(
 #    if NeedFunctionPrototypes
     LockInfoPtr	/* lock */, char * /* file */, int /* line */
@@ -126,7 +126,7 @@ extern void (*_XUnlockMutex_fn)(
 #   endif
 #  else
 #   ifndef XAllocIDs /* Xlibint.h does not have multiple include protection */
-#    include <X11/Xfuncproto.h>	/* for NeedFunctionPrototypes */
+#    include "X11/Xfuncproto.h"	/* for NeedFunctionPrototypes */
 extern void (*_XLockMutex_fn)(
 #    if NeedFunctionPrototypes
     LockInfoPtr	/* lock */
@@ -152,7 +152,7 @@ extern void (*_XUnlockMutex_fn)(
 extern void (*_XtProcessLock)(void);
 #  endif
 #  ifndef _XtintrinsicP_h
-#   include <X11/Xfuncproto.h>	/* for NeedFunctionPrototypes */
+#   include "X11/Xfuncproto.h"	/* for NeedFunctionPrototypes */
 extern void XtProcessLock(
 #   if NeedFunctionPrototypes
     void
@@ -204,7 +204,7 @@ extern void XtProcessUnlock(
  *
  * #define X_INCLUDE_PWD_H
  * #define XOS_USE_..._LOCKING
- * #include <X11/Xos_r.h>
+ * #include "X11/Xos_r.h"
  *
  * typedef ... _Xgetpwparams;
  *
@@ -368,7 +368,7 @@ typedef int _Xgetpwret;
  *
  * #define X_INCLUDE_NETDB_H
  * #define XOS_USE_..._LOCKING
- * #include <X11/Xos_r.h>
+ * #include "X11/Xos_r.h"
  *
  * typedef ... _Xgethostbynameparams;
  * typedef ... _Xgetservbynameparams;
@@ -526,7 +526,7 @@ typedef int _Xgetservbynameparams; /* dummy */
  *
  * #define X_INCLUDE_DIRENT_H
  * #define XOS_USE_..._LOCKING
- * #include <X11/Xos_r.h>
+ * #include "X11/Xos_r.h"
  *
  * typedef ... _Xreaddirparams;
  *
@@ -628,7 +628,7 @@ typedef struct {
  *
  * #define X_INCLUDE_UNISTD_H
  * #define XOS_USE_..._LOCKING
- * #include <X11/Xos_r.h>
+ * #include "X11/Xos_r.h"
  *
  * typedef ... _Xgetloginparams;
  * typedef ... _Xttynameparams;
@@ -638,7 +638,7 @@ typedef struct {
  */
 
 #if defined(X_INCLUDE_UNISTD_H) && !defined(_XOS_INCLUDED_UNISTD_H)
-/* <unistd.h> already included by <X11/Xos.h> */
+/* <unistd.h> already included by "X11/Xos.h" */
 # if defined(XUSE_MTSAFE_API) || defined(XUSE_MTSAFE_UNISTDAPI)
 #  define XOS_USE_MTSAFE_UNISTDAPI 1
 # endif
@@ -770,7 +770,7 @@ typedef struct {
  *
  * #define X_INCLUDE_STRING_H
  * #define XOS_USE_..._LOCKING
- * #include <X11/Xos_r.h>
+ * #include "X11/Xos_r.h"
  *
  * typedef ... _Xstrtokparams;
  *
@@ -778,7 +778,7 @@ typedef struct {
  */
 
 #if defined(X_INCLUDE_STRING_H) && !defined(_XOS_INCLUDED_STRING_H)
-/* <string.h> has already been included by <X11/Xos.h> */
+/* <string.h> has already been included by "X11/Xos.h" */
 # if defined(XUSE_MTSAFE_API) || defined(XUSE_MTSAFE_STRINGAPI)
 #  define XOS_USE_MTSAFE_STRINGAPI 1
 # endif
@@ -816,7 +816,7 @@ typedef char * _Xstrtokparams;
  *
  * #define X_INCLUDE_TIME_H
  * #define XOS_USE_..._LOCKING
- * #include <X11/Xos_r.h>
+ * #include "X11/Xos_r.h"
  *
  * typedef ... _Xatimeparams;
  * typedef ... _Xctimeparams;
@@ -977,7 +977,7 @@ typedef struct tm _Xltimeparams;
  *
  * #define X_INCLUDE_GRP_H
  * #define XOS_USE_..._LOCKING
- * #include <X11/Xos_r.h>
+ * #include "X11/Xos_r.h"
  *
  * typedef ... _Xgetgrparams;
  *

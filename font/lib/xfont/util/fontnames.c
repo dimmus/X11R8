@@ -37,7 +37,7 @@ from The Open Group.
 #include "libxfontint.h"
 #include "util/replace.h"
 #include	"fontmisc.h"
-#include	<X11/fonts/fontstruct.h>
+#include	"X11/fonts/fontstruct.h"
 
 void
 xfont2_free_font_names(FontNamesPtr pFN)

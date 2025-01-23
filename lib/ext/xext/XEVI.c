@@ -24,12 +24,12 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xlibint.h>
-#include <X11/extensions/XEVI.h>
-#include <X11/extensions/EVIproto.h>
-#include <X11/extensions/Xext.h>
-#include <X11/extensions/extutil.h>
-#include <X11/Xutil.h>
+#include "X11/Xlibint.h"
+#include "X11/extensions/XEVI.h"
+#include "X11/extensions/EVIproto.h"
+#include "X11/extensions/Xext.h"
+#include "X11/extensions/extutil.h"
+#include "X11/Xutil.h"
 #include <limits.h>
 #include "reallocarray.h"
 

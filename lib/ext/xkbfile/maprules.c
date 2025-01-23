@@ -36,17 +36,17 @@
 
 #define X_INCLUDE_STRING_H
 #define XOS_USE_NO_LOCKING
-#include <X11/Xos_r.h>
+#include "X11/Xos_r.h"
 
 
-#include <X11/Xproto.h>
-#include <X11/Xlib.h>
-#include <X11/Xos.h>
-#include <X11/Xfuncs.h>
-#include <X11/Xatom.h>
-#include <X11/keysym.h>
-#include <X11/XKBlib.h>
-#include <X11/extensions/XKBgeom.h>
+#include "X11/Xproto.h"
+#include "X11/Xlib.h"
+#include "X11/Xos.h"
+#include "X11/Xfuncs.h"
+#include "X11/Xatom.h"
+#include "X11/keysym.h"
+#include "X11/XKBlib.h"
+#include "X11/extensions/XKBgeom.h"
 #include "XKMformat.h"
 #include "XKBfileInt.h"
 #include "XKBrules.h"

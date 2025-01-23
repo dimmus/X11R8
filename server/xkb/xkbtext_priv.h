@@ -5,7 +5,7 @@
 #ifndef _XSERVER_XKB_XKBTEXT_PRIV_H
 #define _XSERVER_XKB_XKBTEXT_PRIV_H
 
-#include <X11/X.h>
+#include "X11/X.h"
 
 #include "xkbstr.h"
 

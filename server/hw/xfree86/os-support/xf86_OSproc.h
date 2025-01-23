@@ -91,7 +91,7 @@
 /* Prototypes                                                              */
 /***************************************************************************/
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 #include "opaque.h"
 #include "xf86Optionstr.h"
 

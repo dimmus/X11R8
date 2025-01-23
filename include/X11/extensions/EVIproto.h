@@ -24,7 +24,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef _EVIPROTO_H_
 #define _EVIPROTO_H_
 
-#include <X11/extensions/EVI.h>
+#include "X11/extensions/EVI.h"
 
 #define X_EVIQueryVersion		0
 #define X_EVIGetVisualInfo		1

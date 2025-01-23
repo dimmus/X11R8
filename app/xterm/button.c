@@ -65,9 +65,9 @@ button.c	Handles button events in the terminal emulator.
 #include <ctype.h>
 #include <assert.h>
 
-#include <X11/Xatom.h>
-#include <X11/Xmu/Atoms.h>
-#include <X11/Xmu/StdSel.h>
+#include "X11/Xatom.h"
+#include "X11/Xmu/Atoms.h"
+#include "X11/Xmu/StdSel.h"
 
 #include <xutf8.h>
 #include <fontutils.h>
@@ -120,8 +120,8 @@ extern "C" {
 #endif /* OPT_SELECT_REGEX */
 
 #ifdef HAVE_X11_TRANSLATEI_H
-#include <X11/ConvertI.h>
-#include <X11/TranslateI.h>
+#include "X11/ConvertI.h"
+#include "X11/TranslateI.h"
 #else
 extern String _XtPrintXlations(Widget w,
 			       XtTranslations xlations,

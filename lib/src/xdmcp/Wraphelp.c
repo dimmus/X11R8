@@ -2,7 +2,7 @@
 #include <config.h>
 #endif
 #include <sys/types.h>
-#include <X11/Xmd.h>
+#include "X11/Xmd.h"
 #include "Wrap.h"
 
 /* des routines for non-usa - eay 10/9/1991 eay@psych.psy.uq.oz.au

@@ -36,8 +36,8 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XawToggleP_h
 #define _XawToggleP_h
 
-#include <X11/Xaw/Toggle.h>
-#include <X11/Xaw/CommandP.h>
+#include "X11/Xaw/Toggle.h"
+#include "X11/Xaw/CommandP.h"
 
 /*
  * Toggle Widget Private Data

@@ -62,7 +62,7 @@ SOFTWARE.
 #ifndef _XIMTHAI_H_
 #define _XIMTHAI_H_
 
-#include <X11/Xlib.h>
+#include "X11/Xlib.h"
 
 /* Classification of characters in TIS620 according to WTT */
 

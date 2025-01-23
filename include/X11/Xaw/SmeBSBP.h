@@ -31,8 +31,8 @@ in this Software without prior written authorization from The Open Group.
 /*
  * Sme Object Private Data
  */
-#include <X11/Xaw/SmeP.h>
-#include <X11/Xaw/SmeBSB.h>
+#include "X11/Xaw/SmeP.h"
+#include "X11/Xaw/SmeBSB.h"
 
 typedef struct _SmeBSBClassPart {
     XtPointer extension;

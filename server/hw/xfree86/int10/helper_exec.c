@@ -21,7 +21,7 @@
 #define PRINT_PORT 0
 
 #include <unistd.h>
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 
 #include "os/osdep.h"
 

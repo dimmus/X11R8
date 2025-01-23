@@ -34,13 +34,13 @@
 #include <stddef.h>             /* For NULL */
 #include <limits.h>             /* For CHAR_BIT */
 #include <assert.h>
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 #ifdef __APPLE__
 #include <Xplugin.h>
 #include "mi.h"
 #include "pixmapstr.h"
 #include "windowstr.h"
-//#include <X11/extensions/applewm.h>
+//#include "X11/extensions/applewm.h"
 extern int darwinMainScreenX, darwinMainScreenY;
 extern Bool no_configure_window;
 #endif

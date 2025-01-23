@@ -76,7 +76,7 @@ SOFTWARE.
  * MultiSink Object
  */
 
-#include <X11/Xaw/TextSink.h>
+#include "X11/Xaw/TextSink.h"
 
 /* Resources:
 

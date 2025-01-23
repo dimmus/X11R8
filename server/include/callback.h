@@ -47,10 +47,10 @@ SOFTWARE.
 #ifndef CALLBACK_H
 #define CALLBACK_H
 
-#include <X11/X.h>              /* for GContext, Mask */
-#include <X11/Xdefs.h>          /* for Bool */
-#include <X11/Xproto.h>
-#include <X11/Xfuncproto.h>
+#include "X11/X.h"              /* for GContext, Mask */
+#include "X11/Xdefs.h"          /* for Bool */
+#include "X11/Xproto.h"
+#include "X11/Xfuncproto.h"
 
 /*
  *  callback manager stuff

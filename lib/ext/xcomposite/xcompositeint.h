@@ -46,12 +46,12 @@
 #define _XCOMPOSITEINT_H_
 
 #include <stdio.h>
-#include <X11/Xfuncproto.h>
-#include <X11/Xlib.h>
-#include <X11/Xlibint.h>
-#include <X11/Xutil.h>
-#include <X11/extensions/compositeproto.h>
-#include <X11/extensions/Xcomposite.h>
+#include "X11/Xfuncproto.h"
+#include "X11/Xlib.h"
+#include "X11/Xlibint.h"
+#include "X11/Xutil.h"
+#include "X11/extensions/compositeproto.h"
+#include "X11/extensions/Xcomposite.h"
 
 typedef struct _XCompositeExtDisplayInfo {
     struct _XCompositeExtDisplayInfo  *next;    /* keep a linked list */

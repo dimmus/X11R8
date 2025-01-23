@@ -56,7 +56,7 @@ SOFTWARE.
 #include "dix.h"
 #include "privates.h"
 #include "miscstruct.h"
-#include <X11/Xprotostr.h>
+#include "X11/Xprotostr.h"
 #include "opaque.h"
 
 #define GuaranteeNothing	0

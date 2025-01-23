@@ -78,9 +78,9 @@ in this Software without prior written authorization from The Open Group.
 #include <config.h>
 #endif
 #include "IntrinsicI.h"
-#include <X11/keysymdef.h>
+#include "X11/keysymdef.h"
 #ifdef XKB
-#include <X11/XKBlib.h>
+#include "X11/XKBlib.h"
 #endif
 
 #define FLUSHKEYCACHE(ctx) \

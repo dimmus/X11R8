@@ -33,8 +33,8 @@
 #ifndef XDBE_H
 #define XDBE_H
 
-#include <X11/Xfuncproto.h>
-#include <X11/extensions/dbe.h>
+#include "X11/Xfuncproto.h"
+#include "X11/extensions/dbe.h"
 
 typedef struct
 {

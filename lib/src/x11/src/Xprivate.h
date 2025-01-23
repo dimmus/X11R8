@@ -8,7 +8,7 @@
 #ifndef XPRIVATE_H
 #define XPRIVATE_H
 
-#include <X11/Xlib.h>
+#include "X11/Xlib.h"
 
 extern _X_HIDDEN void _XIDHandler(Display *dpy);
 extern _X_HIDDEN void _XSeqSyncFunction(Display *dpy);

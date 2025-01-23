@@ -36,7 +36,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xpoll.h>
+#include "X11/Xpoll.h"
 #include <stdio.h>
 #include <sys/errno.h>
 #define INCL_DOSSEMAPHORES

@@ -38,7 +38,7 @@ from the X Consortium.
 
 #include "xgas.h"
 #include "xgas.icon"
-#include <X11/Shell.h>
+#include "X11/Shell.h"
 
 #include <stdlib.h>
 #include <stdio.h>

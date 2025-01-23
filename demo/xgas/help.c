@@ -5,7 +5,7 @@
  */
 
 #include "xgas.h"
-#include <X11/Shell.h>
+#include "X11/Shell.h"
 extern char quick[];
 extern char *man[];
 extern char *doc[];

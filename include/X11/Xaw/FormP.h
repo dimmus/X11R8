@@ -50,10 +50,10 @@ SOFTWARE.
 #ifndef _XawFormP_h
 #define _XawFormP_h
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
-#include <X11/Xaw/Form.h>
-#include <X11/Xaw/XawInit.h>
+#include "X11/Xaw/Form.h"
+#include "X11/Xaw/XawInit.h"
 
 _XFUNCPROTOBEGIN
 

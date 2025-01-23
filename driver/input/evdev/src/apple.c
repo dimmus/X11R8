@@ -39,7 +39,7 @@
 #include <exevents.h>
 #include <xf86.h>
 #include <xf86Xinput.h>
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 
 /* Apple-specific controls.
  *

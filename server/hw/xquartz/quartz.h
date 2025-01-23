@@ -34,7 +34,7 @@
 #ifndef _QUARTZ_H
 #define _QUARTZ_H
 
-#include <X11/Xdefs.h>
+#include "X11/Xdefs.h"
 #include "privates.h"
 
 #include "screenint.h"

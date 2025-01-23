@@ -26,7 +26,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XawAllWidgets_h
 #define _XawAllWidgets_h
 
-#include <X11/Xmu/WidgetNode.h>
+#include "X11/Xmu/WidgetNode.h"
 
 /*
  * This file matches the generated AllWidgets.c

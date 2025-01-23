@@ -52,7 +52,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #define	XkbChangeKeycodeRange		SrvXkbChangeKeycodeRange
 #define	XkbApplyVirtualModChanges	SrvXkbApplyVirtualModChanges
 
-#include <X11/extensions/XKBproto.h>
+#include "X11/extensions/XKBproto.h"
 #include "xkbstr.h"
 #include "xkbrules.h"
 #include "inputstr.h"

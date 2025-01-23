@@ -63,27 +63,27 @@ SOFTWARE.
 
 /* Make sure all wm properties can make it out of the resource manager */
 
-#include <X11/Xaw3d/Xaw3dP.h>
+#include "X11/Xaw3d/Xaw3dP.h"
 #include <stdio.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/ShellP.h>
-#include <X11/VendorP.h>
-#include <X11/Xmu/Converters.h>
-#include <X11/Xmu/Atoms.h>
-#include <X11/Xmu/Editres.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/ShellP.h"
+#include "X11/VendorP.h"
+#include "X11/Xmu/Converters.h"
+#include "X11/Xmu/Atoms.h"
+#include "X11/Xmu/Editres.h"
 #ifdef XAW_INTERNATIONALIZATION
-#include <X11/Xmu/ExtAgent.h>
+#include "X11/Xmu/ExtAgent.h"
 #endif
 #ifdef XAW_MULTIPLANE_PIXMAPS
-#include <X11/xpm.h>
-#include <X11/Xmu/Drawing.h>
+#include "X11/xpm.h"
+#include "X11/Xmu/Drawing.h"
 #endif
 
 /* The following two headers are for the input method. */
 #ifdef XAW_INTERNATIONALIZATION
-#include <X11/Xaw3d/VendorEP.h>
-#include <X11/Xaw3d/XawImP.h>
+#include "X11/Xaw3d/VendorEP.h"
+#include "X11/Xaw3d/XawImP.h"
 #endif
 
 

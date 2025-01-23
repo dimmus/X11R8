@@ -24,7 +24,7 @@
 #ifndef _FB_H_
 #define _FB_H_
 
-#include <X11/X.h>
+#include "X11/X.h"
 #include <pixman.h>
 
 #include "scrnintstr.h"

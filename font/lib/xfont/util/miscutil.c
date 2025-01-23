@@ -30,12 +30,12 @@ from The Open Group.
 #include <config.h>
 #endif
 #include "libxfontint.h"
-#include <X11/Xosdefs.h>
+#include "X11/Xosdefs.h"
 #include <stdlib.h>
 #include "fontmisc.h"
 
 #define XK_LATIN1
-#include    <X11/keysymdef.h>
+#include    "X11/keysymdef.h"
 
 extern void BuiltinRegisterFpeFunctions(void);
 

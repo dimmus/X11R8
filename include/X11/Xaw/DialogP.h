@@ -48,8 +48,8 @@ SOFTWARE.
 #ifndef _DialogP_h
 #define _DialogP_h
 
-#include <X11/Xaw/Dialog.h>
-#include <X11/Xaw/FormP.h>
+#include "X11/Xaw/Dialog.h"
+#include "X11/Xaw/FormP.h"
 
 typedef struct {
     XtPointer extension;

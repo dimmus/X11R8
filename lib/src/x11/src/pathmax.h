@@ -54,7 +54,7 @@ SOFTWARE.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 
 #ifndef X_NOT_POSIX
 #ifdef _POSIX_SOURCE

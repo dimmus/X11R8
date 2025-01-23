@@ -37,9 +37,9 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #include <stdio.h>
 #include <stdlib.h>
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xmu/StdCmap.h>
+#include "X11/Xlib.h"
+#include "X11/Xutil.h"
+#include "X11/Xmu/StdCmap.h"
 
 /*
  * Prototypes

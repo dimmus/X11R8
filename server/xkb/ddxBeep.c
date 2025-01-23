@@ -27,14 +27,14 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include <dix-config.h>
 
 #include <stdio.h>
-#include <X11/X.h>
-#include <X11/Xproto.h>
-#include <X11/keysym.h>
+#include "X11/X.h"
+#include "X11/Xproto.h"
+#include "X11/keysym.h"
 #include "inputstr.h"
 #include "scrnintstr.h"
 #include "windowstr.h"
 #include <xkbsrv.h>
-#include <X11/extensions/XI.h>
+#include "X11/extensions/XI.h"
 
 /*#define FALLING_TONE	1*/
 /*#define RISING_TONE	1*/

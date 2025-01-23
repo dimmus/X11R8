@@ -27,7 +27,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XCUPPROTO_H_ /* { */
 #define _XCUPPROTO_H_
 
-#include <X11/extensions/cup.h>
+#include "X11/extensions/cup.h"
 
 #define X_XcupQueryVersion			0
 #define X_XcupGetReservedColormapEntries	1

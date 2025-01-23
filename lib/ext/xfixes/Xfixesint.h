@@ -25,11 +25,11 @@
 #define _XFIXESINT_H_
 
 #include <stdio.h>
-#include <X11/Xlib.h>
-#include <X11/Xlibint.h>
-#include <X11/Xutil.h>
+#include "X11/Xlib.h"
+#include "X11/Xlibint.h"
+#include "X11/Xutil.h"
 #include "X11/extensions/Xfixes.h"
-#include <X11/extensions/xfixesproto.h>
+#include "X11/extensions/xfixesproto.h"
 
 typedef struct _XFixesExtDisplayInfo {
     struct _XFixesExtDisplayInfo  *next;    /* keep a linked list */

@@ -26,8 +26,8 @@ SOFTWARE.
 #ifndef _XawSmeThreeDP_h
 #define _XawSmeThreeDP_h
 
-#include <X11/Xaw3d/SmeThreeD.h>
-#include <X11/Xaw3d/SmeP.h>
+#include "X11/Xaw3d/SmeThreeD.h"
+#include "X11/Xaw3d/SmeP.h"
 
 typedef struct {
     Dimension	    shadow_width;

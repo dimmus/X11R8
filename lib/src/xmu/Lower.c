@@ -28,9 +28,9 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/keysymdef.h>
-#include <X11/Xmu/CharSet.h>
-#include <X11/Xmu/SysUtil.h>
+#include "X11/keysymdef.h"
+#include "X11/Xmu/CharSet.h"
+#include "X11/Xmu/SysUtil.h"
 
 #include <stdio.h>
 #include <stdarg.h>

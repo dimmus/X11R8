@@ -60,7 +60,7 @@ in this Software without prior written authorization from The Open Group.
 
 #include <stdio.h>
 #include "twm.h"
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 #include "util.h"
 #include "resize.h"
 #include "parse.h"

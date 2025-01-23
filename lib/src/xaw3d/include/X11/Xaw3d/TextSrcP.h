@@ -60,8 +60,8 @@ SOFTWARE.
  *
  ***********************************************************************/
 
-#include <X11/Xaw3d/TextSrc.h>
-#include <X11/Xaw3d/TextP.h>	/* This source works with the Text widget. */
+#include "X11/Xaw3d/TextSrc.h"
+#include "X11/Xaw3d/TextP.h"	/* This source works with the Text widget. */
 
 /************************************************************
  *

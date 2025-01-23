@@ -32,7 +32,7 @@
 #include <dix-config.h>
 #endif
 #include "uxa-priv.h"
-#include <X11/fonts/fontstruct.h>
+#include "X11/fonts/fontstruct.h"
 #include "dixfontstr.h"
 #include "uxa.h"
 

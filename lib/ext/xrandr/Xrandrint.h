@@ -25,13 +25,13 @@
 #ifndef _XRANDRINT_H_
 #define _XRANDRINT_H_
 
-#include <X11/Xlibint.h>
-#include <X11/Xutil.h>
-#include <X11/extensions/Xext.h>
-#include <X11/extensions/extutil.h>
+#include "X11/Xlibint.h"
+#include "X11/Xutil.h"
+#include "X11/extensions/Xext.h"
+#include "X11/extensions/extutil.h"
 #include "Xrandr.h"
-#include <X11/extensions/randr.h>
-#include <X11/extensions/randrproto.h>
+#include "X11/extensions/randr.h"
+#include "X11/extensions/randrproto.h"
 
 extern char XRRExtensionName[];
 

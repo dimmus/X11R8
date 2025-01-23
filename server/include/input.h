@@ -49,15 +49,15 @@ SOFTWARE.
 
 #include "misc.h"
 #include "screenint.h"
-#include <X11/Xmd.h>
-#include <X11/Xproto.h>
+#include "X11/Xmd.h"
+#include "X11/Xproto.h"
 #include <stdint.h>
 #include "window.h"             /* for WindowPtr */
 #include "xkbrules.h"
 #include "events.h"
 #include "list.h"
 #include "os.h"
-#include <X11/extensions/XI2.h>
+#include "X11/extensions/XI2.h"
 
 #define DEFAULT_KEYBOARD_CLICK 	0
 #define DEFAULT_BELL		50

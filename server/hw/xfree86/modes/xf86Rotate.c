@@ -28,9 +28,9 @@
 #include <stddef.h>
 #include <string.h>
 #include <stdio.h>
-#include <X11/Xatom.h>
-#include <X11/extensions/render.h>
-#include <X11/extensions/dpmsconst.h>
+#include "X11/Xatom.h"
+#include "X11/extensions/render.h"
+#include "X11/extensions/dpmsconst.h"
 
 #include "dix/dix_priv.h"
 

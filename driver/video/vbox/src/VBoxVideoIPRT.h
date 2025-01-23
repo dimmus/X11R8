@@ -57,7 +57,7 @@ RT_C_DECLS_END
 #endif  /* defined(IN_XF86_MODULE) && !defined(NO_ANSIC) */
 #define __STDC_LIMIT_MACROS  /* define *INT*_MAX on C++ too. */
 #include "compiler.h"  /* Can pull in <sdtint.h>.  Must come after xf86_ansic.h on XFree86. */
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 #include <stdint.h>
 #if defined(IN_XF86_MODULE) && !defined(NO_ANSIC)
 /* XFree86 did not have these.  Not that I care much for micro-optimisations

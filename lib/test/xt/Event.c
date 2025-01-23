@@ -21,7 +21,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include <X11/Intrinsic.h>
+#include "X11/Intrinsic.h"
 
 #include <unistd.h>
 #include <signal.h>

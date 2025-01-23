@@ -35,13 +35,13 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <X11/Xaw3d/Xaw3dP.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xos.h>
-#include <X11/Xmu/Converters.h>
-#include <X11/Xaw3d/TipP.h>
-#include <X11/Xaw3d/XawInit.h>
+#include "X11/Xaw3d/Xaw3dP.h"
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xos.h"
+#include "X11/Xmu/Converters.h"
+#include "X11/Xaw3d/TipP.h"
+#include "X11/Xaw3d/XawInit.h"
 
 #include <stdlib.h>
 

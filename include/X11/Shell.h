@@ -48,8 +48,8 @@ SOFTWARE.
 #ifndef _XtShell_h
 #define _XtShell_h
 
-#include <X11/SM/SMlib.h>
-#include <X11/Intrinsic.h>
+#include "X11/SM/SMlib.h"
+#include "X11/Intrinsic.h"
 
 /***********************************************************************
  *

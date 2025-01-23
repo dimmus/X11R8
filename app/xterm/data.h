@@ -117,8 +117,8 @@ extern SIG_ATOMIC_T need_cleanup;
 extern SIG_ATOMIC_T caught_intr;
 
 #if defined(HAVE_XKB_BELL_EXT)
-#include <X11/XKBlib.h>		/* has the prototype */
-#include <X11/extensions/XKBbells.h>	/* has the XkbBI_xxx definitions */
+#include "X11/XKBlib.h"		/* has the prototype */
+#include "X11/extensions/XKBbells.h"	/* has the XkbBI_xxx definitions */
 #endif
 
 #ifndef XkbBI_Info

@@ -50,13 +50,13 @@ SOFTWARE.
 #endif
 #include <stdio.h>
 #include <ctype.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xos.h>
-#include <X11/Xmu/Converters.h>
-#include <X11/Xmu/Drawing.h>
-#include <X11/Xaw/LabelP.h>
-#include <X11/Xaw/XawInit.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xos.h"
+#include "X11/Xmu/Converters.h"
+#include "X11/Xmu/Drawing.h"
+#include "X11/Xaw/LabelP.h"
+#include "X11/Xaw/XawInit.h"
 #include "Private.h"
 
 #define streq(a, b)		(strcmp((a), (b)) == 0)

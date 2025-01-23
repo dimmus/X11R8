@@ -39,12 +39,12 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <fontconfig/fontconfig.h>
-#include <X11/extensions/Xrender.h>
+#include "X11/extensions/Xrender.h"
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 #ifndef _XFT_NO_COMPAT_
-#include <X11/Xft/XftCompat.h>
+#include "X11/Xft/XftCompat.h"
 #endif
 
 #define XFT_CORE		"core"

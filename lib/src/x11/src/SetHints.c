@@ -50,11 +50,11 @@ SOFTWARE.
 #include <config.h>
 #endif
 #include <limits.h>
-#include <X11/Xlibint.h>
-#include <X11/Xutil.h>
+#include "X11/Xlibint.h"
+#include "X11/Xutil.h"
 #include "Xatomtype.h"
-#include <X11/Xatom.h>
-#include <X11/Xos.h>
+#include "X11/Xatom.h"
+#include "X11/Xos.h"
 #include "reallocarray.h"
 
 #define safestrlen(s) ((s) ? strlen(s) : 0)

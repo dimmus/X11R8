@@ -31,7 +31,7 @@
 #define _XawTipP_h
 
 #include "Xaw3dP.h"
-#include <X11/Xaw3d/Tip.h>
+#include "X11/Xaw3d/Tip.h"
 
 typedef struct {
     XtPointer extension;

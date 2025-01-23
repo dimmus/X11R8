@@ -40,8 +40,8 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _SmeBSB_h
 #define _SmeBSB_h
 
-#include <X11/Xmu/Converters.h>
-#include <X11/Xaw/Sme.h>
+#include "X11/Xmu/Converters.h"
+#include "X11/Xaw/Sme.h"
 
 /* BSB Menu Entry Resources:
 

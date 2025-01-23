@@ -42,8 +42,8 @@
 #include "hostx.h"
 
 #define X_INCLUDE_STRING_H
-#include <X11/Xos_r.h>
-#include <X11/keysym.h>
+#include "X11/Xos_r.h"
+#include "X11/keysym.h"
 #include "xcb/xcb.h"
 #include "xcb/xproto.h"
 #include "xcb/xcb_icccm.h"

@@ -28,9 +28,9 @@ in this Software without prior written authorization from The Open Group.
 #include <config.h>
 #endif
 #include <stdio.h>
-#include <X11/Intrinsic.h>
-#include <X11/Xmu/SysUtil.h>
-#include <X11/Xmu/Converters.h>
+#include "X11/Intrinsic.h"
+#include "X11/Xmu/SysUtil.h"
+#include "X11/Xmu/Converters.h"
 
 void
 XmuCvtStringToLong(XrmValuePtr args, Cardinal *num_args,

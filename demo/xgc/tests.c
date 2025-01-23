@@ -6,10 +6,10 @@
 #include "config.h"
 #endif
 
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
-#include <X11/Xaw/AsciiText.h>
-#include <X11/Xos.h>
+#include "X11/Intrinsic.h"
+#include "X11/StringDefs.h"
+#include "X11/Xaw/AsciiText.h"
+#include "X11/Xos.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

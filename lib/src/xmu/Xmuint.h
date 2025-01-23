@@ -29,7 +29,7 @@
 #include <config.h>
 #endif
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 #include <sys/types.h>
 
 #ifndef HAVE_REALLOCARRAY

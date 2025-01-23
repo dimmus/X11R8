@@ -57,7 +57,7 @@ in this Software without prior written authorization from The Open Group.
 
 #define xmalloc __XtMalloc
 #define xfree XtFree
-#include <X11/Xthreads.h>
+#include "X11/Xthreads.h"
 
 #ifndef NDEBUG
 #define NDEBUG

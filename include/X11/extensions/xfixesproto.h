@@ -46,9 +46,9 @@
 #ifndef _XFIXESPROTO_H_
 #define _XFIXESPROTO_H_
 
-#include <X11/Xmd.h>
-#include <X11/extensions/xfixeswire.h>
-#include <X11/extensions/shapeconst.h>
+#include "X11/Xmd.h"
+#include "X11/extensions/xfixeswire.h"
+#include "X11/extensions/shapeconst.h"
 
 #define Window CARD32
 #define Drawable CARD32

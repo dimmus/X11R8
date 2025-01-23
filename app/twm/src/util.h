@@ -104,7 +104,7 @@ extern int HotX, HotY;
 #define LOUD_BELL               100
 
 #ifdef XKB
-#include <X11/extensions/XKBbells.h>
+#include "X11/extensions/XKBbells.h"
 #else
 #define XkbBI_Info              0
 #define XkbBI_MinorError        1

@@ -35,9 +35,9 @@ in this Software without prior written authorization from the X Consortium.
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <X11/Intrinsic.h>
-#include <X11/Vendor.h>
-#include <X11/Xaw3d/XawInit.h>
+#include "X11/Intrinsic.h"
+#include "X11/Vendor.h"
+#include "X11/Xaw3d/XawInit.h"
 
 void XawInitializeWidgetSet (void)
 {

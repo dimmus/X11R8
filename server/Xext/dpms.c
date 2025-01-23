@@ -28,8 +28,8 @@ Equipment Corporation.
 
 #include <dix-config.h>
 
-#include <X11/X.h>
-#include <X11/Xproto.h>
+#include "X11/X.h"
+#include "X11/Xproto.h"
 
 #include "os/screensaver.h"
 
@@ -38,7 +38,7 @@ Equipment Corporation.
 #include "dixstruct.h"
 #include "extnsionst.h"
 #include "opaque.h"
-#include <X11/extensions/dpmsproto.h>
+#include "X11/extensions/dpmsproto.h"
 #include "dpmsproc.h"
 #include "extinit_priv.h"
 #include "scrnintstr.h"

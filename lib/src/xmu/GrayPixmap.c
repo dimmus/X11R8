@@ -52,8 +52,8 @@ SOFTWARE.
 #include <config.h>
 #endif
 #include <stdio.h>
-#include <X11/Intrinsic.h>
-#include <X11/Xmu/Drawing.h>
+#include "X11/Intrinsic.h"
+#include "X11/Xmu/Drawing.h"
 
 typedef struct _PixmapCache {
     Screen *screen;

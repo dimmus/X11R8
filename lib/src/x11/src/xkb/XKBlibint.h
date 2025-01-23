@@ -27,8 +27,8 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef _XKBLIBINT_H_
 #define _XKBLIBINT_H_
 
-#include <X11/Xutil.h>
-#include <X11/XKBlib.h>
+#include "X11/Xutil.h"
+#include "X11/XKBlib.h"
 #include "reallocarray.h"
 
 #define XkbMapPending           (1<<0)

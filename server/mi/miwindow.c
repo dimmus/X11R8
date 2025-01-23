@@ -46,8 +46,8 @@ SOFTWARE.
 ******************************************************************/
 #include <dix-config.h>
 
-#include <X11/X.h>
-#include <X11/extensions/shapeconst.h>
+#include "X11/X.h"
+#include "X11/extensions/shapeconst.h"
 
 #include "dix/cursor_priv.h"
 #include "dix/input_priv.h"

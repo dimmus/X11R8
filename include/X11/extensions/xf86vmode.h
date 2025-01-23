@@ -33,9 +33,9 @@ from Kaleb S. KEITHLEY
 #ifndef _XF86VIDMODE_H_
 #define _XF86VIDMODE_H_
 
-#include <X11/Xfuncproto.h>
-#include <X11/Xmd.h>
-#include <X11/extensions/xf86vm.h>
+#include "X11/Xfuncproto.h"
+#include "X11/Xmd.h"
+#include "X11/extensions/xf86vm.h"
 
 #define CLKFLAG_PROGRAMABLE		1
 

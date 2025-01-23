@@ -15,8 +15,8 @@ is" without express or implied warranty.
 #ifndef XNESTSCREEN_H
 #define XNESTSCREEN_H
 
-#include <X11/X.h>
-#include <X11/Xdefs.h>
+#include "X11/X.h"
+#include "X11/Xdefs.h"
 
 extern Window xnestDefaultWindows[MAXSCREENS];
 extern Window xnestScreenSaverWindows[MAXSCREENS];

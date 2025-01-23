@@ -46,12 +46,12 @@ SOFTWARE.
 
 #ifndef MI_H
 #define MI_H
-#include <X11/X.h>
+#include "X11/X.h"
 #include "region.h"
 #include "validate.h"
 #include "window.h"
 #include "gc.h"
-#include <X11/fonts/font.h>
+#include "X11/fonts/font.h"
 #include "input.h"
 #include "cursor.h"
 #include "privates.h"

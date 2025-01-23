@@ -27,10 +27,10 @@
 #if defined(LAYOUT)
 # include "Layout.h"
 #else
-# include <X11/Xaw3d/Layout.h>
+# include "X11/Xaw3d/Layout.h"
 #endif
 
-#include <X11/ConstrainP.h>
+#include "X11/ConstrainP.h"
 
 #ifdef MOTIF
 # include "Xm/ManagerP.h"

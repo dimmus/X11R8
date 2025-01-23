@@ -30,7 +30,7 @@ from the X Consortium.
 
 #include "config.h"
 
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 #include <sys/types.h>
 #include <errno.h>
 #include <stdlib.h>

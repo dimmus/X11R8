@@ -36,8 +36,8 @@ from The Open Group.
 #include "libxfontint.h"
 #include "util/replace.h"
 #include    "fontmisc.h"
-#include    <X11/fonts/fontstruct.h>
-#include    <X11/fonts/FSproto.h>
+#include    "X11/fonts/fontstruct.h"
+#include    "X11/fonts/FSproto.h"
 #include    "fontutil.h"
 
 /* Define global here...  doesn't hurt the servers, and avoids

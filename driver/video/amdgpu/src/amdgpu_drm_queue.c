@@ -33,7 +33,7 @@
 #include <errno.h>
 
 #include <xorg-server.h>
-#include <X11/Xdefs.h>
+#include "X11/Xdefs.h"
 #include <list.h>
 
 #include "amdgpu_drv.h"

@@ -1,7 +1,7 @@
 #ifndef _FONTUTIL_H_
 #define _FONTUTIL_H_
 
-#include <X11/fonts/FSproto.h>
+#include "X11/fonts/FSproto.h"
 
 #if 0
 extern int FontCouldBeTerminal(FontInfoPtr);

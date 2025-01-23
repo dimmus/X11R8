@@ -35,7 +35,7 @@ THE SOFTWARE.
 #define MAXFONTNAMELEN 1024
 #define MAXFONTFILENAMELEN 1024
 
-#include <X11/fonts/fontenc.h>
+#include "X11/fonts/fontenc.h"
 #include "fontencI.h"
 #include "reallocarray.h"
 

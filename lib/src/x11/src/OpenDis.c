@@ -29,8 +29,8 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #include "Xlibint.h"
 #include "Xxcbint.h"
-#include <X11/Xatom.h>
-#include <X11/Xresource.h>
+#include "X11/Xatom.h"
+#include "X11/Xresource.h"
 #include <stdio.h>
 #include "Xintconn.h"
 

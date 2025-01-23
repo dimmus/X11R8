@@ -27,8 +27,8 @@ from The Open Group.
 #ifndef _XAG_H_
 #define _XAG_H_
 
-#include <X11/extensions/ag.h>
-#include <X11/Xfuncproto.h>
+#include "X11/extensions/ag.h"
+#include "X11/Xfuncproto.h"
 
 #include <stdarg.h>
 

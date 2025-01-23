@@ -48,8 +48,8 @@ SOFTWARE.
 #ifndef _XawStripChartP_h
 #define _XawStripChartP_h
 
-#include <X11/Xaw/StripChart.h>
-#include <X11/Xaw/SimpleP.h>
+#include "X11/Xaw/StripChart.h"
+#include "X11/Xaw/SimpleP.h"
 
 #define NO_GCS 0
 #define FOREGROUND	(1 << 0)

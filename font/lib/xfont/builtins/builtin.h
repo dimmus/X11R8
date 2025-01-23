@@ -22,8 +22,8 @@
  * Author:  Keith Packard, SuSE, Inc.
  */
 
-#include <X11/Xdefs.h>
-#include <X11/fonts/font.h>
+#include "X11/Xdefs.h"
+#include "X11/fonts/font.h"
 #include "fontxlfd.h"
 #include "fntfil.h"
 #include "fntfilio.h"

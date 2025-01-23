@@ -25,7 +25,7 @@
 #include "swaprep.h"
 #include "mipointer.h"
 
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 
 RESTYPE RRCrtcType = 0;
 

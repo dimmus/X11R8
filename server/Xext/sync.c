@@ -53,10 +53,10 @@ PERFORMANCE OF THIS SOFTWARE.
 
 #include <string.h>
 #include <stdio.h>
-#include <X11/X.h>
-#include <X11/Xproto.h>
-#include <X11/Xmd.h>
-#include <X11/extensions/syncproto.h>
+#include "X11/X.h"
+#include "X11/Xproto.h"
+#include "X11/Xmd.h"
+#include "X11/extensions/syncproto.h"
 
 #include "dix/dix_priv.h"
 #include "os/osdep.h"

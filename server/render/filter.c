@@ -23,7 +23,7 @@
 #include <dix-config.h>
 
 #define  XK_LATIN1
-#include <X11/keysymdef.h>
+#include "X11/keysymdef.h"
 
 #include "misc.h"
 #include "scrnintstr.h"

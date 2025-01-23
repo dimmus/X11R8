@@ -45,7 +45,7 @@ in this Software without prior written authorization from the X Consortium.
 #ifndef _XawMenuButton_h
 #define _XawMenuButton_h
 
-#include <X11/Xaw3d/Command.h>
+#include "X11/Xaw3d/Command.h"
 
 /* Resources:
 

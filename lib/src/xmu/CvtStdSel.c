@@ -36,28 +36,28 @@ in this Software without prior written authorization from The Open Group.
 #include <config.h>
 #endif
 
-#include <X11/IntrinsicP.h>
-#include <X11/Xatom.h>
-#include <X11/ShellP.h>
+#include "X11/IntrinsicP.h"
+#include "X11/Xatom.h"
+#include "X11/ShellP.h"
 #ifdef XTHREADS
-#include <X11/Xthreads.h>
+#include "X11/Xthreads.h"
 #endif
 #include <stdio.h>
 
 #ifdef WIN32
-#include <X11/Xwinsock.h>
+#include "X11/Xwinsock.h"
 #else
 #include <sys/socket.h>
 #define XOS_USE_XT_LOCKING
 #endif
-#include <X11/Xos_r.h>
+#include "X11/Xos_r.h"
 
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 #include <stdlib.h>
 #include "Atoms.h"
 #include "StdSel.h"
 #include "SysUtil.h"
-#include <X11/Xfuncs.h>
+#include "X11/Xfuncs.h"
 
 #ifndef OS_NAME
 # ifndef X_OS_FILE

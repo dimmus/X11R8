@@ -42,9 +42,9 @@
 
 #include <dix-config.h>
 
-#include <X11/X.h>
-#include <X11/Xmd.h>
-#include <X11/Xproto.h>
+#include "X11/X.h"
+#include "X11/Xmd.h"
+#include "X11/Xproto.h"
 #include "misc.h"
 #include "windowstr.h"
 #include "pixmapstr.h"
@@ -72,7 +72,7 @@
 
 #include <IOKit/hidsystem/IOLLEvent.h>
 
-#include <X11/extensions/applewmconst.h>
+#include "X11/extensions/applewmconst.h"
 #include "applewmExt.h"
 
 /* FIXME: Abstract this better */

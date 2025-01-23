@@ -31,9 +31,9 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/SM/SMlib.h>
+#include "X11/SM/SMlib.h"
 #include "SMlibint.h"
-#include <X11/Xtrans/Xtrans.h>
+#include "X11/Xtrans/Xtrans.h"
 
 static Status
 _SmsProtocolSetupProc (IceConn    iceConn,

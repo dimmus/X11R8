@@ -25,7 +25,7 @@
 #include <config.h>
 #endif
 #include "xdamageint.h"
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 XDamageExtInfo XDamageExtensionInfo;
 

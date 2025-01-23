@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
-#include <X11/Xaw/Form.h>
-#include <X11/Xaw/Command.h>
-#include <X11/Xaw/Scrollbar.h>
+#include "X11/Intrinsic.h"
+#include "X11/StringDefs.h"
+#include "X11/Xaw/Form.h"
+#include "X11/Xaw/Command.h"
+#include "X11/Xaw/Scrollbar.h"
 
 
 static XtAppContext app_context;

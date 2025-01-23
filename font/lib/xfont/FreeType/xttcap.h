@@ -34,7 +34,7 @@ Notice===
 #ifndef _XTTCAP_H_
 #define _XTTCAP_H_ (1)
 
-#include <X11/Xdefs.h>
+#include "X11/Xdefs.h"
 
 /*******************************************************************
   Data Types

@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <X11/Xutil.h> /* for XDestroyImage */
+#include "X11/Xutil.h" /* for XDestroyImage */
 
 #include "test.h"
 

@@ -25,7 +25,7 @@
 
 #ifdef DRI3
 
-#include <X11/extensions/dri3proto.h>
+#include "X11/extensions/dri3proto.h"
 #include <randrstr.h>
 
 #define DRI3_SCREEN_INFO_VERSION        4

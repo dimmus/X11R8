@@ -27,8 +27,8 @@ from The Open Group.
 #ifndef _SECURPROTO_H
 #define _SECURPROTO_H
 
-#include <X11/Xmd.h>
-#include <X11/extensions/secur.h>
+#include "X11/Xmd.h"
+#include "X11/extensions/secur.h"
 
 #define X_SecurityQueryVersion		0
 #define X_SecurityGenerateAuthorization 1

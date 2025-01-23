@@ -24,7 +24,7 @@
 #include <dix-config.h>
 
 #include "fb.h"
-#include	<X11/fonts/fontstruct.h>
+#include	"X11/fonts/fontstruct.h"
 #include	"dixfontstr.h"
 
 static Bool

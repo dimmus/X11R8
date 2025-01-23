@@ -46,7 +46,7 @@ in this Software without prior written authorization from the X Consortium.
  ***********************************************************************/
 
 #include "Xaw3dP.h"
-#include <X11/Xaw3d/Sme.h>
+#include "X11/Xaw3d/Sme.h"
 
 /************************************************************
  *

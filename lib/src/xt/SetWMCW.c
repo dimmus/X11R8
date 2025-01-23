@@ -58,7 +58,7 @@ in this Software without prior written authorization from The Open Group.
 #include <config.h>
 #endif
 #include "IntrinsicI.h"
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 
 /*      Function Name: XtSetWMColormapWindows
  *

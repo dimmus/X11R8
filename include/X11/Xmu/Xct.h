@@ -27,7 +27,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _Xct_h
 #define _Xct_h
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 #define XctVersion 1
 

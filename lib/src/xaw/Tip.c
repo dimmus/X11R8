@@ -30,12 +30,12 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xos.h>
-#include <X11/Xaw/TipP.h>
-#include <X11/Xaw/XawInit.h>
-#include <X11/Xmu/Converters.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xos.h"
+#include "X11/Xaw/TipP.h"
+#include "X11/Xaw/XawInit.h"
+#include "X11/Xmu/Converters.h"
 #include "Private.h"
 
 #define	TIP_EVENT_MASK (ButtonPressMask	  |	\

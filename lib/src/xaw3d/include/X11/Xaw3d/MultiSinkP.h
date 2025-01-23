@@ -85,8 +85,8 @@ SOFTWARE.
  *
  ***********************************************************************/
 
-#include <X11/Xaw3d/TextSinkP.h>
-#include <X11/Xaw3d/MultiSink.h>
+#include "X11/Xaw3d/TextSinkP.h"
+#include "X11/Xaw3d/MultiSink.h"
 
 /************************************************************
  *

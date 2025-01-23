@@ -51,7 +51,7 @@ PERFORMANCE OF THIS SOFTWARE.
 #ifndef _SYNCPROTO_H_
 #define _SYNCPROTO_H_
 
-#include <X11/extensions/syncconst.h>
+#include "X11/extensions/syncconst.h"
 
 #define X_SyncInitialize		0
 #define X_SyncListSystemCounters	1

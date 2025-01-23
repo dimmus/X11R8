@@ -85,8 +85,8 @@ OR PERFORMANCE OF THIS SOFTWARE.
 #include <stdlib.h>             /* for malloc() */
 #include <sys/stat.h>
 #include <time.h>
-#include <X11/Xfuncproto.h>
-#include <X11/Xos.h>
+#include "X11/Xfuncproto.h"
+#include "X11/Xos.h"
 
 #include "dix/dix_priv.h"
 #include "dix/input_priv.h"

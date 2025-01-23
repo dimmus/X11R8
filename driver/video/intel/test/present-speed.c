@@ -26,17 +26,17 @@
 #include "config.h"
 #endif
 
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <X11/Xlib-xcb.h>
-#include <X11/xshmfence.h>
-#include <X11/Xutil.h>
-#include <X11/Xlibint.h>
-#include <X11/extensions/Xcomposite.h>
-#include <X11/extensions/Xdamage.h>
-#include <X11/extensions/dpms.h>
-#include <X11/extensions/randr.h>
-#include <X11/extensions/Xrandr.h>
+#include "X11/Xlib.h"
+#include "X11/Xatom.h"
+#include "X11/Xlib-xcb.h"
+#include "X11/xshmfence.h"
+#include "X11/Xutil.h"
+#include "X11/Xlibint.h"
+#include "X11/extensions/Xcomposite.h"
+#include "X11/extensions/Xdamage.h"
+#include "X11/extensions/dpms.h"
+#include "X11/extensions/randr.h"
+#include "X11/extensions/Xrandr.h"
 #include <xcb/xcb.h>
 #include <xcb/present.h>
 #include <xcb/dri3.h>

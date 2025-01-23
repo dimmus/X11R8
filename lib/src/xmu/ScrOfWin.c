@@ -32,8 +32,8 @@ in this Software without prior written authorization from The Open Group.
 #include <config.h>
 #endif
 #include <stdio.h>
-#include <X11/Xlib.h>
-#include <X11/Xmu/WinUtil.h>
+#include "X11/Xlib.h"
+#include "X11/Xmu/WinUtil.h"
 
 Screen *
 XmuScreenOfWindow(Display *dpy, Window w)

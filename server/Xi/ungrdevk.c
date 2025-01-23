@@ -52,8 +52,8 @@ SOFTWARE.
 
 #include <dix-config.h>
 
-#include <X11/extensions/XI.h>
-#include <X11/extensions/XIproto.h>
+#include "X11/extensions/XI.h"
+#include "X11/extensions/XIproto.h"
 
 #include "dix/dix_priv.h"
 #include "dix/dixgrabs_priv.h"

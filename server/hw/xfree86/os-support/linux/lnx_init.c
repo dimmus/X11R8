@@ -28,8 +28,8 @@
 #endif
 
 #include <errno.h>
-#include <X11/X.h>
-#include <X11/Xmd.h>
+#include "X11/X.h"
+#include "X11/Xmd.h"
 
 #include "os/cmdline.h"
 #include "os/osdep.h"

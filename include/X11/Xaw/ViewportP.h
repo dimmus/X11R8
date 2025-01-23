@@ -52,8 +52,8 @@ SOFTWARE.
 #ifndef _ViewportP_h
 #define _ViewportP_h
 
-#include <X11/Xaw/Viewport.h>
-#include <X11/Xaw/FormP.h>
+#include "X11/Xaw/Viewport.h"
+#include "X11/Xaw/FormP.h"
 
 typedef struct {
     XtPointer extension;

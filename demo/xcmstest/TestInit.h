@@ -11,7 +11,7 @@
 #endif
 #endif
 #ifndef _X11_XLIB
-#include <X11/Xlib.h>
+#include "X11/Xlib.h"
 #ifndef _X11_XLIB
 #define _X11_XLIB
 #endif

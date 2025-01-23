@@ -50,7 +50,7 @@ in this Software without prior written authorization from The Open Group.
 
 #include	"config.h"
 
-#include	<X11/Xos.h>	/* strings, time, etc */
+#include	"X11/Xos.h"	/* strings, time, etc */
 
 #include	<stdio.h>
 #include	<errno.h>

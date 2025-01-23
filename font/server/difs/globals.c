@@ -50,7 +50,7 @@ in this Software without prior written authorization from The Open Group.
 
 #include	"config.h"
 
-#include	<X11/fonts/FSproto.h>
+#include	"X11/fonts/FSproto.h"
 #include	"clientstr.h"
 #include	"misc.h"
 #include	"site.h"

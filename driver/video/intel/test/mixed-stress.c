@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <X11/Xutil.h> /* for XDestroyImage */
+#include "X11/Xutil.h" /* for XDestroyImage */
 #include <pixman.h>
 
 #include "test.h"

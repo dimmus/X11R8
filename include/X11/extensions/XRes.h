@@ -5,7 +5,7 @@
 #ifndef _XRES_H
 #define _XRES_H
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 /* v1.0 */
 

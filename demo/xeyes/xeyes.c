@@ -30,9 +30,9 @@ from the X Consortium.
 */
 /* $XFree86: xc/programs/xeyes/xeyes.c,v 1.3 2000/02/17 14:00:35 dawes Exp $ */
 
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
-#include <X11/Shell.h>
+#include "X11/Intrinsic.h"
+#include "X11/StringDefs.h"
+#include "X11/Shell.h"
 #include "Eyes.h"
 #include <stdio.h> 
 #include <stdlib.h> 

@@ -29,8 +29,8 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XMITMISC_H_
 #define _XMITMISC_H_
 
-#include <X11/Xfuncproto.h>
-#include <X11/extensions/mitmiscconst.h>
+#include "X11/Xfuncproto.h"
+#include "X11/extensions/mitmiscconst.h"
 
 _XFUNCPROTOBEGIN
 

@@ -34,7 +34,7 @@
 #include <xstrings.h>
 #include <fontutils.h>
 
-#include <X11/Xmu/Drawing.h>
+#include "X11/Xmu/Drawing.h"
 
 /*
  * hide (or eliminate) calls to

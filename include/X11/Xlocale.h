@@ -29,8 +29,8 @@ from The Open Group.
 #ifndef _X11_XLOCALE_H_
 #define _X11_XLOCALE_H_
 
-#include <X11/Xfuncproto.h>
-#include <X11/Xosdefs.h>
+#include "X11/Xfuncproto.h"
+#include "X11/Xosdefs.h"
 
 #include <locale.h>
 

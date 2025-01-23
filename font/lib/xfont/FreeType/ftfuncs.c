@@ -44,7 +44,7 @@ THE SOFTWARE.
 
 #include "fntfilst.h"
 #include "fontutil.h"
-#include <X11/fonts/FSproto.h>
+#include "X11/fonts/FSproto.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -64,7 +64,7 @@ THE SOFTWARE.
 #include FT_OUTLINE_H
 #endif
 
-#include <X11/fonts/fontenc.h>
+#include "X11/fonts/fontenc.h"
 #include "ft.h"
 #include "ftfuncs.h"
 #include "xttcap.h"

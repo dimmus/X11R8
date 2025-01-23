@@ -77,26 +77,26 @@ SOFTWARE.
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 
-#include <X11/XlibConf.h>
+#include "X11/XlibConf.h"
 #ifdef XTHREADS
 # define MULTITHREAD
 #endif
 #endif /* HAVE_CONFIG_H / autoconf */
 
 #include <math.h>
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <X11/Xutil.h>
-#include <X11/Xfuncs.h>
-#include <X11/keysym.h>
+#include "X11/Xlib.h"
+#include "X11/Xatom.h"
+#include "X11/Xutil.h"
+#include "X11/Xfuncs.h"
+#include "X11/keysym.h"
 #include <stdio.h>
 #ifdef MULTIBUFFER
-#include <X11/extensions/multibuf.h>
+#include "X11/extensions/multibuf.h"
 #endif /* MULTIBUFFER */
 #ifdef MULTITHREAD
-#include <X11/Xthreads.h>
+#include "X11/Xthreads.h"
 #endif
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 
 #define MIN_ICO_WIDTH 5
 #define MIN_ICO_HEIGHT 5

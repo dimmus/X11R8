@@ -28,8 +28,8 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XawPorthole_h
 #define _XawPorthole_h
 
-#include <X11/Intrinsic.h>
-#include <X11/Xaw/Reports.h>
+#include "X11/Intrinsic.h"
+#include "X11/Xaw/Reports.h"
 
 /*****************************************************************************
  *

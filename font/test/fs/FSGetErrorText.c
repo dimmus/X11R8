@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <X11/fonts/FSlib.h>
+#include "X11/fonts/FSlib.h"
 
 static int
 CheckErrorMessage(FSServer *srv, int code, const char *codestr)

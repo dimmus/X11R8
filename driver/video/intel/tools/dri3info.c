@@ -23,8 +23,8 @@
  * To compile standalone: gcc -o dri3info dri3info.c `pkg-config --cflags --libs xcb-dri3 x11-xcb xrandr xxf86vm libdrm`
  */
 
-#include <X11/Xlib.h>
-#include <X11/Xlib-xcb.h>
+#include "X11/Xlib.h"
+#include "X11/Xlib-xcb.h"
 #include <xcb/xcb.h>
 #include <xcb/dri3.h>
 #include <unistd.h>
@@ -36,8 +36,8 @@
 #include <drm.h>
 #include <xf86drm.h>
 
-#include <X11/extensions/Xrandr.h>
-#include <X11/extensions/xf86vmode.h>
+#include "X11/extensions/Xrandr.h"
+#include "X11/extensions/xf86vmode.h"
 
 static int dri3_query_version(Display *dpy, int *major, int *minor)
 {

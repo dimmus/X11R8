@@ -26,7 +26,7 @@
 #include <config.h>
 #endif
 
-#include <X11/Xmu/EditresP.h>
+#include "X11/Xmu/EditresP.h"
 #include <assert.h>
 #include <string.h>
 

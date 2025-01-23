@@ -35,7 +35,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <X11/X.h>
+#include "X11/X.h"
 #include <pciaccess.h>
 #include "os.h"
 #include "Pci.h"

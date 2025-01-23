@@ -5,7 +5,7 @@
 
 #ifndef _XIINT_H_
 #define _XIINT_H_
-#include <X11/extensions/XI.h>
+#include "X11/extensions/XI.h"
 
 /* inputproto 2.0 still shipped with these defined in the proto headers */
 #ifndef XInput_Initial_Release

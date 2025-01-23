@@ -197,8 +197,8 @@ typedef FdSet FdSetPtr;
 
 #else /* not WIN32 */
 
-# include <X11/Xwinsock.h>
-# include <X11/Xw32defs.h>
+# include "X11/Xwinsock.h"
+# include "X11/Xw32defs.h"
 
 typedef fd_set FdSet;
 typedef FdSet *FdSetPtr;

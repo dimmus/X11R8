@@ -34,12 +34,12 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-#include <X11/Xproto.h>
-#include <X11/Xlib.h>
-#include <X11/Xos.h>
-#include <X11/Xfuncs.h>
-#include <X11/XKBlib.h>
-#include <X11/extensions/XKBfile.h>
+#include "X11/Xproto.h"
+#include "X11/Xlib.h"
+#include "X11/Xos.h"
+#include "X11/Xfuncs.h"
+#include "X11/XKBlib.h"
+#include "X11/extensions/XKBfile.h"
 
 const char *_XkbErrMessages[] = {
     "success",                                  /* _XkbSuccess               */

@@ -61,7 +61,7 @@ SOFTWARE.
  ***********************************************************************/
 
 #include "ULabel.h"
-#include <X11/Xaw/SimpleP.h>
+#include "X11/Xaw/SimpleP.h"
 
 /* New fields for the UCSLabel widget class record */
 

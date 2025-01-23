@@ -27,7 +27,7 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Intrinsic.h>
+#include "X11/Intrinsic.h"
 #include "Converters.h"
 #include "CharSet.h"
 

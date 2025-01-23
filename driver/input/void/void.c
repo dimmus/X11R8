@@ -38,12 +38,12 @@
 #include <xf86_OSproc.h>
 #include <xf86Xinput.h>
 #include <exevents.h>		/* Needed for InitValuator/Proximity stuff */
-#include <X11/keysym.h>
+#include "X11/keysym.h"
 #include <mipointer.h>
 
 #include <xf86Module.h>
 
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 #include <xserver-properties.h>
 
 #define MAXBUTTONS 3

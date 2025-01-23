@@ -30,13 +30,13 @@ SOFTWARE.
 #include <stdint.h>
 
 #ifndef VMS
-#include <X11/Xatom.h>
-#include <X11/Xos.h>
+#include "X11/Xatom.h"
+#include "X11/Xos.h"
 #else
 #include <decw$include/Xatom.h>
 #endif
 #include "x11perf.h"
-#include <X11/Xmu/SysUtil.h>
+#include "X11/Xmu/SysUtil.h"
 
 #include <time.h>
 #define Time_t time_t

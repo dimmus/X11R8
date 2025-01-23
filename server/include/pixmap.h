@@ -50,7 +50,7 @@ SOFTWARE.
 #include "misc.h"
 #include "screenint.h"
 #include "regionstr.h"
-#include <X11/extensions/randr.h>
+#include "X11/extensions/randr.h"
 /* types for Drawable */
 #define DRAWABLE_WINDOW 0
 #define DRAWABLE_PIXMAP 1

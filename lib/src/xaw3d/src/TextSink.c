@@ -41,11 +41,11 @@ in this Software without prior written authorization from the X Consortium.
 #endif
 #include <stdio.h>
 #include <ctype.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xaw3d/XawInit.h>
-#include <X11/Xaw3d/TextSinkP.h>
-#include <X11/Xaw3d/TextP.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xaw3d/XawInit.h"
+#include "X11/Xaw3d/TextSinkP.h"
+#include "X11/Xaw3d/TextP.h"
 
 /****************************************************************
  *

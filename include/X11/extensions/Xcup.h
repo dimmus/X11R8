@@ -27,8 +27,8 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XCUP_H_
 #define _XCUP_H_
 
-#include <X11/Xfuncproto.h>
-#include <X11/extensions/cup.h>
+#include "X11/Xfuncproto.h"
+#include "X11/extensions/cup.h"
 
 _XFUNCPROTOBEGIN
 

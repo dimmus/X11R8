@@ -39,8 +39,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endif
 
 #include <string.h>
-#include <X11/X.h>
-#include <X11/Xproto.h>
+#include "X11/X.h"
+#include "X11/Xproto.h"
 
 #include "dix/dix_priv.h"
 
@@ -54,7 +54,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "scrnintstr.h"
 #include "servermd.h"
 #define _XF86DRI_SERVER_
-#include <X11/dri/xf86driproto.h>
+#include "X11/dri/xf86driproto.h"
 #include "swaprep.h"
 #include "xf86str.h"
 #include "dri.h"

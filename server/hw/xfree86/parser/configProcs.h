@@ -29,7 +29,7 @@
 
 /* exported functions are/were used by the X Server */
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 /* Device.c */
 XF86ConfDevicePtr xf86parseDeviceSection(void);

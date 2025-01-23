@@ -26,7 +26,7 @@
 #include <config.h>
 #endif
 
-#include <X11/xpm.h>
+#include "X11/xpm.h"
 #include <assert.h>
 #include <string.h>
 

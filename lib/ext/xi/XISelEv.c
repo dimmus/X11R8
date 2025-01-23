@@ -35,12 +35,12 @@ in this Software without prior written authorization from the author.
 #endif
 
 #include <stdint.h>
-#include <X11/Xlibint.h>
-#include <X11/extensions/XI2proto.h>
-#include <X11/extensions/XInput2.h>
-#include <X11/extensions/extutil.h>
-#include <X11/extensions/ge.h>
-#include <X11/extensions/geproto.h>
+#include "X11/Xlibint.h"
+#include "X11/extensions/XI2proto.h"
+#include "X11/extensions/XInput2.h"
+#include "X11/extensions/extutil.h"
+#include "X11/extensions/ge.h"
+#include "X11/extensions/geproto.h"
 #include "XIint.h"
 #include <limits.h>
 

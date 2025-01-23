@@ -52,10 +52,10 @@ SOFTWARE.
 #include "colormap.h"
 #include "cursor.h"
 #include "validate.h"
-#include <X11/Xproto.h>
+#include "X11/Xproto.h"
 #include "dix.h"
 #include "privates.h"
-#include <X11/extensions/randr.h>
+#include "X11/extensions/randr.h"
 
 typedef struct _PixmapFormat {
     unsigned char depth;

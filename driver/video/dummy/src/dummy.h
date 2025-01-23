@@ -7,7 +7,7 @@
 
 #ifdef XvExtension
 #include "xf86xv.h"
-#include <X11/extensions/Xv.h>
+#include "X11/extensions/Xv.h"
 #endif
 #include <string.h>
 

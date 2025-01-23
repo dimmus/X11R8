@@ -59,10 +59,10 @@ University of California.
 #include <config.h>
 #endif
 #include <stdio.h>
-#include <X11/Xproto.h>
-#include <X11/Xlibint.h>
-#include <X11/extensions/xtestext1.h>
-#include <X11/extensions/xtestext1proto.h>
+#include "X11/Xproto.h"
+#include "X11/Xlibint.h"
+#include "X11/extensions/xtestext1.h"
+#include "X11/extensions/xtestext1proto.h"
 
 /******************************************************************************
  * variables

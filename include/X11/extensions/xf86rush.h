@@ -8,8 +8,8 @@ Copyright (c) 1998  Daryll Strauss
 #ifndef _XF86RUSH_H_
 #define _XF86RUSH_H_
 
-#include <X11/extensions/Xv.h>
-#include <X11/Xfuncproto.h>
+#include "X11/extensions/Xv.h"
+#include "X11/Xfuncproto.h"
 
 #define X_XF86RushQueryVersion		0
 #define X_XF86RushLockPixmap		1

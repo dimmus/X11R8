@@ -21,7 +21,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include <X11/xpm.h>
+#include "X11/xpm.h"
 
 #include "TestAllFiles.h"
 

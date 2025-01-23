@@ -32,8 +32,8 @@
 #include <cairo.h>
 #include <cairo-xlib.h>
 #include <cairo-xlib-xrender.h>
-#include <X11/Xlib.h>
-#include <X11/extensions/Xrender.h>
+#include "X11/Xlib.h"
+#include "X11/extensions/Xrender.h"
 
 #include <string.h>
 

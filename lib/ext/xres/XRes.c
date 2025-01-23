@@ -6,12 +6,12 @@
 #include <config.h>
 #endif
 #include <stdlib.h>
-#include <X11/Xlibint.h>
-#include <X11/Xutil.h>
-#include <X11/extensions/Xext.h>
-#include <X11/extensions/extutil.h>
-#include <X11/extensions/XResproto.h>
-#include <X11/extensions/XRes.h>
+#include "X11/Xlibint.h"
+#include "X11/Xutil.h"
+#include "X11/extensions/Xext.h"
+#include "X11/extensions/extutil.h"
+#include "X11/extensions/XResproto.h"
+#include "X11/extensions/XRes.h"
 #include <assert.h>
 #include <limits.h>
 

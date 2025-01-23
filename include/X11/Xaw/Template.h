@@ -27,7 +27,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _Template_h
 #define _Template_h
 
-#include <X11/Intrinsic.h>
+#include "X11/Intrinsic.h"
 
 /****************************************************************
  *
@@ -52,7 +52,7 @@ in this Software without prior written authorization from The Open Group.
 
 */
 
-/* define any special resource names here that are not in <X11/StringDefs.h> */
+/* define any special resource names here that are not in "X11/StringDefs.h" */
 #define XtNtemplateResource "templateResource"
 
 #define XtCTemplateResource "TemplateResource"

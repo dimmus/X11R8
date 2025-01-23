@@ -54,11 +54,11 @@ from The Open Group.
 #endif
 #include <stdio.h>
 #include <assert.h>
-#include <X11/Xlibint.h>
-#include <X11/extensions/Xext.h>
-#include <X11/extensions/extutil.h>
-#include <X11/extensions/recordproto.h>
-#include <X11/extensions/record.h>
+#include "X11/Xlibint.h"
+#include "X11/extensions/Xext.h"
+#include "X11/extensions/extutil.h"
+#include "X11/extensions/recordproto.h"
+#include "X11/extensions/record.h"
 #include <limits.h>
 
 static XExtensionInfo _xrecord_info_data;

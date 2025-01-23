@@ -4,8 +4,8 @@
 
 #include "vl_hwmc.h"
 #include <os.h>
-#include <X11/extensions/Xv.h>
-#include <X11/extensions/XvMC.h>
+#include "X11/extensions/Xv.h"
+#include "X11/extensions/XvMC.h"
 #include <xf86.h>
 #include <fourcc.h>
 

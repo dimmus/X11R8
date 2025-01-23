@@ -38,7 +38,7 @@
 #include <OpenGL/OpenGL.h>
 #include <OpenGL/gl.h>     /* Just to prevent glxserver.h from loading mesa's and colliding with OpenGL.h */
 
-#include <X11/Xproto.h>
+#include "X11/Xproto.h"
 #include <GL/glxproto.h>
 
 #include <glxserver.h>

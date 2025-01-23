@@ -42,7 +42,7 @@ SOFTWARE.
  *      routines sorted by module (globally defined routines *only*).
  */
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 #include <stdio.h>
 

@@ -37,7 +37,7 @@ from The Open Group.
  * Send bugs, etc. to chariot@athena.mit.edu.
  */
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
     /* Simple helper macros */
 #ifndef MAX

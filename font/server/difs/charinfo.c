@@ -51,13 +51,13 @@ in this Software without prior written authorization from The Open Group.
 
 #include "config.h"
 
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 #include "misc.h"
-#include <X11/fonts/fontstruct.h>
+#include "X11/fonts/fontstruct.h"
 
 #include "clientstr.h"
 #define FSMD_H
-#include <X11/fonts/FSproto.h>
+#include "X11/fonts/FSproto.h"
 #include "difs.h"
 
 #define GLWIDTHBYTESPADDED(bits,nbytes) \

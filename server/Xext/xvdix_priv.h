@@ -4,7 +4,7 @@
  */
 #ifndef _XORG_XVDIX_PRIV_H
 
-#include <X11/Xdefs.h>
+#include "X11/Xdefs.h"
 
 #include "include/pixmap.h"
 #include "include/regionstr.h"

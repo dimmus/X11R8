@@ -23,7 +23,7 @@
 
 #include <dix-config.h>
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 #include <errno.h>
 #include <signal.h>

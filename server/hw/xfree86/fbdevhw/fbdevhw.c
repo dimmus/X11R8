@@ -18,7 +18,7 @@
 #include "fbdevhw.h"
 #include "fbpriv.h"
 #include "globals.h"
-#include <X11/extensions/dpmsconst.h>
+#include "X11/extensions/dpmsconst.h"
 
 #define PAGE_MASK               (~(getpagesize() - 1))
 

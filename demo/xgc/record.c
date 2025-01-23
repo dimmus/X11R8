@@ -4,13 +4,13 @@
 ** record.c
 */
 
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
-#include <X11/Xaw/Label.h>
-#include <X11/Xaw/Command.h>
-#include <X11/Xaw/Form.h>
-#include <X11/Shell.h>
-#include <X11/Xaw/AsciiText.h>
+#include "X11/Intrinsic.h"
+#include "X11/StringDefs.h"
+#include "X11/Xaw/Label.h"
+#include "X11/Xaw/Command.h"
+#include "X11/Xaw/Form.h"
+#include "X11/Shell.h"
+#include "X11/Xaw/AsciiText.h"
 #include <stdio.h>
 
 #include "xgc.h"

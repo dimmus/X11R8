@@ -61,7 +61,7 @@ SOFTWARE.
 #include <err.h>
 #endif
 #include "../../xfont/util/replace.h"
-#include <X11/X.h>
+#include "X11/X.h"
 
 static unsigned long server_generation;
 static xfont2_fpe_funcs_rec const **fpe_functions;

@@ -38,11 +38,11 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #include <stdio.h>
 #include <ctype.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xmu/Drawing.h>
-#include <X11/Xaw/ListP.h>
-#include <X11/Xaw/XawInit.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xmu/Drawing.h"
+#include "X11/Xaw/ListP.h"
+#include "X11/Xaw/XawInit.h"
 #include "Private.h"
 
 #define HeightLock  1

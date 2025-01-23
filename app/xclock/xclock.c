@@ -39,17 +39,17 @@ in this Software without prior written authorization from The Open Group.
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <X11/Xatom.h>
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
-#include <X11/Shell.h>
+#include "X11/Xatom.h"
+#include "X11/Intrinsic.h"
+#include "X11/StringDefs.h"
+#include "X11/Shell.h"
 #include "Clock.h"
-#include <X11/Xaw/Cardinals.h>
+#include "X11/Xaw/Cardinals.h"
 #include "clock.bit"
 #include "clmask.bit"
 
 #ifdef XKB
-#include <X11/extensions/XKBbells.h>
+#include "X11/extensions/XKBbells.h"
 #endif
 
 #ifndef NO_I18N

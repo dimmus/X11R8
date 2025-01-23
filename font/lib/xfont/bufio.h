@@ -29,7 +29,7 @@ from The Open Group.
 #ifndef ___BUFIO_H___
 #define ___BUFIO_H___ 1
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 #define BUFFILESIZE	8192
 #define BUFFILEEOF	-1

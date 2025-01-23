@@ -58,7 +58,7 @@
 
 #include <errno.h>
 #include <sys/stat.h>
-#include <X11/X.h>
+#include "X11/X.h"
 
 #include "os/osdep.h"
 #include "os/xserver_poll.h"

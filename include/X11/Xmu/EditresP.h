@@ -265,8 +265,8 @@ in this Software without prior written authorization from The Open Group.
 
 ************************************************************/
 
-#include <X11/Intrinsic.h>
-#include <X11/Xfuncproto.h>
+#include "X11/Intrinsic.h"
+#include "X11/Xfuncproto.h"
 
 #define XER_NBBY 8		/* number of bits in a byte */
 #define BYTE_MASK 255

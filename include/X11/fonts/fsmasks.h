@@ -57,7 +57,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _FSMASKS_H_
 #define _FSMASKS_H_
 
-#include <X11/Xmd.h>
+#include "X11/Xmd.h"
 
 /* font format macros */
 #define BitmapFormatByteOrderMask       (1L << 0)

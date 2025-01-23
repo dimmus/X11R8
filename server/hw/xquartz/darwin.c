@@ -31,8 +31,8 @@
 #include <dix-config.h>
 
 #include <sys/stat.h>
-#include <X11/X.h>
-#include <X11/Xproto.h>
+#include "X11/X.h"
+#include "X11/Xproto.h"
 
 #include "os/ddx_priv.h"
 #include "os/osdep.h"
@@ -48,8 +48,8 @@
 #include "dix.h"
 #include "xkbsrv.h"
 
-#include <X11/extensions/XI.h>
-#include <X11/extensions/XIproto.h>
+#include "X11/extensions/XI.h"
+#include "X11/extensions/XIproto.h"
 #include "exevents.h"
 #include "extinit.h"
 #include "glx_extinit.h"

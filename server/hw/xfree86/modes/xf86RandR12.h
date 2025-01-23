@@ -23,7 +23,7 @@
 #ifndef _XF86_RANDR_H_
 #define _XF86_RANDR_H_
 #include <randrstr.h>
-#include <X11/extensions/render.h>
+#include "X11/extensions/render.h"
 
 extern _X_EXPORT Bool xf86RandR12CreateScreenResources(ScreenPtr pScreen);
 extern _X_EXPORT Bool xf86RandR12Init(ScreenPtr pScreen);

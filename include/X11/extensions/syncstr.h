@@ -51,7 +51,7 @@ PERFORMANCE OF THIS SOFTWARE.
 #ifndef _SYNCSTR_H_
 #define _SYNCSTR_H_
 
-#include <X11/extensions/syncproto.h>
+#include "X11/extensions/syncproto.h"
 
 #ifdef _SYNC_SERVER
 

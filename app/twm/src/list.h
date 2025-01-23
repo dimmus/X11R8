@@ -60,9 +60,9 @@ in this Software without prior written authorization from The Open Group.
 #ifndef LIST_H
 #define LIST_H
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Intrinsic.h>
+#include "X11/Xlib.h"
+#include "X11/Xutil.h"
+#include "X11/Intrinsic.h"
 
 typedef struct name_list_struct name_list;
 

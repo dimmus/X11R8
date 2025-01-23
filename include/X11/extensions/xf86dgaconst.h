@@ -5,7 +5,7 @@
 #ifndef _XF86DGACONST_H_
 #define _XF86DGACONST_H_
 
-#include <X11/extensions/xf86dga1const.h>
+#include "X11/extensions/xf86dga1const.h"
 
 #define X_XDGAQueryVersion		0
 

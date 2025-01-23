@@ -43,10 +43,10 @@
 
 #include "xf86str.h"
 #include "xf86Opt.h"
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 #include <stdarg.h>
 #ifdef RANDR
-#include <X11/extensions/randr.h>
+#include "X11/extensions/randr.h"
 #endif
 
 #include "propertyst.h"

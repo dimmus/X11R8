@@ -25,7 +25,7 @@
 #ifndef DRI3_H
 #define DRI3_H
 
-#include <X11/X.h>
+#include "X11/X.h"
 
 int dri3_open(Display *dpy);
 int dri3_open__full(Display *dpy, Window root, unsigned provider);

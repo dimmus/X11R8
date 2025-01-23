@@ -28,7 +28,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <X11/X.h>
+#include "X11/X.h"
 #include "os.h"
 #include "xf86.h"
 #include "xf86Priv.h"

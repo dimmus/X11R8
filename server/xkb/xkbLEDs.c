@@ -29,9 +29,9 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include <stdio.h>
 #include <ctype.h>
 #include <math.h>
-#include <X11/X.h>
-#include <X11/Xproto.h>
-#include <X11/extensions/XI.h>
+#include "X11/X.h"
+#include "X11/Xproto.h"
+#include "X11/extensions/XI.h"
 
 #include "xkb/xkbsrv_priv.h"
 

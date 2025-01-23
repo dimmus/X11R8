@@ -43,7 +43,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XawAsciiSrc_h
 #define _XawAsciiSrc_h
 
-#include <X11/Xaw/TextSrc.h>
+#include "X11/Xaw/TextSrc.h"
 
 /* Resources:
 

@@ -32,9 +32,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _WINDOWSWMSTR_H_
 #define _WINDOWSWMSTR_H_
 
-#include <X11/extensions/windowswm.h>
-#include <X11/X.h>
-#include <X11/Xmd.h>
+#include "X11/extensions/windowswm.h"
+#include "X11/X.h"
+#include "X11/Xmd.h"
 
 #define WINDOWSWMNAME "Windows-WM"
 

@@ -32,8 +32,8 @@ from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xlib.h>
-#include <X11/extensions/Xext.h>
+#include "X11/Xlib.h"
+#include "X11/extensions/Xext.h"
 
 /*
  * Error handlers; used to be in XlibInt.c

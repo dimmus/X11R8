@@ -29,7 +29,7 @@ Author: Ralph Mor, X Consortium
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/ICE/ICElib.h>
+#include "X11/ICE/ICElib.h"
 #include "ICElibint.h"
 
 static Bool auth_valid (const char *auth_name, int num_auth_names,

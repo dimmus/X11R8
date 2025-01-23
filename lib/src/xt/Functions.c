@@ -53,8 +53,8 @@ in this Software without prior written authorization from The Open Group.
 #include <config.h>
 #endif
 #include "IntrinsicI.h"
-#include <X11/Shell.h>
-#include <X11/Vendor.h>
+#include "X11/Shell.h"
+#include "X11/Vendor.h"
 
 /*
  * This file defines functional equivalents to all macros defined

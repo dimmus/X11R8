@@ -32,8 +32,8 @@
 #include "sna.h"
 #include "sna_video_hwmc.h"
 
-#include <X11/extensions/Xv.h>
-#include <X11/extensions/XvMC.h>
+#include "X11/extensions/Xv.h"
+#include "X11/extensions/XvMC.h"
 #include <fourcc.h>
 
 extern DevPrivateKey XF86XvScreenKey;

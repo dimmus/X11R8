@@ -39,8 +39,8 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XawMenuButtonP_h
 #define _XawMenuButtonP_h
 
-#include <X11/Xaw/MenuButton.h>
-#include <X11/Xaw/CommandP.h>
+#include "X11/Xaw/MenuButton.h"
+#include "X11/Xaw/CommandP.h"
 
 /* New fields for the MenuButton widget class */
 typedef struct _MenuButtonClass {

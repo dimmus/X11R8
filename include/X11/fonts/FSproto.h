@@ -46,7 +46,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _FS_PROTO_H_
 #define _FS_PROTO_H_
 
-#include <X11/fonts/FS.h>
+#include "X11/fonts/FS.h"
 
 #define sz_fsPropOffset 20
 #define sz_fsPropInfo 8

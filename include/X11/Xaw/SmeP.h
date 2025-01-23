@@ -40,9 +40,9 @@ in this Software without prior written authorization from The Open Group.
 /*
  * Sme Widget Private Data
  */
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
-#include <X11/Xaw/Sme.h>
+#include "X11/Xaw/Sme.h"
 
 _XFUNCPROTOBEGIN
 

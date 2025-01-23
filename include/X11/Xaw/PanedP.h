@@ -58,7 +58,7 @@ SOFTWARE.
 #ifndef _XawPanedP_h
 #define _XawPanedP_h
 
-#include <X11/Xaw/Paned.h>
+#include "X11/Xaw/Paned.h"
 
 /* New fields for the Paned widget class record */
 typedef struct _PanedClassPart {

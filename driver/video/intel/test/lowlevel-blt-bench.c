@@ -33,16 +33,16 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include <X11/X.h>
-#include <X11/Xutil.h> /* for XDestroyImage */
-#include <X11/Xlibint.h>
-#include <X11/extensions/Xrender.h>
+#include "X11/X.h"
+#include "X11/Xutil.h" /* for XDestroyImage */
+#include "X11/Xlibint.h"
+#include "X11/extensions/Xrender.h"
 #if HAVE_MIT_SHM
-#include <X11/extensions/XShm.h>
+#include "X11/extensions/XShm.h"
 #if HAVE_X11_EXTENSIONS_SHMPROTO_H
-#include <X11/extensions/shmproto.h>
+#include "X11/extensions/shmproto.h"
 #elif HAVE_X11_EXTENSIONS_SHMSTR_H
-#include <X11/extensions/shmstr.h>
+#include "X11/extensions/shmstr.h"
 #else
 #error Failed to find the right header for X11 MIT-SHM protocol definitions
 #endif

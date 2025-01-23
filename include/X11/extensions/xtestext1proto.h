@@ -52,7 +52,7 @@ University of California.
 #ifndef _XTESTEXT1PROTO_H
 #define _XTESTEXT1PROTO_H 1
 
-#include <X11/extensions/xtestext1const.h>
+#include "X11/extensions/xtestext1const.h"
 
 /*
  * the typedefs for CARD8, CARD16, and CARD32 are defined in Xmd.h

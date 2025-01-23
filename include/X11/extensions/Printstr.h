@@ -61,18 +61,18 @@
 
 #define NEED_REPLIES
 
-#include <X11/Xproto.h>
+#include "X11/Xproto.h"
 #ifndef _XP_PRINT_SERVER_
-#include <X11/Xlib.h>
+#include "X11/Xlib.h"
 #endif /* _XP_PRINT_SERVER_ */
 
 /*
  * Pull in other definitions.  Print.h will hide some things if we're
  * doing server side work.
  */
-#include <X11/extensions/Print.h>
+#include "X11/extensions/Print.h"
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 _XFUNCPROTOBEGIN
 
@@ -764,7 +764,7 @@ typedef struct _XpContext {
 	int imageRes;
 } XpContextRec, *XpContextPtr;
 
-#include <X11/fonts/fontstruct.h>	/* FontResolutionPtr */
+#include "X11/fonts/fontstruct.h"	/* FontResolutionPtr */
 
 extern FontResolutionPtr XpGetClientResolutions(ClientPtr, int *);
 extern XpContextPtr XpContextOfClient(ClientPtr);

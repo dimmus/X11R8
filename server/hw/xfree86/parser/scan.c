@@ -63,8 +63,8 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <stdarg.h>
-#include <X11/Xdefs.h>
-#include <X11/Xfuncproto.h>
+#include "X11/Xdefs.h"
+#include "X11/Xfuncproto.h"
 #include <limits.h>
 
 #if !defined(MAXHOSTNAMELEN)

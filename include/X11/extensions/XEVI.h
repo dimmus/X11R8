@@ -23,8 +23,8 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #ifndef _XEVI_H_
 #define _XEVI_H_
-#include <X11/Xfuncproto.h>
-#include <X11/extensions/EVI.h>
+#include "X11/Xfuncproto.h"
+#include "X11/extensions/EVI.h"
 
 typedef struct {
     VisualID		core_visual_id;

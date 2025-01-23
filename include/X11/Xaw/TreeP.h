@@ -50,7 +50,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XawTreeP_h
 #define _XawTreeP_h
 
-#include <X11/Xaw/Tree.h>
+#include "X11/Xaw/Tree.h"
 
 typedef struct _TreeClassPart {
     XtPointer extension;

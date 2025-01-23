@@ -48,7 +48,7 @@ SOFTWARE.
 #ifndef _XawTextSink_h
 #define _XawTextSink_h
 
-#include <X11/Xaw/Text.h>
+#include "X11/Xaw/Text.h"
 
 /***********************************************************************
  *

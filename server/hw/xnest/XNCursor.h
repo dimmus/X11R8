@@ -15,7 +15,7 @@ is" without express or implied warranty.
 #ifndef XNESTCURSOR_H
 #define XNESTCURSOR_H
 
-#include <X11/Xdefs.h>
+#include "X11/Xdefs.h"
 
 #include "mipointrst.h"
 

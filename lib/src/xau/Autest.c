@@ -27,7 +27,7 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xauth.h>
+#include "X11/Xauth.h"
 #include <stdio.h>
 #include <stdlib.h>
 

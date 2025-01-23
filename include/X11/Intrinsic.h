@@ -50,14 +50,14 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XtIntrinsic_h
 #define _XtIntrinsic_h
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xresource.h>
-#include <X11/Xfuncproto.h>
+#include "X11/Xlib.h"
+#include "X11/Xutil.h"
+#include "X11/Xresource.h"
+#include "X11/Xfuncproto.h"
 #ifdef XT_BC
-#include <X11/Xos.h>		/* for R4 compatibility */
+#include "X11/Xos.h"		/* for R4 compatibility */
 #else
-#include <X11/Xosdefs.h>
+#include "X11/Xosdefs.h"
 #include <string.h>		/* for XtNewString */
 #endif /* XT_BC else */
 
@@ -179,11 +179,11 @@ _Static_assert(sizeof(XtArgVal) >= sizeof(long), "XtArgVal too small");
 /* (It remains here only for backward compatibility.) */
 typedef XtPointer	Opaque;
 
-#include <X11/Core.h>
-#include <X11/Composite.h>
-#include <X11/Constraint.h>
-#include <X11/Object.h>
-#include <X11/RectObj.h>
+#include "X11/Core.h"
+#include "X11/Composite.h"
+#include "X11/Constraint.h"
+#include "X11/Object.h"
+#include "X11/RectObj.h"
 
 typedef struct _TranslationData *XtTranslations;
 typedef struct _TranslationData *XtAccelerators;

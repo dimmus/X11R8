@@ -22,7 +22,7 @@
 
 #ifndef _XFTCOMPAT_H_
 #define _XFTCOMPAT_H_
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 /*
  * Compatibility definitions -- map Fc names to Xft names

@@ -55,7 +55,7 @@
 #include <xorg-config.h>
 #endif
 
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 #include "xf86Parser.h"
 #include "xf86tokens.h"
 #include "Configint.h"

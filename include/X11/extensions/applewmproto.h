@@ -28,9 +28,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _APPLEWMPROTO_H_
 #define _APPLEWMPROTO_H_
 
-#include <X11/extensions/applewmconst.h>
-#include <X11/X.h>
-#include <X11/Xmd.h>
+#include "X11/extensions/applewmconst.h"
+#include "X11/X.h"
+#include "X11/Xmd.h"
 
 #define APPLEWMNAME "Apple-WM"
 

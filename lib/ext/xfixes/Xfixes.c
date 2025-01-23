@@ -24,7 +24,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 #include "Xfixesint.h"
 
 XFixesExtInfo XFixesExtensionInfo;

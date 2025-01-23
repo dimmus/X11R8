@@ -4,18 +4,18 @@
  *   Larry Medwin Dec. 15, 1989, April 1991
  */
 
-#include <X11/StringDefs.h>
-#include <X11/Intrinsic.h>
-#include <X11/Xaw/Form.h>
-#include <X11/Xaw/Command.h>
-#include <X11/Xaw/Label.h>
-#include <X11/Xaw/Scrollbar.h>
-#include <X11/Xaw/Box.h>
-#include <X11/Xaw/AsciiText.h>
-#include <X11/Xaw/Toggle.h>
+#include "X11/StringDefs.h"
+#include "X11/Intrinsic.h"
+#include "X11/Xaw/Form.h"
+#include "X11/Xaw/Command.h"
+#include "X11/Xaw/Label.h"
+#include "X11/Xaw/Scrollbar.h"
+#include "X11/Xaw/Box.h"
+#include "X11/Xaw/AsciiText.h"
+#include "X11/Xaw/Toggle.h"
 #include "Gas.h"
-#include <X11/Xutil.h>
-#include <X11/Xlib.h>
+#include "X11/Xutil.h"
+#include "X11/Xlib.h"
 #include <math.h>
 
 /* Force the numerical instability out into the open */

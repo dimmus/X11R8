@@ -27,9 +27,9 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xaw/TemplateP.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xaw/TemplateP.h"
 
 /*
  * Class Methods

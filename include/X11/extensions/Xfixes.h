@@ -46,10 +46,10 @@
 #ifndef _XFIXES_H_
 #define _XFIXES_H_
 
-#include <X11/extensions/xfixeswire.h>
+#include "X11/extensions/xfixeswire.h"
 
-#include <X11/Xfuncproto.h>
-#include <X11/Xlib.h>
+#include "X11/Xfuncproto.h"
+#include "X11/Xlib.h"
 
 /*
  * This revision number also appears in configure.ac, they have

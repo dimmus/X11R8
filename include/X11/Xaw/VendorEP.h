@@ -53,7 +53,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _VendorEP_h
 #define _VendorEP_h
 
-#include <X11/Xaw/XawImP.h>
+#include "X11/Xaw/XawImP.h"
 
 typedef struct {
     XtPointer	extension;

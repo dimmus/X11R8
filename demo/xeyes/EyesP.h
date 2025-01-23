@@ -6,7 +6,7 @@
 #define _EyesP_h
 
 #include "Eyes.h"
-#include <X11/CoreP.h>
+#include "X11/CoreP.h"
 #include "transform.h"
 
 #define SEG_BUFF_SIZE		128

@@ -28,7 +28,7 @@
 
 #include "twm.h"
 
-#include <X11/SM/SMlib.h>
+#include "X11/SM/SMlib.h"
 
 extern void ConnectToSessionManager(char *previous_id, XtAppContext appContext);
 extern int GetWindowConfig(TwmWindow *theWindow, short *x, short *y,

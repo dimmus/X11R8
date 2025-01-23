@@ -39,7 +39,7 @@
 
 #include "X11Application.h"
 
-#include <X11/extensions/randr.h>
+#include "X11/extensions/randr.h"
 #include <randrstr.h>
 #include <IOKit/graphics/IOGraphicsTypes.h>
 

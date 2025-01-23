@@ -79,7 +79,7 @@ in this Software without prior written authorization from The Open Group.
 #define XK_LATIN1
 #endif
 #define XK_MISCELLANY
-#include <X11/keysymdef.h>
+#include "X11/keysymdef.h"
 
 #ifdef CACHE_TRANSLATIONS
 #ifdef REFCNT_TRANSLATIONS

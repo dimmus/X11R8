@@ -96,22 +96,22 @@
 #if OPT_TOOLBAR
 
 #if defined(HAVE_LIB_XAW)
-#include <X11/Xaw/Form.h>
+#include "X11/Xaw/Form.h"
 #elif defined(HAVE_LIB_XAW3D)
-#include <X11/Xaw3d/Form.h>
+#include "X11/Xaw3d/Form.h"
 #elif defined(HAVE_LIB_XAW3DXFT)
-#include <X11/Xaw3dxft/Form.h>
-#include <X11/Xaw3dxft/Xaw3dXft.h>
+#include "X11/Xaw3dxft/Form.h"
+#include "X11/Xaw3dxft/Xaw3dXft.h"
 #elif defined(HAVE_LIB_NEXTAW)
-#include <X11/neXtaw/Form.h>
+#include "X11/neXtaw/Form.h"
 #elif defined(HAVE_LIB_XAWPLUS)
-#include <X11/XawPlus/Form.h>
+#include "X11/XawPlus/Form.h"
 #endif
 
 #else
 
 #if defined(HAVE_LIB_XAW3DXFT)
-#include <X11/Xaw3dxft/Xaw3dXft.h>
+#include "X11/Xaw3dxft/Xaw3dXft.h"
 #endif
 
 #endif /* OPT_TOOLBAR */
@@ -843,7 +843,7 @@ static char *passedPty = noPassedPty;	/* name if pty if slave */
 
 #if defined(TIOCCONS) || defined(SRIOCSREDIR)
 static int Console;
-#include <X11/Xmu/SysUtil.h>	/* XmuGetHostname */
+#include "X11/Xmu/SysUtil.h"	/* XmuGetHostname */
 #define MIT_CONSOLE_LEN	12
 #define MIT_CONSOLE "MIT_CONSOLE_"
 static char mit_console_name[255 + MIT_CONSOLE_LEN + 1] = MIT_CONSOLE;

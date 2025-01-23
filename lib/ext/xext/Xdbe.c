@@ -34,11 +34,11 @@
 #include <config.h>
 #endif
 #include <stdio.h>
-#include <X11/Xlibint.h>
-#include <X11/extensions/Xext.h>
-#include <X11/extensions/extutil.h>
-#include <X11/extensions/Xdbe.h>
-#include <X11/extensions/dbeproto.h>
+#include "X11/Xlibint.h"
+#include "X11/extensions/Xext.h"
+#include "X11/extensions/extutil.h"
+#include "X11/extensions/Xdbe.h"
+#include "X11/extensions/dbeproto.h"
 #include <limits.h>
 #include "reallocarray.h"
 

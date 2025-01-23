@@ -81,14 +81,14 @@ SOFTWARE.
 #ifndef _GNU_SOURCE
 # define _GNU_SOURCE
 #endif
-#include <X11/Xlib.h>
-#include <X11/StringDefs.h>
-#include <X11/IntrinsicP.h>
+#include "X11/Xlib.h"
+#include "X11/StringDefs.h"
+#include "X11/IntrinsicP.h"
 #include "ClockP.h"
-#include <X11/Xosdefs.h>
+#include "X11/Xosdefs.h"
 #include <stdio.h>
-#include <X11/Xos.h>
-#include <X11/Xaw/XawInit.h>
+#include "X11/Xos.h"
+#include "X11/Xaw/XawInit.h"
 #include <math.h>
 #if !defined(NO_I18N) && defined(HAVE_ICONV) && defined(HAVE_NL_LANGINFO)
 #include <iconv.h>
@@ -100,14 +100,14 @@ SOFTWARE.
 #if defined(XawVersion) && (XawVersion >= 7000002L)
 #define USE_XAW_PIXMAP_CVT
 #else
-#include <X11/xpm.h>
+#include "X11/xpm.h"
 #endif
 
 #include <time.h>
 #define Time_t time_t
 
 #ifdef XKB
-#include <X11/extensions/XKBbells.h>
+#include "X11/extensions/XKBbells.h"
 #endif
 
 #ifndef NO_I18N

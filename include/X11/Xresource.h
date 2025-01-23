@@ -50,7 +50,7 @@ SOFTWARE.
 #define _X11_XRESOURCE_H_
 
 #ifndef _XP_PRINT_SERVER_
-#include <X11/Xlib.h>
+#include "X11/Xlib.h"
 #endif
 
 /****************************************************************

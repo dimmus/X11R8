@@ -28,7 +28,7 @@ in this Software without prior written authorization from the X Consortium.
 #ifndef _SAVERPROTO_H_
 #define _SAVERPROTO_H_
 
-#include <X11/extensions/saver.h>
+#include "X11/extensions/saver.h"
 
 #define Window CARD32
 #define Drawable CARD32

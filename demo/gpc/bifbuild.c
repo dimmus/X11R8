@@ -221,7 +221,7 @@ SOFTWARE.
 #include "macfunct.h"
 #include "brftypes.h"
 #include "brfexption.h"
-#include <X11/Xfuncs.h>
+#include "X11/Xfuncs.h"
     
     
 /*--------------------------------------------------------------------*\

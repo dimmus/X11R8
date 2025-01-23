@@ -39,7 +39,7 @@
 #ifndef _DMXEXT_H_
 #define _DMXEXT_H_
 
-#include <X11/extensions/dmx.h>
+#include "X11/extensions/dmx.h"
 
 /** Client-library screen information structure, returned by
  * #DMXGetScreenAttributes.  */

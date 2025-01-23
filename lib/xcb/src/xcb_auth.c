@@ -30,7 +30,7 @@
 #endif
 
 #include <assert.h>
-#include <X11/Xauth.h>
+#include "X11/Xauth.h"
 #include <stdlib.h>
 #include <time.h>
 
@@ -43,7 +43,7 @@
 #ifdef HASXDMAUTH
 /* We must include the wrapped windows.h before any system header which includes
    it unwrapped, to avoid conflicts with types defined in X headers */
-#include <X11/Xwindows.h>
+#include "X11/Xwindows.h"
 #endif
 #include "xcb_windefs.h"
 #else
@@ -59,7 +59,7 @@
 #include "xcbint.h"
 
 #ifdef HASXDMAUTH
-#include <X11/Xdmcp.h>
+#include "X11/Xdmcp.h"
 #endif
 
 enum auth_protos {

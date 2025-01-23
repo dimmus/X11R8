@@ -34,8 +34,8 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XMU_CVTCACHE_H_
 #define _XMU_CVTCACHE_H_
 
-#include <X11/Xmu/DisplayQue.h>
-#include <X11/Xfuncproto.h>
+#include "X11/Xmu/DisplayQue.h"
+#include "X11/Xfuncproto.h"
 
 typedef struct _XmuCvtCache {
     struct {

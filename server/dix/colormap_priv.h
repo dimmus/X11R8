@@ -5,8 +5,8 @@
 #ifndef _XSERVER_DIX_COLORMAP_PRIV_H
 #define _XSERVER_DIX_COLORMAP_PRIV_H
 
-#include <X11/Xdefs.h>
-#include <X11/Xproto.h>
+#include "X11/Xdefs.h"
+#include "X11/Xproto.h"
 
 #include "dix/screenint_priv.h"
 #include "include/colormap.h"

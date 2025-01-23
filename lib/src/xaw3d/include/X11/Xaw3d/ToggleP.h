@@ -39,8 +39,8 @@ in this Software without prior written authorization from the X Consortium.
 #ifndef _XawToggleP_h
 #define _XawToggleP_h
 
-#include <X11/Xaw3d/Toggle.h>
-#include <X11/Xaw3d/CommandP.h>
+#include "X11/Xaw3d/Toggle.h"
+#include "X11/Xaw3d/CommandP.h"
 
 /***********************************************************************
  *

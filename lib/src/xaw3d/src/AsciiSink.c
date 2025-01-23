@@ -51,13 +51,13 @@ SOFTWARE.
 #endif
 #include <stdio.h>
 
-#include <X11/Xatom.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xaw3d/XawInit.h>
-#include <X11/Xaw3d/AsciiSinkP.h>
-#include <X11/Xaw3d/AsciiSrcP.h>	/* For source function defs. */
-#include <X11/Xaw3d/TextP.h>	/* I also reach into the text widget. */
+#include "X11/Xatom.h"
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xaw3d/XawInit.h"
+#include "X11/Xaw3d/AsciiSinkP.h"
+#include "X11/Xaw3d/AsciiSrcP.h"	/* For source function defs. */
+#include "X11/Xaw3d/TextP.h"	/* I also reach into the text widget. */
 
 #ifdef GETLASTPOS
 #undef GETLASTPOS		/* We will use our own GETLASTPOS. */

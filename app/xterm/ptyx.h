@@ -63,21 +63,21 @@
 /* *INDENT-OFF* */
 /* @(#)ptyx.h	X10/6.6	11/10/86 */
 
-#include <X11/IntrinsicP.h>
-#include <X11/Shell.h>		/* for XtNdieCallback, etc. */
-#include <X11/StringDefs.h>	/* for standard resource names */
-#include <X11/Xmu/Misc.h>	/* For Max() and Min(). */
-#include <X11/cursorfont.h>
+#include "X11/IntrinsicP.h"
+#include "X11/Shell.h"		/* for XtNdieCallback, etc. */
+#include "X11/StringDefs.h"	/* for standard resource names */
+#include "X11/Xmu/Misc.h"	/* For Max() and Min(). */
+#include "X11/cursorfont.h"
 
 
 #undef bcopy
 #undef bzero
-#include <X11/Xfuncs.h>
+#include "X11/Xfuncs.h"
 
-#include <X11/Xosdefs.h>
-#include <X11/Xmu/Converters.h>
+#include "X11/Xosdefs.h"
+#include "X11/Xmu/Converters.h"
 #ifdef XRENDERFONT
-#include <X11/Xft/Xft.h>
+#include "X11/Xft/Xft.h"
 #endif
 
 #include <stdio.h>
@@ -168,7 +168,7 @@
 #endif /* SYSV */
 
 /*
- * Newer versions of <X11/Xft/Xft.h> have a version number.  We use certain
+ * Newer versions of "X11/Xft/Xft.h" have a version number.  We use certain
  * features from that.
  */
 #if defined(XRENDERFONT) && defined(XFT_VERSION) && XFT_VERSION >= 20100

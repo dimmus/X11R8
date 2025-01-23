@@ -49,10 +49,10 @@
 #include "servermd.h"
 #include "swaprep.h"
 #include "propertyst.h"
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 #include "darwin.h"
 #define _APPLEWM_SERVER_
-#include <X11/extensions/applewmproto.h>
+#include "X11/extensions/applewmproto.h"
 #include "applewmExt.h"
 #include "X11Application.h"
 #include "protocol-versions.h"

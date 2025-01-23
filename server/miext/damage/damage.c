@@ -26,13 +26,13 @@
 
 #include "os/osdep.h"
 
-#include    <X11/X.h>
+#include    "X11/X.h"
 #include    "scrnintstr.h"
 #include    "windowstr.h"
-#include    <X11/fonts/font.h>
+#include    "X11/fonts/font.h"
 #include    "dixfontstr.h"
-#include    <X11/fonts/fontstruct.h>
-#include    <X11/fonts/libxfont2.h>
+#include    "X11/fonts/fontstruct.h"
+#include    "X11/fonts/libxfont2.h"
 #include    "mi.h"
 #include    "mipict.h"
 #include    "regionstr.h"

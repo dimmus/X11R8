@@ -61,10 +61,10 @@ SOFTWARE.
 #ifndef _AsciiTextP_h
 #define _AsciiTextP_h
 
-#include <X11/Xaw/TextP.h>
-#include <X11/Xaw/AsciiText.h>
-#include <X11/Xaw/AsciiSrc.h>
-#include <X11/Xaw/MultiSrc.h>
+#include "X11/Xaw/TextP.h"
+#include "X11/Xaw/AsciiText.h"
+#include "X11/Xaw/AsciiSrc.h"
+#include "X11/Xaw/MultiSrc.h"
 
 typedef struct {
   XtPointer extension;

@@ -24,7 +24,7 @@
 #include <xorg-config.h>
 #endif
 
-#include <X11/extensions/render.h>
+#include "X11/extensions/render.h"
 
 #include "dix/input_priv.h"
 #include "dix/screenint_priv.h"

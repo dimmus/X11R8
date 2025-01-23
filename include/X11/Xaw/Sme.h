@@ -37,8 +37,8 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _Sme_h
 #define _Sme_h
 
-#include <X11/Intrinsic.h>
-#include <X11/RectObj.h>
+#include "X11/Intrinsic.h"
+#include "X11/RectObj.h"
 
 /* Resources:
 

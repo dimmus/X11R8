@@ -31,7 +31,7 @@
 #include "misc.h"
 #include "xf86.h"
 #include "xf86_OSproc.h"
-#include <X11/X.h>
+#include "X11/X.h"
 #include "colormapst.h"
 #include "scrnintstr.h"
 #include "screenint.h"

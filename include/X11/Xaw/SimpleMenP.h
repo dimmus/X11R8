@@ -37,10 +37,10 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _SimpleMenuP_h
 #define _SimpleMenuP_h
 
-#include <X11/Xaw/SimpleMenu.h>
-#include <X11/Xaw/SmeP.h>
-#include <X11/ShellP.h>
-#include <X11/Xaw/XawInit.h>
+#include "X11/Xaw/SimpleMenu.h"
+#include "X11/Xaw/SmeP.h"
+#include "X11/ShellP.h"
+#include "X11/Xaw/XawInit.h"
 
 typedef struct {
     XtPointer extension;		/* For future needs */

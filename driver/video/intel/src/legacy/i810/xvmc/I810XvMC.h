@@ -43,7 +43,7 @@ THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <stdint.h>
 #include "xf86drm.h"
 #include "../i810_common.h"
-#include <X11/Xlibint.h>
+#include "X11/Xlibint.h"
 
 
 /***************************************************************************

@@ -31,19 +31,19 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/IntrinsicP.h>	/* To get into the composite and core widget
+#include "X11/IntrinsicP.h"	/* To get into the composite and core widget
 				   structures. */
-#include <X11/ObjectP.h>	/* For XtIs<Classname> macros. */
-#include <X11/StringDefs.h>	/* for XtRString. */
-#include <X11/ShellP.h>		/* for Application Shell Widget class. */
+#include "X11/ObjectP.h"	/* For XtIs<Classname> macros. */
+#include "X11/StringDefs.h"	/* for XtRString. */
+#include "X11/ShellP.h"		/* for Application Shell Widget class. */
 
-#include <X11/Xatom.h>
-#include <X11/Xos.h>		/* for strcpy declaration */
-#include <X11/Xfuncs.h>
-#include <X11/Xmu/EditresP.h>
-#include <X11/Xmd.h>
-#include <X11/Xmu/CharSet.h>
-#include <X11/Xmu/SysUtil.h>
+#include "X11/Xatom.h"
+#include "X11/Xos.h"		/* for strcpy declaration */
+#include "X11/Xfuncs.h"
+#include "X11/Xmu/EditresP.h"
+#include "X11/Xmd.h"
+#include "X11/Xmu/CharSet.h"
+#include "X11/Xmu/SysUtil.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

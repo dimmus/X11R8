@@ -1,7 +1,7 @@
 #ifndef _XtShellInternal_h
 #define _XtShellInternal_h
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 _XFUNCPROTOBEGIN
 

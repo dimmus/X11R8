@@ -11,11 +11,11 @@ Copyright (c) 1995,1996  The XFree86 Project, Inc
 #endif
 
 
-#include <X11/Xlibint.h>
-#include <X11/extensions/Xxf86dga.h>
-#include <X11/extensions/xf86dgaproto.h>
-#include <X11/extensions/Xext.h>
-#include <X11/extensions/extutil.h>
+#include "X11/Xlibint.h"
+#include "X11/extensions/Xxf86dga.h"
+#include "X11/extensions/xf86dgaproto.h"
+#include "X11/extensions/Xext.h"
+#include "X11/extensions/extutil.h"
 #include <stdio.h>
 
 #include <stdint.h>
@@ -733,7 +733,7 @@ void XDGAKeyEventToXKeyEvent(
     xk->same_screen = True;
 }
 
-#include <X11/Xmd.h>
+#include "X11/Xmd.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>

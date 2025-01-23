@@ -37,18 +37,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <X11/StringDefs.h>
-#include <X11/Intrinsic.h>
-#include <X11/IntrinsicP.h>
-#include <X11/Shell.h>
+#include "X11/StringDefs.h"
+#include "X11/Intrinsic.h"
+#include "X11/IntrinsicP.h"
+#include "X11/Shell.h"
 
 #ifdef VMS
-#include <X11/shape.h>
+#include "X11/shape.h"
 #else
-#include <X11/extensions/shape.h>
+#include "X11/extensions/shape.h"
 #endif
 
-#include <X11/xpm.h>
+#include "X11/xpm.h"
 
 #ifdef USE_GETTEXT
 #include <locale.h>

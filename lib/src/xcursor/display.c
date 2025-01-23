@@ -22,7 +22,7 @@
  */
 
 #include "xcursorint.h"
-#include <X11/Xlibint.h>
+#include "X11/Xlibint.h"
 #include <ctype.h>
 #include <unistd.h>		/* for getpid */
 

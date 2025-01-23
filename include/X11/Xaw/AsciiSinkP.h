@@ -51,8 +51,8 @@ SOFTWARE.
 /*
  * AsciiSink Object Private Data
  */
-#include <X11/Xaw/TextSinkP.h>
-#include <X11/Xaw/AsciiSink.h>
+#include "X11/Xaw/TextSinkP.h"
+#include "X11/Xaw/AsciiSink.h"
 
 /* New fields for the AsciiSink object class record */
 typedef struct _AsciiSinkClassPart {

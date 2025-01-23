@@ -54,7 +54,7 @@ SOFTWARE.
 #include "pixmap.h"
 #include "screenint.h"
 #include "privates.h"
-#include <X11/Xprotostr.h>
+#include "X11/Xprotostr.h"
 
 #define GCAllBits ((1 << (GCLastBit + 1)) - 1)
 

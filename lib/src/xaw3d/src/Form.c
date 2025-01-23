@@ -49,12 +49,12 @@ SOFTWARE.
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xmu/Converters.h>
-#include <X11/Xmu/CharSet.h>
-#include <X11/Xaw3d/XawInit.h>
-#include <X11/Xaw3d/FormP.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xmu/Converters.h"
+#include "X11/Xmu/CharSet.h"
+#include "X11/Xaw3d/XawInit.h"
+#include "X11/Xaw3d/FormP.h"
 
 /* Private Definitions */
 

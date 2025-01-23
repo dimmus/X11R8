@@ -145,7 +145,7 @@ SOFTWARE.
 #include "db_tools.h"
 #include "globals.h"
 #include "ph_map.h"
-#include <X11/Xfuncs.h>
+#include "X11/Xfuncs.h"
 
 
 /* ---------------------------------------------------------------------*\

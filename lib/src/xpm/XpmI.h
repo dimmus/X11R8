@@ -50,9 +50,9 @@
 #include <string.h>
 #include <strings.h>
 
-#include <X11/Xos.h>
-#include <X11/Xfuncs.h>
-#include <X11/Xmd.h>
+#include "X11/Xos.h"
+#include "X11/Xfuncs.h"
+#include "X11/Xmd.h"
 
 #ifdef VMS
 #include <unixio.h>

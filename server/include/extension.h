@@ -74,7 +74,7 @@ SOFTWARE.
 #ifndef EXTENSION_H
 #define EXTENSION_H
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 #include "dixstruct.h"
 

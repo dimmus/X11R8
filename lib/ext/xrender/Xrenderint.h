@@ -28,10 +28,10 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xlibint.h>
-#include <X11/Xutil.h>
-#include <X11/extensions/renderproto.h>
-#include <X11/extensions/Xrender.h>
+#include "X11/Xlibint.h"
+#include "X11/Xutil.h"
+#include "X11/extensions/renderproto.h"
+#include "X11/extensions/Xrender.h"
 
 #ifndef _X_UNUSED
 #define _X_UNUSED /* nothing */

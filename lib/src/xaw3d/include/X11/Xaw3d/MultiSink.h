@@ -79,7 +79,7 @@ SOFTWARE.
  *
  ***********************************************************************/
 
-#include <X11/Xaw3d/TextSink.h>
+#include "X11/Xaw3d/TextSink.h"
 
 /* Resources:
 

@@ -5,7 +5,7 @@
 #ifndef _XSERVER_DIXGRABS_PRIV_H_
 #define _XSERVER_DIXGRABS_PRIV_H_
 
-#include <X11/extensions/XIproto.h>
+#include "X11/extensions/XIproto.h"
 
 #include "misc.h"
 #include "window.h"

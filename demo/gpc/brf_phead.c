@@ -71,7 +71,7 @@ SOFTWARE.
 |
 \*--------------------------------------------------------------------*/
 
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 #include <stdio.h>
 #include "brf_prt.h"
 #include "biftypes.h"

@@ -56,7 +56,7 @@ SOFTWARE.
  ***********************************************************************/
 
 #include "Xaw3dP.h"
-#include <X11/Xaw3d/Simple.h>
+#include "X11/Xaw3d/Simple.h"
 
 /* Resources:
 

@@ -36,9 +36,9 @@
 #include <errno.h>
 #include <ctype.h>
 
-#include <X11/Xos.h>
-#include <X11/Xfuncproto.h>
-#include <X11/fonts/fontenc.h>
+#include "X11/Xos.h"
+#include "X11/Xfuncproto.h"
+#include "X11/fonts/fontenc.h"
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_SFNT_NAMES_H

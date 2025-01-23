@@ -33,18 +33,18 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xosdefs.h>
+#include "X11/Xosdefs.h"
 #include <string.h>
 #include <unistd.h>
 
 #ifdef WIN32
-#include <X11/Xlibint.h>
-#include <X11/Xwinsock.h>
+#include "X11/Xlibint.h"
+#include "X11/Xwinsock.h"
 #endif
 
 
 
-#include <X11/Xmu/SysUtil.h>
+#include "X11/Xmu/SysUtil.h"
 
 int
 XmuGetHostname(char *buf, int maxlen)

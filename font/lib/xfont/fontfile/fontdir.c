@@ -33,7 +33,7 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #include "libxfontint.h"
 #include    "fntfilst.h"
-#include    <X11/keysym.h>
+#include    "X11/keysym.h"
 #include "util/replace.h"
 
 #ifdef HAVE_STDINT_H

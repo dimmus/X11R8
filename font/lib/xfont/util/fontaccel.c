@@ -36,7 +36,7 @@ from The Open Group.
 
 #include "libxfontint.h"
 #include "fontmisc.h"
-#include <X11/fonts/fontstruct.h>
+#include "X11/fonts/fontstruct.h"
 #include "fontutil.h"
 
 void

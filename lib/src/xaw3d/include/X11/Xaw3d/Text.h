@@ -49,7 +49,7 @@ SOFTWARE.
 #ifndef _XawText_h
 #define _XawText_h
 
-#include <X11/Xaw3d/Simple.h>
+#include "X11/Xaw3d/Simple.h"
 
 /*
  Text widget
@@ -103,8 +103,8 @@ typedef struct {
     unsigned long format;
     } XawTextBlock, *XawTextBlockPtr;
 
-#include <X11/Xaw3d/TextSink.h>
-#include <X11/Xaw3d/TextSrc.h>
+#include "X11/Xaw3d/TextSink.h"
+#include "X11/Xaw3d/TextSrc.h"
 
 #define XtEtextScrollNever "never"
 #define XtEtextScrollWhenNeeded "whenneeded"
@@ -271,8 +271,8 @@ _XFUNCPROTOEND
  * For R3 compatibility only.
  */
 
-#include <X11/Xaw3d/AsciiSrc.h>
-#include <X11/Xaw3d/AsciiSink.h>
+#include "X11/Xaw3d/AsciiSrc.h"
+#include "X11/Xaw3d/AsciiSink.h"
 
 #endif /* _XawText_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

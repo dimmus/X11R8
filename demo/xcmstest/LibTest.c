@@ -61,8 +61,8 @@
  *              program using this package.
  */
 #include "LibTest.h"
-#include <X11/Xlib.h>
-#include <X11/Xlibint.h>      
+#include "X11/Xlib.h"
+#include "X11/Xlibint.h"      
 
 /*
  *	EXTERNALS

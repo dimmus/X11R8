@@ -59,8 +59,8 @@ in this Software without prior written authorization from The Open Group.
 
 #include <stdio.h>
 #include <stdarg.h>
-#include <X11/Xos.h>
-#include <X11/Xmu/CharSet.h>
+#include "X11/Xos.h"
+#include "X11/Xmu/CharSet.h"
 
 #include "twm.h"
 #include "screen.h"
@@ -68,8 +68,8 @@ in this Software without prior written authorization from The Open Group.
 #include "util.h"
 #include "parse.h"
 
-#include <X11/Xatom.h>
-#include <X11/extensions/sync.h>
+#include "X11/Xatom.h"
+#include "X11/extensions/sync.h"
 
 #define BUF_LEN 300
 

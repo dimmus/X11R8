@@ -8,8 +8,8 @@
 #include "Xlibint.h"
 #include "Xxcbint.h"
 #include <xcb/xcbext.h>
-#include <X11/Xatom.h>
-#include <X11/Xresource.h>
+#include "X11/Xatom.h"
+#include "X11/Xresource.h"
 #include <stdio.h>
 
 static xcb_auth_info_t xauth;

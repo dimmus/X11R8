@@ -1,9 +1,9 @@
 #include <stdlib.h>
-#include <X11/StringDefs.h>
+#include "X11/StringDefs.h"
 #include <Xaw/Box.h>
 #include <Xaw/Simple.h>
 #include <Xaw/Command.h>
-#include <X11/Xmu/Drawing.h>
+#include "X11/Xmu/Drawing.h"
 
 /*
 	this is the  draw function. it uses two pencils (GC) with

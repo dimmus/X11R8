@@ -78,14 +78,14 @@ in this Software without prior written authorization from The Open Group.
 #include "CoreP.h"
 #include "ShellP.h"
 #include <stdio.h>
-#include <X11/Xlocale.h>
+#include "X11/Xlocale.h"
 #ifdef XTHREADS
-#include <X11/Xthreads.h>
+#include "X11/Xthreads.h"
 #endif
 #ifndef WIN32
 #define X_INCLUDE_PWD_H
 #define XOS_USE_XT_LOCKING
-#include <X11/Xos_r.h>
+#include "X11/Xos_r.h"
 #endif
 
 #include <stdlib.h>

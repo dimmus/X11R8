@@ -41,9 +41,9 @@
 #ifndef _XF86MODULE_H
 #define _XF86MODULE_H
 
-#include <X11/Xfuncproto.h>
-#include <X11/Xdefs.h>
-#include <X11/Xmd.h>
+#include "X11/Xfuncproto.h"
+#include "X11/Xdefs.h"
+#include "X11/Xmd.h"
 
 #ifndef NULL
 #define NULL ((void *)0)

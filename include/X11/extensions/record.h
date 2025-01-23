@@ -21,7 +21,7 @@
 #ifndef _RECORD_H_
 #define _RECORD_H_
 
-#include <X11/extensions/recordconst.h>
+#include "X11/extensions/recordconst.h"
 
 typedef unsigned long   XRecordClientSpec;
 typedef unsigned long	XRecordContext;

@@ -29,7 +29,7 @@
 
 #include "dix-config.h"
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 #include "glamor.h"
 #include "xvdix.h"

@@ -54,8 +54,8 @@ SOFTWARE.
 
 #include "windowstr.h"          /* focus struct      */
 #include "inputstr.h"           /* DeviceIntPtr      */
-#include <X11/extensions/XI.h>
-#include <X11/extensions/XIproto.h>
+#include "X11/extensions/XI.h"
+#include "X11/extensions/XIproto.h"
 #include "exglobals.h"
 
 #include "getfocus.h"

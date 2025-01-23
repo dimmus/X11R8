@@ -56,17 +56,17 @@ SOFTWARE.
 
 #include <stdio.h>
 #include <stdint.h>
-#include <X11/extensions/XI.h>
-#include <X11/extensions/XI2.h>
-#include <X11/extensions/XIproto.h>
-#include <X11/extensions/XI2proto.h>
-#include <X11/Xlibint.h>
-#include <X11/extensions/XInput.h>
-#include <X11/extensions/XInput2.h>
-#include <X11/extensions/extutil.h>
-#include <X11/extensions/geproto.h>
-#include <X11/extensions/ge.h>
-#include <X11/extensions/Xge.h>
+#include "X11/extensions/XI.h"
+#include "X11/extensions/XI2.h"
+#include "X11/extensions/XIproto.h"
+#include "X11/extensions/XI2proto.h"
+#include "X11/Xlibint.h"
+#include "X11/extensions/XInput.h"
+#include "X11/extensions/XInput2.h"
+#include "X11/extensions/extutil.h"
+#include "X11/extensions/geproto.h"
+#include "X11/extensions/ge.h"
+#include "X11/extensions/Xge.h"
 #include "XIint.h"
 
 #define ENQUEUE_EVENT	True

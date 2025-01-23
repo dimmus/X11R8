@@ -26,8 +26,8 @@ SOFTWARE.
 #ifndef _ThreeDP_h
 #define _ThreeDP_h
 
-#include <X11/Xaw3d/ThreeD.h>
-#include <X11/Xaw3d/SimpleP.h>
+#include "X11/Xaw3d/ThreeD.h"
+#include "X11/Xaw3d/SimpleP.h"
 
 #define XtRRelief "Relief"
 

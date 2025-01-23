@@ -47,9 +47,9 @@ in this Software without prior written authorization from The Open Group.
 # include "config.h"
 #endif
 
-#include <X11/fonts/FSlib.h>
+#include "X11/fonts/FSlib.h"
 #include <stdio.h>
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 #include <stdlib.h>
 #include <assert.h>
 

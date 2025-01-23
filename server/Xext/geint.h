@@ -29,13 +29,13 @@
 #ifndef _GEINT_H_
 #define _GEINT_H_
 
-#include <X11/X.h>
-#include <X11/Xproto.h>
+#include "X11/X.h"
+#include "X11/Xproto.h"
 #include "misc.h"
 #include "os.h"
 #include "dixstruct.h"
 #include "extnsionst.h"
-#include <X11/extensions/geproto.h>
+#include "X11/extensions/geproto.h"
 
 extern DevPrivateKeyRec GEClientPrivateKeyRec;
 

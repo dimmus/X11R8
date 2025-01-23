@@ -30,8 +30,8 @@
 #endif
 #include <stdlib.h>
 
-#include <X11/IntrinsicP.h>
-#include <X11/Xmu/Xmu.h>
+#include "X11/IntrinsicP.h"
+#include "X11/Xmu/Xmu.h"
 
 #define XmuMax(a, b)	((a) > (b) ? (a) : (b))
 #define XmuMin(a, b)	((a) < (b) ? (a) : (b))

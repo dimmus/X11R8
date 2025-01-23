@@ -48,7 +48,7 @@ SOFTWARE.
 #ifndef _Simple_h
 #define _Simple_h
 
-#include <X11/Xmu/Converters.h>
+#include "X11/Xmu/Converters.h"
 
 /* Resources:
 

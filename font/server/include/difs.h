@@ -28,7 +28,7 @@
 
 #include "difsfn.h"
 #include "globals.h"
-#include <X11/fonts/fontstruct.h>
+#include "X11/fonts/fontstruct.h"
 
 typedef int (*InitialFunc)(ClientPtr);
 typedef int (*ProcFunc)(ClientPtr);

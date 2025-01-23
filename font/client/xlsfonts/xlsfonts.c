@@ -28,9 +28,9 @@ in this Software without prior written authorization from The Open Group.
 # include "config.h"
 #endif
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xos.h>
+#include "X11/Xlib.h"
+#include "X11/Xutil.h"
+#include "X11/Xos.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>

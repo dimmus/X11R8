@@ -62,7 +62,7 @@ in this Software without prior written authorization from The Open Group.
 #endif
 
 #include <stdio.h>
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 #include "twm.h"
 #include "gc.h"
 #include "menus.h"
@@ -76,9 +76,9 @@ in this Software without prior written authorization from The Open Group.
 #include "add_window.h"
 #include "icons.h"
 #include "session.h"
-#include <X11/Xmu/CharSet.h>
-#include <X11/extensions/sync.h>
-#include <X11/SM/SMlib.h>
+#include "X11/Xmu/CharSet.h"
+#include "X11/extensions/sync.h"
+#include "X11/SM/SMlib.h"
 
 int RootFunction = 0;
 MenuRoot *ActiveMenu = NULL;            /**< the active menu */

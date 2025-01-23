@@ -28,7 +28,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XawPortholeP_h
 #define _XawPortholeP_h
 
-#include <X11/Xaw/Porthole.h>
+#include "X11/Xaw/Porthole.h"
 
 /* new fields in widget class */
 typedef struct {

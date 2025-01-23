@@ -23,8 +23,8 @@ authorization from The XFree86 Project Inc..
 #ifndef _FONTPROTO_H
 #define _FONTPROTO_H
 
-#include <X11/Xfuncproto.h>
-#include <X11/fonts/fontstruct.h>
+#include "X11/Xfuncproto.h"
+#include "X11/fonts/fontstruct.h"
 
 /* Externally provided functions required by libXfont */
 

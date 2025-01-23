@@ -29,8 +29,8 @@ from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xlibint.h>
-#include <X11/Xos.h>
+#include "X11/Xlibint.h"
+#include "X11/Xos.h"
 
 /*
  * Xlib's _XAsyncErrorState sequence number may wrap in 32bit

@@ -51,10 +51,10 @@ SOFTWARE.
 /*
  * TextSrc Object Private Data
  */
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
-#include <X11/Xaw/TextSrc.h>
-#include <X11/Xaw/TextP.h>	/* This source works with the Text widget */
+#include "X11/Xaw/TextSrc.h"
+#include "X11/Xaw/TextP.h"	/* This source works with the Text widget */
 
 _XFUNCPROTOBEGIN
 

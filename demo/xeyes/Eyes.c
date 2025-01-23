@@ -36,14 +36,14 @@ from the X Consortium.
  * a widget which follows the mouse around
  */
 
-# include <X11/Xos.h>
+# include "X11/Xos.h"
 # include <stdio.h>
-# include <X11/IntrinsicP.h>
-# include <X11/StringDefs.h>
-# include <X11/Xmu/Converters.h>
+# include "X11/IntrinsicP.h"
+# include "X11/StringDefs.h"
+# include "X11/Xmu/Converters.h"
 # include "EyesP.h"
 # include <math.h>
-# include <X11/extensions/shape.h>
+# include "X11/extensions/shape.h"
 
 #if (defined(SVR4) || defined(SYSV) && defined(i386))
 extern double hypot(double, double);

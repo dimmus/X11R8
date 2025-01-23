@@ -49,33 +49,33 @@ SOFTWARE.
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <X11/Xaw3d/Xaw3dP.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Shell.h>
-#include <X11/Xatom.h>
-#include <X11/Xutil.h>
+#include "X11/Xaw3d/Xaw3dP.h"
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Shell.h"
+#include "X11/Xatom.h"
+#include "X11/Xutil.h"
 #ifdef XAW_INTERNATIONALIZATION
 #include "XawI18n.h"
 #endif
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <X11/Xmu/Atoms.h>
-#include <X11/Xmu/CharSet.h>
-#include <X11/Xmu/Converters.h>
-#include <X11/Xmu/StdSel.h>
-#include <X11/Xmu/Misc.h>
-#include <X11/Xaw3d/XawInit.h>
-#include <X11/Xaw3d/Cardinals.h>
-#include <X11/Xaw3d/Scrollbar.h>
-#include <X11/Xaw3d/TextP.h>
+#include "X11/Xmu/Atoms.h"
+#include "X11/Xmu/CharSet.h"
+#include "X11/Xmu/Converters.h"
+#include "X11/Xmu/StdSel.h"
+#include "X11/Xmu/Misc.h"
+#include "X11/Xaw3d/XawInit.h"
+#include "X11/Xaw3d/Cardinals.h"
+#include "X11/Xaw3d/Scrollbar.h"
+#include "X11/Xaw3d/TextP.h"
 #ifdef XAW_INTERNATIONALIZATION
-#include <X11/Xaw3d/MultiSinkP.h>
-#include <X11/Xaw3d/XawImP.h>
+#include "X11/Xaw3d/MultiSinkP.h"
+#include "X11/Xaw3d/XawImP.h"
 #endif
-#include <X11/Xaw3d/ThreeDP.h>
-#include <X11/Xfuncs.h>
+#include "X11/Xaw3d/ThreeDP.h"
+#include "X11/Xfuncs.h"
 #include <ctype.h>		/* for isprint() */
 
 #ifndef MAX_LEN_CT

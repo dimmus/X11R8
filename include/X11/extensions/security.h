@@ -28,9 +28,9 @@ from The Open Group.
 #define _SECURITY_H
 
 #define _XAUTH_STRUCT_ONLY
-#include <X11/Xauth.h>
+#include "X11/Xauth.h"
 
-#include <X11/extensions/secur.h>
+#include "X11/extensions/secur.h"
 
 _XFUNCPROTOBEGIN
 

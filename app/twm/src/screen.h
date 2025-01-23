@@ -34,9 +34,9 @@ in this Software without prior written authorization from The Open Group.
 #ifndef SCREEN_H
 #define SCREEN_H
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/cursorfont.h>
+#include "X11/Xlib.h"
+#include "X11/Xutil.h"
+#include "X11/cursorfont.h"
 #include "list.h"
 #include "menus.h"
 #include "iconmgr.h"

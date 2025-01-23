@@ -27,7 +27,7 @@
 #include <dix-config.h>
 
 #include <stdint.h>
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 
 #include "dix/dix_priv.h"
 #include "dix/input_priv.h"

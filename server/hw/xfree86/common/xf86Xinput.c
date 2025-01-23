@@ -51,11 +51,11 @@
 #endif
 
 #include <string.h>             /* InputClassMatches */
-#include <X11/Xfuncproto.h>
-#include <X11/Xmd.h>
-#include <X11/extensions/XI.h>
-#include <X11/extensions/XIproto.h>
-#include <X11/Xatom.h>
+#include "X11/Xfuncproto.h"
+#include "X11/Xmd.h"
+#include "X11/extensions/XI.h"
+#include "X11/extensions/XIproto.h"
+#include "X11/Xatom.h"
 
 #include "dix/dix_priv.h"
 #include "dix/ptrveloc_priv.h"

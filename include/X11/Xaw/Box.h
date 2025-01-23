@@ -48,7 +48,7 @@ SOFTWARE.
 #ifndef _XawBox_h
 #define _XawBox_h
 
-#include <X11/Xmu/Converters.h>
+#include "X11/Xmu/Converters.h"
 
 /*
  * Box Widget (subclass of CompositeClass)

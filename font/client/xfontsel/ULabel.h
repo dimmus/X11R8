@@ -55,8 +55,8 @@ SOFTWARE.
  *
  ***********************************************************************/
 
-#include <X11/Xaw/Label.h>
-#include <X11/Xaw/Simple.h>
+#include "X11/Xaw/Label.h"
+#include "X11/Xaw/Simple.h"
 
 /* Resources:
 

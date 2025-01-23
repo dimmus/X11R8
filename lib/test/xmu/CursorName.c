@@ -26,8 +26,8 @@
 #include <config.h>
 #endif
 
-#include <X11/Xmu/CurUtil.h>
-#include <X11/Xmu/CharSet.h>
+#include "X11/Xmu/CurUtil.h"
+#include "X11/Xmu/CharSet.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -37,7 +37,7 @@
 
 #define SKIP_WHITESPACE(p)  while (isspace(*p)) p++
 
-/* Looks up each entry from <X11/cursorfont.h> to verify value returned */
+/* Looks up each entry from "X11/cursorfont.h" to verify value returned */
 static void
 test_CursorNameToIndex_goodnames(void)
 {

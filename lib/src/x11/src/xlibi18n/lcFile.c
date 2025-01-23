@@ -31,7 +31,7 @@
 #include <ctype.h>
 #include "Xlibint.h"
 #include "XlcPubI.h"
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 #include <unistd.h>
 
 /************************************************************************/

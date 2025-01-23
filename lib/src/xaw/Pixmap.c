@@ -31,12 +31,12 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <X11/IntrinsicP.h>
-#include <X11/Xmu/CharSet.h>
-#include <X11/Xfuncs.h>
-#include <X11/extensions/shape.h>
+#include "X11/IntrinsicP.h"
+#include "X11/Xmu/CharSet.h"
+#include "X11/Xfuncs.h"
+#include "X11/extensions/shape.h"
 #ifndef OLDXAW
-#include <X11/xpm.h>
+#include "X11/xpm.h"
 #endif
 #include "Private.h"
 

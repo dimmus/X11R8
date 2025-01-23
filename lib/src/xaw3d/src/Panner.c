@@ -28,15 +28,15 @@ in this Software without prior written authorization from the X Consortium.
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>		/* for XtN and XtC defines */
-#include <X11/Xmu/CharSet.h>		/* for XmuCompareISOLatin1() */
-#include <X11/Xaw3d/XawInit.h>		/* for XawInitializeWidgetSet */
-#include <X11/Xaw3d/PannerP.h>		/* us */
-#include <X11/Xos.h>
-#include <X11/Xmu/Misc.h>		/* for Min */
-#include <X11/Xmu/Drawing.h>
-#include <X11/Xmu/StdCmap.h>		/* for XmuDistinguishablePixels() */
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"		/* for XtN and XtC defines */
+#include "X11/Xmu/CharSet.h"		/* for XmuCompareISOLatin1() */
+#include "X11/Xaw3d/XawInit.h"		/* for XawInitializeWidgetSet */
+#include "X11/Xaw3d/PannerP.h"		/* us */
+#include "X11/Xos.h"
+#include "X11/Xmu/Misc.h"		/* for Min */
+#include "X11/Xmu/Drawing.h"
+#include "X11/Xmu/StdCmap.h"		/* for XmuDistinguishablePixels() */
 #include <ctype.h>			/* for isascii() etc. */
 #include <stdlib.h>			/* for atof() */
 

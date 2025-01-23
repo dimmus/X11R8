@@ -31,12 +31,12 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _SMLIBINT_H_
 #define _SMLIBINT_H_
 
-#include <X11/Xos.h>
-#include <X11/Xfuncs.h>
-#include <X11/Xmd.h>
-#include <X11/ICE/ICEmsg.h>
-#include <X11/ICE/ICEproto.h>
-#include <X11/SM/SMproto.h>
+#include "X11/Xos.h"
+#include "X11/Xfuncs.h"
+#include "X11/Xmd.h"
+#include "X11/ICE/ICEmsg.h"
+#include "X11/ICE/ICEproto.h"
+#include "X11/SM/SMproto.h"
 
 #include <stdlib.h>
 

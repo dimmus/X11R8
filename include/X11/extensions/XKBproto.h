@@ -27,9 +27,9 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef _XKBPROTO_H_
 #define	_XKBPROTO_H_
 
-#include <X11/Xmd.h>
-#include <X11/Xfuncproto.h>
-#include <X11/extensions/XKB.h>
+#include "X11/Xmd.h"
+#include "X11/Xfuncproto.h"
+#include "X11/extensions/XKB.h"
 
 #define Window CARD32
 #define Atom CARD32

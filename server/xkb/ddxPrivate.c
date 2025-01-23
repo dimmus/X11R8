@@ -1,7 +1,7 @@
 
 #include <dix-config.h>
 
-#include <X11/X.h>
+#include "X11/X.h"
 #include "windowstr.h"
 #include <xkbsrv.h>
 

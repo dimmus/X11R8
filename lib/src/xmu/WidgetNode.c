@@ -35,10 +35,10 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #include <stdio.h>
 #include <stdlib.h>
-#include <X11/Xos.h>
-#include <X11/IntrinsicP.h>
-#include <X11/Xmu/CharSet.h>
-#include <X11/Xmu/WidgetNode.h>
+#include "X11/Xos.h"
+#include "X11/IntrinsicP.h"
+#include "X11/Xmu/CharSet.h"
+#include "X11/Xmu/WidgetNode.h"
 
 /*
  * Prototypes

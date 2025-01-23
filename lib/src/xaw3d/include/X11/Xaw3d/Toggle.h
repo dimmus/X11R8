@@ -42,7 +42,7 @@ in this Software without prior written authorization from the X Consortium.
  *
  ***********************************************************************/
 
-#include <X11/Xaw3d/Command.h>
+#include "X11/Xaw3d/Command.h"
 
 /* Resources:
 

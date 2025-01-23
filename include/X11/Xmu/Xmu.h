@@ -32,14 +32,14 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XMU_H_
 #define _XMU_H_
 
-#include <X11/Xfuncproto.h>
-#include <X11/Intrinsic.h>
-#include <X11/Xmu/Atoms.h>		/* _XA_... */
-#include <X11/Xmu/CharSet.h>		/* CopyISOLatin1Lowered */
-#include <X11/Xmu/Converters.h>		/* CvtStringTo... */
-#include <X11/Xmu/Drawing.h>		/* DrawRoundedRect, DrawLogo */
-#include <X11/Xmu/Error.h>		/* PrintDefaultError */
-#include <X11/Xmu/StdSel.h>		/* ConvertStandardSelection */
+#include "X11/Xfuncproto.h"
+#include "X11/Intrinsic.h"
+#include "X11/Xmu/Atoms.h"		/* _XA_... */
+#include "X11/Xmu/CharSet.h"		/* CopyISOLatin1Lowered */
+#include "X11/Xmu/Converters.h"		/* CvtStringTo... */
+#include "X11/Xmu/Drawing.h"		/* DrawRoundedRect, DrawLogo */
+#include "X11/Xmu/Error.h"		/* PrintDefaultError */
+#include "X11/Xmu/StdSel.h"		/* ConvertStandardSelection */
 
 /*
  * clip lists

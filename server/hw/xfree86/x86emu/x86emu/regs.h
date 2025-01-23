@@ -39,7 +39,7 @@
 #ifndef __X86EMU_REGS_H
 #define __X86EMU_REGS_H
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 /*---------------------- Macros and type definitions ----------------------*/
 

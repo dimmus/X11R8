@@ -52,7 +52,7 @@ SOFTWARE.
 #error xserver code must include dix-config.h before any other headers
 #endif
 
-#include <X11/Xarch.h>		/* for X_LITTLE_ENDIAN/X_BIG_ENDIAN */
+#include "X11/Xarch.h"		/* for X_LITTLE_ENDIAN/X_BIG_ENDIAN */
 
 #if X_BYTE_ORDER == X_LITTLE_ENDIAN
 #define IMAGE_BYTE_ORDER        LSBFirst
@@ -87,7 +87,7 @@ SOFTWARE.
 #define LOG2_BYTES_PER_SCANLINE_PAD	2
 #endif
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 /*
  *   This returns the number of padding units, for depth d and width w.
  * For bitmaps this can be calculated with the macros above.

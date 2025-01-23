@@ -45,8 +45,8 @@ in this Software without prior written authorization from the X Consortium.
  ***********************************************************************/
 
 #include "Xaw3dP.h"
-#include <X11/Xaw3d/SimpleP.h>
-#include <X11/Xaw3d/List.h>
+#include "X11/Xaw3d/SimpleP.h"
+#include "X11/Xaw3d/List.h"
 
 #define NO_HIGHLIGHT            XAW_LIST_NONE
 #define OUT_OF_RANGE            -1

@@ -26,15 +26,15 @@ SOFTWARE.
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <X11/Xaw3d/Xaw3dP.h>
-#include <X11/Xlib.h>
-#include <X11/StringDefs.h>
-#include <X11/IntrinsicP.h>
-#include <X11/Xaw3d/XawInit.h>
-#include <X11/Xaw3d/ThreeDP.h>
-#include <X11/Xaw3d/SimpleMenP.h>
-#include <X11/Xaw3d/SmeThreeDP.h>
-#include <X11/Xosdefs.h>
+#include "X11/Xaw3d/Xaw3dP.h"
+#include "X11/Xlib.h"
+#include "X11/StringDefs.h"
+#include "X11/IntrinsicP.h"
+#include "X11/Xaw3d/XawInit.h"
+#include "X11/Xaw3d/ThreeDP.h"
+#include "X11/Xaw3d/SimpleMenP.h"
+#include "X11/Xaw3d/SmeThreeDP.h"
+#include "X11/Xosdefs.h"
 
 /* Initialization of defaults */
 

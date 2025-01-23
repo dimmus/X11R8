@@ -37,10 +37,10 @@ in this Software without prior written authorization from The Open Group.
 #endif
 
 #include <stdint.h>
-#include <X11/extensions/XI2proto.h>
-#include <X11/Xlibint.h>
-#include <X11/extensions/XInput2.h>
-#include <X11/extensions/extutil.h>
+#include "X11/extensions/XI2proto.h"
+#include "X11/Xlibint.h"
+#include "X11/extensions/XInput2.h"
+#include "X11/extensions/extutil.h"
 #include "XIint.h"
 
 Status

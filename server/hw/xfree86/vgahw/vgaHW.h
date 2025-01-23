@@ -12,7 +12,7 @@
 #ifndef _VGAHW_H
 #define _VGAHW_H
 
-#include <X11/X.h>
+#include "X11/X.h"
 #include "misc.h"
 #include "input.h"
 #include "scrnintstr.h"
@@ -24,7 +24,7 @@
 #include "xf86DDC.h"
 
 #include "globals.h"
-#include <X11/extensions/dpmsconst.h>
+#include "X11/extensions/dpmsconst.h"
 
 extern _X_EXPORT int vgaHWGetIndex(void);
 

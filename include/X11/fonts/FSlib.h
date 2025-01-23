@@ -56,10 +56,10 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _FSLIB_H_
 #define _FSLIB_H_
 
-#include	<X11/Xfuncproto.h>
+#include	"X11/Xfuncproto.h"
 
-#include	<X11/fonts/FS.h>
-#include	<X11/fonts/FSproto.h>
+#include	"X11/fonts/FS.h"
+#include	"X11/fonts/FSproto.h"
 
 #define	Bool	int
 #define	Status	int

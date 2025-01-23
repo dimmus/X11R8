@@ -31,13 +31,13 @@
 
 #include "xpr.h"
 
-#include <X11/extensions/applewmproto.h>
+#include "X11/extensions/applewmproto.h"
 
 #include "applewmExt.h"
 #include "rootless.h"
 #include "rootlessCommon.h"
 #include <Xplugin.h>
-#include <X11/X.h>
+#include "X11/X.h"
 #include "quartz.h"
 #include "x-hash.h"
 

@@ -48,7 +48,7 @@ SOFTWARE.
 #ifndef _XawForm_h
 #define _XawForm_h
 
-#include <X11/Intrinsic.h>
+#include "X11/Intrinsic.h"
 
 /* Resources:
 

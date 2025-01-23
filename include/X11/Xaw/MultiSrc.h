@@ -57,7 +57,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XawMultiSrc_h
 #define _XawMultiSrc_h
 
-#include <X11/Xaw/TextSrc.h>
+#include "X11/Xaw/TextSrc.h"
 
 /* Resources:
 

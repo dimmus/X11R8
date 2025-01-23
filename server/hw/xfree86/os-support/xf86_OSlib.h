@@ -73,8 +73,8 @@
 #ifndef _XF86_OSLIB_H
 #define _XF86_OSLIB_H
 
-#include <X11/Xos.h>
-#include <X11/Xfuncproto.h>
+#include "X11/Xos.h"
+#include "X11/Xfuncproto.h"
 
 #include <stdio.h>
 #include <ctype.h>

@@ -72,7 +72,7 @@ SOFTWARE.
 |	Includes, Defines, and Statics
 \*--------------------------------------------------------------------*/
 
-#include <X11/Xosdefs.h>
+#include "X11/Xosdefs.h"
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/time.h>

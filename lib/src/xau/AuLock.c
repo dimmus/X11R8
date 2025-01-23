@@ -27,8 +27,8 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xauth.h>
-#include <X11/Xos.h>
+#include "X11/Xauth.h"
+#include "X11/Xos.h"
 #include <sys/stat.h>
 #include <errno.h>
 #include <time.h>
@@ -37,7 +37,7 @@ in this Software without prior written authorization from The Open Group.
 # include <unistd.h>
 #endif
 #ifdef WIN32
-# include <X11/Xwindows.h>
+# include "X11/Xwindows.h"
 # define link rename
 #endif
 

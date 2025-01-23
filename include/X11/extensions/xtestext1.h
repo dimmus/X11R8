@@ -57,7 +57,7 @@ University of California.
  * the typedefs for CARD8, CARD16, and CARD32 are defined in Xmd.h
  */
 
-#include <X11/extensions/xtestext1const.h>
+#include "X11/extensions/xtestext1const.h"
 /*
  * This is the definition for the input action host format event structure.
  * This is the form that a client using this extension will see when

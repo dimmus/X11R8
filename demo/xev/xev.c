@@ -37,11 +37,11 @@ from the X Consortium.
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <X11/Xlocale.h>
-#include <X11/Xos.h>
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xproto.h>
+#include "X11/Xlocale.h"
+#include "X11/Xos.h"
+#include "X11/Xlib.h"
+#include "X11/Xutil.h"
+#include "X11/Xproto.h"
 
 #define INNER_WINDOW_WIDTH 50
 #define INNER_WINDOW_HEIGHT 50

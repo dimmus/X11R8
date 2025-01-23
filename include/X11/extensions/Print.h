@@ -63,12 +63,12 @@
 #define _XpPrint_H_
 
 #ifndef _XP_PRINT_SERVER_
-#include <X11/Xlib.h>
-#include <X11/Xresource.h>
-#include <X11/Xauth.h>
+#include "X11/Xlib.h"
+#include "X11/Xresource.h"
+#include "X11/Xauth.h"
 #endif /* _XP_PRINT_SERVER_ */
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 _XFUNCPROTOBEGIN
 

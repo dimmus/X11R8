@@ -69,8 +69,8 @@
 #include <xf86Xinput.h>
 #include <exevents.h>
 
-#include <X11/Xatom.h>
-#include <X11/extensions/XI2.h>
+#include "X11/Xatom.h"
+#include "X11/extensions/XI2.h"
 #include <xserver-properties.h>
 #include <ptrveloc.h>
 

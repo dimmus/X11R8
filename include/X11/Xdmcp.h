@@ -16,9 +16,9 @@
 #ifndef _XDMCP_H_
 #define _XDMCP_H_
 
-#include <X11/Xmd.h>
+#include "X11/Xmd.h"
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 _XFUNCPROTOBEGIN
 

@@ -28,12 +28,12 @@
 #include "config.h"
 #endif
 
-#include <X11/Xlib.h>
-#include <X11/cursorfont.h>
-#include <X11/extensions/Xrender.h>
+#include "X11/Xlib.h"
+#include "X11/cursorfont.h"
+#include "X11/extensions/Xrender.h"
 
 #ifdef HAVE_XFIXES
-#include <X11/extensions/Xfixes.h>
+#include "X11/extensions/Xfixes.h"
 #endif
 
 #include "Xcursor.h"

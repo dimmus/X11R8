@@ -9,11 +9,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
-#include <X11/Xaw/Form.h>
-#include <X11/Xaw/Label.h>
-#include <X11/Xaw/AsciiText.h>
+#include "X11/Intrinsic.h"
+#include "X11/StringDefs.h"
+#include "X11/Xaw/Form.h"
+#include "X11/Xaw/Label.h"
+#include "X11/Xaw/AsciiText.h"
 #include "xgc.h"
 
 static void WriteText(Widget, XEvent *, String *, Cardinal *);

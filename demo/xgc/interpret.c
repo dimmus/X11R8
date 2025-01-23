@@ -6,8 +6,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
+#include "X11/Intrinsic.h"
+#include "X11/StringDefs.h"
 #include "xgc.h"
 #include "tile"
 

@@ -32,7 +32,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _WINDOWSWM_H_
 #define _WINDOWSWM_H_
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 #define X_WindowsWMQueryVersion		0
 #define X_WindowsWMFrameGetRect		1

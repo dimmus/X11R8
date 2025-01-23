@@ -52,8 +52,8 @@ SOFTWARE.
  * Scrollbar Widget
  */
 
-#include <X11/Xmu/Converters.h>
-#include <X11/Xfuncproto.h>
+#include "X11/Xmu/Converters.h"
+#include "X11/Xfuncproto.h"
 
 /* Scrollbar resources:
 

@@ -29,7 +29,7 @@ Author:  Ralph Mor, X Consortium
 #include "config.h"
 #endif
 
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 
 #ifndef X_NOT_POSIX
 #ifdef _POSIX_SOURCE
@@ -54,9 +54,9 @@ Author:  Ralph Mor, X Consortium
 #include <unistd.h>
 #endif
 
-#include <X11/Xlib.h>
-#include <X11/SM/SMlib.h>
-#include <X11/Xatom.h>
+#include "X11/Xlib.h"
+#include "X11/SM/SMlib.h"
+#include "X11/Xatom.h"
 #include <stdio.h>
 #include "twm.h"
 #include "screen.h"

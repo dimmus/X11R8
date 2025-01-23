@@ -52,9 +52,9 @@ SOFTWARE.
 
 #include <dix-config.h>
 
-#include <X11/extensions/XI.h>
-#include <X11/extensions/XI2.h>
-#include <X11/extensions/XIproto.h>
+#include "X11/extensions/XI.h"
+#include "X11/extensions/XI2.h"
+#include "X11/extensions/XIproto.h"
 
 #include "dix/dix_priv.h"
 #include "dix/exevents_priv.h"

@@ -79,7 +79,7 @@ SOFTWARE.
 #include <dix-config.h>
 
 #ifdef WIN32
-#include <X11/Xwinsock.h>
+#include "X11/Xwinsock.h"
 #endif
 
 #include <stdio.h>
@@ -87,10 +87,10 @@ SOFTWARE.
 #define XSERV_t
 #define TRANS_SERVER
 #define TRANS_REOPEN
-#include <X11/Xtrans/Xtrans.h>
-#include <X11/Xauth.h>
-#include <X11/X.h>
-#include <X11/Xproto.h>
+#include "X11/Xtrans/Xtrans.h"
+#include "X11/Xauth.h"
+#include "X11/X.h"
+#include "X11/Xproto.h"
 #include "misc.h"
 #include <errno.h>
 #include <sys/types.h>
@@ -171,7 +171,7 @@ SOFTWARE.
 #endif
 
 #define X_INCLUDE_NETDB_H
-#include <X11/Xos_r.h>
+#include "X11/Xos_r.h"
 
 #include "os/auth.h"
 #include "os/client_priv.h"

@@ -51,8 +51,8 @@ SOFTWARE.
 /*
  * Label Widget Private Data
  */
-#include <X11/Xaw/Label.h>
-#include <X11/Xaw/SimpleP.h>
+#include "X11/Xaw/Label.h"
+#include "X11/Xaw/SimpleP.h"
 
 /* New fields for the Label widget class record */
 typedef struct {

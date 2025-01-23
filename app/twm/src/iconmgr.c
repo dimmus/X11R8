@@ -39,8 +39,8 @@ in this Software without prior written authorization from The Open Group.
 #include "resize.h"
 #include "add_window.h"
 #include "siconify.bm"
-#include <X11/Xos.h>
-#include <X11/Xmu/CharSet.h>
+#include "X11/Xos.h"
+#include "X11/Xmu/CharSet.h"
 
 static void InsertInIconManager(IconMgr *ip, WList *tmp, TwmWindow *tmp_win);
 

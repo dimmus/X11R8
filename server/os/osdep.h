@@ -51,17 +51,17 @@ SOFTWARE.
 #ifndef _OSDEP_H_
 #define _OSDEP_H_ 1
 
-#include <X11/Xdefs.h>
+#include "X11/Xdefs.h"
 
 #if defined(XDMCP) || defined(HASXDMAUTH)
-#include <X11/Xdmcp.h>
+#include "X11/Xdmcp.h"
 #endif
 
 #include <limits.h>
 #include <stddef.h>
-#include <X11/Xos.h>
-#include <X11/Xmd.h>
-#include <X11/Xdefs.h>
+#include "X11/Xos.h"
+#include "X11/Xmd.h"
+#include "X11/Xdefs.h"
 
 #ifndef __has_builtin
 # define __has_builtin(x) 0     /* Compatibility with older compilers */
@@ -142,7 +142,7 @@ void TimerInit(void);
 Bool TimerForce(OsTimerPtr timer);
 
 #ifdef WIN32
-#include <X11/Xwinsock.h>
+#include "X11/Xwinsock.h"
 struct utsname {
     char nodename[512];
 };

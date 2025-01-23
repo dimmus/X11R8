@@ -75,7 +75,7 @@ SOFTWARE.
 #endif
 #include "Xlibint.h"
 #include "Xutil.h"
-#include <X11/Xregion.h>
+#include "X11/Xregion.h"
 #include "poly.h"
 #include "reallocarray.h"
 

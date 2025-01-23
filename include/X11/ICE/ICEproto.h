@@ -29,7 +29,7 @@ Author: Ralph Mor, X Consortium
 #ifndef _ICEPROTO_H_
 #define _ICEPROTO_H_
 
-#include <X11/Xmd.h>
+#include "X11/Xmd.h"
 
 typedef struct {
     CARD8	majorOpcode;

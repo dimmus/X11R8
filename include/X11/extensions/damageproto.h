@@ -24,9 +24,9 @@
 #ifndef _DAMAGEPROTO_H_
 #define _DAMAGEPROTO_H_
 
-#include <X11/Xmd.h>
-#include <X11/extensions/xfixesproto.h>
-#include <X11/extensions/damagewire.h>
+#include "X11/Xmd.h"
+#include "X11/extensions/xfixesproto.h"
+#include "X11/extensions/damagewire.h"
 
 #define Window CARD32
 #define Drawable CARD32

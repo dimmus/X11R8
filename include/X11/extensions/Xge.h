@@ -30,8 +30,8 @@
 #ifndef _XGE_H_
 #define _XGE_H_
 
-#include <X11/Xlib.h>
-#include <X11/Xfuncproto.h>
+#include "X11/Xlib.h"
+#include "X11/Xfuncproto.h"
 
 _XFUNCPROTOBEGIN
 

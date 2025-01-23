@@ -55,7 +55,7 @@ from the X Consortium.
 
 */
 
-/* define any special resource names here that are not in <X11/StringDefs.h> */
+/* define any special resource names here that are not in "X11/StringDefs.h" */
 
 #define XtNgasResource "gasResource"
 

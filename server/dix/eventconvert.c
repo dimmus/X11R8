@@ -31,11 +31,11 @@
 #include <dix-config.h>
 
 #include <stdint.h>
-#include <X11/X.h>
-#include <X11/extensions/XIproto.h>
-#include <X11/extensions/XI2proto.h>
-#include <X11/extensions/XI.h>
-#include <X11/extensions/XI2.h>
+#include "X11/X.h"
+#include "X11/extensions/XIproto.h"
+#include "X11/extensions/XI2proto.h"
+#include "X11/extensions/XI.h"
+#include "X11/extensions/XI2.h"
 
 #include "dix/dix_priv.h"
 #include "dix/eventconvert.h"

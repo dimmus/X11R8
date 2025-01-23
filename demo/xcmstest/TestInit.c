@@ -32,7 +32,7 @@
  *              program using this package.
  */
 #include "LibTest.h"
-#include <X11/Xlib.h>
+#include "X11/Xlib.h"
 
 
 /*
@@ -45,8 +45,8 @@
 #include <stdlib.h>
 
 #include <sys/stat.h>
-#include <X11/Xutil.h>
-#include <X11/Xatom.h>
+#include "X11/Xutil.h"
+#include "X11/Xatom.h"
 
 #ifdef AUTOHEADER
 #  include "TekCMS_TCI.ah"

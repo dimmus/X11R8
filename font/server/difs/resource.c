@@ -65,7 +65,7 @@ in this Software without prior written authorization from The Open Group.
 
 #include "config.h"
 
-#include <X11/fonts/FS.h>
+#include "X11/fonts/FS.h"
 #include "misc.h"
 #include "os.h"
 #include "fsresource.h"

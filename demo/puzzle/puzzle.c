@@ -25,7 +25,7 @@
  ** indirectly from John Nagle.
  **/
 
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <setjmp.h>

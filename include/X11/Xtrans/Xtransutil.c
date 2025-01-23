@@ -55,11 +55,11 @@ from The Open Group.
  */
 
 #ifdef XTHREADS
-#include <X11/Xthreads.h>
+#include "X11/Xthreads.h"
 #endif
 #ifdef WIN32
-#include <X11/Xlibint.h>
-#include <X11/Xwinsock.h>
+#include "X11/Xlibint.h"
+#include "X11/Xwinsock.h"
 #endif
 
 #ifdef X11_t
@@ -222,7 +222,7 @@ TRANS(ConvertAddress)(int *familyp, int *addrlenp, Xtransaddr **addrp)
 # if defined(TCPCONN) || defined(UNIXCONN)
 #  define X_INCLUDE_NETDB_H
 #  define XOS_USE_NO_LOCKING
-#  include <X11/Xos_r.h>
+#  include "X11/Xos_r.h"
 # endif
 
 #include <signal.h>

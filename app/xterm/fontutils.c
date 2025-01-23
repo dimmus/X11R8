@@ -39,8 +39,8 @@
 #define RES_OFFSET(field)	XtOffsetOf(SubResourceRec, field)
 
 #include <fontutils.h>
-#include <X11/Xmu/Drawing.h>
-#include <X11/Xmu/CharSet.h>
+#include "X11/Xmu/Drawing.h"
+#include "X11/Xmu/CharSet.h"
 
 #include <main.h>
 #include <data.h>

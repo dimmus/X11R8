@@ -24,7 +24,7 @@ THE SOFTWARE.
 #ifndef _FT_H_
 #define _FT_H_
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 #define FREETYPE_VERSION (FREETYPE_MAJOR * 1000000 + FREETYPE_MINOR * 1000 + FREETYPE_PATCH)
 

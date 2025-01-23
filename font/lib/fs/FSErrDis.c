@@ -54,7 +54,7 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #include <stdio.h>
 #include "FSlibint.h"
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 
 static const char *FSErrorList[] = {
      /* FSBadRequest	 */ "BadRequest, invalid request code or no such operation",

@@ -49,7 +49,7 @@ SOFTWARE.
 #include "dix/cursor_priv.h"
 
 #include "misc.h"
-#include <X11/fonts/fontstruct.h>
+#include "X11/fonts/fontstruct.h"
 #include "dixfontstr.h"
 #include "scrnintstr.h"
 #include "gcstruct.h"

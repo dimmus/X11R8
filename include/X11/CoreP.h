@@ -48,7 +48,7 @@ SOFTWARE.
 #ifndef XtCoreP_h
 #define XtCoreP_h
 
-#include <X11/Core.h>
+#include "X11/Core.h"
 
 _XFUNCPROTOBEGIN
 

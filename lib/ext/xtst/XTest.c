@@ -30,13 +30,13 @@ from The Open Group.
 
 */
 
-#include <X11/Xlibint.h>
-#include <X11/extensions/XTest.h>
-#include <X11/extensions/xtestproto.h>
-#include <X11/extensions/Xext.h>
-#include <X11/extensions/extutil.h>
-#include <X11/extensions/XInput.h>
-#include <X11/extensions/XIproto.h>
+#include "X11/Xlibint.h"
+#include "X11/extensions/XTest.h"
+#include "X11/extensions/xtestproto.h"
+#include "X11/extensions/Xext.h"
+#include "X11/extensions/extutil.h"
+#include "X11/extensions/XInput.h"
+#include "X11/extensions/XIproto.h"
 
 static XExtensionInfo _xtest_info_data;
 static XExtensionInfo *xtest_info = &_xtest_info_data;

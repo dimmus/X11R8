@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <X11/StringDefs.h>
+#include "X11/StringDefs.h"
 #include <Xaw/Box.h>
 #include <Xaw/Command.h>
 #include <Xaw/SimpleMenu.h>

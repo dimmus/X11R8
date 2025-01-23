@@ -39,14 +39,14 @@ in this Software without prior written authorization from the X Consortium.
 #include "config.h"
 #endif
 #include <stdio.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
 
-#include <X11/Xaw3d/XawInit.h>
-#include <X11/Xaw3d/ThreeDP.h>
-#include <X11/Xaw3d/SimpleMenP.h>
-#include <X11/Xaw3d/SmeLineP.h>
-#include <X11/Xaw3d/Cardinals.h>
+#include "X11/Xaw3d/XawInit.h"
+#include "X11/Xaw3d/ThreeDP.h"
+#include "X11/Xaw3d/SimpleMenP.h"
+#include "X11/Xaw3d/SmeLineP.h"
+#include "X11/Xaw3d/Cardinals.h"
 
 #define offset(field) XtOffsetOf(SmeLineRec, sme_line.field)
 static XtResource resources[] = {

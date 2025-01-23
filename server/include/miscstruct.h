@@ -48,7 +48,7 @@ SOFTWARE.
 #define MISCSTRUCT_H 1
 
 #include "misc.h"
-#include <X11/Xprotostr.h>
+#include "X11/Xprotostr.h"
 #include <pixman.h>
 
 typedef xPoint DDXPointRec;

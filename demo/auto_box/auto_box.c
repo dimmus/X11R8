@@ -34,8 +34,8 @@ SOFTWARE.
 
 
 #ifdef USE_X_DRAWABLE
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
+#include "X11/Xlib.h"
+#include "X11/Xatom.h"
 #endif /*USE_X_DRAWABLE*/
 
 #include <phigs/phigs.h>

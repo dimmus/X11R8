@@ -54,7 +54,7 @@ in this Software without prior written authorization from The Open Group.
 #include <config.h>
 #endif
 #include	<stdio.h>
-#include	<X11/Xosdefs.h>
+#include	"X11/Xosdefs.h"
 #include	<stdlib.h>
 #include	"FSlib.h"
 

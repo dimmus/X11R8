@@ -28,12 +28,12 @@
 #include "config.h"
 #endif
 
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <X11/extensions/XInput.h>
+#include "X11/Xlib.h"
+#include "X11/Xatom.h"
+#include "X11/extensions/XInput.h"
 #ifdef HAVE_X11_EXTENSIONS_RECORD_H
-#include <X11/Xproto.h>
-#include <X11/extensions/record.h>
+#include "X11/Xproto.h"
+#include "X11/extensions/record.h"
 #endif                          /* HAVE_X11_EXTENSIONS_RECORD_H */
 
 #include <stdio.h>

@@ -33,7 +33,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XOS_H_
 # define _XOS_H_
 
-# include <X11/Xosdefs.h>
+# include "X11/Xosdefs.h"
 
 /*
  * Get major data types (esp. caddr_t)
@@ -80,7 +80,7 @@ in this Software without prior written authorization from The Open Group.
 #   include <unistd.h>
 #  endif
 #  ifdef WIN32
-#   include <X11/Xw32defs.h>
+#   include "X11/Xw32defs.h"
 #  else
 #   include <sys/file.h>
 #  endif
@@ -143,6 +143,6 @@ struct timeval {
 #  define SIGCHLD SIGCLD
 # endif
 
-# include <X11/Xarch.h>
+# include "X11/Xarch.h"
 
 #endif /* _XOS_H_ */

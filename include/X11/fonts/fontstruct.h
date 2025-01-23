@@ -24,10 +24,10 @@ SOFTWARE.
 #ifndef FONTSTR_H
 #define FONTSTR_H
 
-#include <X11/Xproto.h>
+#include "X11/Xproto.h"
 #include "font.h"
-#include <X11/Xfuncproto.h>
-#include <X11/Xdefs.h>
+#include "X11/Xfuncproto.h"
+#include "X11/Xdefs.h"
 
 /*
  * This version of the server font data structure is only for describing

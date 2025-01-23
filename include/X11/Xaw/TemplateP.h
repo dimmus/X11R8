@@ -27,12 +27,12 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _TemplateP_h
 #define _TemplateP_h
 
-#include <X11/Xaw/Template.h>
+#include "X11/Xaw/Template.h"
 
 /* include superclass private header file */
-#include <X11/CoreP.h>
+#include "X11/CoreP.h"
 
-/* define unique representation types not found in <X11/StringDefs.h> */
+/* define unique representation types not found in "X11/StringDefs.h" */
 #define XtRTemplateResource "TemplateResource"
 
 typedef struct {

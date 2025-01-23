@@ -50,7 +50,7 @@ SOFTWARE.
 #include <config.h>
 #endif
 #include "Xlibint.h"
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 #include <stdio.h>
 
 Status XGetWMProtocols (

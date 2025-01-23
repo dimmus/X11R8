@@ -68,19 +68,19 @@ SOFTWARE.
  *          kit@expo.lcs.mit.edu
  */
 
-#include <X11/Xaw3d/Xaw3dP.h>
+#include "X11/Xaw3d/Xaw3dP.h"
 #include <stdio.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xaw3d/XawInit.h>
-#include <X11/Xaw3d/Cardinals.h>
-#include <X11/Xaw3d/AsciiTextP.h>
-#include <X11/Xaw3d/AsciiSrc.h>
-#include <X11/Xaw3d/AsciiSink.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xaw3d/XawInit.h"
+#include "X11/Xaw3d/Cardinals.h"
+#include "X11/Xaw3d/AsciiTextP.h"
+#include "X11/Xaw3d/AsciiSrc.h"
+#include "X11/Xaw3d/AsciiSink.h"
 #ifdef XAW_INTERNATIONALIZATION
-#include <X11/Xaw3d/MultiSrc.h>
-#include <X11/Xaw3d/MultiSinkP.h>
-#include <X11/Xaw3d/XawImP.h>
+#include "X11/Xaw3d/MultiSrc.h"
+#include "X11/Xaw3d/MultiSinkP.h"
+#include "X11/Xaw3d/XawImP.h"
 #endif
 
 #define TAB_COUNT 32

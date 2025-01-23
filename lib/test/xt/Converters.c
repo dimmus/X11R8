@@ -21,7 +21,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include <X11/Intrinsic.h>
+#include "X11/Intrinsic.h"
 #include <assert.h>
 
 /* Test for Solaris bug 4163152 XtCvtIntToPixmap() gets a SIGBUS in 64-bit

@@ -33,7 +33,7 @@ from Kaleb S. KEITHLEY
 #ifndef _XF86VM_H_
 #define _XF86VM_H_
 
-#include <X11/Xmd.h>
+#include "X11/Xmd.h"
 
 
 #define CLKFLAG_PROGRAMABLE		1

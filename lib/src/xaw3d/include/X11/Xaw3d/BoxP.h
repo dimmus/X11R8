@@ -60,8 +60,8 @@ SOFTWARE.
  *
  ***********************************************************************/
 
-#include <X11/Xaw3d/Box.h>
-#include <X11/Xmu/Converters.h>
+#include "X11/Xaw3d/Box.h"
+#include "X11/Xmu/Converters.h"
 
 /* New fields for the Box widget class record */
 typedef struct {int empty;} BoxClassPart;

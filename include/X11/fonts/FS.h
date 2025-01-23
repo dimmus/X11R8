@@ -52,8 +52,8 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _FS_H_
 #define	_FS_H_
 
-#include <X11/Xdefs.h>
-#include <X11/fonts/fsmasks.h>
+#include "X11/Xdefs.h"
+#include "X11/fonts/fsmasks.h"
 
 #define	FS_PROTOCOL		2
 #define	FS_PROTOCOL_MINOR	0

@@ -26,7 +26,7 @@
 
 #include <dix-config.h>
 
-#include <X11/Xlib.h>
+#include "X11/Xlib.h"
 #include <list.h>
 #include <string.h>
 #include <assert.h>

@@ -33,10 +33,10 @@ THE SOFTWARE.
 
 #include "fntfilst.h"
 #include "fontutil.h"
-#include <X11/fonts/FSproto.h>
+#include "X11/fonts/FSproto.h"
 
 #include "fontmisc.h"
-#include <X11/fonts/fontenc.h>
+#include "X11/fonts/fontenc.h"
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_TRUETYPE_IDS_H

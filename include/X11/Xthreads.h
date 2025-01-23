@@ -95,7 +95,7 @@ extern xthread_t (*_x11_thr_self)();
 #   define xcondition_broadcast(cv) cond_broadcast(cv)
 #  else /* !SVR4 */
 #   ifdef WIN32
-#    include <X11/Xwindows.h>
+#    include "X11/Xwindows.h"
 typedef DWORD xthread_t;
 typedef DWORD xthread_key_t;
 struct _xthread_waiter {

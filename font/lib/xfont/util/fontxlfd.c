@@ -35,11 +35,11 @@ from The Open Group.
 #endif
 #include "libxfontint.h"
 #include	"fontmisc.h"
-#include	<X11/fonts/fontstruct.h>
+#include	"X11/fonts/fontstruct.h"
 #include	"fontxlfd.h"
 #include	"fontutil.h"
 #include	"fntfilst.h" /* for MAXFONTNAMELEN */
-#include	<X11/Xos.h>
+#include	"X11/Xos.h"
 #include	<math.h>
 #include	<stdlib.h>
 #include	<locale.h>

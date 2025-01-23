@@ -36,18 +36,18 @@ in this Software without prior written authorization from The Open Group.
 #include <stdlib.h>
 #include <ctype.h>
 #include <errno.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xos.h>
-#include <X11/Xfuncs.h>
-#include <X11/Xmu/CharSet.h>
-#include <X11/Xmu/Misc.h>
-#include <X11/Xaw/XawInit.h>
-#include <X11/Xaw/AsciiSrcP.h>
-#include <X11/Xaw/MultiSrcP.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xos.h"
+#include "X11/Xfuncs.h"
+#include "X11/Xmu/CharSet.h"
+#include "X11/Xmu/Misc.h"
+#include "X11/Xaw/XawInit.h"
+#include "X11/Xaw/AsciiSrcP.h"
+#include "X11/Xaw/MultiSrcP.h"
 #ifndef OLDXAW
-#include <X11/Xaw/TextSinkP.h>
-#include <X11/Xaw/AsciiSinkP.h>
+#include "X11/Xaw/TextSinkP.h"
+#include "X11/Xaw/AsciiSinkP.h"
 #endif
 #include "Private.h"
 
@@ -60,7 +60,7 @@ in this Software without prior written authorization from The Open Group.
 #endif
 
 #if (defined(ASCII_STRING) || defined(ASCII_DISK))
-#include <X11/Xaw/AsciiText.h>		/* for Widget Classes */
+#include "X11/Xaw/AsciiText.h"		/* for Widget Classes */
 #endif
 
 #define MAGIC_VALUE	((XawTextPosition)-1)
@@ -1797,7 +1797,7 @@ GetDefaultPieceSize(Widget w _X_UNUSED, int offset _X_UNUSED, XrmValue *value)
 }
 
 #if (defined(ASCII_STRING) || defined(ASCII_DISK))
-#  include <X11/Xaw/Cardinals.h>
+#  include "X11/Xaw/Cardinals.h"
 #endif
 
 #ifdef ASCII_STRING

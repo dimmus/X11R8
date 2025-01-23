@@ -54,16 +54,16 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xos.h>
-#include <X11/Xfuncs.h>
-#include <X11/ShellP.h>
-#include <X11/Xaw/TextP.h>
-#include <X11/Xaw/MultiSrc.h>
-#include <X11/Xaw/MultiSinkP.h>
-#include <X11/Xaw/XawImP.h>
-#include <X11/Xaw/VendorEP.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xos.h"
+#include "X11/Xfuncs.h"
+#include "X11/ShellP.h"
+#include "X11/Xaw/TextP.h"
+#include "X11/Xaw/MultiSrc.h"
+#include "X11/Xaw/MultiSinkP.h"
+#include "X11/Xaw/XawImP.h"
+#include "X11/Xaw/VendorEP.h"
 #include "XawI18n.h"
 #include <ctype.h>
 

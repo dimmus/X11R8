@@ -60,22 +60,22 @@
 
 #include <xterm.h>
 
-#include <X11/keysym.h>
+#include "X11/keysym.h"
 
 #ifdef VMS
-#include <X11/keysymdef.h>
+#include "X11/keysymdef.h"
 #endif
 
 #if HAVE_X11_DECKEYSYM_H
-#include <X11/DECkeysym.h>
+#include "X11/DECkeysym.h"
 #endif
 
 #if HAVE_X11_SUNKEYSYM_H
-#include <X11/Sunkeysym.h>
+#include "X11/Sunkeysym.h"
 #endif
 
 #if HAVE_X11_XF86KEYSYM_H
-#include <X11/XF86keysym.h>
+#include "X11/XF86keysym.h"
 #endif
 
 #if !defined(HAVE_CONFIG_H) && defined(_X_DEPRECATED)
@@ -83,10 +83,10 @@
 #endif
 
 #ifdef HAVE_XKBKEYCODETOKEYSYM
-#include <X11/XKBlib.h>
+#include "X11/XKBlib.h"
 #endif
 
-#include <X11/Xutil.h>
+#include "X11/Xutil.h"
 #include <stdio.h>
 #include <ctype.h>
 
@@ -125,7 +125,7 @@
 #define MAP(from, to) case from: result = to; break
 #define Masked(value,mask) ((value) & (unsigned) (~(mask)))
 
-#define KEYSYM_FMT "0x%04lX"	/* simplify matching <X11/keysymdef.h> */
+#define KEYSYM_FMT "0x%04lX"	/* simplify matching "X11/keysymdef.h" */
 
 #define TEK4014_GIN(tw) (tw != 0 && TekScreenOf(tw)->TekGIN)
 

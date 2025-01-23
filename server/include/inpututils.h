@@ -31,7 +31,7 @@
 
 #include "input.h"
 #include "eventstr.h"
-#include <X11/extensions/XI2proto.h>
+#include "X11/extensions/XI2proto.h"
 
 extern Mask event_filters[MAXDEVICES][MAXEVENTS];
 

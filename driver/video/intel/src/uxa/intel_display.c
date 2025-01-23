@@ -48,7 +48,7 @@
 #include "xf86drmMode.h"
 #include "X11/Xatom.h"
 #if defined(HAVE_X11_EXTENSIONS_DPMSCONST_H)
-#include <X11/extensions/dpmsconst.h>
+#include "X11/extensions/dpmsconst.h"
 #else
 #define DPMSModeOn 0
 #define DPMSModeOff 3

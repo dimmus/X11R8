@@ -27,13 +27,13 @@ Equipment Corporation.
 # include "config.h"
 #endif
 
-#include <X11/Xlibint.h>
-#include <X11/Xutil.h>
-#include <X11/extensions/Xext.h>
-#include <X11/extensions/extutil.h>
-#include <X11/extensions/panoramiXext.h>
-#include <X11/extensions/panoramiXproto.h>
-#include <X11/extensions/Xinerama.h>
+#include "X11/Xlibint.h"
+#include "X11/Xutil.h"
+#include "X11/extensions/Xext.h"
+#include "X11/extensions/extutil.h"
+#include "X11/extensions/panoramiXext.h"
+#include "X11/extensions/panoramiXproto.h"
+#include "X11/extensions/Xinerama.h"
 
 static XExtensionInfo _panoramiX_ext_info_data;
 static XExtensionInfo *panoramiX_ext_info = &_panoramiX_ext_info_data;

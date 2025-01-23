@@ -22,7 +22,7 @@ SOFTWARE.
 ******************************************************************************/
 
 #ifndef VMS
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 #else
 #include <decw$include/Xatom.h>
 #endif

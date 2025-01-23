@@ -66,7 +66,7 @@
 # include "xf86RandR12.h"
 /* For setting the root window property. */
 #include "property.h"
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 
 # include <stdlib.h>
 # include <string.h>

@@ -25,10 +25,10 @@
 
 #include <dix-config.h>
 
-#include <X11/X.h>              /* for inputstr.h    */
-#include <X11/Xproto.h>         /* Request macro     */
-#include <X11/extensions/XI.h>
-#include <X11/extensions/XI2proto.h>
+#include "X11/X.h"              /* for inputstr.h    */
+#include "X11/Xproto.h"         /* Request macro     */
+#include "X11/extensions/XI.h"
+#include "X11/extensions/XI2proto.h"
 
 #include "dix/dix_priv.h"
 

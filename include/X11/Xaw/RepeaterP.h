@@ -28,8 +28,8 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XawRepeaterP_h
 #define _XawRepeaterP_h
 
-#include <X11/Xaw/CommandP.h>
-#include <X11/Xaw/Repeater.h>
+#include "X11/Xaw/CommandP.h"
+#include "X11/Xaw/Repeater.h"
 
 /* new fields in widget class */
 typedef struct {

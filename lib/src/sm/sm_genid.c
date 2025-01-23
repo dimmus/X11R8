@@ -58,10 +58,10 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <X11/SM/SMlib.h>
+#include "X11/SM/SMlib.h"
 #include "SMlibint.h"
 #ifdef XTHREADS
-# include <X11/Xthreads.h>
+# include "X11/Xthreads.h"
 #endif
 #include <stdio.h>
 #include <unistd.h>
@@ -77,16 +77,16 @@ in this Software without prior written authorization from The Open Group.
 #  include <arpa/inet.h>
 #  define XOS_USE_NO_LOCKING
 #  define X_INCLUDE_NETDB_H
-#  include <X11/Xos_r.h>
+#  include "X11/Xos_r.h"
 # endif
 
 #else /* WIN32 */
 
-# include <X11/Xwinsock.h>
-# include <X11/Xw32defs.h>
+# include "X11/Xwinsock.h"
+# include "X11/Xw32defs.h"
 # define X_INCLUDE_NETDB_H
 # define XOS_USE_MTSAFE_NETDBAPI
-# include <X11/Xos_r.h>
+# include "X11/Xos_r.h"
 
 #endif /* WIN32 */
 

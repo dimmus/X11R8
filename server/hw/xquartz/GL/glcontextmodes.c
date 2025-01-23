@@ -35,7 +35,7 @@
 #include <GL/gl.h>
 #else
 #include <dix-config.h>
-#include <X11/X.h>
+#include "X11/X.h"
 #include <GL/glx.h>
 #include "GL/glxint.h"
 #endif
@@ -55,7 +55,7 @@
 #define _mesa_free(m)   free(m)
 #define _mesa_memset memset
 #else
-#include <X11/Xlibint.h>
+#include "X11/Xlibint.h"
 #define _mesa_memset memset
 #define _mesa_malloc(b) Xmalloc(b)
 #define _mesa_free(m)   free(m)

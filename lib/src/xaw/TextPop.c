@@ -48,17 +48,17 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #include <stdio.h>
 #include <errno.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Shell.h>
-#include <X11/Xos.h>
-#include <X11/Xmu/CharSet.h>
-#include <X11/Xaw/TextP.h>
-#include <X11/Xaw/AsciiText.h>
-#include <X11/Xaw/Cardinals.h>
-#include <X11/Xaw/Command.h>
-#include <X11/Xaw/Form.h>
-#include <X11/Xaw/Toggle.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Shell.h"
+#include "X11/Xos.h"
+#include "X11/Xmu/CharSet.h"
+#include "X11/Xaw/TextP.h"
+#include "X11/Xaw/AsciiText.h"
+#include "X11/Xaw/Cardinals.h"
+#include "X11/Xaw/Command.h"
+#include "X11/Xaw/Form.h"
+#include "X11/Xaw/Toggle.h"
 #include "XawI18n.h"
 
 #ifdef O_CLOEXEC

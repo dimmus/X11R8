@@ -33,7 +33,7 @@ in this Software without prior written authorization from The Open Group.
 
 #include <stdio.h>
 #include "twm.h"
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 #include "screen.h"
 #include "util.h"
 

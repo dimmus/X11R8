@@ -27,7 +27,7 @@ SOFTWARE.
 
 #undef POLYTRIANGLE_HACK    /* don't use this code */
 #ifdef POLYTRIANGLE_HACK
-#include <X11/Xlibint.h>
+#include "X11/Xlibint.h"
 #endif
 
 #include "x11perf.h"

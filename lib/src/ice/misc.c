@@ -32,13 +32,13 @@ Author: Ralph Mor, X Consortium
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/ICE/ICElib.h>
+#include "X11/ICE/ICElib.h"
 #include "ICElibint.h"
-#include <X11/Xtrans/Xtrans.h>
+#include "X11/Xtrans/Xtrans.h"
 #include <stdio.h>
 #ifdef WIN32
-#include <X11/Xwinsock.h>
-#include <X11/Xw32defs.h>
+#include "X11/Xwinsock.h"
+#include "X11/Xw32defs.h"
 #endif
 
 

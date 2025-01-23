@@ -39,7 +39,7 @@
 #endif
 
 #include <sys/stat.h>
-#include <X11/X.h>
+#include "X11/X.h"
 
 #include "dix/dix_priv.h"
 #include "dix/input_priv.h"

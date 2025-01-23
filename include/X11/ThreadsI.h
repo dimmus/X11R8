@@ -53,7 +53,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XtThreadsI_h
 #define _XtThreadsI_h
 
-#include <X11/XlibConf.h>
+#include "X11/XlibConf.h"
 
 #ifdef XTHREADS
 

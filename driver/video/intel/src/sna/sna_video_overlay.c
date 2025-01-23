@@ -33,7 +33,7 @@
 
 #include <xf86drm.h>
 #include <xf86xv.h>
-#include <X11/extensions/Xv.h>
+#include "X11/extensions/Xv.h"
 #include <fourcc.h>
 #include <i915_drm.h>
 

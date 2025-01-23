@@ -23,7 +23,7 @@
 #ifndef _MKS_LIST_H_
 #define _MKS_LIST_H_ 1
 
-#include <X11/Xfuncproto.h> /* for _X_ATTRIBUTE_PRINTF */
+#include "X11/Xfuncproto.h" /* for _X_ATTRIBUTE_PRINTF */
 
 char *dsprintf(const char *f, ...) _X_ATTRIBUTE_PRINTF(1,2);
 

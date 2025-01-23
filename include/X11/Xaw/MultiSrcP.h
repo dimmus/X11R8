@@ -93,9 +93,9 @@ SOFTWARE.
 #ifndef _XawMultiSrcP_h
 #define _XawMultiSrcP_h
 
-#include <X11/Xfuncproto.h>
-#include <X11/Xaw/TextSrcP.h>
-#include <X11/Xaw/MultiSrc.h>
+#include "X11/Xfuncproto.h"
+#include "X11/Xaw/TextSrcP.h"
+#include "X11/Xaw/MultiSrc.h"
 
 #ifdef L_tmpnam
 #define TMPSIZ L_tmpnam

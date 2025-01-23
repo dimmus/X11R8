@@ -113,7 +113,7 @@ SOFTWARE.
 |	Include Files
 \*--------------------------------------------------------------------*/
 #include <stdio.h>
-#include <X11/Xosdefs.h>
+#include "X11/Xosdefs.h"
 #ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
 #else

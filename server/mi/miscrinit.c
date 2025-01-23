@@ -28,7 +28,7 @@ from The Open Group.
 
 #include <dix-config.h>
 
-#include <X11/X.h>
+#include "X11/X.h"
 
 #include "mi/mi_priv.h"
 
@@ -40,7 +40,7 @@ from The Open Group.
 #include "dix.h"
 #include "miline.h"
 #ifdef MITSHM
-#include <X11/extensions/shm.h>
+#include "X11/extensions/shm.h"
 #include "shmint.h"
 #endif
 

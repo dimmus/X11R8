@@ -29,7 +29,7 @@ Author: Ralph Mor, X Consortium
 #ifndef _ICECONN_H_
 #define _ICECONN_H_
 
-#include <X11/ICE/ICElib.h>
+#include "X11/ICE/ICElib.h"
 
 /*
  * Data structures for ICE connection object

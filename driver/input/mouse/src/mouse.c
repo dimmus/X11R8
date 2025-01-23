@@ -52,19 +52,19 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <X11/X.h>
+#include "X11/X.h"
 
 #include "xf86.h"
 
-#include <X11/Xdefs.h>
-#include <X11/extensions/XI.h>
+#include "X11/Xdefs.h"
+#include "X11/extensions/XI.h"
 #include "extnsionst.h"
 #include "extinit.h"
 
 #include "xf86Xinput.h"
 #include "xf86_OSproc.h"
 #include "exevents.h"
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 #include "xserver-properties.h"
 #include "xf86-mouse-properties.h"
 

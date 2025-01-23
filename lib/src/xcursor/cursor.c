@@ -22,8 +22,8 @@
  */
 
 #include "xcursorint.h"
-#include <X11/Xlibint.h>
-#include <X11/Xutil.h>
+#include "X11/Xlibint.h"
+#include "X11/Xutil.h"
 
 XcursorCursors *
 XcursorCursorsCreate (Display *dpy, int size)
@@ -820,7 +820,7 @@ _XcursorCreateFontCursor (Display *dpy, unsigned int shape)
     /*
      * the cursor font contains the shape glyph followed by the mask
      * glyph; so character position 0 contains a shape, 1 the mask for 0,
-     * 2 a shape, etc.  <X11/cursorfont.h> contains hash define names
+     * 2 a shape, etc.  "X11/cursorfont.h" contains hash define names
      * for all of these.
      */
 

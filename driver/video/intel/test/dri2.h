@@ -35,8 +35,8 @@
 
 #include <stdint.h>
 
-#include <X11/extensions/Xfixes.h>
-#include <X11/extensions/dri2tokens.h>
+#include "X11/extensions/Xfixes.h"
+#include "X11/extensions/dri2tokens.h"
 
 typedef struct
 {

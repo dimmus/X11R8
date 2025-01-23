@@ -90,7 +90,7 @@ Equipment Corporation.
   */
 #include <dix-config.h>
 
-#include    <X11/X.h>
+#include    "X11/X.h"
 #include    "scrnintstr.h"
 #include    "validate.h"
 #include    "windowstr.h"

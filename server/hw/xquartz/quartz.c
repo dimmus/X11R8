@@ -47,7 +47,7 @@
 
 #include "X11Application.h"
 
-#include <X11/extensions/applewmconst.h>
+#include "X11/extensions/applewmconst.h"
 
 // X headers
 #include "scrnintstr.h"

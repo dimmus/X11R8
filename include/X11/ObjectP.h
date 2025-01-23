@@ -48,7 +48,7 @@ SOFTWARE.
 #ifndef _Xt_ObjectP_h_
 #define _Xt_ObjectP_h_
 
-#include <X11/Object.h>
+#include "X11/Object.h"
 
 _XFUNCPROTOBEGIN
 

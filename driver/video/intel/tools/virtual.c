@@ -26,28 +26,28 @@
 #include "config.h"
 #endif
 
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
+#include "X11/Xlib.h"
+#include "X11/Xatom.h"
 
-#include <X11/Xlibint.h>
-#include <X11/extensions/record.h>
-#include <X11/extensions/scrnsaver.h>
-#include <X11/extensions/XShm.h>
+#include "X11/Xlibint.h"
+#include "X11/extensions/record.h"
+#include "X11/extensions/scrnsaver.h"
+#include "X11/extensions/XShm.h"
 #if HAVE_X11_EXTENSIONS_SHMPROTO_H
-#include <X11/extensions/shmproto.h>
+#include "X11/extensions/shmproto.h"
 #elif HAVE_X11_EXTENSIONS_SHMSTR_H
-#include <X11/extensions/shmstr.h>
+#include "X11/extensions/shmstr.h"
 #else
 #error Failed to find the right header for X11 MIT-SHM protocol definitions
 #endif
-#include <X11/extensions/Xdamage.h>
+#include "X11/extensions/Xdamage.h"
 #if HAVE_X11_EXTENSIONS_XINERAMA_H
-#include <X11/extensions/Xinerama.h>
+#include "X11/extensions/Xinerama.h"
 #define USE_XINERAMA
 #endif
-#include <X11/extensions/Xrandr.h>
-#include <X11/extensions/Xrender.h>
-#include <X11/Xcursor/Xcursor.h>
+#include "X11/extensions/Xrandr.h"
+#include "X11/extensions/Xrender.h"
+#include "X11/Xcursor/Xcursor.h"
 #include <pixman.h>
 
 #include <sys/types.h>
@@ -340,8 +340,8 @@ can_use_shm(Display *dpy,
 }
 
 #ifdef DRI3
-#include <X11/Xlib-xcb.h>
-#include <X11/xshmfence.h>
+#include "X11/Xlib-xcb.h"
+#include "X11/xshmfence.h"
 #include <xcb/xcb.h>
 #include <xcb/xcbext.h>
 #include <xcb/dri3.h>

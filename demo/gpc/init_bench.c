@@ -79,10 +79,10 @@ SOFTWARE.
 #include "bifparse.h"
 #include "stopwatch.h"
 #ifdef USING_PHIGS
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xresource.h>
-#include <X11/Xatom.h>
+#include "X11/Xlib.h"
+#include "X11/Xutil.h"
+#include "X11/Xresource.h"
+#include "X11/Xatom.h"
 #include <ctype.h>
 #include "brfexption.h"
 #include "brftypes.h"

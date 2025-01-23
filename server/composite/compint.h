@@ -70,7 +70,7 @@
 #include "damage.h"
 #include "damageextint.h"
 #include "xfixes.h"
-#include <X11/extensions/compositeproto.h>
+#include "X11/extensions/compositeproto.h"
 #include "compositeext.h"
 #include <assert.h>
 

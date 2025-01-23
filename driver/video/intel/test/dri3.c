@@ -22,9 +22,9 @@
  *
  */
 
-#include <X11/Xlib.h>
-#include <X11/Xlib-xcb.h>
-#include <X11/xshmfence.h>
+#include "X11/Xlib.h"
+#include "X11/Xlib-xcb.h"
+#include "X11/xshmfence.h"
 #include <xcb/xcb.h>
 #include <xcb/dri3.h>
 #include <xcb/sync.h>

@@ -32,7 +32,7 @@
 #ifndef _XCMSINT_H_
 #define _XCMSINT_H_
 
-#include <X11/Xcms.h>
+#include "X11/Xcms.h"
 
 /*
  *	DEFINES

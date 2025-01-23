@@ -63,7 +63,7 @@ in this Software without prior written authorization from the X Consortium.
 #define XtNsharedIc		"sharedIc"
 #define XtCSharedIc		"SharedIc"
 
-#include <X11/Xaw3d/Text.h>
+#include "X11/Xaw3d/Text.h"
 
 #define	CIICFocus	(1 << 0)
 #define	CIFontSet	(1 << 1)

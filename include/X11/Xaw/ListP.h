@@ -38,8 +38,8 @@ in this Software without prior written authorization from The Open Group.
 /*
  * List Widget Private Data
  */
-#include <X11/Xaw/SimpleP.h>
-#include <X11/Xaw/List.h>
+#include "X11/Xaw/SimpleP.h"
+#include "X11/Xaw/List.h"
 
 #define NO_HIGHLIGHT            XAW_LIST_NONE
 #define OUT_OF_RANGE            -1

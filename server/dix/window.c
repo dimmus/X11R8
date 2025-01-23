@@ -138,7 +138,7 @@ Equipment Corporation.
 #include "privates.h"
 #include "xace.h"
 
-#include <X11/Xatom.h>          /* must come after server includes */
+#include "X11/Xatom.h"          /* must come after server includes */
 
 /******
  * Window stuff for server

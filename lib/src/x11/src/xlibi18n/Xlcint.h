@@ -72,8 +72,8 @@ from The Open Group.
 
 #ifndef _XP_PRINT_SERVER_
 
-#include <X11/Xresource.h>
-#include <X11/Xutil.h>
+#include "X11/Xresource.h"
+#include "X11/Xutil.h"
 #include <stdarg.h>
 
 typedef Bool (*XFilterEventProc)(

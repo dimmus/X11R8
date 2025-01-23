@@ -31,8 +31,8 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _SMLIB_H_
 #define _SMLIB_H_
 
-#include <X11/SM/SM.h>
-#include <X11/ICE/ICElib.h>
+#include "X11/SM/SM.h"
+#include "X11/ICE/ICElib.h"
 
 
 /*

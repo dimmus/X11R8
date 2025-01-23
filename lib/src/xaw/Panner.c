@@ -30,14 +30,14 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #include <ctype.h>
 #include <math.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xos.h>
-#include <X11/Xmu/CharSet.h>
-#include <X11/Xmu/Drawing.h>
-#include <X11/Xmu/Misc.h>
-#include <X11/Xaw/PannerP.h>
-#include <X11/Xaw/XawInit.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xos.h"
+#include "X11/Xmu/CharSet.h"
+#include "X11/Xmu/Drawing.h"
+#include "X11/Xmu/Misc.h"
+#include "X11/Xaw/PannerP.h"
+#include "X11/Xaw/XawInit.h"
 #include "Private.h"
 #include <stdlib.h>			/* for atof() */
 

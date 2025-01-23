@@ -33,8 +33,8 @@ authorization.
 #ifndef included_xmu_lookup_h
 #define included_xmu_lookup_h 1
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
+#include "X11/Xlib.h"
+#include "X11/Xutil.h"
 
 extern int XmuLookupString(
 		XKeyEvent *event,

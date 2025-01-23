@@ -35,7 +35,7 @@ from The Open Group.
 #include <config.h>
 #endif
 #include "libxfontint.h"
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 #include "fontmisc.h"
 #include "bufio.h"
 #include <errno.h>

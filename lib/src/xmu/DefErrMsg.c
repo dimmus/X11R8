@@ -28,10 +28,10 @@ in this Software without prior written authorization from The Open Group.
 #include <config.h>
 #endif
 #include <stdio.h>
-#include <X11/Xlibint.h>
-#include <X11/Xproto.h>
-#include <X11/Xmu/Error.h>
-#include <X11/Xmu/SysUtil.h>
+#include "X11/Xlibint.h"
+#include "X11/Xproto.h"
+#include "X11/Xmu/Error.h"
+#include "X11/Xmu/SysUtil.h"
 
 /*
  * XmuPrintDefaultErrorMessage - print a nice error that looks like the usual

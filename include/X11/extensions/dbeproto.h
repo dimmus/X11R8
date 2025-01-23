@@ -33,7 +33,7 @@
 #ifndef DBE_PROTO_H
 #define DBE_PROTO_H
 
-#include <X11/extensions/dbe.h>
+#include "X11/extensions/dbe.h"
 
 /* Request values used in (S)ProcDbeDispatch() */
 #define X_DbeGetVersion                 0

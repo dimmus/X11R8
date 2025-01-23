@@ -81,24 +81,24 @@
 #include <version.h>
 #include <xterm.h>
 
-#include <X11/Xatom.h>
-#include <X11/Xutil.h>
-#include <X11/Xmu/Atoms.h>
-#include <X11/Xmu/CharSet.h>
-#include <X11/Xmu/Converters.h>
+#include "X11/Xatom.h"
+#include "X11/Xutil.h"
+#include "X11/Xmu/Atoms.h"
+#include "X11/Xmu/CharSet.h"
+#include "X11/Xmu/Converters.h"
 
 #if OPT_INPUT_METHOD
 
 #if defined(HAVE_LIB_XAW)
-#include <X11/Xaw/XawImP.h>
+#include "X11/Xaw/XawImP.h"
 #elif defined(HAVE_LIB_XAW3D)
-#include <X11/Xaw3d/XawImP.h>
+#include "X11/Xaw3d/XawImP.h"
 #elif defined(HAVE_LIB_XAW3DXFT)
-#include <X11/Xaw3dxft/XawImP.h>
+#include "X11/Xaw3dxft/XawImP.h"
 #elif defined(HAVE_LIB_NEXTAW)
-#include <X11/neXtaw/XawImP.h>
+#include "X11/neXtaw/XawImP.h"
 #elif defined(HAVE_LIB_XAWPLUS)
-#include <X11/XawPlus/XawImP.h>
+#include "X11/XawPlus/XawImP.h"
 #endif
 
 #endif
@@ -113,7 +113,7 @@
 #endif
 
 #if USE_DOUBLE_BUFFER
-#include <X11/extensions/Xdbe.h>
+#include "X11/extensions/Xdbe.h"
 #endif
 
 #include <stdio.h>

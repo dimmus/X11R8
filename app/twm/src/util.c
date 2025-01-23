@@ -61,11 +61,11 @@ in this Software without prior written authorization from The Open Group.
 #include "util.h"
 #include "parse.h"
 #include "screen.h"
-#include <X11/Xos.h>
-#include <X11/Xatom.h>
+#include "X11/Xos.h"
+#include "X11/Xatom.h"
 #include <stdio.h>
-#include <X11/Xmu/Drawing.h>
-#include <X11/Xmu/CharSet.h>
+#include "X11/Xmu/Drawing.h"
+#include "X11/Xmu/CharSet.h"
 
 static Pixmap CreateXLogoPixmap(unsigned int *widthp, unsigned int *heightp);
 static Pixmap CreateResizePixmap(unsigned int *widthp, unsigned int *heightp);

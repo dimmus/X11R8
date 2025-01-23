@@ -53,7 +53,7 @@ SOFTWARE.
 */
 
 #include "scrnintstr.h"
-#include <X11/extensions/Xvproto.h>
+#include "X11/extensions/Xvproto.h"
 
 typedef struct {
     int numerator;

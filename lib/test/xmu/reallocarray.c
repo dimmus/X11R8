@@ -25,7 +25,7 @@
 #include <config.h>
 #endif
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -51,9 +51,9 @@ SOFTWARE.
 /*
  * Box Widget Private Data
  */
-#include <X11/Xaw/Box.h>
-#include <X11/Xmu/Converters.h>
-#include <X11/Xaw/XawInit.h>
+#include "X11/Xaw/Box.h"
+#include "X11/Xmu/Converters.h"
+#include "X11/Xaw/XawInit.h"
 
 /* New fields for the Box widget class record */
 typedef struct {

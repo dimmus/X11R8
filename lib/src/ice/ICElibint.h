@@ -29,15 +29,15 @@ Author: Ralph Mor, X Consortium
 #ifndef _ICELIBINT_H_
 #define _ICELIBINT_H_
 
-#include <X11/Xos.h>
-#include <X11/Xfuncs.h>
-#include <X11/Xmd.h>
-#include <X11/ICE/ICEproto.h>
-#include <X11/ICE/ICEconn.h>
-#include <X11/ICE/ICEmsg.h>
-#include <X11/ICE/ICEutil.h>
+#include "X11/Xos.h"
+#include "X11/Xfuncs.h"
+#include "X11/Xmd.h"
+#include "X11/ICE/ICEproto.h"
+#include "X11/ICE/ICEconn.h"
+#include "X11/ICE/ICEmsg.h"
+#include "X11/ICE/ICEutil.h"
 #ifdef WIN32
-#include <X11/Xwindows.h>
+#include "X11/Xwindows.h"
 #endif
 
 #include <stdlib.h>

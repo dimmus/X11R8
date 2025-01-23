@@ -7,9 +7,9 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
-#include <X11/X.h>
-#include <X11/Xproto.h>
-#include <X11/extensions/XResproto.h>
+#include "X11/X.h"
+#include "X11/Xproto.h"
+#include "X11/extensions/XResproto.h"
 
 #include "dix/registry_priv.h"
 #include "os/client_priv.h"

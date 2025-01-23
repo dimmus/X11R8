@@ -28,8 +28,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <X11/X.h>
-#include <X11/Xproto.h>
+#include "X11/X.h"
+#include "X11/Xproto.h"
 #include "inputstr.h"
 #include "scrnintstr.h"
 #include "xf86.h"

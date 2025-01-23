@@ -61,20 +61,20 @@ SOFTWARE.
  *          kit@expo.lcs.mit.edu
  */
 
-#include <X11/Xaw3d/Xaw3dP.h>
-#include <X11/IntrinsicP.h>
-#include <X11/cursorfont.h>
-#include <X11/StringDefs.h>
-#include <X11/Xmu/Misc.h>
-#include <X11/Xmu/Converters.h>
-#include <X11/Xaw3d/XawInit.h>
-#include <X11/Xaw3d/Grip.h>
-#include <X11/Xaw3d/PanedP.h>
+#include "X11/Xaw3d/Xaw3dP.h"
+#include "X11/IntrinsicP.h"
+#include "X11/cursorfont.h"
+#include "X11/StringDefs.h"
+#include "X11/Xmu/Misc.h"
+#include "X11/Xmu/Converters.h"
+#include "X11/Xaw3d/XawInit.h"
+#include "X11/Xaw3d/Grip.h"
+#include "X11/Xaw3d/PanedP.h"
 #include <ctype.h>
 
 /* I don't know why Paned.c calls _XawImCallVendorShellExtResize, but... */
 #ifdef XAW_INTERNATIONALIZATION
-#include <X11/Xaw3d/XawImP.h>
+#include "X11/Xaw3d/XawImP.h"
 #endif
 
 typedef enum {UpLeftPane = 'U', LowRightPane = 'L',

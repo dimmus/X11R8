@@ -53,15 +53,15 @@ SOFTWARE.
  * Command.c - Command button widget
  */
 
-#include <X11/Xaw3d/Xaw3dP.h>
+#include "X11/Xaw3d/Xaw3dP.h"
 #include <stdio.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xmu/Misc.h>
-#include <X11/Xaw3d/XawInit.h>
-#include <X11/Xaw3d/CommandP.h>
-#include <X11/Xmu/Converters.h>
-#include <X11/extensions/shape.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xmu/Misc.h"
+#include "X11/Xaw3d/XawInit.h"
+#include "X11/Xaw3d/CommandP.h"
+#include "X11/Xmu/Converters.h"
+#include "X11/extensions/shape.h"
 
 #define DEFAULT_HIGHLIGHT_THICKNESS 2
 #define DEFAULT_SHAPE_HIGHLIGHT 32767

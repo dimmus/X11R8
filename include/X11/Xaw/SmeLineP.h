@@ -31,8 +31,8 @@ in this Software without prior written authorization from The Open Group.
 /*
  * SmeLine Widget Private Data
  */
-#include <X11/Xaw/SmeP.h>
-#include <X11/Xaw/SmeLine.h>
+#include "X11/Xaw/SmeP.h"
+#include "X11/Xaw/SmeLine.h"
 
 /* New fields for the SmeLine widget class */
 typedef struct _SmeLineClassPart {

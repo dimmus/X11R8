@@ -48,10 +48,10 @@ SOFTWARE.
 #ifndef _XawTextP_h
 #define _XawTextP_h
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
-#include <X11/Xaw/Text.h>
-#include <X11/Xaw/SimpleP.h>
+#include "X11/Xaw/Text.h"
+#include "X11/Xaw/SimpleP.h"
 
 _XFUNCPROTOBEGIN
 

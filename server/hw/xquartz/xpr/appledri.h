@@ -40,7 +40,7 @@
 #ifndef _APPLEDRI_H_
 #define _APPLEDRI_H_
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 #define X_AppleDRIQueryVersion                0
 #define X_AppleDRIQueryDirectRenderingCapable 1

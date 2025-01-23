@@ -33,7 +33,7 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #include "libxfontint.h"
 #include    "fontmisc.h"
-#include    <X11/fonts/fontstruct.h>
+#include    "X11/fonts/fontstruct.h"
 
 /*
  * Static sized hash table for looking up font name patterns

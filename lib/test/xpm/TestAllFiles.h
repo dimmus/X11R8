@@ -25,7 +25,7 @@
 #include <config.h>
 #endif
 
-#include <X11/Xlib.h>
+#include "X11/Xlib.h"
 
 #include <time.h>
 #include <errno.h>

@@ -8,7 +8,7 @@ Copyright (c) 1998  Daryll Strauss
 #ifndef _XF86RUSHSTR_H_
 #define _XF86RUSHSTR_H_
 
-#include <X11/extensions/xf86rush.h>
+#include "X11/extensions/xf86rush.h"
 
 #define XF86RUSHNAME "XFree86-Rush"
 

@@ -32,13 +32,13 @@ from The Open Group.
 #include <config.h>
 #endif
 #include "XKBlib.h"
-#include <X11/Xlibint.h>
-#include <X11/Xutil.h>
-#include <X11/keysym.h>
+#include "X11/Xlibint.h"
+#include "X11/Xutil.h"
+#include "X11/keysym.h"
 #include <stdio.h>
 #include <ctype.h>
 
-#include <X11/extensions/XKBproto.h>
+#include "X11/extensions/XKBproto.h"
 #include "XKBlibint.h"
 
 #define AllMods (ShiftMask|LockMask|ControlMask| \

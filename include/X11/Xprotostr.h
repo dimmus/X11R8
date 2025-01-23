@@ -47,7 +47,7 @@ ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
 SOFTWARE.
 
 ******************************************************************/
-#include <X11/Xmd.h>
+#include "X11/Xmd.h"
 
 /* Used by PolySegment */
 

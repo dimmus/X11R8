@@ -34,7 +34,7 @@
 #define included_xstrings_h 1
 /* *INDENT-OFF* */
 
-#include <X11/Intrinsic.h>
+#include "X11/Intrinsic.h"
 #include <pwd.h>
 
 #define OkPasswd(p) ((p)->pw_name != 0 && (p)->pw_name[0] != 0)

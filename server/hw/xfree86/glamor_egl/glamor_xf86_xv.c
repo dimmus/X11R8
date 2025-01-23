@@ -39,7 +39,7 @@
 #define GLAMOR_FOR_XORG
 #include "glamor_priv.h"
 
-#include <X11/extensions/Xv.h>
+#include "X11/extensions/Xv.h"
 #include "fourcc.h"
 
 #define NUM_FORMATS 4

@@ -59,68 +59,68 @@
 #include <fontutils.h>
 #include <xstrings.h>
 
-#include <X11/Xmu/CharSet.h>
+#include "X11/Xmu/CharSet.h"
 
 #define app_con Xaw_app_con	/* quiet a warning from SimpleMenu.h */
 
 #if defined(HAVE_LIB_XAW)
 
-#include <X11/Xaw/SimpleMenu.h>
-#include <X11/Xaw/Box.h>
-#include <X11/Xaw/SmeBSB.h>
-#include <X11/Xaw/SmeLine.h>
+#include "X11/Xaw/SimpleMenu.h"
+#include "X11/Xaw/Box.h"
+#include "X11/Xaw/SmeBSB.h"
+#include "X11/Xaw/SmeLine.h"
 
 #if OPT_TOOLBAR
-#include <X11/Xaw/MenuButton.h>
-#include <X11/Xaw/Form.h>
+#include "X11/Xaw/MenuButton.h"
+#include "X11/Xaw/Form.h"
 #endif
 
 #elif defined(HAVE_LIB_XAW3D)
 
-#include <X11/Xaw3d/SimpleMenu.h>
-#include <X11/Xaw3d/Box.h>
-#include <X11/Xaw3d/SmeBSB.h>
-#include <X11/Xaw3d/SmeLine.h>
+#include "X11/Xaw3d/SimpleMenu.h"
+#include "X11/Xaw3d/Box.h"
+#include "X11/Xaw3d/SmeBSB.h"
+#include "X11/Xaw3d/SmeLine.h"
 
 #if OPT_TOOLBAR
-#include <X11/Xaw3d/MenuButton.h>
-#include <X11/Xaw3d/Form.h>
+#include "X11/Xaw3d/MenuButton.h"
+#include "X11/Xaw3d/Form.h"
 #endif
 
 #elif defined(HAVE_LIB_XAW3DXFT)
 
-#include <X11/Xaw3dxft/SimpleMenu.h>
-#include <X11/Xaw3dxft/Box.h>
-#include <X11/Xaw3dxft/SmeBSB.h>
-#include <X11/Xaw3dxft/SmeLine.h>
+#include "X11/Xaw3dxft/SimpleMenu.h"
+#include "X11/Xaw3dxft/Box.h"
+#include "X11/Xaw3dxft/SmeBSB.h"
+#include "X11/Xaw3dxft/SmeLine.h"
 
 #if OPT_TOOLBAR
-#include <X11/Xaw3dxft/MenuButton.h>
-#include <X11/Xaw3dxft/Form.h>
+#include "X11/Xaw3dxft/MenuButton.h"
+#include "X11/Xaw3dxft/Form.h"
 #endif
 
 #elif defined(HAVE_LIB_NEXTAW)
 
-#include <X11/neXtaw/SimpleMenu.h>
-#include <X11/neXtaw/Box.h>
-#include <X11/neXtaw/SmeBSB.h>
-#include <X11/neXtaw/SmeLine.h>
+#include "X11/neXtaw/SimpleMenu.h"
+#include "X11/neXtaw/Box.h"
+#include "X11/neXtaw/SmeBSB.h"
+#include "X11/neXtaw/SmeLine.h"
 
 #if OPT_TOOLBAR
-#include <X11/neXtaw/MenuButton.h>
-#include <X11/neXtaw/Form.h>
+#include "X11/neXtaw/MenuButton.h"
+#include "X11/neXtaw/Form.h"
 #endif
 
 #elif defined(HAVE_LIB_XAWPLUS)
 
-#include <X11/XawPlus/SimpleMenu.h>
-#include <X11/XawPlus/Box.h>
-#include <X11/XawPlus/SmeBSB.h>
-#include <X11/XawPlus/SmeLine.h>
+#include "X11/XawPlus/SimpleMenu.h"
+#include "X11/XawPlus/Box.h"
+#include "X11/XawPlus/SmeBSB.h"
+#include "X11/XawPlus/SmeLine.h"
 
 #if OPT_TOOLBAR
-#include <X11/XawPlus/MenuButton.h>
-#include <X11/XawPlus/Form.h>
+#include "X11/XawPlus/MenuButton.h"
+#include "X11/XawPlus/Form.h"
 #endif
 
 #endif

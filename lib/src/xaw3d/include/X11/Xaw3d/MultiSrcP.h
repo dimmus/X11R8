@@ -99,8 +99,8 @@ SOFTWARE.
 #ifndef _XawMultiSrcP_h
 #define _XawMultiSrcP_h
 
-#include <X11/Xaw3d/TextSrcP.h>
-#include <X11/Xaw3d/MultiSrc.h>
+#include "X11/Xaw3d/TextSrcP.h"
+#include "X11/Xaw3d/MultiSrc.h"
 
 /************************************************************
  *

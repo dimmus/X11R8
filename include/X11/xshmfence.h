@@ -23,7 +23,7 @@
 #ifndef _XSHMFENCE_H_
 #define _XSHMFENCE_H_
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 #define HAVE_STRUCT_XSHMFENCE 1
 

@@ -53,8 +53,8 @@ SOFTWARE.
 #include <dix-config.h>
 
 #include "inputstr.h"           /* DeviceIntPtr      */
-#include <X11/extensions/XI.h>
-#include <X11/extensions/XIproto.h>
+#include "X11/extensions/XI.h"
+#include "X11/extensions/XIproto.h"
 #include "exglobals.h"
 #include "swaprep.h"
 #include "xkbsrv.h"

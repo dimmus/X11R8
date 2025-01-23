@@ -52,7 +52,7 @@ in this Software without prior written authorization from the X Consortium.
 #ifndef _XawTreeP_h
 #define _XawTreeP_h
 
-#include <X11/Xaw3d/Tree.h>
+#include "X11/Xaw3d/Tree.h"
 
 typedef struct _TreeClassPart {
     int ignore;

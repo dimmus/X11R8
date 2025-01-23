@@ -34,19 +34,19 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-#include <X11/Xfuncs.h>
+#include "X11/Xfuncs.h"
 
-#include <X11/Xfuncs.h>
+#include "X11/Xfuncs.h"
 
 
-#include <X11/Xos.h>
-#include <X11/Xlib.h>
-#include <X11/keysym.h>
-#include <X11/XKBlib.h>
+#include "X11/Xos.h"
+#include "X11/Xlib.h"
+#include "X11/keysym.h"
+#include "X11/XKBlib.h"
 #include "XKBfileInt.h"
 
 
-#include <X11/extensions/XKBconfig.h>
+#include "X11/extensions/XKBconfig.h"
 
 /***====================================================================***/
 

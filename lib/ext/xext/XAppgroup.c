@@ -28,14 +28,14 @@ in this Software without prior written authorization from The Open Group.
 #include <config.h>
 #endif
 #ifdef WIN32
-#include <X11/Xwindows.h>
+#include "X11/Xwindows.h"
 #endif
 
-#include <X11/Xlibint.h>
-#include <X11/extensions/Xag.h>
-#include <X11/extensions/agproto.h>
-#include <X11/extensions/Xext.h>
-#include <X11/extensions/extutil.h>
+#include "X11/Xlibint.h"
+#include "X11/extensions/Xag.h"
+#include "X11/extensions/agproto.h"
+#include "X11/extensions/Xext.h"
+#include "X11/extensions/extutil.h"
 
 #include <stdarg.h>
 

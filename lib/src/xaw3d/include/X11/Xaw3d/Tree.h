@@ -52,7 +52,7 @@ in this Software without prior written authorization from the X Consortium.
 #ifndef _XawTree_h
 #define _XawTree_h
 
-#include <X11/Xmu/Converters.h>
+#include "X11/Xmu/Converters.h"
 
 /******************************************************************************
  *

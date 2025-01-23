@@ -27,9 +27,9 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xmu/CharSet.h>
-#include <X11/Xmu/CurUtil.h>
-#include <X11/cursorfont.h>
+#include "X11/Xmu/CharSet.h"
+#include "X11/Xmu/CurUtil.h"
+#include "X11/cursorfont.h"
 #include <string.h>
 
 int

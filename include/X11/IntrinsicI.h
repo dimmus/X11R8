@@ -53,7 +53,7 @@ SOFTWARE.
 #ifdef WIN32
 #define _WILLWINSOCK_
 #endif
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 
 #include "Object.h"
 #include "RectObj.h"
@@ -114,7 +114,7 @@ SOFTWARE.
  ****************************************************************/
 
 #define _XBCOPYFUNC _XtBcopy
-#include <X11/Xfuncs.h>
+#include "X11/Xfuncs.h"
 
 #define XtMemmove(dst, src, size)	\
     if ((const void *)(dst) != (const void *)(src)) {		    \

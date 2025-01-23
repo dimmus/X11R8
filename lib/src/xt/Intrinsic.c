@@ -76,7 +76,7 @@ in this Software without prior written authorization from The Open Group.
 #include "IntrinsicI.h"
 #include "VarargsI.h"           /* for geoTattler */
 #ifndef NO_IDENTIFY_WINDOWS
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 #endif
 #include <sys/stat.h>
 #ifdef WIN32

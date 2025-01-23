@@ -35,8 +35,8 @@
 #include "evdev.h"
 #include "axis_labels.h"
 
-#include <X11/keysym.h>
-#include <X11/extensions/XI.h>
+#include "X11/keysym.h"
+#include "X11/extensions/XI.h"
 
 #include <sys/stat.h>
 #ifdef HAVE_LIBUDEV
@@ -52,7 +52,7 @@
 #include <xorgVersion.h>
 #include <xkbsrv.h>
 
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 #include <evdev-properties.h>
 #include <xserver-properties.h>
 #include <mtdev-plumbing.h>

@@ -57,7 +57,7 @@ SOFTWARE.
 #ifndef _XtShellPrivate_h
 #define _XtShellPrivate_h
 
-#include <X11/Shell.h>
+#include "X11/Shell.h"
 
 /* *****
  * ***** VendorP.h is included later on; it needs fields defined in the first
@@ -216,7 +216,7 @@ typedef  struct {
 
 _XFUNCPROTOEND
 
-#include <X11/VendorP.h>
+#include "X11/VendorP.h"
 
 _XFUNCPROTOBEGIN
 

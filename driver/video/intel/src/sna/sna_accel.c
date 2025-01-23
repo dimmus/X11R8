@@ -36,8 +36,8 @@
 
 #include "intel_options.h"
 
-#include <X11/fonts/font.h>
-#include <X11/fonts/fontstruct.h>
+#include "X11/fonts/font.h"
+#include "X11/fonts/fontstruct.h"
 
 #include <dixfontstr.h>
 
@@ -50,7 +50,7 @@
 #endif
 #include <shmint.h>
 
-#include <X11/extensions/damageproto.h>
+#include "X11/extensions/damageproto.h"
 
 #include <sys/time.h>
 #include <sys/mman.h>

@@ -49,23 +49,23 @@ in this Software without prior written authorization from the X Consortium.
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <X11/Xaw3d/Xaw3dP.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Shell.h>
-#include <X11/Xaw3d/TextP.h>
-#include <X11/Xaw3d/AsciiText.h>
-#include <X11/Xaw3d/Cardinals.h>
-#include <X11/Xaw3d/Command.h>
-#include <X11/Xaw3d/Form.h>
-#include <X11/Xaw3d/Toggle.h>
-#include <X11/Xmu/CharSet.h>
+#include "X11/Xaw3d/Xaw3dP.h"
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Shell.h"
+#include "X11/Xaw3d/TextP.h"
+#include "X11/Xaw3d/AsciiText.h"
+#include "X11/Xaw3d/Cardinals.h"
+#include "X11/Xaw3d/Command.h"
+#include "X11/Xaw3d/Form.h"
+#include "X11/Xaw3d/Toggle.h"
+#include "X11/Xmu/CharSet.h"
 #ifdef XAW_INTERNATIONALIZATION
 #include "XawI18n.h"
 #endif
 #include <stdint.h>
 #include <stdio.h>
-#include <X11/Xos.h>		/* for O_RDONLY */
+#include "X11/Xos.h"		/* for O_RDONLY */
 #include <errno.h>
 
 #ifdef O_CLOEXEC

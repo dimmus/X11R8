@@ -27,7 +27,7 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xfuncs.h>
+#include "X11/Xfuncs.h"
 #include "Xct.h"
 #include <stdio.h>
 #include "Xmuint.h"

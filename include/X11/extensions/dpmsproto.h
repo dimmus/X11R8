@@ -29,7 +29,7 @@ Equipment Corporation.
 #ifndef _DPMSPROTO_H_
 #define _DPMSPROTO_H_
 
-#include <X11/extensions/dpmsconst.h>
+#include "X11/extensions/dpmsconst.h"
 
 #define X_DPMSGetVersion	0
 #define X_DPMSCapable		1

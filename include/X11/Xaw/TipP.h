@@ -30,9 +30,9 @@
 #ifndef _XawTipP_h
 #define _XawTipP_h
 
-#include <X11/Xaw/Tip.h>
-#include <X11/CoreP.h>
-#include <X11/Xaw/XawInit.h>
+#include "X11/Xaw/Tip.h"
+#include "X11/CoreP.h"
+#include "X11/Xaw/XawInit.h"
 
 typedef struct {
     XtPointer extension;

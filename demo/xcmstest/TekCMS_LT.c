@@ -55,9 +55,9 @@
  */
 #include <stdio.h>
 #include <string.h>
-#include <X11/Xlib.h>
+#include "X11/Xlib.h"
 #include <sys/stat.h>
-#include <X11/Xcms.h>
+#include "X11/Xcms.h"
 
 #ifdef AUTOHEADER
 #  include "TestInit.ah"

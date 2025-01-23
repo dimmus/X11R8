@@ -40,7 +40,7 @@ in this Software without prior written authorization from the X Consortium.
 #define _Sme_h
 
 #include "Xaw3dP.h"
-#include <X11/RectObj.h>
+#include "X11/RectObj.h"
 
 /****************************************************************
  *

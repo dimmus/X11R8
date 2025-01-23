@@ -48,8 +48,8 @@ SOFTWARE.
 #ifndef _XawViewport_h
 #define _XawViewport_h
 
-#include <X11/Xaw/Form.h>
-#include <X11/Xaw/Reports.h>
+#include "X11/Xaw/Form.h"
+#include "X11/Xaw/Reports.h"
 
 /* Resources:
 

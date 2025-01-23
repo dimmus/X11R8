@@ -33,11 +33,11 @@
 #include <xtermcap.h>
 #include <data.h>
 
-#include <X11/keysym.h>
+#include "X11/keysym.h"
 #include <ctype.h>
 
 #ifdef VMS
-#include <X11/keysymdef.h>
+#include "X11/keysymdef.h"
 #endif
 
 #include <xstrings.h>

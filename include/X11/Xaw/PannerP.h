@@ -28,8 +28,8 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XawPannerP_h
 #define _XawPannerP_h
 
-#include <X11/Xaw/Panner.h>
-#include <X11/Xaw/SimpleP.h>
+#include "X11/Xaw/Panner.h"
+#include "X11/Xaw/SimpleP.h"
 
 /* new fields in widget class */
 typedef struct {

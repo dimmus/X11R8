@@ -84,8 +84,8 @@ typedef char StringType[STRLENGTH];
 #include "ph_map.h"
 #include "brfexption.h"
 #ifdef USING_PHIGS
-#include <X11/Xlib.h>
-#include <X11/Xresource.h>
+#include "X11/Xlib.h"
+#include "X11/Xresource.h"
 #endif /* USING_PHIGS */
 
 #ifdef STAND_ALONE

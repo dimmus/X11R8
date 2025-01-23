@@ -1,10 +1,10 @@
 #ifndef _XVMCLIBINT_H
 #define _XVMCLIBINT_H
 
-#include <X11/Xlibint.h>
-#include <X11/extensions/Xvproto.h>
-#include <X11/extensions/XvMCproto.h>
-#include <X11/extensions/XvMClib.h>
+#include "X11/Xlibint.h"
+#include "X11/extensions/Xvproto.h"
+#include "X11/extensions/XvMCproto.h"
+#include "X11/extensions/XvMClib.h"
 
 #define XvMCCheckExtension(dpy, i, val) \
   XextCheckExtension(dpy, i, xvmc_extension_name, val)

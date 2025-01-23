@@ -39,10 +39,10 @@
 #include <math.h>
 #include <limits.h>
 
-#include <X11/Xdefs.h>
-#include <X11/Xatom.h>
-#include <X11/extensions/XI.h>
-#include <X11/extensions/XInput.h>
+#include "X11/Xdefs.h"
+#include "X11/Xatom.h"
+#include "X11/extensions/XI.h"
+#include "X11/extensions/XInput.h"
 #include "synaptics-properties.h"
 
 #ifndef XATOM_FLOAT

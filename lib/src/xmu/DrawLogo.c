@@ -27,8 +27,8 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xlib.h>
-#include <X11/Xmu/Drawing.h>
+#include "X11/Xlib.h"
+#include "X11/Xmu/Drawing.h"
 
 /*
  *  Draw the "official" X Window System Logo, designed by Danny Chong

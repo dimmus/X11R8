@@ -38,12 +38,12 @@
  * can be included in client applications by linking with the libdmx.a
  * library. */
 
-#include <X11/Xlibint.h>
-#include <X11/extensions/Xext.h>
+#include "X11/Xlibint.h"
+#include "X11/extensions/Xext.h"
 #define EXTENSION_PROC_ARGS void *
-#include <X11/extensions/extutil.h>
-#include <X11/extensions/dmxproto.h>
-#include <X11/extensions/dmxext.h>
+#include "X11/extensions/extutil.h"
+#include "X11/extensions/dmxproto.h"
+#include "X11/extensions/dmxext.h"
 #include <limits.h>
 
 static XExtensionInfo dmx_extension_info_data;

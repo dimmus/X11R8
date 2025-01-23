@@ -48,8 +48,8 @@ SOFTWARE.
 #ifndef _ScrollbarP_h
 #define _ScrollbarP_h
 
-#include <X11/Xaw/Scrollbar.h>
-#include <X11/Xaw/SimpleP.h>
+#include "X11/Xaw/Scrollbar.h"
+#include "X11/Xaw/SimpleP.h"
 
 typedef struct {
     /* resources */

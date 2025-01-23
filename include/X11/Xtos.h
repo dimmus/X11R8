@@ -50,7 +50,7 @@ SOFTWARE.
 
 #define ALLOCATE_LOCAL_FALLBACK(_size) XtMalloc((unsigned long)(_size))
 #define DEALLOCATE_LOCAL_FALLBACK(_ptr) XtFree((XtPointer)(_ptr))
-#include <X11/Xalloca.h>
+#include "X11/Xalloca.h"
 
 
 #if defined(__SIZEOF_LONG__)

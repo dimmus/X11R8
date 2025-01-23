@@ -28,10 +28,10 @@ in this Software without prior written authorization from The Open Group.
 #include <config.h>
 #endif
 #include <stdio.h>
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <X11/Xutil.h>
-#include <X11/Xmu/StdCmap.h>
+#include "X11/Xlib.h"
+#include "X11/Xatom.h"
+#include "X11/Xutil.h"
+#include "X11/Xmu/StdCmap.h"
 
 static XVisualInfo *getDeepestVisual(int, XVisualInfo*, int);
 

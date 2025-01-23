@@ -45,8 +45,8 @@ SOFTWARE.
 ******************************************************************/
 #include <dix-config.h>
 
-#include <X11/X.h>
-#include <X11/Xprotostr.h>
+#include "X11/X.h"
+#include "X11/Xprotostr.h"
 #include "pixmapstr.h"
 #include "gcstruct.h"
 #include "windowstr.h"

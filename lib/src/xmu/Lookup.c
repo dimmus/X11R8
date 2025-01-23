@@ -27,11 +27,11 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xmu/Lookup.h>
+#include "X11/Xmu/Lookup.h"
 
 #define XK_LATIN1
 #define XK_PUBLISHING
-#include <X11/keysymdef.h>
+#include "X11/keysymdef.h"
 
 /* bit (1<<i) means character is in codeset i */
 static unsigned short _Xconst latin1[128] =

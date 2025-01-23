@@ -71,11 +71,11 @@ OF THIS SOFTWARE.
  *
  */
 
-#include <X11/Xosdefs.h>
-#include <X11/Xfuncproto.h>
-#include <X11/Xmd.h>
-#include <X11/X.h>
-#include <X11/Xdefs.h>
+#include "X11/Xosdefs.h"
+#include "X11/Xfuncproto.h"
+#include "X11/Xmd.h"
+#include "X11/X.h"
+#include "X11/Xdefs.h"
 
 #include <stddef.h>
 #include <stdint.h>
@@ -117,7 +117,7 @@ typedef struct _CallbackList *CallbackListPtr;  /* also in dix.h */
 typedef struct _xReq *xReqPtr;
 
 #include "os.h"                 /* for ALLOCATE_LOCAL and DEALLOCATE_LOCAL */
-#include <X11/Xfuncs.h>         /* for bcopy, bzero, and bcmp */
+#include "X11/Xfuncs.h"         /* for bcopy, bzero, and bcmp */
 
 #define NullBox ((BoxPtr)0)
 #define MILLI_PER_MIN (1000 * 60)

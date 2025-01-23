@@ -61,9 +61,9 @@ __stdcall unsigned long GetTickCount(void);
 #endif
 
 #if defined(WIN32) && !defined(__CYGWIN__)
-#include <X11/Xwinsock.h>
+#include "X11/Xwinsock.h"
 #endif
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 #include <stdio.h>
 #include <time.h>
 #if !defined(WIN32) || !defined(__MINGW32__)
@@ -71,17 +71,17 @@ __stdcall unsigned long GetTickCount(void);
 #include <sys/resource.h>
 #endif
 #include "misc.h"
-#include <X11/X.h>
+#include "X11/X.h"
 #define XSERV_t
 #define TRANS_SERVER
 #define TRANS_REOPEN
-#include <X11/Xtrans/Xtrans.h>
+#include "X11/Xtrans/Xtrans.h"
 
 #include "os/audit.h"
 
 #include "input.h"
 #include "dixfont.h"
-#include <X11/fonts/libxfont2.h>
+#include "X11/fonts/libxfont2.h"
 #include "osdep.h"
 #include "xdmcp.h"
 #include "extension.h"
@@ -179,7 +179,7 @@ Bool noDRI2Extension = FALSE;
 Bool noGEExtension = FALSE;
 
 #define X_INCLUDE_NETDB_H
-#include <X11/Xos_r.h>
+#include "X11/Xos_r.h"
 
 #include <errno.h>
 
@@ -1275,7 +1275,7 @@ Fclose(void *iop)
 
 #ifdef WIN32
 
-#include <X11/Xwindows.h>
+#include "X11/Xwindows.h"
 
 const char *
 Win32TempDir(void)

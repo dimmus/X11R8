@@ -51,10 +51,10 @@ SOFTWARE.
 /*
  * TextSink Object Private Data
  */
-#include <X11/Xaw/TextSink.h>
-#include <X11/Xaw/TextP.h>	/* This sink works with the Text widget */
-#include <X11/Xaw/TextSrcP.h>	/* This sink works with the Text Source */
-#include <X11/Xmu/Xmu.h>
+#include "X11/Xaw/TextSink.h"
+#include "X11/Xaw/TextP.h"	/* This sink works with the Text widget */
+#include "X11/Xaw/TextSrcP.h"	/* This sink works with the Text Source */
+#include "X11/Xmu/Xmu.h"
 
 #ifndef OLDXAW
 /* font/fontset defined? */

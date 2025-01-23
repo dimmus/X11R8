@@ -33,22 +33,22 @@ from The Open Group.
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include <X11/X.h>
-#include <X11/Xlib.h>
+#include "X11/X.h"
+#include "X11/Xlib.h"
 #include "Xlibint.h"
 #include "Xlcint.h"
 #include "XlcPubI.h"
 #include "Ximint.h"
-#include <X11/Xutil.h>
-#include <X11/Xmd.h>
+#include "X11/Xutil.h"
+#include "X11/Xmd.h"
 #define XK_LATIN1
 #define XK_PUBLISHING
-#include <X11/keysym.h>
-#include <X11/extensions/XKBproto.h>
+#include "X11/keysym.h"
+#include "X11/extensions/XKBproto.h"
 #include "XKBlibint.h"
-#include <X11/Xlocale.h>
+#include "X11/Xlocale.h"
 #include <ctype.h>
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 
 static int
 _XkbHandleSpecialSym(KeySym keysym, char *buffer, int nbytes, int *extra_rtrn)

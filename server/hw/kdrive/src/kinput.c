@@ -27,15 +27,15 @@
 #include "inputstr.h"
 
 #define XK_PUBLISHING
-#include <X11/keysym.h>
+#include "X11/keysym.h"
 #if HAVE_X11_XF86KEYSYM_H
-#include <X11/XF86keysym.h>
+#include "X11/XF86keysym.h"
 #endif
 #include <stdio.h>
 #include <sys/file.h>           /* needed for FNONBLOCK & FASYNC */
 
-#include <X11/extensions/XI.h>
-#include <X11/extensions/XIproto.h>
+#include "X11/extensions/XI.h"
+#include "X11/extensions/XIproto.h"
 
 #include "dix/input_priv.h"
 

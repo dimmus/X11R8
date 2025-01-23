@@ -2,11 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/extensions/Xfixes.h>
-#include <X11/extensions/Xrandr.h>
-#include <X11/Xlib-xcb.h>
+#include "X11/Xlib.h"
+#include "X11/Xutil.h"
+#include "X11/extensions/Xfixes.h"
+#include "X11/extensions/Xrandr.h"
+#include "X11/Xlib-xcb.h"
 #include <xcb/xcb.h>
 #include <xcb/xcbext.h>
 #include <xcb/dri2.h>

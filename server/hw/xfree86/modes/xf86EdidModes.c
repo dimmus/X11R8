@@ -34,7 +34,7 @@
 #define _PARSE_EDID_
 #include "xf86.h"
 #include "xf86DDC.h"
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 #include "property.h"
 #include "propertyst.h"
 #include "xf86Crtc.h"

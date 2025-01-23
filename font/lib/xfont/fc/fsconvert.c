@@ -30,12 +30,12 @@
 #endif
 
 #include "libxfontint.h"
-#include <X11/X.h>
-#include <X11/Xtrans/Xtrans.h>
-#include <X11/Xpoll.h>
-#include <X11/fonts/FS.h>
-#include <X11/fonts/FSproto.h>
-#include <X11/fonts/fontstruct.h>
+#include "X11/X.h"
+#include "X11/Xtrans/Xtrans.h"
+#include "X11/Xpoll.h"
+#include "X11/fonts/FS.h"
+#include "X11/fonts/FSproto.h"
+#include "X11/fonts/fontstruct.h"
 #include "fontutil.h"
 #include "fontmisc.h"
 #include "fslibos.h"

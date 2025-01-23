@@ -49,8 +49,8 @@ SOFTWARE.
 #ifndef _XawTextP_h
 #define _XawTextP_h
 
-#include <X11/Xaw3d/Text.h>
-#include <X11/Xaw3d/SimpleP.h>
+#include "X11/Xaw3d/Text.h"
+#include "X11/Xaw3d/SimpleP.h"
 
 /****************************************************************
  *

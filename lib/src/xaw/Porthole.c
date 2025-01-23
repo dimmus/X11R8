@@ -31,11 +31,11 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xmu/Misc.h>
-#include <X11/Xaw/PortholeP.h>
-#include <X11/Xaw/XawInit.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xmu/Misc.h"
+#include "X11/Xaw/PortholeP.h"
+#include "X11/Xaw/XawInit.h"
 #include "Private.h"
 
 /*

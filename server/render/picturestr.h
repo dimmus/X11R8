@@ -24,7 +24,7 @@
 #ifndef _PICTURESTR_H_
 #define _PICTURESTR_H_
 
-#include <X11/extensions/renderproto.h>
+#include "X11/extensions/renderproto.h"
 #include "scrnintstr.h"
 #include "glyphstr.h"
 #include "resource.h"

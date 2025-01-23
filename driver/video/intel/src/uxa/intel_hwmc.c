@@ -32,8 +32,8 @@
 #include "intel.h"
 #include "intel_xvmc.h"
 
-#include <X11/extensions/Xv.h>
-#include <X11/extensions/XvMC.h>
+#include "X11/extensions/Xv.h"
+#include "X11/extensions/XvMC.h"
 #include <fourcc.h>
 
 static int create_subpicture(ScrnInfoPtr scrn, XvMCSubpicturePtr subpicture,

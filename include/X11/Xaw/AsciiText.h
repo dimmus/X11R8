@@ -60,9 +60,9 @@ SOFTWARE.
 #ifndef _AsciiText_h
 #define _AsciiText_h
 
-#include <X11/Xaw/Text.h>
-#include <X11/Xaw/AsciiSrc.h>
-#include <X11/Xaw/MultiSrc.h>
+#include "X11/Xaw/Text.h"
+#include "X11/Xaw/AsciiSrc.h"
+#include "X11/Xaw/MultiSrc.h"
 
 /* Resources:
 

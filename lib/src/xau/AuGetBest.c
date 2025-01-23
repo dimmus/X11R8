@@ -27,10 +27,10 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xauth.h>
-#include <X11/Xos.h>
+#include "X11/Xauth.h"
+#include "X11/Xos.h"
 #ifdef XTHREADS
-#include <X11/Xthreads.h>
+#include "X11/Xthreads.h"
 #endif
 
 #ifdef O_CLOEXEC

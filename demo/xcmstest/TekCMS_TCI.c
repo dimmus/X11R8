@@ -53,8 +53,8 @@
  */
 #include <stdio.h>
 #include <string.h>
-#include <X11/Xlib.h>
-#include <X11/Xcms.h>
+#include "X11/Xlib.h"
+#include "X11/Xcms.h"
 #ifdef AUTOHEADER
 #  include "TekCMS_LT.ah"
 #  include "TestInit.ah"

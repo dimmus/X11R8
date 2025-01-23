@@ -45,7 +45,7 @@ in this Software without prior written authorization from The Open Group.
 
 #include	"config.h"
 
-#include	<X11/Xos.h>
+#include	"X11/Xos.h"
 #include        <sys/param.h>
 #include	<sys/socket.h>
 #include	<netdb.h>

@@ -26,8 +26,8 @@ SOFTWARE.
 
 #include <stdio.h>
 #include <errno.h>
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
+#include "X11/Xlib.h"
+#include "X11/Xatom.h"
 
 #define	WIN_X	200
 #define	WIN_Y  	200

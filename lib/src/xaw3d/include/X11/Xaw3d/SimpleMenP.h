@@ -37,9 +37,9 @@ in this Software without prior written authorization from the X Consortium.
 #ifndef _SimpleMenuP_h
 #define _SimpleMenuP_h
 
-#include <X11/Xaw3d/SimpleMenu.h>
-#include <X11/Xaw3d/SmeP.h>
-#include <X11/ShellP.h>
+#include "X11/Xaw3d/SimpleMenu.h"
+#include "X11/Xaw3d/SmeP.h"
+#include "X11/ShellP.h"
 
 typedef struct {
     XtPointer extension;		/* For future needs. */

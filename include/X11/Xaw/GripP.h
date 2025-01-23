@@ -48,8 +48,8 @@ SOFTWARE.
 #ifndef _XawGripP_h
 #define _XawGripP_h
 
-#include <X11/Xaw/Grip.h>
-#include <X11/Xaw/SimpleP.h>
+#include "X11/Xaw/Grip.h"
+#include "X11/Xaw/SimpleP.h"
 
 #define DEFAULT_GRIP_SIZE 8
 

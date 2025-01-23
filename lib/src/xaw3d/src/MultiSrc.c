@@ -62,17 +62,17 @@ in this Software without prior written authorization from the X Consortium.
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <X11/Xaw3d/Xaw3dP.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xfuncs.h>
-#include <X11/Xaw3d/XawInit.h>
-#include <X11/Xaw3d/MultiSrcP.h>
-#include <X11/Xaw3d/XawImP.h>
-#include <X11/Xmu/Misc.h>
-#include <X11/Xmu/CharSet.h>
+#include "X11/Xaw3d/Xaw3dP.h"
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xfuncs.h"
+#include "X11/Xaw3d/XawInit.h"
+#include "X11/Xaw3d/MultiSrcP.h"
+#include "X11/Xaw3d/XawImP.h"
+#include "X11/Xmu/Misc.h"
+#include "X11/Xmu/CharSet.h"
 #include "XawI18n.h"
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <errno.h>

@@ -59,7 +59,7 @@ from The Open Group.
 #include <stdarg.h>
 
 #include "fntfilst.h"
-#include <X11/fonts/fontstruct.h>
+#include "X11/fonts/fontstruct.h"
 /* use bitmap structure */
 #include "bitmap.h"
 #include "bdfint.h"

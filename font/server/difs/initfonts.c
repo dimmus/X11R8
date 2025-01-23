@@ -50,9 +50,9 @@ in this Software without prior written authorization from The Open Group.
 #include	"config.h"
 
 #include        <stddef.h>
-#include        <X11/fonts/font.h>
-#include        <X11/fonts/fontstruct.h>
-#include        <X11/fonts/libxfont2.h>
+#include        "X11/fonts/font.h"
+#include        "X11/fonts/fontstruct.h"
+#include        "X11/fonts/libxfont2.h"
 #include	"difs.h"
 #include	"globals.h"
 

@@ -54,9 +54,9 @@
 
 #ifndef XPM_NUMBERS
 
-# include <X11/Xfuncproto.h>
-# include <X11/Xlib.h>
-# include <X11/Xutil.h>
+# include "X11/Xfuncproto.h"
+# include "X11/Xlib.h"
+# include "X11/Xutil.h"
 
 /* let's define Pixel if it is not done yet */
 #if ! defined(_XtIntrinsic_h) && ! defined(PIXEL_ALREADY_TYPEDEFED)

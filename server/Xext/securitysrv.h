@@ -25,12 +25,12 @@ from The Open Group.
 */
 
 /* Xserver internals for Security extension - moved here from
-   _SECURITY_SERVER section of <X11/extensions/security.h> */
+   _SECURITY_SERVER section of "X11/extensions/security.h" */
 
 #ifndef _SECURITY_SRV_H
 #define _SECURITY_SRV_H
 
-#include <X11/extensions/secur.h>
+#include "X11/extensions/secur.h"
 
 #include "input.h"              /* for DeviceIntPtr */
 #include "property.h"           /* for PropertyPtr */

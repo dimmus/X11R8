@@ -19,10 +19,10 @@
  */
 
 #include <stdio.h>
-#include <X11/Xos.h>
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xproto.h>
+#include "X11/Xos.h"
+#include "X11/Xlib.h"
+#include "X11/Xutil.h"
+#include "X11/Xproto.h"
 #include <ctype.h>
 
 #define INNER_WINDOW_WIDTH 50

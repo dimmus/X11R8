@@ -29,7 +29,7 @@ Author: Ralph Mor, X Consortium
 #ifndef _ICEUTIL_H_
 #define _ICEUTIL_H_
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 #include <stdio.h>
 

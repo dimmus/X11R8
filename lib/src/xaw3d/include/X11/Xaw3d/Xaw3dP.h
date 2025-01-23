@@ -30,7 +30,7 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef _Xaw3dP_h
 #define _Xaw3dP_h
 
-#include <X11/IntrinsicP.h>
+#include "X11/IntrinsicP.h"
 
 /* These are set during the build to reflect capability and options. */
 /* I18n support */

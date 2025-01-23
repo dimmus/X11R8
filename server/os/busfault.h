@@ -25,7 +25,7 @@
 
 #include <dix-config.h>
 
-#include <X11/Xdefs.h>
+#include "X11/Xdefs.h"
 
 #include "misc.h"                         /* for TRUE/FALSE */
 

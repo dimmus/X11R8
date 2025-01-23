@@ -53,12 +53,12 @@ SOFTWARE.
 #include <config.h>
 #endif
 
-#include <X11/extensions/XIproto.h>
-#include <X11/Xlibint.h>
-#include <X11/extensions/XInput.h>
-#include <X11/extensions/extutil.h>
-#include <X11/extensions/Xge.h>
-#include <X11/extensions/geproto.h>
+#include "X11/extensions/XIproto.h"
+#include "X11/Xlibint.h"
+#include "X11/extensions/XInput.h"
+#include "X11/extensions/extutil.h"
+#include "X11/extensions/Xge.h"
+#include "X11/extensions/geproto.h"
 #include "XIint.h"
 
 _X_HIDDEN Status

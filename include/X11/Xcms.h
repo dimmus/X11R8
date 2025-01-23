@@ -29,7 +29,7 @@
 #ifndef _X11_XCMS_H_
 #define _X11_XCMS_H_
 
-#include <X11/Xlib.h>
+#include "X11/Xlib.h"
 
 /* The Xcms structs are full of implicit padding to properly align members.
    We can't clean that up without breaking ABI, so tell clang not to bother

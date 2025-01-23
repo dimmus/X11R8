@@ -36,13 +36,13 @@ in this Software without prior written authorization from the X Consortium.
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <X11/Xaw3d/Xaw3dP.h>
+#include "X11/Xaw3d/Xaw3dP.h"
 #include <stdio.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xaw3d/XawInit.h>
-#include <X11/Xaw3d/SmeP.h>
-#include <X11/Xaw3d/Cardinals.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xaw3d/XawInit.h"
+#include "X11/Xaw3d/SmeP.h"
+#include "X11/Xaw3d/Cardinals.h"
 
 #define offset(field) XtOffsetOf(SmeRec, sme.field)
 static XtResource resources[] = {

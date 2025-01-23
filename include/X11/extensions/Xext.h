@@ -26,7 +26,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XEXT_H_
 #define _XEXT_H_
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 _XFUNCPROTOBEGIN
 

@@ -37,10 +37,10 @@ in this Software without prior written authorization from The Open Group.
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <X11/X.h>
-#include <X11/Xproto.h>
-#include <X11/extensions/shmproto.h>
-#include <X11/Xfuncproto.h>
+#include "X11/X.h"
+#include "X11/Xproto.h"
+#include "X11/extensions/shmproto.h"
+#include "X11/Xfuncproto.h"
 
 #include "dix/dix_priv.h"
 #include "os/auth.h"

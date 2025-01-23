@@ -33,8 +33,8 @@
 #define EPOXY_GLX_H
 
 #include <epoxy/gl.h>
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
+#include "X11/Xlib.h"
+#include "X11/Xutil.h"
 
 #if defined(GLX_H) || defined(__glxext_h_)
 #error epoxy/glx.h must be included before (or in place of) GL/glx.h

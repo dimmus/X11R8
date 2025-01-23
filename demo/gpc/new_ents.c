@@ -147,7 +147,7 @@ SOFTWARE.
 |	Include files
 \*--------------------------------------------------------------------*/
 #include <stdio.h>
-#include <X11/Xosdefs.h>
+#include "X11/Xosdefs.h"
 #ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
 #else
@@ -165,7 +165,7 @@ char *malloc();
 #include "bifmacro.h"
 #include "ph_map.h"
 #include "globals.h"
-#include <X11/Xfuncs.h>
+#include "X11/Xfuncs.h"
 
 /*--------------------------------------------------------------------*\
 |	Local Macros

@@ -35,7 +35,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XawList_h
 #define _XawList_h
 
-#include <X11/Xaw/Simple.h>
+#include "X11/Xaw/Simple.h"
 
 /* Resources:
 

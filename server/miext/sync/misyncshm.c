@@ -25,7 +25,7 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <unistd.h>
-#include <X11/xshmfence.h>
+#include "X11/xshmfence.h"
 
 #include "os/osdep.h"
 

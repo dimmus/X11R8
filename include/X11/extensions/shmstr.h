@@ -29,7 +29,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _SHMSTR_H_
 #define _SHMSTR_H_
 
-#include <X11/extensions/shmproto.h>
+#include "X11/extensions/shmproto.h"
 
 #ifdef _XSHM_SERVER_
 #define XSHM_PUT_IMAGE_ARGS \

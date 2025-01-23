@@ -48,13 +48,13 @@ SOFTWARE.
 #ifndef _SimpleP_h
 #define _SimpleP_h
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
-#include <X11/Xaw/Simple.h>
+#include "X11/Xaw/Simple.h"
 
 _XFUNCPROTOBEGIN
 
-#include <X11/Xaw/XawInit.h>
+#include "X11/Xaw/XawInit.h"
 
 typedef struct {
     Bool (*change_sensitive)(Widget);

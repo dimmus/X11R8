@@ -26,10 +26,10 @@
 #include <config.h>
 #endif
 
-#include <X11/Xmu/CharSet.h>
-#include <X11/Xmu/SysUtil.h>
+#include "X11/Xmu/CharSet.h"
+#include "X11/Xmu/SysUtil.h"
 #define  XK_LATIN1
-#include <X11/keysymdef.h>
+#include "X11/keysymdef.h"
 
 #include <assert.h>
 #include <string.h>

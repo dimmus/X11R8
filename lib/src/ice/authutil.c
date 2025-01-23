@@ -29,10 +29,10 @@ Author: Ralph Mor, X Consortium
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/ICE/ICElib.h>
+#include "X11/ICE/ICElib.h"
 #include "ICElibint.h"
-#include <X11/ICE/ICEutil.h>
-#include <X11/Xos.h>
+#include "X11/ICE/ICEutil.h"
+#include "X11/Xos.h"
 #include <sys/stat.h>
 #include <errno.h>
 #include <limits.h>

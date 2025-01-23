@@ -82,15 +82,15 @@ in this Software without prior written authorization from The Open Group.
 #include "ShellI.h"
 #include "Vendor.h"
 #include "VendorP.h"
-#include <X11/Xatom.h>
-#include <X11/Xlocale.h>
-#include <X11/ICE/ICElib.h>
+#include "X11/Xatom.h"
+#include "X11/Xlocale.h"
+#include "X11/ICE/ICElib.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 #ifdef EDITRES
-#include <X11/Xmu/Editres.h>
+#include "X11/Xmu/Editres.h"
 #endif
 
 #ifdef WIN32

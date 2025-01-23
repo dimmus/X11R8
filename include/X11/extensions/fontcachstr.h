@@ -34,7 +34,7 @@
 #ifndef _FONTCACHESTR_H_
 #define _FONTCACHESTR_H_
 
-#include <X11/extensions/fontcache.h>
+#include "X11/extensions/fontcache.h"
 
 #define FONTCACHENAME		"FontCache"
 

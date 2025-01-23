@@ -49,21 +49,21 @@ in this Software without prior written authorization from The Open Group.
 
 #include	"config.h"
 
-#include        <X11/fonts/FS.h>
-#include        <X11/fonts/FSproto.h>
+#include        "X11/fonts/FS.h"
+#include        "X11/fonts/FSproto.h"
 #include	<stdio.h>
 #include	<stdlib.h>
-#include	<X11/Xos.h>
+#include	"X11/Xos.h"
 #include	"clientstr.h"
 #include	"fsresource.h"
 #include	"difsfnst.h"
-#include	<X11/fonts/fontstruct.h>
+#include	"X11/fonts/fontstruct.h"
 #include	"closestr.h"
 #include	"globals.h"
 #include	"difs.h"
 #include	"dispatch.h"
 #include	"swaprep.h"
-#include        <X11/fonts/libxfont2.h>
+#include        "X11/fonts/libxfont2.h"
 
 static FontPathElementPtr *font_path_elements = (FontPathElementPtr *) 0;
 static int  num_fpes = 0;

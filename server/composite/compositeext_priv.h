@@ -6,7 +6,7 @@
 #ifndef _XSERVER_COMPOSITEEXT_PRIV_H_
 #define _XSERVER_COMPOSITEEXT_PRIV_H_
 
-#include <X11/X.h>
+#include "X11/X.h"
 
 #include "screenint.h"
 

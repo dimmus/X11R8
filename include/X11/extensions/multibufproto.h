@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _MULTIBUFPROTO_H_
 #define _MULTIBUFPROTO_H_
 
-#include <X11/extensions/multibufconst.h>
+#include "X11/extensions/multibufconst.h"
 
 /*
  * Protocol requests constants and alignment values

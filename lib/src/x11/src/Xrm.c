@@ -55,12 +55,12 @@ from The Open Group.
 #include	<stdio.h>
 #include	<ctype.h>
 #include	"Xlibint.h"
-#include	<X11/Xresource.h>
+#include	"X11/Xresource.h"
 #include	"Xlcint.h"
 #ifdef XTHREADS
 #include	"locking.h"
 #endif
-#include	<X11/Xos.h>
+#include	"X11/Xos.h"
 #include	<sys/stat.h>
 #include	<limits.h>
 #include "Xresinternal.h"

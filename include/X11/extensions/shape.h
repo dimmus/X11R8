@@ -27,11 +27,11 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _SHAPE_H_
 #define _SHAPE_H_
 
-#include <X11/Xfuncproto.h>
-#include <X11/extensions/shapeconst.h>
+#include "X11/Xfuncproto.h"
+#include "X11/extensions/shapeconst.h"
 
 #ifndef _SHAPE_SERVER_
-#include <X11/Xutil.h>
+#include "X11/Xutil.h"
 
 typedef struct {
     int	type;		    /* of event */

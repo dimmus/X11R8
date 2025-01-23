@@ -73,13 +73,13 @@ SOFTWARE.
 #ifndef _XawMultiSinkP_h
 #define _XawMultiSinkP_h
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 /*
  * MultiSink Object Private Data
  */
-#include <X11/Xaw/TextSinkP.h>
-#include <X11/Xaw/MultiSink.h>
+#include "X11/Xaw/TextSinkP.h"
+#include "X11/Xaw/MultiSink.h"
 
 /* new fields for the MultiSink object class */
 typedef struct _MultiSinkClassPart {

@@ -34,11 +34,11 @@ from Kaleb S. KEITHLEY.
 #include <config.h>
 #endif
 
-#include <X11/Xlibint.h>
-#include <X11/extensions/xf86vmproto.h>
-#include <X11/extensions/xf86vmode.h>
-#include <X11/extensions/Xext.h>
-#include <X11/extensions/extutil.h>
+#include "X11/Xlibint.h"
+#include "X11/extensions/xf86vmproto.h"
+#include "X11/extensions/xf86vmode.h"
+#include "X11/extensions/Xext.h"
+#include "X11/extensions/extutil.h"
 #include <limits.h>
 
 #ifdef DEBUG

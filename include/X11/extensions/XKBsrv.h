@@ -66,8 +66,8 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #define XkbUpdateKeyTypeVirtualMods	SrvXkbUpdateKeyTypeVirtualMods
 #endif
 
-#include <X11/extensions/XKBstr.h>
-#include <X11/extensions/XKBproto.h>
+#include "X11/extensions/XKBstr.h"
+#include "X11/extensions/XKBproto.h"
 #include "inputstr.h"
 
 typedef struct _XkbInterest {
@@ -1092,9 +1092,9 @@ extern void XkbSendNewKeyboardNotify(
 
 #ifdef XKBSRV_NEED_FILE_FUNCS
 
-#include <X11/extensions/XKMformat.h>
-#include <X11/extensions/XKBfile.h>
-#include <X11/extensions/XKBrules.h>
+#include "X11/extensions/XKMformat.h"
+#include "X11/extensions/XKBfile.h"
+#include "X11/extensions/XKBrules.h"
 
 #define	_XkbListKeymaps		0
 #define	_XkbListKeycodes	1

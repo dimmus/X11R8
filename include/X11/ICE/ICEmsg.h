@@ -29,9 +29,9 @@ Author: Ralph Mor, X Consortium
 #ifndef _ICEMSG_H_
 #define _ICEMSG_H_
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
-#include <X11/ICE/ICEconn.h>
+#include "X11/ICE/ICEconn.h"
 
 #include <assert.h>
 #if !defined(__cplusplus) && !defined(static_assert)

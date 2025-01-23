@@ -63,7 +63,7 @@
 #ifndef _xf86Parser_h_
 #define _xf86Parser_h_
 
-#include <X11/Xdefs.h>
+#include "X11/Xdefs.h"
 #include "xf86Optrec.h"
 #include "list.h"
 

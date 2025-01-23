@@ -26,9 +26,9 @@
 #include <config.h>
 #endif
 
-#include <X11/Xfuncproto.h>
-#include <X11/Intrinsic.h>
-#include <X11/IntrinsicI.h>
+#include "X11/Xfuncproto.h"
+#include "X11/Intrinsic.h"
+#include "X11/IntrinsicI.h"
 
 #include <time.h>
 #include <stdio.h>

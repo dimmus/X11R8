@@ -25,8 +25,8 @@
 #ifndef _XawLayout_h
 #define _XawLayout_h
 
-#include <X11/Constraint.h>
-#include <X11/Xfuncproto.h>
+#include "X11/Constraint.h"
+#include "X11/Xfuncproto.h"
 
 /****************************************************************
  *

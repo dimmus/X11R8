@@ -15,7 +15,7 @@ is" without express or implied warranty.
 #ifndef XNESTINIT_H
 #define XNESTINIT_H
 
-#include <X11/Xdefs.h>
+#include "X11/Xdefs.h"
 
 extern Bool xnestDoFullGeneration;
 

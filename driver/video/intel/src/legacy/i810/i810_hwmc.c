@@ -52,8 +52,8 @@ THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "xf86xv.h"
 #include "xf86xvmc.h"
-#include <X11/extensions/Xv.h>
-#include <X11/extensions/XvMC.h>
+#include "X11/extensions/Xv.h"
+#include "X11/extensions/XvMC.h"
 #include "dixstruct.h"
 #include "fourcc.h"
 

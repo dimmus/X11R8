@@ -50,17 +50,17 @@ SOFTWARE.
 #include <config.h>
 #endif
 #include "Xlibint.h"
-#include <X11/Xos.h>
-#include <X11/Xresource.h>
+#include "X11/Xos.h"
+#include "X11/Xresource.h"
 #include "pathmax.h"
 
 #ifdef XTHREADS
-#include <X11/Xthreads.h>
+#include "X11/Xthreads.h"
 #endif
 #ifndef WIN32
 #define X_INCLUDE_PWD_H
 #define XOS_USE_XLIB_LOCKING
-#include <X11/Xos_r.h>
+#include "X11/Xos_r.h"
 #endif
 #include <stdio.h>
 #include <ctype.h>

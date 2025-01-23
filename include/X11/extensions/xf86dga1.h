@@ -14,8 +14,8 @@ Copyright (c) 1995  XFree86 Inc
 #ifndef _XF86DGA1_H_
 #define _XF86DGA1_H_
 
-#include <X11/Xfuncproto.h>
-#include <X11/extensions/xf86dga1const.h>
+#include "X11/Xfuncproto.h"
+#include "X11/extensions/xf86dga1const.h"
 
 _XFUNCPROTOBEGIN
 

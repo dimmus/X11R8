@@ -31,7 +31,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _SMPROTO_H_
 #define _SMPROTO_H_
 
-#include <X11/Xmd.h>
+#include "X11/Xmd.h"
 
 typedef struct {
     CARD8	majorOpcode;

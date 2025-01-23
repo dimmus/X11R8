@@ -51,7 +51,7 @@
 
 #include <cursorstr.h>
 
-#include <X11/extensions/dpmsconst.h>
+#include "X11/extensions/dpmsconst.h"
 
 #include "driver.h"
 

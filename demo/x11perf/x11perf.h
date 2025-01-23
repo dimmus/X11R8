@@ -26,18 +26,18 @@ SOFTWARE.
 #endif
 
 #ifndef VMS
-#include <X11/Xlib.h>
+#include "X11/Xlib.h"
 #include <stdlib.h>
-#include <X11/Xutil.h>
+#include "X11/Xutil.h"
 #else
 #include <decw$include/Xlib.h>
 #include <decw$include/Xutil.h>
 #endif
 #if defined(XlibSpecificationRelease) && XlibSpecificationRelease >= 5
-#include <X11/Xfuncs.h>
+#include "X11/Xfuncs.h"
 #endif
 #include <stddef.h>
-#include <X11/extensions/Xrender.h>
+#include "X11/extensions/Xrender.h"
 
 #define POLY	     1000       /* # (small) items in poly calls	*/
 #define MAXROWS	       40       /* Max rows of items in poly calls      */

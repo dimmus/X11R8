@@ -50,9 +50,9 @@ from The Open Group.
 #ifndef _XTRANS_H_
 #define _XTRANS_H_
 
-#include <X11/Xfuncproto.h>
-#include <X11/Xos.h>
-#include <X11/Xmd.h>
+#include "X11/Xfuncproto.h"
+#include "X11/Xos.h"
+#include "X11/Xmd.h"
 
 #ifndef WIN32
 #include <sys/socket.h>

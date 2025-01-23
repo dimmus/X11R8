@@ -8,7 +8,7 @@
 #ifndef _XSERVER_XF86_OS_SUPPORT
 #define _XSERVER_XF86_OS_SUPPORT
 
-#include <X11/Xdefs.h>
+#include "X11/Xdefs.h"
 
 #include "os.h"
 #include "dix/dix_priv.h"

@@ -18,7 +18,7 @@
 #include "micmap.h"
 
 /* identifying atom needed by magnifiers */
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 #include "property.h"
 
 #include "xf86cmap.h"
@@ -37,8 +37,8 @@
 #include "dummy.h"
 
 /* These need to be checked */
-#include <X11/X.h>
-#include <X11/Xproto.h>
+#include "X11/X.h"
+#include "X11/Xproto.h"
 #include "scrnintstr.h"
 #include "servermd.h"
 

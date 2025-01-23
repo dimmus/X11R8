@@ -73,13 +73,13 @@ SOFTWARE.
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xatom.h>
-#include <X11/Xaw3d/XawInit.h>
-#include <X11/Xaw3d/MultiSinkP.h>
-#include <X11/Xaw3d/MultiSrcP.h>
-#include <X11/Xaw3d/TextP.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xatom.h"
+#include "X11/Xaw3d/XawInit.h"
+#include "X11/Xaw3d/MultiSinkP.h"
+#include "X11/Xaw3d/MultiSrcP.h"
+#include "X11/Xaw3d/TextP.h"
 #include "XawI18n.h"
 #include <stdio.h>
 #include <stdlib.h>

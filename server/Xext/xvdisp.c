@@ -25,10 +25,10 @@ SOFTWARE.
 
 #include <string.h>
 
-#include <X11/X.h>
-#include <X11/Xproto.h>
-#include <X11/extensions/Xv.h>
-#include <X11/extensions/Xvproto.h>
+#include "X11/X.h"
+#include "X11/Xproto.h"
+#include "X11/extensions/Xv.h"
+#include "X11/extensions/Xvproto.h"
 
 #include "dix/dix_priv.h"
 #include "Xext/xvdix_priv.h"
@@ -42,7 +42,7 @@ SOFTWARE.
 #include "resource.h"
 #include "opaque.h"
 #ifdef MITSHM
-#include <X11/extensions/shmproto.h>
+#include "X11/extensions/shmproto.h"
 #include "shmint.h"
 #endif
 

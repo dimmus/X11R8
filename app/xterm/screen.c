@@ -60,7 +60,7 @@
 #include <data.h>
 #include <xterm_io.h>
 
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 
 #if OPT_WIDE_ATTRS || OPT_WIDE_CHARS
 #include <fontutils.h>

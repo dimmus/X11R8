@@ -1,4 +1,4 @@
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 /*
  * Some versions of byacc and flex declare yylex().  This chunk fixes that.

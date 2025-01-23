@@ -100,8 +100,8 @@ Equipment Corporation.
 #include <version-config.h>
 
 #include <stddef.h>
-#include <X11/fonts/fontstruct.h>
-#include <X11/fonts/libxfont2.h>
+#include "X11/fonts/fontstruct.h"
+#include "X11/fonts/libxfont2.h"
 
 #include "dix/colormap_priv.h"
 #include "dix/cursor_priv.h"

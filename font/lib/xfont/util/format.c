@@ -54,9 +54,9 @@ from The Open Group.
 #include <config.h>
 #endif
 #include "libxfontint.h"
-#include	<X11/fonts/FSproto.h>
-#include	<X11/fonts/font.h>
-#include	<X11/fonts/fontstruct.h>
+#include	"X11/fonts/FSproto.h"
+#include	"X11/fonts/font.h"
+#include	"X11/fonts/fontstruct.h"
 #include	"fontutil.h"
 
 int

@@ -31,11 +31,11 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _FONTMISC_H_
 #define _FONTMISC_H_
 
-#include <X11/Xfuncs.h>
+#include "X11/Xfuncs.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <X11/Xdefs.h>
+#include "X11/Xdefs.h"
 
 
 #ifndef LSBFirst

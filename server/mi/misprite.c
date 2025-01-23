@@ -31,10 +31,10 @@ in this Software without prior written authorization from The Open Group.
 
 #include <dix-config.h>
 
-#include   <X11/X.h>
-#include   <X11/Xproto.h>
-#include   <X11/fonts/font.h>
-#include   <X11/fonts/fontstruct.h>
+#include   "X11/X.h"
+#include   "X11/Xproto.h"
+#include   "X11/fonts/font.h"
+#include   "X11/fonts/fontstruct.h"
 
 #include   "dix/colormap_priv.h"
 #include   "dix/dix_priv.h"

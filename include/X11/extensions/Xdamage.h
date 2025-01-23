@@ -23,9 +23,9 @@
 #ifndef _XDAMAGE_H_
 #define _XDAMAGE_H_
 
-#include <X11/extensions/damagewire.h>
-#include <X11/extensions/Xfixes.h>
-#include <X11/Xfuncproto.h>
+#include "X11/extensions/damagewire.h"
+#include "X11/extensions/Xfixes.h"
+#include "X11/Xfuncproto.h"
 
 #define XDAMAGE_1_1_INTERFACE
 

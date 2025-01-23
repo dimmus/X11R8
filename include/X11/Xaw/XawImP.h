@@ -62,7 +62,7 @@ in this Software without prior written authorization from The Open Group.
 #define XtNsharedIc		"sharedIc"
 #define XtCSharedIc		"SharedIc"
 
-#include <X11/Xaw/Text.h>
+#include "X11/Xaw/Text.h"
 
 #define	CIICFocus	(1 << 0)
 #define	CIFontSet	(1 << 1)

@@ -28,7 +28,7 @@
 #include <dix-config.h>
 #endif
 
-#include <X11/extensions/XI2proto.h>
+#include "X11/extensions/XI2proto.h"
 
 #ifndef QUERYVERSION_H
 #define QUERYVERSION_H 1

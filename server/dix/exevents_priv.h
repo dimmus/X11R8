@@ -6,7 +6,7 @@
 #ifndef _XSERVER_EXEVENTS_PRIV_H
 #define _XSERVER_EXEVENTS_PRIV_H
 
-#include <X11/extensions/XIproto.h>
+#include "X11/extensions/XIproto.h"
 #include "exevents.h"
 
 /**

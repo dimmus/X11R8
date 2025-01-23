@@ -33,11 +33,11 @@
 #endif
 
 #include <stdio.h>
-#include <X11/extensions/geproto.h>
-#include <X11/extensions/ge.h>
-#include <X11/Xlibint.h>
-#include <X11/extensions/extutil.h>
-#include <X11/extensions/Xge.h>
+#include "X11/extensions/geproto.h"
+#include "X11/extensions/ge.h"
+#include "X11/Xlibint.h"
+#include "X11/extensions/extutil.h"
+#include "X11/extensions/Xge.h"
 
 #include "extutilP.h"
 

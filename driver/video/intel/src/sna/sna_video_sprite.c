@@ -36,7 +36,7 @@
 #include <xf86drm.h>
 #include <xf86xv.h>
 #include <xf86Crtc.h>
-#include <X11/extensions/Xv.h>
+#include "X11/extensions/Xv.h"
 #include <fourcc.h>
 #include <i915_drm.h>
 #include <errno.h>

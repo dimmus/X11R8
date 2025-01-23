@@ -33,7 +33,7 @@ from The Open Group.
 #ifndef _FONTXLFD_H_
 #define _FONTXLFD_H_
 
-#include <X11/fonts/FSproto.h>
+#include "X11/fonts/FSproto.h"
 
 /* Constants for values_supplied bitmap */
 

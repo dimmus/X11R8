@@ -33,8 +33,8 @@ from The Open Group.
 
 #include <dix-config.h>
 
-#include   <X11/X.h>
-#include   <X11/Xauth.h>
+#include   "X11/X.h"
+#include   "X11/Xauth.h"
 #include   "misc.h"
 #include   "osdep.h"
 #include   "dixstruct.h"
@@ -42,7 +42,7 @@ from The Open Group.
 #include   <sys/stat.h>
 #include   <errno.h>
 #ifdef WIN32
-#include    <X11/Xw32defs.h>
+#include    "X11/Xw32defs.h"
 #endif
 #include   <stdlib.h>       /* for arc4random_buf() */
 

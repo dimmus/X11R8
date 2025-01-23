@@ -40,9 +40,9 @@ SOFTWARE.
 **
 */
 
-#include <X11/Xlibint.h>
-#include <X11/extensions/Xvproto.h>
-#include <X11/extensions/Xvlib.h>
+#include "X11/Xlibint.h"
+#include "X11/extensions/Xvproto.h"
+#include "X11/extensions/Xvlib.h"
 
 /* names in Xvproto.h don't match the expectation of Xlib's GetReq* macros,
    so we have to provide our own implementation */

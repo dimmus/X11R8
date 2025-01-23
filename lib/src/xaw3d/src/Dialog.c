@@ -51,17 +51,17 @@ SOFTWARE.
    than just directly making your own form. */
 
 
-#include <X11/IntrinsicP.h>
-#include <X11/Xos.h>
-#include <X11/StringDefs.h>
-#include <X11/Xmu/Misc.h>
+#include "X11/IntrinsicP.h"
+#include "X11/Xos.h"
+#include "X11/StringDefs.h"
+#include "X11/Xmu/Misc.h"
 
-#include <X11/Xaw3d/XawInit.h>
-#include <X11/Xaw3d/AsciiText.h>
-#include <X11/Xaw3d/Command.h>
-#include <X11/Xaw3d/Label.h>
-#include <X11/Xaw3d/DialogP.h>
-#include <X11/Xaw3d/Cardinals.h>
+#include "X11/Xaw3d/XawInit.h"
+#include "X11/Xaw3d/AsciiText.h"
+#include "X11/Xaw3d/Command.h"
+#include "X11/Xaw3d/Label.h"
+#include "X11/Xaw3d/DialogP.h"
+#include "X11/Xaw3d/Cardinals.h"
 
 /*
  * After we have set the string in the value widget we set the

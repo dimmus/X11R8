@@ -22,8 +22,8 @@
  */
 
 #include "xcursorint.h"
-#include <X11/Xlibint.h>
-#include <X11/Xatom.h>
+#include "X11/Xlibint.h"
+#include "X11/Xatom.h"
 #include <stdlib.h>
 
 static XcursorBool

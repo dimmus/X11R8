@@ -44,10 +44,10 @@
 #include <sys/utsname.h>
 #endif
 
-#include <X11/X.h>
-#include <X11/Xmd.h>
-#include <X11/Xproto.h>
-#include <X11/Xatom.h>
+#include "X11/X.h"
+#include "X11/Xmd.h"
+#include "X11/Xproto.h"
+#include "X11/Xatom.h"
 
 #include "config/dbus-core.h"
 #include "dix/input_priv.h"
@@ -71,8 +71,8 @@
 #include "xf86cmap.h"
 #include "xorgVersion.h"
 #include "mipointer.h"
-#include <X11/extensions/XI.h>
-#include <X11/extensions/XIproto.h>
+#include "X11/extensions/XI.h"
+#include "X11/extensions/XIproto.h"
 #include "xf86Extensions.h"
 #include "xf86DDC.h"
 #include "xf86Xinput.h"
@@ -88,7 +88,7 @@
 #include "xserver-properties.h"
 
 #ifdef DPMSExtension
-#include <X11/extensions/dpmsconst.h>
+#include "X11/extensions/dpmsconst.h"
 #include "dpmsproc.h"
 #endif
 

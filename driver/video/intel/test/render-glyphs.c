@@ -5,7 +5,7 @@
 #include <stdarg.h>
 #include <string.h>
 
-#include <X11/Xutil.h> /* for XDestroyImage */
+#include "X11/Xutil.h" /* for XDestroyImage */
 #include <pixman.h> /* for pixman blt functions */
 
 #include "test.h"

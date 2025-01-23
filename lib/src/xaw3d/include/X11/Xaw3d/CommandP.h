@@ -54,8 +54,8 @@ SOFTWARE.
 #ifndef _XawCommandP_h
 #define _XawCommandP_h
 
-#include <X11/Xaw3d/Command.h>
-#include <X11/Xaw3d/LabelP.h>
+#include "X11/Xaw3d/Command.h"
+#include "X11/Xaw3d/LabelP.h"
 
 /***********************************************************************
  *

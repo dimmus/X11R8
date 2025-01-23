@@ -54,12 +54,12 @@ SOFTWARE.
 #ifndef _XawClockP_h
 #define _XawClockP_h
 
-#include <X11/Xos.h>		/* Needed for struct tm. */
+#include "X11/Xos.h"		/* Needed for struct tm. */
 #include "Clock.h"
-#include <X11/Xaw/SimpleP.h>
+#include "X11/Xaw/SimpleP.h"
 #ifdef XRENDER
-#include <X11/Xft/Xft.h>
-#include <X11/extensions/Xrender.h>
+#include "X11/Xft/Xft.h"
+#include "X11/extensions/Xrender.h"
 #endif
 
 #define SEG_BUFF_SIZE		128

@@ -55,7 +55,7 @@ SOFTWARE.
  *
  ***********************************************************************/
 
-#include <X11/Xaw3d/Text.h>
+#include "X11/Xaw3d/Text.h"
 
 /* Resources:
 

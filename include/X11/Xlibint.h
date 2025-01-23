@@ -39,12 +39,12 @@ from The Open Group.
  */
 
 #include <stdint.h>
-#include <X11/Xlib.h>
-#include <X11/Xproto.h>		/* to declare xEvent */
-#include <X11/XlibConf.h>	/* for configured options like XTHREADS */
+#include "X11/Xlib.h"
+#include "X11/Xproto.h"		/* to declare xEvent */
+#include "X11/XlibConf.h"	/* for configured options like XTHREADS */
 
 #ifdef XTHREADS
-#include <X11/Xthreads.h>
+#include "X11/Xthreads.h"
 #endif
 
 /* The Xlib structs are full of implicit padding to properly align members.
@@ -339,11 +339,11 @@ typedef struct _XSQEvent
 } _XQEvent;
 #endif
 
-#include <X11/Xproto.h>
+#include "X11/Xproto.h"
 #include <errno.h>
 #define _XBCOPYFUNC _Xbcopy
-#include <X11/Xfuncs.h>
-#include <X11/Xosdefs.h>
+#include "X11/Xfuncs.h"
+#include "X11/Xosdefs.h"
 
 /* Utek leaves kernel macros around in include files (bleah) */
 #ifdef dirty
@@ -353,7 +353,7 @@ typedef struct _XSQEvent
 #include <stdlib.h>
 #include <string.h>
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 _XFUNCPROTOBEGIN
 

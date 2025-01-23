@@ -58,16 +58,16 @@ SOFTWARE.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/IntrinsicP.h>
-#include <X11/cursorfont.h>
-#include <X11/StringDefs.h>
-#include <X11/Xmu/CharSet.h>
-#include <X11/Xmu/Converters.h>
-#include <X11/Xmu/Misc.h>
-#include <X11/Xaw/Grip.h>
-#include <X11/Xaw/PanedP.h>
-#include <X11/Xaw/XawImP.h>
-#include <X11/Xaw/XawInit.h>
+#include "X11/IntrinsicP.h"
+#include "X11/cursorfont.h"
+#include "X11/StringDefs.h"
+#include "X11/Xmu/CharSet.h"
+#include "X11/Xmu/Converters.h"
+#include "X11/Xmu/Misc.h"
+#include "X11/Xaw/Grip.h"
+#include "X11/Xaw/PanedP.h"
+#include "X11/Xaw/XawImP.h"
+#include "X11/Xaw/XawInit.h"
 #include "Private.h"
 
 typedef enum {

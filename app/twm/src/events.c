@@ -59,7 +59,7 @@ in this Software without prior written authorization from The Open Group.
 
 #include <stdio.h>
 #include "twm.h"
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 #include "iconmgr.h"
 #include "add_window.h"
 #include "menus.h"
@@ -71,7 +71,7 @@ in this Software without prior written authorization from The Open Group.
 #include "icons.h"
 
 #ifdef HAVE_XRANDR
-#include <X11/extensions/Xrandr.h>
+#include "X11/extensions/Xrandr.h"
 #endif
 
 #define MAX_X_EVENT 256

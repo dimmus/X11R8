@@ -79,22 +79,22 @@
 
 #include <xterm.h>
 
-#include <X11/Xatom.h>
-#include <X11/Xutil.h>
-#include <X11/Xmu/CharSet.h>
+#include "X11/Xatom.h"
+#include "X11/Xutil.h"
+#include "X11/Xmu/CharSet.h"
 
 #if OPT_TOOLBAR
 
 #if defined(HAVE_LIB_XAW)
-#include <X11/Xaw/Form.h>
+#include "X11/Xaw/Form.h"
 #elif defined(HAVE_LIB_XAW3D)
-#include <X11/Xaw3d/Form.h>
+#include "X11/Xaw3d/Form.h"
 #elif defined(HAVE_LIB_XAW3DXFT)
-#include <X11/Xaw3dxft/Form.h>
+#include "X11/Xaw3dxft/Form.h"
 #elif defined(HAVE_LIB_NEXTAW)
-#include <X11/neXtaw/Form.h>
+#include "X11/neXtaw/Form.h"
 #elif defined(HAVE_LIB_XAWPLUS)
-#include <X11/XawPlus/Form.h>
+#include "X11/XawPlus/Form.h"
 #endif
 
 #endif /* OPT_TOOLBAR */

@@ -34,7 +34,7 @@ in this Software without prior written authorization from The Open Group.
 #include "libxfontint.h"
 #include "util/replace.h"
 #include    "fontmisc.h"
-#include    <X11/fonts/fontstruct.h>
+#include    "X11/fonts/fontstruct.h"
 
 static int _FontPrivateAllocateIndex = 0;
 

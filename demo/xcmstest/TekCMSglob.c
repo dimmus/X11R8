@@ -40,8 +40,8 @@
  *              Include files that need NOT be exported to any package or
  *              program using this package.
  */
-#include <X11/Xlib.h>
-#include <X11/Xcms.h>
+#include "X11/Xlib.h"
+#include "X11/Xcms.h"
 
 /*
  *	INTERNALS

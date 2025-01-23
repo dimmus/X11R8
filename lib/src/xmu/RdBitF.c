@@ -47,15 +47,15 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xos.h>
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xlibint.h>
+#include "X11/Xos.h"
+#include "X11/Xlib.h"
+#include "X11/Xutil.h"
+#include "X11/Xlibint.h"
 #include <stdio.h>
 #include <ctype.h>
-#include <X11/Xmu/Drawing.h>
+#include "X11/Xmu/Drawing.h"
 #ifdef WIN32
-#include <X11/Xwindows.h>
+#include "X11/Xwindows.h"
 #include <direct.h>            /* for _getdrives() */
 #endif
 

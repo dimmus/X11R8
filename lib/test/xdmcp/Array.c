@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include <X11/Xdmcp.h>
+#include "X11/Xdmcp.h"
 #include <inttypes.h>
 
 /* Test what happens if you try to allocate an array with too many entries */

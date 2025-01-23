@@ -32,8 +32,8 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XMU_STRCONVERT_H_
 #define _XMU_STRCONVERT_H_
 
-#include <X11/Intrinsic.h>
-#include <X11/Xfuncproto.h>
+#include "X11/Intrinsic.h"
+#include "X11/Xfuncproto.h"
 
 _XFUNCPROTOBEGIN
 

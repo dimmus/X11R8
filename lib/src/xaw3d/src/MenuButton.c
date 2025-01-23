@@ -48,11 +48,11 @@ in this Software without prior written authorization from the X Consortium.
 #include "config.h"
 #endif
 #include <stdio.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
 
-#include <X11/Xaw3d/XawInit.h>
-#include <X11/Xaw3d/MenuButtoP.h>
+#include "X11/Xaw3d/XawInit.h"
+#include "X11/Xaw3d/MenuButtoP.h"
 
 static void ClassInitialize(void);
 static void PopupMenu(Widget, XEvent *, String *, Cardinal *);

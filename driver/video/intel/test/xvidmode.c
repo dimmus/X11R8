@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <X11/Xlib.h>
-#include <X11/extensions/xf86vmode.h>
+#include "X11/Xlib.h"
+#include "X11/extensions/xf86vmode.h"
 
 int main(void)
 {

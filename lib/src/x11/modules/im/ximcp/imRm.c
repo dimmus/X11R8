@@ -34,7 +34,7 @@ PERFORMANCE OF THIS SOFTWARE.
 #include <config.h>
 #endif
 #include <stdio.h>
-#include <X11/Xlib.h>
+#include "X11/Xlib.h"
 #include "Xlibint.h"
 #include "Xlcint.h"
 #include "Ximint.h"

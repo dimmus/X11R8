@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include <config.h>
 #endif
 #include "libxfontint.h"
-#include <X11/fonts/fontenc.h>
+#include "X11/fonts/fontenc.h"
 #include "fontencc.h"
 
 char *

@@ -34,7 +34,7 @@
  * Tip Widget
  */
 
-#include <X11/Xaw/Simple.h>
+#include "X11/Xaw/Simple.h"
 
 /* Resources:
 

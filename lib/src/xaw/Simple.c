@@ -49,14 +49,14 @@ SOFTWARE.
 #include <config.h>
 #endif
 #include <stdio.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xmu/Drawing.h>
-#include <X11/Xaw/SimpleP.h>
-#include <X11/Xaw/XawInit.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xmu/Drawing.h"
+#include "X11/Xaw/SimpleP.h"
+#include "X11/Xaw/XawInit.h"
 #include "Private.h"
 #ifndef OLDXAW
-#include <X11/Xaw/Tip.h>
+#include "X11/Xaw/Tip.h"
 #endif
 
 /*

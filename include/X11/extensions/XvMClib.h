@@ -1,9 +1,9 @@
 #ifndef _XVMCLIB_H_
 #define _XVMCLIB_H_
 
-#include <X11/Xfuncproto.h>
-#include <X11/extensions/Xvlib.h>
-#include <X11/extensions/XvMC.h>
+#include "X11/Xfuncproto.h"
+#include "X11/extensions/Xvlib.h"
+#include "X11/extensions/XvMC.h"
 
 _XFUNCPROTOBEGIN
 Bool XvMCQueryExtension(Display *display, int *eventBase, int *errBase);

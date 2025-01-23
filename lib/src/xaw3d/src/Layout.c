@@ -24,11 +24,11 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
 
-#include <X11/Xmu/Misc.h>
-#include <X11/Xmu/Converters.h>
+#include "X11/Xmu/Misc.h"
+#include "X11/Xmu/Converters.h"
 
 #ifdef MOTIF
 # include <Xm/XmP.h>
@@ -37,7 +37,7 @@
 #if defined(LAYOUT)
 # include "LayoutP.h"
 #else
-# include <X11/Xaw3d/LayoutP.h>
+# include "X11/Xaw3d/LayoutP.h"
 #endif
 
 #include <ctype.h>

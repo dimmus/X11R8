@@ -36,13 +36,13 @@
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 #include <sys/stat.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <limits.h>
 #define XK_LATIN1
-#include <X11/keysymdef.h>
+#include "X11/keysymdef.h"
 #include "Cv.h"
 
 /* forwards/locals */

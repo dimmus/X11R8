@@ -28,20 +28,20 @@ in this Software without prior written authorization from the X Consortium.
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <X11/Xaw3d/Xaw3dP.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xutil.h>
-#include <X11/Xatom.h>
-#include <X11/Xmu/Misc.h>
-#include <X11/Xmu/StdSel.h>		/* for XmuConvertStandardSelection */
-#include <X11/Xmu/Atoms.h>		/* for XA_COMPOUND_TEXT */
-#include <X11/Xaw3d/TextP.h>
+#include "X11/Xaw3d/Xaw3dP.h"
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xutil.h"
+#include "X11/Xatom.h"
+#include "X11/Xmu/Misc.h"
+#include "X11/Xmu/StdSel.h"		/* for XmuConvertStandardSelection */
+#include "X11/Xmu/Atoms.h"		/* for XA_COMPOUND_TEXT */
+#include "X11/Xaw3d/TextP.h"
 #ifdef XAW_INTERNATIONALIZATION
-#include <X11/Xaw3d/MultiSrcP.h>
-#include <X11/Xaw3d/XawImP.h>
+#include "X11/Xaw3d/MultiSrcP.h"
+#include "X11/Xaw3d/XawImP.h"
 #endif
-#include <X11/Xfuncs.h>
+#include "X11/Xfuncs.h"
 #ifdef XAW_INTERNATIONALIZATION
 #include "XawI18n.h"
 #endif

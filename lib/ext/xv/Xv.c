@@ -55,9 +55,9 @@ SOFTWARE.
 
 #include <stdio.h>
 #include "Xvlibint.h"
-#include <X11/extensions/Xext.h>
-#include <X11/extensions/extutil.h>
-#include <X11/extensions/XShm.h>
+#include "X11/extensions/Xext.h"
+#include "X11/extensions/extutil.h"
+#include "X11/extensions/XShm.h"
 #include <limits.h>
 
 static XExtensionInfo _xv_info_data;

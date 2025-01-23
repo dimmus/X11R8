@@ -6,11 +6,11 @@
 
 #include <assert.h>
 #include <stdint.h>
-#include <X11/Xlibint.h>
+#include "X11/Xlibint.h"
 #ifdef WIN32
-#include <X11/Xwindows.h>
+#include "X11/Xwindows.h"
 #endif
-#include <X11/Xlib-xcb.h>
+#include "X11/Xlib-xcb.h"
 #include "locking.h"
 
 #define XLIB_SEQUENCE_COMPARE(a,op,b)	(((int64_t) (a) - (int64_t) (b)) op 0)

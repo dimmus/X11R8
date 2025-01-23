@@ -31,8 +31,8 @@
 #ifndef _XRANDRP_H_
 #define _XRANDRP_H_
 
-#include <X11/extensions/randr.h>
-#include <X11/extensions/renderproto.h>
+#include "X11/extensions/randr.h"
+#include "X11/extensions/renderproto.h"
 
 #define Window CARD32
 #define Drawable CARD32

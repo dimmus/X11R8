@@ -27,7 +27,7 @@ from The Open Group.
 #ifndef _AGPROTO_H_ /* { */
 #define _AGPROTO_H_
 
-#include <X11/extensions/ag.h>
+#include "X11/extensions/ag.h"
 
 #define X_XagQueryVersion		0
 #define X_XagCreate			1

@@ -52,13 +52,13 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include <X11/Xatom.h>
-#include <X11/Xmu/Atoms.h>
-#include <X11/Xmu/Error.h>
+#include "X11/Xatom.h"
+#include "X11/Xmu/Atoms.h"
+#include "X11/Xmu/Error.h"
 
 #ifdef HAVE_X11_TRANSLATEI_H
-#include <X11/ConvertI.h>
-#include <X11/TranslateI.h>
+#include "X11/ConvertI.h"
+#include "X11/TranslateI.h"
 #else
 #ifdef __cplusplus
 extern "C" {

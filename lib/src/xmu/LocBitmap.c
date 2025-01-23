@@ -31,14 +31,14 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xlib.h>
+#include "X11/Xlib.h"
 #include <stdlib.h>
 #include <string.h>
-#include <X11/Xresource.h>
-#include <X11/Xutil.h>
-#include <X11/Xmu/CvtCache.h>
-#include <X11/Xmu/Drawing.h>
-#include <X11/Xmu/SysUtil.h>
+#include "X11/Xresource.h"
+#include "X11/Xutil.h"
+#include "X11/Xmu/CvtCache.h"
+#include "X11/Xmu/Drawing.h"
+#include "X11/Xmu/SysUtil.h"
 
 #ifndef X_NOT_POSIX
 #ifdef _POSIX_SOURCE

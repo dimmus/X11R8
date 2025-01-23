@@ -5,7 +5,7 @@
 #ifndef _XSERVER_DIX_PRIV_H
 #define _XSERVER_DIX_PRIV_H
 
-#include <X11/Xdefs.h>
+#include "X11/Xdefs.h"
 
 /* This file holds global DIX settings to be used inside the Xserver,
  *  but NOT supposed to be accessed directly by external server modules like
@@ -13,9 +13,9 @@
  *  Xserver's module API/ABI.
  */
 
-#include <X11/Xdefs.h>
-#include <X11/Xfuncproto.h>
-#include <X11/extensions/XI.h>
+#include "X11/Xdefs.h"
+#include "X11/Xfuncproto.h"
+#include "X11/extensions/XI.h"
 
 #include "include/callback.h"
 #include "include/cursor.h"

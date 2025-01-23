@@ -45,7 +45,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XawMenuButton_h
 #define _XawMenuButton_h
 
-#include <X11/Xaw/Command.h>
+#include "X11/Xaw/Command.h"
 
 /* Resources:
 

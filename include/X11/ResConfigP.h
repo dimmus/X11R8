@@ -55,7 +55,7 @@ Corporation.
 #ifndef _RESCONFIGP_H
 #define _RESCONFIGP_H
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 _XFUNCPROTOBEGIN
 

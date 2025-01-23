@@ -45,7 +45,7 @@
 #endif
 
 #undef bcopy
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 
 #ifndef HAVE_CONFIG_H
 
@@ -275,7 +275,7 @@ extern void free();
 extern int errno;
 #endif
 
-#include <X11/Xlocale.h>
+#include "X11/Xlocale.h"
 
 #ifdef HAVE_STDNORETURN_H
 #include <stdnoreturn.h>
@@ -353,7 +353,7 @@ extern int errno;
 #define IGNORE_RC(func) (void) func
 #endif /* gcc workarounds */
 #if (XtSpecificationRelease >= 6) && !defined(NO_XPOLL_H) && !defined(sun)
-#include <X11/Xpoll.h>
+#include "X11/Xpoll.h"
 #define USE_XPOLL_H 1
 #else
 #define Select(n,r,w,e,t) select(n,(fd_set*)r,(fd_set*)w,(fd_set*)e,(struct timeval *)t)

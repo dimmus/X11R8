@@ -22,7 +22,7 @@
  */
 
 #include "fb.h"
-#include <X11/fonts/fontstruct.h>
+#include "X11/fonts/fontstruct.h"
 #include <dixfontstr.h>
 
 #define GLYPH	    fbGlyph8

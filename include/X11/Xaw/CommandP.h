@@ -51,8 +51,8 @@ SOFTWARE.
 /*
  * Command Widget Private Data
  */
-#include <X11/Xaw/Command.h>
-#include <X11/Xaw/LabelP.h>
+#include "X11/Xaw/Command.h"
+#include "X11/Xaw/LabelP.h"
 
 typedef enum {
     HighlightNone,		/* Do not highlight */

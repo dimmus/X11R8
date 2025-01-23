@@ -52,9 +52,9 @@ SOFTWARE.
 **
 */
 
-#include <X11/Xfuncproto.h>
-#include <X11/extensions/Xv.h>
-#include <X11/extensions/XShm.h>
+#include "X11/Xfuncproto.h"
+#include "X11/extensions/Xv.h"
+#include "X11/extensions/XShm.h"
 
 typedef struct {
     int numerator;

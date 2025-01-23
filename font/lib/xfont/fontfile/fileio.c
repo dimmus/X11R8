@@ -33,7 +33,7 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #include "libxfontint.h"
 #include "fntfilio.h"
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 #ifndef O_BINARY
 #define O_BINARY O_RDONLY
 #endif

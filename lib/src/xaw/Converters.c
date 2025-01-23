@@ -29,11 +29,11 @@
 #include <config.h>
 #endif
 #include <stdio.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xmu/CharSet.h>
-#include <X11/Xaw/Simple.h>
-#include <X11/Xaw/XawInit.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xmu/CharSet.h"
+#include "X11/Xaw/Simple.h"
+#include "X11/Xaw/XawInit.h"
 #include "Private.h"
 
 #ifndef OLDXAW

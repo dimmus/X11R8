@@ -23,7 +23,7 @@
 #ifndef _XWAYLAND_PROTO_H_
 #define _XWAYLAND_PROTO_H_
 
-#include <X11/Xproto.h>
+#include "X11/Xproto.h"
 
 #define XWAYLAND_EXTENSION_NAME		"XWAYLAND"
 #define XWAYLAND_EXTENSION_MAJOR	1

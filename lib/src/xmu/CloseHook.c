@@ -55,9 +55,9 @@ in this Software without prior written authorization from The Open Group.
 #include <config.h>
 #endif
 #include <stdio.h>					/* for NULL */
-#include <X11/Xos.h>
-#include <X11/Xlib.h>
-#include <X11/Xmu/CloseHook.h>
+#include "X11/Xos.h"
+#include "X11/Xlib.h"
+#include "X11/Xmu/CloseHook.h"
 #include <stdlib.h>
 
 /*

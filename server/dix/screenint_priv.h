@@ -6,7 +6,7 @@
 #ifndef _XSERVER_DIX_SCREENINT_PRIV_H
 #define _XSERVER_DIX_SCREENINT_PRIV_H
 
-#include <X11/Xdefs.h>
+#include "X11/Xdefs.h"
 
 #include "screenint.h"
 

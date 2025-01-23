@@ -31,9 +31,9 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xmu/StdCmap.h>
+#include "X11/Xlib.h"
+#include "X11/Xutil.h"
+#include "X11/Xmu/StdCmap.h"
 
 /* To remove any standard colormap property, use XmuDeleteStandardColormap().
  * XmuDeleteStandardColormap() will remove the specified property from the

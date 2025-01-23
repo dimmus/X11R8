@@ -6,7 +6,7 @@
 #include "extinit.h"
 #ifdef DPMSExtension
 /* sigh, too many drivers assume this */
-#include <X11/extensions/dpmsconst.h>
+#include "X11/extensions/dpmsconst.h"
 #endif
 
 /* Global X server variables that are visible to mi, dix, os, and ddx */

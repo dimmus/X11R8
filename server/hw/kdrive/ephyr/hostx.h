@@ -26,8 +26,8 @@
 #ifndef _XLIBS_STUFF_H_
 #define _XLIBS_STUFF_H_
 
-#include <X11/X.h>
-#include <X11/Xmd.h>
+#include "X11/X.h"
+#include "X11/Xmd.h"
 #include "xcb/xcb.h"
 #include "xcb/render.h"
 #include "ephyr.h"

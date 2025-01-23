@@ -76,7 +76,7 @@ typedef unsigned long Atom;		/* Also in Xdefs.h */
 typedef unsigned long VisualID;
 typedef unsigned long Time;
 #else
-#  include <X11/Xmd.h>
+#  include "X11/Xmd.h"
 #  ifndef _XTYPEDEF_XID
 #    define _XTYPEDEF_XID
 typedef CARD32 XID;

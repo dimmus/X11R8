@@ -35,7 +35,7 @@
 #include <data.h>
 #include <fontutils.h>
 
-#include <X11/keysym.h>
+#include "X11/keysym.h"
 
 #define BLANK ' '
 #define UNDEF 0x2e2e		/* rendered as a backwards "?" (alt: 0x2426) */

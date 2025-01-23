@@ -37,7 +37,7 @@
 
 #include "propertyst.h"
 #include "dix.h"
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 #include "windowstr.h"
 #include "quartz.h"
 

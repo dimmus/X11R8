@@ -27,7 +27,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef _XKBGEOM_H_
 #define	_XKBGEOM_H_
 
-#include <X11/extensions/XKBstr.h>
+#include "X11/extensions/XKBstr.h"
 
 typedef	struct _XkbProperty {
 	char	*name;

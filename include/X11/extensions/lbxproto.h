@@ -23,7 +23,7 @@
 #ifndef _LBXPROTO_H_
 #define _LBXPROTO_H_
 
-#include <X11/extensions/lbx.h>
+#include "X11/extensions/lbx.h"
 /*
  * NOTE:  any changes or additions to the opcodes needs to be reflected
  * in the lbxCacheable array in Xserver/lbx/lbxmain.c

@@ -49,7 +49,7 @@ SOFTWARE.
 #ifndef _XawCommand_h
 #define _XawCommand_h
 
-#include <X11/Xaw3d/Label.h>
+#include "X11/Xaw3d/Label.h"
 
 /* Command widget resources:
 

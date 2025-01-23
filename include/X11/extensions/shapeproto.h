@@ -27,7 +27,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _SHAPEPROTO_H_
 #define _SHAPEPROTO_H_
 
-#include <X11/extensions/shapeconst.h>
+#include "X11/extensions/shapeconst.h"
 
 /*
  * Protocol requests constants and alignment values

@@ -65,19 +65,19 @@
 #include <pwd.h>
 #include <sys/wait.h>
 
-#include <X11/keysym.h>
-#include <X11/Xatom.h>
+#include "X11/keysym.h"
+#include "X11/Xatom.h"
 
-#include <X11/Xmu/Error.h>
-#include <X11/Xmu/SysUtil.h>
-#include <X11/Xmu/WinUtil.h>
-#include <X11/Xmu/Xmu.h>
+#include "X11/Xmu/Error.h"
+#include "X11/Xmu/SysUtil.h"
+#include "X11/Xmu/WinUtil.h"
+#include "X11/Xmu/Xmu.h"
 #if HAVE_X11_SUNKEYSYM_H
-#include <X11/Sunkeysym.h>
+#include "X11/Sunkeysym.h"
 #endif
 
 #ifdef HAVE_LIBXPM
-#include <X11/xpm.h>
+#include "X11/xpm.h"
 #endif
 
 #ifdef HAVE_LANGINFO_CODESET
@@ -113,7 +113,7 @@
 #endif /* VMS */
 
 #if USE_DOUBLE_BUFFER
-#include <X11/extensions/Xdbe.h>
+#include "X11/extensions/Xdbe.h"
 #endif
 
 #if OPT_WIDE_CHARS
@@ -869,7 +869,7 @@ make_colored_cursor(unsigned c_index,		/* index into font */
 		/*
 		 * Cursor fonts follow each shape glyph with a mask glyph; so
 		 * that character position 0 contains a shape, 1 the mask for
-		 * 0, 2 a shape, 3 a mask for 2, etc.  <X11/cursorfont.h>
+		 * 0, 2 a shape, 3 a mask for 2, etc.  "X11/cursorfont.h"
 		 * contains defined names for each shape.
 		 */
 		c = XCreateGlyphCursor(dpy,
@@ -896,7 +896,7 @@ make_colored_cursor(unsigned c_index,		/* index into font */
     return c;
 }
 
-/* adapted from <X11/cursorfont.h> */
+/* adapted from "X11/cursorfont.h" */
 static int
 LookupCursorShape(const char *name)
 {

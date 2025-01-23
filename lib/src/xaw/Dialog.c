@@ -48,16 +48,16 @@ SOFTWARE.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xos.h>
-#include <X11/Xmu/Misc.h>
-#include <X11/Xaw/AsciiText.h>
-#include <X11/Xaw/Cardinals.h>
-#include <X11/Xaw/Command.h>
-#include <X11/Xaw/Label.h>
-#include <X11/Xaw/DialogP.h>
-#include <X11/Xaw/XawInit.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xos.h"
+#include "X11/Xmu/Misc.h"
+#include "X11/Xaw/AsciiText.h"
+#include "X11/Xaw/Cardinals.h"
+#include "X11/Xaw/Command.h"
+#include "X11/Xaw/Label.h"
+#include "X11/Xaw/DialogP.h"
+#include "X11/Xaw/XawInit.h"
 #include "Private.h"
 
 /*

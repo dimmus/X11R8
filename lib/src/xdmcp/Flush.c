@@ -30,13 +30,13 @@ in this Software without prior written authorization from The Open Group.
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <X11/Xos.h>
-#include <X11/X.h>
-#include <X11/Xmd.h>
-#include <X11/Xdmcp.h>
+#include "X11/Xos.h"
+#include "X11/X.h"
+#include "X11/Xmd.h"
+#include "X11/Xdmcp.h"
 
 #ifdef WIN32
-#include <X11/Xwinsock.h>
+#include "X11/Xwinsock.h"
 #else
 #include <sys/socket.h>
 #endif

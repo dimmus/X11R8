@@ -49,8 +49,8 @@ SOFTWARE.
 #include <errno.h>
 #include <stdio.h>
 #include <signal.h>
-#include <X11/X.h>
-#include <X11/Xos.h>
+#include "X11/X.h"
+#include "X11/Xos.h"
 #ifdef HAVE_DLFCN_H
 #include <dlfcn.h>
 #endif

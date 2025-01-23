@@ -27,7 +27,7 @@
 
 #include <sys/types.h>
 #include <stdlib.h>
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 #ifndef HAVE_REALLOCARRAY
 extern _X_HIDDEN void *xreallocarray(void *optr, size_t nmemb, size_t size);

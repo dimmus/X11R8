@@ -61,8 +61,8 @@ SOFTWARE.
  ***********************************************************************/
 
 #include "Xaw3dP.h"
-#include <X11/Xaw3d/Label.h>
-#include <X11/Xaw3d/ThreeDP.h>
+#include "X11/Xaw3d/Label.h"
+#include "X11/Xaw3d/ThreeDP.h"
 
 /* New fields for the Label widget class record */
 

@@ -30,26 +30,26 @@ in this Software without prior written authorization from The Open Group.
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <X11/Xos.h>		/* for select() and struct timeval */
+#include "X11/Xos.h"		/* for select() and struct timeval */
 #include <ctype.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xatom.h>
-#include <X11/Xfuncs.h>
-#include <X11/Xutil.h>
-#include <X11/Xmu/Atoms.h>
-#include <X11/Xmu/Misc.h>
-#include <X11/Xmu/StdSel.h>
-#include <X11/Xaw/MultiSinkP.h>
-#include <X11/Xaw/MultiSrcP.h>
-#include <X11/Xaw/TextP.h>
-#include <X11/Xaw/TextSrcP.h>
-#include <X11/Xaw/XawImP.h>
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xatom.h"
+#include "X11/Xfuncs.h"
+#include "X11/Xutil.h"
+#include "X11/Xmu/Atoms.h"
+#include "X11/Xmu/Misc.h"
+#include "X11/Xmu/StdSel.h"
+#include "X11/Xaw/MultiSinkP.h"
+#include "X11/Xaw/MultiSrcP.h"
+#include "X11/Xaw/TextP.h"
+#include "X11/Xaw/TextSrcP.h"
+#include "X11/Xaw/XawImP.h"
 #include "Private.h"
 #include "XawI18n.h"
 
 #ifdef _WIN32
-#include <X11/Xwinsock.h>
+#include "X11/Xwinsock.h"
 #endif
 
 #define SrcScan			XawTextSourceScan

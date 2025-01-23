@@ -34,8 +34,8 @@ from The Open Group.
 
 #include <dix-config.h>
 
-#include <X11/extensions/XI.h>
-#include <X11/extensions/XIproto.h>
+#include "X11/extensions/XI.h"
+#include "X11/extensions/XIproto.h"
 
 #include "dix/exevents_priv.h"
 #include "dix/input_priv.h"

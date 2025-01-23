@@ -62,7 +62,7 @@ Corporation.
 #include "ShellP.h"
 #include "StringDefs.h"
 #include "ResConfigP.h"
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 #include <stdio.h>
 #include <stdlib.h>
 

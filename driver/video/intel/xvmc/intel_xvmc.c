@@ -28,8 +28,8 @@
 #include <xcb/xcb.h>
 #include <xcb/xcb_aux.h>
 #include <xcb/dri2.h>
-#include <X11/Xlib-xcb.h>
-#include <X11/extensions/dri2tokens.h>
+#include "X11/Xlib-xcb.h"
+#include "X11/extensions/dri2tokens.h"
 
 /* global */
 struct _intel_xvmc_driver *xvmc_driver = NULL;

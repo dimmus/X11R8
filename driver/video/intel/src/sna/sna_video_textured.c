@@ -32,7 +32,7 @@
 #include "sna_video.h"
 
 #include <xf86xv.h>
-#include <X11/extensions/Xv.h>
+#include "X11/extensions/Xv.h"
 
 #define MAKE_ATOM(a) MakeAtom(a, sizeof(a) - 1, true)
 

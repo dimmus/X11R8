@@ -62,8 +62,8 @@ SOFTWARE.
 #ifndef _XawAsciiSrcP_h
 #define _XawAsciiSrcP_h
 
-#include <X11/Xaw/TextSrcP.h>
-#include <X11/Xaw/AsciiSrc.h>
+#include "X11/Xaw/TextSrcP.h"
+#include "X11/Xaw/AsciiSrc.h"
 
 #ifdef L_tmpnam
 #define TMPSIZ L_tmpnam

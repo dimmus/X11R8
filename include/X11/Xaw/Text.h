@@ -48,7 +48,7 @@ SOFTWARE.
 #ifndef _XawText_h
 #define _XawText_h
 
-#include <X11/Xaw/Simple.h>
+#include "X11/Xaw/Simple.h"
 
 /*
 
@@ -160,8 +160,8 @@ typedef struct _XawTextProperty XawTextProperty;
 typedef struct _XawTextPropertyList XawTextPropertyList;
 #endif
 
-#include <X11/Xaw/TextSink.h>
-#include <X11/Xaw/TextSrc.h>
+#include "X11/Xaw/TextSink.h"
+#include "X11/Xaw/TextSrc.h"
 
 #define XtEtextScrollNever "never"
 #define XtEtextScrollWhenNeeded "whenneeded"
@@ -364,7 +364,7 @@ _XFUNCPROTOEND
 /*
  * For R3 compatibility only
  */
-#include <X11/Xaw/AsciiSrc.h>
-#include <X11/Xaw/AsciiSink.h>
+#include "X11/Xaw/AsciiSrc.h"
+#include "X11/Xaw/AsciiSink.h"
 
 #endif /* _XawText_h */

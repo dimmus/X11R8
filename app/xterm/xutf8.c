@@ -26,10 +26,10 @@
 
 #include <xterm.h>
 
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <X11/Xutil.h>
-#include <X11/Xmu/Xmu.h>
+#include "X11/Xlib.h"
+#include "X11/Xatom.h"
+#include "X11/Xutil.h"
+#include "X11/Xmu/Xmu.h"
 
 #include <xutf8.h>
 

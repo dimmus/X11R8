@@ -38,14 +38,14 @@ in this Software without prior written authorization from the X Consortium.
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <X11/Xaw3d/Xaw3dP.h>
-#include <X11/IntrinsicP.h>
-#include <X11/StringDefs.h>
-#include <X11/Xutil.h>
-#include <X11/Xaw3d/XawInit.h>
-#include <X11/Xaw3d/TextSrcP.h>
-#include <X11/Xmu/Atoms.h>
-#include <X11/Xmu/CharSet.h>
+#include "X11/Xaw3d/Xaw3dP.h"
+#include "X11/IntrinsicP.h"
+#include "X11/StringDefs.h"
+#include "X11/Xutil.h"
+#include "X11/Xaw3d/XawInit.h"
+#include "X11/Xaw3d/TextSrcP.h"
+#include "X11/Xmu/Atoms.h"
+#include "X11/Xmu/CharSet.h"
 #ifdef XAW_INTERNATIONALIZATION
 #include "XawI18n.h"
 #endif

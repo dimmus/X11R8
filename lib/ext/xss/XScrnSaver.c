@@ -26,12 +26,12 @@ in this Software without prior written authorization from the X Consortium.
  * Author:  Keith Packard, MIT X Consortium
  */
 
-#include <X11/Xlibint.h>
-#include <X11/Xutil.h>
-#include <X11/extensions/Xext.h>
-#include <X11/extensions/extutil.h>
-#include <X11/extensions/saverproto.h>
-#include <X11/extensions/scrnsaver.h>
+#include "X11/Xlibint.h"
+#include "X11/Xutil.h"
+#include "X11/extensions/Xext.h"
+#include "X11/extensions/extutil.h"
+#include "X11/extensions/saverproto.h"
+#include "X11/extensions/scrnsaver.h"
 
 
 static XExtensionInfo _screen_saver_info_data;

@@ -26,8 +26,8 @@
 #include <config.h>
 #endif
 
-#include <X11/Xmu/Converters.h>
-#include <X11/Xmd.h>
+#include "X11/Xmu/Converters.h"
+#include "X11/Xmd.h"
 #include <assert.h>
 #include <stdio.h>
 

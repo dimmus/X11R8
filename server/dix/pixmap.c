@@ -28,7 +28,7 @@ from The Open Group.
 
 #include <dix-config.h>
 
-#include <X11/X.h>
+#include "X11/X.h"
 #include "scrnintstr.h"
 #include "mi.h"
 #include "misc.h"

@@ -53,7 +53,7 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "compiler.h"
 #include "mipointer.h"
 #include "micmap.h"
-#include <X11/extensions/randr.h>
+#include "X11/extensions/randr.h"
 #include "fb.h"
 #include "miscstruct.h"
 #include "dixstruct.h"

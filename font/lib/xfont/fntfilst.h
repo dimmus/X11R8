@@ -31,11 +31,11 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _FONTFILEST_H_
 #define _FONTFILEST_H_
 
-#include <X11/Xos.h>
+#include "X11/Xos.h"
 #ifndef XP_PSTEXT
 #include "fontmisc.h"
 #endif
-#include <X11/fonts/fontstruct.h>
+#include "X11/fonts/fontstruct.h"
 #include "fontxlfd.h"
 #include "fntfil.h"
 

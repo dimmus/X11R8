@@ -47,7 +47,7 @@ SOFTWARE.
 #ifndef INPUTSTRUCT_H
 #define INPUTSTRUCT_H
 
-#include <X11/extensions/XI2proto.h>
+#include "X11/extensions/XI2proto.h"
 
 #include <pixman.h>
 #include "input.h"

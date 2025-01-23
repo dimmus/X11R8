@@ -36,7 +36,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XawToggle_h
 #define _XawToggle_h
 
-#include <X11/Xaw/Command.h>
+#include "X11/Xaw/Command.h"
 
 /* Resources:
 

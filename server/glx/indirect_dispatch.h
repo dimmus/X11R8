@@ -28,7 +28,7 @@
 #if !defined( _INDIRECT_DISPATCH_H_ )
 #define _INDIRECT_DISPATCH_H_
 
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 struct __GLXclientStateRec;
 

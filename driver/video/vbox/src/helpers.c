@@ -27,7 +27,7 @@
 #include "propertyst.h"
 #include "windowstr.h"
 #include "xf86.h"
-#include <X11/Xatom.h>
+#include "X11/Xatom.h"
 #include "VBoxVideoErr.h"
 
 VBOXPtr vbvxGetRec(ScrnInfoPtr pScrn)

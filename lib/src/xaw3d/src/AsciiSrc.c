@@ -33,26 +33,26 @@ in this Software without prior written authorization from the X Consortium.
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <X11/Xaw3d/Xaw3dP.h>
-#include <X11/IntrinsicP.h>
+#include "X11/Xaw3d/Xaw3dP.h"
+#include "X11/IntrinsicP.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <errno.h>
-#include <X11/StringDefs.h>
-#include <X11/Xos.h>
+#include "X11/StringDefs.h"
+#include "X11/Xos.h"
 #include <stdlib.h>
-#include <X11/Xfuncs.h>
-#include <X11/Xaw3d/XawInit.h>
-#include <X11/Xaw3d/AsciiSrcP.h>
-#include <X11/Xmu/Misc.h>
-#include <X11/Xmu/CharSet.h>
+#include "X11/Xfuncs.h"
+#include "X11/Xaw3d/XawInit.h"
+#include "X11/Xaw3d/AsciiSrcP.h"
+#include "X11/Xmu/Misc.h"
+#include "X11/Xmu/CharSet.h"
 #ifdef XAW_INTERNATIONALIZATION
-#include <X11/Xaw3d/MultiSrcP.h>
+#include "X11/Xaw3d/MultiSrcP.h"
 #endif
 
 
 #if (defined(ASCII_STRING) || defined(ASCII_DISK))
-#  include <X11/Xaw3d/AsciiText.h> /* for Widget Classes. */
+#  include "X11/Xaw3d/AsciiText.h" /* for Widget Classes. */
 #endif
 
 #ifdef O_CLOEXEC
@@ -1293,7 +1293,7 @@ CvtStringToAsciiType(XrmValuePtr args, Cardinal * num_args, XrmValuePtr fromVal,
 }
 
 #if (defined(ASCII_STRING) || defined(ASCII_DISK))
-#  include <X11/Xaw3d/Cardinals.h>
+#  include "X11/Xaw3d/Cardinals.h"
 #endif
 
 #ifdef ASCII_STRING

@@ -33,7 +33,7 @@ from Kaleb S. KEITHLEY
 #ifndef _XF86VIDMODEPROTO_H_
 #define _XF86VIDMODEPROTO_H_
 
-#include <X11/extensions/xf86vm.h>
+#include "X11/extensions/xf86vm.h"
 
 #define XF86VIDMODENAME "XFree86-VidModeExtension"
 

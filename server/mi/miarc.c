@@ -49,8 +49,8 @@ SOFTWARE.
 #include <dix-config.h>
 
 #include <math.h>
-#include <X11/X.h>
-#include <X11/Xprotostr.h>
+#include "X11/X.h"
+#include "X11/Xprotostr.h"
 #include "misc.h"
 #include "gcstruct.h"
 #include "scrnintstr.h"
@@ -59,7 +59,7 @@ SOFTWARE.
 #include "mifpoly.h"
 #include "mi.h"
 #include "mifillarc.h"
-#include <X11/Xfuncproto.h>
+#include "X11/Xfuncproto.h"
 
 #define EPSILON	0.000001
 #define ISEQUAL(a,b) (fabs((a) - (b)) <= EPSILON)
