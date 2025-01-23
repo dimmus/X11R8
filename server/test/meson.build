@@ -2,16 +2,16 @@ simple_xinit = executable(
     'simple-xinit',
     'simple-xinit.c',
     include_directories: inc_server,
-    dependencies: [ xproto ],
+    dependencies: xproto,
 )
 
 piglit_env = environment()
-piglit_env.set('XSERVER_DIR', meson.project_source_root())
-piglit_env.set('XSERVER_BUILDDIR', meson.project_build_root())
+piglit_env.set('XSERVER_DIR', dir_source)
+piglit_env.set('XSERVER_BUILDDIR', dir_build)
 
 gles20_env = environment()
-gles20_env.set('XSERVER_DIR', meson.project_source_root())
-gles20_env.set('XSERVER_BUILDDIR', meson.project_build_root())
+gles20_env.set('XSERVER_DIR', dir_source)
+gles20_env.set('XSERVER_BUILDDIR', dir_build)
 gles20_env.set('MESA_GLES_VERSION_OVERRIDE', '2.0')
 
 some_ops = ' -o clear,src,dst,over,xor,disjointover'
@@ -186,30 +186,30 @@ if cc.has_link_argument('-Wl,-wrap')
     # LTO breaks with -Wl,-wrap on certain configurations
     unit_c_args += ['-fno-lto']
     unit_sources += [
-    'xi1/protocol-xchangedevicecontrol.c',
-    'xi2/protocol-common.c',
-    'xi2/protocol-xiqueryversion.c',
-    'xi2/protocol-xiquerydevice.c',
-    'xi2/protocol-xiselectevents.c',
-    'xi2/protocol-xigetselectedevents.c',
-    'xi2/protocol-xisetclientpointer.c',
-    'xi2/protocol-xigetclientpointer.c',
-    'xi2/protocol-xiquerypointer.c',
-    'xi2/protocol-xipassivegrabdevice.c',
-    'xi2/protocol-xiwarppointer.c',
-    'xi2/protocol-eventconvert.c',
-    'xi2/xi2.c',
+        'xi1/protocol-xchangedevicecontrol.c',
+        'xi2/protocol-common.c',
+        'xi2/protocol-xiqueryversion.c',
+        'xi2/protocol-xiquerydevice.c',
+        'xi2/protocol-xiselectevents.c',
+        'xi2/protocol-xigetselectedevents.c',
+        'xi2/protocol-xisetclientpointer.c',
+        'xi2/protocol-xigetclientpointer.c',
+        'xi2/protocol-xiquerypointer.c',
+        'xi2/protocol-xipassivegrabdevice.c',
+        'xi2/protocol-xiwarppointer.c',
+        'xi2/protocol-eventconvert.c',
+        'xi2/xi2.c',
     ]
     unit_c_args += ['-DLDWRAP_TESTS']
     unit_includes += include_directories('xi1', 'xi2')
     ldwraps = [
-    '-Wl,-wrap,dixLookupWindow',
-    '-Wl,-wrap,dixLookupClient',
-    '-Wl,-wrap,WriteToClient',
-    '-Wl,-wrap,dixLookupWindow',
-    '-Wl,-wrap,XISetEventMask',
-    '-Wl,-wrap,AddResource',
-    '-Wl,-wrap,GrabButton',
+        '-Wl,-wrap,dixLookupWindow',
+        '-Wl,-wrap,dixLookupClient',
+        '-Wl,-wrap,WriteToClient',
+        '-Wl,-wrap,dixLookupWindow',
+        '-Wl,-wrap,XISetEventMask',
+        '-Wl,-wrap,AddResource',
+        '-Wl,-wrap,GrabButton',
     ]
 else
     ldwraps = []
