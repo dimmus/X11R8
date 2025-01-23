@@ -7,7 +7,7 @@ if get_option('xvfb')
     ]
 
     if get_option('xvfb') and get_option('xephyr')
-        bug1354 = executable('bug1354', 'bug1354.c', dependencies: dep_xcb)
+        bug1354 = executable('bug1354', 'bug1354.c', dependencies: libxcb)
         foreach testsuite: [
             ['-gl', ':201', ':200'],
             ['-gles2', ':199', ':198'],
