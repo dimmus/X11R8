@@ -124,10 +124,10 @@ WITH_XTHREADS_DBG = false
 dep_m            = cc.find_library('m',         required: get_option('driver_video_intel')) # libxcvt
 dep_dl           = cc.find_library('dl',        required: false) # xvmc, xserver,static/epoxy
 
-dep_zlib         = dependency('zlib',           required: false) # xfont, fontenc
+dep_zlib         = dependency('zlib',           required: true) # xfont, fontenc
 dep_bzip2        = dependency('bzip2',          required: false) # xfont
-dep_freetype2    = dependency('freetype2',      required: false) # xfont, xft
-dep_fontconfig   = dependency('fontconfig',     required: false, version: '>= 2.5.92') # xft
+dep_freetype2    = dependency('freetype2',      required: true) # xfont, xft
+dep_fontconfig   = dependency('fontconfig',     required: true, version: '>= 2.5.92') # xft
 dep_uuid         = dependency('uuid',           required: false) # sm
 dep_gettext      = dependency('gettext',        required: false) # xpm
 # xserver
