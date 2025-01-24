@@ -40,8 +40,8 @@
 #include "X11/Xlib.h"
 #include "X11/Xutil.h"
 #include "X11/Xos.h"
-#include <X11/bitmaps/gray1>
-#include <X11/bitmaps/xlogo64>
+#include "X11/bitmaps/gray1"
+#include "X11/bitmaps/xlogo64"
 
 #include <stdio.h>
 #include <stdlib.h>
