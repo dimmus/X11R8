@@ -56,7 +56,7 @@
 #define included_ptyx_h 1
 
 #ifdef HAVE_CONFIG_H
-#include "config_xterm.h"
+#include "xtermcfg.h"
 #endif
 
 /* ptyx.h */
@@ -167,11 +167,7 @@
 #endif
 #endif /* SYSV */
 
-/*
- * Newer versions of "X11/Xft/Xft.h" have a version number.  We use certain
- * features from that.
- */
-#if defined(XRENDERFONT) && defined(XFT_VERSION) && XFT_VERSION >= 20100
+#if defined(XRENDERFONT)
 #define HAVE_TYPE_FCCHAR32	1	/* compatible: XftChar16 */
 #define HAVE_TYPE_XFTCHARSPEC	1	/* new type XftCharSpec */
 #endif

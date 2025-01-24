@@ -67,7 +67,7 @@ add_project_arguments(
   '-DHAVE_CONFIG_H',
   '-D_GNU_SOURCE',
   '-D_BSD_SOURCE',
-  '-D_XOPEN_SOURCE', # xfont
+  # '-D_XOPEN_SOURCE', # xfont
   '-D__EXTENSIONS__',
   '-D_CONST_X_STRING',
   '-D_DEFAULT_SOURCE',

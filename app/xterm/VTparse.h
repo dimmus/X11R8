@@ -90,6 +90,6 @@ extern Const PARSE_T scs_2qt_table[];
 extern Const PARSE_T csi_hash_table[];
 #endif
 
-/* #include <VTparse.hin> */
+#include <VTparse.hin>
 
 #endif /* included_VTparse_h */
