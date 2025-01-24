@@ -2,6 +2,7 @@ inc_lib += [
     inc_config,
     include_directories(
         '.',
+        'bitmaps',
         'dri',
         'extensions',
         'fonts',
@@ -301,3 +302,5 @@ configure_file(input: 'Xpoll.h.in',
                install: true,
                install_dir: dir_include / 'X11',
                configuration: xpoll_config)
+
+subdir('bitmaps')
