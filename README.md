@@ -20,9 +20,10 @@ meson install -C build
 - Enabled 3D acceleration by default
 - Integrated XCB
 - Integrated X drivers
-- Integrated X apps like `twm`, `xinit`, `xclock`, `xterm` *
+- Integrated X apps like `twm`, `xinit`, `xclock`, `xterm`
+- Integrated `libepoxy` and `pixman`
 - Revived font server
 - No Windows support
 - No Wayland support
 
-`*` - work in progress
+<!-- `*` - work in progress -->
