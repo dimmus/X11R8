@@ -39,6 +39,8 @@
 #include "exa.h"
 #include "compat-api.h"
 
+typedef void *pointer;
+
 /**
  * A per-Screen structure used to communicate and coordinate between the
  * ARMSOC X driver and an external EXA sub-module (if loaded).

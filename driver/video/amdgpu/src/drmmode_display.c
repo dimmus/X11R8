@@ -829,8 +829,8 @@ static void drmmode_lut_compose(uint16_t *a_red,
 			 * values in the LUTs are [0, 1<<16)
 			 */
 			j = a_out_ibmax / max_lut;
-			*(uint16_t*)((void*)out + (i*struct_size)) =
-				*(uint16_t*)((void*)b + (j*struct_size));
+			*(uint16_t*)(out + (i*struct_size)) =
+				*(uint16_t*)(b + (j*struct_size));
 		}
 	}
 
@@ -885,7 +885,7 @@ static void drmmode_lut_interpolate(uint16_t *in_red,
 			out_ibmax = i_bmax * in[i_l] +
 				      coeff_ibmax * (in[i_r] - in[i_l]);
 
-			*(uint16_t*)((void*)out + (i*struct_size)) =
+			*(uint16_t*)(out + (i*struct_size)) =
 				out_ibmax / i_bmax;
 		}
 	}

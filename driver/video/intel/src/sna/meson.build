@@ -1,25 +1,27 @@
-config.set('USE_SNA', 1)
+conf.set('USE_SNA', 1)
 
 if cc.has_member('struct sysinfo', 'totalram',
 		 prefix : '#include <sys/sysinfo.h>')
-  config.set('HAVE_STRUCT_SYSINFO_TOTALRAM', 1)
+  conf.set('HAVE_STRUCT_SYSINFO_TOTALRAM', 1)
 endif
 
 git_version_h = vcs_tag(input : 'git_version.h.in', output : 'git_version.h',
 			fallback : 'not compiled from git',
 			command : [ 'git', 'describe' ] )
 
-config.set('HAVE_DOT_GIT', 1)
+conf.set('HAVE_DOT_GIT', 1)
 
 if cc.has_header('alloca.h')
-  config.set('HAVE_ALLOCA_H', 1)
+  conf.set('HAVE_ALLOCA_H', 1)
 endif
 
 sna_deps = [
   dep_m,
   dep_threads,
-  libxserver,
+  xserver,
+  libxcb,
   dep_drm,
+  dep_rt
 ]
 
 sna_sources = [
@@ -68,35 +70,18 @@ sna_sources = [
   'gen9_render.c',
 ]
 
-if libudev.found()
-  sna_deps += libudev
+if dep_udev.found()
+  sna_deps += dep_udev
 endif
 
 if with_valgrind
   sna_deps += valgrind
 endif
 
-if with_dri2
-  sna_sources += 'sna_dri2.c'
-  sna_deps += [
-    dependency('dri2proto', required : true),
-    cc.find_library('rt', required : true),
-  ]
-endif
-
-if with_dri3
-  sna_sources += 'sna_dri3.c'
-  sna_deps += dri3
-endif
-
-if has_present
-  sna_sources += 'sna_present.c'
-  sna_deps += present
-endif
-
-if with_xvmc
-  sna_sources += 'sna_video_hwmc.c'
-endif
+sna_sources += 'sna_dri2.c'
+sna_sources += 'sna_dri3.c'
+sna_sources += 'sna_present.c'
+sna_sources += 'sna_video_hwmc.c'
 
 if debug == 'full'
   sna_sources += [
@@ -111,32 +96,33 @@ if debug == 'full'
 endif
 
 if get_option('tearfree')
-  config.set('TEARFREE', 1)
+  conf.set('TEARFREE', 1)
 endif
 if get_option('use-create2')
-  config.set('USE_CREATE2', 1)
+  conf.set('USE_CREATE2', 1)
 endif
 if get_option('async-swap')
-  config.set('USE_ASYNC_SWAP', 1)
+  conf.set('USE_ASYNC_SWAP', 1)
 endif
 
 subdir('brw')
 subdir('fb')
 
 sna = static_library('sna',
-		     [ git_version_h, sna_sources ],
-		     dependencies : sna_deps,
-		     link_with : [ brw, fb, ],
-		     include_directories : inc,
-		     c_args : [
-		       '-Wno-unused-but-set-variable',
-		       '-Wno-expansion-to-defined',
-		       '-Wno-maybe-uninitialized',
-		       '-Wno-unused-parameter',
-		       '-Wno-unused-function',
-		       '-Wno-unused-variable',
-		       '-Wno-sign-compare',
-		       '-Wno-type-limits',
-		       '-Wno-clobbered',
-		     ],
-		     install : false)
+  [ git_version_h, sna_sources ],
+  dependencies : sna_deps,
+  link_with : [ brw, fb, ],
+  include_directories : inc,
+  c_args : [
+    '-Wno-unused-but-set-variable',
+    '-Wno-expansion-to-defined',
+    '-Wno-maybe-uninitialized',
+    '-Wno-unused-parameter',
+    '-Wno-unused-function',
+    '-Wno-unused-variable',
+    '-Wno-sign-compare',
+    '-Wno-type-limits',
+    '-Wno-clobbered',
+  ],
+  install : false
+)

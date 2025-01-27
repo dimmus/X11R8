@@ -1,3 +1,5 @@
+inc_server += include_directories('.')
+
 if host_machine.system() == 'linux'
     srcs_fbdevhw = 'fbdevhw.c'
 else

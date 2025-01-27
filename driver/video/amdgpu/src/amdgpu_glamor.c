@@ -28,6 +28,8 @@
 #include "config.h"
 #endif
 
+#include "X11/Xdefs.h"
+
 #ifdef USE_GLAMOR
 
 #include <xf86.h>
@@ -136,11 +138,7 @@ amdgpu_glamor_create_textured_pixmap(PixmapPtr pixmap, struct amdgpu_buffer *bo)
 
 	if (bo->flags & AMDGPU_BO_FLAGS_GBM) {
 		return glamor_egl_create_textured_pixmap_from_gbm_bo(pixmap,
-								     bo->bo.gbm
-#if XORG_VERSION_CURRENT > XORG_VERSION_NUMERIC(1,19,99,903,0)
-								     , FALSE
-#endif
-								     );
+								     bo->bo.gbm, FALSE);
 	} else {
 		uint32_t bo_handle;
 

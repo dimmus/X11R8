@@ -115,7 +115,7 @@ RegionDuplicate(RegionPtr pOld)
 #define MIN(a,b) ((a)>(b)?(b):(a))
 #endif
 
-#if HAVE_BYTESWAP_H
+#ifdef HAVE_BYTESWAP_H
 #include <byteswap.h>
 #elif defined(USE_SYS_ENDIAN_H)
 #include <sys/endian.h>

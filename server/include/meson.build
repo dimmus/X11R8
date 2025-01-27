@@ -11,6 +11,8 @@ release = 1 * 10000000 + major * 100000 + minor * 1000 + patch
 # libgl1-mesa-dri - to have DRI_DRIVER_PATH=/usr/lib/x86_64-linux-gnu/dri
 # dep_dri = dependency('dri', required: true)
 
+conf.set('XORG_VERSION_CURRENT', release)
+
 conf_data = configuration_data()
 conf_data.set('_DIX_CONFIG_H_', '1')
 

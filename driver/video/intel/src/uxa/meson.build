@@ -1,4 +1,4 @@
-config.set('USE_UXA', 1)
+conf.set('USE_UXA', 1)
 
 uxa_sources = [
   'intel_batchbuffer.c',
@@ -25,16 +25,16 @@ uxa_sources = [
 ]
 
 uxa_deps = [
-  dependency('xorg-server', version : '>= 1.6', required : true),
-  dependency('pixman-1', version : '>= 0.24.0', required : true),
-  dependency('libdrm', required : true),
-  dependency('libdrm_intel', version : '>= 2.4.52', required : true),
-  dependency('libudev', required : false),
+  xserver,
+  dep_pixman,
+  dep_drm,
+  dep_drm_intel,
+  dep_udev
 ]
 
 if with_dri2
   uxa_sources += 'intel_dri.c'
-  uxa_deps += dependency('dri2proto', version : '>= 2.6', required : true)
+  uxa_deps += libxcb
 endif
 
 if with_dri3
@@ -44,21 +44,17 @@ if with_dri3
   ]
 endif
 
-if has_present
-  uxa_sources += 'intel_present.c'
-endif
-
-if with_xvmc
-  uxa_sources += 'intel_hwmc.c'
-endif
+uxa_sources += 'intel_present.c'
+uxa_sources += 'intel_hwmc.c'
 
 uxa = static_library('uxa',
-		     sources : uxa_sources,
-		     dependencies : uxa_deps,
-		     include_directories : inc,
-		     c_args : [
-		       '-Wno-deprecated-declarations',
-		       '-Wno-unused-parameter',
-		       '-Wno-sign-compare',
-		     ],
-		     install : false)
+  sources : uxa_sources,
+  dependencies : uxa_deps,
+  include_directories : inc,
+  c_args : [
+    '-Wno-deprecated-declarations',
+    '-Wno-unused-parameter',
+    '-Wno-sign-compare',
+  ],
+  install : false
+)

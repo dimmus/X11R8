@@ -1,3 +1,5 @@
+inc_server += include_directories('.')
+
 shared_module('shadowfb',
     [ 'shadowfb.c', 'sfbmodule.c'],
     include_directories: [ inc_server, inc_server ],

@@ -26,6 +26,8 @@
 #ifndef COMPAT_API_H
 #define COMPAT_API_H
 
+typedef void *pointer;
+
 #if ABI_VIDEODRV_VERSION >= SET_ABI_VERSION(22,0)
 #define HAVE_NOTIFY_FD	1
 #endif

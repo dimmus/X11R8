@@ -1,53 +1,47 @@
-ver_xf86-video-intel = '2.99.917'
+ver_intel = '2.99.917'
+version = ver_intel.split('.')
 
-config = configuration_data()
+conf.set('PACKAGE_VERSION_MAJOR', version[0])
+conf.set('PACKAGE_VERSION_MINOR', version[1])
+conf.set('PACKAGE_VERSION_PATCHLEVEL', version[2])
+conf.set_quoted('LIBEXEC_PATH', dir_libexec)
 
-version = meson.project_version().split('.')
-config.set('PACKAGE_VERSION_MAJOR', version[0])
-config.set('PACKAGE_VERSION_MINOR', version[1])
-config.set('PACKAGE_VERSION_PATCHLEVEL', version[2])
+# cairo-xlib-xrender
+dep_int_intel = [
+  xproto,
+  libx11,
+  libx11_xcb,
+  libxcomposite,
+  libxdamage,
+  libxrender,
+  libxrandr,
+  libxext,
+  libxfixes,
+  libxcb,
+  xserver,
+]
 
-config.set_quoted('LIBEXEC_PATH', dir_libexec)
+dep_ext_intel = [
+  dep_threads,
+  dep_pciaccess,
+  dep_pixman,
+  dep_cairo,
+  dep_png,
+  dep_drm_intel,
+]
 
-xorg = libx11
-pthreads = dependency('threads', required : true)
-pciaccess = dep_pciaccess
+dep_intel_drv = [dep_int_intel, dep_ext_intel]
 
-png = dep_png
+f_check += ['getline', 'strndup', 'strcasecmp']
 
 if not cc.has_function('clock_gettime', args : '-lrt')
   error('clock_gettime() missing')
 endif
 
-if cc.has_function('getline')
-  config.set('HAVE_GETLINE', 1)
-endif
-
-if cc.has_function('strndup')
-  config.set('HAVE_STRNDUP', 1)
-endif
-
-if cc.has_function('strcasecmp')
-  config.set('HAVE_STRCASECMP', 1)
-endif
-
-# if cc.has_header_symbol('xorg-server.h', 'RANDR',
-# 			dependencies : xorg)
-#   dependency('randrproto', required : true)
-# endif
-# if cc.has_header_symbol('xorg-server.h', 'RENDER',
-# 			dependencies : xorg)
-#   dependency('renderproto', required : true)
-# endif
-# if cc.has_header_symbol('xorg-server.h', 'DPMSExtension',
-# 			dependencies : xorg)
-#   dependency('xextproto', required : true)
-# endif
-
 with_tools = get_option('tools')
 
-config.set('USE_GIT_DESCRIBE', 1)
-config.set('BUILDER_DESCRIPTION', 1)
+conf.set('USE_GIT_DESCRIBE', 1)
+conf.set('BUILDER_DESCRIPTION', 1)
 
 atomic_primitives = 'none'
 
@@ -63,12 +57,12 @@ int main(void) {
 }'''
 if cc.links(atomic_primitives_code, name : 'atomic primitives')
   atomic_primitives = 'intel'
-  config.set('HAVE_ATOMIC_PRIMITIVES', 1)
+  conf.set('HAVE_ATOMIC_PRIMITIVES', 1)
 endif
 
 if atomic_primitives == 'none' and cc.has_header('atomic_ops.h')
   atomic_primitives = 'libatomic-ops'
-  config.set('HAVE_LIB_ATOMIC_OPS', 1)
+  conf.set('HAVE_LIB_ATOMIC_OPS', 1)
 endif
 
 if atomic_primitives == 'none'
@@ -76,7 +70,7 @@ if atomic_primitives == 'none'
 endif
 
 if dep_udev.found()
-  config.set('HAVE_UDEV', 1)
+  conf.set('HAVE_UDEV', 1)
 endif
 
 cpuid_code = '''
@@ -90,96 +84,65 @@ int main(void) {
     return 0;
 }'''
 if cc.links(cpuid_code, name : '__cpuid()')
-  config.set('HAVE_CPUID_H', 1)
+  conf.set('HAVE_CPUID_H', 1)
 endif
 
-has_shm = (cc.has_header('sys/ipc.h') and
-	   cc.has_header('X11/extensions/XShm.h') and
-	   cc.has_header('X11/extensions/shmproto.h') and
-	   cc.has_header('X11/extensions/shmstr.h'))
-if has_shm
-  config.set('HAVE_MIT_SHM', 1)
-  config.set('HAVE_X11_EXTENSIONS_SHMPROTO_H', 1)
-  config.set('HAVE_X11_EXTENSIONS_SHMSTR_H', 1)
+if cc.has_header('sys/ipc.h')
+  conf.set('HAVE_MIT_SHM', 1)
+  conf.set('HAVE_X11_EXTENSIONS_SHMPROTO_H', 1)
+  conf.set('HAVE_X11_EXTENSIONS_SHMSTR_H', 1)
 endif
 
-if cc.has_header('X11/extensions/Xinerama.h')
-  config.set('HAVE_X11_EXTENSIONS_XINERAMA_H', 1)
-endif
+conf.set('HAVE_X11_EXTENSIONS_XINERAMA_H', 1)
+conf.set('HAVE_X11_EXTENSIONS_DPMSCONST_H', 1)
+conf.set('HAS_PIXMAN_TRIANGLES', 1)
+conf.set('HAS_PIXMAN_GLYPHS', 1)
 
-if cc.has_header('X11/extensions/dpmsconst.h')
-  config.set('HAVE_X11_EXTENSIONS_DPMSCONST_H', 1)
-endif
-
-config.set('HAS_PIXMAN_TRIANGLES', 1)
-config.set('HAS_PIXMAN_GLYPHS', 1)
-
-with_kms = get_option('kms')
-if with_kms
-  config.set('KMS', 1)
+if get_option('kms')
+  conf.set('KMS', 1)
 endif
 
 with_ums = get_option('ums')
 if with_ums
-  has_ums = cc.has_header('vgaHW.h',
-			  dependencies : xorg)
-
-  # Currently 'required' doesn't work for cc.has_header() & co.
-  if not has_ums
+  if not cc.has_header('vgaHW.h')
     error('UMS dependencies not met')
   endif
-
-  config.set('UMS', 1)
+  conf.set('UMS', 1)
 endif
 
-with_xvmc = get_option('xvmc')
-if with_xvmc
-  dependency('xvmc', required : true)
-  dependency('dri2proto', required : true)
-  dependency('x11', required : true)
-  dependency('x11-xcb', required : true)
-  dependency('xcb-dri2', required : true)
-  dependency('xcb-aux', required : true)
-  dependency('libdrm_intel', required : true)
-
-  config.set('ENABLE_XVMC', 1)
-endif
+conf.set('ENABLE_XVMC', 1)
 
 with_valgrind = get_option('valgrind')
 if with_valgrind
   message('Checking Valgrind support')
   valgrind = dependency('valgrind', required : true)
-  config.set('HAVE_VALGRIND', 1)
+  conf.set('HAVE_VALGRIND', 1)
 endif
 
-inc = include_directories([ '.', 'src', 'xvmc', 'src/render_program', ])
+inc = [
+  include_directories('.', 'src', 'xvmc', 'src/render_program'),
+  inc_server
+]
 
-add_project_arguments('-include', 'config.h', language : 'c')
-
-man_config = configuration_data()
-man_config.set('appmansuffix', '1')
-man_config.set('filemansuffix', '5')
-man_config.set('drivermansuffix', '4')
-man_config.set('miscmansuffix', '7')
-man_config.set('xservername',
-	       cc.get_define('__XSERVERNAME__',
-			     prefix : '#include <xorg-server.h>',
-			     dependencies : xorg))
-man_config.set('xconfigfile',
-	       cc.get_define('__XCONFIGFILE____',
-			     prefix : '#include <xorg-server.h>',
-			     dependencies : xorg))
-man_config.set('vendorversion', '"@0@ @1@" "@2@"'.format(meson.project_name(),
-							 meson.project_version(),
-							 'X Version 11'))
+# man_config = configuration_data()
+# man_conf.set('appmansuffix', '1')
+# man_conf.set('filemansuffix', '5')
+# man_conf.set('drivermansuffix', '4')
+# man_conf.set('miscmansuffix', '7')
+# man_conf.set('xservername',
+# 	       cc.get_define('__XSERVERNAME__',
+# 			     prefix : '#include <xorg-server.h>')
+# man_conf.set('xconfigfile',
+# 	       cc.get_define('__XCONFIGFILE____',
+# 			     prefix : '#include <xorg-server.h>')
+# man_conf.set('vendorversion', '"@0@ @1@" "@2@"'.format(meson.project_name(),
+# 							 meson.project_version(),
+# 							 'X Version 11'))
 
 subdir('src')
 subdir('tools')
+subdir('xvmc')
 
-if with_xvmc
-  subdir('xvmc')
-endif
+# subdir('man')
 
-subdir('man')
-
-configure_file(output: 'config.h', install: false, configuration: config)
+# configure_file(output: 'conf.h', install: false, configuration: config)
