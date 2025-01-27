@@ -496,7 +496,7 @@ main(int argc, char *argv[])
             dump_settings = 1;
             break;
         case 'V':
-            printf("%s\n", VERSION);
+            printf("%s\n", SYNAPTICS_VERSION);
             exit(0);
         case '?':
         default:

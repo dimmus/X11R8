@@ -30,8 +30,9 @@
 #ifndef _XF86OSMOUSE_H_
 #define _XF86OSMOUSE_H_
 
-#include "X11/Xdefs.h"
 #include "xf86Xinput.h"
+
+typedef void *pointer;
 
 #if GET_ABI_MAJOR(ABI_XINPUT_VERSION) < 18
 #define LogMessageVerbSigSafe LogMessageVerb

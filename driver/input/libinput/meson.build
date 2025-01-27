@@ -53,7 +53,7 @@ shared_module('libinput_drv',
 	include_directories: [include_directories('include'), inc_config, inc_server, inc_lib],
 	dependencies: dep_drivers,
 	install: true,
-	install_dir: dir_xorg_module,
+	install_dir: dir_xorg_module / 'input',
 )
 
 test_bezier = executable('test-bezier',
@@ -82,4 +82,7 @@ test('test-draglock', test_draglock)
 # 	install_dir: dir_pkgconf,
 # )
 
-install_data('conf/40-libinput.conf', install_dir: dir_xorg_conf)
+install_data(
+	'conf/40-libinput.conf',
+	install_dir: dir_xorg_conf
+)

@@ -15,5 +15,5 @@ shared_module('libvoid_drv',
 	include_directories: [inc_config, inc_server],
 	dependencies: xserver,
 	install: true,
-	install_dir: dir_xorg_module,
+	install_dir: dir_xorg_module / 'input',
 )

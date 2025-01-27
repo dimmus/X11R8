@@ -102,8 +102,7 @@ dir_lib          = dir_prefix / get_option('libdir')
 dir_man          = dir_prefix / get_option('mandir')
 dir_sysconf      = dir_prefix / get_option('sysconfdir')
 dir_libexec      = dir_prefix / get_option('libexecdir')
-dir_headers      = dir_lib / get_option('module_dir') # drivers
-dir_xorg_module  = dir_include / 'xorg' # drivers
+dir_xorg_module  = dir_lib / 'xorg' / 'modules' # drivers
 dir_xorg_conf    = dir_data / 'X11' / 'xorg.conf.d' # drivers
 
 dir_build        = meson.project_build_root()
@@ -122,7 +121,8 @@ WITH_XTHREADS    = true
 WITH_XTHREADS_DBG = false
 
 dep_m            = cc.find_library('m',         required: get_option('driver_video_intel')) # libxcvt
-dep_dl           = cc.find_library('dl',        required: false) # xvmc, xserver,static/epoxy
+dep_dl           = cc.find_library('dl',        required: false) # xvmc, xserver, static/epoxy
+dep_rt           = cc.find_library('rt',        required : true) # driver/video/intel
 
 dep_zlib         = dependency('zlib',           required: true) # xfont, fontenc
 dep_bzip2        = dependency('bzip2',          required: false) # xfont
@@ -157,6 +157,10 @@ dep_gles1        = dependency('glesv1_cm',      required: false) # epoxy
 dep_udev         = dependency('libudev',        required: false) # input/evdev
 dep_evdev        = dependency('libevdev',       required: false) # input/evdev
 dep_input        = dependency('libinput',       required: true, version: '>= 1.11.0') # input/libinput
+dep_cairo        = dependency('cairo',          required: true) # video/intel
+dep_png          = dependency('libpng',         required: true) # video/intel
+dep_drm_intel    = dependency('libdrm_intel',   required: true) # video/intel
+dep_drm_nouveau  = dependency('libdrm_nouveau', required: true) # video/nouveau
 
 exe_bison        = find_program('bison',        required: false)
 exe_flex         = find_program('flex',         required: false)

@@ -168,3 +168,20 @@ option('xorg-module-dir',       type: 'string',  value: '',      description: 'D
 option('xorg-conf-dir',         type: 'string',  value: '',      description: 'Default xorg.conf.d directory [default=from xorg-server pkgconfig]')
 #  video/intel
 option('driver_video_intel',    type: 'boolean', value: true)
+option('sna',                   type: 'boolean', value: true,    description: 'Build with SNA support')
+option('uxa',                   type: 'boolean', value: true,    description: 'Build with UXA support')
+option('xaa',                   type: 'boolean', value: true,    description: 'Build with XAA support')
+option('ums',                   type: 'boolean', value: false,   description: 'Build with UMS support') # need cc.has_header('vgaHW.h')
+option('kms',                   type: 'boolean', value: true,    description: 'Build with KMS support')
+option('valgrind',              type: 'boolean', value: true,    description: 'Enable valgrindified ioctls for debugging')
+option('tools',                 type: 'boolean', value: true,    description: 'Enable building and installing the miscellaneous tools')
+option('backlight',             type: 'boolean', value: true,    description: 'Enable control of the backlight')
+option('backlight-helper',      type: 'boolean', value: true,    description: 'Enable building the backlight helper executable for running X under a normal user')
+option('tearfree',              type: 'boolean', value: false,   description: 'Enable use of TearFree by default')
+option('use-create2',           type: 'boolean', value: false,   description: 'Enable use of create2 ioctl (experimental)')
+option('async-swap',            type: 'boolean', value: false,   description: 'Enable use of asynchronous swaps (experimental)')
+option('default-dri',           type: 'combo',   value: '2',     choices : [ '1', '2', '3' ],                            description : 'Select the default maximum DRI level')
+option('default-accel',         type: 'combo',   value: 'sna',   choices : [ 'sna', 'uxa', 'none' ],                     description : 'Select the default acceleration method')
+option('internal-debug',        type: 'combo',   value: 'no',    choices : [ 'no', 'sync', 'memory', 'pixmap', 'full' ], description : 'Enable internal debugging')
+
+

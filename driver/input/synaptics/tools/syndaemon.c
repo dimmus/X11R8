@@ -568,7 +568,9 @@ main(int argc, char *argv[])
     double idle_time = 2.0;
     int poll_delay = 200000;    /* 200 ms */
     int c;
+#ifdef HAVE_X11_EXTENSIONS_RECORD_H
     int use_xrecord = 0;
+#endif
 
     /* Parse command line parameters */
     while ((c = getopt(argc, argv, "i:m:dtp:kKR?v")) != EOF) {
@@ -596,7 +598,9 @@ main(int argc, char *argv[])
             ignore_modifier_keys = 1;
             break;
         case 'R':
+#ifdef HAVE_X11_EXTENSIONS_RECORD_H
             use_xrecord = 1;
+#endif
             break;
         case 'v':
             verbose = 1;

@@ -1,4 +1,5 @@
 subdir('evdev')
 subdir('libinput')
-# subdir('mouse')
+subdir('mouse')
+subdir('synaptics')
 subdir('void')
