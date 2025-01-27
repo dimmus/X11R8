@@ -10,7 +10,7 @@ conf.set('HAVE_SENDMSG', 1) # Define if your platform supports sendmsg
 conf.set('HAVE_ABSTRACT_SOCKETS', 1) # Define if your platform supports abstract sockets
 conf.set('XCB_QUEUE_BUFFER_SIZE', 16384) # Set the XCB buffer queue size (default is 16384)
 conf.set('XCB_SERVERSIDE_SUPPORT', 0) # Build with support for server-side usage of xcb. This is still EXPERIMENTAL! ABI/API may change! (default: no)
-conf.set('IOV_MAX', 16) # Define if not provided by <limits.h>
+# conf.set('IOV_MAX', 16) # Define if not provided by <limits.h>
 
 dep_int_xcb = [libxau, libxdmcp]
 
