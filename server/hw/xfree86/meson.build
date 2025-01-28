@@ -20,9 +20,6 @@ xorg_c_args += '-DXORG_NO_SDKSYMS'
 # subdirs for convenience libraries statically linked into Xorg
 subdir('common')
 subdir('ddc')
-if build_dri1
-    subdir('dri')
-endif
 if build_dri2
     subdir('dri2')
 endif
@@ -61,9 +58,6 @@ xorg_link = [
     libxserver_main,
     libxserver_config,
 ]
-if build_dri1
-    xorg_link += xorg_dri
-endif
 if build_dri2
     xorg_link += xorg_dri2
 endif

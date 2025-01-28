@@ -246,40 +246,22 @@ if build_glx
     build_hashtable = true
 endif
 
-if get_option('dri1') == 'auto'
-    build_dri1 = xproto.found() and dep_drm.found()
-else
-    build_dri1 = get_option('dri1') == 'true'
-endif
-
-if get_option('dri2') == 'auto'
-    build_dri2 = xproto.found() and dep_drm.found()
-else
-    build_dri2 = get_option('dri2') == 'true'
-endif
-
 if host_machine.system() in ['freebsd', 'openbsd']
    dep_epoll = dependency('epoll-shim')
 else
    dep_epoll = []
 endif
 
-have_eventfd = cc.has_header('sys/eventfd.h', dependencies: dep_epoll)
-if get_option('dri3') == 'auto'
-    build_dri3 = xproto.found() and dep_drm.found() and have_eventfd
-else
-    build_dri3 = get_option('dri3') == 'true'
-    if build_dri3
-       if not have_eventfd
-           error('DRI3 requested, but sys/eventfd.h not found')
-       endif
-    endif
+build_dri2 = get_option('dri2')
+build_dri3 = get_option('dri3')
+
+if build_dri3
+   if not cc.has_header('sys/eventfd.h', dependencies: dep_epoll)
+       error('DRI3 requested, but sys/eventfd.h not found')
+   endif
 endif
 
-libdrm_required = (build_dri1 or build_dri2 or build_dri3) and get_option('drm')
-if not dep_drm.found() and libdrm_required
-    error('DRI requested, but LIBDRM not found')
-endif
+libdrm_required = (build_dri2 or build_dri3) and get_option('drm')
 
 build_modesetting = dep_drm.found()
 

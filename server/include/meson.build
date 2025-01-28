@@ -5,12 +5,6 @@ patch = version_split[2].to_int()
 
 # convert to the old-style 1.x.y version scheme used up to 1.20.x for backwards compatibility
 release = 1 * 10000000 + major * 100000 + minor * 1000 + patch
-
-# For Ubuntu should be installed:
-# mesa-common-dev - to install /usr/include/GL/internal/dri_interface.h
-# libgl1-mesa-dri - to have DRI_DRIVER_PATH=/usr/lib/x86_64-linux-gnu/dri
-# dep_dri = dependency('dri', required: true)
-
 conf.set('XORG_VERSION_CURRENT', release)
 
 conf_data = configuration_data()
@@ -244,7 +238,7 @@ conf_data.set('XCMISC', '1')
 conf_data.set('XCSECURITY', build_xsecurity ? '1': false)
 conf_data.set('XDMCP', build_xdmcp ? '1': false)
 conf_data.set('XF86BIGFONT', build_xf86bigfont ? '1': false)
-conf_data.set('XF86DRI', build_dri1 ? '1': false)
+conf_data.set('XF86DRI', false) # DRI1 support removed
 conf_data.set('XF86VIDMODE', 1)
 conf_data.set('XFIXES', '1')
 conf_data.set('XFreeXDGA', build_dga ? '1': false)
@@ -301,7 +295,6 @@ summary_srv += {'XACE': build_xace}
 summary_srv += {'XCSECURITY': build_xsecurity}
 summary_srv += {'XDMCP': build_xdmcp}
 summary_srv += {'XF86BIGFONT': build_xf86bigfont}
-summary_srv += {'XF86DRI': build_dri1}
 summary_srv += {'XFreeXDGA': build_dga}
 summary_srv += {'XINERAMA': build_xinerama}
 summary_srv += {'XSELINUX': build_xselinux}
