@@ -65,8 +65,8 @@ install_deps()
             sudo pacman -S meson libdrm libunwind libinput
             sudo pacman -Sdd mesa libglvnd # avoid autoinstall x11 stuff
             ;;
-        "Alpine")
-            sudo apk add meson freetype-dev
+        "Alpine Linux")
+            sudo apk add meson flex bison freetype-dev
             ;;
         *) 
             echo "Have not list of dependencies for $OS"
