@@ -151,7 +151,6 @@ dep_threads      = dependency('threads',        required: get_option('driver_vid
 dep_openmp       = dependency('openmp',         required: get_option('openmp')) # pixman
 dep_egl          = dependency('egl',            required: WITH_INT_EPOXY) # epoxy
 dep_gles2        = dependency('glesv2',         required: WITH_INT_EPOXY) # epoxy
-dep_gles1        = dependency('glesv1_cm',      required: false) # epoxy
 
 # drivers
 dep_udev         = dependency('libudev',        required: false) # input/evdev

@@ -15,10 +15,6 @@ if not dep_gles2.found()
   dep_gles2 = cc.find_library('libGLESv2', required: false)
 endif
 
-if not dep_gles1.found()
-  dep_gles1 = cc.find_library('libGLESv1_CM', required: false)
-endif
-
 # Generates the dispatch tables
 gen_dispatch_py = find_program('src/gen_dispatch.py')
 
