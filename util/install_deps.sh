@@ -66,7 +66,10 @@ install_deps()
             sudo pacman -Sdd mesa libglvnd # avoid autoinstall x11 stuff
             ;;
         "Alpine Linux")
-            doas apk add meson flex bison clang ccache freetype-dev
+            doas apk add meson flex bison clang ccache \
+                freetype-dev fontconfig-dev pixman-dev xkbcomp-dev dbus-dev \
+                libdrm-dev mesa-dev libunwind-dev libinput-dev libevdev-dev \
+                cairo-dev openssl-dev
             ;;
         *) 
             echo "Have not list of dependencies for $OS"
