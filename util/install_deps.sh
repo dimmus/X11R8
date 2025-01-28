@@ -55,18 +55,23 @@ install_deps()
 {   
     msg "Installing dependencies"
 
-    if [ "$OS" = "Ubuntu" ] || [ "$OS" = "Kali GNU/Linux" ]; then
-        sudo apt-get install -y \
-             build-essential meson ninja-build \
-             mesa-common-dev libgl1-mesa-dri
-    elif [ "$OS" = "Archlinux" ]; then
-        sudo pacman -S meson libdrm libunwind libinput
-        sudo pacman -Sdd mesa libglvnd # avoid autoinstall x11 stuff
-    elif [ "$OS" = "Alpine" ]; then
-        sudo apk add meson freetype-dev
-    else
-        echo "Have not list of dependencies for $OS"
-    fi
+    case $OS in
+        "Ubuntu"|"Kali GNU/Linux")
+            sudo apt-get install -y \
+                build-essential meson ninja-build \
+                mesa-common-dev libgl1-mesa-dri
+            ;;
+        "Archlinux")
+            sudo pacman -S meson libdrm libunwind libinput
+            sudo pacman -Sdd mesa libglvnd # avoid autoinstall x11 stuff
+            ;;
+        "Alpine")
+            sudo apk add meson freetype-dev
+            ;;
+        *) 
+            echo "Have not list of dependencies for $OS"
+            ;;
+    esac
 }
 
 get_os
