@@ -83,8 +83,6 @@ else
     build_systemd_logind = get_option('systemd_logind') == 'true'
 endif
 
-dir_xorg = dir_include / 'xorg'
-
 build_xquartz = false
 if get_option('xquartz') == 'auto'
     if host_machine.system() == 'darwin'

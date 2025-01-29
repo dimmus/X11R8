@@ -6,10 +6,7 @@ srcs_xorg_dri2 = [
 xorg_dri2 = static_library('xorg_dri2',
     srcs_xorg_dri2,
     include_directories: inc_server,
-    dependencies: [
-        dep_common,
-        dep_drm,
-    ],
+    dependencies: [dep_common, dep_drm],
     c_args: xorg_c_args,
 )
 

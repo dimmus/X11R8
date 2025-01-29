@@ -43,10 +43,7 @@ endif
 glamor = static_library('glamor',
     srcs_glamor,
     include_directories: [inc_server, inc_server_glx, inc_epoxy],
-    dependencies: [
-        dep_common,
-        dep_epoxy,
-    ],
+    dependencies: [dep_common, dep_epoxy],
 )
 
 install_data('glamor.h', install_dir: dir_xorg)

@@ -13,9 +13,7 @@ inc_server += include_directories(
     'vgahw',
 )
 
-xorg_c_args = []
-xorg_c_args += '-DHAVE_XORG_CONFIG_H'
-xorg_c_args += '-DXORG_NO_SDKSYMS'
+xorg_c_args = ['-DHAVE_XORG_CONFIG_H', '-DXORG_NO_SDKSYMS']
 
 # subdirs for convenience libraries statically linked into Xorg
 subdir('common')
@@ -94,12 +92,11 @@ else
     xorg_install_dir = dir_bin
 endif
 
-e = executable(
-    'Xorg',
+exe_xorg = executable('Xorg',
     srcs_xorg,
     include_directories: inc_server,
-    link_whole: xorg_link,
     dependencies: dep_xorg,
+    link_whole: xorg_link,
     link_args: linker_export_flags,
     c_args: xorg_c_args,
     install: true,
@@ -173,8 +170,7 @@ executable('gtf',
 )
 
 # For symbol presence testing only
-xorgserver_lib = shared_library(
-    'xorgserver',
+xorgserver_lib = shared_library('xorgserver',
     srcs_xorg,
     include_directories: inc_server,
     link_whole: xorg_link,

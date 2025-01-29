@@ -56,12 +56,10 @@
 #include "loaderProcs.h"
 
 #ifdef HAVE_DLFCN_H
-
-#include <dlfcn.h>
-#include "X11/Xos.h"
-
+# include <dlfcn.h>
+# include "X11/Xos.h"
 #else
-#error i have no dynamic linker and i must scream
+# error i have no dynamic linker and i must scream
 #endif
 
 #ifndef XORG_NO_SDKSYMS

@@ -13,7 +13,7 @@ if build_dri3
     libxserver_dri3 = static_library('libxserver_dri3',
         srcs_dri3,
         include_directories: inc_server,
-        dependencies: [ dep_common, dep_drm ],
+        dependencies: [dep_common, dep_drm],
         )
 endif
 

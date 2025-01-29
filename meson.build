@@ -104,6 +104,7 @@ dir_sysconf      = dir_prefix / get_option('sysconfdir')
 dir_libexec      = dir_prefix / get_option('libexecdir')
 dir_xorg_module  = dir_lib / 'xorg' / 'modules' # drivers
 dir_xorg_conf    = dir_data / 'X11' / 'xorg.conf.d' # drivers
+dir_xorg         = dir_include / 'xorg' # server
 
 dir_build        = meson.project_build_root()
 dir_source       = meson.project_source_root()

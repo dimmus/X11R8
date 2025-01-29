@@ -73,10 +73,11 @@ Equipment Corporation.
 
 ******************************************************************/
 
-#include <dix-config.h>
-#include <version-config.h>
+#include "dix-config.h"
+#include "version-config.h"
 
 #include <pixman.h>
+
 #include "X11/X.h"
 #include "X11/Xos.h"            /* for unistd.h  */
 #include "X11/Xproto.h"

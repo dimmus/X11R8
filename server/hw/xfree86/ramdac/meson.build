@@ -10,9 +10,4 @@ xorg_ramdac = static_library('xorg_ramdac',
     c_args: xorg_c_args,
 )
 
-install_data(
-    [
-        'xf86Cursor.h',
-    ],
-    install_dir: dir_xorg,
-)
+install_data('xf86Cursor.h', install_dir: dir_xorg)

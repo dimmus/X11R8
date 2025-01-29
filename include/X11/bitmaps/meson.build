@@ -1,16 +1,5 @@
 ver_xbitmaps = '1.1.3'
 
-pc_conf = configuration_data({
-    'prefix': dir_prefix,
-    'exec_prefix': dir_prefix,
-    'includedir': dir_include,
-    'PACKAGE_VERSION': ver_xbitmaps
-})
-configure_file(input: 'xbitmaps.pc.in',
-               output: 'xbitmaps.pc',
-               install_dir: dir_data / 'pkgconfig',
-               configuration : pc_conf)
-
 bitmap_files = [
   '1x1',
   '2x2',
@@ -88,3 +77,9 @@ bitmap_files = [
 install_headers(bitmap_files,
                 subdir: 'X11' / 'bitmaps')
 
+
+pkg.generate(
+  name: 'X bitmaps',
+  description: 'Bitmaps that are shared between X applications',
+  version: ver_xbitmaps,
+)

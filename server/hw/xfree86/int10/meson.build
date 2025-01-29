@@ -44,21 +44,19 @@ if int10 == 'vm86'
     int10_c_args += '-D_VM86_LINUX'
 endif
 
-xorg_int10 = shared_module('int10',
+shared_module('int10',
     srcs_xorg_int10,
     include_directories: [
-        inc_server,
         inc_server,
         include_directories('../x86emu')
     ],
     dependencies: dep_common,
     link_with: int10_link,
     c_args: int10_c_args,
-
     install: true,
     install_dir: module_dir,
 )
 
 install_data('xf86int10.h', install_dir: dir_xorg)
-install_data('vbe.h', install_dir: dir_xorg)
-install_data('vbeModes.h', install_dir: dir_xorg)
+install_data('vbe.h',       install_dir: dir_xorg)
+install_data('vbeModes.h',  install_dir: dir_xorg)

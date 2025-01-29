@@ -380,12 +380,9 @@ endif
 summary_srv += {'LIBPCIACCESS': get_option('pciaccess')}
 summary_srv += {'UDEV_KMS': build_udev_kms}
 
-configure_file(output: 'dix-config.h',
-               configuration: conf_data)
-
-configure_file(output: 'xorg-server.h',
+configure_file(output: 'dix-config.h',  configuration: conf_data)
+configure_file(output: 'xorg-server.h', configuration: conf_data,
                input: 'xorg-server.h.meson.in',
-               configuration: conf_data,
                install: true,
                install_dir: dir_xorg)
 
@@ -395,8 +392,7 @@ version_data.set_quoted('VENDOR_NAME',       get_option('vendor_name'))
 version_data.set_quoted('VENDOR_NAME_SHORT', get_option('vendor_name_short'))
 version_data.set_quoted('VENDOR_WEB',        get_option('vendor_web'))
 version_data.set_quoted('VENDOR_MAN_VERSION', 'Version @0@.@1@.@2@'.format(major, minor, patch))
-configure_file(output: 'version-config.h',
-               configuration: version_data)
+configure_file(output: 'version-config.h', configuration: version_data)
 
 xkb_data = configuration_data()
 xkb_data.set_quoted('XKB_BIN_DIRECTORY', xkb_bin_dir)
@@ -407,9 +403,7 @@ xkb_data.set_quoted('XKB_DFLT_LAYOUT',  get_option('xkb_default_layout'))
 xkb_data.set_quoted('XKB_DFLT_VARIANT', get_option('xkb_default_variant'))
 xkb_data.set_quoted('XKB_DFLT_OPTIONS', get_option('xkb_default_options'))
 xkb_data.set_quoted('XKM_OUTPUT_DIR', xkb_output_dir + '/')
-
-configure_file(output: 'xkb-config.h',
-               configuration: xkb_data)
+configure_file(output: 'xkb-config.h', configuration: xkb_data)
 
 xorg_data = configuration_data()
 xorg_data.set_quoted('XORG_BIN_DIRECTORY', dir_bin)
@@ -427,8 +421,7 @@ xorg_data.set_quoted('__XSERVERNAME__', 'Xorg')
 xorg_data.set('XSERVER_LIBPCIACCESS', get_option('pciaccess') ? '1': false)
 xorg_data.set_quoted('PCI_TXT_IDS_PATH', '')
 xorg_data.set('XSERVER_PLATFORM_BUS', build_udev_kms ? '1': false)
-xorg_data.set('WSCONS_SUPPORT',
-              host_machine.system() == 'netbsd' or host_machine.system() == 'openbsd' ? '1': false)
+xorg_data.set('WSCONS_SUPPORT', host_machine.system() == 'netbsd' or host_machine.system() == 'openbsd' ? '1': false)
 xorg_data.set('HAVE_STROPTS_H', cc.has_header('stropts.h') ? '1': false)
 xorg_data.set('HAVE_SYS_KD_H', cc.has_header('sys/kd.h') ? '1': false)
 xorg_data.set('HAVE_SYS_VT_H', cc.has_header('sys/vt.h') ? '1': false)
@@ -448,7 +441,7 @@ elif host_machine.system() == 'netbsd' or host_machine.system() == 'openbsd'
 endif
 
 configure_file(output: 'xorg-config.h',
-               input: 'xorg-config.h.meson.in',
+               input:  'xorg-config.h.meson.in',
                configuration: xorg_data)
 
 summary_org += {'XORG_BIN_DIRECTORY': xorg_data.get('XORG_BIN_DIRECTORY')}

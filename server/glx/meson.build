@@ -40,11 +40,9 @@ if build_glx
             dep_dl,
             dep_dri,
             dep_gl,
-            xproto,
         ],
         c_args: [
             glx_align64,
-            # XXX: generated code includes an unused function
             '-Wno-unused-function',
         ]
     )
@@ -69,14 +67,9 @@ hdrs_vnd = [
 libglxvnd = []
 if build_glx
     libglxvnd = static_library('libglxvnd',
-    srcs_vnd,
-    include_directories: inc_server,
-        dependencies: [
-            dep_common,
-            dep_dl,
-            dep_gl,
-            xproto,
-        ],
+        srcs_vnd,
+        include_directories: inc_server,
+        dependencies: [dep_common, dep_dl],
     )
 
     install_data(hdrs_vnd, install_dir: dir_xorg)

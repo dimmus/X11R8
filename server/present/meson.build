@@ -19,11 +19,7 @@ hdrs_present = [
 libxserver_present = static_library('libxserver_present',
     srcs_present,
     include_directories: inc_server,
-    dependencies: [
-        dep_common,
-	    dep_epoll,
-        xproto
-    ],
+    dependencies: [dep_common, dep_epoll],
 )
 
 install_data(hdrs_present, install_dir: dir_xorg)

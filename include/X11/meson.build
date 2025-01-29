@@ -294,13 +294,6 @@ elif cc.has_member('fd_set', '__fds_bits', prefix: fd_set_headers)
 else
     error('Your fd_set is too weird.')
 endif
-
-xpoll_config = configuration_data()
-xpoll_config.set('USE_FDS_BITS', fds_bits)
-configure_file(input: 'Xpoll.h.in',
-               output: 'Xpoll.h',
-               install: true,
-               install_dir: dir_include / 'X11',
-               configuration: xpoll_config)
+conf.set('USE_FDS_BITS', fds_bits)
 
 subdir('bitmaps')
