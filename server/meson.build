@@ -83,22 +83,8 @@ else
     build_systemd_logind = get_option('systemd_logind') == 'true'
 endif
 
-build_xquartz = false
-if get_option('xquartz') == 'auto'
-    if host_machine.system() == 'darwin'
-            build_xquartz = true
-    endif
-else
-    build_xquartz = get_option('xquartz') == 'true'
-endif
-
-build_rootless = false
-if build_xquartz
-    build_rootless = true
-endif
-
 # IPv6 support
-have_AF_INET6 = cc.compiles('''
+have_af_inet6 = cc.compiles('''
 #ifdef WIN32
 #include <winsock2.h>
 #else
@@ -106,11 +92,11 @@ have_AF_INET6 = cc.compiles('''
 #endif
 int main(void) { int foo = AF_INET6; return foo; }''')
 if get_option('ipv6') == 'auto'
-    build_ipv6 = cc.has_function('getaddrinfo') and have_AF_INET6
+    build_ipv6 = cc.has_function('getaddrinfo') and have_af_inet6
 else
     build_ipv6 = get_option('ipv6') == 'true'
 endif
-if build_ipv6 and not have_AF_INET6
+if build_ipv6 and not have_af_inet6
     error('ipv6 support needs AF_INET6')
 endif
 message('IPv6 support: ' + (build_ipv6 ? 'YES': 'NO'))
@@ -264,10 +250,6 @@ libdrm_required = (build_dri2 or build_dri3) and get_option('drm')
 build_modesetting = dep_drm.found()
 
 build_dpms = get_option('dpms')
-if build_xquartz
-    build_dpms = false
-endif
-
 build_xf86bigfont = get_option('xf86bigfont')
 build_screensaver = get_option('screensaver')
 build_res = get_option('xres')
@@ -405,13 +387,7 @@ subdir('dbe')
 subdir('miext' / 'damage')
 subdir('miext' / 'shadow')
 subdir('miext' / 'sync')
-if build_rootless
-    subdir('miext' / 'rootless')
-endif
 subdir('present')
-if build_xquartz
-    subdir('pseudoramiX')
-endif
 subdir('randr')
 subdir('record')
 subdir('xfixes')

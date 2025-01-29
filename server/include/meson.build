@@ -273,12 +273,6 @@ conf_data.set_quoted('__VENDORDWEBSUPPORT__', get_option('vendor_web'))
 conf_data.set_quoted('BUILDERADDR', get_option('builder_addr'))
 conf_data.set_quoted('BUILDERSTRING', get_option('builder_string'))
 
-if build_rootless
-    conf_data.set('ROOTLESS', build_rootless ? '1': false)
-    conf_data.set('ROOTLESS_WORKAROUND', 1)
-    conf_data.set('ROOTLESS_SAFEALPHA', 1)
-endif
-
 summary_srv += {'IPv6': build_ipv6}
 summary_srv += {'DGA': build_dga}
 summary_srv += {'DPMSExtension': build_dpms}
@@ -306,9 +300,6 @@ summary_srv += {'X_REGISTRY_REQUEST': build_registry_request}
 summary_srv += {'HAVE_APM': build_apm or build_acpi}
 summary_srv += {'HAVE_ACPI': build_acpi}
 summary_srv += {'DEBUG': enable_debugging}
-if build_xquartz
-summary_srv += {'ROOTLESS (XQuartz)': build_rootless}
-endif
 
 #
 # for xorg-server.h only

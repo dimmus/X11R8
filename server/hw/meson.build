@@ -11,7 +11,3 @@ if get_option('xnest')
 endif
 
 subdir('xfree86')
-
-if build_xquartz
-    subdir('xquartz')
-endif
