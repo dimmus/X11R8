@@ -28,9 +28,6 @@
 #mesondefine IDRIVERS
 
 /* Path to configuration file. */
-#mesondefine XF86CONFIGFILE
-
-/* Path to configuration file. */
 #mesondefine XCONFIGFILE
 
 /* Name of configuration directory. */

@@ -19,9 +19,6 @@ inc_lib += [
 subdir('dri')
 subdir('extensions')
 subdir('fonts')
-if get_option('legacy')
-subdir('PM')
-endif
 
 install_headers(
     'ap_keysym.h',

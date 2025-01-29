@@ -66,27 +66,7 @@ foreach pc: pcs
     )
 endforeach
 
-
-docs = files(
-    'compositeproto.txt',
-    'damageproto.txt',
-    'dri2proto.txt',
-    'dri3proto.txt',
-    'fixesproto.txt',
-    'presentproto.txt',
-    'randrproto.txt',
-    'renderproto.txt',
-    'resproto.txt',
-    'xv-protocol-v2.txt',
-    'xwaylandproto.txt'
-)
-
-install_data(docs,
-    install_dir: dir_data / 'doc' / 'xproto'
-)
-
-
-if get_option('legacy')
+if get_option('build-xproto-legacy')
     legacy_pcs = [
         'evieproto',
         'fontcacheproto',
@@ -107,9 +87,6 @@ if get_option('legacy')
             configuration: pc_data,
         )
     endforeach
-    legacy_docs = files('PM_spec')
-    install_data(legacy_docs,
-                 install_dir: dir_data / 'doc' / 'xproto')
 endif
 
 xproto = declare_dependency(

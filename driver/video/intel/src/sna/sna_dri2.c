@@ -33,7 +33,7 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include "config_intel.h"
 #endif
 
 #include <errno.h>

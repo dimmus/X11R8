@@ -1,11 +1,4 @@
-if WITH_DEMOS
-    # TODO: need PHIGS library
-    # if BuildPexClients
-    # subdir('auto_box')
-    # subdir('beach_ball')
-    # subdir('gpc')
-    # endif
-
+if WITH_DEMO
     if get_option('demo-xcmstest')
         subdir('xcmstest')
     endif

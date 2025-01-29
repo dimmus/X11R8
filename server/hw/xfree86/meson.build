@@ -86,12 +86,6 @@ dep_xorg = [
     libxfont,
 ]
 
-if get_option('suid_wrapper')
-    xorg_install_dir = dir_libexec
-else
-    xorg_install_dir = dir_bin
-endif
-
 exe_xorg = executable('Xorg',
     srcs_xorg,
     include_directories: inc_server,
@@ -100,7 +94,7 @@ exe_xorg = executable('Xorg',
     link_args: linker_export_flags,
     c_args: xorg_c_args,
     install: true,
-    install_dir: xorg_install_dir,
+    install_dir: dir_bin,
     implib: true,
 )
 
@@ -133,33 +127,6 @@ meson.add_install_script(
         dir_bin / 'X'
     )
 )
-
-if get_option('suid_wrapper')
-    executable('Xorg.wrap',
-        'xorg-wrapper.c',
-        include_directories: inc_server,
-        dependencies: dep_xorg,
-        c_args: xorg_c_args,
-        install: true,
-        install_dir: dir_libexec,
-        install_mode: ['r-sr-xr-x', 0, 0],
-    )
-
-    # meson gets confused when there are two targets of the same name
-    # within the same directory, so we use a different intermediate name.
-    xorg_sh = configure_file(
-        input: 'Xorg.sh.in',
-        output: 'Xorg.sh',
-        configuration: conf_data,
-    )
-
-    install_data(
-        xorg_sh,
-        install_mode: 'rwxr-xr-x',
-        install_dir: dir_bin,
-        rename: ['Xorg']
-    )
-endif
 
 executable('gtf',
     'utils/gtf/gtf.c',

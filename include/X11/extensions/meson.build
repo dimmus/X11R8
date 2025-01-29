@@ -1,8 +1,6 @@
 headers = files(
     'ag.h',
     'agproto.h',
-    'applewmconst.h',
-    'applewmproto.h',
     'bigreqsproto.h',
     'bigreqstr.h',
     'composite.h',
@@ -90,7 +88,7 @@ headers = files(
     'xwaylandproto.h',
 )
 
-if get_option('legacy')
+if get_option('build-xproto-legacy')
     headers += files(
         'evieproto.h',
         'fontcache.h',

@@ -38,13 +38,10 @@ endif
 
 dfp = get_option('default_font_path')
 if dfp == ''
-    fontrootdir = get_option('fontrootdir')
-    if fontrootdir == ''
-        if dep_fontutil.found()
-            fontrootdir = dep_fontutil.get_variable(pkgconfig: 'fontrootdir')
-        else
-            fontrootdir = dir_data / 'fonts' / 'X11'
-        endif
+    if dep_fontutil.found()
+        fontrootdir = dep_fontutil.get_variable(pkgconfig: 'fontrootdir')
+    else
+        fontrootdir = dir_data / 'fonts' / 'X11'
     endif
     dfp_elements = [
         fontrootdir / 'misc',
@@ -138,8 +135,6 @@ if log_dir == ''
     log_dir = dir_prefix / get_option('localstatedir') / 'log'
 endif
 
-module_dir = dir_lib / get_option('module_dir')
-
 # The idea behind the ordering here is that we should first prefer system
 # builtin providers, and then smaller implementations of over larger ones.
 test_sha1 = [
@@ -222,8 +217,6 @@ else
         error('No suitable SHA1 implementation found')
     endif
 endif
-
-has_xdm_auth = get_option('xdm-auth-1')
 
 build_glx = get_option('glx')
 if build_glx
@@ -432,7 +425,7 @@ sdkconfig.set('prefix',      dir_prefix)
 sdkconfig.set('libdir',      dir_lib)
 sdkconfig.set('includedir',  dir_include)
 sdkconfig.set('datarootdir', dir_data)
-sdkconfig.set('moduledir',   dir_prefix / module_dir)
+sdkconfig.set('moduledir',   dir_xorg_module)
 sdkconfig.set('sdkdir',      dir_include / 'xorg')
 sdkconfig.set('sysconfigdir', '${datarootdir}' / 'X11' / 'xorg.conf.d')
 sdkconfig.set('abi_ansic',

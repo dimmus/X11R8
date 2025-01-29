@@ -83,8 +83,6 @@ add_project_link_arguments(
   language: 'c'
 )
 
-WITH_SUMMARY = get_option('show_summary')
-if WITH_SUMMARY
 summary_dir  = {}
 summary_lib  = {}
 summary_info = {}
@@ -92,7 +90,6 @@ summary_mem  = {}
 summary_srv  = {}
 summary_org  = {}
 summary_xwl  = {}
-endif
 
 dir_prefix       = get_option('prefix')
 dir_bin          = dir_prefix / get_option('bindir')
@@ -111,23 +108,23 @@ dir_source       = meson.project_source_root()
 
 WITH_UNIT_TESTS  = false
 WITH_FONT_SERVER = get_option('build-font-server')
-WITH_TESTS       = get_option('build-tests')
-WITH_DOC         = get_option('build-docs')
-WITH_DOC_MAN     = get_option('build-docs-man')
-WITH_INT_PIXMAN  = get_option('use-builtin-pixman')
-WITH_INT_EPOXY   = get_option('use-builtin-epoxy')
-WITH_DEMOS       = get_option('build-demos')
+WITH_TESTS       = get_option('build-test')
+WITH_DOC         = get_option('build-doc')
+WITH_DOC_MAN     = get_option('build-doc-man')
+WITH_INT_PIXMAN  = get_option('build-static-pixman')
+WITH_INT_EPOXY   = get_option('build-static-epoxy')
+WITH_DEMO        = get_option('build-demo')
 WITH_DTRACE      = get_option('dtrace')
-WITH_XTHREADS    = true
-WITH_XTHREADS_DBG = false
+WITH_XTHREAD     = true
+WITH_XTHREAD_DBG = false
 
-dep_m            = cc.find_library('m',         required: get_option('driver_video_intel')) # libxcvt
+dep_m            = cc.find_library('m',         required: true)  # libxcvt
 dep_dl           = cc.find_library('dl',        required: false) # xvmc, xserver, static/epoxy
-dep_rt           = cc.find_library('rt',        required : true) # driver/video/intel
+dep_rt           = cc.find_library('rt',        required: true)  # driver/video/intel
 
-dep_zlib         = dependency('zlib',           required: true) # xfont, fontenc
+dep_zlib         = dependency('zlib',           required: true)  # xfont, fontenc
 dep_bzip2        = dependency('bzip2',          required: false) # xfont
-dep_freetype2    = dependency('freetype2',      required: true) # xfont, xft
+dep_freetype2    = dependency('freetype2',      required: true)  # xfont, xft
 dep_fontconfig   = dependency('fontconfig',     required: true, version: '>= 2.5.92') # xft
 dep_uuid         = dependency('uuid',           required: false) # sm
 dep_gettext      = dependency('gettext',        required: false) # xpm
@@ -148,7 +145,7 @@ dep_libunwind    = dependency('libunwind',      required: get_option('libunwind'
 dep_dri          = dependency('dri',            required: true) # server, driver/video/intel
 
 # static
-dep_threads      = dependency('threads',        required: get_option('driver_video_intel')) # pixman, driver/video/intel
+dep_threads      = dependency('threads',        required: get_option('build-video-intel')) # pixman, driver/video/intel
 dep_openmp       = dependency('openmp',         required: get_option('openmp')) # pixman
 dep_egl          = dependency('egl',            required: WITH_INT_EPOXY) # epoxy
 dep_gles2        = dependency('glesv2',         required: WITH_INT_EPOXY) # epoxy
@@ -281,12 +278,12 @@ conf.set('HAVE_REALLOCF', cc.has_function('reallocf'))
 conf.set('HAVE_STRNDUP', cc.has_function('strndup') and cc.has_header_symbol('string.h', 'strndup'))
 conf.set('HAVE_UNLOCKED_STDIO', cc.has_function('getc_unlocked'))
 
-conf.set('XTHREADS',                WITH_XTHREADS ? '1' : false)
-conf.set('XUSE_MTSAFE_API',         WITH_XTHREADS ? '1' : false)
-conf.set('X_FORCE_USE_MTSAFE_API',  WITH_XTHREADS ? '1' : false)
-conf.set('XTHREADS_WARN',           WITH_XTHREADS_DBG ? '1' : false)
-conf.set('XTHREADS_FILE_LINE',      WITH_XTHREADS_DBG ? '1' : false)
-conf.set('XTHREADS_DEBUG',          WITH_XTHREADS_DBG ? '1' : false)
+conf.set('XTHREADS',                WITH_XTHREAD ? '1' : false)
+conf.set('XUSE_MTSAFE_API',         WITH_XTHREAD ? '1' : false)
+conf.set('X_FORCE_USE_MTSAFE_API',  WITH_XTHREAD ? '1' : false)
+conf.set('XTHREADS_WARN',           WITH_XTHREAD_DBG ? '1' : false)
+conf.set('XTHREADS_FILE_LINE',      WITH_XTHREAD_DBG ? '1' : false)
+conf.set('XTHREADS_DEBUG',          WITH_XTHREAD_DBG ? '1' : false)
 
 if WITH_DOC
 if WITH_DOC_MAN
@@ -303,7 +300,6 @@ configure_file(
   configuration: conf
 )
 
-if WITH_SUMMARY
 summary(summary_lib,  bool_yn: true, section: 'X11 Library ')
 summary(summary_srv,  bool_yn: true, section: 'X11 Server')
 summary(summary_org,  bool_yn: true, section: 'X11 Server: Xorg')
@@ -311,4 +307,3 @@ summary(summary_xwl,  bool_yn: true, section: 'X11 Server: XWayland')
 summary(summary_dir,  bool_yn: true, section: 'Directories')
 summary(summary_mem,  bool_yn: true, section: 'Memory configuration')
 summary(summary_info, bool_yn: true, section: 'Information')
-endif

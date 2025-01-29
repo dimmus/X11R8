@@ -1,10 +1,11 @@
 ver_intel = '2.99.917'
 version = ver_intel.split('.')
 
-conf.set('PACKAGE_VERSION_MAJOR', version[0])
-conf.set('PACKAGE_VERSION_MINOR', version[1])
-conf.set('PACKAGE_VERSION_PATCHLEVEL', version[2])
-conf.set_quoted('LIBEXEC_PATH', dir_libexec)
+conf_intel = configuration_data()
+conf_intel.set('PACKAGE_VERSION_MAJOR', version[0])
+conf_intel.set('PACKAGE_VERSION_MINOR', version[1])
+conf_intel.set('PACKAGE_VERSION_PATCHLEVEL', version[2])
+conf_intel.set_quoted('LIBEXEC_PATH', dir_libexec)
 
 # cairo-xlib-xrender
 dep_int_intel = [
@@ -40,8 +41,8 @@ endif
 
 with_tools = get_option('tools')
 
-conf.set('USE_GIT_DESCRIBE', 1)
-conf.set('BUILDER_DESCRIPTION', 1)
+conf_intel.set('USE_GIT_DESCRIBE', 1)
+conf_intel.set('BUILDER_DESCRIPTION', 1)
 
 atomic_primitives = 'none'
 
@@ -57,12 +58,12 @@ int main(void) {
 }'''
 if cc.links(atomic_primitives_code, name : 'atomic primitives')
   atomic_primitives = 'intel'
-  conf.set('HAVE_ATOMIC_PRIMITIVES', 1)
+  conf_intel.set('HAVE_ATOMIC_PRIMITIVES', 1)
 endif
 
 if atomic_primitives == 'none' and cc.has_header('atomic_ops.h')
   atomic_primitives = 'libatomic-ops'
-  conf.set('HAVE_LIB_ATOMIC_OPS', 1)
+  conf_intel.set('HAVE_LIB_ATOMIC_OPS', 1)
 endif
 
 if atomic_primitives == 'none'
@@ -70,7 +71,7 @@ if atomic_primitives == 'none'
 endif
 
 if dep_udev.found()
-  conf.set('HAVE_UDEV', 1)
+  conf_intel.set('HAVE_UDEV', 1)
 endif
 
 cpuid_code = '''
@@ -84,39 +85,35 @@ int main(void) {
     return 0;
 }'''
 if cc.links(cpuid_code, name : '__cpuid()')
-  conf.set('HAVE_CPUID_H', 1)
+  conf_intel.set('HAVE_CPUID_H', 1)
 endif
 
 if cc.has_header('sys/ipc.h')
-  conf.set('HAVE_MIT_SHM', 1)
-  conf.set('HAVE_X11_EXTENSIONS_SHMPROTO_H', 1)
-  conf.set('HAVE_X11_EXTENSIONS_SHMSTR_H', 1)
+  conf_intel.set('HAVE_MIT_SHM', 1)
+  conf_intel.set('HAVE_X11_EXTENSIONS_SHMPROTO_H', 1)
+  conf_intel.set('HAVE_X11_EXTENSIONS_SHMSTR_H', 1)
 endif
 
-conf.set('HAVE_X11_EXTENSIONS_XINERAMA_H', 1)
-conf.set('HAVE_X11_EXTENSIONS_DPMSCONST_H', 1)
-conf.set('HAS_PIXMAN_TRIANGLES', 1)
-conf.set('HAS_PIXMAN_GLYPHS', 1)
+conf_intel.set('HAVE_X11_EXTENSIONS_XINERAMA_H', 1)
+conf_intel.set('HAVE_X11_EXTENSIONS_DPMSCONST_H', 1)
+conf_intel.set('HAS_PIXMAN_TRIANGLES', 1)
+conf_intel.set('HAS_PIXMAN_GLYPHS', 1)
 
 if get_option('kms')
-  conf.set('KMS', 1)
+  conf_intel.set('KMS', 1)
 endif
 
-with_ums = get_option('ums')
-if with_ums
-  if not cc.has_header('vgaHW.h')
-    error('UMS dependencies not met')
-  endif
-  conf.set('UMS', 1)
+if get_option('ums')
+  # need vgaHW.h from server (inc_server)
+  conf_intel.set('UMS', 1)
 endif
 
-conf.set('ENABLE_XVMC', 1)
+conf_intel.set('ENABLE_XVMC', 1)
 
 with_valgrind = get_option('valgrind')
 if with_valgrind
-  message('Checking Valgrind support')
   valgrind = dependency('valgrind', required : true)
-  conf.set('HAVE_VALGRIND', 1)
+  conf_intel.set('HAVE_VALGRIND', 1)
 endif
 
 inc = [
@@ -125,17 +122,17 @@ inc = [
 ]
 
 # man_config = configuration_data()
-# man_conf.set('appmansuffix', '1')
-# man_conf.set('filemansuffix', '5')
-# man_conf.set('drivermansuffix', '4')
-# man_conf.set('miscmansuffix', '7')
-# man_conf.set('xservername',
+# man_conf_intel.set('appmansuffix', '1')
+# man_conf_intel.set('filemansuffix', '5')
+# man_conf_intel.set('drivermansuffix', '4')
+# man_conf_intel.set('miscmansuffix', '7')
+# man_conf_intel.set('xservername',
 # 	       cc.get_define('__XSERVERNAME__',
 # 			     prefix : '#include <xorg-server.h>')
-# man_conf.set('xconfigfile',
+# man_conf_intel.set('xconfigfile',
 # 	       cc.get_define('__XCONFIGFILE____',
 # 			     prefix : '#include <xorg-server.h>')
-# man_conf.set('vendorversion', '"@0@ @1@" "@2@"'.format(meson.project_name(),
+# man_conf_intel.set('vendorversion', '"@0@ @1@" "@2@"'.format(meson.project_name(),
 # 							 meson.project_version(),
 # 							 'X Version 11'))
 
@@ -143,6 +140,8 @@ subdir('src')
 subdir('tools')
 subdir('xvmc')
 
-# subdir('man')
-
-# configure_file(output: 'conf.h', install: false, configuration: config)
+configure_file(
+  output: 'config_intel.h',
+  install: false,
+  configuration: conf_intel
+)

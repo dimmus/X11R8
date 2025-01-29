@@ -691,7 +691,7 @@ DoConfigure(void)
         }
     }
 
-    snprintf(filename, sizeof(filename), "%s%s" XF86CONFIGFILE ".new",
+    snprintf(filename, sizeof(filename), "%s%s" XCONFIGFILE ".new",
              home, addslash);
 
     if (xf86writeConfigFile(filename, xf86config) == 0) {
@@ -824,7 +824,7 @@ DoConfigure(void)
                " has configured a multihead system, please check your config.\n");
     }
 
-    ErrorF("\nYour %s file is %s\n\n", XF86CONFIGFILE, filename);
+    ErrorF("\nYour %s file is %s\n\n", XCONFIGFILE, filename);
     ErrorF("To test the server, run 'X -config %s'\n\n", filename);
 
  bail:

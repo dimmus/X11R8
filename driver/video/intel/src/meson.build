@@ -63,11 +63,6 @@ intel_drv_sources = [
 
 intel_drv_libs = []
 
-if with_ums
-  subdir('legacy/i810')
-  intel_drv_libs += i810
-endif
-
 default_accel = get_option('default-accel')
 
 with_sna = get_option('sna')

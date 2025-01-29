@@ -1,35 +1,42 @@
-option('show_summary',          type: 'boolean', value: true)
+## BUILD
+option('build-font-server',     type: 'boolean', value: true )
+option('build-input-evdev',     type: 'boolean', value: false) # replaced by libinput
+option('build-input-synaptics', type: 'boolean', value: false) # replaced by libinput
+option('build-video-intel',     type: 'boolean', value: true )
+option('build-static-epoxy',    type: 'boolean', value: true )
+option('build-static-pixman',   type: 'boolean', value: true )
+option('build-xproto-legacy',   type: 'boolean', value: false)
+option('build-demo',            type: 'boolean', value: false)
+option('build-test',            type: 'boolean', value: false)
+option('build-doc',             type: 'boolean', value: false)
 
+## SETUP
 ## lib
-option('legacy',                type: 'boolean', value: false,                                       description: '[xproto]')
-option('xthreads',              type: 'boolean', value : true,                                       description: '[xau] Whether libXau should be compiled with thread support.')
-option('xdmauth',               type: 'boolean', value : true,                                       description: '[xdmcp] Has Wraphelp.c needed for XDM AUTH protocols.')
-option('composecache',          type: 'boolean', value : true,                                       description: '[x11] Enable compose table cache support.')
-option('xkb',                   type: 'boolean', value : true,                                       description: '[x11] Enable XKB support *EXPERIMENTAL*.')
-option('xf86bigfont',           type: 'boolean', value : true,                                       description: '[x11] Enable XF86BigFont extension support.')
-option('xcms',                  type: 'boolean', value : true,                                      description: '[x11] Enable Xlib support for CMS *EXPERIMENTAL*.')
-option('xlocale',               type: 'boolean', value : true,                                       description: '[x11] Enable Xlib locale implementation *EXPERIMENTAL*.')
-option('open-zfile',            type: 'boolean', value : true,                                       description: '[xpm] Search for files with .Z & .gz extensions automatically.')
-option('stat-zfile',            type: 'boolean', value : true,                                       description: '[xpm] Search for files with .Z & .gz extensions automatically.')
-option('build-sxpm',            type: 'boolean', value : true,                                       description: '[xpm] Build programm to show XPM files.')
+option('xthreads',              type: 'boolean', value: true,                                        description: '[xau] Whether libXau should be compiled with thread support.')
+option('composecache',          type: 'boolean', value: true,                                        description: '[x11] Enable compose table cache support.')
+option('xkb',                   type: 'boolean', value: true,                                        description: '[x11] Enable XKB support *EXPERIMENTAL*.')
+option('xf86bigfont',           type: 'boolean', value: true,                                        description: '[x11] Enable XF86BigFont extension support.')
+option('xcms',                  type: 'boolean', value: true,                                        description: '[x11] Enable Xlib support for CMS *EXPERIMENTAL*.')
+option('xlocale',               type: 'boolean', value: true,                                        description: '[x11] Enable Xlib locale implementation *EXPERIMENTAL*.')
+option('zfile-open',            type: 'boolean', value: true,                                        description: '[xpm] Search for files with .Z & .gz extensions automatically.')
+option('zfile-stat',            type: 'boolean', value: true,                                        description: '[xpm] Search for files with .Z & .gz extensions automatically.')
+option('sxpm',                  type: 'boolean', value: true,                                        description: '[xpm] Build programm to show XPM files.')
 
 ## xserver
-option('xquartz',               type: 'combo',   value: 'false', choices: ['true', 'false', 'auto'], description: 'Enable Xquartz X server')
 option('xnest',                 type: 'boolean', value: true,                                        description: 'Enable Xnest nested X server')
 option('xephyr',                type: 'boolean', value: true,                                        description: 'Enable Xephyr nested X server')
 option('xvfb',                  type: 'boolean', value: true,                                        description: 'Enable Xvfb X server')
 
-option('builder_addr',          type: 'string',  value: 'xorg@lists.freedesktop.org',                description: 'Builder address')
-option('builder_string',        type: 'string',                                                      description: 'Additional builder string')
 option('log_dir',               type: 'string')
-option('module_dir',            type: 'string',  value: 'xorg/modules',                              description: 'X.Org modules directory (absolute or relative to the directory specified by the libdir option)')
 option('default_font_path',     type: 'string')
-option('fontrootdir',           type: 'string',                                                      description: 'Root directory for legacy fonts. Default: from font-utils.pc or $datadir/fonts/X11')
 option('serverconfigdir',       type: 'string',                                                      description: 'Miscellaneous server configuration files path. Default: $libdir/xorg')
 
 option('glx',                   type: 'boolean', value: true)
+option('dri2',                  type: 'boolean', value: true,                                        description: 'Build DRI2 extension (default: auto)')
+option('dri3',                  type: 'boolean', value: true,                                        description: 'Build DRI3 extension (default: auto)')
+option('drm',                   type: 'boolean', value: true,                                        description: 'Build Xorg with libdrm support')
+option('libunwind',             type: 'boolean', value: true,                                        description: 'Use libunwind for backtrace reporting')
 option('xdmcp',                 type: 'boolean', value: true)
-option('xdm-auth-1',            type: 'boolean', value: true)
 option('ipv6',                  type: 'combo',   value: 'auto', choices: ['true', 'false', 'auto'])
 option('input_thread',          type: 'combo',   value: 'auto', choices: ['true', 'false', 'auto'])
 
@@ -41,7 +48,6 @@ option('xkb_default_model',     type: 'string', value: 'pc105')
 option('xkb_default_layout',    type: 'string', value: 'us')
 option('xkb_default_variant',   type: 'string')
 option('xkb_default_options',   type: 'string')
-
 option('fallback_input_driver', type: 'string', value: 'auto')
 
 option('vendor_name',           type: 'string', value: 'The X.Org Foundation')
@@ -54,7 +60,6 @@ option('listen_tcp',            type: 'boolean', value: false,  description: 'Li
 option('listen_unix',           type: 'boolean', value: true,   description: 'Listen on Unix by default')
 option('listen_local',          type: 'boolean', value: true,   description: 'Listen on local by default')
 
-option('suid_wrapper',          type: 'boolean', value: false,  description: 'SUID wrapper for legacy driver support')
 option('pciaccess',             type: 'boolean', value: true,   description: 'Xorg pciaccess support')
 option('udev',                  type: 'boolean', value: true)
 option('udev_kms',              type: 'boolean', value: true)
@@ -81,12 +86,6 @@ option('mitshm',                type: 'combo',   value: 'auto', choices: ['true'
 option('agp',                   type: 'combo',   value: 'auto', choices: ['true', 'false', 'auto'],   description: 'AGP support')
 option('sha1',                  type: 'combo',   value: 'auto', choices: ['libc', 'CommonCrypto', 'CryptoAPI', 'libmd', 'libsha1', 'libnettle', 'libgcrypt', 'libcrypto', 'auto'], 
                                                                                                       description: 'SHA1 implementation')
-
-option('dri2',                  type: 'boolean', value: true,                                         description: 'Build DRI2 extension (default: auto)')
-option('dri3',                  type: 'boolean', value: true,                                         description: 'Build DRI3 extension (default: auto)')
-option('drm',                   type: 'boolean', value: true,                                         description: 'Build Xorg with libdrm support')
-option('libunwind',             type: 'boolean', value: true,                                         description: 'Use libunwind for backtrace reporting')
-
 # xcb
 option('composite',             type: 'boolean', value: true)
 option('damage',                type: 'boolean', value: true)
@@ -108,33 +107,27 @@ option('selinux',               type: 'boolean', value: true)
 option('xtest',                 type: 'boolean', value: true)
 option('ge',                    type: 'boolean', value: true)
 
-option('build-docs',            type: 'boolean', value: false,   description: 'Build documentation')
-option('build-docs-guide',      type: 'boolean', value: false,   description: 'Build development guides')
-option('build-docs-pdf',        type: 'boolean', value: false,   description: 'Build documentation as pdf files')
-option('build-docs-man',        type: 'boolean', value: true,    description: 'Build manual pages')
+## doc 
+option('build-doc-guide',       type: 'boolean', value: false,   description: 'Build development guides')
+option('build-doc-pdf',         type: 'boolean', value: false,   description: 'Build documentation as pdf files')
+option('build-doc-man',         type: 'boolean', value: true,    description: 'Build manual pages')
 
-option('build-font-server',     type: 'boolean', value: true,    description: '')
-option('build-tests',           type: 'boolean', value: false,   description: '')
+## demo
+option('demo-x11perf',          type: 'boolean', value: true )
+option('demo-xcmstest',         type: 'boolean', value: false) # legacy
+option('demo-ico',              type: 'boolean', value: true )
+option('demo-maze',             type: 'boolean', value: true )
+option('demo-puzzle',           type: 'boolean', value: true )
+option('demo-xeyes',            type: 'boolean', value: true )
+option('demo-xgamma',           type: 'boolean', value: true )
+option('demo-xev',              type: 'boolean', value: true )
+option('demo-xgas',             type: 'boolean', value: false) # legacy
+option('demo-xgc',              type: 'boolean', value: true )
 
-## Demo
-option('build-demos',           type: 'boolean', value: true,   description: '')
-option('demo-x11perf',          type: 'boolean', value: true,   description: '')
-option('demo-xcmstest',         type: 'boolean', value: false,  description: 'Legacy')
-option('demo-ico',              type: 'boolean', value: true,   description: '')
-option('demo-maze',             type: 'boolean', value: true,   description: '')
-option('demo-puzzle',           type: 'boolean', value: true,   description: '')
-option('demo-xeyes',            type: 'boolean', value: true,   description: '')
-option('demo-xgamma',           type: 'boolean', value: true,   description: '')
-option('demo-xev',              type: 'boolean', value: true,   description: '')
-option('demo-xgas',             type: 'boolean', value: false,  description: 'Legacy')
-option('demo-xgc',              type: 'boolean', value: true,   description: '')
-
-## Static libraries
-#  static/epoxy
-option('use-builtin-epoxy',     type: 'boolean', value: true)
+## static/epoxy
 option('egl',                   type: 'boolean', value: true)
-#  static/pixman
-option('use-builtin-pixman',    type: 'boolean', value: true)
+
+## static/pixman
 option('loongson-mmi',          type: 'feature',                 description: 'Use Loongson MMI intrinsic optimized paths')
 option('mmx',                   type: 'feature',                 description: 'Use X86 MMX intrinsic optimized paths')
 option('sse2',                  type: 'feature',                 description: 'Use X86 SSE2 intrinsic optimized paths')
@@ -151,17 +144,11 @@ option('openmp',                type: 'feature',                 description: 'E
 option('cpu-features-path',     type: 'string',                  description: 'Path to platform-specific cpu-features.[ch] for systems that do not provide it (e.g. Android)')
 option('timers',                type: 'boolean', value : false,  description: 'Enable TIMER_* macros')
 
-## Drivers
-#  input/libinput
-option('sdkdir',                type: 'string',  value: '',      description: 'Directory to install header files in [default=from xorg-server pkgconf]')
-option('xorg-module-dir',       type: 'string',  value: '',      description: 'Default xorg module directory [default=from xorg-server pkgconf]')
-option('xorg-conf-dir',         type: 'string',  value: '',      description: 'Default xorg.conf.d directory [default=from xorg-server pkgconfig]')
-#  video/intel
-option('driver_video_intel',    type: 'boolean', value: true)
+##  driver/video/intel
 option('sna',                   type: 'boolean', value: true,    description: 'Build with SNA support')
 option('uxa',                   type: 'boolean', value: true,    description: 'Build with UXA support')
 option('xaa',                   type: 'boolean', value: true,    description: 'Build with XAA support')
-option('ums',                   type: 'boolean', value: false,   description: 'Build with UMS support') # need cc.has_header('vgaHW.h')
+option('ums',                   type: 'boolean', value: true,    description: 'Build with UMS support')
 option('kms',                   type: 'boolean', value: true,    description: 'Build with KMS support')
 option('valgrind',              type: 'boolean', value: true,    description: 'Enable valgrindified ioctls for debugging')
 option('tools',                 type: 'boolean', value: true,    description: 'Enable building and installing the miscellaneous tools')
@@ -173,5 +160,3 @@ option('async-swap',            type: 'boolean', value: false,   description: 'E
 option('default-dri',           type: 'combo',   value: '2',     choices : [ '1', '2', '3' ],                            description : 'Select the default maximum DRI level')
 option('default-accel',         type: 'combo',   value: 'sna',   choices : [ 'sna', 'uxa', 'none' ],                     description : 'Select the default acceleration method')
 option('internal-debug',        type: 'combo',   value: 'no',    choices : [ 'no', 'sync', 'memory', 'pixmap', 'full' ], description : 'Enable internal debugging')
-
-

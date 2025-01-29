@@ -2,7 +2,7 @@ lib_args = []
 
 f_check += ['strlcat', 'fork', 'closefrom']
 
-if get_option('open-zfile')
+if get_option('zfile-open')
   if exe_gzip.found()
     XPM_PATH_GZIP = exe_gzip.full_path()
     conf.set_quoted('XPM_PATH_GZIP', XPM_PATH_GZIP)
@@ -23,11 +23,11 @@ else
   COMPRESSED_PIXMAPS = true
 endif
 
-if get_option('build-sxpm')
+if get_option('sxpm')
   f_check += ['close_range', 'break']
 endif
 
-if get_option('stat-zfile')
+if get_option('zfile-stat')
   lib_args += ['-DSTAT_ZFILE']
 endif
 
@@ -96,7 +96,7 @@ executable('cxpm',
   include_directories: inc_lib,
 )
 
-if get_option('build-sxpm')
+if get_option('sxpm')
   executable('sxpm',
     'sxpm/sxpm.c',
     dependencies: dep_int_xpm,

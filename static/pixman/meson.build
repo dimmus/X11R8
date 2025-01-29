@@ -394,9 +394,7 @@ if not use_gnu_asm.disabled()
   endif
 endif
 
-if get_option('timers')
-  conf_pixman.set('PIXMAN_TIMERS', 1)
-endif
+conf_pixman.set('PIXMAN_TIMERS', get_option('timers'))
 
 if cc.get_id() != 'msvc'
   if dep_openmp.found()

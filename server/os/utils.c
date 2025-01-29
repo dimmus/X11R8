@@ -1437,12 +1437,6 @@ enum BadCode {
     InternalError
 };
 
-#if defined(BUILDERADDR)
-#define BUGADDRESS BUILDERADDR
-#else
-#define BUGADDRESS "xorg@freedesktop.org"
-#endif
-
 void
 CheckUserParameters(int argc, char **argv, char **envp)
 {

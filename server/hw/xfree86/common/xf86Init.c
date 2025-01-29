@@ -183,9 +183,6 @@ xf86PrintBanner(void)
         }
     }
 #endif
-#if defined(BUILDERSTRING)
-    xf86ErrorFVerb(0, "%s \n", BUILDERSTRING);
-#endif
     xf86ErrorFVerb(0, "Current version of pixman: %s\n",
                    pixman_version_string());
     xf86ErrorFVerb(0, "\tBefore reporting problems, check "

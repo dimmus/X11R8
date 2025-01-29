@@ -23,7 +23,7 @@ manpage_config.set('XKB_DFLT_LAYOUT', get_option('xkb_default_layout'))
 manpage_config.set('XKB_DFLT_VARIANT', get_option('xkb_default_variant'))
 manpage_config.set('XKB_DFLT_OPTIONS', get_option('xkb_default_options'))
 manpage_config.set('bundle_id_prefix', '...')
-manpage_config.set('modulepath', module_dir)
+manpage_config.set('modulepath', dir_xorg_module)
 manpage_config.set('suid_wrapper_dir', dir_libexec)
 manpage_config.set('default_font_path', default_font_path)
 

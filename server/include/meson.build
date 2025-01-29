@@ -115,12 +115,11 @@ conf_data.set_quoted('COMPILEDDEFAULTFONTPATH', default_font_path)
 
 conf_data.set('XORG_VERSION_CURRENT', release)
 
-conf_data.set('HASXDMAUTH', has_xdm_auth ? '1': false)
+conf_data.set('HASXDMAUTH', '1')
 
 summary_srv += {'XSERVER_DTRACE': WITH_DTRACE}
 summary_srv += {'X_BYTE_ORDER': conf_data.get('X_BYTE_ORDER')}
 summary_srv += {'INPUTTHREAD': enable_input_thread}
-summary_srv += {'HASXDMAUTH': has_xdm_auth}
 summary_srv += {'HAVE_LIBBSD': dep_libbsd.found()}
 summary_srv += {'SYSTEMD_DAEMON': build_systemd_notify}
 summary_srv += {'SYSTEMD_LOGIND': build_systemd_logind}
@@ -270,8 +269,6 @@ conf_data.set('DEBUG', enable_debugging ? '1': false)
 conf_data.set_quoted('XVENDORNAME', get_option('vendor_name'))
 conf_data.set_quoted('XVENDORNAMESHORT', get_option('vendor_name_short'))
 conf_data.set_quoted('__VENDORDWEBSUPPORT__', get_option('vendor_web'))
-conf_data.set_quoted('BUILDERADDR', get_option('builder_addr'))
-conf_data.set_quoted('BUILDERSTRING', get_option('builder_string'))
 
 summary_srv += {'IPv6': build_ipv6}
 summary_srv += {'DGA': build_dga}
@@ -399,14 +396,13 @@ configure_file(output: 'xkb-config.h', configuration: xkb_data)
 xorg_data = configuration_data()
 xorg_data.set_quoted('XORG_BIN_DIRECTORY', dir_bin)
 xorg_data.set('XORG_VERSION_CURRENT', release)
-xorg_data.set_quoted('XF86CONFIGFILE', 'xorg.conf')
 xorg_data.set_quoted('XCONFIGFILE', 'xorg.conf')
 xorg_data.set_quoted('XCONFIGDIR', 'xorg.conf.d')
 xorg_data.set_quoted('DEFAULT_XDG_DATA_HOME', '.local/share')
 xorg_data.set_quoted('DEFAULT_XDG_DATA_HOME_LOGDIR', 'xorg')
 xorg_data.set_quoted('DEFAULT_LOGDIR', log_dir)
 xorg_data.set_quoted('DEFAULT_LOGPREFIX', 'Xorg.')
-xorg_data.set_quoted('DEFAULT_MODULE_PATH', dir_prefix / module_dir)
+xorg_data.set_quoted('DEFAULT_MODULE_PATH', dir_xorg_module)
 xorg_data.set_quoted('DEFAULT_LIBRARY_PATH', dir_lib)
 xorg_data.set_quoted('__XSERVERNAME__', 'Xorg')
 xorg_data.set('XSERVER_LIBPCIACCESS', get_option('pciaccess') ? '1': false)
@@ -437,7 +433,6 @@ configure_file(output: 'xorg-config.h',
 
 summary_org += {'XORG_BIN_DIRECTORY': xorg_data.get('XORG_BIN_DIRECTORY')}
 summary_org += {'XORG_VERSION_CURRENT': xorg_data.get('XORG_VERSION_CURRENT')}
-summary_org += {'XF86CONFIGFILE': xorg_data.get('XF86CONFIGFILE')}
 summary_org += {'XCONFIGFILE': xorg_data.get('XCONFIGFILE')}
 summary_org += {'XCONFIGDIR': xorg_data.get('XCONFIGDIR')}
 summary_org += {'XDG_DATA_HOME': xorg_data.get('DEFAULT_XDG_DATA_HOME')}

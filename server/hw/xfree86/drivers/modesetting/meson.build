@@ -23,7 +23,7 @@ shared_module(
     ],
 
     install: true,
-    install_dir: module_dir / 'drivers',
+    install_dir: dir_xorg_module / 'drivers',
 )
 
 # Test that we don't have any unresolved symbols from our module to Xorg.

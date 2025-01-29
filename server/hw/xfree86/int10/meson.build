@@ -54,7 +54,7 @@ shared_module('int10',
     link_with: int10_link,
     c_args: int10_c_args,
     install: true,
-    install_dir: module_dir,
+    install_dir: dir_xorg_module,
 )
 
 install_data('xf86int10.h', install_dir: dir_xorg)

@@ -10,7 +10,7 @@ shared_module(
     c_args: xorg_c_args,
     dependencies: dep_common,
     install: true,
-    install_dir: module_dir / 'input',
+    install_dir: dir_xorg_module / 'input',
     link_with: exe_xorg,
 )
 

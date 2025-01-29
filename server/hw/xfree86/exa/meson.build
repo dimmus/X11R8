@@ -5,5 +5,5 @@ shared_module('exa',
     link_with: [libxserver_exa, exe_xorg],
     c_args: xorg_c_args,
     install: true,
-    install_dir: module_dir,
+    install_dir: dir_xorg_module,
 )

@@ -1,12 +1,6 @@
 h_check += ['sys/random.h']
 f_check += ['srand48', 'lrand48', 'arc4random_buf', 'getentropy']
 
-lib_args = []
-if get_option('xdmauth')
-  lib_args += '-DHASXDMAUTH'
-  src += 'Wraphelp.c'
-endif
-
 src = files(
   'Array.c',
   'Fill.c',
@@ -20,7 +14,7 @@ src = files(
 )
 
 lib = library('Xdmcp', src,
-  c_args: lib_args,
+  c_args: '-DHASXDMAUTH',
   include_directories: inc_lib,
   dependencies: xproto,
   version: '6.0.0',

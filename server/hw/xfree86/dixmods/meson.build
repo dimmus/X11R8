@@ -6,7 +6,7 @@ shared_module('wfb',
     link_whole: libxserver_wfb,
     link_with: exe_xorg,
     install: true,
-    install_dir: module_dir,
+    install_dir: dir_xorg_module,
 )
 
 shared_module('shadow',
@@ -17,7 +17,7 @@ shared_module('shadow',
     link_whole: libxserver_miext_shadow,
     link_with: exe_xorg,
     install: true,
-    install_dir: module_dir,
+    install_dir: dir_xorg_module,
 )
 
 if build_glx
@@ -29,6 +29,6 @@ shared_module('glx',
     link_whole: libxserver_glx,
     link_with: exe_xorg,
     install: true,
-    install_dir: module_dir / 'extensions'
+    install_dir: dir_xorg_module / 'extensions'
 )
 endif

@@ -34,7 +34,7 @@ pkg.generate(lib,
   requires_private: ['xcb-render', 'xcb-renderutil', 'xcb-image'],
 )
 
-gperf = find_program('gperf', required: false)
+# gperf = find_program('gperf', required: false)
 
 # Run command: gperf --includes --struct-type --language=ANSI-C --switch=1 shape_to_id.gperf > shape_to_id.c
 

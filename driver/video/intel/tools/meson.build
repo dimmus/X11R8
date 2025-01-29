@@ -15,7 +15,7 @@ if with_tools
 			libxtst,
 			dep_pixman,
 		],
-		c_args : ['-Wno-unused-parameter'],
+		c_args : '-Wno-unused-parameter',
 		install : true
 	)
 
@@ -88,7 +88,7 @@ if with_backlight_helper
 	configure_file(input : 'org.x.xf86-video-intel.backlight-helper.policy.in',
 		output : 'org.x.xf86-video-intel.backlight-helper.policy',
 		configuration : polkit_config,
-		install_dir : join_paths(dir_data, 'polkit-1/actions'),
+		install_dir : dir_data / 'polkit-1' / 'actions',
 		install : true
 	)
 endif
