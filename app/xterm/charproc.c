@@ -104,7 +104,6 @@
 #endif
 
 #if OPT_WIDE_CHARS
-#include <xutf8.h>
 #include <wcwidth.h>
 #include <precompose.h>
 #ifdef HAVE_LANGINFO_CODESET

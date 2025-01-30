@@ -121,6 +121,11 @@ h_check += [
 # conf_xterm.set_quoted('OWN_TERMINFO_DIR', '/usr/lib/terminfo') # Define to override default TERMINFO value
 # conf_xterm.set_quoted('PROCFS_ROOT', '/proc') # This is defined via the --enable-exec-xterm option
 
+# configure_file(
+#   output: 'config_xterm.h',
+#   configuration: conf_xterm
+# )
+
 # TERMLIB="termlib ncursesw ncurses curses"
 dep_ext_xterm = [dep_freetype2, dep_fontconfig, dependency('ncurses')]
 
@@ -173,11 +178,6 @@ src = files(
     'xstrings.c',
     'xtermcap.c',
 )
-
-# configure_file(
-#   output: 'config_xterm.h',
-#   configuration: conf_xterm
-# )
 
 executable('xterm', src,
     include_directories: [inc_xterm, inc_lib],

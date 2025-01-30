@@ -90,8 +90,6 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#include <xutf8.h>
-
 #include <data.h>
 #include <fontutils.h>
 #include <xstrings.h>

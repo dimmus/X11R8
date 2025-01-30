@@ -84,8 +84,6 @@
 #include <langinfo.h>
 #endif
 
-#include <xutf8.h>
-
 #include <data.h>
 #include <error.h>
 #include <menu.h>

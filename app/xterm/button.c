@@ -69,7 +69,6 @@ button.c	Handles button events in the terminal emulator.
 #include "X11/Xmu/Atoms.h"
 #include "X11/Xmu/StdSel.h"
 
-#include <xutf8.h>
 #include <fontutils.h>
 
 #include <data.h>
