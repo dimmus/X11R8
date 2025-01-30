@@ -37,11 +37,9 @@ endforeach
 epoxy_sources = sources + gen_sources
 
 common_ldflags = []
-if host_system == 'linux' and cc.get_id() == 'gcc'
+if host_machine.system() == 'linux' and cc.get_id() == 'gcc'
   common_ldflags += cc.get_supported_link_arguments([ '-Wl,-Bsymbolic-functions', '-Wl,-z,relro' ])
 endif
-
-dep_ext_epoxy = [dep_dl, dep_egl_headers]
 
 epoxy = static_library('epoxy',
   sources: epoxy_sources + epoxy_headers,
@@ -77,7 +75,7 @@ pkg.generate(
   libraries: libepoxy,
   name: 'epoxy',
   description: 'GL dispatch library',
-  version: meson.project_version(),
+  version: ver_epoxy,
   variables: [
     'epoxy_has_glx=@0@'.format(epoxy_has_glx),
     'epoxy_has_egl=@0@'.format(epoxy_has_egl),
