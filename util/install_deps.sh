@@ -38,7 +38,7 @@ install_deps()
                 build-essential meson ninja-build \
                 mesa-common-dev libgl1-mesa-dri
             ;;
-        "Archlinux")
+        "Arch Linux")
             sudo pacman -S meson libdrm libunwind libinput
             sudo pacman -Sdd mesa libglvnd # avoid autoinstall x11 stuff
             ;;
