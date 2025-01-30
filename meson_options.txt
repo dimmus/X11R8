@@ -34,11 +34,8 @@ option('serverconfigdir',       type: 'string',                                 
 option('glx',                   type: 'boolean', value: true)
 option('dri2',                  type: 'boolean', value: true,                                        description: 'Build DRI2 extension (default: auto)')
 option('dri3',                  type: 'boolean', value: true,                                        description: 'Build DRI3 extension (default: auto)')
-option('drm',                   type: 'boolean', value: true,                                        description: 'Build Xorg with libdrm support')
 option('libunwind',             type: 'boolean', value: true,                                        description: 'Use libunwind for backtrace reporting')
-option('xdmcp',                 type: 'boolean', value: true)
 option('ipv6',                  type: 'combo',   value: 'auto', choices: ['true', 'false', 'auto'])
-option('input_thread',          type: 'combo',   value: 'auto', choices: ['true', 'false', 'auto'])
 
 option('xkb_dir',               type: 'string')
 option('xkb_output_dir',        type: 'string')

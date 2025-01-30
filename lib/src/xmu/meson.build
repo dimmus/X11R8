@@ -6,10 +6,8 @@ dep_int_xmuu = [libx11]
 # TODO: need?
 # AC_REPLACE_FUNCS([reallocarray])
 
-if WITH_UNIT_TESTS
-  f_check += 'malloc_usable_size'
-  h_check += 'malloc.h'
-endif
+f_check += 'malloc_usable_size'
+h_check += 'malloc.h'
 
 src_muu = files(
   'ClientWin.c',

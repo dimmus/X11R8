@@ -3,6 +3,7 @@ project('X Window System', 'c',
     version: '11.8.1',
     default_options : [
       'buildtype=debug', # plain,debug,debugoptimized,release,minsize,custom
+      'c_std=gnu99', # we use typeof in server
       # 'optimization=g',  # 0,g,1,2,3,s
       # 'b_sanitize=none   # none,address,thread,undefined,memory,leak,address,undefined',
       # 'b_coverage=true',
@@ -11,7 +12,9 @@ project('X Window System', 'c',
       # 'b_staticpic=true', 
       # 'b_pie=false',
       # 'b_lundef=true',
-      'c_std=gnu99' # we use typeof in server
+      'prefix=/usr',
+      'sysconfdir=/etc',
+      'localstatedir=/var'
     ],
     meson_version: '>=0.59.0',
     # 0.56.0
@@ -45,16 +48,19 @@ if get_option('buildtype').startswith('debug')
   endif
 else
   test_wflags = [
-    '-Wno-use-after-free',
-    '-Wno-stringop-truncation',
-    '-Wno-maybe-uninitialized',
-    '-Wno-unused-result',
-    '-Wno-format-truncation',
-    '-Wno-alloc-size-larger-than=',
-    '-Wno-stringop-overflow',
-    '-Wno-strict-aliasing',
-    '-Wno-array-bounds',
-    '-Wno-stringop-overread',
+    '-Wno-use-after-free',          # gcc
+    '-Wno-stringop-truncation',     # gcc
+    '-Wno-maybe-uninitialized',     # gcc
+    '-Wno-unused-result',           # gcc, clang
+    '-Wno-format-truncation',       # gcc, clang
+    '-Wno-stringop-overflow',       # gcc
+    '-Wno-strict-aliasing',         # gcc, clang
+    '-Wno-array-bounds',            # gcc, clang
+    '-Wno-stringop-overread',       # gcc
+    '-Wno-unused-but-set-variable', # gcc, clang
+    '-Wno-typedef-redefinition',    # clang
+    '-Wno-incompatible-pointer-types-discards-qualifiers', # clang
+    '-Wno-unknown-warning-option',  # clang
   ]
 endif
 
@@ -67,7 +73,6 @@ add_project_arguments(
   '-DHAVE_CONFIG_H',
   '-D_GNU_SOURCE',
   '-D_BSD_SOURCE',
-  # '-D_XOPEN_SOURCE', # xfont
   '-D__EXTENSIONS__',
   '-D_CONST_X_STRING',
   '-D_DEFAULT_SOURCE',
@@ -83,13 +88,8 @@ add_project_link_arguments(
   language: 'c'
 )
 
-summary_dir  = {}
-summary_lib  = {}
-summary_info = {}
-summary_mem  = {}
-summary_srv  = {}
-summary_org  = {}
-summary_xwl  = {}
+dir_build        = meson.project_build_root()
+dir_source       = meson.project_source_root()
 
 dir_prefix       = get_option('prefix')
 dir_bin          = dir_prefix / get_option('bindir')
@@ -103,10 +103,6 @@ dir_xorg_module  = dir_lib / 'xorg' / 'modules' # drivers
 dir_xorg_conf    = dir_data / 'X11' / 'xorg.conf.d' # drivers
 dir_xorg         = dir_include / 'xorg' # server
 
-dir_build        = meson.project_build_root()
-dir_source       = meson.project_source_root()
-
-WITH_UNIT_TESTS  = false
 WITH_FONT_SERVER = get_option('build-font-server')
 WITH_TESTS       = get_option('build-test')
 WITH_DOC         = get_option('build-doc')
@@ -115,7 +111,6 @@ WITH_INT_PIXMAN  = get_option('build-static-pixman')
 WITH_INT_EPOXY   = get_option('build-static-epoxy')
 WITH_DEMO        = get_option('build-demo')
 WITH_DTRACE      = get_option('dtrace')
-WITH_XTHREAD     = true
 WITH_XTHREAD_DBG = false
 
 dep_m            = cc.find_library('m',         required: true)  # libxcvt
@@ -184,44 +179,9 @@ inc_server       = []
 inc_pixman       = []
 inc_epoxy        = []
 
-# libraries
-ver_ice          = '1.1.1'
-ver_sm           = '1.2.4'
-ver_x11          = '1.8.10'
-ver_xau          = '1.0.11'
-ver_xaw          = '1.0.16'
-ver_xcursor      = '1.2.3'
-ver_xcvt         = '0.1.2'
-ver_xdmcp        = '1.1.5'
-ver_xft          = '2.3.8'
-ver_xmu          = '1.2.1'
-ver_xpm          = '3.5.17'
-ver_xt           = '1.3.0'
-ver_xtrans       = '1.5.1'
-ver_xcb          = '1.17.0'
-ver_xshmfence    = '1.3.2'
-# extensions
-ver_dmx          = '1.1.5'
-ver_xcomposite   = '0.4.6'
-ver_xdamage      = '1.1.6'
-ver_xext         = '1.3.6'
-ver_xf86dga      = '1.1.6'
-ver_xf86vm       = '1.1.5'
-ver_xfixes       = '6.0.1'
-ver_xi           = '1.8.2'
-ver_xinerama     = '1.1.5'
-ver_xkbfile      = '1.1.3'
-ver_xrandr       = '1.5.4'
-ver_xrender      = '0.9.11'
-ver_xres         = '1.2.2'
-ver_xss          = '1.2.4'
-ver_xtst         = '1.2.5'
-ver_xv           = '1.0.12'
-ver_xvmc         = '1.0.14'
-# xserver
-ver_xserver      = '21.1.99.1'
-# drivers
-ver_evdev = '2.11.0'
+summary_lib      = {}
+summary_srv      = {}
+summary_org      = {}
 
 subdir('include')
 subdir('static')
@@ -236,39 +196,32 @@ subdir('driver')
 subdir('app')
 subdir('demo')
 
-FIRST_RUN = not fs.is_dir(dir_build / 'src')
-
-# speed up when run meson reconfigure
-if FIRST_RUN
-  f_unique = []
-  foreach f: f_check
-    if not f_unique.contains(f)
-      conf.set('HAVE_@0@'.format(f.to_upper()), cc.has_function(f))
-      if f == 'arc4random_buf'
-        h_check += ['sys/random.h']
-      endif
-      f_unique += f
+f_unique = []
+foreach f: f_check
+  if not f_unique.contains(f)
+    conf.set('HAVE_@0@'.format(f.to_upper()), cc.has_function(f))
+    if f == 'arc4random_buf'
+      h_check += ['sys/random.h']
     endif
-  endforeach
+    f_unique += f
+  endif
+endforeach
 
-  h_unique = []
-  foreach h: h_check
-    if not h_unique.contains(h)
-      if h == 'unistd.h' and cc.has_header(h)
-        conf.set('HAVE_@0@'.format(h.underscorify().to_upper()), 1) # avoid warning with redefinition in freetype2
-      else
-        conf.set('HAVE_@0@'.format(h.underscorify().to_upper()), cc.has_header(h))
-      endif
-      h_unique += h
-    endif
-  endforeach
-
-  if not cc.has_function('strcasecmp')
-    if cc.has_function('_stricmp')
-      conf.set('strcasecmp', '_stricmp', description: 'Replacement for strcasecmp, if necessary')
+h_unique = []
+foreach h: h_check
+  if not h_unique.contains(h)
+    if h == 'unistd.h' and cc.has_header(h)
+      conf.set('HAVE_@0@'.format(h.underscorify().to_upper()), 1) # avoid warning with redefinition in freetype2
     else
-      error('strcasecmp (or _stricmp) is mandatory')
+      conf.set('HAVE_@0@'.format(h.underscorify().to_upper()), cc.has_header(h))
     endif
+    h_unique += h
+  endif
+endforeach
+
+if not cc.has_function('strcasecmp')
+  if cc.has_function('_stricmp')
+    conf.set('strcasecmp', '_stricmp', description: 'Replacement for strcasecmp, if necessary')
   endif
 endif
 
@@ -277,9 +230,9 @@ conf.set('HAVE_REALLOCF', cc.has_function('reallocf'))
 conf.set('HAVE_STRNDUP', cc.has_function('strndup') and cc.has_header_symbol('string.h', 'strndup'))
 conf.set('HAVE_UNLOCKED_STDIO', cc.has_function('getc_unlocked'))
 
-conf.set('XTHREADS',                WITH_XTHREAD ? '1' : false)
-conf.set('XUSE_MTSAFE_API',         WITH_XTHREAD ? '1' : false)
-conf.set('X_FORCE_USE_MTSAFE_API',  WITH_XTHREAD ? '1' : false)
+conf.set('XTHREADS',                '1')
+conf.set('XUSE_MTSAFE_API',         '1')
+conf.set('X_FORCE_USE_MTSAFE_API',  '1')
 conf.set('XTHREADS_WARN',           WITH_XTHREAD_DBG ? '1' : false)
 conf.set('XTHREADS_FILE_LINE',      WITH_XTHREAD_DBG ? '1' : false)
 conf.set('XTHREADS_DEBUG',          WITH_XTHREAD_DBG ? '1' : false)
@@ -294,15 +247,8 @@ subdir('doc' / 'man')
 endif
 endif
 
-configure_file(
-  output: 'config.h',
-  configuration: conf
-)
+configure_file(output: 'config.h',  configuration: conf)
 
 summary(summary_lib,  bool_yn: true, section: 'X11 Library ')
 summary(summary_srv,  bool_yn: true, section: 'X11 Server')
 summary(summary_org,  bool_yn: true, section: 'X11 Server: Xorg')
-summary(summary_xwl,  bool_yn: true, section: 'X11 Server: XWayland')
-summary(summary_dir,  bool_yn: true, section: 'Directories')
-summary(summary_mem,  bool_yn: true, section: 'Memory configuration')
-summary(summary_info, bool_yn: true, section: 'Information')

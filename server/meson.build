@@ -1,3 +1,4 @@
+ver_xserver     = '21.1.99.1'
 libselinux_req  = '>= 2.0.86'
 gbm_req         = '>= 10.2'
 
@@ -238,8 +239,6 @@ if build_dri3
    endif
 endif
 
-libdrm_required = (build_dri2 or build_dri3) and get_option('drm')
-
 build_modesetting = dep_drm.found()
 
 build_dpms = get_option('dpms')
@@ -262,7 +261,6 @@ endif
 
 build_xv = get_option('xv')
 build_xvmc = get_option('xvmc')
-build_xdmcp = get_option('xdmcp')
 
 build_dga = false
 if get_option('dga') == 'auto' or get_option('dga') == 'true'

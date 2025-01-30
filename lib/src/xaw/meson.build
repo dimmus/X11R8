@@ -4,10 +4,8 @@ h_check += ['wctype.h', 'wchar.h', 'widec.h']
 BUILD_XAW6 = false
 BUILD_XAW7 = true
 
-if WITH_UNIT_TESTS
-  f_check += 'malloc_usable_size'
-  h_check += 'malloc.h'
-endif
+f_check += 'malloc_usable_size'
+h_check += 'malloc.h'
 
 dep_int_xaw = [libx11, xproto, libxext, libxt, libxmu, libxpm, libi18n]
 

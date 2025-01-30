@@ -34,7 +34,6 @@ subdir('test')
 endif
 subdir('example')
 
-summary_lib += {'XTHREADS': WITH_XTHREAD}
 summary_lib += {'XTHREADS_DBG': WITH_XTHREAD_DBG}
 summary_lib += {'XCMS': get_option('xcms')}
 summary_lib += {'XLOCALE': get_option('xlocale')}

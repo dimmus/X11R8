@@ -220,7 +220,7 @@ _XimLocalUtf8LookupString(XIC xic, XKeyEvent *ev, char *buffer, int bytes,
 		return (ret);
 	    }
 	    buffer[0] = 0xe0 | ((BRL_UC_ROW >> 12) & 0x0f);
-	    buffer[1] = 0x80 | ((BRL_UC_ROW >> 8) & 0x30) | (pattern >> 6);
+	    buffer[1] = 0x80 | ((BRL_UC_ROW >> 8)  & 0x30) | (pattern >> 6);
 	    buffer[2] = 0x80 | (pattern & 0x3f);
 	    if(keysym) {
 		*keysym = XK_braille_blank | pattern;
