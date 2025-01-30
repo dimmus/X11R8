@@ -70,11 +70,17 @@ test_draglock = executable('test-draglock',
 			 install: false)
 test('test-draglock', test_draglock)
 
-pkg.generate(
-  name: 'xorg-libinput',
-  description: 'X.Org libinput input driver',
-  version: ver_libinput,
-)
+
+# conf_pkgconf = configuration_data()
+# conf_pkgconf.set('PACKAGE_VERSION', meson.project_version())
+# conf_pkgconf.set('sdkdir', dir_headers)
+
+# configure_file(
+# 	input: 'xorg-libinput.pc.in',
+# 	output: 'xorg-libinput.pc',
+# 	configuration: conf_pkgconf,
+# 	install_dir: dir_pkgconf,
+# )
 
 install_data(
 	'conf/40-libinput.conf',

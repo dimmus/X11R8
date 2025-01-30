@@ -49,6 +49,8 @@
 #include "libinput-properties.h"
 #include "util-strings.h"
 
+typedef void *pointer;
+
 #define TOUCHPAD_NUM_AXES 4 /* x, y, hscroll, vscroll */
 #define TABLET_NUM_BUTTONS 7 /* we need scroll buttons */
 #define TOUCH_MAX_SLOTS 15
