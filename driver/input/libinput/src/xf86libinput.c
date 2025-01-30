@@ -465,6 +465,7 @@ xf86libinput_set_pressurecurve(struct xf86libinput *driver_data,
 			    driver_data->pressurecurve.sz);
 }
 
+#if 0 /* UNUSED */
 static inline bool
 xf86libinput_set_pressure_range(struct xf86libinput *driver_data,
 				const struct range *range)
@@ -483,6 +484,7 @@ xf86libinput_set_pressure_range(struct xf86libinput *driver_data,
 	return FALSE;
 #endif
 }
+#endif
 
 static inline void
 xf86libinput_set_area_ratio(struct xf86libinput *driver_data,

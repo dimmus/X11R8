@@ -29,6 +29,7 @@
 #include <string.h>
 #include <stdio.h>
 
+#if 0
 static inline void
 print_curve(int *bezier, size_t size)
 {
@@ -36,6 +37,7 @@ print_curve(int *bezier, size_t size)
 	for (int i = 0; i < size; i++)
 		printf("%d %d\n", i, bezier[i]);
 }
+#endif
 
 static void
 test_linear(void)

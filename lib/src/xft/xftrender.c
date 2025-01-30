@@ -150,7 +150,7 @@ XftGlyphRender (Display		*dpy,
 		goto bail1;
     
 	needed = (size_t)nglyphs * size;
-    if (needed > sizeof (char_local))
+    if (needed > sizeof (char_local) && needed < sizeof(size_t) )
     {
 		chars = malloc (needed);
 		if (!chars)

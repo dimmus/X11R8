@@ -21,6 +21,8 @@ OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION  WITH
 THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ********************************************************/
 
+#include "Xmd.h"
+#include <stdio.h>
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -147,9 +149,15 @@ Status XeviGetVisualInfo(
 	        return BadValue;
 	    }
 	}
-	temp_visual = Xmallocarray(n_visual, sz_VisualID32);
+    if (n_visual < sizeof(size_t) && sz_VisualID32 < sizeof(size_t)) {
+	    temp_visual = Xmallocarray(n_visual, sz_VisualID32);
         for (visualIndex = 0; visualIndex < n_visual; visualIndex++)
-	    temp_visual[visualIndex] = visual[visualIndex];
+	        temp_visual[visualIndex] = visual[visualIndex];
+    }
+    else {
+        fprintf(stderr, "Cannot allocate memory");
+        abort();
+    }
     }
     XFree(vinfo);
     LockDisplay(dpy);

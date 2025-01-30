@@ -361,7 +361,7 @@ xf86ReadSerial(int fd, void *buf, int count)
     int r;
     int i;
 
-    SYSCALL(r = read(fd, buf, count));
+    SYSCALL(r = read(fd, buf, count))
     DebugF("ReadingSerial: 0x%x", (unsigned char) *(((unsigned char *) buf)));
     for (i = 1; i < r; i++)
         DebugF(", 0x%x", (unsigned char) *(((unsigned char *) buf) + i));

@@ -63,7 +63,7 @@ _Xmblen(
 
 /* API mentioning "UTF8" or "utf8" is an XFree86 extension, introduced in
    November 2000. Its presence is indicated through the following macro. */
-#define X_HAVE_UTF8_STRING 1
+#define X_HAVE_UTF8_STRING
 
 /* The Xlib structs are full of implicit padding to properly align members.
    We can't clean that up without breaking ABI, so tell clang not to bother

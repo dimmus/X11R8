@@ -156,8 +156,16 @@ static void find_charset2uni_pages (Encoding* enc)
 static void find_charset2uni_blocks (Encoding* enc)
 {
   int n, row, lastrow;
+  size_t max;
 
-  enc->charsetblocks = malloc(enc->rows*sizeof(Block));
+  max = enc->rows*sizeof(Block);
+  if (max < sizeof(size_t)) {
+    enc->charsetblocks = malloc(max);
+  }
+  else {
+    fprintf(stderr, "Cannot allocate memory of size %ld bytes", max);
+    abort();
+  }
 
   n = 0;
   for (row = 0; row < enc->rows; row++)
