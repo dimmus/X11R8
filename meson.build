@@ -154,9 +154,9 @@ dep_gles2        = dependency('glesv2',         required: WITH_INT_EPOXY) # epox
 dep_udev         = dependency('libudev',        required: false) # input/evdev
 dep_evdev        = dependency('libevdev',       required: false) # input/evdev
 dep_input        = dependency('libinput',       required: true, version: '>= 1.11.0') # input/libinput
-dep_cairo        = dependency('cairo',          required: true) # video/intel (test)
-dep_png          = dependency('libpng',         required: true) # video/intel (test, tools)
-dep_drm_intel    = dependency('libdrm_intel',   required: true) # video/intel
+# dep_cairo        = dependency('cairo',          required: true) # video/intel (test)
+# dep_png          = dependency('libpng',         required: true) # video/intel (test, tools)
+# dep_drm_intel    = dependency('libdrm_intel',   required: true) # video/intel
 dep_drm_nouveau  = dependency('libdrm_nouveau', required: true) # video/nouveau
 
 exe_bison        = find_program('bison',        required: false)
@@ -164,8 +164,7 @@ exe_flex         = find_program('flex',         required: false)
 exe_gzip         = find_program('gzip',         required: false)
 exe_awk          = find_program('awk',          required: false)
 exe_dtrace       = find_program('dtrace',       required: WITH_DTRACE)
-exe_python       = find_program('python3',      required: false)
-exe_mig          = find_program('mig',          required: false) # xquarz, mach interface
+# exe_python       = find_program('python3',      required: false) # unused
 
 python           = import('python').find_installation()
 pkg              = import('pkgconfig')
@@ -288,9 +287,9 @@ conf.set('XTHREADS_DEBUG',          WITH_XTHREAD_DBG ? '1' : false)
 if WITH_DOC
 if WITH_DOC_MAN
 exe_sed  = find_program('sed',      required: false)
-xmlto    = find_program('xmlto',    required: false)
-xsltproc = find_program('xsltproc', required: false) # require_devel_docs
-fop      = find_program('fop',      required: false) # require_docs_pdf
+# xmlto    = find_program('xmlto',    required: false)
+# xsltproc = find_program('xsltproc', required: false) # require_devel_docs
+# fop      = find_program('fop',      required: false) # require_docs_pdf
 subdir('doc' / 'man')
 endif
 endif
