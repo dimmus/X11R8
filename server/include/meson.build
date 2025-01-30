@@ -156,7 +156,6 @@ conf_data.set('HAVE_EPOLL_CREATE1', cc.has_function('epoll_create1') ? '1': fals
 conf_data.set('HAVE_GETUID', cc.has_function('getuid') ? '1': false)
 conf_data.set('HAVE_GETEUID', cc.has_function('geteuid') ? '1': false)
 conf_data.set('HAVE_ISASTREAM', cc.has_function('isastream') ? '1': false)
-conf_data.set('HAVE_ISSETUGID', cc.has_function('issetugid') ? '1': false)
 conf_data.set('HAVE_GETIFADDRS', cc.has_function('getifaddrs') ? '1': false)
 conf_data.set('HAVE_GETPEEREID', cc.has_function('getpeereid') ? '1': false)
 conf_data.set('HAVE_GETPEERUCRED', cc.has_function('getpeerucred') ? '1': false)
@@ -370,7 +369,6 @@ summary_srv += {'UDEV_KMS': build_udev_kms}
 
 configure_file(output: 'dix-config.h',  configuration: conf_data)
 configure_file(output: 'xorg-server.h', configuration: conf_data,
-               input: 'xorg-server.h.meson.in',
                install: true,
                install_dir: dir_xorg)
 
