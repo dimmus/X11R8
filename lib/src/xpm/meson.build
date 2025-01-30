@@ -28,13 +28,13 @@ if get_option('sxpm')
 endif
 
 if get_option('zfile-stat')
-  lib_args += ['-DSTAT_ZFILE']
+  lib_args += '-DSTAT_ZFILE'
 endif
 
 dep_int_xpm = [libx11, xproto, libxext, libxt]
 
 if dep_gettext.found()
-  lib_args += ['-DUSE_GETTEXT'] 
+  lib_args += '-DUSE_GETTEXT'
 endif
 
 src = files(
