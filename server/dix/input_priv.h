@@ -53,8 +53,8 @@ SOFTWARE.
 
 #include "input.h"
 
-typedef struct _InputOption InputOption;
-typedef struct _XI2Mask XI2Mask;
+typedef struct _InputOption InputOptionNew;
+typedef struct _XI2Mask XI2MaskNew;
 
 void InitCoreDevices(void);
 void InitXTestDevices(void);
