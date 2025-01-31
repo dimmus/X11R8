@@ -53,7 +53,7 @@ option('vendor_web',            type: 'string', value: 'http://wiki.x.org')
 
 option('dtrace',                type: 'boolean', value: false,  description: 'Enable dtrace hooks') # need dtrace
 
-option('listen_tcp',            type: 'boolean', value: false,  description: 'Listen on TCP by default')
+option('listen_tcp',            type: 'boolean', value: true,   description: 'Listen on TCP by default')
 option('listen_unix',           type: 'boolean', value: true,   description: 'Listen on Unix by default')
 option('listen_local',          type: 'boolean', value: true,   description: 'Listen on local by default')
 
