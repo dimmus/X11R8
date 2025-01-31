@@ -1,93 +1,69 @@
-# Copyright © 2018 Intel Corporation
+ver_xproto = '2024.1'
 
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
+h_check += ['sys/select.h', 'sys/param.h', 'sys/types.h', 'sys/time.h']
 
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-
-# version: '2024.1'
-
-pcs = [
-    'applewmproto',
-    'bigreqsproto',
-    'compositeproto',
-    'damageproto',
-    'dmxproto',
-    'dpmsproto',
-    'dri2proto',
-    'dri3proto',
-    'fixesproto',
-    'fontsproto',
-    'glproto',
-    'inputproto',
-    'kbproto',
-    'presentproto',
-    'randrproto',
-    'recordproto',
-    'renderproto',
-    'resourceproto',
-    'scrnsaverproto',
-    'videoproto',
-    'xcmiscproto',
-    'xextproto',
-    'xf86bigfontproto',
-    'xf86dgaproto',
-    'xf86driproto',
-    'xf86vidmodeproto',
-    'xineramaproto',
-    'xproto',
-    'xwaylandproto',
+proto_pc = [
+  ['AppleWM',       '1.4.2'   ],
+  ['BigReqs',       '1.1.2'   ],
+  ['Composite',     '0.4.2'   ], # Ext
+  ['Damage',        '1.2.1'   ],
+  ['DMX',           '2.3.1'   ],
+  ['DPMS',          '1.2'     ],
+  ['DRI2',          '2.8'     ],
+  ['DRI3',          '1.4'     ],
+  ['Fixes',         '6.1'     ],
+  ['Fonts',         '2.1.3'   ],
+  ['GL',            '1.4.17'  ],
+  ['Input',         '2.3.99.2'],
+  ['KB',            '1.0.7'   ],
+  ['Present',       '1.4'     ],
+  ['Randr',         '1.6.0'   ],
+  ['Record',        '1.14.2'  ],
+  ['Render',        '0.11.1'  ],
+  ['Resource',      '1.2.0'   ],
+  ['ScrnSaver',     '1.2.3'   ],
+  ['Video',         '2.3.3'   ],
+  ['XCMisc',        '1.2.2'   ],
+  ['XExt',          '7.3.0'   ],
+  ['XF86BigFont',   '1.2.0'   ],
+  ['XF86DGA',       '2.1'     ],
+  ['XF86DRI',       '2.1.1'   ],
+  ['XF86VidMode',   '2.3.1'   ],
+  ['Xinerama',      '1.2.1'   ],
+  ['Xwayland',      '1.0'     ],
 ]
 
-pc_data = configuration_data()
-pc_data.set('prefix', dir_prefix)
-# meson does not allow installing the includedir outside of the prefix
-pc_data.set('includedir', '${prefix}' / dir_include)
+if get_option('build-xproto-legacy')
+proto_pc += [
+  ['EvIE',          '1.1.1'   ], # Ext
+  ['Fontcache',     '0.1.3'   ],
+  ['Lg3d',          '5.0'     ],
+  ['Print',         '1.0.5'   ],
+  ['Trap',          '3.4.3'   ], # Requires: xt
+  ['WindowsWM',     '1.0.4'   ],
+  ['XCalibrate',    '0.1.0'   ],
+  ['XF86Misc',      '0.9.3'   ],
+  ['XF86Rush',      '1.1.2'   ],
+  ['XProxyMng',     '1.0.3'   ],
+]
+endif
 
-foreach pc: pcs
-    configure_file(
-        input: pc + '.pc.in',
-        output: pc + '.pc',
-        install_dir: dir_data / 'pkgconfig',
-        configuration: pc_data,
-    )
+# pc_data.set('prefix', dir_prefix)
+# pc_data.set('includedir', '${prefix}' / dir_include)
+
+foreach proto : proto_pc
+pkg.generate(
+  name: '@0@Proto'.format(proto[0]),
+  description: '@0@ extension headers'.format(proto[0]),
+  version: proto[1],
+)
 endforeach
 
-if get_option('build-xproto-legacy')
-    legacy_pcs = [
-        'evieproto',
-        'fontcacheproto',
-        'lg3dproto',
-        'printproto',
-        'trapproto',
-        'windowswmproto',
-        'xcalibrateproto',
-        'xf86miscproto',
-        'xf86rushproto',
-        'xproxymngproto',
-    ]
-    foreach pc: legacy_pcs
-        configure_file(
-            input: pc + '.pc.in',
-            output: pc + '.pc',
-            install_dir: dir_data / 'pkgconfig',
-            configuration: pc_data,
-        )
-    endforeach
-endif
+pkg.generate(
+  name: 'Xproto',
+  description: 'Xproto headers',
+  version: '7.0.33',
+)
 
 xproto = declare_dependency(
     include_directories: inc_lib
@@ -95,11 +71,9 @@ xproto = declare_dependency(
 
 keysymfile = dir_source / 'include' / 'X11' / 'XF86keysym.h'
 
-if WITH_TESTS
-# XXX: needs python module 'libevdev'
+if WITH_TESTS # needs python module 'libevdev'
 test('xproto - evdev-keysym',
-    find_program('scripts' / 'keysym-generator.py'),
+    find_program('keysym-generator.py'),
     args: ['-v', '--header', keysymfile, 'verify'],
-
 )
 endif
