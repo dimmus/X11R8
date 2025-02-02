@@ -118,7 +118,7 @@ dep_dl           = cc.find_library('dl',        required: false) # xvmc, xserver
 dep_rt           = cc.find_library('rt',        required: true)  # driver/video/intel
 
 dep_zlib         = dependency('zlib',           required: true)  # xfont, fontenc
-dep_bzip2        = dependency('bzip2',          required: false) # xfont
+dep_bzip2        = dependency('bzip2',          required: true) # xfont
 dep_freetype2    = dependency('freetype2',      required: true)  # xfont, xft
 dep_fontconfig   = dependency('fontconfig',     required: true, version: '>= 2.5.92') # xft
 dep_uuid         = dependency('uuid',           required: false) # sm
