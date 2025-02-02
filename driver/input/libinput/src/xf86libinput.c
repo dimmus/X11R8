@@ -837,7 +837,9 @@ LibinputApplyConfigClickMethod(DeviceIntPtr dev,
 			       struct libinput_device *device)
 {
 	InputInfoPtr pInfo = dev->public.devicePrivate;
+#if HAVE_LIBINPUT_CLICKFINGER_BUTTON_MAP
 	uint32_t click_methods = libinput_device_config_click_get_methods(device);
+#endif
 
 	if (!subdevice_has_capabilities(dev, CAP_POINTER))
 		return;
