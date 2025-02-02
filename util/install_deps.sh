@@ -35,8 +35,24 @@ install_deps()
     case $OS in
         "Ubuntu"|"Kali GNU/Linux")
             sudo apt-get install -y \
-                build-essential meson ninja-build \
-                mesa-common-dev libgl1-mesa-dri
+            build-essential meson ninja-build pkgconf zlib1g-dev libbz2-dev bzip2 \
+            libfreetype-dev libfontconfig-dev libgbm-dev libunwind-dev \
+            flex bison libinput-dev libssl-dev libncurses-dev ncurses-base \
+            mesa-common-dev libgl1-mesa-dri libegl1-mesa-dev
+            
+            # XXX: If you system lack bzip2.pc, run command below:
+            # sudo tee /usr/lib/x86_64-linux-gnu/pkgconfig/bzip2.pc > /dev/null <<'EOF'
+            # prefix=/usr
+            # exec_prefix=/usr
+            # libdir=/usr/lib/x86_64-linux-gnu
+            # includedir=/usr/include
+
+            # Name: bzip2
+            # Description: Some shit
+            # Version: 1.0.8-5build1
+            # Libs: -L${libdir} -lbz2
+            # Cflags: -I${includedir}
+            # EOF
             ;;
         "Arch Linux")
             sudo pacman -S meson libdrm libunwind libinput
