@@ -25,7 +25,6 @@
 
 #include <dix-config.h>
 
-#include "os.h"
 #include "os/xsha1.h"
 
 #if defined(HAVE_SHA1_IN_LIBMD)  /* Use libmd for SHA1 */ \
@@ -215,6 +214,41 @@ x_sha1_final(void *ctx, unsigned char result[20])
 #include <stddef.h>             /* buggy openssl/sha.h wants size_t */
 #include <openssl/sha.h>
 
+#ifdef HAVE_OPENSSL3
+#include <openssl/evp.h>
+
+void *
+x_sha1_init(void)
+{
+    EVP_MD_CTX *ctx = EVP_MD_CTX_new();
+ 
+    if (!ctx) {
+        return NULL;
+    }
+
+    if (EVP_DigestInit_ex(ctx, EVP_sha1(), NULL) != 1) {
+        EVP_MD_CTX_free(ctx);
+        return 0;
+    }
+    return ctx;
+}
+
+int
+x_sha1_update(void *ctx, void *data, int size)
+{
+    return EVP_DigestUpdate(ctx, data, size);
+}
+
+int
+x_sha1_final(void *ctx, unsigned char result[20])
+{
+    unsigned int out_len;
+    int success = EVP_DigestFinal_ex(ctx, result, &out_len);
+    EVP_MD_CTX_free(ctx);
+    return success;
+}
+#else
+
 void *
 x_sha1_init(void)
 {
@@ -253,5 +287,6 @@ x_sha1_final(void *ctx, unsigned char result[20])
     free(sha_ctx);
     return ret;
 }
+#endif
 
 #endif

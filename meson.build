@@ -132,12 +132,16 @@ dep_dbus         = dependency('dbus-1',         required: get_option('systemd_lo
 dep_fontutil     = dependency('fontutil',       required: false)
 dep_drm          = dependency('libdrm',         required: true, version: '>= 2.4.116') # server/hw/xfree86, driver/video/intel
 dep_gl           = dependency('gl',             required: true, version: '>= 1.2') # server/glx, static/epoxy
-dep_gbm          = dependency('gbm',            required: true) # server/glamor
+dep_gbm          = dependency('gbm',            required: true ) # server/glamor
 dep_epoxy        = dependency('epoxy',          required: not WITH_INT_EPOXY) # server/glamor
 dep_pciaccess    = dependency('pciaccess',      required: get_option('pciaccess'), version: '>= 0.12.901') # server/hw/xfree86
 dep_systemd      = dependency('libsystemd',     required: false, version: '>= 209') # server
 dep_libunwind    = dependency('libunwind',      required: get_option('libunwind')) # server
-dep_dri          = dependency('dri',            required: true) # server, driver/video/intel
+dep_dri          = dependency('dri',            required: true ) # server, driver/video/intel
+dep_libsha1      = dependency('libsha1',        required: false) # server/os
+dep_nettle       = dependency('nettle',         required: false) # server/os
+dep_gcrypt       = dependency('libgcrypt',      required: false) # server/os
+dep_openssl      = dependency('openssl',        required: false) # server/os
 
 # static
 dep_threads      = dependency('threads',        required: get_option('build-video-intel')) # pixman, driver/video/intel

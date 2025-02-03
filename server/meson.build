@@ -172,19 +172,16 @@ foreach t: test_sha1
             dep_sha1 = dep_md
         endif
     elif t == 'libsha1'
-        dep_libsha1 = dependency('libsha1', required: false)
         if dep_libsha1.found()
             sha1_found = true
             dep_sha1 = dep_libsha1
         endif
     elif t == 'libnettle'
-        dep_nettle = dependency('nettle', required: false)
         if dep_nettle.found()
             sha1_found = true
             dep_sha1 = dep_nettle
         endif
     elif t == 'libgcrypt'
-        dep_gcrypt = dependency('libgcrypt', required: false)
         if dep_gcrypt.found()
             sha1_found = true
             dep_sha1 = dep_gcrypt
@@ -192,7 +189,6 @@ foreach t: test_sha1
     elif t == 'libcrypto'
         # we don't need all of OpenSSL, just libcrypto
         dep_libcrypto = cc.find_library('crypto', required: false)
-        dep_openssl = dependency('openssl', required: false)
         if dep_libcrypto.found() or dep_openssl.found()
             sha1_found = true
             if dep_libcrypto.found()

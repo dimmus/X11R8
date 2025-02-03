@@ -287,6 +287,7 @@ conf_server.set('SYSCONS_SUPPORT', supports_syscons ? '1': false)
 conf_server.set('WSCONS_SUPPORT', supports_wscons ? '1': false)
 conf_server.set('XSERVER_LIBPCIACCESS', get_option('pciaccess') ? '1': false)
 conf_server.set('XSERVER_PLATFORM_BUS', build_udev_kms ? '1': false)
+conf_server.set('HAVE_OPENSSL3', dep_openssl.version().version_compare('>= 3'))
 
 summary_srv += {'XKB_DFLT_RULES': get_option('xkb_default_rules')}
 summary_srv += {'SVR4': cc.compiles(defines_svr4)}
