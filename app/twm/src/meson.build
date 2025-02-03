@@ -49,10 +49,7 @@ executable('twm', src,
     install: true,
 )
 
-install_data(
-    'system.twmrc',
-    install_dir: dir_data / 'X11' / 'twm/',
-)
+install_data('system.twmrc', install_dir: dir_data / 'X11' / 'twm/')
 
 # configure_file(
 #     input: 'system.twmrc',

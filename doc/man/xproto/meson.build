@@ -34,6 +34,4 @@ docs = files(
     'xwaylandproto.txt'
 )
 
-install_data(docs,
-    install_dir: dir_data / 'doc' / 'xproto'
-)
+install_data(docs, install_dir: dir_data / 'doc' / 'xproto')

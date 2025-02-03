@@ -82,7 +82,4 @@ test('test-draglock', test_draglock)
 # 	install_dir: dir_pkgconf,
 # )
 
-install_data(
-	'conf/40-libinput.conf',
-	install_dir: dir_xorg_conf
-)
+install_data('conf/40-libinput.conf', install_dir: dir_xorg_conf)

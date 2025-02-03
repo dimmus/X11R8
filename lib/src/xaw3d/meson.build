@@ -108,7 +108,7 @@ hdr = files(
 )
 
 install_headers(hdr,
-  subdir: 'X11/xaw3d',
+  subdir: 'X11' / 'xaw3d',
 )
 
 pkg.generate(lib,

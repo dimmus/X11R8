@@ -24,7 +24,4 @@ shared_module('libevdev_drv',
 	install_dir: dir_xorg_module / 'input',
 )
 
-install_data(
-	'10-evdev.conf',
-	install_dir: dir_xorg_conf,
-)
+install_data('10-evdev.conf', install_dir: dir_xorg_conf)

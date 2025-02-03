@@ -40,7 +40,4 @@ shared_module('synaptics_drv', src,
 
 subdir('tools')
 
-install_data(
-	'conf/70-synaptics.conf',
-	install_dir: dir_xorg_conf,
-)
+install_data('conf/70-synaptics.conf', install_dir: dir_xorg_conf)

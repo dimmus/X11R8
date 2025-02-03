@@ -53,7 +53,4 @@ shared_module('amdgpu_drv',
 	install_dir: dir_xorg_module / 'drivers',
 )
 
-install_data(
-	'conf/10-amdgpu.conf',
-	install_dir: dir_xorg_conf,
-)
+install_data('conf/10-amdgpu.conf', install_dir: dir_xorg_conf)

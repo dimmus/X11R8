@@ -9,6 +9,4 @@ src = files(
 )
 
 # Install xcbgen module globally
-install_data(src,
-    install_dir: python.get_path('purelib') / 'xcbgen'
-)
+install_data(src, install_dir: python.get_path('purelib') / 'xcbgen')

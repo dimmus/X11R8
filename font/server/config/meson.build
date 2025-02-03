@@ -18,6 +18,4 @@ configure_file(
     configuration: xfs_config,
 )
 
-install_data('config',
-  install_dir: dir_sysconf / 'X11' / 'fs',
-)
+install_data('config', install_dir: dir_sysconf / 'X11' / 'fs')
