@@ -183,6 +183,7 @@ inc_server       = []
 inc_pixman       = []
 inc_epoxy        = []
 
+summary_dir      = {}
 summary_lib      = {}
 summary_srv      = {}
 summary_org      = {}
@@ -253,6 +254,19 @@ endif
 
 configure_file(output: 'config.h',  configuration: conf)
 
+summary_dir += {'PREFIX': dir_prefix}
+summary_dir += {'BIN': dir_bin}
+summary_dir += {'DATA': dir_data}
+summary_dir += {'INCLUDE': dir_include}
+summary_dir += {'LIB': dir_lib}
+summary_dir += {'MAN': dir_man}
+summary_dir += {'SYSCONF': dir_sysconf}
+summary_dir += {'LIBEXEC': dir_libexec}
+summary_dir += {'XORG-MODULES': dir_xorg_module}
+summary_dir += {'XORG-CONF': dir_xorg_conf}
+summary_dir += {'XORG': dir_xorg}
+
+summary(summary_dir,  bool_yn: true, section: 'Directories: ')
 summary(summary_lib,  bool_yn: true, section: 'X11 Library ')
 summary(summary_srv,  bool_yn: true, section: 'X11 Server')
 summary(summary_org,  bool_yn: true, section: 'X11 Server: Xorg')
