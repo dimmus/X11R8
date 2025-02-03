@@ -86,7 +86,7 @@ mapping_busy_key(int timeout)
     {
         if (keymap[i >> 3] & masktable[i & 7])
         {
-            KeySym ks = XKeycodeToKeysym(dpy, (KeyCode)i, 0);
+            KeySym ks = XkbKeycodeToKeysym(dpy, (KeyCode)i, 0, 0);
             char  *cp = XKeysymToString(ks);
             fprintf(stderr,
                     "    %s (keysym 0x%x, keycode %d)\n",
@@ -272,7 +272,7 @@ PrintModifierMapping(XModifierKeymap *map, FILE *fp)
                 char  *nm;
                 do
                 {
-                    ks = XKeycodeToKeysym(dpy, map->modifiermap[k], index);
+                    ks = XkbKeycodeToKeysym(dpy, map->modifiermap[k], 0, index);
                     index++;
                 }
                 while (!ks && index < keysyms_per_keycode);

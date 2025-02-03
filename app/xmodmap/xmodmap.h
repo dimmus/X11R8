@@ -30,6 +30,8 @@ from The Open Group.
 #  include "config.h"
 #endif
 
+#include <X11/XKBlib.h>
+
 extern const char *ProgramName;
 extern Display    *dpy;
 extern int         min_keycode, max_keycode;

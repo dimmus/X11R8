@@ -85,7 +85,7 @@ KeysymToKeycodes(Display *dpy, KeySym keysym, int *pnum_kcs)
     {
         for (j = 0; j < 8; j++)
         {
-            if (XKeycodeToKeysym(dpy, (KeyCode)i, j) == keysym)
+            if (XkbKeycodeToKeysym(dpy, (KeyCode)i, 0, j) == keysym)
             {
                 if (!kcs) kcs = malloc(sizeof(KeyCode));
                 else kcs = reallocfarray(kcs, (*pnum_kcs + 1), sizeof(KeyCode));
@@ -1340,14 +1340,14 @@ exec_keycode(struct op_keycode *opk)
         {
             for (j = 0; j < opk->count; j++)
             {
-                if (XKeycodeToKeysym(dpy, (KeyCode)i, j) != opk->keysyms[j])
+                if (XkbKeycodeToKeysym(dpy, (KeyCode)i, 0, j) != opk->keysyms[j])
                     break;
             }
             if (j >= opk->count) return (0);
             if (free) continue;
             for (j = 0; j < 8; j++)
             {
-                if (XKeycodeToKeysym(dpy, (KeyCode)i, j) != None) break;
+                if (XkbKeycodeToKeysym(dpy, (KeyCode)i, 0, j) != None) break;
             }
             if (j >= 8) free = i;
         }
