@@ -15,6 +15,7 @@ subdir('src' / 'xpm')     # <- ext/xext
 subdir('src' / 'xmu')     # <- ext/xext
 subdir('src' / 'xaw')     # <- ext/xext
 subdir('src' / 'xaw3d')
+# subdir('src' / 'xaw3dxft')
 subdir('ext' / 'xrandr')
 subdir('ext' / 'xdamage')
 subdir('ext' / 'xcomposite')

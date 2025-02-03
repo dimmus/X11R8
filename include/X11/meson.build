@@ -19,6 +19,8 @@ inc_lib += [
 subdir('dri')
 subdir('extensions')
 subdir('fonts')
+subdir('Xaw3d')
+subdir('Xaw3dxft')
 
 install_headers(
     'ap_keysym.h',
