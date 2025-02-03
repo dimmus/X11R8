@@ -17,5 +17,5 @@ headers += files('fontenc.h')
 headers += files('FSlib.h')
 
 install_headers(headers,
-    subdir: 'X11/fonts',
+    subdir: 'X11' / 'fonts',
 )

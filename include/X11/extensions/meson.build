@@ -184,5 +184,5 @@ headers += files(
 )
 
 install_headers(headers,
-  subdir: 'X11/extensions',
+  subdir: 'X11' / 'extensions',
 )
