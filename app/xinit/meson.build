@@ -7,3 +7,6 @@ executable('xinit', 'xinit.c',
     dependencies: [xserver, libx11],
     install: true,
 )
+
+install_data('startx',  install_dir: dir_bin)
+install_data('xinitrc', install_dir: dir_sysconf / 'X11' / 'xinit')
