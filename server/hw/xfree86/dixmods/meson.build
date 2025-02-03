@@ -1,7 +1,7 @@
 shared_module('wfb',
     'fbmodule.c',
     include_directories: inc_server,
-    c_args: [ xorg_c_args ],
+    c_args: xorg_c_args,
     dependencies: dep_common,
     link_whole: libxserver_wfb,
     link_with: exe_xorg,
