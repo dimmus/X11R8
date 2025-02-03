@@ -35,7 +35,8 @@
 #ifndef CHARCLASS_H
 #define CHARCLASS_H
 
-typedef enum {
+typedef enum
+{
     IDENT = -1,
     OTHER = 0,
     CNTRL = 1,

@@ -67,8 +67,10 @@ extern int tt_length;
 extern int tt_changed;
 extern int tt_pasting;
 extern int tt_new_output;
-#define VMS_TERM_BUFFER_SIZE	500
-struct q_head {
+#  define VMS_TERM_BUFFER_SIZE 500
+
+struct q_head
+{
     int flink;
     int blink;
 };
@@ -76,25 +78,25 @@ extern struct q_head read_queue;
 #endif
 
 #if OPT_TEK4014
-extern Char *Tpushb;
-extern Char *Tpushback;
-extern TekLink *tekRefreshList;
+extern Char     *Tpushb;
+extern Char     *Tpushback;
+extern TekLink  *tekRefreshList;
 extern TekWidget tekWidget;
-extern Widget tekshellwidget;
-extern int T_lastx;
-extern int T_lasty;
-extern int Ttoggled;
-extern jmp_buf Tekend;
+extern Widget    tekshellwidget;
+extern int       T_lastx;
+extern int       T_lasty;
+extern int       Ttoggled;
+extern jmp_buf   Tekend;
 #endif
 
 extern char *ptydev;
 extern char *ttydev;
-extern int hold_screen;
+extern int   hold_screen;
 
 extern PtyData *VTbuffer;
-extern int am_slave;
-extern int max_plus1;
-extern jmp_buf VTend;
+extern int      am_slave;
+extern int      max_plus1;
+extern jmp_buf  VTend;
 
 #ifdef DEBUG
 extern int debug;
@@ -105,7 +107,7 @@ extern PtySelect X_mask;
 extern PtySelect pty_mask;
 
 #if OPT_SESSION_MGT
-extern int ice_fd;
+extern int    ice_fd;
 extern char **restart_command;
 #endif
 
@@ -117,23 +119,23 @@ extern SIG_ATOMIC_T need_cleanup;
 extern SIG_ATOMIC_T caught_intr;
 
 #if defined(HAVE_XKB_BELL_EXT)
-#include "X11/XKBlib.h"		/* has the prototype */
-#include "X11/extensions/XKBbells.h"	/* has the XkbBI_xxx definitions */
+#  include "X11/XKBlib.h"  /* has the prototype */
+#  include "X11/extensions/XKBbells.h" /* has the XkbBI_xxx definitions */
 #endif
 
 #ifndef XkbBI_Info
-#define	XkbBI_Info			0
-#define	XkbBI_MinorError		1
-#define	XkbBI_MajorError		2
-#define	XkbBI_TerminalBell		9
-#define	XkbBI_MarginBell		10
+#  define XkbBI_Info         0
+#  define XkbBI_MinorError   1
+#  define XkbBI_MajorError   2
+#  define XkbBI_TerminalBell 9
+#  define XkbBI_MarginBell   10
 #endif
 
-extern char *ProgramName;	/* just the last part of name, maybe alias */
-extern char *ProgramPath;	/* full pathname which can be executed */
-extern Arg ourTopLevelShellArgs[];
+extern char    *ProgramName; /* just the last part of name, maybe alias */
+extern char    *ProgramPath; /* full pathname which can be executed */
+extern Arg      ourTopLevelShellArgs[];
 extern Cardinal number_ourTopLevelShellArgs;
-extern Atom wm_delete_window;
+extern Atom     wm_delete_window;
 
 extern CellColor initCColor;
 
@@ -154,7 +156,8 @@ extern int mapstate;
 extern char *xterm_cursor_theme;
 #endif
 
-typedef struct XTERM_RESOURCE {
+typedef struct XTERM_RESOURCE
+{
     char *icon_geometry;
     char *title;
     char *icon_hint;
@@ -166,7 +169,7 @@ typedef struct XTERM_RESOURCE {
     int minBufSize;
     int maxBufSize;
 
-    Boolean hold_screen;	/* true if we keep window open  */
+    Boolean hold_screen; /* true if we keep window open  */
     Boolean utmpInhibit;
     Boolean utmpDisplayId;
     Boolean messages;
@@ -181,15 +184,15 @@ typedef struct XTERM_RESOURCE {
     String keyboardType;
 
 #if OPT_PRINT_ON_EXIT
-    int printModeNow;
-    int printModeOnXError;
-    int printOptsNow;
-    int printOptsOnXError;
+    int    printModeNow;
+    int    printModeOnXError;
+    int    printOptsNow;
+    int    printOptsOnXError;
     String printFileNow;
     String printFileOnXError;
 #endif
 
-    Boolean oldKeyboard;	/* placeholder for decode_keyboard_type */
+    Boolean oldKeyboard; /* placeholder for decode_keyboard_type */
 #if OPT_SUNPC_KBD
     Boolean sunKeyboard;
 #endif
@@ -200,44 +203,44 @@ typedef struct XTERM_RESOURCE {
     Boolean scoFunctionKeys;
 #endif
 #if OPT_SUN_FUNC_KEYS
-    Boolean sunFunctionKeys;	/* %%% should be VT100 widget resource? */
+    Boolean sunFunctionKeys; /* %%% should be VT100 widget resource? */
 #endif
 #if OPT_TCAP_FKEYS
     Boolean termcapKeys;
 #endif
 
 #if OPT_INITIAL_ERASE
-    Boolean ptyInitialErase;	/* if true, use pty's sense of erase char */
-    Boolean backarrow_is_erase;	/* override backspace/delete */
+    Boolean ptyInitialErase; /* if true, use pty's sense of erase char */
+    Boolean backarrow_is_erase; /* override backspace/delete */
 #endif
     Boolean useInsertMode;
 #if OPT_ZICONBEEP
-    int zIconBeep;		/* beep level when output while iconified */
-    char *zIconFormat;		/* format for icon name */
+    int   zIconBeep;  /* beep level when output while iconified */
+    char *zIconFormat;  /* format for icon name */
 #endif
 #if OPT_PTY_HANDSHAKE
     Boolean wait_for_map;
-    Boolean wait_for_map0;	/* ...initial value of .wait_for_map */
-    Boolean ptyHandshake;	/* use pty-handshaking */
-    Boolean ptySttySize;	/* reset TTY size after pty handshake */
+    Boolean wait_for_map0; /* ...initial value of .wait_for_map */
+    Boolean ptyHandshake; /* use pty-handshaking */
+    Boolean ptySttySize; /* reset TTY size after pty handshake */
 #endif
 #if OPT_REPORT_CCLASS
-    Boolean reportCClass;	/* show character-class information */
+    Boolean reportCClass; /* show character-class information */
 #endif
 #if OPT_REPORT_COLORS
-    Boolean reportColors;	/* show color information as allocated */
+    Boolean reportColors; /* show color information as allocated */
 #endif
 #if OPT_REPORT_FONTS
-    Boolean reportFonts;	/* show bitmap-font information as loaded */
+    Boolean reportFonts; /* show bitmap-font information as loaded */
 #endif
 #if OPT_XRES_QUERY
-    Boolean reportXRes;		/* show vt100 resources after initialization */
+    Boolean reportXRes;  /* show vt100 resources after initialization */
 #endif
 #if OPT_REPORT_ICONS
-    Boolean reportIcons;	/* show icon information as loaded */
+    Boolean reportIcons; /* show icon information as loaded */
 #endif
 #if OPT_SAME_NAME
-    Boolean sameName;		/* Don't change the title or icon name if it is
+    Boolean sameName;  /* Don't change the title or icon name if it is
 				 * the same.  This prevents flicker on the
 				 * screen at the cost of an extra request to
 				 * the server.
@@ -251,16 +254,16 @@ typedef struct XTERM_RESOURCE {
 #endif
 #if OPT_MAXIMIZE
     Boolean maximized;
-    String fullscreen_s;	/* resource for "fullscreen" */
-    int fullscreen;		/* derived from fullscreen_s */
+    String  fullscreen_s; /* resource for "fullscreen" */
+    int     fullscreen;  /* derived from fullscreen_s */
 #endif
 #if USE_DOUBLE_BUFFER
     Boolean buffered;
-    int buffered_fps;
+    int     buffered_fps;
 #endif
 } XTERM_RESOURCE;
 
-extern Boolean guard_keyboard_type;
+extern Boolean        guard_keyboard_type;
 extern XTERM_RESOURCE resource;
 
 #ifdef USE_IGNORE_RC

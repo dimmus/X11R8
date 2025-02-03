@@ -27,7 +27,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#  include "config.h"
 #endif
 
 #include <mach/mach.h>
@@ -42,25 +42,37 @@
 
 #include "privileged_startx.h"
 
-int client_main(void) {
+int
+client_main(void)
+{
     kern_return_t kr;
-    mach_port_t mp;
-    
+    mach_port_t   mp;
+
     kr = bootstrap_look_up(bootstrap_port, BOOTSTRAP_NAME, &mp);
-    if (kr != KERN_SUCCESS) {
+    if (kr != KERN_SUCCESS)
+    {
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
-        fprintf(stderr, "privileged_startx: bootstrap_look_up(%s): %s\n", BOOTSTRAP_NAME, bootstrap_strerror(kr));
+        fprintf(stderr,
+                "privileged_startx: bootstrap_look_up(%s): %s\n",
+                BOOTSTRAP_NAME,
+                bootstrap_strerror(kr));
 #else
-        fprintf(stderr, "privileged_startx: bootstrap_look_up(%s): %ul\n", BOOTSTRAP_NAME, (unsigned long)kr);
+        fprintf(stderr,
+                "privileged_startx: bootstrap_look_up(%s): %ul\n",
+                BOOTSTRAP_NAME,
+                (unsigned long)kr);
 #endif
         exit(EXIT_FAILURE);
     }
-    
+
     kr = privileged_startx(mp);
-    if (kr != KERN_SUCCESS) {
-        fprintf(stderr, "privileged_startx client: %s\n", mach_error_string(kr));
+    if (kr != KERN_SUCCESS)
+    {
+        fprintf(stderr,
+                "privileged_startx client: %s\n",
+                mach_error_string(kr));
         exit(EXIT_FAILURE);
     }
-    
+
     exit(EXIT_SUCCESS);
 }

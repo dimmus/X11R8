@@ -34,7 +34,7 @@
 
 #define REAL_ROW(screen, row) ((row) + (screen)->saved_fifo)
 #define ROW2FIFO(screen, row) \
-	(unsigned) (REAL_ROW(screen, row) % (screen)->savelines)
+    (unsigned)(REAL_ROW(screen, row) % (screen)->savelines)
 
 /*
  * Given a row-number, find the corresponding data for the line in the VT100
@@ -46,15 +46,17 @@ getScrollback(TScreen *screen, int row)
 {
     LineData *result = 0;
 
-    if (screen->saved_fifo > 0 && REAL_ROW(screen, row) >= 0) {
-	unsigned which = ROW2FIFO(screen, row);
-	ScrnBuf where = scrnHeadAddr(screen, screen->saveBuf_index, which);
-	result = (LineData *) where;
+    if (screen->saved_fifo > 0 && REAL_ROW(screen, row) >= 0)
+    {
+        unsigned which = ROW2FIFO(screen, row);
+        ScrnBuf  where = scrnHeadAddr(screen, screen->saveBuf_index, which);
+        result         = (LineData *)where;
     }
 
     TRACE(("getScrollback %d -> %d -> %p\n",
-	   row, ROW2FIFO(screen, row),
-	   (void *) result));
+           row,
+           ROW2FIFO(screen, row),
+           (void *)result));
     return result;
 }
 
@@ -64,64 +66,75 @@ getScrollback(TScreen *screen, int row)
 LineData *
 addScrollback(TScreen *screen)
 {
-    ScrnBuf where = 0;
-    unsigned ncols = (unsigned) MaxCols(screen);
+    ScrnBuf  where = 0;
+    unsigned ncols = (unsigned)MaxCols(screen);
 
-    if (screen->saveBuf_index != 0 && screen->savelines != 0) {
-	unsigned which;
-	Char *block;
+    if (screen->saveBuf_index != 0 && screen->savelines != 0)
+    {
+        unsigned which;
+        Char    *block;
 
-	TRACE(("addScrollback %lu\n", screen->saved_fifo));
+        TRACE(("addScrollback %lu\n", screen->saved_fifo));
 
-	/* first, see which index we'll use */
-	which = (unsigned) (screen->saved_fifo % screen->savelines);
-	where = scrnHeadAddr(screen, screen->saveBuf_index, which);
+    /* first, see which index we'll use */
+        which = (unsigned)(screen->saved_fifo % screen->savelines);
+        where = scrnHeadAddr(screen, screen->saveBuf_index, which);
 
-	/* discard any obsolete index data */
-	if (screen->saved_fifo > screen->savelines) {
-	    LineData *prior = (LineData *) where;
-	    /*
+    /* discard any obsolete index data */
+        if (screen->saved_fifo > screen->savelines)
+        {
+            LineData *prior = (LineData *)where;
+        /*
 	     * setupLineData uses the attribs as the first address used from the
 	     * data block.
 	     */
-	    if (prior->attribs != 0) {
-		TRACE(("...freeing prior FIFO data in slot %d: %p->%p\n",
-		       which, (void *) prior, (void *) prior->attribs));
-		FreeAndNull(prior->attribs);
-	    }
-	    if (screen->saved_fifo > 2 * screen->savelines) {
-		screen->saved_fifo -= screen->savelines;
-	    }
-	}
+            if (prior->attribs != 0)
+            {
+                TRACE(("...freeing prior FIFO data in slot %d: %p->%p\n",
+                       which,
+                       (void *)prior,
+                       (void *)prior->attribs));
+                FreeAndNull(prior->attribs);
+            }
+            if (screen->saved_fifo > 2 * screen->savelines)
+            {
+                screen->saved_fifo -= screen->savelines;
+            }
+        }
 
-	/* allocate the new data */
-	block = allocScrnData(screen, 1, ncols, False);
+    /* allocate the new data */
+        block = allocScrnData(screen, 1, ncols, False);
 
-	/* record the new data in the index */
-	setupLineData(screen, where, (Char *) block, 1, ncols, False);
+    /* record the new data in the index */
+        setupLineData(screen, where, (Char *)block, 1, ncols, False);
 
-	TRACE(("...storing new FIFO data in slot %d: %p->%p\n",
-	       which, (void *) where, block));
+        TRACE(("...storing new FIFO data in slot %d: %p->%p\n",
+               which,
+               (void *)where,
+               block));
 
-	screen->saved_fifo++;
+        screen->saved_fifo++;
     }
-    return (LineData *) where;
+    return (LineData *)where;
 }
 
 void
 deleteScrollback(TScreen *screen)
 {
-    unsigned which = ROW2FIFO(screen, -1);
-    ScrnBuf where = scrnHeadAddr(screen, screen->saveBuf_index, which);
-    LineData *prior = (LineData *) where;
+    unsigned  which = ROW2FIFO(screen, -1);
+    ScrnBuf   where = scrnHeadAddr(screen, screen->saveBuf_index, which);
+    LineData *prior = (LineData *)where;
     /*
      * setupLineData uses the attribs as the first address used from the
      * data block.
      */
-    if (prior->attribs != 0) {
-	TRACE(("...freeing prior FIFO data in slot %d: %p->%p\n",
-	       which, (void *) prior, (void *) prior->attribs));
-	FreeAndNull(prior->attribs);
+    if (prior->attribs != 0)
+    {
+        TRACE(("...freeing prior FIFO data in slot %d: %p->%p\n",
+               which,
+               (void *)prior,
+               (void *)prior->attribs));
+        FreeAndNull(prior->attribs);
     }
     screen->saved_fifo--;
 }

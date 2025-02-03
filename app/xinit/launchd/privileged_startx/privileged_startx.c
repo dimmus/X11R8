@@ -27,35 +27,43 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#  include "config.h"
 #endif
 
 #include <string.h>
 #include <stdio.h>
 
 #ifndef SCRIPTDIR
-#define SCRIPTDIR="/usr/X11/lib/X11/xinit/privileged_startx.d"
+#  define SCRIPTDIR = "/usr/X11/lib/X11/xinit/privileged_startx.d"
 #endif
 
-static void usage(const char *prog) {
+static void
+usage(const char *prog)
+{
     fprintf(stderr, "%s: usage\n", prog);
     fprintf(stderr, "    %s [-d [<script dir>]]\n\n", prog);
-    fprintf(stderr, "              -d: Passed when called from launchd to denote server-mode.\n");
-    fprintf(stderr, "    <script dir>: Directory to use instead of %s\n", SCRIPTDIR);
+    fprintf(stderr,
+            "              -d: Passed when called from launchd to denote "
+            "server-mode.\n");
+    fprintf(stderr,
+            "    <script dir>: Directory to use instead of %s\n",
+            SCRIPTDIR);
 }
 
 int client_main(void);
 int server_main(const char *dir);
 
-int main(int argc, char *argv[]) {
-
-    if(argc == 1) {
+int
+main(int argc, char *argv[])
+{
+    if (argc == 1)
+    {
         return client_main();
-    } else if(!strncmp(argv[1], "-d", 2)) {
-        if(argc == 2)
-            return server_main(NULL);
-        else if(argc == 3)
-            return server_main(argv[2]);
+    }
+    else if (!strncmp(argv[1], "-d", 2))
+    {
+        if (argc == 2) return server_main(NULL);
+        else if (argc == 3) return server_main(argv[2]);
     }
 
     usage(argv[0]);

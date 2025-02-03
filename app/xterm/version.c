@@ -43,38 +43,45 @@ const char *
 xtermVersion(void)
 {
     static const char vendor_version[] = __vendorversion__;
-    static char *buffer;
-    const char *result;
+    static char      *buffer;
+    const char       *result;
 
-    if (buffer == 0) {
-	const char *vendor = vendor_version;
+    if (buffer == 0)
+    {
+        const char *vendor = vendor_version;
 
-	buffer = malloc(sizeof(vendor_version) + 256);
-	if (buffer == 0) {
-	    result = vendor;
-	} else {
-	    char first[sizeof(vendor_version)];
-	    char second[sizeof(vendor_version)];
+        buffer = malloc(sizeof(vendor_version) + 256);
+        if (buffer == 0)
+        {
+            result = vendor;
+        }
+        else
+        {
+            char first[sizeof(vendor_version)];
+            char second[sizeof(vendor_version)];
 
-	    /* some vendors leave trash in this string */
-	    for (;;) {
-		if (!strncmp(vendor, "Version ", (size_t) 8))
-		    vendor += 8;
-		else if (isspace(CharOf(*vendor)))
-		    ++vendor;
-		else
-		    break;
-	    }
-	    if (strlen(vendor) < BUFSIZ &&
-		sscanf(vendor, "%[0-9.] %[A-Za-z_0-9.]", first, second) == 2) {
-		sprintf(buffer, "%.80s %.80s(%d)", second, first, XTERM_PATCH);
-	    } else {
-		sprintf(buffer, "%.80s(%d)", vendor, XTERM_PATCH);
-	    }
-	    result = buffer;
-	}
-    } else {
-	result = buffer;
+        /* some vendors leave trash in this string */
+            for (;;)
+            {
+                if (!strncmp(vendor, "Version ", (size_t)8)) vendor += 8;
+                else if (isspace(CharOf(*vendor))) ++vendor;
+                else break;
+            }
+            if (strlen(vendor) < BUFSIZ &&
+                sscanf(vendor, "%[0-9.] %[A-Za-z_0-9.]", first, second) == 2)
+            {
+                sprintf(buffer, "%.80s %.80s(%d)", second, first, XTERM_PATCH);
+            }
+            else
+            {
+                sprintf(buffer, "%.80s(%d)", vendor, XTERM_PATCH);
+            }
+            result = buffer;
+        }
+    }
+    else
+    {
+        result = buffer;
     }
     return result;
 }

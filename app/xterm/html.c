@@ -33,13 +33,11 @@
 #include <xterm.h>
 #include <version.h>
 
-#define MakeDim(color) \
-	color = (unsigned short) ((2 * (unsigned) color) / 3)
+#define MakeDim(color) color = (unsigned short)((2 * (unsigned)color) / 3)
 
-#define RGBPCT(c) \
- 	((double)c.red   / 655.35), \
-	((double)c.green / 655.35), \
-	((double)c.blue  / 655.35)
+#define RGBPCT(c)                                         \
+    ((double)c.red / 655.35), ((double)c.green / 655.35), \
+        ((double)c.blue / 655.35)
 
 static void dumpHtmlHeader(XtermWidget xw, FILE *fp);
 static void dumpHtmlScreen(XtermWidget xw, FILE *fp);
@@ -55,12 +53,13 @@ xtermDumpHtml(XtermWidget xw)
 
     TRACE(("xtermDumpHtml...\n"));
     saveLocale = xtermSetLocale(LC_NUMERIC, "C");
-    fp = create_printfile(xw, ".xhtml");
-    if (fp != 0) {
-	dumpHtmlHeader(xw, fp);
-	dumpHtmlScreen(xw, fp);
-	dumpHtmlFooter(xw, fp);
-	fclose(fp);
+    fp         = create_printfile(xw, ".xhtml");
+    if (fp != 0)
+    {
+        dumpHtmlHeader(xw, fp);
+        dumpHtmlScreen(xw, fp);
+        dumpHtmlFooter(xw, fp);
+        fclose(fp);
     }
     xtermResetLocale(LC_NUMERIC, saveLocale);
     TRACE(("...xtermDumpHtml done\n"));
@@ -72,10 +71,14 @@ dumpHtmlHeader(XtermWidget xw, FILE *fp)
     fputs("<?xml version='1.0' encoding='UTF-8'?>\n", fp);
     fputs("<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN'\n", fp);
     fputs("  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>\n", fp);
-    fputs("<html xmlns='http://www.w3.org/1999/xhtml' lang='en' xml:lang='en'>\n", fp);
+    fputs(
+        "<html xmlns='http://www.w3.org/1999/xhtml' lang='en' xml:lang='en'>\n",
+        fp);
     fputs(" <head>\n", fp);
     fprintf(fp, "  <meta name='generator' content='%s'/>\n", xtermVersion());
-    fputs("  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>\n", fp);
+    fputs("  <meta http-equiv='Content-Type' content='text/html; "
+          "charset=UTF-8'/>\n",
+          fp);
     fputs("  <link rel='Stylesheet' type='text/css' href='xterm.css'/>\n", fp);
     fputs("  <title>Xterm</title>\n", fp);
     writeStyle(xw, fp);
@@ -96,10 +99,14 @@ writeStyle(XtermWidget xw, FILE *fp)
     fputs("  #vt100 {\n", fp);
     fputs("    float: left;\n", fp);
     fprintf(fp, "    font-size: 12pt;\n");
-    fprintf(fp, "    border: %upx solid %s;\n", BorderWidth(xw),
-	    PixelToCSSColor(xw, BorderPixel(xw)));
+    fprintf(fp,
+            "    border: %upx solid %s;\n",
+            BorderWidth(xw),
+            PixelToCSSColor(xw, BorderPixel(xw)));
     fprintf(fp, "    padding: %dpx;\n", s->border);
-    fprintf(fp, "    background: %s\n", PixelToCSSColor(xw, xw->old_background));
+    fprintf(fp,
+            "    background: %s\n",
+            PixelToCSSColor(xw, xw->old_background));
     fprintf(fp, "  }\n");
     fputs("  .ul { text-decoration: underline }\n", fp);
     fputs("  .bd { font-weight: bold }\n", fp);
@@ -114,10 +121,11 @@ static void
 dumpHtmlScreen(XtermWidget xw, FILE *fp)
 {
     TScreen *s = TScreenOf(xw);
-    int row;
+    int      row;
 
-    for (row = s->top_marg; row <= s->bot_marg; ++row) {
-	dumpHtmlLine(xw, row, fp);
+    for (row = s->top_marg; row <= s->bot_marg; ++row)
+    {
+        dumpHtmlLine(xw, row, fp);
     }
 }
 
@@ -135,141 +143,151 @@ dumpHtmlScreen(XtermWidget xw, FILE *fp)
 static void
 dumpHtmlLine(XtermWidget xw, int row, FILE *fp)
 {
-    TScreen *s = TScreenOf(xw);
-    char attrs[2][sizeof
-		  "<span class=' ev ul bd it st du ' style='color: rgb(100.00%, 100.00%, 100.00%); background: rgb(100.00%, 100.00%, 100.00%)'>"];
-    int attr_index = 0;
-    char *attr = &attrs[attr_index][0];
-    int inx = ROW2INX(s, row);
-    LineData *ld = getLineData(s, inx);
-    int col;
+    TScreen  *s = TScreenOf(xw);
+    char      attrs[2][sizeof "<span class=' ev ul bd it st du ' style='color: "
+                              "rgb(100.00%, 100.00%, 100.00%); background: "
+                              "rgb(100.00%, 100.00%, 100.00%)'>"];
+    int       attr_index = 0;
+    char     *attr       = &attrs[attr_index][0];
+    int       inx        = ROW2INX(s, row);
+    LineData *ld         = getLineData(s, inx);
+    int       col;
 
-    if (ld == 0)
-	return;
+    if (ld == 0) return;
 
-    for (col = 0; col < MaxCols(s); col++) {
-	XColor fgcolor, bgcolor;
-	IChar chr = ld->charData[col];
-	int slen = 0;
+    for (col = 0; col < MaxCols(s); col++)
+    {
+        XColor fgcolor, bgcolor;
+        IChar  chr  = ld->charData[col];
+        int    slen = 0;
 
-	fgcolor.pixel = xw->old_foreground;
-	bgcolor.pixel = xw->old_background;
+        fgcolor.pixel = xw->old_foreground;
+        bgcolor.pixel = xw->old_background;
 #if OPT_ISO_COLORS
-	if (ld->attribs[col] & FG_COLOR) {
-	    Pixel fg = extract_fg(xw, ld->color[col], ld->attribs[col]);
-#if OPT_DIRECT_COLOR
-	    if (ld->attribs[col] & ATR_DIRECT_FG)
-		fgcolor.pixel = fg;
-	    else
-#endif
-		fgcolor.pixel = s->Acolors[fg].value;
-	}
-	if (ld->attribs[col] & BG_COLOR) {
-	    Pixel bg = extract_bg(xw, ld->color[col], ld->attribs[col]);
-#if OPT_DIRECT_COLOR
-	    if (ld->attribs[col] & ATR_DIRECT_BG)
-		bgcolor.pixel = bg;
-	    else
-#endif
-		bgcolor.pixel = s->Acolors[bg].value;
-	}
+        if (ld->attribs[col] & FG_COLOR)
+        {
+            Pixel fg = extract_fg(xw, ld->color[col], ld->attribs[col]);
+#  if OPT_DIRECT_COLOR
+            if (ld->attribs[col] & ATR_DIRECT_FG) fgcolor.pixel = fg;
+            else
+#  endif
+                fgcolor.pixel = s->Acolors[fg].value;
+        }
+        if (ld->attribs[col] & BG_COLOR)
+        {
+            Pixel bg = extract_bg(xw, ld->color[col], ld->attribs[col]);
+#  if OPT_DIRECT_COLOR
+            if (ld->attribs[col] & ATR_DIRECT_BG) bgcolor.pixel = bg;
+            else
+#  endif
+                bgcolor.pixel = s->Acolors[bg].value;
+        }
 #endif
 
-	(void) QueryOneColor(xw, &fgcolor);
-	(void) QueryOneColor(xw, &bgcolor);
-	xevents(xw);
+        (void)QueryOneColor(xw, &fgcolor);
+        (void)QueryOneColor(xw, &bgcolor);
+        xevents(xw);
 
-	if (ld->attribs[col] & BLINK) {
-	    /* White on red. */
-	    fgcolor.red = fgcolor.green = fgcolor.blue = MAX_U_COLOR;
-	    bgcolor.red = MAX_U_COLOR;
-	    bgcolor.green = bgcolor.blue = 0u;
-	}
+        if (ld->attribs[col] & BLINK)
+        {
+        /* White on red. */
+            fgcolor.red = fgcolor.green = fgcolor.blue = MAX_U_COLOR;
+            bgcolor.red                                = MAX_U_COLOR;
+            bgcolor.green = bgcolor.blue = 0u;
+        }
 #if OPT_WIDE_ATTRS
-	if (ld->attribs[col] & ATR_FAINT) {
-	    MakeDim(fgcolor.red);
-	    MakeDim(fgcolor.green);
-	    MakeDim(fgcolor.blue);
-	}
+        if (ld->attribs[col] & ATR_FAINT)
+        {
+            MakeDim(fgcolor.red);
+            MakeDim(fgcolor.green);
+            MakeDim(fgcolor.blue);
+        }
 #endif
-	if (ld->attribs[col] & INVERSE) {
-	    XColor tmp = fgcolor;
-	    fgcolor = bgcolor;
-	    bgcolor = tmp;
-	}
+        if (ld->attribs[col] & INVERSE)
+        {
+            XColor tmp = fgcolor;
+            fgcolor    = bgcolor;
+            bgcolor    = tmp;
+        }
 
-	slen = sprintf(attr + slen, "<span class=' %s",
-		       ((row % 2) ? "ev" : "od"));
-	if (ld->attribs[col] & BOLD)
-	    slen += sprintf(attr + slen, " bd");
+        slen =
+            sprintf(attr + slen, "<span class=' %s", ((row % 2) ? "ev" : "od"));
+        if (ld->attribs[col] & BOLD) slen += sprintf(attr + slen, " bd");
 #if OPT_WIDE_ATTRS
-	/*
+    /*
 	 * Handle multiple text-decoration properties.
 	 * Treat ATR_DBL_UNDER the same as UNDERLINE since there is no
 	 * official proper CSS 2.2 way to use double underlining. (E.g.
 	 * using border-bottom does not work for successive lines and
 	 * "text-decoration: underline double" is a browser extension).
 	 */
-	if ((ld->attribs[col] & (UNDERLINE | ATR_DBL_UNDER)) &&
-	    (ld->attribs[col] & ATR_STRIKEOUT))
-	    slen += sprintf(attr + slen, " lu");
-	else if (ld->attribs[col] & (UNDERLINE | ATR_DBL_UNDER))
-	    slen += sprintf(attr + slen, " ul");
-	else if (ld->attribs[col] & ATR_STRIKEOUT)
-	    slen += sprintf(attr + slen, " st");
+        if ((ld->attribs[col] & (UNDERLINE | ATR_DBL_UNDER)) &&
+            (ld->attribs[col] & ATR_STRIKEOUT))
+            slen += sprintf(attr + slen, " lu");
+        else if (ld->attribs[col] & (UNDERLINE | ATR_DBL_UNDER))
+            slen += sprintf(attr + slen, " ul");
+        else if (ld->attribs[col] & ATR_STRIKEOUT)
+            slen += sprintf(attr + slen, " st");
 
-	if (ld->attribs[col] & ATR_ITALIC)
-	    slen += sprintf(attr + slen, " it");
+        if (ld->attribs[col] & ATR_ITALIC) slen += sprintf(attr + slen, " it");
 #else
-	if (ld->attribs[col] & UNDERLINE)
-	    slen += sprintf(attr + slen, " ul");
+        if (ld->attribs[col] & UNDERLINE) slen += sprintf(attr + slen, " ul");
 #endif
-	slen += sprintf(attr + slen,
-			" ' style='color: rgb(%.2f%%, %.2f%%, %.2f%%);",
-			RGBPCT(fgcolor));
-	(void) sprintf(attr + slen,
-		       " background: rgb(%.2f%%, %.2f%%, %.2f%%)'>", RGBPCT(bgcolor));
-	if (col == 0) {
-	    fputs(attr, fp);
-	    attr = &attrs[attr_index ^= 1][0];
-	} else {
-	    if (strcmp(&attrs[0][0], &attrs[1][0])) {
-		fputs("</span>", fp);
-		fputs(attr, fp);
-		attr = &attrs[attr_index ^= 1][0];
-	    }
-	}
+        slen += sprintf(attr + slen,
+                        " ' style='color: rgb(%.2f%%, %.2f%%, %.2f%%);",
+                        RGBPCT(fgcolor));
+        (void)sprintf(attr + slen,
+                      " background: rgb(%.2f%%, %.2f%%, %.2f%%)'>",
+                      RGBPCT(bgcolor));
+        if (col == 0)
+        {
+            fputs(attr, fp);
+            attr = &attrs[attr_index ^= 1][0];
+        }
+        else
+        {
+            if (strcmp(&attrs[0][0], &attrs[1][0]))
+            {
+                fputs("</span>", fp);
+                fputs(attr, fp);
+                attr = &attrs[attr_index ^= 1][0];
+            }
+        }
 
 #if OPT_WIDE_CHARS
-	if (chr > 127) {
-	    /* Ignore hidden characters. */
-	    if (chr != HIDDEN_CHAR) {
-		Char temp[10];
-		*convertToUTF8(temp, chr) = 0;
-		fputs((char *) temp, fp);
-	    }
-	} else
+        if (chr > 127)
+        {
+        /* Ignore hidden characters. */
+            if (chr != HIDDEN_CHAR)
+            {
+                Char temp[10];
+                *convertToUTF8(temp, chr) = 0;
+                fputs((char *)temp, fp);
+            }
+        }
+        else
 #endif
-	    switch (chr) {
-	    case 0:
-		fputc(' ', fp);
-		break;
-	    case '&':
-		fputs("&amp;", fp);
-		break;
-	    case '<':
-		fputs("&lt;", fp);
-		break;
-	    case '>':
-		fputs("&gt;", fp);
-		break;
-	    case ' ':
-		fputs("\302\240", fp);
-		break;
-	    default:
-		fputc((int) chr, fp);
-	    }
-	xevents(xw);
+            switch (chr)
+            {
+                case 0:
+                    fputc(' ', fp);
+                    break;
+                case '&':
+                    fputs("&amp;", fp);
+                    break;
+                case '<':
+                    fputs("&lt;", fp);
+                    break;
+                case '>':
+                    fputs("&gt;", fp);
+                    break;
+                case ' ':
+                    fputs("\302\240", fp);
+                    break;
+                default:
+                    fputc((int)chr, fp);
+            }
+        xevents(xw);
     }
     fprintf(fp, "</span>\n");
     xevents(xw);
@@ -289,11 +307,11 @@ char *
 PixelToCSSColor(XtermWidget xw, Pixel p)
 {
     static char rgb[sizeof "rgb(100.00%, 100.00%, 100.00%)"];
-    XColor c;
+    XColor      c;
 
-    (void) xw;
+    (void)xw;
     c.pixel = p;
-    (void) QueryOneColor(xw, &c);
+    (void)QueryOneColor(xw, &c);
     sprintf(rgb, "rgb(%.2f%%, %.2f%%, %.2f%%)", RGBPCT(c));
     return rgb;
 }

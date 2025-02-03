@@ -27,36 +27,36 @@ from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#  include "config.h"
 #endif
 
 extern const char *ProgramName;
-extern Display *dpy;
-extern int min_keycode, max_keycode;
-extern Bool verbose;
-extern Bool dontExecute;
+extern Display    *dpy;
+extern int         min_keycode, max_keycode;
+extern Bool        verbose;
+extern Bool        dontExecute;
 extern const char *inputFilename;
-extern int lineno;
-extern int parse_errors;
+extern int         lineno;
+extern int         parse_errors;
 
 extern void initialize_map(void);
 extern void process_file(const char *filename);
 extern void process_line(const char *buffer);
 extern void handle_line(char *line, int len);
 extern void print_work_queue(void);
-extern int execute_work_queue(void);
+extern int  execute_work_queue(void);
 extern void print_modifier_map(void);
 extern void print_key_table(Bool exprs);
 extern void print_pointer_map(void);
 
 extern int UpdateModifierMapping(XModifierKeymap *map);
 extern int AddModifier(XModifierKeymap **mapp, KeyCode keycode, int modifier);
-extern int RemoveModifier(XModifierKeymap **mapp, KeyCode keycode, 
-			  int modifier);
-extern int ClearModifier(XModifierKeymap **mapp, int modifier);
+extern int
+RemoveModifier(XModifierKeymap **mapp, KeyCode keycode, int modifier);
+extern int  ClearModifier(XModifierKeymap **mapp, int modifier);
 extern void PrintModifierMapping(XModifierKeymap *map, FILE *fp);
 extern void PrintKeyTable(Bool exprs, FILE *fp);
 extern void PrintPointerMap(FILE *fp);
-extern int SetPointerMap(unsigned char *map, int n);
+extern int  SetPointerMap(unsigned char *map, int n);
 
 extern void _X_NORETURN Exit(int status);

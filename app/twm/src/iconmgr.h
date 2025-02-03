@@ -36,48 +36,50 @@ in this Software without prior written authorization from The Open Group.
 
 #include "twm.h"
 
-typedef struct WList {
-    struct WList *next;
-    struct WList *prev;
+typedef struct WList
+{
+    struct WList     *next;
+    struct WList     *prev;
     struct TwmWindow *twm;
-    struct IconMgr *iconmgr;
-    Window w;
-    Window icon;
-    int x, y, width, height;
-    int row, col;
-    int me;
-    Pixel fore, back, highlight;
-    unsigned top, bottom;
-    short active;
-    short down;
+    struct IconMgr   *iconmgr;
+    Window            w;
+    Window            icon;
+    int               x, y, width, height;
+    int               row, col;
+    int               me;
+    Pixel             fore, back, highlight;
+    unsigned          top, bottom;
+    short             active;
+    short             down;
 } WList;
 
-typedef struct IconMgr {
-    struct IconMgr *next;       /* pointer to the next icon manager */
-    struct IconMgr *prev;       /* pointer to the previous icon mgr */
-    struct IconMgr *lasti;      /* pointer to the last icon mgr */
-    struct WList *first;        /* first window in the list */
-    struct WList *last;         /* last window in the list */
-    struct WList *active;       /* the active entry */
-    TwmWindow *twm_win;         /* back pointer to the new parent */
+typedef struct IconMgr
+{
+    struct IconMgr    *next;       /* pointer to the next icon manager */
+    struct IconMgr    *prev;       /* pointer to the previous icon mgr */
+    struct IconMgr    *lasti;      /* pointer to the last icon mgr */
+    struct WList      *first;        /* first window in the list */
+    struct WList      *last;         /* last window in the list */
+    struct WList      *active;       /* the active entry */
+    TwmWindow         *twm_win;         /* back pointer to the new parent */
     struct ScreenInfo *scr;     /* the screen this thing is on */
-    Window w;                   /* this icon manager window */
-    const char *geometry;       /* geometry string */
-    const char *name;
-    const char *icon_name;
-    int x, y, width, height;
-    int columns, cur_rows, cur_columns;
-    int count;
+    Window             w;                   /* this icon manager window */
+    const char        *geometry;       /* geometry string */
+    const char        *name;
+    const char        *icon_name;
+    int                x, y, width, height;
+    int                columns, cur_rows, cur_columns;
+    int                count;
 } IconMgr;
 
-extern int iconmgr_textx;
+extern int    iconmgr_textx;
 extern WList *DownIconManager;
-extern int iconifybox_width, iconifybox_height;
+extern int    iconifybox_width, iconifybox_height;
 
-extern void ActiveIconManager(WList *active);
+extern void   ActiveIconManager(WList *active);
 extern WList *AddIconManager(TwmWindow *tmp_win);
-extern IconMgr *AllocateIconManager(char *name, char *icon_name, char *geom,
-                                    int columns);
+extern IconMgr *
+AllocateIconManager(char *name, char *icon_name, char *geom, int columns);
 extern void CreateIconManagers(void);
 extern void DrawIconManagerBorder(WList *tmp);
 extern void JumpIconManager(int dir);

@@ -42,38 +42,38 @@
 #include <ptyx.h>
 
 #ifndef HAVE_TIGETSTR
-#undef USE_TERMINFO
+#  undef USE_TERMINFO
 #endif
 
 #ifndef USE_TERMINFO
-#define USE_TERMINFO 0
+#  define USE_TERMINFO 0
 #endif
 
 #if !USE_TERMINFO
-#undef HAVE_TIGETSTR
-#ifndef USE_TERMCAP
-#define USE_TERMCAP 1
-#endif
+#  undef HAVE_TIGETSTR
+#  ifndef USE_TERMCAP
+#    define USE_TERMCAP 1
+#  endif
 #endif
 
-#undef ERR			/* workaround for glibc 2.1.3 */
+#undef ERR   /* workaround for glibc 2.1.3 */
 
 #ifdef HAVE_NCURSES_CURSES_H
-#include <ncurses/curses.h>
+#  include <ncurses/curses.h>
 #else
-#include <curses.h>
+#  include <curses.h>
 #endif
 
 #ifndef NCURSES_VERSION
-#ifdef HAVE_TERMCAP_H
-#include <termcap.h>
-#endif
+#  ifdef HAVE_TERMCAP_H
+#    include <termcap.h>
+#  endif
 #endif
 
 #ifdef HAVE_NCURSES_TERM_H
-#include <ncurses/term.h>
+#  include <ncurses/term.h>
 #elif defined(HAVE_TERM_H)
-#include <term.h>		/* tgetent() */
+#  include <term.h>  /* tgetent() */
 #endif
 
 /*
@@ -87,14 +87,14 @@
 extern "C" {
 #endif
 
-#define	MOD_NONE	1
-#define	MOD_SHIFT	1
-#define	MOD_ALT		2
-#define	MOD_CTRL	4
-#define	MOD_META	8
+#define MOD_NONE  1
+#define MOD_SHIFT 1
+#define MOD_ALT   2
+#define MOD_CTRL  4
+#define MOD_META  8
 
 #define MODIFIER_NAME(parm, name) \
-	(((parm > MOD_NONE) && ((parm - MOD_NONE) & name)) ? " "#name : "")
+    (((parm > MOD_NONE) && ((parm - MOD_NONE) & name)) ? " " #name : "")
 
 /* xtermcap.c */
 extern Bool get_termcap(XtermWidget /* xw */, char * /* name */);
@@ -105,16 +105,20 @@ extern char *get_tcap_buffer(XtermWidget /* xw */);
 extern char *get_tcap_erase(XtermWidget /* xw */);
 
 #if OPT_TCAP_FKEYS
-extern int xtermcapString(XtermWidget /* xw */, int /* keycode */, unsigned /* mask */);
+extern int
+xtermcapString(XtermWidget /* xw */, int /* keycode */, unsigned /* mask */);
 #endif
 
 #if OPT_TCAP_QUERY
-extern int xtermcapKeycode(XtermWidget /* xw */, const char ** /* params */, unsigned * /* state */, Bool * /* fkey */);
+extern int xtermcapKeycode(XtermWidget /* xw */,
+                           const char ** /* params */,
+                           unsigned * /* state */,
+                           Bool * /* fkey */);
 #endif
 
 #ifdef __cplusplus
-	}
+}
 #endif
 
 /* *INDENT-ON* */
-#endif	/* included_xtermcap_h */
+#endif /* included_xtermcap_h */

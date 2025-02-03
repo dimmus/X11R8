@@ -61,13 +61,14 @@
 
 #include <xterm.h>
 
-#ifndef OPT_MENU_KEEPCLIPBOARD 
-#define OPT_MENU_KEEPCLIPBOARD 0	/* useful for debugging */
+#ifndef OPT_MENU_KEEPCLIPBOARD
+#  define OPT_MENU_KEEPCLIPBOARD 0 /* useful for debugging */
 #endif
 
-typedef struct _MenuEntry {
+typedef struct _MenuEntry
+{
     const char *name;
-    void (*function) PROTO_XT_CALLBACK_ARGS;
+    void(*function) PROTO_XT_CALLBACK_ARGS;
     Widget widget;
 } MenuEntry;
 
@@ -77,87 +78,90 @@ extern MenuEntry fontMenuEntries[];
 extern MenuEntry tekMenuEntries[];
 #endif
 
-extern void Handle8BitControl      PROTO_XT_ACTIONS_ARGS;
-extern void HandleAllow132         PROTO_XT_ACTIONS_ARGS;
-extern void HandleAllowBoldFonts   PROTO_XT_ACTIONS_ARGS;
-extern void HandleAllowColorOps    PROTO_XT_ACTIONS_ARGS;
-extern void HandleAllowFontOps     PROTO_XT_ACTIONS_ARGS;
-extern void HandleAllowMouseOps    PROTO_XT_ACTIONS_ARGS;
-extern void HandleAllowSends       PROTO_XT_ACTIONS_ARGS;
-extern void HandleAllowTcapOps     PROTO_XT_ACTIONS_ARGS;
-extern void HandleAllowTitleOps    PROTO_XT_ACTIONS_ARGS;
-extern void HandleAllowWindowOps   PROTO_XT_ACTIONS_ARGS;
-extern void HandleAltEsc           PROTO_XT_ACTIONS_ARGS;
-extern void HandleAltScreen        PROTO_XT_ACTIONS_ARGS;
-extern void HandleAppCursor        PROTO_XT_ACTIONS_ARGS;
-extern void HandleAppKeypad        PROTO_XT_ACTIONS_ARGS;
-extern void HandleAutoLineFeed     PROTO_XT_ACTIONS_ARGS;
-extern void HandleAutoWrap         PROTO_XT_ACTIONS_ARGS;
-extern void HandleBackarrow        PROTO_XT_ACTIONS_ARGS;
-extern void HandleBellIsUrgent     PROTO_XT_ACTIONS_ARGS;
-extern void HandleCreateMenu       PROTO_XT_ACTIONS_ARGS;
-extern void HandleCursesEmul       PROTO_XT_ACTIONS_ARGS;
-extern void HandleCursorBlink      PROTO_XT_ACTIONS_ARGS;
-extern void HandleDeleteIsDEL      PROTO_XT_ACTIONS_ARGS;
-extern void HandleDumpHtml         PROTO_XT_ACTIONS_ARGS;
-extern void HandleDumpSvg          PROTO_XT_ACTIONS_ARGS;
-extern void HandleFontBoxChars     PROTO_XT_ACTIONS_ARGS;
-extern void HandleFontDoublesize   PROTO_XT_ACTIONS_ARGS;
-extern void HandleFontLoading      PROTO_XT_ACTIONS_ARGS;
-extern void HandleFontPacked       PROTO_XT_ACTIONS_ARGS;
-extern void HandleFullscreen       PROTO_XT_ACTIONS_ARGS;
-extern void HandleHpFunctionKeys   PROTO_XT_ACTIONS_ARGS;
-extern void HandleJumpscroll       PROTO_XT_ACTIONS_ARGS;
-extern void HandleKeepClipboard    PROTO_XT_ACTIONS_ARGS;
-extern void HandleKeepSelection    PROTO_XT_ACTIONS_ARGS;
-extern void HandleLogging          PROTO_XT_ACTIONS_ARGS;
-extern void HandleMarginBell       PROTO_XT_ACTIONS_ARGS;
-extern void HandleMetaEsc          PROTO_XT_ACTIONS_ARGS;
-extern void HandleNumLock          PROTO_XT_ACTIONS_ARGS;
-extern void HandleOldFunctionKeys  PROTO_XT_ACTIONS_ARGS;
-extern void HandlePopupMenu        PROTO_XT_ACTIONS_ARGS;
-extern void HandlePrintControlMode PROTO_XT_ACTIONS_ARGS;
-extern void HandlePrintEverything  PROTO_XT_ACTIONS_ARGS;
-extern void HandlePrintImmediate   PROTO_XT_ACTIONS_ARGS;
-extern void HandlePrintOnError     PROTO_XT_ACTIONS_ARGS;
-extern void HandlePrintScreen      PROTO_XT_ACTIONS_ARGS;
-extern void HandleRedraw           PROTO_XT_ACTIONS_ARGS;
-extern void HandleRenderFont       PROTO_XT_ACTIONS_ARGS;
-extern void HandleReverseVideo     PROTO_XT_ACTIONS_ARGS;
-extern void HandleReverseWrap      PROTO_XT_ACTIONS_ARGS;
-extern void HandleScoFunctionKeys  PROTO_XT_ACTIONS_ARGS;
-extern void HandleScrollKey        PROTO_XT_ACTIONS_ARGS;
-extern void HandleScrollTtyOutput  PROTO_XT_ACTIONS_ARGS;
-extern void HandleScrollbar        PROTO_XT_ACTIONS_ARGS;
-extern void HandleSecure           PROTO_XT_ACTIONS_ARGS;
-extern void HandleSendSignal       PROTO_XT_ACTIONS_ARGS;
-extern void HandleSetPopOnBell     PROTO_XT_ACTIONS_ARGS;
+extern void Handle8BitControl              PROTO_XT_ACTIONS_ARGS;
+extern void HandleAllow132                 PROTO_XT_ACTIONS_ARGS;
+extern void HandleAllowBoldFonts           PROTO_XT_ACTIONS_ARGS;
+extern void HandleAllowColorOps            PROTO_XT_ACTIONS_ARGS;
+extern void HandleAllowFontOps             PROTO_XT_ACTIONS_ARGS;
+extern void HandleAllowMouseOps            PROTO_XT_ACTIONS_ARGS;
+extern void HandleAllowSends               PROTO_XT_ACTIONS_ARGS;
+extern void HandleAllowTcapOps             PROTO_XT_ACTIONS_ARGS;
+extern void HandleAllowTitleOps            PROTO_XT_ACTIONS_ARGS;
+extern void HandleAllowWindowOps           PROTO_XT_ACTIONS_ARGS;
+extern void HandleAltEsc                   PROTO_XT_ACTIONS_ARGS;
+extern void HandleAltScreen                PROTO_XT_ACTIONS_ARGS;
+extern void HandleAppCursor                PROTO_XT_ACTIONS_ARGS;
+extern void HandleAppKeypad                PROTO_XT_ACTIONS_ARGS;
+extern void HandleAutoLineFeed             PROTO_XT_ACTIONS_ARGS;
+extern void HandleAutoWrap                 PROTO_XT_ACTIONS_ARGS;
+extern void HandleBackarrow                PROTO_XT_ACTIONS_ARGS;
+extern void HandleBellIsUrgent             PROTO_XT_ACTIONS_ARGS;
+extern void HandleCreateMenu               PROTO_XT_ACTIONS_ARGS;
+extern void HandleCursesEmul               PROTO_XT_ACTIONS_ARGS;
+extern void HandleCursorBlink              PROTO_XT_ACTIONS_ARGS;
+extern void HandleDeleteIsDEL              PROTO_XT_ACTIONS_ARGS;
+extern void HandleDumpHtml                 PROTO_XT_ACTIONS_ARGS;
+extern void HandleDumpSvg                  PROTO_XT_ACTIONS_ARGS;
+extern void HandleFontBoxChars             PROTO_XT_ACTIONS_ARGS;
+extern void HandleFontDoublesize           PROTO_XT_ACTIONS_ARGS;
+extern void HandleFontLoading              PROTO_XT_ACTIONS_ARGS;
+extern void HandleFontPacked               PROTO_XT_ACTIONS_ARGS;
+extern void HandleFullscreen               PROTO_XT_ACTIONS_ARGS;
+extern void HandleHpFunctionKeys           PROTO_XT_ACTIONS_ARGS;
+extern void HandleJumpscroll               PROTO_XT_ACTIONS_ARGS;
+extern void HandleKeepClipboard            PROTO_XT_ACTIONS_ARGS;
+extern void HandleKeepSelection            PROTO_XT_ACTIONS_ARGS;
+extern void HandleLogging                  PROTO_XT_ACTIONS_ARGS;
+extern void HandleMarginBell               PROTO_XT_ACTIONS_ARGS;
+extern void HandleMetaEsc                  PROTO_XT_ACTIONS_ARGS;
+extern void HandleNumLock                  PROTO_XT_ACTIONS_ARGS;
+extern void HandleOldFunctionKeys          PROTO_XT_ACTIONS_ARGS;
+extern void HandlePopupMenu                PROTO_XT_ACTIONS_ARGS;
+extern void HandlePrintControlMode         PROTO_XT_ACTIONS_ARGS;
+extern void HandlePrintEverything          PROTO_XT_ACTIONS_ARGS;
+extern void HandlePrintImmediate           PROTO_XT_ACTIONS_ARGS;
+extern void HandlePrintOnError             PROTO_XT_ACTIONS_ARGS;
+extern void HandlePrintScreen              PROTO_XT_ACTIONS_ARGS;
+extern void HandleRedraw                   PROTO_XT_ACTIONS_ARGS;
+extern void HandleRenderFont               PROTO_XT_ACTIONS_ARGS;
+extern void HandleReverseVideo             PROTO_XT_ACTIONS_ARGS;
+extern void HandleReverseWrap              PROTO_XT_ACTIONS_ARGS;
+extern void HandleScoFunctionKeys          PROTO_XT_ACTIONS_ARGS;
+extern void HandleScrollKey                PROTO_XT_ACTIONS_ARGS;
+extern void HandleScrollTtyOutput          PROTO_XT_ACTIONS_ARGS;
+extern void HandleScrollbar                PROTO_XT_ACTIONS_ARGS;
+extern void HandleSecure                   PROTO_XT_ACTIONS_ARGS;
+extern void HandleSendSignal               PROTO_XT_ACTIONS_ARGS;
+extern void HandleSetPopOnBell             PROTO_XT_ACTIONS_ARGS;
 extern void HandleSetPrivateColorRegisters PROTO_XT_ACTIONS_ARGS;
-extern void HandleSetSelect        PROTO_XT_ACTIONS_ARGS;
-extern void HandleSetTekText       PROTO_XT_ACTIONS_ARGS;
-extern void HandleSetTerminalType  PROTO_XT_ACTIONS_ARGS;
-extern void HandleSetVisualBell    PROTO_XT_ACTIONS_ARGS;
-extern void HandleSixelScrolling   PROTO_XT_ACTIONS_ARGS;
-extern void HandleSunFunctionKeys  PROTO_XT_ACTIONS_ARGS;
-extern void HandleSunKeyboard      PROTO_XT_ACTIONS_ARGS;
-extern void HandleTekCopy          PROTO_XT_ACTIONS_ARGS;
-extern void HandleTekPage          PROTO_XT_ACTIONS_ARGS;
-extern void HandleTekReset         PROTO_XT_ACTIONS_ARGS;
-extern void HandleTiteInhibit      PROTO_XT_ACTIONS_ARGS;
-extern void HandleToolbar          PROTO_XT_ACTIONS_ARGS;
-extern void HandleUTF8Fonts        PROTO_XT_ACTIONS_ARGS;
-extern void HandleUTF8Mode         PROTO_XT_ACTIONS_ARGS;
-extern void HandleUTF8Title        PROTO_XT_ACTIONS_ARGS;
-extern void HandleVisibility       PROTO_XT_ACTIONS_ARGS;
-extern void HandleWriteError       PROTO_XT_ACTIONS_ARGS;
-extern void HandleWriteNow         PROTO_XT_ACTIONS_ARGS;
+extern void HandleSetSelect                PROTO_XT_ACTIONS_ARGS;
+extern void HandleSetTekText               PROTO_XT_ACTIONS_ARGS;
+extern void HandleSetTerminalType          PROTO_XT_ACTIONS_ARGS;
+extern void HandleSetVisualBell            PROTO_XT_ACTIONS_ARGS;
+extern void HandleSixelScrolling           PROTO_XT_ACTIONS_ARGS;
+extern void HandleSunFunctionKeys          PROTO_XT_ACTIONS_ARGS;
+extern void HandleSunKeyboard              PROTO_XT_ACTIONS_ARGS;
+extern void HandleTekCopy                  PROTO_XT_ACTIONS_ARGS;
+extern void HandleTekPage                  PROTO_XT_ACTIONS_ARGS;
+extern void HandleTekReset                 PROTO_XT_ACTIONS_ARGS;
+extern void HandleTiteInhibit              PROTO_XT_ACTIONS_ARGS;
+extern void HandleToolbar                  PROTO_XT_ACTIONS_ARGS;
+extern void HandleUTF8Fonts                PROTO_XT_ACTIONS_ARGS;
+extern void HandleUTF8Mode                 PROTO_XT_ACTIONS_ARGS;
+extern void HandleUTF8Title                PROTO_XT_ACTIONS_ARGS;
+extern void HandleVisibility               PROTO_XT_ACTIONS_ARGS;
+extern void HandleWriteError               PROTO_XT_ACTIONS_ARGS;
+extern void HandleWriteNow                 PROTO_XT_ACTIONS_ARGS;
 
-extern GCC_NORETURN void HandleClearSavedLines  PROTO_XT_ACTIONS_ARGS;
-extern GCC_NORETURN void HandleHardReset        PROTO_XT_ACTIONS_ARGS;
-extern GCC_NORETURN void HandleQuit             PROTO_XT_ACTIONS_ARGS;
-extern GCC_NORETURN void HandleSoftReset        PROTO_XT_ACTIONS_ARGS;
+extern GCC_NORETURN void HandleClearSavedLines PROTO_XT_ACTIONS_ARGS;
+extern GCC_NORETURN void HandleHardReset       PROTO_XT_ACTIONS_ARGS;
+extern GCC_NORETURN void HandleQuit            PROTO_XT_ACTIONS_ARGS;
+extern GCC_NORETURN void HandleSoftReset       PROTO_XT_ACTIONS_ARGS;
 
-extern void SetupMenus (Widget /*shell*/, Widget */*forms*/, Widget */*menus*/, Dimension * /*menu_high*/);
+extern void SetupMenus(Widget /*shell*/,
+                       Widget * /*forms*/,
+                       Widget * /*menus*/,
+                       Dimension * /*menu_high*/);
 
 #if OPT_TOOLBAR
 extern void ShowToolbar(Bool);
@@ -171,7 +175,8 @@ extern void ShowToolbar(Bool);
 /*
  * items in primary menu
  */
-typedef enum {
+typedef enum
+{
 #if OPT_TOOLBAR
     mainMenu_toolbar,
 #endif
@@ -232,11 +237,11 @@ typedef enum {
     mainMenu_LAST
 } mainMenuIndices;
 
-
 /*
  * items in vt100 mode menu
  */
-typedef enum {
+typedef enum
+{
     vtMenu_scrollbar,
     vtMenu_jumpscroll,
     vtMenu_reversevideo,
@@ -286,7 +291,8 @@ typedef enum {
 /*
  * items in vt100 font menu
  */
-typedef enum {
+typedef enum
+{
     fontMenu_default,
     fontMenu_font1,
     fontMenu_font2,
@@ -295,6 +301,7 @@ typedef enum {
     fontMenu_font5,
     fontMenu_font6,
     fontMenu_font7,
+
 #define fontMenu_lastBuiltin fontMenu_font7
     fontMenu_fontescape,
     fontMenu_fontsel,
@@ -303,28 +310,28 @@ typedef enum {
 #if OPT_DEC_CHRSET || OPT_BOX_CHARS || OPT_DEC_SOFTFONT
     fontMenu_line1,
     fontMenu_allowBoldFonts,
-#if OPT_BOX_CHARS
+#  if OPT_BOX_CHARS
     fontMenu_font_boxchars,
     fontMenu_font_packedfont,
-#endif
-#if OPT_DEC_CHRSET
+#  endif
+#  if OPT_DEC_CHRSET
     fontMenu_font_doublesize,
-#endif
-#if OPT_DEC_SOFTFONT
+#  endif
+#  if OPT_DEC_SOFTFONT
     fontMenu_font_loadable,
-#endif
+#  endif
 #endif
 
 #if OPT_RENDERFONT || OPT_WIDE_CHARS
     fontMenu_line2,
-#if OPT_RENDERFONT
+#  if OPT_RENDERFONT
     fontMenu_render_font,
-#endif
-#if OPT_WIDE_CHARS
+#  endif
+#  if OPT_WIDE_CHARS
     fontMenu_utf8_mode,
     fontMenu_utf8_fonts,
     fontMenu_utf8_title,
-#endif
+#  endif
 #endif
 #if OPT_ALLOW_XXX_OPS
     fontMenu_line3,
@@ -343,7 +350,8 @@ typedef enum {
  * items in tek4014 mode menu
  */
 #if OPT_TEK4014
-typedef enum {
+typedef enum
+{
     tekMenu_tektextlarge,
     tekMenu_tektext2,
     tekMenu_tektext3,
@@ -360,21 +368,23 @@ typedef enum {
 } tekMenuIndices;
 #endif
 
-
 /*
  * functions for updating menus
  */
 
 extern void SetItemSensitivity(Widget mi, Bool val);
 
-typedef enum {
+typedef enum
+{
     toggleErr = -2,
     toggleAll = -1,
     toggleOff = 0,
-    toggleOn = 1
+    toggleOn  = 1
 } ToggleEnum;
 
-extern int decodeToggle(XtermWidget /* xw */, String * /* params */, Cardinal /* nparams */);
+extern int decodeToggle(XtermWidget /* xw */,
+                        String * /* params */,
+                        Cardinal /* nparams */);
 
 /*
  * there should be one of each of the following for each checkable item
@@ -382,13 +392,13 @@ extern int decodeToggle(XtermWidget /* xw */, String * /* params */, Cardinal /*
 #if OPT_TOOLBAR
 extern void update_toolbar(void);
 #else
-#define update_toolbar() /* nothing */
+#  define update_toolbar() /* nothing */
 #endif
 
 #if OPT_MAXIMIZE
 extern void update_fullscreen(void);
 #else
-#define update_fullscreen() /* nothing */
+#  define update_fullscreen() /* nothing */
 #endif
 
 extern void update_securekbd(void);
@@ -397,13 +407,13 @@ extern void update_allowsends(void);
 #ifdef ALLOWLOGGING
 extern void update_logging(void);
 #else
-#define update_logging() /*nothing*/
+#  define update_logging() /*nothing*/
 #endif
 
 #if OPT_PRINT_ON_EXIT
 extern void update_write_error(void);
 #else
-#define update_write_error() /*nothing*/
+#  define update_write_error() /*nothing*/
 #endif
 
 extern void update_print_redir(void);
@@ -415,9 +425,9 @@ extern void update_num_lock(void);
 extern void update_alt_esc(void);
 extern void update_meta_esc(void);
 #else
-#define update_num_lock() /*nothing*/
-#define update_alt_esc()  /*nothing*/
-#define update_meta_esc() /*nothing*/
+#  define update_num_lock() /*nothing*/
+#  define update_alt_esc()  /*nothing*/
+#  define update_meta_esc() /*nothing*/
 #endif
 
 extern void update_old_fkeys(void);
@@ -430,25 +440,25 @@ extern void update_sun_kbd(void);
 #if OPT_HP_FUNC_KEYS
 extern void update_hp_fkeys(void);
 #else
-#define update_hp_fkeys() /*nothing*/
+#  define update_hp_fkeys() /*nothing*/
 #endif
 
 #if OPT_SCO_FUNC_KEYS
 extern void update_sco_fkeys(void);
 #else
-#define update_sco_fkeys() /*nothing*/
+#  define update_sco_fkeys() /*nothing*/
 #endif
 
 #if OPT_SUN_FUNC_KEYS
 extern void update_sun_fkeys(void);
 #else
-#define update_sun_fkeys() /*nothing*/
+#  define update_sun_fkeys() /*nothing*/
 #endif
 
 #if OPT_TCAP_FKEYS
 extern void update_tcap_fkeys(void);
 #else
-#define update_tcap_fkeys() /*nothing*/
+#  define update_tcap_fkeys() /*nothing*/
 #endif
 
 extern void update_scrollbar(void);
@@ -472,7 +482,7 @@ extern void update_poponbell(void);
 #if OPT_MENU_KEEPCLIPBOARD
 extern void update_keepClipboard(void);
 #else
-#define update_keepClipboard() /* nothing */
+#  define update_keepClipboard() /* nothing */
 #endif
 
 #define update_marginbell() /* nothing */
@@ -480,7 +490,7 @@ extern void update_keepClipboard(void);
 #if OPT_LOAD_VTFONTS
 extern void update_font_escape(void);
 #else
-#define update_font_escape() /* nothing */
+#  define update_font_escape() /* nothing */
 #endif
 
 #if OPT_ALLOW_XXX_OPS
@@ -495,7 +505,7 @@ extern void update_menu_allowWindowOps(void);
 #if OPT_BLINK_CURS
 extern void update_cursorblink(void);
 #else
-#define update_cursorblink() /* nothing */
+#  define update_cursorblink() /* nothing */
 #endif
 
 extern void update_altscreen(void);
@@ -508,39 +518,39 @@ extern void update_activeicon(void);
 #if OPT_DEC_CHRSET
 extern void update_font_doublesize(void);
 #else
-#define update_font_doublesize() /* nothing */
+#  define update_font_doublesize() /* nothing */
 #endif
 
 #if OPT_BOX_CHARS
 extern void update_font_boxchars(void);
 extern void update_font_packed(void);
 #else
-#define update_font_boxchars() /* nothing */
-#define update_font_packed() /* nothing */
+#  define update_font_boxchars() /* nothing */
+#  define update_font_packed() /* nothing */
 #endif
 
 #if OPT_SIXEL_GRAPHICS
 extern void update_decsdm(void);
 #else
-#define update_decsdm() /* nothing */
+#  define update_decsdm() /* nothing */
 #endif
 
 #if OPT_GRAPHICS
 extern void update_privatecolorregisters(void);
 #else
-#define update_privatecolorregisters() /* nothing */
+#  define update_privatecolorregisters() /* nothing */
 #endif
 
 #if OPT_DEC_SOFTFONT
 extern void update_font_loadable(void);
 #else
-#define update_font_loadable() /* nothing */
+#  define update_font_loadable() /* nothing */
 #endif
 
 #if OPT_RENDERFONT
 extern void update_font_renderfont(void);
 #else
-#define update_font_renderfont() /* nothing */
+#  define update_font_renderfont() /* nothing */
 #endif
 
 #if OPT_WIDE_CHARS
@@ -548,9 +558,9 @@ extern void update_font_utf8_mode(void);
 extern void update_font_utf8_fonts(void);
 extern void update_font_utf8_title(void);
 #else
-#define update_font_utf8_mode() /* nothing */
-#define update_font_utf8_fonts() /* nothing */
-#define update_font_utf8_title() /* nothing */
+#  define update_font_utf8_mode() /* nothing */
+#  define update_font_utf8_fonts() /* nothing */
+#  define update_font_utf8_title() /* nothing */
 #endif
 
 #if OPT_TEK4014
@@ -560,29 +570,29 @@ extern void update_vtshow(void);
 extern void set_vthide_sensitivity(void);
 extern void set_tekhide_sensitivity(void);
 #else
-#define update_tekshow() /*nothing*/
-#define update_vttekmode() /*nothing*/
-#define update_vtshow() /*nothing*/
-#define set_vthide_sensitivity() /*nothing*/
-#define set_tekhide_sensitivity() /*nothing*/
+#  define update_tekshow() /*nothing*/
+#  define update_vttekmode() /*nothing*/
+#  define update_vtshow() /*nothing*/
+#  define set_vthide_sensitivity() /*nothing*/
+#  define set_tekhide_sensitivity() /*nothing*/
 #endif
 
 #if OPT_DEC_CHRSET || OPT_BOX_CHARS || OPT_DEC_SOFTFONT
 extern void update_menu_allowBoldFonts(void);
 #else
-#define update_menu_allowBoldFonts() /*nothing*/
+#  define update_menu_allowBoldFonts() /*nothing*/
 #endif
 
 /*
  * macros for mapping font size to tekMenu placement
  */
-#define FS2MI(n) (n)			/* font_size_to_menu_item */
-#define MI2FS(n) (n)			/* menu_item_to_font_size */
+#define FS2MI(n) (n)   /* font_size_to_menu_item */
+#define MI2FS(n) (n)   /* menu_item_to_font_size */
 
 #if OPT_TEK4014
-extern void set_tekfont_menu_item(int n,int val);
+extern void set_tekfont_menu_item(int n, int val);
 #else
-#define set_tekfont_menu_item(n,val) /*nothing*/
+#  define set_tekfont_menu_item(n, val) /*nothing*/
 #endif
 
 extern void set_menu_font(int val);

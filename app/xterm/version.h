@@ -38,11 +38,11 @@
  * version of X to which this version of xterm has been built.  The resulting
  * number in parentheses is my patch number (Thomas E. Dickey).
  */
-#define XTERM_PATCH   379
-#define XTERM_DATE    2023-02-15
+#define XTERM_PATCH 379
+#define XTERM_DATE  2023 - 02 - 15
 
 #ifndef __vendorversion__
-#define __vendorversion__ "XTerm"
+#  define __vendorversion__ "XTerm"
 #endif
 
 extern const char *xtermVersion(void);

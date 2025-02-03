@@ -64,10 +64,11 @@ in this Software without prior written authorization from The Open Group.
 #include "parse.h"
 #include "util.h"
 
-struct name_list_struct {
+struct name_list_struct
+{
     name_list *next;    /**< pointer to the next name */
-    char *name;         /**< the name of the window */
-    char *ptr;          /**< list dependent data */
+    char      *name;         /**< the name of the window */
+    char      *ptr;          /**< list dependent data */
 };
 
 /**
@@ -83,23 +84,23 @@ struct name_list_struct {
  *  \param ptr   pointer to list dependent data
  */
 void
-AddToList(name_list ** list_head, char *name, char *ptr)
+AddToList(name_list **list_head, char *name, char *ptr)
 {
     name_list *nptr;
 
-    if (!list_head)
-        return;                 /* ignore empty inserts */
+    if (!list_head) return;                 /* ignore empty inserts */
 
-    nptr = (name_list *) malloc(sizeof(name_list));
-    if (nptr == NULL) {
+    nptr = (name_list *)malloc(sizeof(name_list));
+    if (nptr == NULL)
+    {
         parseWarning("unable to allocate %lu bytes for name_list",
-                     (unsigned long) sizeof(name_list));
+                     (unsigned long)sizeof(name_list));
         Done(NULL, NULL);
     }
 
     nptr->next = *list_head;
     nptr->name = name;
-    nptr->ptr = (ptr == NULL) ? (char *) TRUE : ptr;
+    nptr->ptr  = (ptr == NULL) ? (char *)TRUE : ptr;
     *list_head = nptr;
 }
 
@@ -114,31 +115,29 @@ AddToList(name_list ** list_head, char *name, char *ptr)
  *  \param xclass  a pointer to the class to look for
  */
 char *
-LookInList(name_list * list_head, const char *name, XClassHint *xclass)
+LookInList(name_list *list_head, const char *name, XClassHint *xclass)
 {
     name_list *nptr;
 
     /* look for the name first */
     for (nptr = list_head; nptr != NULL; nptr = nptr->next)
-        if (strcmp(name, nptr->name) == 0)
-            return (nptr->ptr);
+        if (strcmp(name, nptr->name) == 0) return (nptr->ptr);
 
-    if (xclass) {
+    if (xclass)
+    {
         /* look for the res_name next */
         for (nptr = list_head; nptr != NULL; nptr = nptr->next)
-            if (strcmp(xclass->res_name, nptr->name) == 0)
-                return (nptr->ptr);
+            if (strcmp(xclass->res_name, nptr->name) == 0) return (nptr->ptr);
 
         /* finally look for the res_class */
         for (nptr = list_head; nptr != NULL; nptr = nptr->next)
-            if (strcmp(xclass->res_class, nptr->name) == 0)
-                return (nptr->ptr);
+            if (strcmp(xclass->res_class, nptr->name) == 0) return (nptr->ptr);
     }
     return (NULL);
 }
 
 char *
-LookInNameList(name_list * list_head, const char *name)
+LookInNameList(name_list *list_head, const char *name)
 {
     return (LookInList(list_head, name, NULL));
 }
@@ -155,37 +154,43 @@ LookInNameList(name_list * list_head, const char *name)
  *      \param[out] ptr   fill in the list value if the name was found
  */
 int
-GetColorFromList(name_list * list_head, const char *name, XClassHint *xclass,
-                 Pixel *ptr)
+GetColorFromList(name_list  *list_head,
+                 const char *name,
+                 XClassHint *xclass,
+                 Pixel      *ptr)
 {
-    int save;
+    int        save;
     name_list *nptr;
 
     for (nptr = list_head; nptr != NULL; nptr = nptr->next)
-        if (strcmp(name, nptr->name) == 0) {
-            save = Scr->FirstTime;
+        if (strcmp(name, nptr->name) == 0)
+        {
+            save           = Scr->FirstTime;
             Scr->FirstTime = TRUE;
             GetColor(Scr->Monochrome, ptr, nptr->ptr);
-            Scr->FirstTime = (short) save;
+            Scr->FirstTime = (short)save;
             return (TRUE);
         }
 
-    if (xclass) {
+    if (xclass)
+    {
         for (nptr = list_head; nptr != NULL; nptr = nptr->next)
-            if (strcmp(xclass->res_name, nptr->name) == 0) {
-                save = Scr->FirstTime;
+            if (strcmp(xclass->res_name, nptr->name) == 0)
+            {
+                save           = Scr->FirstTime;
                 Scr->FirstTime = TRUE;
                 GetColor(Scr->Monochrome, ptr, nptr->ptr);
-                Scr->FirstTime = (short) save;
+                Scr->FirstTime = (short)save;
                 return (TRUE);
             }
 
         for (nptr = list_head; nptr != NULL; nptr = nptr->next)
-            if (strcmp(xclass->res_class, nptr->name) == 0) {
-                save = Scr->FirstTime;
+            if (strcmp(xclass->res_class, nptr->name) == 0)
+            {
+                save           = Scr->FirstTime;
                 Scr->FirstTime = TRUE;
                 GetColor(Scr->Monochrome, ptr, nptr->ptr);
-                Scr->FirstTime = (short) save;
+                Scr->FirstTime = (short)save;
                 return (TRUE);
             }
     }
@@ -196,12 +201,13 @@ GetColorFromList(name_list * list_head, const char *name, XClassHint *xclass,
  * free up a list
  */
 void
-FreeList(name_list ** list)
+FreeList(name_list **list)
 {
     name_list *nptr;
     name_list *tmp;
 
-    for (nptr = *list; nptr != NULL;) {
+    for (nptr = *list; nptr != NULL;)
+    {
         tmp = nptr->next;
         free(nptr);
         nptr = tmp;

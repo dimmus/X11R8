@@ -36,25 +36,27 @@ in this Software without prior written authorization from The Open Group.
 
 #include "twm.h"
 
-typedef struct IconRegion {
+typedef struct IconRegion
+{
     struct IconRegion *next;
-    int x, y, w, h;
-    int grav1, grav2;
-    int stepx, stepy;           /* allocation granularity */
-    struct IconEntry *entries;
+    int                x, y, w, h;
+    int                grav1, grav2;
+    int                stepx, stepy;           /* allocation granularity */
+    struct IconEntry  *entries;
 } IconRegion;
 
-typedef struct IconEntry {
+typedef struct IconEntry
+{
     struct IconEntry *next;
-    int x, y, w, h;
-    TwmWindow *twm_win;
-    short used;
+    int               x, y, w, h;
+    TwmWindow        *twm_win;
+    short             used;
 } IconEntry;
 
 extern void IconUp(TwmWindow *tmp_win);
 extern void IconDown(TwmWindow *tmp_win);
-extern void AddIconRegion(char *geom, int grav1, int grav2,
-                          int stepx, int stepy);
+extern void
+AddIconRegion(char *geom, int grav1, int grav2, int stepx, int stepy);
 extern void CreateIconWindow(TwmWindow *tmp_win, int def_x, int def_y);
 
 #endif /* ICONS_H */

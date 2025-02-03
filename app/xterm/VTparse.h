@@ -36,11 +36,11 @@
 #include <xterm.h>
 
 #ifndef Const
-# if defined(__STDC__) && !defined(__cplusplus)
-#  define Const const
-# else
-#  define Const	/**/
-# endif
+#  if defined(__STDC__) && !defined(__cplusplus)
+#    define Const const
+#  else
+#    define Const /**/
+#  endif
 #endif
 
 /*

@@ -32,9 +32,8 @@ in this Software without prior written authorization from The Open Group.
  */
 /* $XFree86: xclock.c,v 1.16 2002/10/21 13:33:08 alanh Exp $ */
 
-
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#  include "config.h"
 #endif
 
 #include <stdio.h>
@@ -49,50 +48,49 @@ in this Software without prior written authorization from The Open Group.
 #include "clmask.bit"
 
 #ifdef XKB
-#include "X11/extensions/XKBbells.h"
+#  include "X11/extensions/XKBbells.h"
 #endif
 
 #ifndef NO_I18N
-#include <locale.h> /* for setlocale() */
+#  include <locale.h> /* for setlocale() */
 Boolean no_locale = True; /* if True, use old behavior */
 #endif
 
 #ifdef HAVE_GETPID
-# include <unistd.h>
+#  include <unistd.h>
 #endif
 
 /* Command line options table.  Only resources are entered here...there is a
    pass over the remaining options after XtParseCommand is let loose. */
 
 static XrmOptionDescRec options[] = {
-{"-chime",	"*clock.chime",		XrmoptionNoArg,		"TRUE"},
-{"-hd",		"*clock.hands",		XrmoptionSepArg,	NULL},
-{"-hands",	"*clock.hands",		XrmoptionSepArg,	NULL},
-{"-hl",		"*clock.highlight",	XrmoptionSepArg,	NULL},
-{"-highlight",	"*clock.highlight",	XrmoptionSepArg,	NULL},
-{"-update",	"*clock.update",	XrmoptionSepArg,	NULL},
-{"-padding",	"*clock.padding",	XrmoptionSepArg,	NULL},
-{"-d",		"*clock.analog",	XrmoptionNoArg,		"FALSE"},
-{"-digital",	"*clock.analog",	XrmoptionNoArg,		"FALSE"},
-{"-analog",	"*clock.analog",	XrmoptionNoArg,		"TRUE"},
-{"-twelve",	"*clock.twentyfour",	XrmoptionNoArg,		"FALSE"},
-{"-twentyfour",	"*clock.twentyfour",	XrmoptionNoArg,		"TRUE"},
-{"-brief",	"*clock.brief",		XrmoptionNoArg,		"TRUE"},
-{"-utime",	"*clock.utime",		XrmoptionNoArg,		"TRUE"},
-{"-strftime",	"*clock.strftime",	XrmoptionSepArg,	NULL},
+    { "-chime",      "*clock.chime",      XrmoptionNoArg,  "TRUE"  },
+    { "-hd",         "*clock.hands",      XrmoptionSepArg, NULL    },
+    { "-hands",      "*clock.hands",      XrmoptionSepArg, NULL    },
+    { "-hl",         "*clock.highlight",  XrmoptionSepArg, NULL    },
+    { "-highlight",  "*clock.highlight",  XrmoptionSepArg, NULL    },
+    { "-update",     "*clock.update",     XrmoptionSepArg, NULL    },
+    { "-padding",    "*clock.padding",    XrmoptionSepArg, NULL    },
+    { "-d",          "*clock.analog",     XrmoptionNoArg,  "FALSE" },
+    { "-digital",    "*clock.analog",     XrmoptionNoArg,  "FALSE" },
+    { "-analog",     "*clock.analog",     XrmoptionNoArg,  "TRUE"  },
+    { "-twelve",     "*clock.twentyfour", XrmoptionNoArg,  "FALSE" },
+    { "-twentyfour", "*clock.twentyfour", XrmoptionNoArg,  "TRUE"  },
+    { "-brief",      "*clock.brief",      XrmoptionNoArg,  "TRUE"  },
+    { "-utime",      "*clock.utime",      XrmoptionNoArg,  "TRUE"  },
+    { "-strftime",   "*clock.strftime",   XrmoptionSepArg, NULL    },
 #ifdef XRENDER
-{"-face",	"*clock.face",		XrmoptionSepArg,	NULL},
-{"-render",	"*clock.render",	XrmoptionNoArg,		"TRUE"},
-{"-norender",	"*clock.render",	XrmoptionNoArg,		"FALSE"},
-{"-sharp",	"*clock.sharp",		XrmoptionNoArg,		"TRUE"},
+    { "-face",       "*clock.face",       XrmoptionSepArg, NULL    },
+    { "-render",     "*clock.render",     XrmoptionNoArg,  "TRUE"  },
+    { "-norender",   "*clock.render",     XrmoptionNoArg,  "FALSE" },
+    { "-sharp",      "*clock.sharp",      XrmoptionNoArg,  "TRUE"  },
 #endif
 };
 
-static void quit ( Widget w, XEvent *event, String *params,
-		   Cardinal *num_params );
+static void quit(Widget w, XEvent *event, String *params, Cardinal *num_params);
 
 static XtActionsRec xclock_actions[] = {
-    { "quit",	quit },
+    { "quit", quit },
 };
 
 static Atom wm_delete_window;
@@ -103,17 +101,19 @@ static Atom wm_delete_window;
 static void _X_NORETURN
 Syntax(const char *call)
 {
-    fprintf (stderr, "Usage: %s %s", call,
-	    "[-analog] [-bw <pixels>] [-digital] [-brief]\n"
-	    "       [-utime] [-strftime <fmt-str>]\n"
-	    "       [-fg <color>] [-bg <color>] [-hd <color>]\n"
-	    "       [-hl <color>] [-bd <color>]\n"
-	    "       [-fn <font_name>] [-help] [-padding <pixels>]\n"
-	    "       [-rv] [-update <seconds>] [-display displayname]\n"
+    fprintf(stderr,
+            "Usage: %s %s",
+            call,
+            "[-analog] [-bw <pixels>] [-digital] [-brief]\n"
+            "       [-utime] [-strftime <fmt-str>]\n"
+            "       [-fg <color>] [-bg <color>] [-hd <color>]\n"
+            "       [-hl <color>] [-bd <color>]\n"
+            "       [-fn <font_name>] [-help] [-padding <pixels>]\n"
+            "       [-rv] [-update <seconds>] [-display displayname]\n"
 #ifdef XRENDER
-	    "       [-[no]render] [-face <face name>] [-sharp]\n"
+            "       [-[no]render] [-face <face name>] [-sharp]\n"
 #endif
-	    "       [-geometry geom] [-twelve] [-twentyfour]\n\n");
+            "       [-geometry geom] [-twelve] [-twentyfour]\n\n");
     exit(1);
 }
 
@@ -130,100 +130,124 @@ quit(Widget w, XEvent *event, String *params, Cardinal *num_params)
     Arg arg;
 
     if (event->type == ClientMessage &&
-	(Atom)event->xclient.data.l[0] != wm_delete_window) {
+        (Atom)event->xclient.data.l[0] != wm_delete_window)
+    {
 #ifdef XKB
-	XkbStdBell(XtDisplay(w), XtWindow(w), 0, XkbBI_MinorError);
+        XkbStdBell(XtDisplay(w), XtWindow(w), 0, XkbBI_MinorError);
 #else
-	XBell (XtDisplay(w), 0);
+        XBell(XtDisplay(w), 0);
 #endif
-    } else {
-	/* resign from the session */
-	XtSetArg(arg, XtNjoinSession, False);
-	XtSetValues(w, &arg, ONE);
-	die(w, NULL, NULL);
+    }
+    else
+    {
+    /* resign from the session */
+        XtSetArg(arg, XtNjoinSession, False);
+        XtSetValues(w, &arg, ONE);
+        die(w, NULL, NULL);
     }
 }
 
 static void
 save(Widget w, XtPointer client_data, XtPointer call_data)
 {
-    XtCheckpointToken token = (XtCheckpointToken) call_data;
+    XtCheckpointToken token = (XtCheckpointToken)call_data;
     /* we have nothing to save */
-    token->save_success = True;
+    token->save_success     = True;
 }
 
 int
 main(int argc, char *argv[])
 {
-    Widget toplevel;
-    Arg arg;
-    Pixmap icon_pixmap = None;
+    Widget       toplevel;
+    Arg          arg;
+    Pixmap       icon_pixmap = None;
     XtAppContext app_con;
 
 #ifndef NO_I18N
     const char *locale_name = setlocale(LC_ALL, "");
-    XtSetLanguageProc ( NULL, NULL, NULL );
+    XtSetLanguageProc(NULL, NULL, NULL);
 
-    if(!locale_name || 0 == strcmp(locale_name,"C")) {
-	no_locale = True;
+    if (!locale_name || 0 == strcmp(locale_name, "C"))
+    {
+        no_locale = True;
     }
-    else {
-	no_locale = False;
+    else
+    {
+        no_locale = False;
     }
 #endif
 
-    toplevel = XtOpenApplication(&app_con, "XClock",
-				 options, XtNumber(options), &argc, argv, NULL,
-				 sessionShellWidgetClass, NULL, ZERO);
+    toplevel = XtOpenApplication(&app_con,
+                                 "XClock",
+                                 options,
+                                 XtNumber(options),
+                                 &argc,
+                                 argv,
+                                 NULL,
+                                 sessionShellWidgetClass,
+                                 NULL,
+                                 ZERO);
     if (argc != 1) Syntax(argv[0]);
     XtAddCallback(toplevel, XtNdieCallback, die, NULL);
     XtAddCallback(toplevel, XtNsaveCallback, save, NULL);
-    XtAppAddActions (app_con, xclock_actions, XtNumber(xclock_actions));
+    XtAppAddActions(app_con, xclock_actions, XtNumber(xclock_actions));
 
     /*
      * This is a hack so that wm_delete_window will do something useful
      * in this single-window application.
      */
-    XtOverrideTranslations(toplevel,
-		    XtParseTranslationTable ("<Message>WM_PROTOCOLS: quit()"));
+    XtOverrideTranslations(
+        toplevel,
+        XtParseTranslationTable("<Message>WM_PROTOCOLS: quit()"));
 
     XtSetArg(arg, XtNiconPixmap, &icon_pixmap);
     XtGetValues(toplevel, &arg, ONE);
 
-    if (icon_pixmap == None) {
-	arg.value = (XtArgVal)XCreateBitmapFromData(XtDisplay(toplevel),
-				       XtScreen(toplevel)->root,
-				       (char *)clock_bits, clock_width, clock_height);
-	XtSetValues (toplevel, &arg, ONE);
+    if (icon_pixmap == None)
+    {
+        arg.value = (XtArgVal)XCreateBitmapFromData(XtDisplay(toplevel),
+                                                    XtScreen(toplevel)->root,
+                                                    (char *)clock_bits,
+                                                    clock_width,
+                                                    clock_height);
+        XtSetValues(toplevel, &arg, ONE);
     }
 
     XtSetArg(arg, XtNiconMask, &icon_pixmap);
     XtGetValues(toplevel, &arg, ONE);
-    if (icon_pixmap == None) {
-	arg.value = (XtArgVal)XCreateBitmapFromData(XtDisplay(toplevel),
-				       XtScreen(toplevel)->root,
-				       (char *)clock_mask_bits, clock_mask_width,
-				       clock_mask_height);
-	XtSetValues (toplevel, &arg, ONE);
+    if (icon_pixmap == None)
+    {
+        arg.value = (XtArgVal)XCreateBitmapFromData(XtDisplay(toplevel),
+                                                    XtScreen(toplevel)->root,
+                                                    (char *)clock_mask_bits,
+                                                    clock_mask_width,
+                                                    clock_mask_height);
+        XtSetValues(toplevel, &arg, ONE);
     }
 
-    XtCreateManagedWidget ("clock", clockWidgetClass, toplevel, NULL, ZERO);
-    XtRealizeWidget (toplevel);
-    wm_delete_window = XInternAtom (XtDisplay(toplevel), "WM_DELETE_WINDOW",
-				    False);
-    (void) XSetWMProtocols (XtDisplay(toplevel), XtWindow(toplevel),
-			    &wm_delete_window, 1);
+    XtCreateManagedWidget("clock", clockWidgetClass, toplevel, NULL, ZERO);
+    XtRealizeWidget(toplevel);
+    wm_delete_window =
+        XInternAtom(XtDisplay(toplevel), "WM_DELETE_WINDOW", False);
+    (void)XSetWMProtocols(XtDisplay(toplevel),
+                          XtWindow(toplevel),
+                          &wm_delete_window,
+                          1);
 
 #ifdef HAVE_GETPID
     {
-	unsigned long pid = (unsigned long)getpid();
-	XChangeProperty(XtDisplay(toplevel), XtWindow(toplevel),
-			XInternAtom(XtDisplay(toplevel), "_NET_WM_PID", False),
-			XA_CARDINAL, 32, PropModeReplace,
-			(unsigned char *) &pid, 1);
+        unsigned long pid = (unsigned long)getpid();
+        XChangeProperty(XtDisplay(toplevel),
+                        XtWindow(toplevel),
+                        XInternAtom(XtDisplay(toplevel), "_NET_WM_PID", False),
+                        XA_CARDINAL,
+                        32,
+                        PropModeReplace,
+                        (unsigned char *)&pid,
+                        1);
     }
 #endif
 
-    XtAppMainLoop (app_con);
+    XtAppMainLoop(app_con);
     exit(0);
 }

@@ -64,22 +64,22 @@ in this Software without prior written authorization from The Open Group.
 
 extern char NoName[];
 
-extern void AddDefaultBindings(void);
+extern void       AddDefaultBindings(void);
 extern TwmWindow *AddWindow(Window w, int iconm, IconMgr *iconp);
-extern ColormapWindow *CreateColormapWindow(Window w, Bool creating_parent,
-                                            Bool property_window);
+extern ColormapWindow *
+CreateColormapWindow(Window w, Bool creating_parent, Bool property_window);
 extern TwmColormap *CreateTwmColormap(Colormap c);
-extern void FetchWmColormapWindows(TwmWindow *tmp);
-extern void FetchWmProtocols(TwmWindow *tmp);
-extern void GetGravityOffsets(TwmWindow *tmp, int *xp, int *yp);
-extern void GetWindowSizeHints(TwmWindow *tmp);
-extern void GrabButtons(TwmWindow *tmp_win);
-extern void GrabKeys(TwmWindow *tmp_win);
-extern int MappedNotOverride(Window w);
-extern void SetHighlightPixmap(char *filename);
-extern int AddingX;
-extern int AddingY;
-extern int AddingW;
-extern int AddingH;
+extern void         FetchWmColormapWindows(TwmWindow *tmp);
+extern void         FetchWmProtocols(TwmWindow *tmp);
+extern void         GetGravityOffsets(TwmWindow *tmp, int *xp, int *yp);
+extern void         GetWindowSizeHints(TwmWindow *tmp);
+extern void         GrabButtons(TwmWindow *tmp_win);
+extern void         GrabKeys(TwmWindow *tmp_win);
+extern int          MappedNotOverride(Window w);
+extern void         SetHighlightPixmap(char *filename);
+extern int          AddingX;
+extern int          AddingY;
+extern int          AddingW;
+extern int          AddingH;
 
 #endif /* ADD_WINDOW_H */

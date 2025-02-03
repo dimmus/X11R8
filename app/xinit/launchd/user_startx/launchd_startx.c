@@ -27,7 +27,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#  include "config.h"
 #endif
 
 #include <asl.h>
@@ -39,23 +39,36 @@
 #include <stdlib.h>
 #include <spawn.h>
 
-int main(int argc, char **argv, char **envp) {
+int
+main(int argc, char **argv, char **envp)
+{
     aslclient aslc;
-    pid_t child;
-    int pstat;
+    pid_t     child;
+    int       pstat;
 
-    if(argc < 2 || strcmp(argv[1], "--help") == 0) {
+    if (argc < 2 || strcmp(argv[1], "--help") == 0)
+    {
         fprintf(stderr, "Usage: %s prog [args...]\n", argv[0]);
         exit(EXIT_FAILURE);
     }
 
-    aslc = asl_open(BUNDLE_ID_PREFIX".startx", BUNDLE_ID_PREFIX, ASL_OPT_NO_DELAY);
+    aslc = asl_open(BUNDLE_ID_PREFIX ".startx",
+                    BUNDLE_ID_PREFIX,
+                    ASL_OPT_NO_DELAY);
 
-    asl_log_descriptor(aslc, NULL, ASL_LEVEL_INFO, STDOUT_FILENO, ASL_LOG_DESCRIPTOR_WRITE);
-    asl_log_descriptor(aslc, NULL, ASL_LEVEL_NOTICE, STDERR_FILENO, ASL_LOG_DESCRIPTOR_WRITE);
+    asl_log_descriptor(aslc,
+                       NULL,
+                       ASL_LEVEL_INFO,
+                       STDOUT_FILENO,
+                       ASL_LOG_DESCRIPTOR_WRITE);
+    asl_log_descriptor(aslc,
+                       NULL,
+                       ASL_LEVEL_NOTICE,
+                       STDERR_FILENO,
+                       ASL_LOG_DESCRIPTOR_WRITE);
 
     /* https://github.com/XQuartz/XQuartz/issues/114 */
-    char const * const home = getenv("HOME");
+    const char *const home = getenv("HOME");
     assert(home);
     chdir(home);
 

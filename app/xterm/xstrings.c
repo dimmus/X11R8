@@ -42,10 +42,10 @@
 static void
 alloc_pw(struct passwd *target, struct passwd *source)
 {
-    *target = *source;
+    *target          = *source;
     /* we care only about these strings */
-    target->pw_dir = x_strdup(source->pw_dir);
-    target->pw_name = x_strdup(source->pw_name);
+    target->pw_dir   = x_strdup(source->pw_dir);
+    target->pw_name  = x_strdup(source->pw_name);
     target->pw_shell = x_strdup(source->pw_shell);
 }
 
@@ -60,9 +60,11 @@ free_pw(struct passwd *source)
 void
 x_appendargv(char **target, char **source)
 {
-    if (target && source) {
-	target += x_countargv(target);
-	while ((*target++ = *source++) != 0) ;
+    if (target && source)
+    {
+        target += x_countargv(target);
+        while ((*target++ = *source++) != 0)
+            ;
     }
 }
 
@@ -79,10 +81,12 @@ unsigned
 x_countargv(char **argv)
 {
     unsigned result = 0;
-    if (argv) {
-	while (*argv++) {
-	    ++result;
-	}
+    if (argv)
+    {
+        while (*argv++)
+        {
+            ++result;
+        }
     }
     return result;
 }
@@ -95,29 +99,37 @@ x_countargv(char **argv)
 char *
 x_decode_hex(const char *source, const char **next)
 {
-    char *result = 0;
-    int pass;
+    char  *result = 0;
+    int    pass;
     size_t j, k;
 
-    for (pass = 0; pass < 2; ++pass) {
-	for (j = k = 0; isxdigit(CharOf(source[j])); ++j) {
-	    if ((pass != 0) && (j & 1) != 0) {
-		result[k++] = (char) ((CharOf(x_hex2int(source[j - 1])) << 4)
-				      | CharOf(x_hex2int(source[j])));
-	    }
-	}
-	*next = (source + j);
-	if ((j & 1) == 0) {
-	    if (pass) {
-		result[k] = '\0';
-	    } else {
-		result = malloc(++j);
-		if (result == 0)
-		    break;	/* not enough memory */
-	    }
-	} else {
-	    break;		/* must have an even number of digits */
-	}
+    for (pass = 0; pass < 2; ++pass)
+    {
+        for (j = k = 0; isxdigit(CharOf(source[j])); ++j)
+        {
+            if ((pass != 0) && (j & 1) != 0)
+            {
+                result[k++] = (char)((CharOf(x_hex2int(source[j - 1])) << 4) |
+                                     CharOf(x_hex2int(source[j])));
+            }
+        }
+        *next = (source + j);
+        if ((j & 1) == 0)
+        {
+            if (pass)
+            {
+                result[k] = '\0';
+            }
+            else
+            {
+                result = malloc(++j);
+                if (result == 0) break; /* not enough memory */
+            }
+        }
+        else
+        {
+            break;  /* must have an even number of digits */
+        }
     }
     return result;
 }
@@ -129,16 +141,18 @@ x_decode_hex(const char *source, const char **next)
 char *
 x_encode_hex(const char *source)
 {
-    size_t need = (strlen(source) * 2) + 1;
-    char *result = malloc(need);
+    size_t need   = (strlen(source) * 2) + 1;
+    char  *result = malloc(need);
 
-    if (result != 0) {
-	unsigned j, k;
-	result[0] = '\0';
-	for (j = k = 0; source[j] != '\0'; ++j) {
-	    sprintf(result + k, "%02X", CharOf(source[j]));
-	    k += 2;
-	}
+    if (result != 0)
+    {
+        unsigned j, k;
+        result[0] = '\0';
+        for (j = k = 0; source[j] != '\0'; ++j)
+        {
+            sprintf(result + k, "%02X", CharOf(source[j]));
+            k += 2;
+        }
     }
     return result;
 }
@@ -160,28 +174,29 @@ login_alias(char *login_name, uid_t uid, struct passwd *in_out)
      * password file, check if it does correspond to the same uid.  If so,
      * allow that as an alias for the uid.
      */
-    if (!IsEmpty(login_name)
-	&& strcmp(login_name, in_out->pw_name)) {
-	struct passwd pw2;
-	Boolean ok2;
+    if (!IsEmpty(login_name) && strcmp(login_name, in_out->pw_name))
+    {
+        struct passwd pw2;
+        Boolean       ok2;
 
-	if ((ok2 = x_getpwnam(login_name, &pw2))) {
-	    uid_t uid2 = pw2.pw_uid;
-	    struct passwd pw3;
-	    Boolean ok3;
+        if ((ok2 = x_getpwnam(login_name, &pw2)))
+        {
+            uid_t         uid2 = pw2.pw_uid;
+            struct passwd pw3;
+            Boolean       ok3;
 
-	    if ((ok3 = x_getpwuid(uid, &pw3))
-		&& ((uid_t) pw3.pw_uid == uid2)) {
-		/* use the other passwd-data including shell */
-		alloc_pw(in_out, &pw2);
-	    } else {
-		FreeAndNull(login_name);
-	    }
-	    if (ok2)
-		free_pw(&pw2);
-	    if (ok3)
-		free_pw(&pw3);
-	}
+            if ((ok3 = x_getpwuid(uid, &pw3)) && ((uid_t)pw3.pw_uid == uid2))
+            {
+        /* use the other passwd-data including shell */
+                alloc_pw(in_out, &pw2);
+            }
+            else
+            {
+                FreeAndNull(login_name);
+            }
+            if (ok2) free_pw(&pw2);
+            if (ok3) free_pw(&pw3);
+        }
     }
     return login_name;
 }
@@ -198,9 +213,10 @@ x_getlogin(uid_t uid, struct passwd *in_out)
     char *login_name;
 
     login_name = login_alias(x_getenv("LOGNAME"), uid, in_out);
-    if (IsEmpty(login_name)) {
-	free(login_name);
-	login_name = login_alias(x_getenv("USER"), uid, in_out);
+    if (IsEmpty(login_name))
+    {
+        free(login_name);
+        login_name = login_alias(x_getenv("USER"), uid, in_out);
     }
 #ifdef HAVE_GETLOGIN
     /*
@@ -209,16 +225,18 @@ x_getlogin(uid_t uid, struct passwd *in_out)
      * tried first to get something useful from the user's $LOGNAME or $USER
      * environment variables.
      */
-    if (IsEmpty(login_name)) {
-	TRACE2(("...try getlogin\n"));
-	free(login_name);
-	login_name = login_alias(x_strdup(getlogin()), uid, in_out);
+    if (IsEmpty(login_name))
+    {
+        TRACE2(("...try getlogin\n"));
+        free(login_name);
+        login_name = login_alias(x_strdup(getlogin()), uid, in_out);
     }
 #endif
 
-    if (IsEmpty(login_name)) {
-	free(login_name);
-	login_name = x_strdup(in_out->pw_name);
+    if (IsEmpty(login_name))
+    {
+        free(login_name);
+        login_name = x_strdup(in_out->pw_name);
     }
 
     TRACE2(("x_getloginid ->%s\n", NonNull(login_name)));
@@ -233,14 +251,17 @@ Boolean
 x_getpwnam(const char *name, struct passwd *result)
 {
     struct passwd *ptr = getpwnam(name);
-    Boolean code;
+    Boolean        code;
 
-    if (ptr != 0 && OkPasswd(ptr)) {
-	code = True;
-	alloc_pw(result, ptr);
-    } else {
-	code = False;
-	memset(result, 0, sizeof(*result));
+    if (ptr != 0 && OkPasswd(ptr))
+    {
+        code = True;
+        alloc_pw(result, ptr);
+    }
+    else
+    {
+        code = False;
+        memset(result, 0, sizeof(*result));
     }
     return code;
 }
@@ -252,17 +273,20 @@ x_getpwnam(const char *name, struct passwd *result)
 Boolean
 x_getpwuid(uid_t uid, struct passwd *result)
 {
-    struct passwd *ptr = getpwuid((uid_t) uid);
-    Boolean code;
+    struct passwd *ptr = getpwuid((uid_t)uid);
+    Boolean        code;
 
-    if (ptr != 0 && OkPasswd(ptr)) {
-	code = True;
-	alloc_pw(result, ptr);
-    } else {
-	code = False;
-	memset(result, 0, sizeof(*result));
+    if (ptr != 0 && OkPasswd(ptr))
+    {
+        code = True;
+        alloc_pw(result, ptr);
     }
-    TRACE2(("x_getpwuid(%d) %d\n", (int) uid, (int) code));
+    else
+    {
+        code = False;
+        memset(result, 0, sizeof(*result));
+    }
+    TRACE2(("x_getpwuid(%d) %d\n", (int)uid, (int)code));
     return code;
 }
 
@@ -272,12 +296,9 @@ x_getpwuid(uid_t uid, struct passwd *result)
 int
 x_hex2int(int c)
 {
-    if (c >= '0' && c <= '9')
-	return c - '0';
-    if (c >= 'a' && c <= 'f')
-	return c - 'a' + 10;
-    if (c >= 'A' && c <= 'F')
-	return c - 'A' + 10;
+    if (c >= '0' && c <= '9') return c - '0';
+    if (c >= 'a' && c <= 'f') return c - 'a' + 10;
+    if (c >= 'A' && c <= 'F') return c - 'A' + 10;
     return -1;
 }
 
@@ -288,14 +309,17 @@ x_hex2int(int c)
 String
 x_nonempty(String s)
 {
-    if (s != 0) {
-	if (*s == '\0') {
-	    s = 0;
-	} else {
-	    s = x_skip_blanks(s);
-	    if (*s == '\0')
-		s = 0;
-	}
+    if (s != 0)
+    {
+        if (*s == '\0')
+        {
+            s = 0;
+        }
+        else
+        {
+            s = x_skip_blanks(s);
+            if (*s == '\0') s = 0;
+        }
     }
     return s;
 }
@@ -304,7 +328,7 @@ String
 x_skip_blanks(String s)
 {
     while (IsSpace(CharOf(*s)))
-	++s;
+        ++s;
     return s;
 }
 
@@ -312,7 +336,7 @@ String
 x_skip_nonblanks(String s)
 {
     while (*s != '\0' && !IsSpace(CharOf(*s)))
-	++s;
+        ++s;
     return s;
 }
 
@@ -320,7 +344,7 @@ static const char *
 skip_blanks(const char *s)
 {
     while (IsSpace(CharOf(*s)))
-	++s;
+        ++s;
     return s;
 }
 
@@ -332,50 +356,61 @@ x_splitargs(const char *command)
 {
     char **result = 0;
 
-    if (command != 0) {
-	const char *first = skip_blanks(command);
-	char *blob = x_strdup(first);
+    if (command != 0)
+    {
+        const char *first = skip_blanks(command);
+        char       *blob  = x_strdup(first);
 
-	if (blob != 0) {
-	    int pass;
+        if (blob != 0)
+        {
+            int pass;
 
-	    for (pass = 0; pass < 2; ++pass) {
-		int state;
-		size_t count;
-		size_t n;
+            for (pass = 0; pass < 2; ++pass)
+            {
+                int    state;
+                size_t count;
+                size_t n;
 
-		for (n = count = 0, state = 0; first[n] != '\0'; ++n) {
-
-		    switch (state) {
-		    case 0:
-			if (!IsSpace(CharOf(first[n]))) {
-			    state = 1;
-			    if (pass)
-				result[count] = blob + n;
-			    ++count;
-			} else {
-			    blob[n] = '\0';
-			}
-			break;
-		    case 1:
-			if (IsSpace(CharOf(first[n]))) {
-			    blob[n] = '\0';
-			    state = 0;
-			}
-			break;
-		    }
-		}
-		if (!pass) {
-		    result = TypeCallocN(char *, count + 1);
-		    if (!result) {
-			free(blob);
-			break;
-		    }
-		}
-	    }
-	}
-    } else {
-	result = TypeCalloc(char *);
+                for (n = count = 0, state = 0; first[n] != '\0'; ++n)
+                {
+                    switch (state)
+                    {
+                        case 0:
+                            if (!IsSpace(CharOf(first[n])))
+                            {
+                                state = 1;
+                                if (pass) result[count] = blob + n;
+                                ++count;
+                            }
+                            else
+                            {
+                                blob[n] = '\0';
+                            }
+                            break;
+                        case 1:
+                            if (IsSpace(CharOf(first[n])))
+                            {
+                                blob[n] = '\0';
+                                state   = 0;
+                            }
+                            break;
+                    }
+                }
+                if (!pass)
+                {
+                    result = TypeCallocN(char *, count + 1);
+                    if (!result)
+                    {
+                        free(blob);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        result = TypeCalloc(char *);
     }
     return result;
 }
@@ -386,9 +421,10 @@ x_splitargs(const char *command)
 void
 x_freeargs(char **argv)
 {
-    if (argv != 0) {
-	free(*argv);
-	free(argv);
+    if (argv != 0)
+    {
+        free(*argv);
+        free(argv);
     }
 }
 
@@ -398,9 +434,7 @@ x_strcasecmp(const char *s1, const char *s2)
     size_t len1 = (s1 != NULL) ? strlen(s1) : 0;
     size_t len2 = (s2 != NULL) ? strlen(s2) : 0;
 
-    return ((len1 != len2)
-	    ? 1
-	    : x_strncasecmp(s1, s2, (unsigned) len1));
+    return ((len1 != len2) ? 1 : x_strncasecmp(s1, s2, (unsigned)len1));
 }
 
 int
@@ -408,23 +442,32 @@ x_strncasecmp(const char *s1, const char *s2, unsigned n)
 {
     int result = 0;
 
-    if (s1 != NULL && s2 != NULL) {
-	while (n-- != 0) {
-	    char c1 = x_toupper(*s1);
-	    char c2 = x_toupper(*s2);
-	    if (c1 != c2) {
-		result = 1;
-		break;
-	    } else if (c1 == 0) {
-		break;
-	    }
-	    s1++;
-	    s2++;
-	}
-    } else if (s1 == NULL && s2 != NULL) {
-	result = 1;
-    } else if (s1 != NULL && s2 == NULL) {
-	result = 1;
+    if (s1 != NULL && s2 != NULL)
+    {
+        while (n-- != 0)
+        {
+            char c1 = x_toupper(*s1);
+            char c2 = x_toupper(*s2);
+            if (c1 != c2)
+            {
+                result = 1;
+                break;
+            }
+            else if (c1 == 0)
+            {
+                break;
+            }
+            s1++;
+            s2++;
+        }
+    }
+    else if (s1 == NULL && s2 != NULL)
+    {
+        result = 1;
+    }
+    else if (s1 != NULL && s2 == NULL)
+    {
+        result = 1;
     }
 
     return result;
@@ -438,12 +481,14 @@ x_strdup(const char *s)
 {
     char *result = 0;
 
-    if (s != 0) {
-	char *t = malloc(strlen(s) + 5);
-	if (t != 0) {
-	    strcpy(t, s);
-	}
-	result = t;
+    if (s != 0)
+    {
+        char *t = malloc(strlen(s) + 5);
+        if (t != 0)
+        {
+            strcpy(t, s);
+        }
+        result = t;
     }
     return result;
 }
@@ -455,13 +500,13 @@ x_strdup(const char *s)
 char *
 x_strindex(char *s1, const char *s2)
 {
-    char *s3;
+    char  *s3;
     size_t s2len = strlen(s2);
 
-    while ((s3 = (strchr) (s1, *s2)) != NULL) {
-	if (strncmp(s3, s2, s2len) == 0)
-	    return (s3);
-	s1 = ++s3;
+    while ((s3 = (strchr)(s1, *s2)) != NULL)
+    {
+        if (strncmp(s3, s2, s2len) == 0) return (s3);
+        s1 = ++s3;
     }
     return (NULL);
 }
@@ -474,26 +519,33 @@ x_strtrim(const char *source)
 {
     char *result;
 
-    if (IsEmpty(source)) {
-	result = x_strdup("");
-    } else {
-	char *t = x_strdup(source);
-	if (t != 0) {
-	    char *s = t;
-	    char *d = s;
-	    while (IsSpace(CharOf(*s)))
-		++s;
-	    while ((*d++ = *s++) != '\0') {
-		;
-	    }
-	    if (*t != '\0') {
-		s = t + strlen(t);
-		while (s != t && IsSpace(CharOf(s[-1]))) {
-		    *--s = '\0';
-		}
-	    }
-	}
-	result = t;
+    if (IsEmpty(source))
+    {
+        result = x_strdup("");
+    }
+    else
+    {
+        char *t = x_strdup(source);
+        if (t != 0)
+        {
+            char *s = t;
+            char *d = s;
+            while (IsSpace(CharOf(*s)))
+                ++s;
+            while ((*d++ = *s++) != '\0')
+            {
+                ;
+            }
+            if (*t != '\0')
+            {
+                s = t + strlen(t);
+                while (s != t && IsSpace(CharOf(s[-1])))
+                {
+                    *--s = '\0';
+                }
+            }
+        }
+        result = t;
     }
     return result;
 }
@@ -506,19 +558,25 @@ x_strrtrim(const char *source)
 {
     char *result;
 
-    if (IsEmpty(source)) {
-	result = x_strdup("");
-    } else {
-	char *t = x_strdup(source);
-	if (t != 0) {
-	    if (*t != '\0') {
-		char *s = t + strlen(t);
-		while (s != t && IsSpace(CharOf(s[-1]))) {
-		    *--s = '\0';
-		}
-	    }
-	}
-	result = t;
+    if (IsEmpty(source))
+    {
+        result = x_strdup("");
+    }
+    else
+    {
+        char *t = x_strdup(source);
+        if (t != 0)
+        {
+            if (*t != '\0')
+            {
+                char *s = t + strlen(t);
+                while (s != t && IsSpace(CharOf(s[-1])))
+                {
+                    *--s = '\0';
+                }
+            }
+        }
+        result = t;
     }
     return result;
 }
@@ -531,19 +589,23 @@ char
 x_toupper(int ch)
 {
     static char table[256];
-    char result = table[CharOf(ch)];
+    char        result = table[CharOf(ch)];
 
-    if (result == '\0') {
-	unsigned n;
-	static const char s[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    if (result == '\0')
+    {
+        unsigned          n;
+        static const char s[] =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-	for (n = 0; n < sizeof(table); ++n) {
-	    table[n] = (char) n;
-	}
-	for (n = 0; s[n] != '\0'; ++n) {
-	    table[CharOf(s[n])] = s[n % 26];
-	}
-	result = table[CharOf(ch)];
+        for (n = 0; n < sizeof(table); ++n)
+        {
+            table[n] = (char)n;
+        }
+        for (n = 0; s[n] != '\0'; ++n)
+        {
+            table[CharOf(s[n])] = s[n % 26];
+        }
+        result = table[CharOf(ch)];
     }
 
     return result;
@@ -557,32 +619,43 @@ x_wildstrcmp(const char *pattern, const char *actual)
 {
     int result = 0;
 
-    while (*pattern && *actual) {
-	char c1 = x_toupper(*pattern);
-	char c2 = x_toupper(*actual);
+    while (*pattern && *actual)
+    {
+        char c1 = x_toupper(*pattern);
+        char c2 = x_toupper(*actual);
 
-	if (c1 == '*') {
-	    Boolean found = False;
-	    pattern++;
-	    while (*actual != '\0') {
-		if (!x_wildstrcmp(pattern, actual++)) {
-		    found = True;
-		    break;
-		}
-	    }
-	    if (!found) {
-		result = 1;
-		break;
-	    }
-	} else if (c1 == '?') {
-	    ++pattern;
-	    ++actual;
-	} else if ((result = (c1 != c2)) == 0) {
-	    ++pattern;
-	    ++actual;
-	} else {
-	    break;
-	}
+        if (c1 == '*')
+        {
+            Boolean found = False;
+            pattern++;
+            while (*actual != '\0')
+            {
+                if (!x_wildstrcmp(pattern, actual++))
+                {
+                    found = True;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                result = 1;
+                break;
+            }
+        }
+        else if (c1 == '?')
+        {
+            ++pattern;
+            ++actual;
+        }
+        else if ((result = (c1 != c2)) == 0)
+        {
+            ++pattern;
+            ++actual;
+        }
+        else
+        {
+            break;
+        }
     }
     return result;
 }

@@ -39,94 +39,174 @@
 
 #if OPT_GRAPHICS
 
-#define CHANNEL_MAX 100
+#  define CHANNEL_MAX 100
 
-typedef struct {
+typedef struct
+{
     short r, g, b;
 } ColorRegister;
 
 typedef unsigned short RegisterNum;
 
-#define MAX_COLOR_REGISTERS 0x400	/* 1024U */
-#define COLOR_HOLE          0x404	/* bytable above MAX_COLOR_REGISTERS */
+#  define MAX_COLOR_REGISTERS 0x400 /* 1024U */
+#  define COLOR_HOLE          0x404 /* bytable above MAX_COLOR_REGISTERS */
 
-#define MAX_GRAPHICS 16U
+#  define MAX_GRAPHICS 16U
 
-#define ClrSpixel(graphic, cell) \
-	do { \
-	    (graphic)->pixels[cell] = COLOR_HOLE; \
-	} while (0)
+#  define ClrSpixel(graphic, cell)              \
+      do                                        \
+      {                                         \
+          (graphic)->pixels[cell] = COLOR_HOLE; \
+      }                                         \
+      while (0)
 
-#define SetSpixel(graphic, cell, value) \
-	do { \
-	    (graphic)->pixels[cell] = value; \
-	} while (0)
+#  define SetSpixel(graphic, cell, value)  \
+      do                                   \
+      {                                    \
+          (graphic)->pixels[cell] = value; \
+      }                                    \
+      while (0)
 
-typedef struct {
-    RegisterNum *pixels;
+typedef struct
+{
+    RegisterNum   *pixels;
     ColorRegister *private_color_registers;
     ColorRegister *color_registers;
-    char color_registers_used[MAX_COLOR_REGISTERS];
-    XtermWidget xw;
-    int max_width;              /* largest image which can be stored */
-    int max_height;             /* largest image which can be stored */
-    unsigned valid_registers;   /* for wrap-around behavior */
-    int actual_width;           /* size of image before scaling */
-    int actual_height;          /* size of image before scaling */
-    int private_colors;         /* if not using the shared color registers */
-    int charrow;                /* upper left starting point in characters */
-    int charcol;                /* upper left starting point in characters */
-    int pixw;                   /* width of graphic pixels in screen pixels */
-    int pixh;                   /* height of graphic pixels in screen pixels */
-    int bufferid;               /* which screen buffer the graphic is associated with */
-    unsigned type;              /* type of graphic 0==sixel, 1...NUM_REGIS_PAGES==ReGIS page */
-    unsigned id;                /* sequential id used for preserving layering */
-    Boolean valid;              /* if the graphic has been initialized */
-    Boolean dirty;              /* if the graphic needs to be redrawn */
-    Boolean hidden;             /* if the graphic should not be displayed */
+    char           color_registers_used[MAX_COLOR_REGISTERS];
+    XtermWidget    xw;
+    int            max_width; /* largest image which can be stored */
+    int            max_height; /* largest image which can be stored */
+    unsigned       valid_registers; /* for wrap-around behavior */
+    int            actual_width; /* size of image before scaling */
+    int            actual_height; /* size of image before scaling */
+    int            private_colors; /* if not using the shared color registers */
+    int            charrow; /* upper left starting point in characters */
+    int            charcol; /* upper left starting point in characters */
+    int            pixw; /* width of graphic pixels in screen pixels */
+    int            pixh; /* height of graphic pixels in screen pixels */
+    int bufferid; /* which screen buffer the graphic is associated with */
+    unsigned
+        type; /* type of graphic 0==sixel, 1...NUM_REGIS_PAGES==ReGIS page */
+    unsigned id; /* sequential id used for preserving layering */
+    Boolean  valid; /* if the graphic has been initialized */
+    Boolean  dirty; /* if the graphic needs to be redrawn */
+    Boolean  hidden; /* if the graphic should not be displayed */
 } Graphic;
 
-extern Graphic *get_new_graphic(XtermWidget /* xw */, int /* charrow */, int /* charcol */, unsigned /* type */);
-extern Graphic *get_new_or_matching_graphic(XtermWidget /* xw */, int /* charrow */, int /* charcol */, int /* actual_width */, int /* actual_height */, unsigned /* type */);
-extern RegisterNum read_pixel(Graphic */* graphic */, int /* x */, int /* y */);
-extern void draw_solid_pixel(Graphic */* graphic */, int /* x */, int /* y */, unsigned /* color */);
-extern void draw_solid_rectangle(Graphic */* graphic */, int /* x1 */, int /* y1 */, int /* x2 */, int /* y2 */, unsigned /* color */);
-extern void copy_overlapping_area(Graphic */* graphic */, int /* src_x */, int /* src_y */, int /* dst_x */, int /* dst_y */, unsigned /* w */, unsigned /* h */, unsigned /* default_color */);
-extern void hls2rgb(int /* h */, int /* l */, int /* s */, short */* r */, short */* g */, short */* b */);
-extern void dump_graphic(Graphic const */* graphic */);
-extern unsigned get_color_register_count(TScreen const */* screen */);
-extern void update_color_register(Graphic */* graphic */, unsigned /* color */, int /* r */, int /* g */, int /* b */);
-extern RegisterNum find_color_register(ColorRegister const */* color_registers */, int /* r */, int /* g */, int /* b */);
-extern void chararea_clear_displayed_graphics(TScreen const */* screen */, int /* leftcol */, int /* toprow */, int /* ncols */, int /* nrows */);
-extern void pixelarea_clear_displayed_graphics(TScreen const */* screen */, int /* winx */, int /* winy */, int /* w */, int /* h */);
-extern void refresh_displayed_graphics(XtermWidget /* xw */, int /* leftcol */, int /* toprow */, int /* ncols */, int /* nrows */);
+extern Graphic *get_new_graphic(XtermWidget /* xw */,
+                                int /* charrow */,
+                                int /* charcol */,
+                                unsigned /* type */);
+extern Graphic *get_new_or_matching_graphic(XtermWidget /* xw */,
+                                            int /* charrow */,
+                                            int /* charcol */,
+                                            int /* actual_width */,
+                                            int /* actual_height */,
+                                            unsigned /* type */);
+extern RegisterNum
+                read_pixel(Graphic                 */* graphic */, int /* x */, int /* y */);
+extern void     draw_solid_pixel(Graphic     */* graphic */,
+                                 int /* x */,
+                                 int /* y */,
+                                 unsigned /* color */);
+extern void     draw_solid_rectangle(Graphic     */* graphic */,
+                                     int /* x1 */,
+                                     int /* y1 */,
+                                     int /* x2 */,
+                                     int /* y2 */,
+                                     unsigned /* color */);
+extern void     copy_overlapping_area(Graphic     */* graphic */,
+                                      int /* src_x */,
+                                      int /* src_y */,
+                                      int /* dst_x */,
+                                      int /* dst_y */,
+                                      unsigned /* w */,
+                                      unsigned /* h */,
+                                      unsigned /* default_color */);
+extern void     hls2rgb(int /* h */,
+                        int /* l */,
+                        int /* s */,
+                        short     */* r */,
+                        short     */* g */,
+                        short     */* b */);
+extern void     dump_graphic(const Graphic     */* graphic */);
+extern unsigned get_color_register_count(const TScreen * /* screen */);
+extern void     update_color_register(Graphic     */* graphic */,
+                                      unsigned /* color */,
+                                      int /* r */,
+                                      int /* g */,
+                                      int /* b */);
+extern RegisterNum
+            find_color_register(const ColorRegister             */* color_registers */,
+                                int /* r */,
+                                int /* g */,
+                                int /* b */);
+extern void chararea_clear_displayed_graphics(const TScreen * /* screen */,
+                                              int /* leftcol */,
+                                              int /* toprow */,
+                                              int /* ncols */,
+                                              int /* nrows */);
+extern void pixelarea_clear_displayed_graphics(const TScreen * /* screen */,
+                                               int /* winx */,
+                                               int /* winy */,
+                                               int /* w */,
+                                               int /* h */);
+extern void refresh_displayed_graphics(XtermWidget /* xw */,
+                                       int /* leftcol */,
+                                       int /* toprow */,
+                                       int /* ncols */,
+                                       int /* nrows */);
 extern void refresh_modified_displayed_graphics(XtermWidget /* xw */);
-extern void reset_displayed_graphics(TScreen const */* screen */);
+extern void reset_displayed_graphics(const TScreen * /* screen */);
 extern void scroll_displayed_graphics(XtermWidget /* xw */, int /* rows */);
 
-#ifdef NO_LEAKS
-extern void noleaks_graphics(Display */* dpy */);
-#endif
+#  ifdef NO_LEAKS
+extern void noleaks_graphics(Display * /* dpy */);
+#  endif
 
 #else
 
-#define get_new_graphic(xw, charrow, charcol, type) /* nothing */
-#define get_new_or_matching_graphic(xw, charrow, charcol, actual_width, actual_height, type) /* nothing */
-#define read_pixel(graphic, x, y) /* nothing */
-#define draw_solid_pixel(graphic, x, y, color) /* nothing */
-#define draw_solid_rectangle(graphic, x1, y1, x2, y2, color) /* nothing */
-#define copy_overlapping_area(graphic, src_x, src_y, dst_x, dst_y, w, h, default_color) /* nothing */
-#define hls2rgb(h, l, s, r, g, b) /* nothing */
-#define dump_graphic(graphic) /* nothing */
-#define get_color_register_count(screen) /* nothing */
-#define update_color_register(graphic, color, r, g, b) /* nothing */
-#define find_color_register(color_registers, r, g, b) /* nothing */
-#define chararea_clear_displayed_graphics(screen, leftcol, toprow, ncols, nrows) /* nothing */
-#define pixelarea_clear_displayed_graphics(screen, winx, winy, w, h) /* nothing */
-#define refresh_displayed_graphics(xw, leftcol, toprow, ncols, nrows) /* nothing */
-#define refresh_modified_displayed_graphics(xw) /* nothing */
-#define reset_displayed_graphics(screen) /* nothing */
-#define scroll_displayed_graphics(xw, rows) /* nothing */
+#  define get_new_graphic(xw, charrow, charcol, type) /* nothing */
+#  define get_new_or_matching_graphic(xw,            \
+                                      charrow,       \
+                                      charcol,       \
+                                      actual_width,  \
+                                      actual_height, \
+                                      type)                    /* nothing */
+#  define read_pixel(graphic, x, y)                            /* nothing */
+#  define draw_solid_pixel(graphic, x, y, color)               /* nothing */
+#  define draw_solid_rectangle(graphic, x1, y1, x2, y2, color) /* nothing */
+#  define copy_overlapping_area(graphic, \
+                                src_x,   \
+                                src_y,   \
+                                dst_x,   \
+                                dst_y,   \
+                                w,       \
+                                h,       \
+                                default_color)           /* nothing */
+#  define hls2rgb(h, l, s, r, g, b)                      /* nothing */
+#  define dump_graphic(graphic)                          /* nothing */
+#  define get_color_register_count(screen)               /* nothing */
+#  define update_color_register(graphic, color, r, g, b) /* nothing */
+#  define find_color_register(color_registers, r, g, b)  /* nothing */
+#  define chararea_clear_displayed_graphics(screen,  \
+                                            leftcol, \
+                                            toprow,  \
+                                            ncols,   \
+                                            nrows) /* nothing */
+#  define pixelarea_clear_displayed_graphics(screen, \
+                                             winx,   \
+                                             winy,   \
+                                             w,      \
+                                             h) /* nothing */
+#  define refresh_displayed_graphics(xw,      \
+                                     leftcol, \
+                                     toprow,  \
+                                     ncols,   \
+                                     nrows)       /* nothing */
+#  define refresh_modified_displayed_graphics(xw) /* nothing */
+#  define reset_displayed_graphics(screen)        /* nothing */
+#  define scroll_displayed_graphics(xw, rows)     /* nothing */
 
 #endif
 

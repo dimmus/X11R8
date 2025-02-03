@@ -34,11 +34,11 @@
 #define included_Tekparse_h 1
 
 #ifndef Const
-# if defined(__STDC__) && !defined(__cplusplus)
-#  define Const const
-# else
-#  define Const /**/
-# endif
+#  if defined(__STDC__) && !defined(__cplusplus)
+#    define Const const
+#  else
+#    define Const /**/
+#  endif
 #endif
 
 extern Const int Talptable[];

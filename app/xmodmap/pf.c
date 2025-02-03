@@ -27,7 +27,7 @@ from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#  include "config.h"
 #endif
 
 #include <X11/Xos.h>
@@ -39,91 +39,102 @@ from The Open Group.
 
 #define NOTINFILEFILENAME "commandline"
 const char *inputFilename = NOTINFILEFILENAME;
-int lineno = 0;
+int         lineno        = 0;
 
-void process_file (const char *filename)	/* NULL means use stdin */
+void
+process_file(const char *filename) /* NULL means use stdin */
 {
     FILE *fp;
-    char buffer[BUFSIZ];
+    char  buffer[BUFSIZ];
 
     /* open the file, eventually we'll want to pipe through cpp */
 
-    if (!filename) {
-	fp = stdin;
-	inputFilename = "stdin"; 
-    } else {
-	fp = fopen (filename, "r");
-	if (!fp) {
-	    fprintf (stderr, "%s:  unable to open file '%s' for reading\n",
-		     ProgramName, filename);
-	    parse_errors++;
-	    return;
-	}
-	inputFilename = filename;
+    if (!filename)
+    {
+        fp            = stdin;
+        inputFilename = "stdin";
     }
-
+    else
+    {
+        fp = fopen(filename, "r");
+        if (!fp)
+        {
+            fprintf(stderr,
+                    "%s:  unable to open file '%s' for reading\n",
+                    ProgramName,
+                    filename);
+            parse_errors++;
+            return;
+        }
+        inputFilename = filename;
+    }
 
     /* read the input and filter */
 
-    if (verbose) {
-	printf ("! %s:\n", inputFilename);
+    if (verbose)
+    {
+        printf("! %s:\n", inputFilename);
     }
 
-    for (lineno = 0; ; lineno++) {
-	buffer[0] = '\0';
-	if (fgets (buffer, BUFSIZ, fp) == NULL)
-	  break;
+    for (lineno = 0;; lineno++)
+    {
+        buffer[0] = '\0';
+        if (fgets(buffer, BUFSIZ, fp) == NULL) break;
 
-	process_line (buffer);
+        process_line(buffer);
     }
 
     inputFilename = NOTINFILEFILENAME;
-    lineno = 0;
-    (void) fclose (fp);
+    lineno        = 0;
+    (void)fclose(fp);
 }
 
-
-void process_line (const char *line)
+void
+process_line(const char *line)
 {
-    int len;
-    int i;
+    int   len;
+    int   i;
     char *cp, *buffer;
 
     /* copy line to buffer since it may point to unwritable data */
     len = strlen(line);
     cp = buffer = strdup(line);
-    if (buffer == NULL) {
-	fprintf(stderr, "%s: Could not allocate %d bytes\n", ProgramName, len);
-	Exit(-1);
+    if (buffer == NULL)
+    {
+        fprintf(stderr, "%s: Could not allocate %d bytes\n", ProgramName, len);
+        Exit(-1);
     }
-    
-    for (i = 0; i < len; i++) {		/* look for blank lines */
-	register char c = buffer[i];
-	if (!(isspace(c) || c == '\n')) break;
+
+    for (i = 0; i < len; i++)
+    {  /* look for blank lines */
+        register char c = buffer[i];
+        if (!(isspace(c) || c == '\n')) break;
     }
     if (i == len) goto done;
 
     cp = &buffer[i];
 
-    if (*cp == '!') goto done;		/* look for comments */
-    len -= (cp - buffer);		/* adjust len by how much we skipped */
+    if (*cp == '!') goto done;  /* look for comments */
+    len -= (cp - buffer);  /* adjust len by how much we skipped */
 
-					/* pipe through cpp */
+                    /* pipe through cpp */
 
-					/* strip trailing space */
-    for (i = len-1; i >= 0; i--) {
-	register char c = cp[i];
-	if (!(isspace(c) || c == '\n')) break;
+                    /* strip trailing space */
+    for (i = len - 1; i >= 0; i--)
+    {
+        register char c = cp[i];
+        if (!(isspace(c) || c == '\n')) break;
     }
-    if (i >= 0) cp[len = (i+1)] = '\0';  /* nul terminate */
+    if (i >= 0) cp[len = (i + 1)] = '\0';  /* nul terminate */
 
-    if (verbose) {
-	printf ("! %d:  %s\n", lineno+1, cp);
+    if (verbose)
+    {
+        printf("! %d:  %s\n", lineno + 1, cp);
     }
 
     /* handle input */
-    handle_line (cp, len);
+    handle_line(cp, len);
 
-  done:
+done:
     free(buffer);
 }

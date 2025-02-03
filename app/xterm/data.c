@@ -53,33 +53,32 @@
 
 #include <data.h>
 
-Widget toplevel;		/* top-most widget in xterm */
+Widget toplevel;  /* top-most widget in xterm */
 
 #if OPT_TEK4014
-Char *Tpushb;
-Char *Tpushback;
-TekLink *tekRefreshList;
+Char     *Tpushb;
+Char     *Tpushback;
+TekLink  *tekRefreshList;
 TekWidget tekWidget;
-Widget tekshellwidget;
-int T_lastx = -1;
-int T_lasty = -1;
-int Ttoggled = 0;
-jmp_buf Tekend;
+Widget    tekshellwidget;
+int       T_lastx  = -1;
+int       T_lasty  = -1;
+int       Ttoggled = 0;
+jmp_buf   Tekend;
 #endif
 
 char *ProgramName;
 char *ProgramPath;
 
-Arg ourTopLevelShellArgs[] =
-{
-    {XtNallowShellResize, (XtArgVal) True},
-    {XtNinput, (XtArgVal) True},
+Arg ourTopLevelShellArgs[] = {
+    { XtNallowShellResize, (XtArgVal)True },
+    { XtNinput,            (XtArgVal)True },
 };
 Cardinal number_ourTopLevelShellArgs = 2;
 
-Atom wm_delete_window;		/* for ICCCM delete window */
+Atom wm_delete_window;  /* for ICCCM delete window */
 
-Boolean guard_keyboard_type = False;
+Boolean        guard_keyboard_type = False;
 XTERM_RESOURCE resource;
 
 PtyData *VTbuffer;
@@ -87,23 +86,23 @@ PtyData *VTbuffer;
 jmp_buf VTend;
 
 #ifdef DEBUG
-int debug = 0;			/* true causes error messages to be displayed */
+int debug = 0;   /* true causes error messages to be displayed */
 #endif /* DEBUG */
 
 XtAppContext app_con;
-XtermWidget term;		/* master data structure for client */
+XtermWidget  term;  /* master data structure for client */
 
-int hold_screen;
+int          hold_screen;
 SIG_ATOMIC_T need_cleanup = False;
-SIG_ATOMIC_T caught_intr = False;
+SIG_ATOMIC_T caught_intr  = False;
 
-int am_slave = -1;		/* set to file-descriptor if we're a slave process */
-int max_plus1;
+int       am_slave = -1; /* set to file-descriptor if we're a slave process */
+int       max_plus1;
 PtySelect Select_mask;
 PtySelect X_mask;
 PtySelect pty_mask;
-char *ptydev;
-char *ttydev;
+char     *ptydev;
+char     *ttydev;
 
 #if HANDLE_STRUCT_NOTIFY
 int mapstate = -1;
@@ -114,7 +113,7 @@ char *xterm_cursor_theme;
 #endif
 
 #if OPT_SESSION_MGT
-int ice_fd = -1;
+int    ice_fd = -1;
 char **restart_command;
 #endif
 
@@ -125,8 +124,7 @@ int ignore_unused;
 #endif
 
 #if OPT_DIRECT_COLOR
-CellColor initCColor =
-{0, 0};
+CellColor initCColor = { 0, 0 };
 #else
 CellColor initCColor = 0;
 #endif

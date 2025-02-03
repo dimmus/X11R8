@@ -40,52 +40,53 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
 /* DECSET arguments for turning on mouse reporting modes */
-#define SET_X10_MOUSE               9
-#define SET_VT200_MOUSE             1000
-#define SET_VT200_HIGHLIGHT_MOUSE   1001
-#define SET_BTN_EVENT_MOUSE         1002
-#define SET_ANY_EVENT_MOUSE         1003
+#define SET_X10_MOUSE             9
+#define SET_VT200_MOUSE           1000
+#define SET_VT200_HIGHLIGHT_MOUSE 1001
+#define SET_BTN_EVENT_MOUSE       1002
+#define SET_ANY_EVENT_MOUSE       1003
 
 #if OPT_FOCUS_EVENT
-#define SET_FOCUS_EVENT_MOUSE       1004 /* can be combined with above */
+#  define SET_FOCUS_EVENT_MOUSE 1004 /* can be combined with above */
 #endif
 
-#define SET_ALTERNATE_SCROLL        1007 /* wheel mouse may send cursor-keys */
+#define SET_ALTERNATE_SCROLL 1007 /* wheel mouse may send cursor-keys */
 
 /* Extend mouse tracking for terminals wider(taller) than 223 cols(rows) */
-#define SET_EXT_MODE_MOUSE          1005 /* compatible with above */
-#define SET_SGR_EXT_MODE_MOUSE      1006
-#define SET_URXVT_EXT_MODE_MOUSE    1015
+#define SET_EXT_MODE_MOUSE       1005 /* compatible with above */
+#define SET_SGR_EXT_MODE_MOUSE   1006
+#define SET_URXVT_EXT_MODE_MOUSE 1015
 
-#define SET_PIXEL_POSITION_MOUSE    1016 /* like 1006, but pixels not chars */
+#define SET_PIXEL_POSITION_MOUSE 1016 /* like 1006, but pixels not chars */
 
-#define SET_BUTTON1_MOVE_POINT      2001 /* click1 emit Esc seq to move point*/
-#define SET_BUTTON2_MOVE_POINT      2002 /* press2 emit Esc seq to move point*/
-#define SET_DBUTTON3_DELETE         2003 /* Double click-3 deletes */
-#define SET_PASTE_IN_BRACKET        2004 /* Surround paste by escapes */
-#define SET_PASTE_QUOTE             2005 /* Quote each char during paste */
-#define SET_PASTE_LITERAL_NL        2006 /* Paste "\n" as C-j */
+#define SET_BUTTON1_MOVE_POINT 2001 /* click1 emit Esc seq to move point*/
+#define SET_BUTTON2_MOVE_POINT 2002 /* press2 emit Esc seq to move point*/
+#define SET_DBUTTON3_DELETE    2003 /* Double click-3 deletes */
+#define SET_PASTE_IN_BRACKET   2004 /* Surround paste by escapes */
+#define SET_PASTE_QUOTE        2005 /* Quote each char during paste */
+#define SET_PASTE_LITERAL_NL   2006 /* Paste "\n" as C-j */
 
 #if OPT_DEC_LOCATOR
 
 /* Bit fields for screen->locator_events */
-#define	LOC_BTNS_DN		0x1
-#define	LOC_BTNS_UP		0x2
+#  define LOC_BTNS_DN 0x1
+#  define LOC_BTNS_UP 0x2
 
 /* Special values for screen->loc_filter_* */
-#define	LOC_FILTER_POS		-1
+#  define LOC_FILTER_POS -1
 
 #endif /* OPT_DEC_LOCATOR */
 
 /* Values for screen->send_mouse_pos */
-typedef enum {
-    MOUSE_OFF
-    ,X10_MOUSE
-    ,VT200_MOUSE
-    ,VT200_HIGHLIGHT_MOUSE
-    ,BTN_EVENT_MOUSE
-    ,ANY_EVENT_MOUSE
-    ,DEC_LOCATOR
+typedef enum
+{
+    MOUSE_OFF,
+    X10_MOUSE,
+    VT200_MOUSE,
+    VT200_HIGHLIGHT_MOUSE,
+    BTN_EVENT_MOUSE,
+    ANY_EVENT_MOUSE,
+    DEC_LOCATOR
 } XtermMouseModes;
 
 /* *INDENT-ON* */

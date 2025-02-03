@@ -38,9 +38,11 @@
 #include <ptyx.h>
 
 #if OPT_REGIS_GRAPHICS
-extern void parse_regis(XtermWidget /* xw */, ANSI */* params */, char const */* string */);
+extern void parse_regis(XtermWidget /* xw */,
+                        ANSI * /* params */,
+                        const char * /* string */);
 #else
-#define parse_regis(xw, params, string) /* nothing */
+#  define parse_regis(xw, params, string) /* nothing */
 #endif
 
 /* *INDENT-ON* */

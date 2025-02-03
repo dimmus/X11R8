@@ -58,11 +58,11 @@
 #include <data.h>
 
 #define TAB_INDEX(n) ((n) >> TAB_BITS_SHIFT)
-#define TAB_MASK(n)  (1U << ((n) & (TAB_BITS_WIDTH-1)))
+#define TAB_MASK(n)  (1U << ((n) & (TAB_BITS_WIDTH - 1)))
 
-#define SET_TAB(tabs,n) UIntSet(tabs[TAB_INDEX(n)], TAB_MASK(n))
-#define CLR_TAB(tabs,n) UIntClr(tabs[TAB_INDEX(n)], TAB_MASK(n))
-#define TST_TAB(tabs,n) (tabs[TAB_INDEX(n)] & (unsigned) TAB_MASK(n))
+#define SET_TAB(tabs, n) UIntSet(tabs[TAB_INDEX(n)], TAB_MASK(n))
+#define CLR_TAB(tabs, n) UIntClr(tabs[TAB_INDEX(n)], TAB_MASK(n))
+#define TST_TAB(tabs, n) (tabs[TAB_INDEX(n)] & (unsigned)TAB_MASK(n))
 
 /*
  * places tabstops at only every 8 columns
@@ -75,7 +75,7 @@ TabReset(Tabs tabs)
     TabZonk(tabs);
 
     for (i = 0; i < MAX_TABS; i += 8)
-	TabSet(tabs, i);
+        TabSet(tabs, i);
 }
 
 /*
@@ -84,8 +84,9 @@ TabReset(Tabs tabs)
 void
 TabSet(Tabs tabs, int col)
 {
-    if (OkTAB(col)) {
-	SET_TAB(tabs, col);
+    if (OkTAB(col))
+    {
+        SET_TAB(tabs, col);
     }
 }
 
@@ -95,8 +96,9 @@ TabSet(Tabs tabs, int col)
 void
 TabClear(Tabs tabs, int col)
 {
-    if (OkTAB(col)) {
-	CLR_TAB(tabs, col);
+    if (OkTAB(col))
+    {
+        CLR_TAB(tabs, col);
     }
 }
 
@@ -110,15 +112,15 @@ TabNext(XtermWidget xw, Tabs tabs, int col)
 {
     TScreen *screen = TScreenOf(xw);
 
-    if (screen->curses && screen->do_wrap && (xw->flags & WRAPAROUND)) {
-	xtermIndex(xw, 1);
-	set_cur_col(screen, 0);
-	col = 0;
-	ResetWrap(screen);
+    if (screen->curses && screen->do_wrap && (xw->flags & WRAPAROUND))
+    {
+        xtermIndex(xw, 1);
+        set_cur_col(screen, 0);
+        col = 0;
+        ResetWrap(screen);
     }
     for (++col; col < MAX_TABS; ++col)
-	if (TST_TAB(tabs, col))
-	    return (col);
+        if (TST_TAB(tabs, col)) return (col);
 
     return (MAX_TABS - 1);
 }
@@ -132,8 +134,7 @@ static int
 TabPrev(Tabs tabs, int col)
 {
     for (--col; col >= 0; --col)
-	if ((col < MAX_TABS) && TST_TAB(tabs, col))
-	    return (col);
+        if ((col < MAX_TABS) && TST_TAB(tabs, col)) return (col);
 
     return (0);
 }
@@ -144,15 +145,13 @@ TabPrev(Tabs tabs, int col)
 Bool
 TabToNextStop(XtermWidget xw)
 {
-    TScreen *screen = TScreenOf(xw);
-    int saved_column = screen->cur_col;
-    int next = TabNext(xw, xw->tabs, screen->cur_col);
-    int max = LineMaxCol(screen, getLineData(screen, screen->cur_row));
+    TScreen *screen       = TScreenOf(xw);
+    int      saved_column = screen->cur_col;
+    int      next         = TabNext(xw, xw->tabs, screen->cur_col);
+    int      max = LineMaxCol(screen, getLineData(screen, screen->cur_row));
 
-    if (IsLeftRightMode(xw))
-	max = TScreenOf(xw)->rgt_marg;
-    if (next > max)
-	next = max;
+    if (IsLeftRightMode(xw)) max = TScreenOf(xw)->rgt_marg;
+    if (next > max) next = max;
     set_cur_col(screen, next);
 
     return (screen->cur_col > saved_column);
@@ -164,14 +163,14 @@ TabToNextStop(XtermWidget xw)
 Bool
 TabToPrevStop(XtermWidget xw)
 {
-    TScreen *screen = TScreenOf(xw);
-    int saved_column = screen->cur_col;
-    int next_column = TabPrev(xw->tabs, screen->cur_col);
+    TScreen *screen       = TScreenOf(xw);
+    int      saved_column = screen->cur_col;
+    int      next_column  = TabPrev(xw->tabs, screen->cur_col);
 
-    if (xw->flags & ORIGIN) {
-	int left = ScrnLeftMargin(xw);
-	if (next_column < left)
-	    next_column = left;
+    if (xw->flags & ORIGIN)
+    {
+        int left = ScrnLeftMargin(xw);
+        if (next_column < left) next_column = left;
     }
 
     set_cur_col(screen, next_column);

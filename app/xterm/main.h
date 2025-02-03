@@ -56,199 +56,199 @@
 #include <xterm.h>
 
 #ifndef DEFCLASS
-#define DEFCLASS		"XTerm"
+#  define DEFCLASS "XTerm"
 #endif
 
 #ifndef DEFFONT
-#define DEFFONT			"fixed"
+#  define DEFFONT "fixed"
 #endif
 
 #ifndef DEFWIDEFONT
-#define DEFWIDEFONT		NULL	/* grab one which is 2x as wide */
+#  define DEFWIDEFONT NULL /* grab one which is 2x as wide */
 #endif
 
 #ifndef DEFWIDEBOLDFONT
-#define DEFWIDEBOLDFONT		NULL
+#  define DEFWIDEBOLDFONT NULL
 #endif
 
 #ifndef DEFXIMFONT
-#define DEFXIMFONT		"fixed"
+#  define DEFXIMFONT "fixed"
 #endif
 
 #ifndef DEFBOLDFONT
-#define DEFBOLDFONT		NULL	/* no bold font uses overstriking */
+#  define DEFBOLDFONT NULL /* no bold font uses overstriking */
 #endif
 
 #ifndef DEFBORDER
-#define DEFBORDER		2
+#  define DEFBORDER 2
 #endif
 
 #ifndef DEFFACENAME
-#define DEFFACENAME		NULL
+#  define DEFFACENAME NULL
 #endif
 
 #ifndef DEFFACENAME_AUTO
-#define DEFFACENAME_AUTO	"mono"
+#  define DEFFACENAME_AUTO "mono"
 #endif
 
 #ifndef DEFFACESIZE
-#define DEFFACESIZE		"8.0"
+#  define DEFFACESIZE "8.0"
 #endif
 
 #ifndef DEF_ALLOW_COLOR
-#define DEF_ALLOW_COLOR		True
+#  define DEF_ALLOW_COLOR True
 #endif
 
 #ifndef DEF_ALLOW_FONT
-#define DEF_ALLOW_FONT		True
+#  define DEF_ALLOW_FONT True
 #endif
 
 #ifndef DEF_ALLOW_MOUSE
-#define DEF_ALLOW_MOUSE		True
+#  define DEF_ALLOW_MOUSE True
 #endif
 
 #ifndef DEF_ALLOW_TCAP
-#define DEF_ALLOW_TCAP		True
+#  define DEF_ALLOW_TCAP True
 #endif
 
 #ifndef DEF_ALLOW_TITLE
-#define DEF_ALLOW_TITLE		True
+#  define DEF_ALLOW_TITLE True
 #endif
 
 #ifndef DEF_ALLOW_WINDOW
-#define DEF_ALLOW_WINDOW	False
+#  define DEF_ALLOW_WINDOW False
 #endif
 
 #ifndef DEF_DISALLOWED_COLOR
-#define DEF_DISALLOWED_COLOR	"SetColor,GetColor,GetAnsiColor"
+#  define DEF_DISALLOWED_COLOR "SetColor,GetColor,GetAnsiColor"
 #endif
 
 #ifndef DEF_DISALLOWED_FONT
-#define DEF_DISALLOWED_FONT	"SetFont,GetFont"
+#  define DEF_DISALLOWED_FONT "SetFont,GetFont"
 #endif
 
 #ifndef DEF_DISALLOWED_MOUSE
-#define DEF_DISALLOWED_MOUSE	"*"
+#  define DEF_DISALLOWED_MOUSE "*"
 #endif
 
 #ifndef DEF_DISALLOWED_PASTE_CONTROLS
-#define DEF_DISALLOWED_PASTE_CONTROLS	"BS,DEL,ENQ,EOT,ESC,NUL"
+#  define DEF_DISALLOWED_PASTE_CONTROLS "BS,DEL,ENQ,EOT,ESC,NUL"
 #endif
 
 #ifndef DEF_DISALLOWED_TCAP
-#define DEF_DISALLOWED_TCAP	"SetTcap,GetTcap"
+#  define DEF_DISALLOWED_TCAP "SetTcap,GetTcap"
 #endif
 
 #ifndef DEF_DISALLOWED_WINDOW
-#define DEF_DISALLOWED_WINDOW	"20,21,SetXprop,SetSelection"
+#  define DEF_DISALLOWED_WINDOW "20,21,SetXprop,SetSelection"
 #endif
 
 #if OPT_BLINK_TEXT
-#define DEFBLINKASBOLD		False
+#  define DEFBLINKASBOLD False
 #else
-#define DEFBLINKASBOLD		True
+#  define DEFBLINKASBOLD True
 #endif
 
 #if OPT_DOUBLE_BUFFER
-#define DEF_DOUBLE_BUFFER	True
+#  define DEF_DOUBLE_BUFFER True
 #else
-#define DEF_DOUBLE_BUFFER	False
+#  define DEF_DOUBLE_BUFFER False
 #endif
 
 #ifndef DEFDELETE_DEL
-#define DEFDELETE_DEL		Maybe
+#  define DEFDELETE_DEL Maybe
 #endif
 
 #ifndef DEF_BACKARO_ERASE
-#define DEF_BACKARO_ERASE	False
+#  define DEF_BACKARO_ERASE False
 #endif
 
 #ifndef DEF_BACKARO_BS
-#define DEF_BACKARO_BS		True
+#  define DEF_BACKARO_BS True
 #endif
 
 #ifndef DEF_CD_XTRA_SCROLL
-#define DEF_CD_XTRA_SCROLL	"False"
+#  define DEF_CD_XTRA_SCROLL "False"
 #endif
 
 #ifndef DEF_ALT_SENDS_ESC
-#define DEF_ALT_SENDS_ESC	False
+#  define DEF_ALT_SENDS_ESC False
 #endif
 
 #ifndef DEF_META_SENDS_ESC
-#define DEF_META_SENDS_ESC	False
+#  define DEF_META_SENDS_ESC False
 #endif
 
 #ifndef DEF_8BIT_META
-#define DEF_8BIT_META		"true"	/* eightBitMeta */
+#  define DEF_8BIT_META "true" /* eightBitMeta */
 #endif
 
 #ifndef DEF_COLOR4
-#define DEF_COLOR4		"blue2"		/* see XTerm-col.ad */
+#  define DEF_COLOR4 "blue2"  /* see XTerm-col.ad */
 #endif
 
 #ifndef DEF_COLOR12
-#define DEF_COLOR12		"rgb:5c/5c/ff"	/* see XTerm-col.ad */
+#  define DEF_COLOR12 "rgb:5c/5c/ff" /* see XTerm-col.ad */
 #endif
 
 #ifndef DEF_INITIAL_ERASE
-#define DEF_INITIAL_ERASE	False
+#  define DEF_INITIAL_ERASE False
 #endif
 
 #ifndef DEF_MENU_LOCALE
-#define DEF_MENU_LOCALE		"C"
+#  define DEF_MENU_LOCALE "C"
 #endif
 
 #ifndef DEF_POINTER_MODE
-#define DEF_POINTER_MODE	pNoMouse
+#  define DEF_POINTER_MODE pNoMouse
 #endif
 
 #ifndef DEF_PTY_STTY_SIZE
-#if defined(linux) || defined(__APPLE__)
-#define DEF_PTY_STTY_SIZE	False
-#else
-#define DEF_PTY_STTY_SIZE	True
-#endif
+#  if defined(linux) || defined(__APPLE__)
+#    define DEF_PTY_STTY_SIZE False
+#  else
+#    define DEF_PTY_STTY_SIZE True
+#  endif
 #endif
 
 #ifndef DEF_BUFFER_RATE
-#define DEF_BUFFER_RATE		40	/* frames/second, limited to 100 */
+#  define DEF_BUFFER_RATE 40 /* frames/second, limited to 100 */
 #endif
 
 #ifndef DEF_LIMIT_RESPONSE
-#define DEF_LIMIT_RESPONSE	1024
+#  define DEF_LIMIT_RESPONSE 1024
 #endif
 
 #ifndef DEF_SAVE_LINES
-#define DEF_SAVE_LINES		1024
+#  define DEF_SAVE_LINES 1024
 #endif
 
 #ifndef DEF_SCROLL_LINES
-#define DEF_SCROLL_LINES	1
+#  define DEF_SCROLL_LINES 1
 #endif
 
 #ifndef DEF_SL_FORMAT
-#define DEF_SL_FORMAT           "%{version%}  %{position%}  %{unixtime%}"
+#  define DEF_SL_FORMAT "%{version%}  %{position%}  %{unixtime%}"
 #endif
 
 #ifndef DEF_TITLE_MODES
-#define DEF_TITLE_MODES		0
+#  define DEF_TITLE_MODES 0
 #endif
 
 #ifndef DEF_TI_XTRA_SCROLL
-#define DEF_TI_XTRA_SCROLL	"False"
+#  define DEF_TI_XTRA_SCROLL "False"
 #endif
 
 #ifndef DEF_TRACK_USAGE
-#define DEF_TRACK_USAGE		False
+#  define DEF_TRACK_USAGE False
 #endif
 
 #ifndef DEF_XFT_CACHE
-#define DEF_XFT_CACHE		50
+#  define DEF_XFT_CACHE 50
 #endif
 
 #ifndef PROJECTROOT
-#define PROJECTROOT		"/usr"
+#  define PROJECTROOT "/usr"
 #endif
 
 /*
@@ -256,27 +256,27 @@
  * imake does not quote PROJECTROOT's value.
  */
 #ifdef HAVE_CONFIG_H
-#define DEFLOCALEFILTER2(x)	x
+#  define DEFLOCALEFILTER2(x) x
 #else
-#define DEFLOCALEFILTER2(x)	#x
+#  define DEFLOCALEFILTER2(x) #x
 #endif
 
 /*
  * If the configure script finds luit, we have the path directly.
  */
 #ifdef LUIT_PATH
-#define DEFLOCALEFILTER		LUIT_PATH
+#  define DEFLOCALEFILTER LUIT_PATH
 #else
-#define DEFLOCALEFILTER1(x)	DEFLOCALEFILTER2(x)
-#define DEFLOCALEFILTER		DEFLOCALEFILTER1(PROJECTROOT) "/bin/luit"
+#  define DEFLOCALEFILTER1(x) DEFLOCALEFILTER2(x)
+#  define DEFLOCALEFILTER     DEFLOCALEFILTER1(PROJECTROOT) "/bin/luit"
 #endif
 
-#define MIN_SCALE_HEIGHT	0.9f
-#define MAX_SCALE_HEIGHT	1.5f
+#define MIN_SCALE_HEIGHT 0.9f
+#define MAX_SCALE_HEIGHT 1.5f
 
 /*
  * See lib/Xt/Resources.c
  */
-#define MAXRESOURCES            400
+#define MAXRESOURCES 400
 
 #endif /* included_main_h */

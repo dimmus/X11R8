@@ -86,72 +86,82 @@
 #include <xterm.h>
 #include <data.h>
 
-#define MARK_ON(a)  (Bool) ((my_attrs & a) != 0 && (xw->flags & (whichone = CharOf(a))) == 0)
-#define MARK_OFF(a) (Bool) ((my_attrs & a) != 0 && (xw->flags & (whichone = CharOf(a))) != 0)
+#define MARK_ON(a) \
+    (Bool)((my_attrs & a) != 0 && (xw->flags & (whichone = CharOf(a))) == 0)
+#define MARK_OFF(a) \
+    (Bool)((my_attrs & a) != 0 && (xw->flags & (whichone = CharOf(a))) != 0)
 
 void
 Mark_XMC(XtermWidget xw, int param)
 {
     static IChar *glitch;
 
-    TScreen *screen = TScreenOf(xw);
-    Bool found = False;
+    TScreen *screen   = TScreenOf(xw);
+    Bool     found    = False;
     unsigned my_attrs = CharOf(screen->xmc_attributes & XMC_FLAGS);
     unsigned whichone = 0;
 
-    if (glitch == 0) {
-	unsigned len = screen->xmc_glitch;
-	glitch = TypeMallocN(IChar, len);
-	if (glitch == NULL) {
-	    xtermWarning("Not enough core for xmc glitch mode\n");
-	    return;
-	} else {
-	    while (len--)
-		glitch[len] = XMC_GLITCH;
-	}
+    if (glitch == 0)
+    {
+        unsigned len = screen->xmc_glitch;
+        glitch       = TypeMallocN(IChar, len);
+        if (glitch == NULL)
+        {
+            xtermWarning("Not enough core for xmc glitch mode\n");
+            return;
+        }
+        else
+        {
+            while (len--)
+                glitch[len] = XMC_GLITCH;
+        }
     }
-    switch (param) {
-    case -1:			/* DEFAULT */
-    case 0:			/* FALLTHRU */
-	found = MARK_OFF((xw->flags & XMC_FLAGS));
-	break;
-    case 1:
-	found = MARK_ON(BOLD);
-	break;
-    case 4:
-	found = MARK_ON(UNDERLINE);
-	break;
-    case 5:
-	found = MARK_ON(BLINK);
-	break;
-    case 7:
-	found = MARK_ON(INVERSE);
-	break;
-    case 22:
-	found = MARK_OFF(BOLD);
-	break;
-    case 24:
-	found = MARK_OFF(UNDERLINE);
-	break;
-    case 25:
-	found = MARK_OFF(BLINK);
-	break;
-    case 27:
-	found = MARK_OFF(INVERSE);
-	break;
+    switch (param)
+    {
+        case -1:   /* DEFAULT */
+        case 0:   /* FALLTHRU */
+            found = MARK_OFF((xw->flags & XMC_FLAGS));
+            break;
+        case 1:
+            found = MARK_ON(BOLD);
+            break;
+        case 4:
+            found = MARK_ON(UNDERLINE);
+            break;
+        case 5:
+            found = MARK_ON(BLINK);
+            break;
+        case 7:
+            found = MARK_ON(INVERSE);
+            break;
+        case 22:
+            found = MARK_OFF(BOLD);
+            break;
+        case 24:
+            found = MARK_OFF(UNDERLINE);
+            break;
+        case 25:
+            found = MARK_OFF(BLINK);
+            break;
+        case 27:
+            found = MARK_OFF(INVERSE);
+            break;
     }
 
     /*
      * Write a glitch with the attributes temporarily set to the new(er)
      * ones.
      */
-    if (found) {
-	unsigned save = xw->flags;
-	xw->flags ^= whichone;
-	TRACE(("XMC Writing glitch (%d/%d) after SGR %d\n", my_attrs,
-	       whichone, param));
-	dotext(xw, (DECNRCM_codes) '?', glitch, screen->xmc_glitch);
-	xw->flags = save;
+    if (found)
+    {
+        unsigned save = xw->flags;
+        xw->flags ^= whichone;
+        TRACE(("XMC Writing glitch (%d/%d) after SGR %d\n",
+               my_attrs,
+               whichone,
+               param));
+        dotext(xw, (DECNRCM_codes)'?', glitch, screen->xmc_glitch);
+        xw->flags = save;
     }
 }
 
@@ -163,10 +173,11 @@ void
 Jump_XMC(XtermWidget xw)
 {
     TScreen *screen = TScreenOf(xw);
-    if (!screen->move_sgr_ok
-	&& screen->cur_col <= LineMaxCol(screen,
-					 getLineData(screen, screen->cur_row))) {
-	Mark_XMC(xw, -1);
+    if (!screen->move_sgr_ok &&
+        screen->cur_col <=
+            LineMaxCol(screen, getLineData(screen, screen->cur_row)))
+    {
+        Mark_XMC(xw, -1);
     }
 }
 
@@ -177,56 +188,71 @@ Jump_XMC(XtermWidget xw)
 void
 Resolve_XMC(XtermWidget xw)
 {
-    TScreen *screen = TScreenOf(xw);
+    TScreen  *screen = TScreenOf(xw);
     LineData *ld;
-    Bool changed = False;
-    IAttr start;
-    IAttr my_attrs = CharOf(screen->xmc_attributes & XMC_FLAGS);
-    int row = screen->cur_row;
-    int col = screen->cur_col;
+    Bool      changed = False;
+    IAttr     start;
+    IAttr     my_attrs = CharOf(screen->xmc_attributes & XMC_FLAGS);
+    int       row      = screen->cur_row;
+    int       col      = screen->cur_col;
 
     /* Find the preceding cell.
      */
     ld = getLineData(screen, row);
-    if (ld->charData[col] != XMC_GLITCH) {
-	if (col != 0) {
-	    col--;
-	} else if (!screen->xmc_inline && row != 0) {
-	    ld = getLineData(screen, --row);
-	    col = LineMaxCol(screen, ld);
-	}
+    if (ld->charData[col] != XMC_GLITCH)
+    {
+        if (col != 0)
+        {
+            col--;
+        }
+        else if (!screen->xmc_inline && row != 0)
+        {
+            ld  = getLineData(screen, --row);
+            col = LineMaxCol(screen, ld);
+        }
     }
     start = (ld->attribs[col] & my_attrs);
 
     /* Now propagate the starting state until we reach a cell which holds
      * a glitch.
      */
-    for (;;) {
-	if (col < LineMaxCol(screen, ld)) {
-	    col++;
-	} else if (!screen->xmc_inline && row < screen->max_row) {
-	    col = 0;
-	    ld = getLineData(screen, ++row);
-	} else
-	    break;
-	if (ld->charData[col] == XMC_GLITCH)
-	    break;
-	if ((ld->attribs[col] & my_attrs) != start) {
-	    ld->attribs[col] =
-		(IAttr) (start | (ld->attribs[col] & ~my_attrs));
-	    changed = True;
-	}
+    for (;;)
+    {
+        if (col < LineMaxCol(screen, ld))
+        {
+            col++;
+        }
+        else if (!screen->xmc_inline && row < screen->max_row)
+        {
+            col = 0;
+            ld  = getLineData(screen, ++row);
+        }
+        else break;
+        if (ld->charData[col] == XMC_GLITCH) break;
+        if ((ld->attribs[col] & my_attrs) != start)
+        {
+            ld->attribs[col] = (IAttr)(start | (ld->attribs[col] & ~my_attrs));
+            changed          = True;
+        }
     }
 
     TRACE(("XMC %s (%s:%d/%d) from %d,%d to %d,%d\n",
-	   changed ? "Ripple" : "Nochange",
-	   BtoS(xw->flags & my_attrs),
-	   my_attrs, start,
-	   screen->cur_row, screen->cur_col,
-	   row, col));
+           changed ? "Ripple" : "Nochange",
+           BtoS(xw->flags & my_attrs),
+           my_attrs,
+           start,
+           screen->cur_row,
+           screen->cur_col,
+           row,
+           col));
 
-    if (changed) {
-	ScrnUpdate(xw, screen->cur_row, 0, row + 1 - screen->cur_row,
-		   MaxCols(screen), True);
+    if (changed)
+    {
+        ScrnUpdate(xw,
+                   screen->cur_row,
+                   0,
+                   row + 1 - screen->cur_row,
+                   MaxCols(screen),
+                   True);
     }
 }

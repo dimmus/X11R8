@@ -38,9 +38,11 @@
 #include <ptyx.h>
 
 #if OPT_SIXEL_GRAPHICS
-extern int parse_sixel(XtermWidget /* xw */, ANSI */* params */, char const */* string */);
+extern int parse_sixel(XtermWidget /* xw */,
+                       ANSI * /* params */,
+                       const char * /* string */);
 #else
-#define parse_sixel(xw, params, string) /* nothing */
+#  define parse_sixel(xw, params, string) /* nothing */
 #endif
 
 /* *INDENT-ON* */

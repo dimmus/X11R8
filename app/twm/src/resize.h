@@ -72,8 +72,13 @@ extern void MenuDoResize(int x_root, int y_root, TwmWindow *tmp_win);
 extern void MenuEndResize(TwmWindow *tmp_win);
 extern void MenuStartResize(TwmWindow *tmp_win, int x, int y, int w, int h);
 extern void SetFrameShape(TwmWindow *tmp);
-extern void SetupFrame(TwmWindow *tmp_win, int x, int y, int w, int h, int bw,
-                       Bool sendEvent);
+extern void SetupFrame(TwmWindow *tmp_win,
+                       int        x,
+                       int        y,
+                       int        w,
+                       int        h,
+                       int        bw,
+                       Bool       sendEvent);
 extern void SetupWindow(TwmWindow *tmp_win, int x, int y, int w, int h, int bw);
 extern void StartResize(XEvent *evp, TwmWindow *tmp_win, Bool fromtitlebar);
 
