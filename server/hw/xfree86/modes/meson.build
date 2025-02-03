@@ -19,11 +19,9 @@ xorg_modes = static_library('xorg_modes',
     c_args: xorg_c_args,
 )
 
-install_data(
-    [
-        'xf86Crtc.h',
-        'xf86Modes.h',
-        'xf86RandR12.h',
-    ],
-    install_dir: dir_xorg,
+install_headers(
+    'xf86Crtc.h',
+    'xf86Modes.h',
+    'xf86RandR12.h',
+    subdir: 'xorg',
 )
