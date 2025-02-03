@@ -19,9 +19,19 @@ event keycodes into keysyms.  It is usually run from the user's
 session startup script to configure the keyboard according to personal
 tastes.
 
-The master development code repository can be found at:
+https://gitlab.freedesktop.org/xorg/app/xmodmap
 
-  https://gitlab.freedesktop.org/xorg/app/xmodmap
+
+## Xinit
+
+The xinit program is used to start the X Window System server and a first
+client program on systems that are not using a display manager such as xdm.
+
+The xinit is not intended for naive users.  Instead, site administrators should
+design user-friendly scripts that present the desired interface when starting
+up X.  The startx script is one such example.
+
+https://gitlab.freedesktop.org/xorg/app/xinit
 
 ## P.S.
 
