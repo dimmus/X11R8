@@ -569,7 +569,7 @@ copy:
     else
 	size = 0;
     while (h--) {
-        RADEONCopySwap((uint8_t*)dst, copy_src->ptr + size, w, swap);
+        RADEONCopySwap((uint8_t*)dst, (uint8_t*)copy_src->ptr + size, w, swap);
         size += copy_pitch;
         dst += dst_pitch;
     }

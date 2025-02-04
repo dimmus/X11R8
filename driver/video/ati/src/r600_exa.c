@@ -1914,7 +1914,7 @@ copy:
     else
 	size = 0;
     while (h--) {
-        memcpy(dst, copy_src->ptr + size, w);
+        memcpy(dst, (char *)copy_src->ptr + size, w);
         size += copy_pitch;
         dst += dst_pitch;
     }
