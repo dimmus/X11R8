@@ -17,33 +17,33 @@ dep_int_amdgpu = [xproto, xserver]
 dep_ext_amdgpu = [dep_drm, dep_gbm, dep_udev]
 
 src_kms = files(
-    'src/amdgpu_bo_helper.c',
-    'src/amdgpu_dri2.c',
-    'src/amdgpu_dri3.c',
-    'src/amdgpu_drm_queue.c',
-	'src/amdgpu_kms.c',
-    'src/amdgpu_present.c',
-    'src/amdgpu_sync.c',
-    'src/drmmode_display.c',
+    'amdgpu_bo_helper.c',
+    'amdgpu_dri2.c',
+    'amdgpu_dri3.c',
+    'amdgpu_drm_queue.c',
+	'amdgpu_kms.c',
+    'amdgpu_present.c',
+    'amdgpu_sync.c',
+    'drmmode_display.c',
 )
 
 src_glamor = files(
-    'src/amdgpu_glamor.c',
-	'src/amdgpu_glamor_wrappers.c',
-	'src/amdgpu_pixmap.c',
+    'amdgpu_glamor.c',
+	'amdgpu_glamor_wrappers.c',
+	'amdgpu_pixmap.c',
 )
 
 src = files(
-	'src/amdgpu_video.c',
-	'src/amdgpu_misc.c',
-    'src/amdgpu_probe.c',
+	'amdgpu_video.c',
+	'amdgpu_misc.c',
+    'amdgpu_probe.c',
 )
 
 shared_module('amdgpu_drv', 
     [src, src_kms, src_glamor],
 	name_prefix: '',
 	include_directories: [
-        include_directories('src'),
+        include_directories('.'),
         inc_config,
         inc_server,
         inc_lib,
@@ -53,4 +53,4 @@ shared_module('amdgpu_drv',
 	install_dir: dir_xorg_module / 'drivers',
 )
 
-install_data('conf/10-amdgpu.conf', install_dir: dir_xorg_conf)
+install_data('10-amdgpu.conf', install_dir: dir_xorg_conf)
