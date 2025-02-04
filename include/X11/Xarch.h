@@ -85,7 +85,7 @@
 #   endif /* sun */
 #  endif /* BYTE_ORDER */
 
-#  define X_BYTE_ORDER BYTE_ORDER
+/* #  define X_BYTE_ORDER BYTE_ORDER */
 #  define X_BIG_ENDIAN BIG_ENDIAN
 #  define X_LITTLE_ENDIAN LITTLE_ENDIAN
 
