@@ -9,5 +9,3 @@ subdir('nouveau')
 # subdir('vbox')    # TODO: need "VboxVideo.h" (need dep_vbox?)
 subdir('vesa')
 # subdir('vmware')    # TODO: need <xa_tracker.h> (mesa?, libxatracker-dev)
-
-# TODO: add ati_drv.so, qxl_drv.so, radeon_drv.so
