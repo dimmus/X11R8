@@ -1,4 +1,4 @@
-src = files(
+src_vmwgfx = files(
     'vmwgfx_driver.c',
     'vmwgfx_crtc.c',
     'vmwgfx_output.c',
@@ -15,15 +15,15 @@ src = files(
     'vmwgfx_dri3.c',
 )
 
-vmwgfx = library('vmwgfx',
-    sources: src,
-    dependencies: [dep_int_vmware, dep_ext_vmware],
-    include_directories: inc_vmware,
-    link_with: libsaa,
-    install: false
-)
+# vmwgfx = library('vmwgfx',
+#     sources: src,
+#     dependencies: [dep_int_vmware, dep_ext_vmware],
+#     include_directories: inc_vmware,
+#     link_with: libsaa,
+#     install: false
+# )
 
-libvmwgfx = declare_dependency(
-  link_with: vmwgfx,
-  include_directories: inc_vmware,
-)
+# libvmwgfx = declare_dependency(
+#   link_with: vmwgfx,
+#   include_directories: inc_vmware,
+# )

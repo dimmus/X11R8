@@ -31,6 +31,8 @@
 
 #define VMWARE_INCHTOMM 25.4
 
+typedef void *pointer;
+
 typedef enum {
     OPTION_HW_CURSOR,
     OPTION_XINERAMA,

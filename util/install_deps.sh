@@ -38,7 +38,7 @@ install_deps()
             build-essential meson ninja-build pkgconf zlib1g-dev libbz2-dev bzip2 \
             libfreetype-dev libfontconfig-dev libgbm-dev libunwind-dev \
             flex bison libinput-dev libssl-dev libncurses-dev ncurses-base \
-            mesa-common-dev libgl1-mesa-dri libegl1-mesa-dev
+            mesa-common-dev libgl1-mesa-dri libegl1-mesa-dev libxatracker-dev
             
             # XXX: If you system lack bzip2.pc, run command below:
             # sudo tee /usr/lib/x86_64-linux-gnu/pkgconfig/bzip2.pc > /dev/null <<'EOF'

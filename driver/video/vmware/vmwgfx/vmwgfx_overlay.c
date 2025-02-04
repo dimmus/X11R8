@@ -71,6 +71,8 @@ typedef uint8_t uint8;
 #include "vmwgfx_driver.h"
 #include "vmwgfx_hosted.h"
 
+typedef void *pointer;
+
 #define MAKE_ATOM(a) MakeAtom(a, sizeof(a) - 1, TRUE)
 
 /*

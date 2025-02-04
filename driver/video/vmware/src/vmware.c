@@ -38,11 +38,6 @@ char rcsId_vmware[] =
 #include "vmware_common.h"
 #include "common_compat.h"
 
-#ifndef HAVE_XORG_SERVER_1_5_0
-#include <xf86_ansic.h>
-#include <xf86_libc.h>
-#endif
-
 #if (GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) >= 5)
 
 #define xf86LoaderReqSymLists(...) do {} while (0)

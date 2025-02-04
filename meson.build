@@ -118,7 +118,7 @@ dep_dl           = cc.find_library('dl',        required: false) # xvmc, xserver
 dep_rt           = cc.find_library('rt',        required: true)  # driver/video/intel
 
 dep_zlib         = dependency('zlib',           required: true)  # xfont, fontenc
-dep_bzip2        = dependency('bzip2',          required: true) # xfont
+dep_bzip2        = dependency('bzip2',          required: true)  # xfont
 dep_freetype2    = dependency('freetype2',      required: true)  # xfont, xft
 dep_fontconfig   = dependency('fontconfig',     required: true, version: '>= 2.5.92') # xft
 dep_uuid         = dependency('uuid',           required: false) # sm
@@ -157,6 +157,7 @@ dep_input        = dependency('libinput',       required: true, version: '>= 1.1
 # dep_png          = dependency('libpng',         required: true) # video/intel (test, tools)
 # dep_drm_intel    = dependency('libdrm_intel',   required: true) # video/intel
 dep_drm_nouveau  = dependency('libdrm_nouveau', required: true) # video/nouveau
+dep_xa           = dependency('xatracker',      required: true) # video/vmware
 
 exe_bison        = find_program('bison',        required: false)
 exe_flex         = find_program('flex',         required: false)

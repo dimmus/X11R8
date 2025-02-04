@@ -48,11 +48,6 @@
 
 #include <X11/extensions/Xv.h>
 
-#ifndef HAVE_XORG_SERVER_1_5_0
-#include <xf86_ansic.h>
-#include <xf86_libc.h>
-#endif
-
 static CONST_ABI_16_0 char xv_adapt_name[] = "VMWare Overlay Video Engine";
 static CONST_ABI_16_0 char xv_image_name[] = "XV_IMAGE";
 

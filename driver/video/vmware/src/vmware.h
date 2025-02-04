@@ -6,7 +6,6 @@
 #ifndef VMWARE_H
 #define VMWARE_H
 
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -42,6 +41,8 @@
 #include "svga_struct.h"
 #include "vmware_bootstrap.h"
 #include <xf86Module.h>
+
+typedef void *pointer;
 
 #if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 12
 #define _swapl(x, n) swapl(x,n)
