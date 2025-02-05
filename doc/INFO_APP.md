@@ -33,6 +33,28 @@ up X.  The startx script is one such example.
 
 https://gitlab.freedesktop.org/xorg/app/xinit
 
+## XFontSel
+xfontsel application provides a simple way to display the X11 core
+protocol fonts known to your X server, examine samples of each, and
+retrieve the X Logical Font Description ("XLFD") full name for a font.
+
+https://gitlab.freedesktop.org/xorg/app/xfontsel
+
+## XlsFonts
+xlsfonts lists fonts available from an X server via the X11 core protocol.
+
+https://gitlab.freedesktop.org/xorg/app/xlsfonts
+
+## mkfontscale
+mkfontscale creates the fonts.scale and fonts.dir index files used by the legacy X11 font system.  It now includes the mkfontdir script previously distributed separately for compatibility with older X11 versions.
+
+https://gitlab.freedesktop.org/xorg/app/mkfontscale
+
+## fslsfonts
+fslsfonts produces a list of fonts served by an X font server.
+
+https://gitlab.freedesktop.org/xorg/app/fslsfonts
+
 ## P.S.
 
 All questions regarding this software should be directed at the
