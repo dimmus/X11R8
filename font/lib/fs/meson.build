@@ -3,9 +3,6 @@ ver_fs = '1.0.10'
 lib_args = ['-DFS_t', '-DTRANS_CLIENT']
 
 f_check += ['strlcpy', 'strnlen']
-# TODO: AC_REPLACE_FUNCS([reallocarray])
-
-dep_int_xfs = [xproto]
 
 src = files(
   'FSCloseFt.c',
@@ -41,7 +38,7 @@ src = files(
 lib = library('FS', src,
   c_args: lib_args,
   include_directories: [inc_lib, include_directories('.')],
-  dependencies: dep_int_xfs,
+  dependencies: xproto,
   version: '6.0.0',
   install: true,
 )

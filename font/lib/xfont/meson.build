@@ -20,13 +20,8 @@ h_check += ['endian.h', 'poll.h', 'sys/poll.h', 'err.h', 'float.h']
 dep_ext_xfont = [dep_m, dep_freetype2, dep_zlib, dep_bzip2]
 dep_int_xfont = [xproto, libfontenc]
 
-if dep_zlib.found()
-  conf.set('X_GZIP_FONT_COMPRESSION', 1)
-endif
-
-if dep_bzip2.found()
-  conf.set('X_BZIP2_FONT_COMPRESSION', 1)
-endif
+conf.set('X_GZIP_FONT_COMPRESSION',  dep_zlib.found())
+conf.set('X_BZIP2_FONT_COMPRESSION', dep_bzip2.found())
 conf.set('XFONT_BUILTINS', 1)  # Support built-in fonts
 conf.set('XFONT_PCFFORMAT', 1) # Support pcf format bitmap font files
 conf.set('XFONT_BDFFORMAT', 1) # Support bdf format bitmap font files

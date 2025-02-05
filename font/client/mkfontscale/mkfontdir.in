@@ -1,5 +1,5 @@
 #!/bin/sh
 
-PATH="@bindir@:$PATH"
+PATH="@BINDIR@:$PATH"
 
 exec mkfontscale -b -s -l "$@"
