@@ -157,7 +157,7 @@ main(int argc, char *argv[])
 		usage(NULL, 0);
 	    }
 	    else if (strcmp(arg, "-version") == 0) {
-		printf("%s\n", PACKAGE_STRING);
+		printf("%s\n", FSLSFONTS_PACKAGE_STRING);
 		exit(0);
 	    }
 	}
