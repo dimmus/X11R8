@@ -1,4 +1,4 @@
-conf.set('USE_UXA', 1)
+conf_intel.set('USE_UXA', 1)
 
 uxa_sources = [
   'intel_batchbuffer.c',
@@ -50,7 +50,7 @@ uxa_sources += 'intel_hwmc.c'
 uxa = static_library('uxa',
   sources : uxa_sources,
   dependencies : uxa_deps,
-  include_directories : inc,
+  include_directories : inc_intel,
   c_args : [
     '-Wno-deprecated-declarations',
     '-Wno-unused-parameter',

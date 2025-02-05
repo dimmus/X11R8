@@ -2826,7 +2826,7 @@ gen2_render_fill_boxes(struct sna *sna,
 		return false;
 	}
 
-#if NO_FILL_BOXES
+#ifdef NO_FILL_BOXES
 	return gen2_render_fill_boxes_try_blt(sna, op, format, color,
 					      dst, dst_bo,
 					      box, n);
@@ -3022,7 +3022,7 @@ gen2_render_fill(struct sna *sna, uint8_t alu,
 		 uint32_t color, unsigned flags,
 		 struct sna_fill_op *tmp)
 {
-#if NO_FILL
+#ifdef NO_FILL
 	return sna_blt_fill(sna, alu,
 			    dst_bo, dst->drawable.bitsPerPixel,
 			    color,
@@ -3099,7 +3099,7 @@ gen2_render_fill_one(struct sna *sna, PixmapPtr dst, struct kgem_bo *bo,
 {
 	struct sna_composite_op tmp;
 
-#if NO_FILL_ONE
+#ifdef NO_FILL_ONE
 	return gen2_render_fill_one_try_blt(sna, dst, bo, color,
 					    x1, y1, x2, y2, alu);
 #endif
@@ -3537,7 +3537,7 @@ gen2_render_copy_boxes(struct sna *sna, uint8_t alu,
 {
 	struct sna_composite_op tmp;
 
-#if NO_COPY_BOXES
+#ifdef NO_COPY_BOXES
 	if (!sna_blt_compare_depth(&src->drawable, &dst->drawable))
 		return false;
 
@@ -3714,7 +3714,7 @@ gen2_render_copy(struct sna *sna, uint8_t alu,
 		 PixmapPtr dst, struct kgem_bo *dst_bo,
 		 struct sna_copy_op *tmp)
 {
-#if NO_COPY
+#ifdef NO_COPY
 	if (!sna_blt_compare_depth(&src->drawable, &dst->drawable))
 		return false;
 
@@ -3822,11 +3822,11 @@ const char *gen2_render_init(struct sna *sna, const char *backend)
 	/* Use the BLT (and overlay) for everything except when forced to
 	 * use the texture combiners.
 	 */
-#if !NO_COMPOSITE
+#ifndef NO_COMPOSITE
 	render->composite = gen2_render_composite;
 	render->prefer_gpu |= PREFER_GPU_RENDER;
 #endif
-#if !NO_COMPOSITE_SPANS
+#ifndef NO_COMPOSITE_SPANS
 	render->check_composite_spans = gen2_check_composite_spans;
 	render->composite_spans = gen2_render_composite_spans;
 	render->prefer_gpu |= PREFER_GPU_SPANS;

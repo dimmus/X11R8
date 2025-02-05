@@ -1,6 +1,7 @@
 if with_tools
 	executable('intel-virtual-output',
 		sources : 'virtual.c',
+		include_directories: inc_intel,
 		dependencies : [
 			libx11,
 			libxext,
@@ -46,6 +47,7 @@ if with_tools
 
 	executable('cursor',
 		sources : 'cursor.c',
+		include_directories: inc_intel,
 		dependencies : [
 			libx11,
 			libxfixes,
@@ -59,6 +61,7 @@ endif
 if with_tools and with_dri3
 	executable('dri3info',
 		sources : 'dri3info.c',
+		include_directories: inc_intel,
 		dependencies : [
 			libx11_xcb,
 			libxcb,
@@ -76,9 +79,10 @@ endif
 if with_backlight_helper
 	executable('xf86-video-intel-backlight-helper',
 		sources : 'backlight_helper.c',
+		include_directories: inc_intel,
 		install_dir : dir_libexec,
 		install_mode : ['rws--x--x', 'root', 'root'],
-		c_args : ['-DMAJOR_IN_SYSMACROS'],
+		c_args : '-DMAJOR_IN_SYSMACROS',
 		install : true
 	)
 

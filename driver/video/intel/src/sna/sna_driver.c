@@ -74,7 +74,7 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <memcheck.h>
 #endif
 
-#if HAVE_DOT_GIT
+#ifdef HAVE_DOT_GIT
 #include "git_version.h"
 #else
 #define git_version "not compiled from git"

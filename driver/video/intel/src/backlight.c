@@ -34,7 +34,7 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 
-#if MAJOR_IN_MKDEV
+#ifdef MAJOR_IN_MKDEV
 #include <sys/mkdev.h>
 #elif MAJOR_IN_SYSMACROS
 #include <sys/sysmacros.h>
@@ -53,6 +53,7 @@
 #include <xorg-server.h>
 #include <xf86.h>
 #include <pciaccess.h>
+#include <os/osdep.h>
 
 #include "backlight.h"
 #include "fd.h"
@@ -347,7 +348,7 @@ static int __backlight_direct_init(struct backlight *b, char *iface)
 
 static int __backlight_helper_init(struct backlight *b, char *iface)
 {
-#if USE_BACKLIGHT_HELPER
+#ifdef USE_BACKLIGHT_HELPER
 	struct stat st;
 	char *env[] = { NULL };
 	int use_pkexec = 0;

@@ -38,7 +38,7 @@
 #include <dirent.h>
 #include <errno.h>
 
-#if MAJOR_IN_MKDEV
+#ifdef MAJOR_IN_MKDEV
 #include <sys/mkdev.h>
 #elif MAJOR_IN_SYSMACROS
 #include <sys/sysmacros.h>

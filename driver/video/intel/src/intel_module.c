@@ -40,7 +40,6 @@
 
 #include "intel_driver.h"
 #include "intel_options.h"
-#include "legacy/legacy.h"
 #include "sna/sna_module.h"
 #include "uxa/uxa_module.h"
 
@@ -425,14 +424,14 @@ static const SymTabRec intel_chipsets[] = {
 };
 
 static const struct pci_id_match intel_device_match[] = {
-#if UMS
+#ifdef UMS
 	INTEL_VGA_DEVICE(PCI_CHIP_I810, &intel_i81x_info),
 	INTEL_VGA_DEVICE(PCI_CHIP_I810_DC100, &intel_i81x_info),
 	INTEL_VGA_DEVICE(PCI_CHIP_I810_E, &intel_i81x_info),
 	INTEL_VGA_DEVICE(PCI_CHIP_I815, &intel_i81x_info),
 #endif
 
-#if KMS
+#ifdef KMS
 	INTEL_I830_IDS(&intel_i830_info),
 	INTEL_I845G_IDS(&intel_i845_info),
 	INTEL_I85X_IDS(&intel_i855_info),
@@ -626,7 +625,7 @@ static Bool intel_driver_func(ScrnInfoPtr pScrn,
 	case GET_REQUIRED_HW_INTERFACES:
 		flag = (CARD32*)ptr;
 		(*flag) = 0;
-#if UMS
+#ifdef UMS
 		(*flag) = HW_IO | HW_MMIO;
 #endif
 #ifdef HW_SKIP_CONSOLE
@@ -647,7 +646,7 @@ static Bool intel_driver_func(ScrnInfoPtr pScrn,
 	}
 }
 
-#if KMS
+#ifdef KMS
 extern XF86ConfigPtr xf86configptr;
 
 static XF86ConfDevicePtr
@@ -731,20 +730,20 @@ intel_scrn_create(DriverPtr		driver,
 		xf86SetEntityShared(entity_num);
 	xf86AddEntityToScreen(scrn, entity_num);
 
-#if UMS
+#ifdef UMS
 	if ((unsigned)((struct intel_device_info *)match_data)->gen < 020)
 		return lg_i810_init(scrn);
 #endif
 
-#if KMS
+#ifdef KMS
 	switch (get_accel_method()) {
-#if USE_SNA
+#ifdef USE_SNA
 	case NOACCEL:
 	case SNA:
 		return sna_init_scrn(scrn, entity_num);
 #endif
-#if USE_UXA
-#if !USE_SNA
+#ifdef USE_UXA
+#ifndef USE_SNA
 	case NOACCEL:
 #endif
 	case UXA:
@@ -752,7 +751,7 @@ intel_scrn_create(DriverPtr		driver,
 #endif
 
 	default:
-#if USE_SNA
+#ifdef USE_SNA
 		return sna_init_scrn(scrn, entity_num);
 #elif USE_UXA
 		return intel_init_scrn(scrn);
@@ -780,7 +779,7 @@ static Bool intel_pci_probe(DriverPtr		driver,
 	Bool ret;
 
 	if (intel_open_device(entity_num, pci, NULL) == -1) {
-#if UMS
+#ifdef UMS
 		switch (pci->device_id) {
 		case PCI_CHIP_I810:
 		case PCI_CHIP_I810_DC100:
@@ -858,7 +857,7 @@ static const OptionInfoRec *
 intel_available_options(int chipid, int busid)
 {
 	switch (chipid) {
-#if UMS
+#ifdef UMS
 	case PCI_CHIP_I810:
 	case PCI_CHIP_I810_DC100:
 	case PCI_CHIP_I810_E:

@@ -81,6 +81,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "misync.h"
 #endif
 
+typedef void *pointer;
+
 /* remain compatible to xorg-server 1.6 */
 #ifndef MONITOR_EDID_COMPLETE_RAWDATA
 #define MONITOR_EDID_COMPLETE_RAWDATA EDID_COMPLETE_RAWDATA

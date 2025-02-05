@@ -24,6 +24,7 @@ fb = static_library('fb',
 		libx11,
 		dep_pixman,
 	],
+	include_directories: inc_intel,
 	c_args : [
 		'-Wno-unused-parameter',
 		'-Wno-sign-compare',

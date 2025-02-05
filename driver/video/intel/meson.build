@@ -7,7 +7,21 @@ conf_intel.set('PACKAGE_VERSION_MINOR', version[1])
 conf_intel.set('PACKAGE_VERSION_PATCHLEVEL', version[2])
 conf_intel.set_quoted('LIBEXEC_PATH', dir_libexec)
 
-# cairo-xlib-xrender
+inc_intel = [
+  include_directories(
+    '.',
+    'src',
+    'src' / 'sna',
+    'src' / 'uxa',
+    'src' / 'render_program',
+    'tools',
+    'xvmc',
+  ),
+  inc_config,
+  inc_server,
+  inc_lib,
+]
+
 dep_int_intel = [
   xproto,
   libx11,
@@ -26,7 +40,7 @@ dep_ext_intel = [
   dep_threads,
   dep_pciaccess,
   dep_pixman,
-  dep_cairo,
+  # dep_cairo, # for test
   dep_png,
   dep_drm_intel,
 ]
@@ -112,14 +126,9 @@ conf_intel.set('ENABLE_XVMC', 1)
 
 with_valgrind = get_option('valgrind')
 if with_valgrind
-  valgrind = dependency('valgrind', required : true)
+  valgrind = dep_valgrind
   conf_intel.set('HAVE_VALGRIND', 1)
 endif
-
-inc = [
-  include_directories('.', 'src', 'xvmc', 'src/render_program'),
-  inc_server
-]
 
 # man_config = configuration_data()
 # man_conf_intel.set('appmansuffix', '1')

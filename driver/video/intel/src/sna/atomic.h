@@ -28,7 +28,7 @@
 #ifndef ATOMIC_H
 #define ATOMIC_H
 
-#if HAVE_ATOMIC_PRIMITIVES
+#ifdef HAVE_ATOMIC_PRIMITIVES
 
 #define HAS_ATOMIC_OPS 1
 
@@ -46,7 +46,7 @@ typedef struct {
 
 #endif
 
-#if HAVE_LIB_ATOMIC_OPS
+#ifdef HAVE_LIB_ATOMIC_OPS
 #include <atomic_ops.h>
 
 #define HAS_ATOMIC_OPS 1
@@ -82,7 +82,7 @@ typedef struct { uint_t atomic; } atomic_t;
 
 #endif
 
-#if ! HAS_ATOMIC_OPS
+#ifndef HAS_ATOMIC_OPS
 #error xf86-video-intel requires atomic operations, please define them for your CPU/compiler.
 #endif
 

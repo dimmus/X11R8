@@ -1,3 +1,5 @@
+# -DTRUE=1 -DFALSE=0
+
 xvmc_sources = files(
   'intel_xvmc.c',
   'intel_xvmc_dump.c',
@@ -10,7 +12,8 @@ xvmc_sources = files(
 shared_library('IntelXvMC', xvmc_sources,
 	soversion : '1',
 	version : '1.0.0',
-	dependencies : [dep_int_intel, dep_ext_intel],
+	dependencies : [dep_int_intel, dep_ext_intel, libxvmc, libxv, libxcb_util],
+	include_directories: inc_intel,
 	c_args : [
 		'-DFALSE=0',
 		'-DTRUE=1',

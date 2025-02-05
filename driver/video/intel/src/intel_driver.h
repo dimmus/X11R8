@@ -3,6 +3,8 @@
 
 struct xf86_platform_device;
 
+typedef void *pointer;
+
 #define INTEL_VERSION 4000
 #define INTEL_NAME "intel"
 #define INTEL_DRIVER_NAME "intel"

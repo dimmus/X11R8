@@ -80,6 +80,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "compiler.h"
 #include "debug.h"
 
+typedef void *pointer;
+
 #define DEBUG_NO_BLT 0
 
 #define DEBUG_FLUSH_BATCH 0

@@ -1,18 +1,19 @@
-conf.set('USE_SNA', 1)
+conf_intel.set('USE_SNA', 1)
 
 if cc.has_member('struct sysinfo', 'totalram',
 		 prefix : '#include <sys/sysinfo.h>')
-  conf.set('HAVE_STRUCT_SYSINFO_TOTALRAM', 1)
+  conf_intel.set('HAVE_STRUCT_SYSINFO_TOTALRAM', 1)
 endif
 
-git_version_h = vcs_tag(input : 'git_version.h.in', output : 'git_version.h',
-			fallback : 'not compiled from git',
-			command : [ 'git', 'describe' ] )
+git_version_h = vcs_tag(input: 'git_version.h.in', output: 'git_version.h',
+  fallback: 'not compiled from git',
+  command: ['git', 'describe']
+)
 
-conf.set('HAVE_DOT_GIT', 1)
+conf_intel.set('HAVE_DOT_GIT', false)
 
 if cc.has_header('alloca.h')
-  conf.set('HAVE_ALLOCA_H', 1)
+  conf_intel.set('HAVE_ALLOCA_H', 1)
 endif
 
 sna_deps = [
@@ -96,13 +97,13 @@ if debug == 'full'
 endif
 
 if get_option('tearfree')
-  conf.set('TEARFREE', 1)
+  conf_intel.set('TEARFREE', 1)
 endif
 if get_option('use-create2')
-  conf.set('USE_CREATE2', 1)
+  conf_intel.set('USE_CREATE2', 1)
 endif
 if get_option('async-swap')
-  conf.set('USE_ASYNC_SWAP', 1)
+  conf_intel.set('USE_ASYNC_SWAP', 1)
 endif
 
 subdir('brw')
@@ -112,7 +113,7 @@ sna = static_library('sna',
   [ git_version_h, sna_sources ],
   dependencies : sna_deps,
   link_with : [ brw, fb, ],
-  include_directories : inc,
+  include_directories : inc_intel,
   c_args : [
     '-Wno-unused-but-set-variable',
     '-Wno-expansion-to-defined',
