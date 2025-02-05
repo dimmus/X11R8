@@ -8,7 +8,7 @@ inc_xaw3dxft = [inc_config, inc_lib, include_directories('.')]
 dep_int_xaw3dxft = [libx11, libxt, libxmu, libxext, libxft, libxpm, libi18n]
 dep_ext_xaw3dxft = dep_freetype2
 
-c_args = [
+lib_args = [
     '-DXAW_INTERNATIONALIZATION',
     '-DXAW_GRAY_BLKWHT_STIPPLES',
     '-DXAW_ARROW_SCROLLBARS',
@@ -83,7 +83,7 @@ lib = library('Xaw3dxft', src,
   include_directories: inc_xaw3dxft,
   dependencies: [dep_int_xaw3dxft, dep_ext_xaw3dxft],
   version: '8.5.0',
-  c_args: c_args,
+  c_args: lib_args,
   install: true,
 )
 

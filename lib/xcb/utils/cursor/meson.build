@@ -3,7 +3,7 @@ inc_xcb += include_directories('.')
 f_check += ['le32toh']
 h_check += ['endian.h', 'sys/endian.h', 'sys/byteorder.h', 'libkern/OSByteOrder.h']
 
-c_args = '-DXCURSORPATH="~/.local/share/icons:~/.icons:@0@/icons:@0@/pixmaps"'.format(dir_data)
+lib_args = '-DXCURSORPATH="~/.local/share/icons:~/.icons:@0@/icons:@0@/pixmaps"'.format(dir_data)
 
 dep_int_cursor = [libxcb, libxcb_renderutil, libxcb_image]
 
@@ -17,7 +17,7 @@ src = files(
 lib = library('xcb-util-cursor', src,
   include_directories: inc_xcb,
   dependencies: dep_int_cursor,
-  c_args: c_args,
+  c_args: lib_args,
   version: '0.0.0',
   install: true,
 )

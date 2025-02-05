@@ -10,10 +10,6 @@ conf.set('HAVE_XF86_CURSOR_RESET_CURSOR', '1')
 conf.set('HAVE_LIBUDEV', true)
 conf.set_quoted('NV_DRIVER_DATE', '25/01/27')
 
-c_args = [
-    '-Wno-pointer-arith',
-]
-
 dep_int_nouveau = [xproto, xserver]
 dep_ext_nouveau = [dep_drm, dep_drm_nouveau, dep_gbm, dep_udev, dep_pciaccess]
 
@@ -61,7 +57,7 @@ shared_module('nouveau_drv', src,
         inc_lib,
     ],
 	dependencies: [dep_int_nouveau, dep_ext_nouveau],
-    c_args: c_args,
+    c_args: '-Wno-pointer-arith',
 	install: true,
 	install_dir: dir_xorg_module / 'drivers',
 )
