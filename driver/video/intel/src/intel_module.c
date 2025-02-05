@@ -57,9 +57,11 @@ static const struct intel_device_info intel_generic_info = {
 	.gen = -1,
 };
 
+#ifdef UMS
 static const struct intel_device_info intel_i81x_info = {
 	.gen = 010,
 };
+#endif
 
 static const struct intel_device_info intel_i830_info = {
 	.gen = 020,
@@ -548,6 +550,7 @@ intel_detect_chipset(ScrnInfoPtr scrn, struct intel_device *dev)
 	scrn->chipset = (char *)name;
 }
 
+#ifdef XFree86LOADER
 /*
  * intel_identify --
  *
@@ -645,6 +648,7 @@ static Bool intel_driver_func(ScrnInfoPtr pScrn,
 		return FALSE;
 	}
 }
+#endif
 
 #ifdef KMS
 extern XF86ConfigPtr xf86configptr;
@@ -692,6 +696,7 @@ static enum accel_method { NOACCEL, SNA, UXA } get_accel_method(void)
 }
 #endif
 
+#ifdef XFree86LOADER
 static Bool
 intel_scrn_create(DriverPtr		driver,
 		  int			entity_num,
@@ -802,8 +807,9 @@ static Bool intel_pci_probe(DriverPtr		driver,
 
 	return ret;
 }
+#endif
 
-#ifdef XSERVER_PLATFORM_BUS
+#if defined(XSERVER_PLATFORM_BUS) && defined(XFree86LOADER)
 static Bool
 intel_platform_probe(DriverPtr driver,
 		     int entity_num, int flags,
