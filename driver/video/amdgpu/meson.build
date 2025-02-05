@@ -12,9 +12,12 @@ conf.set('HAVE_FBGLYPHS', '1')
 conf.set('HAVE_XF86_CURSOR_RESET_CURSOR', '1')
 conf.set('HAVE_GBM_BO_USE_LINEAR', '1')
 conf.set('HAVE_GBM_BO_USE_FRONT_RENDERING', '1')
+conf.set('HAVE_GLAMOR_GLYPHS_INIT', true)
+conf.set('HAVE_GLAMOR_EGL_DESTROY_TEXTURED_PIXMAP', true)
+conf.set('HAVE_GLAMOR_FINISH', true)
 
 dep_int_amdgpu = [xproto, xserver]
-dep_ext_amdgpu = [dep_drm, dep_gbm, dep_udev]
+dep_ext_amdgpu = [dep_drm, dep_gbm, dep_udev, dep_gl]
 
 src_kms = files(
     'amdgpu_bo_helper.c',

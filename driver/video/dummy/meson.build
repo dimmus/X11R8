@@ -9,13 +9,13 @@ conf.set('XFree86LOADER', true)
 dep_int_dummy = [xproto, xserver]
 
 src = files(
-    'src/dummy_cursor.c',
-    'src/dummy_driver.c',
+    'dummy_cursor.c',
+    'dummy_driver.c',
 )
 
 shared_module('dummy_drv', src,
 	name_prefix: '',
-	include_directories: [include_directories('src'), inc_server, inc_lib],
+	include_directories: [include_directories('.'), inc_server, inc_lib],
 	dependencies: dep_int_dummy,
 	install: true,
 	install_dir: dir_xorg_module / 'drivers',

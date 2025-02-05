@@ -15,7 +15,15 @@ conf.set('HAVE_FBGLYPHS', true)
 conf.set('HAVE_XF86_CURSOR_RESET_CURSOR', true)
 
 dep_int_ati = [xproto, xserver]
-dep_ext_ati = [dep_drm, dep_gbm, dep_udev]
+dep_ext_ati = [dep_drm, dep_drm_radeon, dep_gbm, dep_udev]
+
+inc_ati = [
+    include_directories('.'),
+    include_directories('src'),
+    inc_config,
+    inc_server,
+    inc_lib,
+]
 
 src_kms = files(
     'src/radeon_dri2.c',
@@ -64,12 +72,7 @@ src_ati = files(
 
 shared_module('ati_drv', src_ati,
 	name_prefix: '',
-	include_directories: [
-        include_directories('.'),
-        inc_config,
-        inc_server,
-        inc_lib,
-    ],
+	include_directories: inc_ati,
 	dependencies: [dep_int_ati, dep_ext_ati],
 	install: true,
 	install_dir: dir_xorg_module / 'drivers',
@@ -77,12 +80,7 @@ shared_module('ati_drv', src_ati,
 
 shared_module('radeon_drv', src_radeon,
 	name_prefix: '',
-	include_directories: [
-        include_directories('.'),
-        inc_config,
-        inc_server,
-        inc_lib,
-    ],
+	include_directories: inc_ati,
 	dependencies: [dep_int_ati, dep_ext_ati],
 	install: true,
 	install_dir: dir_xorg_module / 'drivers',

@@ -1,6 +1,7 @@
 ver_vboxvideo = '1.0.1'
 
 f_check += ['strlcat', 'strlcpy', 'timingsafe_memcmp']
+conf.set('HAVE_ISA', false)
 
 lib_args = [
     '-Wno-declaration-after-statement',
@@ -10,30 +11,30 @@ lib_args = [
 
 moduledir = dir_lib / 'xorg' / 'modules'
 
-c_args += [
+lib_args += [
     '-DHAVE_ISA',
     '-DDRIVER_NAME=vboxvideo'
 ]
 
 src = files(
-    'src/edid.c',
-    'src/getmode.c',
-    'src/HGSMIBase.c',
-    'src/HGSMIBuffers.c',
-    'src/HGSMICommon.c',
-    'src/hgsmimemalloc.c',
-    'src/Modesetting.c',
-    'src/pointer.c',
-    'src/setmode.c',
-    'src/vboxvideo.c',
-    'src/VBVABase.c',
-    'src/vbva.c',
+    'edid.c',
+    'getmode.c',
+    'HGSMIBase.c',
+    'HGSMIBuffers.c',
+    'HGSMICommon.c',
+    'hgsmimemalloc.c',
+    'Modesetting.c',
+    'pointer.c',
+    'setmode.c',
+    'vboxvideo.c',
+    'VBVABase.c',
+    'vbva.c',
 )
 
 shared_module('vboxvideo_drv', src,
     c_args: lib_args,
 	name_prefix: '',
-	include_directories: [include_directories('src'), inc_config, inc_server],
+	include_directories: [include_directories('.'), inc_config, inc_server],
 	dependencies: [xproto, xserver],
 	install: true,
 	install_dir: dir_xorg_module,

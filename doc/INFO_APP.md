@@ -5,7 +5,7 @@ layout: default
 SPDX-License-Identifier: LGPL-2.1-or-later
 ---
 
-# X Window System Clients
+# X Window System Clients (Applications)
 
 ## Xrdb
 

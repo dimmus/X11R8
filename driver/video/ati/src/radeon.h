@@ -128,7 +128,7 @@ RegionDuplicate(RegionPtr pOld)
 #define radeon_bswap_16 bswap_16
 #define radeon_bswap_32 bswap_32
 #define radeon_bswap_64 bswap_64
-#elif defined(USE_SYS_ENDIAN_H)
+#elif defined(HAVE_SYS_ENDIAN_H)
 #include <sys/endian.h>
 #else
 #define radeon_bswap_16(value)  \

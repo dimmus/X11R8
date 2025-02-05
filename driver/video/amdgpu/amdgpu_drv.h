@@ -117,7 +117,7 @@ RegionDuplicate(RegionPtr pOld)
 
 #ifdef HAVE_BYTESWAP_H
 #include <byteswap.h>
-#elif defined(USE_SYS_ENDIAN_H)
+#elif defined(HAVE_SYS_ENDIAN_H)
 #include <sys/endian.h>
 #else
 #define bswap_16(value)  \
