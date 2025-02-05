@@ -1,3 +1,5 @@
+inc_xcb += include_directories('.')
+
 install_headers(
     'xcb.h',
     'xcbext.h',
