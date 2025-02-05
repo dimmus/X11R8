@@ -285,18 +285,17 @@ get_list(const char *pattern)
 	return;
     }
     else {
-	FontList *old_list = font_list;
-
-	font_list = reallocarray(old_list, (font_cnt + (unsigned) available),
+	FontList *new_list = reallocarray(font_list, (font_cnt + (unsigned) available),
                                  sizeof(FontList));
 
-	if (font_list == NULL) {
-	    free(old_list);
+	if (new_list == NULL) {
+	    free(font_list);
 	    fprintf(stderr, "%s: unable to allocate %zu bytes for font list\n",
 		    program_name,
 		    (font_cnt + (unsigned) available) * sizeof(FontList));
 	    exit(-1);
 	}
+	font_list = new_list;
     }
     for (int i = 0; i < available; i++) {
 	font_list[font_cnt].name = fonts[i];
