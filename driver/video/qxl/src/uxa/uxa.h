@@ -43,6 +43,8 @@
 #define UXA_VERSION_MINOR   0
 #define UXA_VERSION_RELEASE 0
 
+typedef void *pointer;
+
 typedef enum {
 	UXA_ACCESS_RO,
 	UXA_ACCESS_RW

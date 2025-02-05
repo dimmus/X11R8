@@ -56,3 +56,10 @@ xf86-video-ati - Xorg driver for ATI/AMD Radeon GPUs using the radeon kernel dri
 Questions regarding this software should be directed at: 
 https://lists.freedesktop.org/mailman/listinfo/amd-gfx
 https://gitlab.freedesktop.org/xorg/driver/xf86-video-ati
+
+## QXL
+
+The QXL virtual GPU is found in the Red Hat Enterprise
+Virtualisation system, and also in the spice project.
+
+https://gitlab.freedesktop.org/xorg/driver/xf86-video-qxl
