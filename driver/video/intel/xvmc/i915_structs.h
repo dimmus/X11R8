@@ -672,7 +672,9 @@ struct i915_3dstate_pixel_shader_program {
 
 #define REG_CR0         0x00000001
 #define REG_CR1         0x00000002
+#ifndef __USE_GNU
 #define REG_CR2         0x00000004
+#endif
 #define REG_CR3         0x00000008
 #define REG_CR4         0x00000010
 #define REG_CR5         0x00000020
