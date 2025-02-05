@@ -653,6 +653,7 @@ static Bool intel_driver_func(ScrnInfoPtr pScrn,
 #ifdef KMS
 extern XF86ConfigPtr xf86configptr;
 
+#ifdef XFree86LOADER
 static XF86ConfDevicePtr
 _xf86findDriver(const char *ident, XF86ConfDevicePtr p)
 {
@@ -694,6 +695,7 @@ static enum accel_method { NOACCEL, SNA, UXA } get_accel_method(void)
 
 	return accel_method;
 }
+#endif
 #endif
 
 #ifdef XFree86LOADER
