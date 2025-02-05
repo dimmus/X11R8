@@ -273,7 +273,7 @@ static void align_urb_fence()
 	int i, offset_to_next_cacheline;
 	unsigned long batch_offset;
 	BEGIN_BATCH(3);
-	batch_offset = (void *)batch_ptr - xvmc_driver->alloc.ptr;
+	batch_offset = (unsigned char *)batch_ptr - (unsigned char *)xvmc_driver->alloc.ptr;
 	offset_to_next_cacheline = ALIGN(batch_offset, 64) - batch_offset;
 	if (offset_to_next_cacheline <= 12 && offset_to_next_cacheline != 0) {
 		for (i = 0; i < offset_to_next_cacheline / 4; i++)
