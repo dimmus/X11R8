@@ -131,7 +131,7 @@ dep_xkbcomp      = dependency('xkbcomp',        required: false)
 dep_dbus         = dependency('dbus-1',         required: get_option('systemd_logind') == 'true', version: '>= 1.0')
 dep_fontutil     = dependency('fontutil',       required: false)
 dep_drm          = dependency('libdrm',         required: true, version: '>= 2.4.116') # server/hw/xfree86, driver/video/intel
-dep_gl           = dependency('gl',             required: true, version: '>= 1.2') # server/glx, static/epoxy
+dep_gl           = dependency('gl',             required: true, version: '>= 1.2') # server/glx, static/epoxy, driver/amdgpu
 dep_gbm          = dependency('gbm',            required: true ) # server/glamor
 dep_epoxy        = dependency('epoxy',          required: not WITH_INT_EPOXY) # server/glamor
 dep_pciaccess    = dependency('pciaccess',      required: get_option('pciaccess'), version: '>= 0.12.901') # server/hw/xfree86
@@ -157,6 +157,7 @@ dep_input        = dependency('libinput',       required: true, version: '>= 1.1
 # dep_png          = dependency('libpng',         required: true) # video/intel (test, tools)
 # dep_drm_intel    = dependency('libdrm_intel',   required: true) # video/intel
 dep_drm_nouveau  = dependency('libdrm_nouveau', required: true) # video/nouveau
+dep_drm_radeon   = dependency('libdrm_radeon',  required: true) # video/ati
 dep_xa           = dependency('xatracker',      required: true) # video/vmware
 
 exe_bison        = find_program('bison',        required: false)
