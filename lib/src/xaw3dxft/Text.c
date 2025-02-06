@@ -2547,8 +2547,8 @@ _XawTextSetSelection(TextWidget ctx, XawTextPosition l, XawTextPosition r,
   if (nelems == 1 && !strcmp (list[0], "none"))
     return;
   if (nelems == 0) {
-    String defaultSel = "PRIMARY";
-    list = &defaultSel;
+    static const char defaultSel[] = "PRIMARY";
+    list = (String *)&defaultSel;
     nelems = 1;
   }
   _SetSelection(ctx, l, r, _XawTextSelectionList(ctx, list, nelems), nelems);
