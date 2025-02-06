@@ -36,7 +36,7 @@ install_deps()
         "Ubuntu"|"Kali GNU/Linux")
             sudo apt-get install -y \
             build-essential meson ninja-build pkgconf zlib1g-dev libbz2-dev bzip2 \
-            libfreetype-dev libfontconfig-dev libgbm-dev libunwind-dev \
+            libfreetype-dev libfontconfig-dev libgbm-dev libunwind-dev libjpeg-dev \
             flex bison libinput-dev libssl-dev libncurses-dev ncurses-base \
             mesa-common-dev libgl1-mesa-dri libegl1-mesa-dev libxatracker-dev
             
