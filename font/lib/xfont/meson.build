@@ -30,14 +30,6 @@ conf.set('XFONT_BITMAP', 1)    # Support bitmap font files
 conf.set('XFONT_FONTFILE', 1)  # Support fonts in files
 conf.set('XFONT_FC', 1)        # Support the X Font Services Protocol
 
-# TODO: implement for Windows
-# [AC_LANG_SOURCE([[
-#   #if defined(__CYGWIN__) || defined(__MINGW32__)
-#   #error No visibility support
-#   #endif
-#   extern __attribute__((__visibility__("default"))) int x;
-# ]])],
-
 src = files(
   'stubs/atom.c',
   'stubs/libxfontstubs.c',
@@ -82,7 +74,12 @@ src += files(
   'FreeType/ftfuncs.c',
   'FreeType/fttools.c',
   'FreeType/xttcap.c',
-) 
+)
+
+# if XFONT_TRUETYPE # XXX: need libx11
+# src += files(
+#   'TrueType/FontCache.c',
+# ) 
 
 # if XFONT_BITMAP
 src += files(
