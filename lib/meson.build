@@ -30,6 +30,7 @@ subdir('ext' / 'xvmc')
 subdir('ext' / 'xf86dga')
 subdir('ext' / 'xf86vm')
 subdir('ext' / 'dmx')
+subdir('ext' / 'xtrap')
 if WITH_TESTS
 subdir('test')
 endif
