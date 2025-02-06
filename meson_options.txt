@@ -7,6 +7,7 @@ option('build-static-epoxy',    type: 'boolean', value: true )
 option('build-static-pixman',   type: 'boolean', value: true )
 option('build-xproto-legacy',   type: 'boolean', value: false)
 option('build-demo',            type: 'boolean', value: false)
+option('build-app',             type: 'boolean', value: true )
 option('build-test',            type: 'boolean', value: false)
 option('build-doc',             type: 'boolean', value: false)
 
@@ -108,6 +109,9 @@ option('ge',                    type: 'boolean', value: true)
 option('build-doc-guide',       type: 'boolean', value: false,   description: 'Build development guides')
 option('build-doc-pdf',         type: 'boolean', value: false,   description: 'Build documentation as pdf files')
 option('build-doc-man',         type: 'boolean', value: true,    description: 'Build manual pages')
+
+## app
+option('xli',                   type: 'boolean', value: false)
 
 ## demo
 option('demo-x11perf',          type: 'boolean', value: true )

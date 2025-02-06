@@ -110,6 +110,7 @@ WITH_DOC_MAN     = get_option('build-doc-man')
 WITH_INT_PIXMAN  = get_option('build-static-pixman')
 WITH_INT_EPOXY   = get_option('build-static-epoxy')
 WITH_DEMO        = get_option('build-demo')
+WITH_APP         = get_option('build-app')
 WITH_DTRACE      = get_option('dtrace')
 WITH_XTHREAD_DBG = false
 
@@ -143,6 +144,9 @@ dep_nettle       = dependency('nettle',         required: false) # server/os
 dep_gcrypt       = dependency('libgcrypt',      required: false) # server/os
 dep_openssl      = dependency('openssl',        required: false) # server/os
 
+# app
+dep_jpeg         = dependency('libjpeg',        required: get_option('xli')) # app/xli
+
 # static
 dep_threads      = dependency('threads',        required: get_option('build-video-intel')) # pixman, driver/video/intel
 dep_openmp       = dependency('openmp',         required: get_option('openmp')) # pixman
@@ -153,7 +157,7 @@ dep_gles2        = dependency('glesv2',         required: WITH_INT_EPOXY) # epox
 dep_udev         = dependency('libudev',        required: false) # input/evdev
 dep_evdev        = dependency('libevdev',       required: false) # input/evdev
 dep_input        = dependency('libinput',       required: true, version: '>= 1.11.0') # input/libinput
-# dep_cairo        = dependency('cairo',          required: true ) # video/intel (test)
+dep_cairo        = dependency('cairo',          required: false) # video/intel (test)
 dep_png          = dependency('libpng',         required: true ) # video/intel (test, tools)
 dep_drm_intel    = dependency('libdrm_intel',   required: true ) # video/intel
 dep_drm_nouveau  = dependency('libdrm_nouveau', required: true ) # video/nouveau
