@@ -398,7 +398,7 @@ OpenIM(XawVendorShellExtPart *ve)
 
 	if (pbuf == NULL) return;
 
-	for(ns=s=ve->im.input_method; ns && *s;) {
+	for(ns=s=(char *)ve->im.input_method; ns && *s;) {
 	    /* skip any leading blanks */
 	    while (*s && isspace(*s)) s++;
 	    if (!*s) break;
@@ -438,7 +438,7 @@ OpenIM(XawVendorShellExtPart *ve)
 	return;
     }
     found = False;
-    for(ns = s = ve->im.preedit_type; s && !found;) {
+    for(ns = s = (char *)ve->im.preedit_type; s && !found;) {
 	while (*s && isspace(*s)) s++;
 	if (!*s) break;
 	if ((ns = end = strchr(s, ',')) == NULL)
@@ -1522,7 +1522,7 @@ _XawImWcLookupString(
     if ((vw = SearchVendorShell(inwidg)) && (ve = GetExtPart(vw)) &&
 	ve->im.xim && (p = GetIcTableShared(inwidg, ve)) && p->xic) {
           if (_Xaw3dXft->encoding == -1)
-	      ret = Xutf8LookupString (p->xic, event, buffer_return, bytes_buffer, keysym_return, status_return);
+	      ret = Xutf8LookupString (p->xic, event, (char *)buffer_return, bytes_buffer, keysym_return, status_return);
           else
 	      ret = XwcLookupString(p->xic, event, buffer_return, bytes_buffer,
 				 keysym_return, status_return);

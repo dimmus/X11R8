@@ -336,7 +336,7 @@ extern _XtStringDefs_h_Const char XtStrings[];
 #define XtNbitmap ((String)&XtStrings[80])
 #endif
 #ifndef XtNborderColor
-#define XtNborderColor ((String)&XtStrings[87])
+#define XtNborderColor ((char *)&XtStrings[87])
 #endif
 #ifndef XtNborder
 #define XtNborder ((String)&XtStrings[99])
@@ -432,7 +432,7 @@ extern _XtStringDefs_h_Const char XtStrings[];
 #define XtNknobWidth ((String)&XtStrings[419])
 #endif
 #ifndef XtNlabel
-#define XtNlabel ((String)&XtStrings[429])
+#define XtNlabel ((char *)&XtStrings[429])
 #endif
 #ifndef XtNlength
 #define XtNlength ((String)&XtStrings[435])
@@ -507,7 +507,7 @@ extern _XtStringDefs_h_Const char XtStrings[];
 #define XtNselectionArray ((String)&XtStrings[696])
 #endif
 #ifndef XtNsensitive
-#define XtNsensitive ((String)&XtStrings[711])
+#define XtNsensitive ((char *)&XtStrings[711])
 #endif
 #ifndef XtNshown
 #define XtNshown ((String)&XtStrings[721])

@@ -668,7 +668,7 @@ PaintItemName(Widget w, int item)
     x     += lw->list.column_space / 2;
     str_y += lw->list.row_space    / 2;
 
-    str =  lw->list.list[item];	/* draw it */
+    str =  (char *)lw->list.list[item];	/* draw it */
 
     ClipToShadowInteriorAndLongest( lw, &gc, x );
 
@@ -1110,7 +1110,7 @@ Destroy(Widget w)
  */
 
 void
-XawListChange(Widget w, char ** list, int nitems, int longest,
+XawListChange(Widget w, const char ** list, int nitems, int longest,
 #if NeedWidePrototypes
 	      int resize_it)
 #else

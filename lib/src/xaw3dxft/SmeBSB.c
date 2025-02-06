@@ -244,7 +244,7 @@ Destroy(Widget w)
 	XFreePixmap(XtDisplayOfObject(w), entry->sme_bsb.right_stippled);
 #endif
     if (entry->sme_bsb.label != XtName(w))
-	XtFree(entry->sme_bsb.label);
+	XtFree((char *)entry->sme_bsb.label);
 }
 
 /*      Function Name: Redisplay
@@ -310,7 +310,7 @@ Redisplay(Widget w, XEvent * event, Region region)
         int x_loc = entry->rectangle.x + entry->sme_bsb.left_margin;
 	int len = strlen(entry->sme_bsb.label);
 	int width, t_width;
-	char * label = entry->sme_bsb.label;
+	char * label = (char *)entry->sme_bsb.label;
 
 	switch(entry->sme_bsb.justify) {
 	    case XtJustifyCenter:
@@ -601,7 +601,7 @@ GetDefaultSize(Widget w, Dimension * width, Dimension * height)
 	    *width = 0;
         else
 	    *width = Xaw3dXftTextWidth(w, entry->sme_bsb.xftfont,
-			    entry->sme_bsb.label,
+			    (char *)entry->sme_bsb.label,
 			    strlen(entry->sme_bsb.label));
         *height = entry->sme_bsb.xftfont->height + _Xaw3dXft->menu_spacing;
     } else

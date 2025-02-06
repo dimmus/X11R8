@@ -332,7 +332,7 @@ GetValuesHook(Widget w, ArgList args, Cardinal *num_args)
     if (streq(args[i].name, XtNvalue)) {
       XtSetArg(a[0], XtNstring, &s);
       XtGetValues(src->dialog.valueW, a, 1);
-      *((char **) args[i].value) = s;
+      *((char **) args[i].value) = (char *)s;
     }
 }
 

@@ -1198,7 +1198,7 @@ InsertNewLineAndIndent(Widget w, XEvent *event, String *p, Cardinal *n)
      *ptr = '\0';
      text.length = strlen(text.ptr);
   }
-  XtFree( line_to_ip );
+  XtFree( (char *)line_to_ip );
 
   if (_XawTextReplace(ctx,ctx->text.insertPos, ctx->text.insertPos, &text)) {
     XBell(XtDisplay(ctx), 50);
@@ -1611,7 +1611,7 @@ InsertString(Widget w, XEvent *event, String *params, Cardinal *num_params)
   StartAction(ctx, event);
   for ( i = *num_params; i; i--, params++ ) { /* DO FOR EACH PARAMETER */
 
-      text.ptr = IfHexConvertHexElseReturnParam( *params, &text.length );
+      text.ptr = IfHexConvertHexElseReturnParam( (char *)params, &text.length );
 
       if ( text.length == 0 ) continue;
 
@@ -1684,7 +1684,7 @@ DisplayCaret(Widget w, XEvent *event, String *params, Cardinal *num_params)
 
   if (*num_params > 0) {	/* default arg is "True" */
       XrmValue from, to;
-      from.size = strlen(from.addr = params[0]);
+      from.size = strlen(from.addr = (char *)params[0]);
       XtConvert( w, XtRString, &from, XtRBoolean, &to );
 
       if ( to.addr != NULL )

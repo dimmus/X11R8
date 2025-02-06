@@ -58,6 +58,7 @@ in this Software without prior written authorization from the X Consortium.
  *
  */
 
+#include <stdlib.h>
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -137,7 +138,6 @@ static Boolean WriteToFile(String, String);
 static void (MyWStrncpy)();
 #endif
 
-extern char *tmpnam(String);
 #ifdef X_NOT_STDC_ENV
 extern int errno;
 #endif
@@ -750,8 +750,8 @@ SetValues(Widget current, Widget request, Widget new, ArgList args, Cardinal *nu
 
       if ( mb_string != 0 ) {
           FreeAllPieces( old_src );
-          LoadPieces( src, NULL, mb_string );
-          XtFree( mb_string );
+          LoadPieces( src, NULL, (char *)mb_string );
+          XtFree( (char *)mb_string );
       } else {
           /* If the buffer holds bad chars, don't touch it... */
           XtAppWarningMsg( app_con,
@@ -868,7 +868,7 @@ _XawMultiSave(
       if (!src->multi_src.changes) 		/* No changes to save. */
           return(TRUE);
 
-      mb_string = StorePiecesInString( src );
+      mb_string = (char *)StorePiecesInString( src );
 
       if ( mb_string != 0 ) {
           if ( WriteToFile( mb_string, src->multi_src.string ) == FALSE ) {
@@ -891,7 +891,7 @@ _XawMultiSave(
   /* THIS FUNCTIONALITY IS UNDOCUMENTED, probably UNNEEDED?  The manual
   says this routine's only function is to save files to disk.  -Sheeran */
 
-      mb_string = StorePiecesInString( src );
+      mb_string = (char *)StorePiecesInString( src );
 
       if ( mb_string == 0 ) {
           /* If the buffer holds bad chars, don't touch it... */
@@ -935,7 +935,7 @@ _XawMultiSaveAsFile(
 
   if ( mb_string != 0 ) {
       ret = WriteToFile( mb_string, (char *)name );
-      XtFree( mb_string );
+      XtFree( (char *)mb_string );
       return( ret );
   }
 
@@ -1058,7 +1058,7 @@ InitStringOrFile(MultiSrcObject src, Boolean newString)
             if ( src->multi_src.allocated_string )
                 XtFree( src->multi_src.string );
             src->multi_src.allocated_string = True;
-	    src->multi_src.string = temp;
+	    src->multi_src.string = (char *)temp;
 
 	    length = strlen(src->multi_src.string);
 
@@ -1104,7 +1104,7 @@ InitStringOrFile(MultiSrcObject src, Boolean newString)
             src->multi_src.allocated_string = False;
 	    src->multi_src.string = fileName;
 
-	    (void) tmpnam(src->multi_src.string);
+      mkstemp(src->multi_src.string);
 	    src->multi_src.is_tempfile = TRUE;
 	    open_mode = "w";
 	} else

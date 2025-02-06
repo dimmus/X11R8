@@ -14,13 +14,14 @@ subdir('ext' / 'xext')
 subdir('src' / 'xpm')     # <- ext/xext
 subdir('src' / 'xmu')     # <- ext/xext
 subdir('src' / 'xaw')     # <- ext/xext
-subdir('src' / 'xaw3d')
-# subdir('src' / 'xaw3dxft')
+# subdir('src' / 'xaw3d')
+subdir('src' / 'xaw3dxft')
 subdir('ext' / 'xrandr')
 subdir('ext' / 'xdamage')
 subdir('ext' / 'xcomposite')
 subdir('ext' / 'xinerama')
 subdir('ext' / 'xkbfile')
+# subdir('ext' / 'xkbui') # TODO: needs to find "XKBui.h"
 subdir('ext' / 'xss')
 subdir('ext' / 'xi')
 subdir('ext' / 'xres')

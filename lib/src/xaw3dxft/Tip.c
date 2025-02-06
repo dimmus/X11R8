@@ -24,7 +24,7 @@
  * dealings in this Software without prior written authorization from the
  * XFree86 Project.
  *
- * Author: Paulo César Pereira de Andrade
+ * Author: Paulo Cï¿½sar Pereira de Andrade
  */
 
 /*
@@ -337,7 +337,7 @@ XawTipExpose(Widget w, XEvent *event, Region region)
 {
     TipWidget tip = (TipWidget)w;
     GC gc = tip->tip.gc;
-    char *nl, *label = tip->tip.label;
+    char *nl, *label = (char *)tip->tip.label;
     Position y;
     int len;
     static int bw = -1;
@@ -454,7 +454,7 @@ TipLayout(XawTipInfo *info)
     XFontStruct	*font = info->tip->tip.font;
     XftFont *xftfont = info->tip->tip.xftfont;
     int width = 0, height;
-    char *nl, *label = info->tip->tip.label;
+    char *nl, *label = (char *)info->tip->tip.label;
 
     if (_Xaw3dXft->encoding) {
 	height = xftfont->height + 4;

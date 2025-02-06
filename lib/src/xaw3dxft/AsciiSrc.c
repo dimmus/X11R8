@@ -832,7 +832,7 @@ Boolean
 XawAsciiSaveAsFile(Widget w, _Xconst char* name)
 {
   AsciiSrcObject src = (AsciiSrcObject) w;
-  String string;
+  char * string;
   Boolean ret;
 
   /* If the src is really a multi, call the multi save. - */
@@ -852,7 +852,7 @@ XawAsciiSaveAsFile(Widget w, _Xconst char* name)
 		   NULL, NULL);
   }
 
-  string = StorePiecesInString(src);
+  string = (char *)StorePiecesInString(src);
 
   ret = WriteToFile(string, name);
   XtFree(string);
@@ -1019,7 +1019,7 @@ InitStringOrFile(AsciiSrcObject src, Boolean newString)
     case XawtextEdit:
 	if (src->ascii_src.string == NULL) {
 	    src->ascii_src.string = fileName;
-	    (void) tmpnam(src->ascii_src.string);
+      mkstemp(src->ascii_src.string);
 	    src->ascii_src.is_tempfile = TRUE;
 	    open_mode = "w";
 	} else
@@ -1086,7 +1086,7 @@ LoadPieces(AsciiSrcObject src, FILE * file, const char * string)
       local_str = src->ascii_src.string;
   }
   else
-    local_str = string;
+    local_str = (char *)string;
 
   if (src->ascii_src.use_string_in_place) {
     piece = AllocNewPiece(src, piece);
