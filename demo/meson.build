@@ -29,4 +29,5 @@ if WITH_DEMO
     if get_option('demo-xgas')
         subdir('xgas')
     endif
+    subdir('xgetres')
 endif

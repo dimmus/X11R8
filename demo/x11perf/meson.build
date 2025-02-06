@@ -1,8 +1,8 @@
 ver_x11pef = '1.7.0'
 
-conf.set('XRENDER', 1)
-conf.set('XFT', 1)
-conf.set('MITSHM', 1)
+conf.set('XRENDER', true)
+conf.set('XFT', true)
+conf.set('MITSHM', true)
 conf.set_quoted('X11PERF_PACKAGE_STRING', ver_x11pef)
 
 dep_ext_x11perf = [dep_m, dep_freetype2, dep_fontconfig]
