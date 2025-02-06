@@ -222,7 +222,7 @@ endforeach
 h_unique = []
 foreach h: h_check
   if not h_unique.contains(h)
-    if h == 'unistd.h' and cc.has_header(h)
+    if (h == 'unistd.h' or h == 'fcntl.h') and cc.has_header(h)
       conf.set('HAVE_@0@'.format(h.underscorify().to_upper()), 1) # avoid warning with redefinition in freetype2
     else
       conf.set('HAVE_@0@'.format(h.underscorify().to_upper()), cc.has_header(h))

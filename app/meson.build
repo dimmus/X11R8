@@ -8,4 +8,7 @@ subdir('xmodmap')
 if get_option('xli')
     subdir('xli')
 endif
+if get_option('xbindkeys')
+    subdir('xbindkeys')
+endif
 endif

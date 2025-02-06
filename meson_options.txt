@@ -112,6 +112,7 @@ option('build-doc-man',         type: 'boolean', value: true,    description: 'B
 
 ## app
 option('xli',                   type: 'boolean', value: false)
+option('xbindkeys',             type: 'boolean', value: true)
 
 ## demo
 option('demo-x11perf',          type: 'boolean', value: true )
