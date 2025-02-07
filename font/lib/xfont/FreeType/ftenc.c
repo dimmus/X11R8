@@ -85,7 +85,7 @@ FTPickMapping(char *xlfd, int length, char *filename, FT_Face face,
 
     symbol = FTEncFontSpecific(encoding_name);
 
-#if XFONT_BDFFORMAT
+#ifdef XFONT_BDFFORMAT
     ftrc = FT_Get_BDF_Charset_ID(face, &enc, &reg);
 #else
     ftrc = -1;

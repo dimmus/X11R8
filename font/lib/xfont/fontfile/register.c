@@ -26,11 +26,9 @@ in this Software without prior written authorization from The Open Group.
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
-#else
-#define XFONT_BITMAP 1
 #endif
-#include "libxfontint.h"
 
+#include "libxfontint.h"
 #include "fontmisc.h"
 #include "fntfilst.h"
 #include "bitmap.h"
@@ -56,7 +54,6 @@ FontFileRegisterFpeFunctions(void)
 #ifdef XFONT_FREETYPE
     FreeTypeRegisterFontFileFunctions();
 #endif
-
     FontFileRegisterLocalFpeFunctions ();
 #ifdef HAVE_READLINK
     CatalogueRegisterLocalFpeFunctions ();

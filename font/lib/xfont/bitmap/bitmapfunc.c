@@ -36,17 +36,19 @@ in this Software without prior written authorization from The Open Group.
 #include "fntfilst.h"
 #include "bitmap.h"
 #include "fontutil.h"
-#if XFONT_BDFFORMAT
+#ifdef XFONT_BDFFORMAT
 #include "bdfint.h"
 #endif
-#if XFONT_PCFFORMAT
+#ifdef XFONT_PCFFORMAT
 #include "pcf.h"
 #endif
-#if XFONT_SNFFORMAT
+#ifdef XFONT_SNFFORMAT
 #include "snfstr.h"
 #endif
 
-#if XFONT_PCFFORMAT || XFONT_SNFFORMAT || XFONT_BDFFORMAT
+#if defined(XFONT_PCFFORMAT) || defined(XFONT_SNFFORMAT) || \
+    defined(XFONT_BDFFORMAT)
+
 typedef struct _BitmapFileFunctions {
     int         (*ReadFont) (FontPtr /* pFont */, FontFilePtr /* file */,
 			     int /* bit */, int /* byte */,
@@ -63,7 +65,7 @@ static int BitmapGetRenderIndex(FontRendererPtr renderer);
  *
  */
 static BitmapFileFunctionsRec readers[] = {
-#if XFONT_PCFFORMAT
+#ifdef XFONT_PCFFORMAT
     { pcfReadFont, pcfReadFontInfo} ,
     { pcfReadFont, pcfReadFontInfo} ,
 # ifdef X_GZIP_FONT_COMPRESSION
@@ -73,7 +75,7 @@ static BitmapFileFunctionsRec readers[] = {
     { pcfReadFont, pcfReadFontInfo} ,
 # endif
 #endif
-#if XFONT_SNFFORMAT
+#ifdef XFONT_SNFFORMAT
     { snfReadFont, snfReadFontInfo},
     { snfReadFont, snfReadFontInfo},
 # ifdef X_GZIP_FONT_COMPRESSION
@@ -83,7 +85,7 @@ static BitmapFileFunctionsRec readers[] = {
     { snfReadFont, snfReadFontInfo} ,
 # endif
 #endif
-#if XFONT_BDFFORMAT
+#ifdef XFONT_BDFFORMAT
     { bdfReadFont, bdfReadFontInfo} ,
     { bdfReadFont, bdfReadFontInfo} ,
 # ifdef X_GZIP_FONT_COMPRESSION
@@ -165,7 +167,7 @@ BitmapGetInfoBitmap (FontPathElementPtr fpe, FontInfoPtr pFontInfo,
 }
 
 static FontRendererRec	renderers[] = {
-#if XFONT_PCFFORMAT
+#ifdef XFONT_PCFFORMAT
     { ".pcf", 4, BitmapOpenBitmap, BitmapOpenScalable,
 	BitmapGetInfoBitmap, BitmapGetInfoScalable, 0,
 	CAPABILITIES },
@@ -185,7 +187,7 @@ static FontRendererRec	renderers[] = {
 	CAPABILITIES },
 # endif
 #endif
-#if XFONT_SNFFORMAT
+#ifdef XFONT_SNFFORMAT
     { ".snf", 4, BitmapOpenBitmap, BitmapOpenScalable,
 	BitmapGetInfoBitmap, BitmapGetInfoScalable, 0,
 	CAPABILITIES },
@@ -203,7 +205,7 @@ static FontRendererRec	renderers[] = {
 	CAPABILITIES },
 # endif
 #endif
-#if XFONT_BDFFORMAT
+#ifdef XFONT_BDFFORMAT
     { ".bdf", 4, BitmapOpenBitmap, BitmapOpenScalable,
 	BitmapGetInfoBitmap, BitmapGetInfoScalable, 0,
 	CAPABILITIES },
