@@ -1,5 +1,3 @@
-ver_xaw3d = '1.6.6'
-
 lib_args = [
   '-DXAW_INTERNATIONALIZATION',
   '-DXAW_MULTIPLANE_PIXMAPS',
@@ -101,6 +99,3 @@ pkg.generate(lib,
   requires: ['xproto', 'xmu', 'xt'],
   requires_private: ['x11', 'xext']
 )
-
-# Cflags: -I${includedir} @XAW3D_CPPFLAGS@
-# Libs: -L${libdir} -lXaw3d

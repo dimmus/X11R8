@@ -17,6 +17,8 @@ ver_xt           = '1.3.0'
 ver_xtrans       = '1.5.1'
 ver_xcb          = '1.17.0'
 ver_xshmfence    = '1.3.2'
+ver_xaw3d        = '1.6.6'
+ver_xaw3dxft     = '1.6.2'
 
 # extensions
 ver_dmx          = '1.1.5'

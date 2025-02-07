@@ -1,7 +1,7 @@
 lib_args = ['-DXKB', '-DXT_GEO_TATTLER']
 
-f_check += ['reallocarray']
-h_check += ['alloca.h']
+f_check += ['malloc_usable_size', 'reallocarray']
+h_check += ['malloc.h', 'alloca.h']
 
 dep_int_xt = [libsm, libice, libx11, xproto]
 

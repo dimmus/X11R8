@@ -1,29 +1,21 @@
-conf.set('XCURSOR_LIB_MAJOR', 1)
-conf.set('XCURSOR_LIB_MINOR', 2)
-conf.set('XCURSOR_LIB_REVISION', 3)
+ver = ver_xcursor.split('.')
+
+lib_args = [
+  '-DXCURSOR_LIB_MAJOR=@0@'.format(ver[0]),
+  '-DXCURSOR_LIB_MINOR=@0@'.format(ver[1]),
+  '-DXCURSOR_LIB_REVISION=@0@'.format(ver[2]),
+]
 
 dep_int_xcursor = [xproto, libx11, libxrender, libxfixes]
 
-conf.set('HAVE_XFIXES', 1)
+conf.set('HAVE_XFIXES', true)
 
 # TODO: implement. Need?
-# AC_ARG_WITH(icondir,
-#         AS_HELP_STRING([--with-icondir=<path>],
-#                        [Set default icon directory (default: ${datadir}/icons)]),
-#         [ICONDIR="$withval"],
-#         [ICONDIR=${datadir}/icons])
-# AC_SUBST([ICONDIR])
-
+# ICONDIR=${datadir}/icons])
 # DEF_CURSORPATH="~/.local/share/icons:~/.icons:${datadir}/icons:${datadir}/pixmaps"
 # if test "x${ICONDIR}" != "x${datadir}/icons"; then
 # 	DEF_CURSORPATH="${DEF_CURSORPATH}:${ICONDIR}"
 # fi
-# AC_ARG_WITH(cursorpath,
-#         AS_HELP_STRING([--with-cursorpath=<paths>],
-#                        [Set default search path for cursors]),
-#         [XCURSORPATH="$withval"],
-#         [XCURSORPATH=$DEF_CURSORPATH])
-# AC_SUBST([XCURSORPATH])
 
 src = files(
   'xcursorint.h',
@@ -35,6 +27,7 @@ src = files(
 )
 
 lib = library('Xcursor', src,
+  c_args: lib_args,
   include_directories: inc_lib,
   dependencies: dep_int_xcursor,
   version: '1.0.2',
@@ -53,5 +46,3 @@ pkg.generate(lib,
   requires: 'xproto',
   requires_private: ['x11', 'xrender', 'xfixes']
 )
-
-

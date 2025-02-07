@@ -362,6 +362,18 @@ and the O'Reilly X Toolkit books, which they have made freely available online:
 
 The primary development code repository can be found at: https://gitlab.freedesktop.org/xorg/lib/libXt
 
+## libxshmfence - Shared memory 'SyncFence' synchronization primitive
+
+This library offers a CPU-based synchronization primitive compatible
+with the X SyncFence objects that can be shared between processes
+using file descriptor passing.
+
+There are two underlying implementations:
+ 1) On Linux, the library uses futexes
+ 2) On other systems, the library uses posix mutexes and condition variables.
+
+The primary development code repository can be found at: https://gitlab.freedesktop.org/xorg/lib/libxshmfence
+
 ## X11 - Core X11 protocol client library
 
 Documentation for this library can be found in the included man pages,

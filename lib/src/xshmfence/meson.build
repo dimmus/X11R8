@@ -1,14 +1,17 @@
-# h_check += ['sys/umtx.h', 'linux/futex.h', 'sys/memfd.h', 'pthread.h']
-h_check += ['pthread.h']
+# Enable only one of them!
+WITH_PTHREAD = true
+WITH_FUTEX   = not WITH_PTHREAD
+
+if WITH_PTHREAD
+  h_check += ['sys/memfd.h', 'pthread.h']
+else
+  h_check += ['sys/umtx.h', 'linux/futex.h']
+endif
 f_check += ['memfd_create', 'mkostemp']
 
-dep_int_xshmfence = [xproto]
+dep_int_xshmfence = xproto
 
-lib_args = []
-
-shmdirs = ['/run/shm', '/dev/shm', '/var/tmp', '/tmp']
-
-foreach dir : shmdirs
+foreach dir : ['/run/shm', '/dev/shm', '/var/tmp', '/tmp']
   if fs.is_dir(dir)
     conf.set_quoted('SHMDIR', dir)
   endif
@@ -16,20 +19,15 @@ endforeach
 
 src = files('xshmfence_alloc.c')
 
-# Enable only one of them!
-WITH_PTHREAD = true  # h_check += ['pthread.h']
-WITH_FUTEX   = false # h_check += ['sys/umtx.h', 'linux/futex.h']
-
 if WITH_PTHREAD
   src += files('xshmfence_pthread.c')
 endif
 
 if WITH_FUTEX
-  src += files('futex/xshmfence_futex.c')
+  src += files('xshmfence_futex.c')
 endif
 
 lib = library('xshmfence', src,
-  c_args: lib_args,
   include_directories: inc_lib,
   dependencies: dep_int_xshmfence,
   version: '1.0.0',

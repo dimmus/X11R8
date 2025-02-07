@@ -1,3 +1,7 @@
 inc_lib += include_directories('.')
 
-subdir('libxcvt')
+install_headers(
+    'libxcvt/libxcvt.h',
+    'libxcvt/libxcvt_mode.h',
+    subdir: 'libxcvt'
+)

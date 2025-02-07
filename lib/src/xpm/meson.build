@@ -1,6 +1,7 @@
 lib_args = []
 
 f_check += ['strlcat', 'fork', 'closefrom']
+f_check += get_option('sxpm') ? ['close_range', 'break'] : ''
 
 if get_option('zfile-open')
   if exe_gzip.found()
@@ -23,19 +24,10 @@ else
   COMPRESSED_PIXMAPS = true
 endif
 
-if get_option('sxpm')
-  f_check += ['close_range', 'break']
-endif
-
-if get_option('zfile-stat')
-  lib_args += '-DSTAT_ZFILE'
-endif
+lib_args += get_option('zfile-stat') ? '-DSTAT_ZFILE'  : '-DNULL'
+lib_args += dep_gettext.found()      ? '-DUSE_GETTEXT' : '-DNULL'
 
 dep_int_xpm = [libx11, xproto, libxext, libxt]
-
-if dep_gettext.found()
-  lib_args += '-DUSE_GETTEXT'
-endif
 
 src = files(
   'Attrib.c',
@@ -89,8 +81,7 @@ pkg.generate(lib,
   requires: 'x11',
 )
 
-executable('cxpm', 
-  'cxpm/cxpm.c',
+executable('cxpm', 'cxpm/cxpm.c',
   dependencies: dep_int_xpm,
   c_args: lib_args,
   include_directories: inc_lib,
