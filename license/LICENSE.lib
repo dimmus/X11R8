@@ -1,3 +1,33 @@
+x11:
+    Copyright 2003-2006,08 Jamey Sharp, Josh Triplett
+    Copyright 2009 Red Hat, Inc.
+    Copyright 1990-1992,99, 2000,04,09,10,15,17 Oracle and/or its affiliates
+    Copyright 1984-1994, 1998 The Open Group
+    Copyright 1985-1991,94,96 X Consortium
+    Copyright 2000 The XFree86 Project, Inc
+    Copyright 1985-1991,93 by Digital Equipment Corporation, Maynard, Massachusetts
+    Copyright 1999-2000 Free Software Foundation, Inc
+    Copyright 1990,91 Tektronix, Inc
+    Copyright 1992 by Oki Technosystems Laboratory, Inc
+    Copyright 1991,92 by Fuji Xerox Co., Ltd
+    Copyright 1990-1995 by FUJITSU LIMITED
+    Copyright 1993 by Fujitsu Open Systems Solutions, Inc.
+    Copyright 1993 by Digital Equipment Corporation, Maynard, Massachusetts,
+    Copyright 1993,94 by Sony Corporation
+    Copyright 1991 by the Open Software Foundation
+    Copyright 1993,95 by Silicon Graphics Computer Systems, Inc
+    Copyright 1993 by SunSoft, Inc.
+    Copyright 1999-2000 by Bruno Haible
+    Copyright 1991 by the Open Software Foundation
+    Copyright 1992,93 by the TOSHIBA Corp.
+    Copyright 1988 by Wyse Technology, Inc., San Jose, Ca
+    Copyright 1990,91 by OMRON Corporation, NTT Software Corporation,
+                     and Nippon Telegraph and Telephone Corporation
+    Copyright 1996 by Sebastien Marineau and Holger Veit
+    Copyright 2003 Keith Packard
+    Copyright 2007-2009, Troy D. Hanson
+    Copyright 1993 IBM Corporation
+    Copyright 2008 Otto Moerbeek
 dmx: 
     Copyright 2002-2004 Red Hat Inc., Durham, North Carolina
 ice:

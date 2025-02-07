@@ -1,0 +1,134 @@
+server:
+    Copyright 1985-1998, 2001 The Open Group
+    Copyright 1987 by the Regents of the University of California
+    Copyright 1987-1991,1993,96,97 by Digital Equipment Corporation, Maynard, Massachusetts
+    Copyright 1987,1998 The Open Group
+    Copyright 1987,2003-2006, 2008-2010 Oracle and/or its affiliates
+    Copyright 1987,89,90,1992-1995 X Consortium
+    Copyright 1987,90,93 The Regents of the University of California
+    Copyright 1988,91 Adobe Systems Incorporated
+    Copyright 1989 Network Computing Devices, Inc., Mountain View, California
+    Copyright 1989,94,95,2002 Hewlett-Packard Company
+    Copyright 1990-1993 by Thomas Roell, Dinkelscherben, Germany
+    Copyright 1991 Massachusetts Institute of Technology, Cambridge, Massachusetts
+    Copyright 1991-1993 by SGCS (Snitily Graphics Consulting Services), USA
+    Copyright 1991-2000 Silicon Graphics, Inc
+    Copyright 1991-1993 Olivetti Research Limited, Cambridge, England
+    Copyright 1992 by David Dawes
+    Copyright 1992 by Jim Tsillas
+    Copyright 1992 by Orest Zborowski
+    Copyright 1992 by Rich Murphey
+    Copyright 1992 by Robert Baron
+    Copyright 1992 Vrije Universiteit, The Netherlands
+    Copyright 1992-1993 Data General Corporation
+    Copyright 1992-1993 OMRON Corporation
+    Copyright 1993 by David McCullough
+    Copyright 1993 by David Wexelblat
+    Copyright 1993 by Davor Matic
+    Copyright 1993 by Vrije Universiteit, The Netherlands
+    Copyright 1993, 2002,03 by David Dawes
+    Copyright 1994 Quarterdeck Office Systems
+    Copyright 1994-2003 The XFree86 Project, Inc
+    Copyright 1994,1996 by Holger Veit
+    Copyright 1995 by Robin Cutshaw
+    Copyright 1995 Kaleb S. KEITHLEY
+    Copyright 1995-1998 by Metro Link, Inc
+    Copyright 1995-1999 by Frederic Lepied, France
+    Copyright 1996 by Thomas E. Dickey
+    Copyright 1996-1999 SciTech Software, Inc.
+    Copyright 1997 by Takis Psarogiannakopoulos
+    Copyright 1997 Matthieu Herrb
+    Copyright 1997-2004 by Marc Aurele La France (TSI @ UQV)
+    Copyright 1997,98 by UCHIYAMA Yasushi
+    Copyright 1998 by Concurrent Computer Corporation
+    Copyright 1998 Egbert Eich
+    Copyright 1998 Todd C. Miller
+    Copyright 1998-2000 Precision Insight, Inc., Cedar Park, Texas
+    Copyright 1998-2004,06,07 Keith Packard
+    Copyright 1998,2000-2002 by Alan Hourihane
+    Copyright 1999 by David Holland
+    Copyright 1999-2000 SuSE, Inc
+    Copyright 1999-2000 Egbert Eich
+    Copyright 1999-2000 by Eric Sunshine
+    Copyright 2000 by Conectiva S.A
+    Copyright 2000 Compaq Computer Corporation
+    Copyright 2000 Jakub Jelinek
+    Copyright 2000 VA Linux Systems, Inc.
+    Copyright 2000-2001 Juliusz Chroboczek
+    Copyright 2000-2002 Keith Packard, member of The XFree86 Project, Inc
+    Copyright 2000-2001,04,06 Nokia
+    Copyright 2001 Andreas Monitzer.
+    Copyright 2001-2004 Greg Parker.
+    Copyright 2001-2004 Harold L Hunt II
+    Copyright 2001-2004 Torrey T. Lyons
+    Copyright 2001-2005 by J. Kean Johnston
+    Copyright 2001-2005 by Thomas Winischhofer, Vienna, Austria
+    Copyright 2001-2009 Red Hat, Inc
+    Copyright 2001 Andy Ritger
+    Copyright 2002 MontaVista Software Inc
+    Copyright 2002-2007 IBM Corporation
+    Copyright 2002-2009 Apple Computer, Inc.
+    Copyright 2003 by X-Oz Technologies.
+    Copyright 2003-2004 Philip Blundell
+    Copyright 2003-2008,2013 Geert Uytterhoeven
+    Copyright 2003-2004 Anders Carlsson
+    Copyright 2003-2004 Eric Anholt
+    Copyright 2003-2004 Torrey T. Lyons.
+    Copyright 2004 Egbert Eich
+    Copyright 2004 Nicholas Miell
+    Copyright 2004-2005 Alexander Gottwald
+    Copyright 2004 X.Org Foundation
+    Copyright 2005 Bogdan D.
+    Copyright 2005 by Kean Johnston
+    Copyright 2005 Lars Knoll & Zack Rusin, Trolltech
+    Copyright 2005,07 OpenedHand Ltd
+    Copyright 2005 Trolltech AS
+    Copyright 2005-2006 Luc Verhaegen
+    Copyright 2005-2008 Colin Harrison
+    Copyright 2005-2008 Daniel Stone
+    Copyright 2006 Adam Jackson
+    Copyright 2006 Luc Verhaegen
+    Copyright 2006-2008 Peter Hutterer
+    Copyright 2006-2009 Simon Thum
+    Copyright 2006-2007 Intel Corporation
+    Copyright 2007 Jeremy Huddleston
+    Copyright 2008 Bart Trojanowski, Symbio Technologies, LLC
+    Copyright 2008 George Sapountzis
+    Copyright 2008 Tungsten Graphics, Inc., Cedar Park, Texas
+    Copyright 2009-2010 NVIDIA Corporation
+    Copyright 2011 Dave Airlie
+    Copyright 0000 David Mosberger-Tang
+
+All Rights Reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice (including the next
+paragraph) shall be included in all copies or substantial portions of the
+Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
+IN NO EVENT SHALL THE COPYRIGHT HOLDERS AND/OR THEIR SUPPLIERS
+BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Except as contained in this notice, the name of THE COPYRIGHT HOLDERS shall 
+not be used in advertising or otherwise to promote the sale, use or other
+dealings in this Software without prior written authorization THE COPYRIGHT HOLDERS.
+ortium.
+
+THE COPYRIGHT HOLDERS DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, 
+INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT 
+SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL
+DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
