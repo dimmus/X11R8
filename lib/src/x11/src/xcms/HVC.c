@@ -48,7 +48,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
@@ -61,15 +61,15 @@
 /*
  *	DEFINES
  */
-#define u_BR    0.7127          /* u' Best Red */
-#define v_BR    0.4931          /* v' Best Red */
-#define EPS     0.001
-#define CHROMA_SCALE_FACTOR   7.50725
+#define u_BR                0.7127          /* u' Best Red */
+#define v_BR                0.4931          /* v' Best Red */
+#define EPS                 0.001
+#define CHROMA_SCALE_FACTOR 7.50725
 #ifndef PI
 #  ifdef M_PI
-#    define PI	M_PI
+#    define PI M_PI
 #  else
-#    define PI       3.14159265358979323846264338327950
+#    define PI 3.14159265358979323846264338327950
 #  endif
 #endif
 #ifndef degrees
@@ -97,7 +97,7 @@
 /*
  *	FORWARD DECLARATIONS
  */
-static int TekHVC_ParseString(register char *spec, XcmsColor *pColor);
+static int    TekHVC_ParseString(register char *spec, XcmsColor *pColor);
 static Status XcmsTekHVC_ValidSpec(XcmsColor *pColor);
 
 /*
@@ -107,20 +107,16 @@ static Status XcmsTekHVC_ValidSpec(XcmsColor *pColor);
     /*
      * NULL terminated list of functions applied to get from TekHVC to CIEXYZ
      */
-static XcmsConversionProc Fl_TekHVC_to_CIEXYZ[] = {
-    XcmsTekHVCToCIEuvY,
-    XcmsCIEuvYToCIEXYZ,
-    NULL
-};
+static XcmsConversionProc Fl_TekHVC_to_CIEXYZ[] = { XcmsTekHVCToCIEuvY,
+                                                    XcmsCIEuvYToCIEXYZ,
+                                                    NULL };
 
     /*
      * NULL terminated list of functions applied to get from CIEXYZ to TekHVC
      */
-static XcmsConversionProc Fl_CIEXYZ_to_TekHVC[] = {
-    XcmsCIEXYZToCIEuvY,
-    XcmsCIEuvYToTekHVC,
-    NULL
-};
+static XcmsConversionProc Fl_CIEXYZ_to_TekHVC[] = { XcmsCIEXYZToCIEuvY,
+                                                    XcmsCIEuvYToTekHVC,
+                                                    NULL };
 
 /*
  *	GLOBALS
@@ -129,19 +125,13 @@ static XcmsConversionProc Fl_CIEXYZ_to_TekHVC[] = {
     /*
      * TekHVC Color Space
      */
-XcmsColorSpace	XcmsTekHVCColorSpace =
-    {
-	_XcmsTekHVC_prefix,	/* prefix */
-	XcmsTekHVCFormat,		/* id */
-	TekHVC_ParseString,	/* parseString */
-	Fl_TekHVC_to_CIEXYZ,	/* to_CIEXYZ */
-	Fl_CIEXYZ_to_TekHVC,	/* from_CIEXYZ */
-	1
-    };
+XcmsColorSpace XcmsTekHVCColorSpace = { _XcmsTekHVC_prefix, /* prefix */
+                                        XcmsTekHVCFormat,  /* id */
+                                        TekHVC_ParseString, /* parseString */
+                                        Fl_TekHVC_to_CIEXYZ, /* to_CIEXYZ */
+                                        Fl_CIEXYZ_to_TekHVC, /* from_CIEXYZ */
+                                        1 };
 
-
-
-
 /************************************************************************
  *									*
  *			 PRIVATE ROUTINES				*
@@ -155,9 +145,7 @@ XcmsColorSpace	XcmsTekHVCColorSpace =
  *	SYNOPSIS
  */
 static int
-TekHVC_ParseString(
-    register char *spec,
-    XcmsColor *pColor)
+TekHVC_ParseString(register char *spec, XcmsColor *pColor)
 /*
  *	DESCRIPTION
  *		This routines takes a string and attempts to convert
@@ -177,52 +165,56 @@ TekHVC_ParseString(
  */
 {
     size_t n;
-    char *pchar;
+    char  *pchar;
 
-    if ((pchar = strchr(spec, ':')) == NULL) {
-	return(XcmsFailure);
+    if ((pchar = strchr(spec, ':')) == NULL)
+    {
+        return (XcmsFailure);
     }
     n = (size_t)(pchar - spec);
 
     /*
      * Check for proper prefix.
      */
-    if (strncmp(spec, _XcmsTekHVC_prefix, n) != 0) {
-	return(XcmsFailure);
+    if (strncmp(spec, _XcmsTekHVC_prefix, n) != 0)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Attempt to parse the value portion.
      */
-    if (sscanf(spec + n + 1, "%lf/%lf/%lf",
-	    &pColor->spec.TekHVC.H,
-	    &pColor->spec.TekHVC.V,
-	    &pColor->spec.TekHVC.C) != 3) {
+    if (sscanf(spec + n + 1,
+               "%lf/%lf/%lf",
+               &pColor->spec.TekHVC.H,
+               &pColor->spec.TekHVC.V,
+               &pColor->spec.TekHVC.C) != 3)
+    {
         char *s; /* Maybe failed due to locale */
-        int f;
-        if ((s = strdup(spec))) {
+        int   f;
+        if ((s = strdup(spec)))
+        {
             for (f = 0; s[f]; ++f)
-                if (s[f] == '.')
-                    s[f] = ',';
-                else if (s[f] == ',')
-                    s[f] = '.';
-	    if (sscanf(s + n + 1, "%lf/%lf/%lf",
-		       &pColor->spec.TekHVC.H,
-		       &pColor->spec.TekHVC.V,
-		       &pColor->spec.TekHVC.C) != 3) {
+                if (s[f] == '.') s[f] = ',';
+                else if (s[f] == ',') s[f] = '.';
+            if (sscanf(s + n + 1,
+                       "%lf/%lf/%lf",
+                       &pColor->spec.TekHVC.H,
+                       &pColor->spec.TekHVC.V,
+                       &pColor->spec.TekHVC.C) != 3)
+            {
                 free(s);
-                return(XcmsFailure);
+                return (XcmsFailure);
             }
             free(s);
-        } else
-	    return(XcmsFailure);
+        }
+        else return (XcmsFailure);
     }
     pColor->format = XcmsTekHVCFormat;
-    pColor->pixel = 0;
-    return(XcmsTekHVC_ValidSpec(pColor));
+    pColor->pixel  = 0;
+    return (XcmsTekHVC_ValidSpec(pColor));
 }
 
-
 /*
  *	NAME
  *		ThetaOffset -- compute thetaOffset
@@ -230,9 +222,7 @@ TekHVC_ParseString(
  *	SYNOPSIS
  */
 static int
-ThetaOffset(
-    XcmsColor *pWhitePt,
-    XcmsFloat *pThetaOffset)
+ThetaOffset(XcmsColor *pWhitePt, XcmsFloat *pThetaOffset)
 /*
  *	DESCRIPTION
  *		This routine computes the theta offset of a given
@@ -252,20 +242,20 @@ ThetaOffset(
 {
     double div, slopeuv;
 
-    if (pWhitePt == NULL || pWhitePt->format != XcmsCIEuvYFormat) {
-	return(0);
+    if (pWhitePt == NULL || pWhitePt->format != XcmsCIEuvYFormat)
+    {
+        return (0);
     }
 
-    if ((div = u_BR - pWhitePt->spec.CIEuvY.u_prime) == 0.0) {
-	return(0);
+    if ((div = u_BR - pWhitePt->spec.CIEuvY.u_prime) == 0.0)
+    {
+        return (0);
     }
-    slopeuv = (v_BR - pWhitePt->spec.CIEuvY.v_prime) / div;
+    slopeuv       = (v_BR - pWhitePt->spec.CIEuvY.v_prime) / div;
     *pThetaOffset = degrees(XCMS_ATAN(slopeuv));
-    return(1);
+    return (1);
 }
 
-
-
 /************************************************************************
  *									*
  *			 PUBLIC ROUTINES				*
@@ -279,8 +269,7 @@ ThetaOffset(
  *	SYNOPSIS
  */
 static int
-XcmsTekHVC_ValidSpec(
-    XcmsColor *pColor)
+XcmsTekHVC_ValidSpec(XcmsColor *pColor)
 /*
  *	DESCRIPTION
  *		Checks if values in the color specification are valid.
@@ -292,34 +281,42 @@ XcmsTekHVC_ValidSpec(
  *
  */
 {
-    if (pColor->format != XcmsTekHVCFormat) {
-	return(XcmsFailure);
+    if (pColor->format != XcmsTekHVCFormat)
+    {
+        return (XcmsFailure);
     }
-    if (pColor->spec.TekHVC.V < (0.0 - XMY_DBL_EPSILON)
-	    || pColor->spec.TekHVC.V > (100.0 + XMY_DBL_EPSILON)
-	    || (pColor->spec.TekHVC.C < 0.0 - XMY_DBL_EPSILON)) {
-	return(XcmsFailure);
-    }
-
-    if (pColor->spec.TekHVC.V < 0.0) {
-	    pColor->spec.TekHVC.V = 0.0 + XMY_DBL_EPSILON;
-    } else if (pColor->spec.TekHVC.V > 100.0) {
-	pColor->spec.TekHVC.V = 100.0 - XMY_DBL_EPSILON;
+    if (pColor->spec.TekHVC.V < (0.0 - XMY_DBL_EPSILON) ||
+        pColor->spec.TekHVC.V > (100.0 + XMY_DBL_EPSILON) ||
+        (pColor->spec.TekHVC.C < 0.0 - XMY_DBL_EPSILON))
+    {
+        return (XcmsFailure);
     }
 
-    if (pColor->spec.TekHVC.C < 0.0) {
-	pColor->spec.TekHVC.C = 0.0 - XMY_DBL_EPSILON;
+    if (pColor->spec.TekHVC.V < 0.0)
+    {
+        pColor->spec.TekHVC.V = 0.0 + XMY_DBL_EPSILON;
+    }
+    else if (pColor->spec.TekHVC.V > 100.0)
+    {
+        pColor->spec.TekHVC.V = 100.0 - XMY_DBL_EPSILON;
     }
 
-    while (pColor->spec.TekHVC.H < 0.0) {
-	pColor->spec.TekHVC.H += 360.0;
+    if (pColor->spec.TekHVC.C < 0.0)
+    {
+        pColor->spec.TekHVC.C = 0.0 - XMY_DBL_EPSILON;
     }
-    while (pColor->spec.TekHVC.H >= 360.0) {
-	pColor->spec.TekHVC.H -= 360.0;
+
+    while (pColor->spec.TekHVC.H < 0.0)
+    {
+        pColor->spec.TekHVC.H += 360.0;
     }
-    return(XcmsSuccess);
+    while (pColor->spec.TekHVC.H >= 360.0)
+    {
+        pColor->spec.TekHVC.H -= 360.0;
+    }
+    return (XcmsSuccess);
 }
-
+
 /*
  *	NAME
  *		XcmsTekHVCToCIEuvY - convert TekHVC to CIEuvY
@@ -327,11 +324,10 @@ XcmsTekHVC_ValidSpec(
  *	SYNOPSIS
  */
 Status
-XcmsTekHVCToCIEuvY(
-    XcmsCCC ccc,
-    XcmsColor *pHVC_WhitePt,
-    XcmsColor *pColors_in_out,
-    unsigned int nColors)
+XcmsTekHVCToCIEuvY(XcmsCCC      ccc,
+                   XcmsColor   *pHVC_WhitePt,
+                   XcmsColor   *pColors_in_out,
+                   unsigned int nColors)
 /*
  *	DESCRIPTION
  *		Transforms an array of TekHVC color specifications, given
@@ -343,104 +339,124 @@ XcmsTekHVCToCIEuvY(
  *
  */
 {
-    XcmsFloat	thetaOffset;
-    XcmsColor	*pColor = pColors_in_out;
-    XcmsColor	whitePt;
-    XcmsCIEuvY	uvY_return;
-    XcmsFloat	tempHue, u, v;
-    XcmsFloat	tmpVal;
+    XcmsFloat    thetaOffset;
+    XcmsColor   *pColor = pColors_in_out;
+    XcmsColor    whitePt;
+    XcmsCIEuvY   uvY_return;
+    XcmsFloat    tempHue, u, v;
+    XcmsFloat    tmpVal;
     unsigned int i;
 
     /*
      * Check arguments
      */
-    if (pHVC_WhitePt == NULL || pColors_in_out == NULL) {
-	return(XcmsFailure);
+    if (pHVC_WhitePt == NULL || pColors_in_out == NULL)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Make sure white point is in CIEuvY form
      */
-    if (pHVC_WhitePt->format != XcmsCIEuvYFormat) {
-	/* Make copy of the white point because we're going to modify it */
-	memcpy((char *)&whitePt, (char *)pHVC_WhitePt, sizeof(XcmsColor));
-	if (!_XcmsDIConvertColors(ccc, &whitePt, (XcmsColor *)NULL, 1,
-		XcmsCIEuvYFormat)) {
-	    return(XcmsFailure);
-	}
-	pHVC_WhitePt = &whitePt;
+    if (pHVC_WhitePt->format != XcmsCIEuvYFormat)
+    {
+    /* Make copy of the white point because we're going to modify it */
+        memcpy((char *)&whitePt, (char *)pHVC_WhitePt, sizeof(XcmsColor));
+        if (!_XcmsDIConvertColors(ccc,
+                                  &whitePt,
+                                  (XcmsColor *)NULL,
+                                  1,
+                                  XcmsCIEuvYFormat))
+        {
+            return (XcmsFailure);
+        }
+        pHVC_WhitePt = &whitePt;
     }
     /* Make sure it is a white point, i.e., Y == 1.0 */
-    if (pHVC_WhitePt->spec.CIEuvY.Y != 1.0) {
-	return(XcmsFailure);
+    if (pHVC_WhitePt->spec.CIEuvY.Y != 1.0)
+    {
+        return (XcmsFailure);
     }
 
     /* Get the thetaOffset */
-    if (!ThetaOffset(pHVC_WhitePt, &thetaOffset)) {
-	return(XcmsFailure);
+    if (!ThetaOffset(pHVC_WhitePt, &thetaOffset))
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Now convert each XcmsColor structure to CIEXYZ form
      */
-    for (i = 0; i < nColors; i++, pColor++) {
+    for (i = 0; i < nColors; i++, pColor++)
+    {
+    /* Make sure original format is TekHVC and is valid */
+        if (!XcmsTekHVC_ValidSpec(pColor))
+        {
+            return (XcmsFailure);
+        }
 
-	/* Make sure original format is TekHVC and is valid */
-	if (!XcmsTekHVC_ValidSpec(pColor)) {
-	    return(XcmsFailure);
-	}
+        if (pColor->spec.TekHVC.V == 0.0 || pColor->spec.TekHVC.V == 100.0)
+        {
+            if (pColor->spec.TekHVC.V == 100.0)
+            {
+                uvY_return.Y = 1.0;
+            }
+            else
+            { /* pColor->spec.TekHVC.V == 0.0 */
+                uvY_return.Y = 0.0;
+            }
+            uvY_return.u_prime = pHVC_WhitePt->spec.CIEuvY.u_prime;
+            uvY_return.v_prime = pHVC_WhitePt->spec.CIEuvY.v_prime;
+        }
+        else
+        {
+        /* Find the hue based on the white point offset */
+            tempHue = pColor->spec.TekHVC.H + thetaOffset;
 
-	if (pColor->spec.TekHVC.V == 0.0 || pColor->spec.TekHVC.V == 100.0) {
-	    if (pColor->spec.TekHVC.V == 100.0) {
-		uvY_return.Y = 1.0;
-	    } else { /* pColor->spec.TekHVC.V == 0.0 */
-		uvY_return.Y = 0.0;
-	    }
-	    uvY_return.u_prime = pHVC_WhitePt->spec.CIEuvY.u_prime;
-	    uvY_return.v_prime = pHVC_WhitePt->spec.CIEuvY.v_prime;
-	} else {
+            while (tempHue < 0.0)
+            {
+                tempHue += 360.0;
+            }
+            while (tempHue >= 360.0)
+            {
+                tempHue -= 360.0;
+            }
 
-	    /* Find the hue based on the white point offset */
-	    tempHue = pColor->spec.TekHVC.H + thetaOffset;
+            tempHue = radians(tempHue);
 
-	    while (tempHue < 0.0) {
-		tempHue += 360.0;
-	    }
-	    while (tempHue >= 360.0) {
-		tempHue -= 360.0;
-	    }
+        /* Calculate u'v' for the obtained hue */
+            u = (XcmsFloat)((XCMS_COS(tempHue) * pColor->spec.TekHVC.C) /
+                            (pColor->spec.TekHVC.V *
+                             (double)CHROMA_SCALE_FACTOR));
+            v = (XcmsFloat)((XCMS_SIN(tempHue) * pColor->spec.TekHVC.C) /
+                            (pColor->spec.TekHVC.V *
+                             (double)CHROMA_SCALE_FACTOR));
 
-	    tempHue = radians(tempHue);
+        /* Based on the white point get the offset from best red */
+            uvY_return.u_prime = u + pHVC_WhitePt->spec.CIEuvY.u_prime;
+            uvY_return.v_prime = v + pHVC_WhitePt->spec.CIEuvY.v_prime;
 
-	    /* Calculate u'v' for the obtained hue */
-	    u = (XcmsFloat) ((XCMS_COS(tempHue) * pColor->spec.TekHVC.C) /
-		    (pColor->spec.TekHVC.V * (double)CHROMA_SCALE_FACTOR));
-	    v = (XcmsFloat) ((XCMS_SIN(tempHue) * pColor->spec.TekHVC.C) /
-		    (pColor->spec.TekHVC.V * (double)CHROMA_SCALE_FACTOR));
+        /* Calculate the Y value based on the L* = V. */
+            if (pColor->spec.TekHVC.V < 7.99953624)
+            {
+                uvY_return.Y = pColor->spec.TekHVC.V / 903.29;
+            }
+            else
+            {
+                tmpVal       = (pColor->spec.TekHVC.V + 16.0) / 116.0;
+                uvY_return.Y = tmpVal * tmpVal * tmpVal; /* tmpVal ** 3 */
+            }
+        }
 
-	    /* Based on the white point get the offset from best red */
-	    uvY_return.u_prime = u + pHVC_WhitePt->spec.CIEuvY.u_prime;
-	    uvY_return.v_prime = v + pHVC_WhitePt->spec.CIEuvY.v_prime;
+    /* Copy result to pColor */
+        memcpy((char *)&pColor->spec, (char *)&uvY_return, sizeof(XcmsCIEuvY));
 
-	    /* Calculate the Y value based on the L* = V. */
-	    if (pColor->spec.TekHVC.V < 7.99953624) {
-		uvY_return.Y = pColor->spec.TekHVC.V / 903.29;
-	    } else {
-		tmpVal = (pColor->spec.TekHVC.V + 16.0) / 116.0;
-		uvY_return.Y = tmpVal * tmpVal * tmpVal; /* tmpVal ** 3 */
-	    }
-	}
-
-	/* Copy result to pColor */
-	memcpy((char *)&pColor->spec, (char *)&uvY_return, sizeof(XcmsCIEuvY));
-
-	/* Identify that the format is now CIEuvY */
-	pColor->format = XcmsCIEuvYFormat;
+    /* Identify that the format is now CIEuvY */
+        pColor->format = XcmsCIEuvYFormat;
     }
-    return(XcmsSuccess);
+    return (XcmsSuccess);
 }
 
-
 /*
  *	NAME
  *		XcmsCIEuvYToTekHVC - convert CIEuvY to TekHVC
@@ -448,11 +464,10 @@ XcmsTekHVCToCIEuvY(
  *	SYNOPSIS
  */
 Status
-XcmsCIEuvYToTekHVC(
-    XcmsCCC ccc,
-    XcmsColor *pHVC_WhitePt,
-    XcmsColor *pColors_in_out,
-    unsigned int nColors)
+XcmsCIEuvYToTekHVC(XcmsCCC      ccc,
+                   XcmsColor   *pHVC_WhitePt,
+                   XcmsColor   *pColors_in_out,
+                   unsigned int nColors)
 /*
  *	DESCRIPTION
  *		Transforms an array of CIECIEuvY.color specifications, given
@@ -463,117 +478,141 @@ XcmsCIEuvYToTekHVC(
  *
  */
 {
-    XcmsFloat	theta, L2, u, v, nThetaLow, nThetaHigh;
-    XcmsFloat	thetaOffset;
-    XcmsColor	*pColor = pColors_in_out;
-    XcmsColor	whitePt;
-    XcmsTekHVC	HVC_return;
+    XcmsFloat    theta, L2, u, v, nThetaLow, nThetaHigh;
+    XcmsFloat    thetaOffset;
+    XcmsColor   *pColor = pColors_in_out;
+    XcmsColor    whitePt;
+    XcmsTekHVC   HVC_return;
     unsigned int i;
 
     /*
      * Check arguments
      */
-    if (pHVC_WhitePt == NULL || pColors_in_out == NULL) {
-	return(XcmsFailure);
+    if (pHVC_WhitePt == NULL || pColors_in_out == NULL)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Make sure white point is in CIEuvY form
      */
-    if (pHVC_WhitePt->format != XcmsCIEuvYFormat) {
-	/* Make copy of the white point because we're going to modify it */
-	memcpy((char *)&whitePt, (char *)pHVC_WhitePt, sizeof(XcmsColor));
-	if (!_XcmsDIConvertColors(ccc, &whitePt, (XcmsColor *)NULL, 1,
-		XcmsCIEuvYFormat)) {
-	    return(XcmsFailure);
-	}
-	pHVC_WhitePt = &whitePt;
+    if (pHVC_WhitePt->format != XcmsCIEuvYFormat)
+    {
+    /* Make copy of the white point because we're going to modify it */
+        memcpy((char *)&whitePt, (char *)pHVC_WhitePt, sizeof(XcmsColor));
+        if (!_XcmsDIConvertColors(ccc,
+                                  &whitePt,
+                                  (XcmsColor *)NULL,
+                                  1,
+                                  XcmsCIEuvYFormat))
+        {
+            return (XcmsFailure);
+        }
+        pHVC_WhitePt = &whitePt;
     }
     /* Make sure it is a white point, i.e., Y == 1.0 */
-    if (pHVC_WhitePt->spec.CIEuvY.Y != 1.0) {
-	return(XcmsFailure);
+    if (pHVC_WhitePt->spec.CIEuvY.Y != 1.0)
+    {
+        return (XcmsFailure);
     }
-    if (!ThetaOffset(pHVC_WhitePt, &thetaOffset)) {
-	return(XcmsFailure);
+    if (!ThetaOffset(pHVC_WhitePt, &thetaOffset))
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Now convert each XcmsColor structure to CIEXYZ form
      */
-    for (i = 0; i < nColors; i++, pColor++) {
-	if (!_XcmsCIEuvY_ValidSpec(pColor)) {
-	    return(XcmsFailure);
-	}
+    for (i = 0; i < nColors; i++, pColor++)
+    {
+        if (!_XcmsCIEuvY_ValidSpec(pColor))
+        {
+            return (XcmsFailure);
+        }
 
-	/* Use the white point offset to determine HVC */
-	u = pColor->spec.CIEuvY.u_prime - pHVC_WhitePt->spec.CIEuvY.u_prime;
-	v = pColor->spec.CIEuvY.v_prime - pHVC_WhitePt->spec.CIEuvY.v_prime;
+    /* Use the white point offset to determine HVC */
+        u = pColor->spec.CIEuvY.u_prime - pHVC_WhitePt->spec.CIEuvY.u_prime;
+        v = pColor->spec.CIEuvY.v_prime - pHVC_WhitePt->spec.CIEuvY.v_prime;
 
-	/* Calculate the offset */
-	if (u == 0.0) {
-	    theta = 0.0;
-	} else {
-	    theta = v / u;
-	    theta = (XcmsFloat) XCMS_ATAN((double)theta);
-	    theta = degrees(theta);
-	}
+    /* Calculate the offset */
+        if (u == 0.0)
+        {
+            theta = 0.0;
+        }
+        else
+        {
+            theta = v / u;
+            theta = (XcmsFloat)XCMS_ATAN((double)theta);
+            theta = degrees(theta);
+        }
 
-	nThetaLow = 0.0;
-	nThetaHigh = 360.0;
-	if (u > 0.0 && v > 0.0) {
-	    nThetaLow = 0.0;
-	    nThetaHigh = 90.0;
-	} else if (u < 0.0 && v > 0.0) {
-	    nThetaLow = 90.0;
-	    nThetaHigh = 180.0;
-	} else if (u < 0.0 && v < 0.0) {
-	    nThetaLow = 180.0;
-	    nThetaHigh = 270.0;
-	} else if (u > 0.0 && v < 0.0) {
-	    nThetaLow = 270.0;
-	    nThetaHigh = 360.0;
-	}
-	while (theta < nThetaLow) {
-		theta += 90.0;
-	}
-	while (theta >= nThetaHigh) {
-	    theta -= 90.0;
-	}
+        nThetaLow  = 0.0;
+        nThetaHigh = 360.0;
+        if (u > 0.0 && v > 0.0)
+        {
+            nThetaLow  = 0.0;
+            nThetaHigh = 90.0;
+        }
+        else if (u < 0.0 && v > 0.0)
+        {
+            nThetaLow  = 90.0;
+            nThetaHigh = 180.0;
+        }
+        else if (u < 0.0 && v < 0.0)
+        {
+            nThetaLow  = 180.0;
+            nThetaHigh = 270.0;
+        }
+        else if (u > 0.0 && v < 0.0)
+        {
+            nThetaLow  = 270.0;
+            nThetaHigh = 360.0;
+        }
+        while (theta < nThetaLow)
+        {
+            theta += 90.0;
+        }
+        while (theta >= nThetaHigh)
+        {
+            theta -= 90.0;
+        }
 
-	/* calculate the L value from the given Y */
-	L2 = (pColor->spec.CIEuvY.Y < 0.008856)
-	    ?
-	    (pColor->spec.CIEuvY.Y * 903.29)
-	    :
-	    ((XcmsFloat)(XCMS_CUBEROOT(pColor->spec.CIEuvY.Y) * 116.0) - 16.0);
-	HVC_return.C = L2 * CHROMA_SCALE_FACTOR * XCMS_SQRT((double) ((u * u) + (v * v)));
-	if (HVC_return.C < 0.0) {
-	    theta = 0.0;
-	}
-	HVC_return.V = L2;
-	HVC_return.H = theta - thetaOffset;
+    /* calculate the L value from the given Y */
+        L2 = (pColor->spec.CIEuvY.Y < 0.008856)
+                 ? (pColor->spec.CIEuvY.Y * 903.29)
+                 : ((XcmsFloat)(XCMS_CUBEROOT(pColor->spec.CIEuvY.Y) * 116.0) -
+                    16.0);
+        HVC_return.C =
+            L2 * CHROMA_SCALE_FACTOR * XCMS_SQRT((double)((u * u) + (v * v)));
+        if (HVC_return.C < 0.0)
+        {
+            theta = 0.0;
+        }
+        HVC_return.V = L2;
+        HVC_return.H = theta - thetaOffset;
 
-	/*
+    /*
 	 * If this is within the error margin let some other routine later
 	 * in the chain worry about the slop in the calculations.
 	 */
-	while (HVC_return.H < -EPS) {
-	    HVC_return.H += 360.0;
-	}
-	while (HVC_return.H >= 360.0 + EPS) {
-	    HVC_return.H -= 360.0;
-	}
+        while (HVC_return.H < -EPS)
+        {
+            HVC_return.H += 360.0;
+        }
+        while (HVC_return.H >= 360.0 + EPS)
+        {
+            HVC_return.H -= 360.0;
+        }
 
-	/* Copy result to pColor */
-	memcpy((char *)&pColor->spec, (char *)&HVC_return, sizeof(XcmsTekHVC));
+    /* Copy result to pColor */
+        memcpy((char *)&pColor->spec, (char *)&HVC_return, sizeof(XcmsTekHVC));
 
-	/* Identify that the format is now CIEuvY */
-	pColor->format = XcmsTekHVCFormat;
+    /* Identify that the format is now CIEuvY */
+        pColor->format = XcmsTekHVCFormat;
     }
-    return(XcmsSuccess);
+    return (XcmsSuccess);
 }
 
-
 /*
  *	NAME
  *		_XcmsTekHVC_CheckModify
@@ -581,8 +620,7 @@ XcmsCIEuvYToTekHVC(
  *	SYNOPSIS
  */
 int
-_XcmsTekHVC_CheckModify(
-    XcmsColor *pColor)
+_XcmsTekHVC_CheckModify(XcmsColor *pColor)
 /*
  *	DESCRIPTION
  *		Checks if values in the color specification are valid.
@@ -598,28 +636,35 @@ _XcmsTekHVC_CheckModify(
     int n;
 
     /* For now only use the TekHVC numbers as inputs */
-    if (pColor->format != XcmsTekHVCFormat) {
-	return(0);
+    if (pColor->format != XcmsTekHVCFormat)
+    {
+        return (0);
     }
 
-    if (pColor->spec.TekHVC.V < 0.0) {
-	pColor->spec.TekHVC.V = 0.0 + XMY_DBL_EPSILON;
-    } else if (pColor->spec.TekHVC.V > 100.0) {
-	pColor->spec.TekHVC.V = 100.0 - XMY_DBL_EPSILON;
+    if (pColor->spec.TekHVC.V < 0.0)
+    {
+        pColor->spec.TekHVC.V = 0.0 + XMY_DBL_EPSILON;
+    }
+    else if (pColor->spec.TekHVC.V > 100.0)
+    {
+        pColor->spec.TekHVC.V = 100.0 - XMY_DBL_EPSILON;
     }
 
-    if (pColor->spec.TekHVC.C < 0.0) {
-	pColor->spec.TekHVC.C = 0.0 - XMY_DBL_EPSILON;
+    if (pColor->spec.TekHVC.C < 0.0)
+    {
+        pColor->spec.TekHVC.C = 0.0 - XMY_DBL_EPSILON;
     }
 
-    if (pColor->spec.TekHVC.H < 0.0) {
-	n = -pColor->spec.TekHVC.H / 360.0;
-	pColor->spec.TekHVC.H += (n + 1) * 360.0;
-	if (pColor->spec.TekHVC.H >= 360.0)
-	    pColor->spec.TekHVC.H -= 360.0;
-    } else if (pColor->spec.TekHVC.H >= 360.0) {
-	n = pColor->spec.TekHVC.H / 360.0;
-	pColor->spec.TekHVC.H -= n * 360.0;
+    if (pColor->spec.TekHVC.H < 0.0)
+    {
+        n = -pColor->spec.TekHVC.H / 360.0;
+        pColor->spec.TekHVC.H += (n + 1) * 360.0;
+        if (pColor->spec.TekHVC.H >= 360.0) pColor->spec.TekHVC.H -= 360.0;
     }
-    return(1);
+    else if (pColor->spec.TekHVC.H >= 360.0)
+    {
+        n = pColor->spec.TekHVC.H / 360.0;
+        pColor->spec.TekHVC.H -= n * 360.0;
+    }
+    return (1);
 }

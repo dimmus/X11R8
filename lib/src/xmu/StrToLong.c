@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "X11/Intrinsic.h"
@@ -33,48 +33,52 @@ in this Software without prior written authorization from The Open Group.
 #include "X11/Xmu/Converters.h"
 
 void
-XmuCvtStringToLong(XrmValuePtr args, Cardinal *num_args,
-		   XrmValuePtr fromVal, XrmValuePtr toVal)
+XmuCvtStringToLong(XrmValuePtr args,
+                   Cardinal   *num_args,
+                   XrmValuePtr fromVal,
+                   XrmValuePtr toVal)
 {
     static long l;
 
     if (*num_args != 0)
-    XtWarning("String to Long conversion needs no extra arguments");
-  if (sscanf((char *)fromVal->addr, "%ld", &l) == 1)
+        XtWarning("String to Long conversion needs no extra arguments");
+    if (sscanf((char *)fromVal->addr, "%ld", &l) == 1)
     {
-      toVal->size = sizeof(long);
-      toVal->addr = (XPointer)&l;
+        toVal->size = sizeof(long);
+        toVal->addr = (XPointer)&l;
     }
-  else
-    XtStringConversionWarning((char *)fromVal->addr, XtRLong);
+    else XtStringConversionWarning((char *)fromVal->addr, XtRLong);
 }
 
 /*ARGSUSED*/
 Boolean
-XmuCvtLongToString(Display *dpy, XrmValuePtr args, Cardinal *num_args,
-		   XrmValuePtr fromVal, XrmValuePtr toVal, XtPointer *data)
+XmuCvtLongToString(Display    *dpy,
+                   XrmValuePtr args,
+                   Cardinal   *num_args,
+                   XrmValuePtr fromVal,
+                   XrmValuePtr toVal,
+                   XtPointer  *data)
 {
-  static char buffer[32];
-  size_t size;
+    static char buffer[32];
+    size_t      size;
 
-  if (*num_args != 0)
-    XtWarning("Long to String conversion needs no extra arguments");
+    if (*num_args != 0)
+        XtWarning("Long to String conversion needs no extra arguments");
 
-  XmuSnprintf(buffer, sizeof(buffer), "%ld", *(long *)fromVal->addr);
+    XmuSnprintf(buffer, sizeof(buffer), "%ld", *(long *)fromVal->addr);
 
-  size = strlen(buffer) + 1;
-  if (toVal->addr != NULL)
+    size = strlen(buffer) + 1;
+    if (toVal->addr != NULL)
     {
-      if (toVal->size < size)
-	{
-	  toVal->size = size;
-	  return (False);
+        if (toVal->size < size)
+        {
+            toVal->size = size;
+            return (False);
+        }
+        strcpy((char *)toVal->addr, buffer);
     }
-      strcpy((char *)toVal->addr, buffer);
-    }
-  else
-    toVal->addr = (XPointer)buffer;
-  toVal->size = sizeof(String);
+    else toVal->addr = (XPointer)buffer;
+    toVal->size = sizeof(String);
 
-  return (True);
+    return (True);
 }

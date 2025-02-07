@@ -25,26 +25,24 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XAutoRepeatOn (register Display *dpy)
+XAutoRepeatOn(register Display *dpy)
 {
-	XKeyboardControl values;
-	values.auto_repeat_mode = AutoRepeatModeOn;
-	XChangeKeyboardControl (dpy, KBAutoRepeatMode, &values);
-	return 1;
+    XKeyboardControl values;
+    values.auto_repeat_mode = AutoRepeatModeOn;
+    XChangeKeyboardControl(dpy, KBAutoRepeatMode, &values);
+    return 1;
 }
 
 int
-XAutoRepeatOff (register Display *dpy)
+XAutoRepeatOff(register Display *dpy)
 {
-	XKeyboardControl values;
-	values.auto_repeat_mode = AutoRepeatModeOff;
-	XChangeKeyboardControl (dpy, KBAutoRepeatMode, &values);
-	return 1;
+    XKeyboardControl values;
+    values.auto_repeat_mode = AutoRepeatModeOff;
+    XChangeKeyboardControl(dpy, KBAutoRepeatMode, &values);
+    return 1;
 }
-
-

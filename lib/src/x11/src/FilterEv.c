@@ -54,54 +54,54 @@ from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #else
-#define XLOCALE 1
+#  define XLOCALE 1
 #endif
 #include "Xlibint.h"
 #if XLOCALE
-#include "Xlcint.h"
+#  include "Xlcint.h"
 #endif
 
-extern long const _Xevent_to_mask[];
+extern const long _Xevent_to_mask[];
 
 /*
  * Look up if there is a specified filter for the event.
  */
 Bool
-XFilterEvent(
-    XEvent *ev,
-    Window window)
+XFilterEvent(XEvent *ev, Window window)
 {
 #if XLOCALE
-    XFilterEventList	p;
-    Window		win;
-    long		mask;
-    Bool		ret;
+    XFilterEventList p;
+    Window           win;
+    long             mask;
+    Bool             ret;
 
-    if (window)
-	win = window;
-    else
-	win = ev->xany.window;
-    if (ev->type >= LASTEvent)
-	mask = 0;
-    else
-	mask = _Xevent_to_mask[ev->type];
+    if (window) win = window;
+    else win = ev->xany.window;
+    if (ev->type >= LASTEvent) mask = 0;
+    else mask = _Xevent_to_mask[ev->type];
 
     LockDisplay(ev->xany.display);
-    for (p = ev->xany.display->im_filters; p != NULL; p = p->next) {
-	if (win == p->window) {
-	    if ((mask & p->event_mask) ||
-		(ev->type >= p->start_type && ev->type <= p->end_type)) {
-		UnlockDisplay(ev->xany.display);
-		ret = (*(p->filter))(ev->xany.display, p->window, ev,
-				      p->client_data);
-		return(ret);
-	    }
-	}
+    for (p = ev->xany.display->im_filters; p != NULL; p = p->next)
+    {
+        if (win == p->window)
+        {
+            if ((mask & p->event_mask) ||
+                (ev->type >= p->start_type && ev->type <= p->end_type))
+            {
+                UnlockDisplay(ev->xany.display);
+                ret = (*(p->filter))(ev->xany.display,
+                                     p->window,
+                                     ev,
+                                     p->client_data);
+                return (ret);
+            }
+        }
     }
-    for (p = ev->xany.display->im_filters; p != NULL; p = p->next) {
-	/* Java sometimes calls XFilterEvent() with window=0 and ev come from
+    for (p = ev->xany.display->im_filters; p != NULL; p = p->next)
+    {
+    /* Java sometimes calls XFilterEvent() with window=0 and ev come from
 	 * XNextEvent() when users type some keys quickly and switch multiple
 	 * input focuses in a Java window with the keys.
 	 * But XKeyEvent filters need to receive the event with window=0 for
@@ -115,17 +115,21 @@ XFilterEvent(
 	 * and same p->filter could be registerd to Display->im_filters twice
 	 * with different p->window.
 	 */
-	if (p->window == 0 && window == 0) {
-	    if ((mask & p->event_mask) ||
-		(ev->type >= p->start_type && ev->type <= p->end_type)) {
-		UnlockDisplay(ev->xany.display);
-		ret = (*(p->filter))(ev->xany.display, p->window, ev,
-				      p->client_data);
-		return(ret);
-	    }
-	}
+        if (p->window == 0 && window == 0)
+        {
+            if ((mask & p->event_mask) ||
+                (ev->type >= p->start_type && ev->type <= p->end_type))
+            {
+                UnlockDisplay(ev->xany.display);
+                ret = (*(p->filter))(ev->xany.display,
+                                     p->window,
+                                     ev,
+                                     p->client_data);
+                return (ret);
+            }
+        }
     }
     UnlockDisplay(ev->xany.display);
 #endif
-    return(False);
+    return (False);
 }

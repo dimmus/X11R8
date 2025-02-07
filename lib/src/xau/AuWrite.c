@@ -25,44 +25,41 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xauth.h"
 
 static int
-write_short (unsigned short s, FILE *file)
+write_short(unsigned short s, FILE *file)
 {
-    unsigned char   file_short[2];
+    unsigned char file_short[2];
 
     file_short[0] = (s & (unsigned)0xff00) >> 8;
     file_short[1] = s & 0xff;
-    if (fwrite ((char *) file_short, sizeof (file_short), 1, file) != 1)
-	return 0;
+    if (fwrite((char *)file_short, sizeof(file_short), 1, file) != 1) return 0;
     return 1;
 }
 
 static int
-write_counted_string (unsigned short count, char *string, FILE *file)
+write_counted_string(unsigned short count, char *string, FILE *file)
 {
-    if (write_short (count, file) == 0)
-	return 0;
-    if (fwrite (string, sizeof (char), count, file) != count)
-	return 0;
+    if (write_short(count, file) == 0) return 0;
+    if (fwrite(string, sizeof(char), count, file) != count) return 0;
     return 1;
 }
 
 int
-XauWriteAuth (FILE *auth_file, Xauth *auth)
+XauWriteAuth(FILE *auth_file, Xauth *auth)
 {
-    if (write_short (auth->family, auth_file) == 0)
-	return 0;
-    if (write_counted_string (auth->address_length, auth->address, auth_file) == 0)
-	return 0;
-    if (write_counted_string (auth->number_length, auth->number, auth_file) == 0)
-	return 0;
-    if (write_counted_string (auth->name_length, auth->name, auth_file) == 0)
-	return 0;
-    if (write_counted_string (auth->data_length, auth->data, auth_file) == 0)
-	return 0;
+    if (write_short(auth->family, auth_file) == 0) return 0;
+    if (write_counted_string(auth->address_length, auth->address, auth_file) ==
+        0)
+        return 0;
+    if (write_counted_string(auth->number_length, auth->number, auth_file) == 0)
+        return 0;
+    if (write_counted_string(auth->name_length, auth->name, auth_file) == 0)
+        return 0;
+    if (write_counted_string(auth->data_length, auth->data, auth_file) == 0)
+        return 0;
     return 1;
 }

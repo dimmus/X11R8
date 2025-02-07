@@ -25,59 +25,57 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xauth.h"
 #include "X11/Xos.h"
 
 #ifdef O_CLOEXEC
-#define FOPEN_CLOEXEC "e"
+#  define FOPEN_CLOEXEC "e"
 #else
-#define FOPEN_CLOEXEC ""
+#  define FOPEN_CLOEXEC ""
 #endif
 
 #define binaryEqual(a, b, len) (memcmp(a, b, len) == 0)
 
 Xauth *
-XauGetAuthByAddr (
+XauGetAuthByAddr(
 #if NeedWidePrototypes
-unsigned int	family,
-unsigned int	address_length,
+    unsigned int family,
+    unsigned int address_length,
 #else
-unsigned short	family,
-unsigned short	address_length,
+    unsigned short family,
+    unsigned short address_length,
 #endif
-_Xconst char*	address,
+    _Xconst char *address,
 #if NeedWidePrototypes
-unsigned int	number_length,
+    unsigned int number_length,
 #else
-unsigned short	number_length,
+    unsigned short number_length,
 #endif
-_Xconst char*	number,
+    _Xconst char *number,
 #if NeedWidePrototypes
-unsigned int	name_length,
+    unsigned int name_length,
 #else
-unsigned short	name_length,
+    unsigned short name_length,
 #endif
-_Xconst char*	name)
+    _Xconst char *name)
 {
-    FILE    *auth_file;
-    char    *auth_name;
-    Xauth   *entry;
+    FILE  *auth_file;
+    char  *auth_name;
+    Xauth *entry;
 
-    auth_name = XauFileName ();
-    if (!auth_name)
-	return NULL;
-    if (access (auth_name, R_OK) != 0)		/* checks REAL id */
-	return NULL;
-    auth_file = fopen (auth_name, "rb" FOPEN_CLOEXEC);
-    if (!auth_file)
-	return NULL;
-    for (;;) {
-	entry = XauReadAuth (auth_file);
-	if (!entry)
-	    break;
-	/*
+    auth_name = XauFileName();
+    if (!auth_name) return NULL;
+    if (access(auth_name, R_OK) != 0)  /* checks REAL id */
+        return NULL;
+    auth_file = fopen(auth_name, "rb" FOPEN_CLOEXEC);
+    if (!auth_file) return NULL;
+    for (;;)
+    {
+        entry = XauReadAuth(auth_file);
+        if (!entry) break;
+    /*
 	 * Match when:
 	 *   either family or entry->family are FamilyWild or
 	 *    family and entry->family are the same and
@@ -90,19 +88,19 @@ _Xconst char*	name)
 	 *    name and entry->name are the same
 	 */
 
-	if ((family == FamilyWild || entry->family == FamilyWild ||
-	     (entry->family == family &&
-	      address_length == entry->address_length &&
-	      binaryEqual (entry->address, address, address_length))) &&
-	    (number_length == 0 || entry->number_length == 0 ||
-	     (number_length == entry->number_length &&
-	      binaryEqual (entry->number, number, number_length))) &&
-	    (name_length == 0 || entry->name_length == 0 ||
-	     (entry->name_length == name_length &&
-	      binaryEqual (entry->name, name, name_length))))
-	    break;
-	XauDisposeAuth (entry);
+        if ((family == FamilyWild || entry->family == FamilyWild ||
+             (entry->family == family &&
+              address_length == entry->address_length &&
+              binaryEqual(entry->address, address, address_length))) &&
+            (number_length == 0 || entry->number_length == 0 ||
+             (number_length == entry->number_length &&
+              binaryEqual(entry->number, number, number_length))) &&
+            (name_length == 0 || entry->name_length == 0 ||
+             (entry->name_length == name_length &&
+              binaryEqual(entry->name, name, name_length))))
+            break;
+        XauDisposeAuth(entry);
     }
-    (void) fclose (auth_file);
+    (void)fclose(auth_file);
     return entry;
 }

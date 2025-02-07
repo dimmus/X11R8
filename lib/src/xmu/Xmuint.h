@@ -24,9 +24,8 @@
 #ifndef XMUINT_H
 #define XMUINT_H
 
-
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/Xfuncproto.h"
@@ -34,7 +33,7 @@
 
 #ifndef HAVE_REALLOCARRAY
 extern _X_HIDDEN void *Xmureallocarray(void *optr, size_t nmemb, size_t size);
-# define reallocarray(ptr, n, size) Xmureallocarray((ptr), (n), (size))
+#  define reallocarray(ptr, n, size) Xmureallocarray((ptr), (n), (size))
 #endif
 
 #define Xmumallocarray(n, size) reallocarray(NULL, (n), (size))

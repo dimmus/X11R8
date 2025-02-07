@@ -25,36 +25,36 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
-Status XQueryBestCursor(
-    register Display *dpy,
-    Drawable drawable,
-    unsigned int width,
-    unsigned int height,
-    unsigned int *ret_width,
-    unsigned int *ret_height)
+Status
+XQueryBestCursor(register Display *dpy,
+                 Drawable          drawable,
+                 unsigned int      width,
+                 unsigned int      height,
+                 unsigned int     *ret_width,
+                 unsigned int     *ret_height)
 {
-    xQueryBestSizeReply rep;
+    xQueryBestSizeReply         rep;
     register xQueryBestSizeReq *req;
 
     LockDisplay(dpy);
     GetReq(QueryBestSize, req);
-    req->class = CursorShape;
+    req->class    = CursorShape;
     req->drawable = drawable;
-    req->width = width;
-    req->height = height;
-    if (_XReply (dpy, (xReply *)&rep, 0, xTrue) == 0) {
-	UnlockDisplay(dpy);
-	SyncHandle();
-	return 0;
-	}
-    *ret_width = rep.width;
+    req->width    = width;
+    req->height   = height;
+    if (_XReply(dpy, (xReply *)&rep, 0, xTrue) == 0)
+    {
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return 0;
+    }
+    *ret_width  = rep.width;
     *ret_height = rep.height;
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

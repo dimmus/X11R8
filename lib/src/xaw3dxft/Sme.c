@@ -34,7 +34,7 @@ in this Software without prior written authorization from the X Consortium.
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 #include <X11/Xaw3dxft/Xaw3dP.h>
 #include <stdio.h>
@@ -46,11 +46,17 @@ in this Software without prior written authorization from the X Consortium.
 
 #define offset(field) XtOffsetOf(SmeRec, sme.field)
 static XtResource resources[] = {
-  {XtNcallback, XtCCallback, XtRCallback, sizeof(XtPointer),
-     offset(callbacks), XtRCallback, (XtPointer)NULL},
+    { XtNcallback,
+     XtCCallback,      XtRCallback,
+     sizeof(XtPointer),
+     offset(callbacks),
+     XtRCallback,  (XtPointer)NULL  },
 #ifdef XAW_INTERNATIONALIZATION
-  {XtNinternational, XtCInternational, XtRBoolean, sizeof(Boolean),
-     offset(international), XtRImmediate, (XtPointer) FALSE},
+    { XtNinternational,
+     XtCInternational, XtRBoolean,
+     sizeof(Boolean),
+     offset(international),
+     XtRImmediate, (XtPointer)FALSE },
 #endif
 };
 #undef offset
@@ -64,55 +70,53 @@ static void Highlight(Widget);
 static void Notify(Widget);
 static void ClassPartInitialize(WidgetClass);
 static void Initialize(Widget, Widget, ArgList, Cardinal *);
-static XtGeometryResult QueryGeometry(Widget, XtWidgetGeometry *, XtWidgetGeometry *);
+static XtGeometryResult
+QueryGeometry(Widget, XtWidgetGeometry *, XtWidgetGeometry *);
 
 #define SUPERCLASS (&rectObjClassRec)
 
 SmeClassRec smeClassRec = {
-  {
-    /* superclass         */    (WidgetClass) SUPERCLASS,
-    /* class_name         */    "Sme",
-    /* size               */    sizeof(SmeRec),
-    /* class_initialize   */	XawInitializeWidgetSet,
-    /* class_part_initialize*/	ClassPartInitialize,
-    /* Class init'ed      */	FALSE,
-    /* initialize         */    Initialize,
-    /* initialize_hook    */	NULL,
-    /* realize            */    NULL,
-    /* actions            */    NULL,
-    /* num_actions        */    ZERO,
-    /* resources          */    resources,
-    /* resource_count     */	XtNumber(resources),
-    /* xrm_class          */    NULLQUARK,
-    /* compress_motion    */    FALSE,
-    /* compress_exposure  */    FALSE,
-    /* compress_enterleave*/ 	FALSE,
-    /* visible_interest   */    FALSE,
-    /* destroy            */    NULL,
-    /* resize             */    NULL,
-    /* expose             */    NULL,
-    /* set_values         */    NULL,
-    /* set_values_hook    */	NULL,
-    /* set_values_almost  */	XtInheritSetValuesAlmost,
-    /* get_values_hook    */	NULL,
-    /* accept_focus       */    NULL,
-    /* intrinsics version */	XtVersion,
-    /* callback offsets   */    NULL,
-    /* tm_table		  */    NULL,
-    /* query_geometry	  */    QueryGeometry,
-    /* display_accelerator*/    NULL,
-    /* extension	  */    NULL
-  },{
-    /* Simple Menu Entry Fields */
+    { /* superclass         */ (WidgetClass)SUPERCLASS,
+     /* class_name         */ "Sme",
+     /* size               */ sizeof(SmeRec),
+     /* class_initialize   */ XawInitializeWidgetSet,
+     /* class_part_initialize*/ ClassPartInitialize,
+     /* Class init'ed      */ FALSE,
+     /* initialize         */ Initialize,
+     /* initialize_hook    */ NULL,
+     /* realize            */ NULL,
+     /* actions            */ NULL,
+     /* num_actions        */ ZERO,
+     /* resources          */ resources,
+     /* resource_count     */ XtNumber(resources),
+     /* xrm_class          */ NULLQUARK,
+     /* compress_motion    */ FALSE,
+     /* compress_exposure  */ FALSE,
+     /* compress_enterleave*/ FALSE,
+     /* visible_interest   */ FALSE,
+     /* destroy            */ NULL,
+     /* resize             */ NULL,
+     /* expose             */ NULL,
+     /* set_values         */ NULL,
+     /* set_values_hook    */ NULL,
+     /* set_values_almost  */ XtInheritSetValuesAlmost,
+     /* get_values_hook    */ NULL,
+     /* accept_focus       */ NULL,
+     /* intrinsics version */ XtVersion,
+     /* callback offsets   */ NULL,
+     /* tm_table		  */ NULL,
+     /* query_geometry	  */ QueryGeometry,
+     /* display_accelerator*/ NULL,
+     /* extension	  */ NULL },
+    {    /* Simple Menu Entry Fields */
 
-    /* highlight */             Highlight,
-    /* unhighlight */           Unhighlight,
-    /* notify */		Notify,
-    /* extension */             NULL
-  }
+      /* highlight */ Highlight,
+     /* unhighlight */ Unhighlight,
+     /* notify */ Notify,
+     /* extension */ NULL }
 };
 
-WidgetClass smeObjectClass = (WidgetClass) &smeClassRec;
+WidgetClass smeObjectClass = (WidgetClass)&smeClassRec;
 
 /************************************************************
  *
@@ -131,8 +135,8 @@ ClassPartInitialize(WidgetClass class)
 {
     SmeObjectClass m_ent, superC;
 
-    m_ent = (SmeObjectClass) class;
-    superC = (SmeObjectClass) m_ent->rect_class.superclass;
+    m_ent  = (SmeObjectClass) class;
+    superC = (SmeObjectClass)m_ent->rect_class.superclass;
 
 /*
  * We don't need to check for null super since we'll get to TextSink
@@ -140,13 +144,13 @@ ClassPartInitialize(WidgetClass class)
  */
 
     if (m_ent->sme_class.highlight == XtInheritHighlight)
-	m_ent->sme_class.highlight = superC->sme_class.highlight;
+        m_ent->sme_class.highlight = superC->sme_class.highlight;
 
     if (m_ent->sme_class.unhighlight == XtInheritUnhighlight)
-	m_ent->sme_class.unhighlight = superC->sme_class.unhighlight;
+        m_ent->sme_class.unhighlight = superC->sme_class.unhighlight;
 
     if (m_ent->sme_class.notify == XtInheritNotify)
-	m_ent->sme_class.notify = superC->sme_class.notify;
+        m_ent->sme_class.notify = superC->sme_class.notify;
 }
 
 /*      Function Name: Initialize
@@ -218,24 +222,26 @@ Notify(Widget w)
  */
 
 static XtGeometryResult
-QueryGeometry(Widget w, XtWidgetGeometry *intended, XtWidgetGeometry *return_val)
+QueryGeometry(Widget            w,
+              XtWidgetGeometry *intended,
+              XtWidgetGeometry *return_val)
 {
-    SmeObject entry = (SmeObject) w;
-    Dimension width;
+    SmeObject        entry = (SmeObject)w;
+    Dimension        width;
     XtGeometryResult ret_val = XtGeometryYes;
-    XtGeometryMask mode = intended->request_mode;
+    XtGeometryMask   mode    = intended->request_mode;
 
-    width = 1;			/* we can be really small. */
+    width = 1;   /* we can be really small. */
 
-    if ( ((mode & CWWidth) && (intended->width != width)) ||
-	 !(mode & CWWidth) ) {
-	return_val->request_mode |= CWWidth;
-	return_val->width = width;
-	mode = return_val->request_mode;
+    if (((mode & CWWidth) && (intended->width != width)) || !(mode & CWWidth))
+    {
+        return_val->request_mode |= CWWidth;
+        return_val->width = width;
+        mode              = return_val->request_mode;
 
-	if ( (mode & CWWidth) && (width == entry->rectangle.width) )
-	    return(XtGeometryNo);
-	return(XtGeometryAlmost);
+        if ((mode & CWWidth) && (width == entry->rectangle.width))
+            return (XtGeometryNo);
+        return (XtGeometryAlmost);
     }
-    return(ret_val);
+    return (ret_val);
 }

@@ -33,14 +33,13 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
 
-
 /*
  *	NAME
  *		XcmsAllocNamedColor -
@@ -48,13 +47,12 @@
  *	SYNOPSIS
  */
 Status
-XcmsAllocNamedColor (
-    Display *dpy,
-    Colormap cmap,
-    _Xconst char *colorname,
-    XcmsColor *pColor_scrn_return,
-    XcmsColor *pColor_exact_return,
-    XcmsColorFormat result_format)
+XcmsAllocNamedColor(Display        *dpy,
+                    Colormap        cmap,
+                    _Xconst char   *colorname,
+                    XcmsColor      *pColor_scrn_return,
+                    XcmsColor      *pColor_exact_return,
+                    XcmsColorFormat result_format)
 /*
  *	DESCRIPTION
  *		Finds the color specification associated with the color
@@ -70,38 +68,44 @@ XcmsAllocNamedColor (
  *
  */
 {
-    long nbytes;
+    long                  nbytes;
     xAllocNamedColorReply rep;
-    xAllocNamedColorReq *req;
-    XColor hard_def;
-    XColor exact_def;
-    Status retval1 = 1;
-    Status retval2 = XcmsSuccess;
-    XcmsColor tmpColor;
-    XColor XColor_in_out;
-    XcmsCCC ccc;
+    xAllocNamedColorReq  *req;
+    XColor                hard_def;
+    XColor                exact_def;
+    Status                retval1 = 1;
+    Status                retval2 = XcmsSuccess;
+    XcmsColor             tmpColor;
+    XColor                XColor_in_out;
+    XcmsCCC               ccc;
 
     /*
      * 0. Check for invalid arguments.
      */
-    if (dpy == NULL || colorname[0] == '\0' || pColor_scrn_return == 0
-	    || pColor_exact_return == NULL) {
-	return(XcmsFailure);
+    if (dpy == NULL || colorname[0] == '\0' || pColor_scrn_return == 0 ||
+        pColor_exact_return == NULL)
+    {
+        return (XcmsFailure);
     }
 
-    if ((ccc = XcmsCCCOfColormap(dpy, cmap)) == (XcmsCCC)NULL) {
-	return(XcmsFailure);
+    if ((ccc = XcmsCCCOfColormap(dpy, cmap)) == (XcmsCCC)NULL)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * 1. Convert string to a XcmsColor using Xcms and i18n mechanism
      */
-    if ((retval1 = _XcmsResolveColorString(ccc, &colorname,
-	    &tmpColor, result_format)) == XcmsFailure) {
-	return(XcmsFailure);
+    if ((retval1 = _XcmsResolveColorString(ccc,
+                                           &colorname,
+                                           &tmpColor,
+                                           result_format)) == XcmsFailure)
+    {
+        return (XcmsFailure);
     }
-    if (retval1 == _XCMS_NEWNAME) {
-	goto PassToServer;
+    if (retval1 == _XCMS_NEWNAME)
+    {
+        goto PassToServer;
     }
     memcpy((char *)pColor_exact_return, (char *)&tmpColor, sizeof(XcmsColor));
 
@@ -109,17 +113,22 @@ XcmsAllocNamedColor (
      * 2. Convert tmpColor to RGB
      *	Assume pColor_exact_return is now adjusted to Client White Point
      */
-    if ((retval2 = XcmsConvertColors(ccc, &tmpColor,
-	    1, XcmsRGBFormat, (Bool *) NULL)) == XcmsFailure) {
-	return(XcmsFailure);
+    if ((retval2 = XcmsConvertColors(ccc,
+                                     &tmpColor,
+                                     1,
+                                     XcmsRGBFormat,
+                                     (Bool *)NULL)) == XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * 3. Convert to XColor and call XAllocColor
      */
     _XcmsRGB_to_XColor(&tmpColor, &XColor_in_out, 1);
-    if (XAllocColor(ccc->dpy, cmap, &XColor_in_out) == 0) {
-	return(XcmsFailure);
+    if (XAllocColor(ccc->dpy, cmap, &XColor_in_out) == 0)
+    {
+        return (XcmsFailure);
     }
 
     /*
@@ -130,17 +139,23 @@ XcmsAllocNamedColor (
      *    device-dependent format.
      */
     _XColor_to_XcmsRGB(ccc, &XColor_in_out, pColor_scrn_return, 1);
-    if (result_format != XcmsRGBFormat) {
-	if (result_format == XcmsUndefinedFormat) {
-	    result_format = pColor_exact_return->format;
-	}
-	if (XcmsConvertColors(ccc, pColor_scrn_return, 1, result_format,
-		(Bool *) NULL) == XcmsFailure) {
-	    return(XcmsFailure);
-	}
+    if (result_format != XcmsRGBFormat)
+    {
+        if (result_format == XcmsUndefinedFormat)
+        {
+            result_format = pColor_exact_return->format;
+        }
+        if (XcmsConvertColors(ccc,
+                              pColor_scrn_return,
+                              1,
+                              result_format,
+                              (Bool *)NULL) == XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
     }
 
-    return(retval1 > retval2 ? retval1 : retval2);
+    return (retval1 > retval2 ? retval1 : retval2);
 
 PassToServer:
     /*
@@ -152,25 +167,26 @@ PassToServer:
     GetReq(AllocNamedColor, req);
 
     req->cmap = cmap;
-    nbytes = req->nbytes = (CARD16) strlen(colorname);
+    nbytes = req->nbytes = (CARD16)strlen(colorname);
     req->length += (nbytes + 3) >> 2; /* round up to mult of 4 */
 
     _XSend(dpy, colorname, nbytes);
        /* _XSend is more efficient that Data, since _XReply follows */
 
-    if (!_XReply (dpy, (xReply *) &rep, 0, xTrue)) {
-	UnlockDisplay(dpy);
+    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue))
+    {
+        UnlockDisplay(dpy);
         SyncHandle();
         return (0);
     }
 
-    exact_def.red = rep.exactRed;
+    exact_def.red   = rep.exactRed;
     exact_def.green = rep.exactGreen;
-    exact_def.blue = rep.exactBlue;
+    exact_def.blue  = rep.exactBlue;
 
-    hard_def.red = rep.screenRed;
+    hard_def.red   = rep.screenRed;
     hard_def.green = rep.screenGreen;
-    hard_def.blue = rep.screenBlue;
+    hard_def.blue  = rep.screenBlue;
 
     exact_def.pixel = hard_def.pixel = rep.pixel;
 
@@ -182,17 +198,25 @@ PassToServer:
      */
     _XColor_to_XcmsRGB(ccc, &exact_def, pColor_exact_return, 1);
     _XColor_to_XcmsRGB(ccc, &hard_def, pColor_scrn_return, 1);
-    if (result_format != XcmsRGBFormat
-	    && result_format != XcmsUndefinedFormat) {
-	if (XcmsConvertColors(ccc, pColor_exact_return, 1, result_format,
-		(Bool *) NULL) == XcmsFailure) {
-	    return(XcmsFailure);
-	}
-	if (XcmsConvertColors(ccc, pColor_scrn_return, 1, result_format,
-		(Bool *) NULL) == XcmsFailure) {
-	    return(XcmsFailure);
-	}
+    if (result_format != XcmsRGBFormat && result_format != XcmsUndefinedFormat)
+    {
+        if (XcmsConvertColors(ccc,
+                              pColor_exact_return,
+                              1,
+                              result_format,
+                              (Bool *)NULL) == XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
+        if (XcmsConvertColors(ccc,
+                              pColor_scrn_return,
+                              1,
+                              result_format,
+                              (Bool *)NULL) == XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
     }
 
-    return(XcmsSuccess);
+    return (XcmsSuccess);
 }

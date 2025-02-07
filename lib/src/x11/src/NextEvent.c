@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
@@ -35,24 +35,20 @@ in this Software without prior written authorization from The Open Group.
  */
 
 int
-XNextEvent (
-	register Display *dpy,
-	register XEvent *event)
+XNextEvent(register Display *dpy, register XEvent *event)
 {
-	register _XQEvent *qelt;
+    register _XQEvent *qelt;
 
-	LockDisplay(dpy);
+    LockDisplay(dpy);
 
-	/* Delete unclaimed cookies */
-	_XFreeEventCookies(dpy);
+    /* Delete unclaimed cookies */
+    _XFreeEventCookies(dpy);
 
-	if (dpy->head == NULL)
-	    _XReadEvents(dpy);
-	qelt = dpy->head;
-	*event = qelt->event;
-	_XDeq(dpy, NULL, qelt);
-	_XStoreEventCookie(dpy, event);
-	UnlockDisplay(dpy);
-	return 0;
+    if (dpy->head == NULL) _XReadEvents(dpy);
+    qelt   = dpy->head;
+    *event = qelt->event;
+    _XDeq(dpy, NULL, qelt);
+    _XStoreEventCookie(dpy, event);
+    UnlockDisplay(dpy);
+    return 0;
 }
-

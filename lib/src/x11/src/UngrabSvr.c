@@ -25,20 +25,18 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XUngrabServer (
-    register Display *dpy)
+XUngrabServer(register Display *dpy)
 {
-        _X_UNUSED register xReq *req;
+    _X_UNUSED register xReq *req;
 
-        LockDisplay(dpy);
-        GetEmptyReq(UngrabServer, req);
-        UnlockDisplay(dpy);
-	SyncHandle();
-	return 1;
+    LockDisplay(dpy);
+    GetEmptyReq(UngrabServer, req);
+    UnlockDisplay(dpy);
+    SyncHandle();
+    return 1;
 }
-

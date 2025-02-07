@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xos.h"
 #include "X11/X.h"
@@ -49,41 +49,37 @@ in this Software without prior written authorization from The Open Group.
  * Examine the XDMCP specification for the correct algorithm
  */
 
-#include "Wrap.h"
+#  include "Wrap.h"
 
 void
-XdmcpUnwrap (
-    unsigned char	*input,
-    unsigned char	*wrapper,
-    unsigned char	*output,
-    int			bytes)
+XdmcpUnwrap(unsigned char *input,
+            unsigned char *wrapper,
+            unsigned char *output,
+            int            bytes)
 {
-    int			i, j, k;
-    unsigned char	tmp[8];
-    unsigned char	blocks[2][8];
-    unsigned char	expand_wrapper[8];
-    auth_wrapper_schedule	schedule;
+    int                   i, j, k;
+    unsigned char         tmp[8];
+    unsigned char         blocks[2][8];
+    unsigned char         expand_wrapper[8];
+    auth_wrapper_schedule schedule;
 
-    _XdmcpWrapperToOddParity (wrapper, expand_wrapper);
-    _XdmcpAuthSetup (expand_wrapper, schedule);
+    _XdmcpWrapperToOddParity(wrapper, expand_wrapper);
+    _XdmcpAuthSetup(expand_wrapper, schedule);
 
     k = 0;
     for (j = 0; j < bytes; j += 8)
     {
-	if (bytes - j < 8)
-	    return; /* bad input length */
-	for (i = 0; i < 8; i++)
-	    blocks[k][i] = input[j + i];
-	_XdmcpAuthDoIt ((input + j), tmp, schedule, 0);
-	/* block chaining */
-	k = (k == 0) ? 1 : 0;
-	for (i = 0; i < 8; i++)
-	{
-	    if (j == 0)
-		output[j + i] = tmp[i];
-	    else
-		output[j + i] = tmp[i] ^ blocks[k][i];
-	}
+        if (bytes - j < 8) return; /* bad input length */
+        for (i = 0; i < 8; i++)
+            blocks[k][i] = input[j + i];
+        _XdmcpAuthDoIt((input + j), tmp, schedule, 0);
+    /* block chaining */
+        k = (k == 0) ? 1 : 0;
+        for (i = 0; i < 8; i++)
+        {
+            if (j == 0) output[j + i] = tmp[i];
+            else output[j + i] = tmp[i] ^ blocks[k][i];
+        }
     }
 }
 

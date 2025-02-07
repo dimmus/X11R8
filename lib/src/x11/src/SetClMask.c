@@ -25,15 +25,12 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XSetClipMask (
-    register Display *dpy,
-    GC gc,
-    Pixmap mask)
+XSetClipMask(register Display *dpy, GC gc, Pixmap mask)
 {
     LockDisplay(dpy);
     /* always update, since client may have changed pixmap contents */

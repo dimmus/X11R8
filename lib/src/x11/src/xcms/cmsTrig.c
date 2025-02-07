@@ -44,81 +44,69 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xcmsint.h"
 
 /* forward/static */
 static double _XcmsModulo(double value, double base);
-static double _XcmsPolynomial(
-    register int order,
-    double const *coeffs,
-    double x);
 static double
-_XcmsModuloF(
-    double val,
-    register double *dp);
+_XcmsPolynomial(register int order, const double *coeffs, double x);
+static double _XcmsModuloF(double val, register double *dp);
 
 /*
  *	DEFINES
  */
-#define XCMS_MAXERROR       	0.000001
-#define XCMS_MAXITER       	10000
-#define XCMS_PI       		3.14159265358979323846264338327950
-#define XCMS_TWOPI 		6.28318530717958620
-#define XCMS_HALFPI		1.57079632679489660
-#define XCMS_FOURTHPI		0.785398163397448280
-#define XCMS_SIXTHPI		0.523598775598298820
-#define XCMS_RADIANS(d)		((d) * XCMS_PI / 180.0)
-#define XCMS_DEGREES(r)		((r) * 180.0 / XCMS_PI)
+#define XCMS_MAXERROR   0.000001
+#define XCMS_MAXITER    10000
+#define XCMS_PI         3.14159265358979323846264338327950
+#define XCMS_TWOPI      6.28318530717958620
+#define XCMS_HALFPI     1.57079632679489660
+#define XCMS_FOURTHPI   0.785398163397448280
+#define XCMS_SIXTHPI    0.523598775598298820
+#define XCMS_RADIANS(d) ((d) * XCMS_PI / 180.0)
+#define XCMS_DEGREES(r) ((r) * 180.0 / XCMS_PI)
 #ifdef __vax__
-#define XCMS_X6_UNDERFLOWS	(3.784659e-07)	/* X**6 almost underflows*/
+#  define XCMS_X6_UNDERFLOWS (3.784659e-07) /* X**6 almost underflows*/
 #else
-#define XCMS_X6_UNDERFLOWS	(4.209340e-52)	/* X**6 almost underflows */
+#  define XCMS_X6_UNDERFLOWS (4.209340e-52) /* X**6 almost underflows */
 #endif
-#define XCMS_X16_UNDERFLOWS	(5.421010e-20)	/* X**16 almost underflows*/
-#define XCMS_CHAR_BIT		8
-#define XCMS_LONG_MAX		0x7FFFFFFF
-#define XCMS_DEXPLEN		11
-#define XCMS_NBITS(type)	(XCMS_CHAR_BIT * (int)sizeof(type))
-#define XCMS_FABS(x)		((x) < 0.0 ? -(x) : (x))
+#define XCMS_X16_UNDERFLOWS (5.421010e-20) /* X**16 almost underflows*/
+#define XCMS_CHAR_BIT       8
+#define XCMS_LONG_MAX       0x7FFFFFFF
+#define XCMS_DEXPLEN        11
+#define XCMS_NBITS(type)    (XCMS_CHAR_BIT * (int)sizeof(type))
+#define XCMS_FABS(x)        ((x) < 0.0 ? -(x) : (x))
 
 /* XCMS_DMAXPOWTWO - largest power of two exactly representable as a double */
-#define XCMS_DMAXPOWTWO	((double)(XCMS_LONG_MAX) * \
-	    (1L << ((XCMS_NBITS(double)-XCMS_DEXPLEN) - XCMS_NBITS(int) + 1)))
+#define XCMS_DMAXPOWTWO        \
+    ((double)(XCMS_LONG_MAX) * \
+     (1L << ((XCMS_NBITS(double) - XCMS_DEXPLEN) - XCMS_NBITS(int) + 1)))
 
 /*
  *	LOCAL VARIABLES
  */
 
-static double const cos_pcoeffs[] = {
-    0.12905394659037374438e7,
-   -0.37456703915723204710e6,
-    0.13432300986539084285e5,
-   -0.11231450823340933092e3
-};
+static const double cos_pcoeffs[] = { 0.12905394659037374438e7,
+                                      -0.37456703915723204710e6,
+                                      0.13432300986539084285e5,
+                                      -0.11231450823340933092e3 };
 
-static double const cos_qcoeffs[] = {
-    0.12905394659037373590e7,
-    0.23467773107245835052e5,
-    0.20969518196726306286e3,
-    1.0
-};
+static const double cos_qcoeffs[] = { 0.12905394659037373590e7,
+                                      0.23467773107245835052e5,
+                                      0.20969518196726306286e3,
+                                      1.0 };
 
-static double const sin_pcoeffs[] = {
-    0.20664343336995858240e7,
-   -0.18160398797407332550e6,
-    0.35999306949636188317e4,
-   -0.20107483294588615719e2
-};
+static const double sin_pcoeffs[] = { 0.20664343336995858240e7,
+                                      -0.18160398797407332550e6,
+                                      0.35999306949636188317e4,
+                                      -0.20107483294588615719e2 };
 
-static double const sin_qcoeffs[] = {
-    0.26310659102647698963e7,
-    0.39270242774649000308e5,
-    0.27811919481083844087e3,
-    1.0
-};
-
+static const double sin_qcoeffs[] = { 0.26310659102647698963e7,
+                                      0.39270242774649000308e5,
+                                      0.27811919481083844087e3,
+                                      1.0 };
+
 /*
  *
  *  FUNCTION
@@ -226,39 +214,55 @@ static double const sin_qcoeffs[] = {
  *
  */
 
-double _XcmsCosine(double x)
+double
+_XcmsCosine(double x)
 {
     auto double y;
     auto double yt2;
-    double retval;
+    double      retval;
 
-    if (x < -XCMS_PI || x > XCMS_PI) {
-	x = _XcmsModulo (x, XCMS_TWOPI);
-        if (x > XCMS_PI) {
-	    x = x - XCMS_TWOPI;
-        } else if (x < -XCMS_PI) {
-	    x = x + XCMS_TWOPI;
+    if (x < -XCMS_PI || x > XCMS_PI)
+    {
+        x = _XcmsModulo(x, XCMS_TWOPI);
+        if (x > XCMS_PI)
+        {
+            x = x - XCMS_TWOPI;
+        }
+        else if (x < -XCMS_PI)
+        {
+            x = x + XCMS_TWOPI;
         }
     }
-    if (x > XCMS_HALFPI) {
-	retval = -(_XcmsCosine (x - XCMS_PI));
-    } else if (x < -XCMS_HALFPI) {
-	retval = -(_XcmsCosine (x + XCMS_PI));
-    } else if (x > XCMS_FOURTHPI) {
-	retval = _XcmsSine (XCMS_HALFPI - x);
-    } else if (x < -XCMS_FOURTHPI) {
-	retval = _XcmsSine (XCMS_HALFPI + x);
-    } else if (x < XCMS_X6_UNDERFLOWS && x > -XCMS_X6_UNDERFLOWS) {
-	retval = _XcmsSquareRoot (1.0 - (x * x));
-    } else {
-	y = x / XCMS_FOURTHPI;
-	yt2 = y * y;
-	retval = _XcmsPolynomial (3, cos_pcoeffs, yt2) / _XcmsPolynomial (3, cos_qcoeffs, yt2);
+    if (x > XCMS_HALFPI)
+    {
+        retval = -(_XcmsCosine(x - XCMS_PI));
+    }
+    else if (x < -XCMS_HALFPI)
+    {
+        retval = -(_XcmsCosine(x + XCMS_PI));
+    }
+    else if (x > XCMS_FOURTHPI)
+    {
+        retval = _XcmsSine(XCMS_HALFPI - x);
+    }
+    else if (x < -XCMS_FOURTHPI)
+    {
+        retval = _XcmsSine(XCMS_HALFPI + x);
+    }
+    else if (x < XCMS_X6_UNDERFLOWS && x > -XCMS_X6_UNDERFLOWS)
+    {
+        retval = _XcmsSquareRoot(1.0 - (x * x));
+    }
+    else
+    {
+        y      = x / XCMS_FOURTHPI;
+        yt2    = y * y;
+        retval = _XcmsPolynomial(3, cos_pcoeffs, yt2) /
+                 _XcmsPolynomial(3, cos_qcoeffs, yt2);
     }
     return (retval);
 }
 
-
 /*
  *  FUNCTION
  *
@@ -286,17 +290,17 @@ double _XcmsCosine(double x)
  *	Fred Fish
  *
  */
-static double _XcmsModulo(double value, double base)
+static double
+_XcmsModulo(double value, double base)
 {
     auto double intpart;
 
     value /= base;
-    value = _XcmsModuloF (value, &intpart);
+    value = _XcmsModuloF(value, &intpart);
     value *= base;
-    return(value);
+    return (value);
 }
 
-
 /*
  * frac = (double) _XcmsModuloF(double val, double *dp)
  *	return fractional part of 'val'
@@ -307,33 +311,33 @@ static double _XcmsModulo(double value, double base)
  * defined in "math.h".
  */
 static double
-_XcmsModuloF(
-    double val,
-    register double *dp)
+_XcmsModuloF(double val, register double *dp)
 {
-	register double abs;
-	/*
+    register double abs;
+    /*
 	 * Don't use a register for this.  The extra precision this results
 	 * in on some systems causes problems.
 	 */
-	double ip;
+    double ip;
 
-	/* should check for illegal values here - nan, inf, etc */
-	abs = XCMS_FABS(val);
-	if (abs >= XCMS_DMAXPOWTWO) {
-		ip = val;
-	} else {
-		ip = abs + XCMS_DMAXPOWTWO;	/* dump fraction */
-		ip -= XCMS_DMAXPOWTWO;	/* restore w/o frac */
-		if (ip > abs)		/* if it rounds up */
-			ip -= 1.0;	/* fix it */
-		ip = XCMS_FABS(ip);
-	}
-	*dp = ip;
-	return (val - ip); /* signed fractional part */
+    /* should check for illegal values here - nan, inf, etc */
+    abs = XCMS_FABS(val);
+    if (abs >= XCMS_DMAXPOWTWO)
+    {
+        ip = val;
+    }
+    else
+    {
+        ip = abs + XCMS_DMAXPOWTWO; /* dump fraction */
+        ip -= XCMS_DMAXPOWTWO; /* restore w/o frac */
+        if (ip > abs)  /* if it rounds up */
+            ip -= 1.0; /* fix it */
+        ip = XCMS_FABS(ip);
+    }
+    *dp = ip;
+    return (val - ip); /* signed fractional part */
 }
 
-
 /*
  *  FUNCTION
  *
@@ -372,22 +376,19 @@ _XcmsModuloF(
  *
  */
 
-static double _XcmsPolynomial(
-    register int order,
-    double const *coeffs,
-    double x)
+static double
+_XcmsPolynomial(register int order, const double *coeffs, double x)
 {
     auto double rtn_value;
 
     coeffs += order;
     rtn_value = *coeffs--;
-    while(order-- > 0)
-	rtn_value = *coeffs-- + (x * rtn_value);
+    while (order-- > 0)
+        rtn_value = *coeffs-- + (x * rtn_value);
 
-    return(rtn_value);
+    return (rtn_value);
 }
 
-
 /*
  *  FUNCTION
  *
@@ -496,39 +497,54 @@ static double _XcmsPolynomial(
  */
 
 double
-_XcmsSine (double x)
+_XcmsSine(double x)
 {
     double y;
     double yt2;
     double retval;
 
-    if (x < -XCMS_PI || x > XCMS_PI) {
-	x = _XcmsModulo (x, XCMS_TWOPI);
-	if (x > XCMS_PI) {
-	    x = x - XCMS_TWOPI;
-	} else if (x < -XCMS_PI) {
-	    x = x + XCMS_TWOPI;
-	}
+    if (x < -XCMS_PI || x > XCMS_PI)
+    {
+        x = _XcmsModulo(x, XCMS_TWOPI);
+        if (x > XCMS_PI)
+        {
+            x = x - XCMS_TWOPI;
+        }
+        else if (x < -XCMS_PI)
+        {
+            x = x + XCMS_TWOPI;
+        }
     }
-    if (x > XCMS_HALFPI) {
-	retval = -(_XcmsSine (x - XCMS_PI));
-    } else if (x < -XCMS_HALFPI) {
-	retval = -(_XcmsSine (x + XCMS_PI));
-    } else if (x > XCMS_FOURTHPI) {
-	retval = _XcmsCosine (XCMS_HALFPI - x);
-    } else if (x < -XCMS_FOURTHPI) {
-	retval = -(_XcmsCosine (XCMS_HALFPI + x));
-    } else if (x < XCMS_X6_UNDERFLOWS && x > -XCMS_X6_UNDERFLOWS) {
-	retval = x;
-    } else {
-	y = x / XCMS_FOURTHPI;
-	yt2 = y * y;
-	retval = y * (_XcmsPolynomial (3, sin_pcoeffs, yt2) / _XcmsPolynomial(3, sin_qcoeffs, yt2));
+    if (x > XCMS_HALFPI)
+    {
+        retval = -(_XcmsSine(x - XCMS_PI));
     }
-    return(retval);
+    else if (x < -XCMS_HALFPI)
+    {
+        retval = -(_XcmsSine(x + XCMS_PI));
+    }
+    else if (x > XCMS_FOURTHPI)
+    {
+        retval = _XcmsCosine(XCMS_HALFPI - x);
+    }
+    else if (x < -XCMS_FOURTHPI)
+    {
+        retval = -(_XcmsCosine(XCMS_HALFPI + x));
+    }
+    else if (x < XCMS_X6_UNDERFLOWS && x > -XCMS_X6_UNDERFLOWS)
+    {
+        retval = x;
+    }
+    else
+    {
+        y      = x / XCMS_FOURTHPI;
+        yt2    = y * y;
+        retval = y * (_XcmsPolynomial(3, sin_pcoeffs, yt2) /
+                      _XcmsPolynomial(3, sin_qcoeffs, yt2));
+    }
+    return (retval);
 }
 
-
 /*
  *	NAME
  *		_XcmsArcTangent
@@ -551,28 +567,31 @@ _XcmsArcTangent(double x)
 {
     double ai, a1 = 0.0, bi, b1 = 0.0, l, d;
     double maxerror;
-    int i;
+    int    i;
 
-    if (x == 0.0)  {
-	return (0.0);
+    if (x == 0.0)
+    {
+        return (0.0);
     }
-    if (x < 1.0) {
-	maxerror = x * XCMS_MAXERROR;
-    } else {
-	maxerror = XCMS_MAXERROR;
+    if (x < 1.0)
+    {
+        maxerror = x * XCMS_MAXERROR;
     }
-    ai = _XcmsSquareRoot( 1.0 / (1.0 + (x * x)) );
+    else
+    {
+        maxerror = XCMS_MAXERROR;
+    }
+    ai = _XcmsSquareRoot(1.0 / (1.0 + (x * x)));
     bi = 1.0;
-    for (i = 0; i < XCMS_MAXITER; i++) {
-	a1 = (ai + bi) / 2.0;
-	b1 = _XcmsSquareRoot((a1 * bi));
-	if (a1 == b1)
-	    break;
-	d = XCMS_FABS(a1 - b1);
-	if (d < maxerror)
-	    break;
-	ai = a1;
-	bi = b1;
+    for (i = 0; i < XCMS_MAXITER; i++)
+    {
+        a1 = (ai + bi) / 2.0;
+        b1 = _XcmsSquareRoot((a1 * bi));
+        if (a1 == b1) break;
+        d = XCMS_FABS(a1 - b1);
+        if (d < maxerror) break;
+        ai = a1;
+        bi = b1;
     }
 
     l = ((a1 > b1) ? b1 : a1);

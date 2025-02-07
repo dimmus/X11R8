@@ -25,10 +25,10 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef WIN32
-#define _WILLWINSOCK_
+#  define _WILLWINSOCK_
 #endif
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xos.h"
 #include "X11/X.h"
@@ -37,32 +37,37 @@ in this Software without prior written authorization from The Open Group.
 #include <stdlib.h>
 
 #ifdef WIN32
-#include "X11/Xwinsock.h"
+#  include "X11/Xwinsock.h"
 #else
-#include <sys/socket.h>
+#  include <sys/socket.h>
 #endif
 
 int
-XdmcpFill (int fd, XdmcpBufferPtr buffer, XdmcpNetaddr from, int *fromlen)
+XdmcpFill(int fd, XdmcpBufferPtr buffer, XdmcpNetaddr from, int *fromlen)
 {
-    BYTE    *newBuf;
+    BYTE *newBuf;
 
     if (buffer->size < XDM_MAX_MSGLEN)
     {
-	newBuf = (BYTE *) malloc(XDM_MAX_MSGLEN);
-	if (newBuf)
-	{
-	    free(buffer->data);
-	    buffer->data = newBuf;
-	    buffer->size = XDM_MAX_MSGLEN;
-	}
+        newBuf = (BYTE *)malloc(XDM_MAX_MSGLEN);
+        if (newBuf)
+        {
+            free(buffer->data);
+            buffer->data = newBuf;
+            buffer->size = XDM_MAX_MSGLEN;
+        }
     }
     buffer->pointer = 0;
-    buffer->count = recvfrom (fd, (char*)buffer->data, buffer->size, 0,
-			      (struct sockaddr *)from, (void *)fromlen);
-    if (buffer->count < 6) {
-	buffer->count = 0;
-	return FALSE;
+    buffer->count   = recvfrom(fd,
+                             (char *)buffer->data,
+                             buffer->size,
+                             0,
+                             (struct sockaddr *)from,
+                             (void *)fromlen);
+    if (buffer->count < 6)
+    {
+        buffer->count = 0;
+        return FALSE;
     }
     return TRUE;
 }

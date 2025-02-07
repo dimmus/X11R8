@@ -25,45 +25,43 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xutil.h"
 #include <stdio.h>
-
 
 /*
  * Routines for allocating space for structures that are expected to get
  * longer at some point.
  */
 
-XSizeHints *XAllocSizeHints (void)
+XSizeHints *
+XAllocSizeHints(void)
 {
-    return Xcalloc (1, sizeof (XSizeHints));
+    return Xcalloc(1, sizeof(XSizeHints));
 }
 
-
-XStandardColormap *XAllocStandardColormap (void)
+XStandardColormap *
+XAllocStandardColormap(void)
 {
-    return Xcalloc (1, sizeof (XStandardColormap));
+    return Xcalloc(1, sizeof(XStandardColormap));
 }
 
-
-XWMHints *XAllocWMHints (void)
+XWMHints *
+XAllocWMHints(void)
 {
-    return Xcalloc (1, sizeof (XWMHints));
+    return Xcalloc(1, sizeof(XWMHints));
 }
 
-
-XClassHint *XAllocClassHint (void)
+XClassHint *
+XAllocClassHint(void)
 {
-    return Xcalloc (1, sizeof (XClassHint));
+    return Xcalloc(1, sizeof(XClassHint));
 }
 
-
-XIconSize *XAllocIconSize (void)
+XIconSize *
+XAllocIconSize(void)
 {
-    return Xcalloc (1, sizeof (XIconSize));
+    return Xcalloc(1, sizeof(XIconSize));
 }
-
-

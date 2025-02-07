@@ -25,7 +25,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ********************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "Xlibint.h"
@@ -37,11 +37,13 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 int
 _XkbInitReadBuffer(Display *dpy, XkbReadBufferPtr buf, int size)
 {
-    if ((dpy != NULL) && (buf != NULL) && (size > 0)) {
+    if ((dpy != NULL) && (buf != NULL) && (size > 0))
+    {
         buf->error = 0;
-        buf->size = size;
+        buf->size  = size;
         buf->start = buf->data = _XkbAlloc(size);
-        if (buf->start) {
+        if (buf->start)
+        {
             _XRead(dpy, buf->start, size);
             return 1;
         }
@@ -49,13 +51,12 @@ _XkbInitReadBuffer(Display *dpy, XkbReadBufferPtr buf, int size)
     return 0;
 }
 
-#define	_XkbReadBufferDataLeft(b)	(((b)->size)-((b)->data-(b)->start))
+#define _XkbReadBufferDataLeft(b) (((b)->size) - ((b)->data - (b)->start))
 
 int
 _XkbSkipReadBufferData(XkbReadBufferPtr from, int size)
 {
-    if (size == 0)
-        return 1;
+    if (size == 0) return 1;
     if ((from == NULL) || (from->error) || (size < 1) ||
         (_XkbReadBufferDataLeft(from) < size))
         return 0;
@@ -66,8 +67,7 @@ _XkbSkipReadBufferData(XkbReadBufferPtr from, int size)
 int
 _XkbCopyFromReadBuffer(XkbReadBufferPtr from, char *to, int size)
 {
-    if (size == 0)
-        return 1;
+    if (size == 0) return 1;
     if ((from == NULL) || (from->error) || (to == NULL) || (size < 1) ||
         (_XkbReadBufferDataLeft(from) < size))
         return 0;
@@ -78,29 +78,30 @@ _XkbCopyFromReadBuffer(XkbReadBufferPtr from, char *to, int size)
 
 #ifdef XKB_FORCE_INT_KEYSYM
 int
-_XkbReadCopyKeySyms(int *wire, KeySym * to, int num_words)
+_XkbReadCopyKeySyms(int *wire, KeySym *to, int num_words)
 {
-    while (num_words-- > 0) {
+    while (num_words-- > 0)
+    {
         *to++ = *wire++;
     }
     return 1;
 }
 
 int
-_XkbReadBufferCopyKeySyms(XkbReadBufferPtr from, KeySym * to, int num_words)
+_XkbReadBufferCopyKeySyms(XkbReadBufferPtr from, KeySym *to, int num_words)
 {
-    if ((unsigned) (num_words * 4) > _XkbReadBufferDataLeft(from))
-        return 0;
-    _XkbReadCopyKeySyms((int *) from->data, to, num_words);
+    if ((unsigned)(num_words * 4) > _XkbReadBufferDataLeft(from)) return 0;
+    _XkbReadCopyKeySyms((int *)from->data, to, num_words);
     from->data += (4 * num_words);
     return True;
 }
 
 int
-_XkbWriteCopyKeySyms(register KeySym * from, CARD32 *to, int len)
+_XkbWriteCopyKeySyms(register KeySym *from, CARD32 *to, int len)
 {
-    while (len-- > 0) {
-        *to++ = (CARD32) *from++;
+    while (len-- > 0)
+    {
+        *to++ = (CARD32)*from++;
     }
     return True;
 }
@@ -110,7 +111,8 @@ _XkbWriteCopyKeySyms(register KeySym * from, CARD32 *to, int len)
 int
 _XkbReadCopyData32(int *wire, long *to, int num_words)
 {
-    while (num_words-- > 0) {
+    while (num_words-- > 0)
+    {
         *to++ = *wire++;
     }
     return 1;
@@ -119,9 +121,8 @@ _XkbReadCopyData32(int *wire, long *to, int num_words)
 int
 _XkbReadBufferCopy32(XkbReadBufferPtr from, long *to, int num_words)
 {
-    if ((unsigned) (num_words * 4) > _XkbReadBufferDataLeft(from))
-        return 0;
-    _XkbReadCopyData32((int *) from->data, to, num_words);
+    if ((unsigned)(num_words * 4) > _XkbReadBufferDataLeft(from)) return 0;
+    _XkbReadCopyData32((int *)from->data, to, num_words);
     from->data += (4 * num_words);
     return True;
 }
@@ -129,13 +130,13 @@ _XkbReadBufferCopy32(XkbReadBufferPtr from, long *to, int num_words)
 int
 _XkbWriteCopyData32(register unsigned long *from, CARD32 *to, int len)
 {
-    while (len-- > 0) {
-        *to++ = (CARD32) *from++;
+    while (len-- > 0)
+    {
+        *to++ = (CARD32)*from++;
     }
     return True;
 }
 #endif                          /* LONG64 */
-
 
 char *
 _XkbPeekAtReadBuffer(XkbReadBufferPtr from, int size)
@@ -159,17 +160,17 @@ _XkbGetReadBufferPtr(XkbReadBufferPtr from, int size)
     return ptr;
 }
 
-
 int
 _XkbFreeReadBuffer(XkbReadBufferPtr buf)
 {
-    if ((buf != NULL) && (buf->start != NULL)) {
+    if ((buf != NULL) && (buf->start != NULL))
+    {
         int left;
 
-        left = (int) _XkbReadBufferDataLeft(buf);
+        left = (int)_XkbReadBufferDataLeft(buf);
 
         Xfree(buf->start);
-        buf->size = 0;
+        buf->size  = 0;
         buf->start = buf->data = NULL;
         return left;
     }
@@ -180,19 +181,20 @@ Bool
 _XkbGetReadBufferCountedString(XkbReadBufferPtr buf, char **rtrn)
 {
     CARD16 len, *pLen;
-    int left;
-    char *str = NULL;
+    int    left;
+    char  *str = NULL;
 
     if ((buf == NULL) || (buf->error) ||
-        ((left = (int) _XkbReadBufferDataLeft(buf)) < 4))
+        ((left = (int)_XkbReadBufferDataLeft(buf)) < 4))
         return False;
-    pLen = (CARD16 *) buf->data;
-    len = *pLen;
-    if (len > 0) {
-        if (XkbPaddedSize(len + 2) > left)
-            return False;
+    pLen = (CARD16 *)buf->data;
+    len  = *pLen;
+    if (len > 0)
+    {
+        if (XkbPaddedSize(len + 2) > left) return False;
         str = _XkbAlloc(len + 1);
-        if (str) {
+        if (str)
+        {
             memcpy(str, &buf->data[2], len);
             str[len] = '\0';
         }

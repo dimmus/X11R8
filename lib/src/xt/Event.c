@@ -69,19 +69,20 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "IntrinsicI.h"
 #include "X11/Shell.h"
 #include "StringDefs.h"
 
-typedef struct _XtEventRecExt {
-    int type;
+typedef struct _XtEventRecExt
+{
+    int       type;
     XtPointer select_data[1];   /* actual dimension is [mask] */
 } XtEventRecExt;
 
-#define EXT_TYPE(p) (((XtEventRecExt*) ((p)+1))->type)
-#define EXT_SELECT_DATA(p,n) (((XtEventRecExt*) ((p)+1))->select_data[n])
+#define EXT_TYPE(p)           (((XtEventRecExt *)((p) + 1))->type)
+#define EXT_SELECT_DATA(p, n) (((XtEventRecExt *)((p) + 1))->select_data[n])
 
 #define NonMaskableMask ((EventMask)0x80000000L)
 
@@ -96,36 +97,39 @@ typedef struct _XtEventRecExt {
  * NO_EXPOSE        - TRUE if the widget wants No expose events dispatched.
  */
 
-#define COMP_EXPOSE   (widget->core.widget_class->core_class.compress_exposure)
+#define COMP_EXPOSE      (widget->core.widget_class->core_class.compress_exposure)
 #define COMP_EXPOSE_TYPE (COMP_EXPOSE & 0x0f)
-#define GRAPHICS_EXPOSE  ((XtExposeGraphicsExpose & COMP_EXPOSE) || \
-                          (XtExposeGraphicsExposeMerged & COMP_EXPOSE))
-#define NO_EXPOSE        (XtExposeNoExpose & COMP_EXPOSE)
+#define GRAPHICS_EXPOSE                        \
+    ((XtExposeGraphicsExpose & COMP_EXPOSE) || \
+     (XtExposeGraphicsExposeMerged & COMP_EXPOSE))
+#define NO_EXPOSE (XtExposeNoExpose & COMP_EXPOSE)
 
 EventMask
 XtBuildEventMask(Widget widget)
 {
     EventMask mask = 0L;
 
-    if (widget != NULL) {
+    if (widget != NULL)
+    {
         XtEventTable ev;
 
         WIDGET_TO_APPCON(widget);
 
         LOCK_APP(app);
-        for (ev = widget->core.event_table; ev != NULL; ev = ev->next) {
-            if (!ev->select)
-                continue;
+        for (ev = widget->core.event_table; ev != NULL; ev = ev->next)
+        {
+            if (!ev->select) continue;
 
-            if (!ev->has_type_specifier)
-                mask |= ev->mask;
-            else {
-                if (EXT_TYPE(ev) < LASTEvent) {
+            if (!ev->has_type_specifier) mask |= ev->mask;
+            else
+            {
+                if (EXT_TYPE(ev) < LASTEvent)
+                {
                     Cardinal i;
 
                     for (i = 0; i < ev->mask; i++)
                         if (EXT_SELECT_DATA(ev, i))
-                            mask |= *(EventMask *) EXT_SELECT_DATA(ev, i);
+                            mask |= *(EventMask *)EXT_SELECT_DATA(ev, i);
                 }
             }
         }
@@ -148,69 +152,68 @@ static void
 CallExtensionSelector(Widget widget, ExtSelectRec *rec, Boolean forceCall)
 {
     XtEventRec *p;
-    XtPointer *data;
-    int *types;
-    Cardinal i, count = 0;
+    XtPointer  *data;
+    int        *types;
+    Cardinal    i, count = 0;
 
     for (p = widget->core.event_table; p != NULL; p = p->next)
-        if (p->has_type_specifier &&
-            EXT_TYPE(p) >= rec->min && EXT_TYPE(p) <= rec->max)
-            count = (Cardinal) (count + p->mask);
+        if (p->has_type_specifier && EXT_TYPE(p) >= rec->min &&
+            EXT_TYPE(p) <= rec->max)
+            count = (Cardinal)(count + p->mask);
 
-    if (count == 0 && !forceCall)
-        return;
+    if (count == 0 && !forceCall) return;
 
-    data = (XtPointer *) ALLOCATE_LOCAL(count * sizeof(XtPointer));
-    types = (int *) ALLOCATE_LOCAL(count * sizeof(int));
+    data  = (XtPointer *)ALLOCATE_LOCAL(count * sizeof(XtPointer));
+    types = (int *)ALLOCATE_LOCAL(count * sizeof(int));
     count = 0;
 
     for (p = widget->core.event_table; p != NULL; p = p->next)
-        if (p->has_type_specifier &&
-            EXT_TYPE(p) >= rec->min && EXT_TYPE(p) <= rec->max)
-            for (i = 0; i < p->mask; i++) {
-                types[count] = EXT_TYPE(p);
+        if (p->has_type_specifier && EXT_TYPE(p) >= rec->min &&
+            EXT_TYPE(p) <= rec->max)
+            for (i = 0; i < p->mask; i++)
+            {
+                types[count]  = EXT_TYPE(p);
                 data[count++] = EXT_SELECT_DATA(p, i);
             }
 
-    (*rec->proc) (widget, types, data, (int) count, rec->client_data);
-    DEALLOCATE_LOCAL((char *) types);
-    DEALLOCATE_LOCAL((char *) data);
+    (*rec->proc)(widget, types, data, (int)count, rec->client_data);
+    DEALLOCATE_LOCAL((char *)types);
+    DEALLOCATE_LOCAL((char *)data);
 }
 
 static void
-RemoveEventHandler(Widget widget,
-                   XtPointer select_data,
-                   int type,
-                   Boolean has_type_specifier,
-                   Boolean other,
+RemoveEventHandler(Widget               widget,
+                   XtPointer            select_data,
+                   int                  type,
+                   Boolean              has_type_specifier,
+                   Boolean              other,
                    const XtEventHandler proc,
-                   const XtPointer closure,
-                   Boolean raw)
+                   const XtPointer      closure,
+                   Boolean              raw)
 {
     XtEventRec *p, **pp;
-    EventMask oldMask = XtBuildEventMask(widget);
+    EventMask   oldMask = XtBuildEventMask(widget);
 
-    if (raw)
-        raw = 1;
+    if (raw) raw = 1;
     pp = &widget->core.event_table;
     while ((p = *pp) &&
            (p->proc != proc || p->closure != closure || p->select == raw ||
             has_type_specifier != p->has_type_specifier ||
             (has_type_specifier && EXT_TYPE(p) != type)))
         pp = &p->next;
-    if (!p)
-        return;
+    if (!p) return;
 
     /* un-register it */
-    if (!has_type_specifier) {
-        EventMask eventMask = *(EventMask *) select_data;
+    if (!has_type_specifier)
+    {
+        EventMask eventMask = *(EventMask *)select_data;
 
         eventMask &= ~NonMaskableMask;
-        if (other)
-            eventMask |= NonMaskableMask;
+        if (other) eventMask |= NonMaskableMask;
         p->mask &= ~eventMask;
     }
-    else {
+    else
+    {
         Cardinal i;
 
         /* p->mask specifies count of EXT_SELECT_DATA(p,i)
@@ -219,45 +222,49 @@ RemoveEventHandler(Widget widget,
          */
         for (i = 0; i < p->mask && select_data != EXT_SELECT_DATA(p, i);)
             i++;
-        if (i == p->mask)
-            return;
-        if (p->mask == 1)
-            p->mask = 0;
-        else {
+        if (i == p->mask) return;
+        if (p->mask == 1) p->mask = 0;
+        else
+        {
             p->mask--;
-            while (i < p->mask) {
+            while (i < p->mask)
+            {
                 EXT_SELECT_DATA(p, i) = EXT_SELECT_DATA(p, i + 1);
                 i++;
             }
         }
     }
 
-    if (!p->mask) {             /* delete it entirely */
+    if (!p->mask)
+    {             /* delete it entirely */
         *pp = p->next;
-        XtFree((char *) p);
+        XtFree((char *)p);
     }
 
     /* Reset select mask if realized and not raw. */
-    if (!raw && XtIsRealized(widget) && !widget->core.being_destroyed) {
+    if (!raw && XtIsRealized(widget) && !widget->core.being_destroyed)
+    {
         EventMask mask = XtBuildEventMask(widget);
-        Display *dpy = XtDisplay(widget);
+        Display  *dpy  = XtDisplay(widget);
 
-        if (oldMask != mask)
-            XSelectInput(dpy, XtWindow(widget), (long) mask);
+        if (oldMask != mask) XSelectInput(dpy, XtWindow(widget), (long)mask);
 
-        if (has_type_specifier) {
+        if (has_type_specifier)
+        {
             XtPerDisplay pd = _XtGetPerDisplay(dpy);
-            int i;
+            int          i;
 
-            for (i = 0; i < pd->ext_select_count; i++) {
+            for (i = 0; i < pd->ext_select_count; i++)
+            {
                 if (type >= pd->ext_select_list[i].min &&
-                    type <= pd->ext_select_list[i].max) {
-                    CallExtensionSelector(widget, pd->ext_select_list + i,
+                    type <= pd->ext_select_list[i].max)
+                {
+                    CallExtensionSelector(widget,
+                                          pd->ext_select_list + i,
                                           TRUE);
                     break;
                 }
-                if (type < pd->ext_select_list[i].min)
-                    break;
+                if (type < pd->ext_select_list[i].min) break;
             }
         }
     }
@@ -280,35 +287,31 @@ RemoveEventHandler(Widget widget,
  */
 
 static void
-AddEventHandler(Widget widget,
-                XtPointer select_data,
-                int type,
-                Boolean has_type_specifier,
-                Boolean other,
+AddEventHandler(Widget         widget,
+                XtPointer      select_data,
+                int            type,
+                Boolean        has_type_specifier,
+                Boolean        other,
                 XtEventHandler proc,
-                XtPointer closure,
+                XtPointer      closure,
                 XtListPosition position,
-                Boolean force_new_position,
-                Boolean raw)
+                Boolean        force_new_position,
+                Boolean        raw)
 {
     register XtEventRec *p, **pp;
-    EventMask oldMask = 0, eventMask = 0;
+    EventMask            oldMask = 0, eventMask = 0;
 
-    if (!has_type_specifier) {
-        eventMask = *(EventMask *) select_data & ~NonMaskableMask;
-        if (other)
-            eventMask |= NonMaskableMask;
-        if (!eventMask)
-            return;
+    if (!has_type_specifier)
+    {
+        eventMask = *(EventMask *)select_data & ~NonMaskableMask;
+        if (other) eventMask |= NonMaskableMask;
+        if (!eventMask) return;
     }
-    else if (!type)
-        return;
+    else if (!type) return;
 
-    if (XtIsRealized(widget) && !raw)
-        oldMask = XtBuildEventMask(widget);
+    if (XtIsRealized(widget) && !raw) oldMask = XtBuildEventMask(widget);
 
-    if (raw)
-        raw = 1;
+    if (raw) raw = 1;
     pp = &widget->core.event_table;
     while ((p = *pp) &&
            (p->proc != proc || p->closure != closure || p->select == raw ||
@@ -316,66 +319,75 @@ AddEventHandler(Widget widget,
             (has_type_specifier && EXT_TYPE(p) != type)))
         pp = &p->next;
 
-    if (!p) {                   /* New proc to add to list */
-        if (has_type_specifier) {
-            p = (XtEventRec *) __XtMalloc(sizeof(XtEventRec) +
-                                          sizeof(XtEventRecExt));
+    if (!p)
+    {                   /* New proc to add to list */
+        if (has_type_specifier)
+        {
+            p           = (XtEventRec *)__XtMalloc(sizeof(XtEventRec) +
+                                         sizeof(XtEventRecExt));
             EXT_TYPE(p) = type;
             EXT_SELECT_DATA(p, 0) = select_data;
-            p->mask = 1;
+            p->mask               = 1;
             p->has_type_specifier = True;
         }
-        else {
-            p = (XtEventRec *) __XtMalloc(sizeof(XtEventRec));
+        else
+        {
+            p       = (XtEventRec *)__XtMalloc(sizeof(XtEventRec));
             p->mask = eventMask;
             p->has_type_specifier = False;
         }
-        p->proc = proc;
+        p->proc    = proc;
         p->closure = closure;
-        p->select = !raw;
+        p->select  = !raw;
 
-        if (position == XtListHead) {
-            p->next = widget->core.event_table;
+        if (position == XtListHead)
+        {
+            p->next                  = widget->core.event_table;
             widget->core.event_table = p;
         }
-        else {
-            *pp = p;
+        else
+        {
+            *pp     = p;
             p->next = NULL;
         }
     }
-    else {
-        if (force_new_position) {
+    else
+    {
+        if (force_new_position)
+        {
             *pp = p->next;
 
-            if (position == XtListHead) {
-                p->next = widget->core.event_table;
+            if (position == XtListHead)
+            {
+                p->next                  = widget->core.event_table;
                 widget->core.event_table = p;
             }
-            else {
+            else
+            {
                 /*
                  * Find the last element in the list.
                  */
                 while (*pp)
                     pp = &(*pp)->next;
-                *pp = p;
+                *pp     = p;
                 p->next = NULL;
             }
         }
 
-        if (!has_type_specifier)
-            p->mask |= eventMask;
-        else {
+        if (!has_type_specifier) p->mask |= eventMask;
+        else
+        {
             Cardinal i;
 
             /* p->mask specifies count of EXT_SELECT_DATA(p,i) */
             for (i = 0; i < p->mask && select_data != EXT_SELECT_DATA(p, i);)
                 i++;
-            if (i == p->mask) {
-                p = (XtEventRec *) XtRealloc((char *) p,
-                                             (Cardinal) (sizeof(XtEventRec) +
-                                                         sizeof(XtEventRecExt) +
-                                                         p->mask *
-                                                         sizeof(XtPointer)));
+            if (i == p->mask)
+            {
+                p = (XtEventRec *)XtRealloc(
+                    (char *)p,
+                    (Cardinal)(sizeof(XtEventRec) + sizeof(XtEventRecExt) +
+                               p->mask * sizeof(XtPointer)));
                 EXT_SELECT_DATA(p, i) = select_data;
                 p->mask++;
                 *pp = p;
@@ -383,167 +395,230 @@ AddEventHandler(Widget widget,
         }
     }
 
-    if (XtIsRealized(widget) && !raw) {
+    if (XtIsRealized(widget) && !raw)
+    {
         EventMask mask = XtBuildEventMask(widget);
-        Display *dpy = XtDisplay(widget);
+        Display  *dpy  = XtDisplay(widget);
 
-        if (oldMask != mask)
-            XSelectInput(dpy, XtWindow(widget), (long) mask);
+        if (oldMask != mask) XSelectInput(dpy, XtWindow(widget), (long)mask);
 
-        if (has_type_specifier) {
+        if (has_type_specifier)
+        {
             XtPerDisplay pd = _XtGetPerDisplay(dpy);
-            int i;
+            int          i;
 
-            for (i = 0; i < pd->ext_select_count; i++) {
+            for (i = 0; i < pd->ext_select_count; i++)
+            {
                 if (type >= pd->ext_select_list[i].min &&
-                    type <= pd->ext_select_list[i].max) {
-                    CallExtensionSelector(widget, pd->ext_select_list + i,
+                    type <= pd->ext_select_list[i].max)
+                {
+                    CallExtensionSelector(widget,
+                                          pd->ext_select_list + i,
                                           FALSE);
                     break;
                 }
-                if (type < pd->ext_select_list[i].min)
-                    break;
+                if (type < pd->ext_select_list[i].min) break;
             }
         }
     }
 }
 
 void
-XtRemoveEventHandler(Widget widget,
-                     EventMask eventMask,
-                     _XtBoolean other,
+XtRemoveEventHandler(Widget         widget,
+                     EventMask      eventMask,
+                     _XtBoolean     other,
                      XtEventHandler proc,
-                     XtPointer closure)
+                     XtPointer      closure)
 {
     WIDGET_TO_APPCON(widget);
     LOCK_APP(app);
-    RemoveEventHandler(widget, (XtPointer) &eventMask, 0, FALSE,
-                       (Boolean) other, proc, closure, FALSE);
+    RemoveEventHandler(widget,
+                       (XtPointer)&eventMask,
+                       0,
+                       FALSE,
+                       (Boolean)other,
+                       proc,
+                       closure,
+                       FALSE);
     UNLOCK_APP(app);
 }
 
 void
-XtAddEventHandler(Widget widget,
-                  EventMask eventMask,
-                  _XtBoolean other,
+XtAddEventHandler(Widget         widget,
+                  EventMask      eventMask,
+                  _XtBoolean     other,
                   XtEventHandler proc,
-                  XtPointer closure)
+                  XtPointer      closure)
 {
     WIDGET_TO_APPCON(widget);
     LOCK_APP(app);
-    AddEventHandler(widget, (XtPointer) &eventMask, 0, FALSE, (Boolean) other,
-                    proc, closure, XtListTail, FALSE, FALSE);
+    AddEventHandler(widget,
+                    (XtPointer)&eventMask,
+                    0,
+                    FALSE,
+                    (Boolean)other,
+                    proc,
+                    closure,
+                    XtListTail,
+                    FALSE,
+                    FALSE);
     UNLOCK_APP(app);
 }
 
 void
-XtInsertEventHandler(Widget widget,
-                     EventMask eventMask,
-                     _XtBoolean other,
+XtInsertEventHandler(Widget         widget,
+                     EventMask      eventMask,
+                     _XtBoolean     other,
                      XtEventHandler proc,
-                     XtPointer closure,
+                     XtPointer      closure,
                      XtListPosition position)
 {
     WIDGET_TO_APPCON(widget);
     LOCK_APP(app);
-    AddEventHandler(widget, (XtPointer) &eventMask, 0, FALSE, (Boolean) other,
-                    proc, closure, position, TRUE, FALSE);
+    AddEventHandler(widget,
+                    (XtPointer)&eventMask,
+                    0,
+                    FALSE,
+                    (Boolean)other,
+                    proc,
+                    closure,
+                    position,
+                    TRUE,
+                    FALSE);
     UNLOCK_APP(app);
 }
 
 void
-XtRemoveRawEventHandler(Widget widget,
-                        EventMask eventMask,
-                        _XtBoolean other,
+XtRemoveRawEventHandler(Widget         widget,
+                        EventMask      eventMask,
+                        _XtBoolean     other,
                         XtEventHandler proc,
-                        XtPointer closure)
+                        XtPointer      closure)
 {
     WIDGET_TO_APPCON(widget);
     LOCK_APP(app);
-    RemoveEventHandler(widget, (XtPointer) &eventMask, 0, FALSE,
-                       (Boolean) other, proc, closure, TRUE);
+    RemoveEventHandler(widget,
+                       (XtPointer)&eventMask,
+                       0,
+                       FALSE,
+                       (Boolean)other,
+                       proc,
+                       closure,
+                       TRUE);
     UNLOCK_APP(app);
 }
 
 void
-XtInsertRawEventHandler(Widget widget,
-                        EventMask eventMask,
-                        _XtBoolean other,
+XtInsertRawEventHandler(Widget         widget,
+                        EventMask      eventMask,
+                        _XtBoolean     other,
                         XtEventHandler proc,
-                        XtPointer closure,
+                        XtPointer      closure,
                         XtListPosition position)
 {
     WIDGET_TO_APPCON(widget);
     LOCK_APP(app);
-    AddEventHandler(widget, (XtPointer) &eventMask, 0, FALSE, (Boolean) other,
-                    proc, closure, position, TRUE, TRUE);
+    AddEventHandler(widget,
+                    (XtPointer)&eventMask,
+                    0,
+                    FALSE,
+                    (Boolean)other,
+                    proc,
+                    closure,
+                    position,
+                    TRUE,
+                    TRUE);
     UNLOCK_APP(app);
 }
 
 void
-XtAddRawEventHandler(Widget widget,
-                     EventMask eventMask,
-                     _XtBoolean other,
+XtAddRawEventHandler(Widget         widget,
+                     EventMask      eventMask,
+                     _XtBoolean     other,
                      XtEventHandler proc,
-                     XtPointer closure)
+                     XtPointer      closure)
 {
     WIDGET_TO_APPCON(widget);
     LOCK_APP(app);
-    AddEventHandler(widget, (XtPointer) &eventMask, 0, FALSE, (Boolean) other,
-                    proc, closure, XtListTail, FALSE, TRUE);
+    AddEventHandler(widget,
+                    (XtPointer)&eventMask,
+                    0,
+                    FALSE,
+                    (Boolean)other,
+                    proc,
+                    closure,
+                    XtListTail,
+                    FALSE,
+                    TRUE);
     UNLOCK_APP(app);
 }
 
 void
-XtRemoveEventTypeHandler(Widget widget,
-                         int type,
-                         XtPointer select_data,
+XtRemoveEventTypeHandler(Widget         widget,
+                         int            type,
+                         XtPointer      select_data,
                          XtEventHandler proc,
-                         XtPointer closure)
+                         XtPointer      closure)
 {
     WIDGET_TO_APPCON(widget);
     LOCK_APP(app);
-    RemoveEventHandler(widget, select_data, type, TRUE,
-                       FALSE, proc, closure, FALSE);
+    RemoveEventHandler(widget,
+                       select_data,
+                       type,
+                       TRUE,
+                       FALSE,
+                       proc,
+                       closure,
+                       FALSE);
     UNLOCK_APP(app);
 }
 
 void
-XtInsertEventTypeHandler(Widget widget,
-                         int type,
-                         XtPointer select_data,
+XtInsertEventTypeHandler(Widget         widget,
+                         int            type,
+                         XtPointer      select_data,
                          XtEventHandler proc,
-                         XtPointer closure,
+                         XtPointer      closure,
                          XtListPosition position)
 {
     WIDGET_TO_APPCON(widget);
     LOCK_APP(app);
-    AddEventHandler(widget, select_data, type, TRUE, FALSE,
-                    proc, closure, position, TRUE, FALSE);
+    AddEventHandler(widget,
+                    select_data,
+                    type,
+                    TRUE,
+                    FALSE,
+                    proc,
+                    closure,
+                    position,
+                    TRUE,
+                    FALSE);
     UNLOCK_APP(app);
 }
 
-typedef struct _WWPair {
+typedef struct _WWPair
+{
     struct _WWPair *next;
-    Window window;
-    Widget widget;
+    Window          window;
+    Widget          widget;
 } *WWPair;
 
-typedef struct _WWTable {
+typedef struct _WWTable
+{
     unsigned int mask;          /* size of hash table - 1 */
     unsigned int rehash;        /* mask - 2 */
     unsigned int occupied;      /* number of occupied entries */
     unsigned int fakes;         /* number occupied by WWfake */
-    Widget *entries;            /* the entries */
-    WWPair pairs;               /* bogus entries */
+    Widget      *entries;            /* the entries */
+    WWPair       pairs;               /* bogus entries */
 } *WWTable;
 
 static const WidgetRec WWfake;  /* placeholder for deletions */
 
-#define WWHASH(tab,win) ((win) & tab->mask)
-#define WWREHASHVAL(tab,win) ((((win) % tab->rehash) + 2) | 1)
-#define WWREHASH(tab,idx,rehash) ((unsigned)(idx + rehash) & (tab->mask))
-#define WWTABLE(display) (_XtGetPerDisplay(display)->WWtable)
+#define WWHASH(tab, win)           ((win) & tab->mask)
+#define WWREHASHVAL(tab, win)      ((((win) % tab->rehash) + 2) | 1)
+#define WWREHASH(tab, idx, rehash) ((unsigned)(idx + rehash) & (tab->mask))
+#define WWTABLE(display)           (_XtGetPerDisplay(display)->WWtable)
 
 static void ExpandWWTable(WWTable);
 
@@ -551,9 +626,9 @@ void
 XtRegisterDrawable(Display *display, Drawable drawable, Widget widget)
 {
     WWTable tab;
-    int idx;
-    Widget entry;
-    Window window = (Window) drawable;
+    int     idx;
+    Widget  entry;
+    Window  window = (Window)drawable;
 
     WIDGET_TO_APPCON(widget);
 
@@ -561,33 +636,34 @@ XtRegisterDrawable(Display *display, Drawable drawable, Widget widget)
     LOCK_PROCESS;
     tab = WWTABLE(display);
 
-    if (window != XtWindow(widget)) {
+    if (window != XtWindow(widget))
+    {
         WWPair pair;
         pair = XtNew(struct _WWPair);
 
-        pair->next = tab->pairs;
+        pair->next   = tab->pairs;
         pair->window = window;
         pair->widget = widget;
-        tab->pairs = pair;
+        tab->pairs   = pair;
         UNLOCK_PROCESS;
         UNLOCK_APP(app);
         return;
     }
-    if ((tab->occupied + (tab->occupied >> 2)) > tab->mask)
-        ExpandWWTable(tab);
+    if ((tab->occupied + (tab->occupied >> 2)) > tab->mask) ExpandWWTable(tab);
 
-    idx = (int) WWHASH(tab, window);
-    if ((entry = tab->entries[idx]) && entry != &WWfake) {
-        int rehash = (int) WWREHASHVAL(tab, window);
+    idx = (int)WWHASH(tab, window);
+    if ((entry = tab->entries[idx]) && entry != &WWfake)
+    {
+        int rehash = (int)WWREHASHVAL(tab, window);
 
-        do {
-            idx = (int) WWREHASH(tab, idx, rehash);
-        } while ((entry = tab->entries[idx]) && entry != &WWfake);
+        do
+        {
+            idx = (int)WWREHASH(tab, idx, rehash);
+        }
+        while ((entry = tab->entries[idx]) && entry != &WWfake);
     }
-    if (!entry)
-        tab->occupied++;
-    else if (entry == &WWfake)
-        tab->fakes--;
+    if (!entry) tab->occupied++;
+    else if (entry == &WWfake) tab->fakes--;
     tab->entries[idx] = widget;
     UNLOCK_PROCESS;
     UNLOCK_APP(app);
@@ -597,47 +673,53 @@ void
 XtUnregisterDrawable(Display *display, Drawable drawable)
 {
     WWTable tab;
-    int idx;
-    Widget entry;
-    Window window = (Window) drawable;
-    Widget widget = XtWindowToWidget(display, window);
+    int     idx;
+    Widget  entry;
+    Window  window = (Window)drawable;
+    Widget  widget = XtWindowToWidget(display, window);
     DPY_TO_APPCON(display);
 
-    if (widget == NULL)
-        return;
+    if (widget == NULL) return;
 
     LOCK_APP(app);
     LOCK_PROCESS;
     tab = WWTABLE(display);
-    if (window != XtWindow(widget)) {
+    if (window != XtWindow(widget))
+    {
         WWPair *prev, pair;
 
         prev = &tab->pairs;
         while ((pair = *prev) && pair->window != window)
             prev = &pair->next;
-        if (pair) {
+        if (pair)
+        {
             *prev = pair->next;
-            XtFree((char *) pair);
+            XtFree((char *)pair);
         }
         UNLOCK_PROCESS;
         UNLOCK_APP(app);
         return;
     }
-    idx = (int) WWHASH(tab, window);
-    if ((entry = tab->entries[idx])) {
-        if (entry != widget) {
-            int rehash = (int) WWREHASHVAL(tab, window);
+    idx = (int)WWHASH(tab, window);
+    if ((entry = tab->entries[idx]))
+    {
+        if (entry != widget)
+        {
+            int rehash = (int)WWREHASHVAL(tab, window);
 
-            do {
-                idx = (int) WWREHASH(tab, idx, rehash);
-                if (!(entry = tab->entries[idx])) {
+            do
+            {
+                idx = (int)WWREHASH(tab, idx, rehash);
+                if (!(entry = tab->entries[idx]))
+                {
                     UNLOCK_PROCESS;
                     UNLOCK_APP(app);
                     return;
                 }
-            } while (entry != widget);
+            }
+            while (entry != widget);
         }
-        tab->entries[idx] = (Widget) &WWfake;
+        tab->entries[idx] = (Widget)&WWfake;
         tab->fakes++;
     }
     UNLOCK_PROCESS;
@@ -647,35 +729,41 @@ XtUnregisterDrawable(Display *display, Drawable drawable)
 static void
 ExpandWWTable(register WWTable tab)
 {
-    unsigned int oldmask;
-    register Widget *oldentries, *entries;
+    unsigned int      oldmask;
+    register Widget  *oldentries, *entries;
     register Cardinal oldidx, newidx, rehash;
-    register Widget entry;
+    register Widget   entry;
 
     LOCK_PROCESS;
-    oldmask = tab->mask;
+    oldmask    = tab->mask;
     oldentries = tab->entries;
     tab->occupied -= tab->fakes;
     tab->fakes = 0;
-    if ((tab->occupied + (tab->occupied >> 2)) > tab->mask) {
-        tab->mask = (tab->mask << 1) + 1;
+    if ((tab->occupied + (tab->occupied >> 2)) > tab->mask)
+    {
+        tab->mask   = (tab->mask << 1) + 1;
         tab->rehash = tab->mask - 2;
     }
     entries = tab->entries =
-        (Widget *) __XtCalloc(tab->mask + 1, sizeof(Widget));
-    for (oldidx = 0; oldidx <= oldmask; oldidx++) {
-        if ((entry = oldentries[oldidx]) && entry != &WWfake) {
-            newidx = (Cardinal) WWHASH(tab, XtWindow(entry));
-            if (entries[newidx]) {
-                rehash = (Cardinal) WWREHASHVAL(tab, XtWindow(entry));
-                do {
-                    newidx = (Cardinal) WWREHASH(tab, newidx, rehash);
-                } while (entries[newidx]);
+        (Widget *)__XtCalloc(tab->mask + 1, sizeof(Widget));
+    for (oldidx = 0; oldidx <= oldmask; oldidx++)
+    {
+        if ((entry = oldentries[oldidx]) && entry != &WWfake)
+        {
+            newidx = (Cardinal)WWHASH(tab, XtWindow(entry));
+            if (entries[newidx])
+            {
+                rehash = (Cardinal)WWREHASHVAL(tab, XtWindow(entry));
+                do
+                {
+                    newidx = (Cardinal)WWREHASH(tab, newidx, rehash);
+                }
+                while (entries[newidx]);
             }
             entries[newidx] = entry;
         }
     }
-    XtFree((char *) oldentries);
+    XtFree((char *)oldentries);
     UNLOCK_PROCESS;
 }
 
@@ -683,32 +771,37 @@ Widget
 XtWindowToWidget(register Display *display, register Window window)
 {
     WWTable tab;
-    int idx;
-    Widget entry;
-    WWPair pair;
+    int     idx;
+    Widget  entry;
+    WWPair  pair;
     DPY_TO_APPCON(display);
 
-    if (!window)
-        return NULL;
+    if (!window) return NULL;
 
     LOCK_APP(app);
     LOCK_PROCESS;
     tab = WWTABLE(display);
-    idx = (int) WWHASH(tab, window);
-    if ((entry = tab->entries[idx]) && XtWindow(entry) != window) {
-        int rehash = (int) WWREHASHVAL(tab, window);
+    idx = (int)WWHASH(tab, window);
+    if ((entry = tab->entries[idx]) && XtWindow(entry) != window)
+    {
+        int rehash = (int)WWREHASHVAL(tab, window);
 
-        do {
-            idx = (int) WWREHASH(tab, idx, rehash);
-        } while ((entry = tab->entries[idx]) && XtWindow(entry) != window);
+        do
+        {
+            idx = (int)WWREHASH(tab, idx, rehash);
+        }
+        while ((entry = tab->entries[idx]) && XtWindow(entry) != window);
     }
-    if (entry) {
+    if (entry)
+    {
         UNLOCK_PROCESS;
         UNLOCK_APP(app);
         return entry;
     }
-    for (pair = tab->pairs; pair; pair = pair->next) {
-        if (pair->window == window) {
+    for (pair = tab->pairs; pair; pair = pair->next)
+    {
+        if (pair->window == window)
+        {
             entry = pair->widget;
             UNLOCK_PROCESS;
             UNLOCK_APP(app);
@@ -725,14 +818,14 @@ _XtAllocWWTable(XtPerDisplay pd)
 {
     register WWTable tab;
 
-    tab = (WWTable) __XtMalloc(sizeof(struct _WWTable));
-    tab->mask = 0x7f;
-    tab->rehash = tab->mask - 2;
-    tab->entries = (Widget *) __XtCalloc(tab->mask + 1, sizeof(Widget));
+    tab           = (WWTable)__XtMalloc(sizeof(struct _WWTable));
+    tab->mask     = 0x7f;
+    tab->rehash   = tab->mask - 2;
+    tab->entries  = (Widget *)__XtCalloc(tab->mask + 1, sizeof(Widget));
     tab->occupied = 0;
-    tab->fakes = 0;
-    tab->pairs = NULL;
-    pd->WWtable = tab;
+    tab->fakes    = 0;
+    tab->pairs    = NULL;
+    pd->WWtable   = tab;
 }
 
 void
@@ -740,12 +833,13 @@ _XtFreeWWTable(register XtPerDisplay pd)
 {
     register WWPair pair, next;
 
-    for (pair = pd->WWtable->pairs; pair; pair = next) {
+    for (pair = pd->WWtable->pairs; pair; pair = next)
+    {
         next = pair->next;
-        XtFree((char *) pair);
+        XtFree((char *)pair);
     }
-    XtFree((char *) pd->WWtable->entries);
-    XtFree((char *) pd->WWtable);
+    XtFree((char *)pd->WWtable->entries);
+    XtFree((char *)pd->WWtable);
 }
 
 #define EHMAXSIZE 25            /* do not make whopping big */
@@ -754,29 +848,33 @@ static Boolean
 CallEventHandlers(Widget widget, XEvent *event, EventMask mask)
 {
     register XtEventRec *p;
-    XtEventHandler *proc;
-    XtPointer *closure;
-    Boolean cont_to_disp = True;
-    int i, numprocs;
+    XtEventHandler      *proc;
+    XtPointer           *closure;
+    Boolean              cont_to_disp = True;
+    int                  i, numprocs;
 
     /* Have to copy the procs into an array, because one of them might
      * call XtRemoveEventHandler, which would break our linked list. */
 
     numprocs = 0;
-    for (p = widget->core.event_table; p; p = p->next) {
+    for (p = widget->core.event_table; p; p = p->next)
+    {
         if ((!p->has_type_specifier && (mask & p->mask)) ||
             (p->has_type_specifier && event->type == EXT_TYPE(p)))
             numprocs++;
     }
-    proc = XtMallocArray((Cardinal) numprocs, (Cardinal)
-                         (sizeof(XtEventHandler) + sizeof(XtPointer)));
-    closure = (XtPointer *) (proc + numprocs);
+    proc =
+        XtMallocArray((Cardinal)numprocs,
+                      (Cardinal)(sizeof(XtEventHandler) + sizeof(XtPointer)));
+    closure = (XtPointer *)(proc + numprocs);
 
     numprocs = 0;
-    for (p = widget->core.event_table; p; p = p->next) {
+    for (p = widget->core.event_table; p; p = p->next)
+    {
         if ((!p->has_type_specifier && (mask & p->mask)) ||
-            (p->has_type_specifier && event->type == EXT_TYPE(p))) {
-            proc[numprocs] = p->proc;
+            (p->has_type_specifier && event->type == EXT_TYPE(p)))
+        {
+            proc[numprocs]    = p->proc;
             closure[numprocs] = p->closure;
             numprocs++;
         }
@@ -795,15 +893,16 @@ CallEventHandlers(Widget widget, XEvent *event, EventMask mask)
        Selection.c:HandleSelectionEvents
      */
     for (i = 0; i < numprocs && cont_to_disp; i++)
-        (*(proc[i])) (widget, closure[i], event, &cont_to_disp);
-    XtFree((char *) proc);
+        (*(proc[i]))(widget, closure[i], event, &cont_to_disp);
+    XtFree((char *)proc);
     return cont_to_disp;
 }
 
 static void CompressExposures(XEvent *, Widget);
 
-#define KnownButtons (Button1MotionMask|Button2MotionMask|Button3MotionMask|\
-                      Button4MotionMask|Button5MotionMask)
+#define KnownButtons                                             \
+    (Button1MotionMask | Button2MotionMask | Button3MotionMask | \
+     Button4MotionMask | Button5MotionMask)
 
 /* keep this SMALL to avoid blowing stack cache! */
 /* because some compilers allocate all local locals on procedure entry */
@@ -813,10 +912,10 @@ Boolean
 XtDispatchEventToWidget(Widget widget, XEvent *event)
 {
     register XtEventRec *p;
-    Boolean was_dispatched = False;
-    Boolean call_tm = False;
-    Boolean cont_to_disp;
-    EventMask mask;
+    Boolean              was_dispatched = False;
+    Boolean              call_tm        = False;
+    Boolean              cont_to_disp;
+    EventMask            mask;
 
     WIDGET_TO_APPCON(widget);
 
@@ -827,21 +926,22 @@ XtDispatchEventToWidget(Widget widget, XEvent *event)
         mask |= (event->xmotion.state & KnownButtons);
 
     LOCK_PROCESS;
-    if ((mask == ExposureMask) ||
-        ((event->type == NoExpose) && NO_EXPOSE) ||
-        ((event->type == GraphicsExpose) && GRAPHICS_EXPOSE)) {
-
-        if (widget->core.widget_class->core_class.expose != NULL) {
-
+    if ((mask == ExposureMask) || ((event->type == NoExpose) && NO_EXPOSE) ||
+        ((event->type == GraphicsExpose) && GRAPHICS_EXPOSE))
+    {
+        if (widget->core.widget_class->core_class.expose != NULL)
+        {
             /* We need to mask off the bits that could contain the information
              * about whether or not we desire Graphics and NoExpose events.  */
 
             if ((COMP_EXPOSE_TYPE == XtExposeNoCompress) ||
                 (event->type == NoExpose))
 
-                (*widget->core.widget_class->core_class.expose)
-                    (widget, event, (Region) NULL);
-            else {
+                (*widget->core.widget_class->core_class.expose)(widget,
+                                                                event,
+                                                                (Region)NULL);
+            else
+            {
                 CompressExposures(event, widget);
             }
             was_dispatched = True;
@@ -849,24 +949,26 @@ XtDispatchEventToWidget(Widget widget, XEvent *event)
     }
 
     if ((mask == VisibilityChangeMask) &&
-        XtClass(widget)->core_class.visible_interest) {
+        XtClass(widget)->core_class.visible_interest)
+    {
         was_dispatched = True;
         /* our visibility just changed... */
-        switch (((XVisibilityEvent *) event)->state) {
-        case VisibilityUnobscured:
-            widget->core.visible = TRUE;
-            break;
+        switch (((XVisibilityEvent *)event)->state)
+        {
+            case VisibilityUnobscured:
+                widget->core.visible = TRUE;
+                break;
 
-        case VisibilityPartiallyObscured:
-            /* what do we want to say here? */
-            /* well... some of us is visible */
-            widget->core.visible = TRUE;
-            break;
+            case VisibilityPartiallyObscured:
+                /* what do we want to say here? */
+                /* well... some of us is visible */
+                widget->core.visible = TRUE;
+                break;
 
-        case VisibilityFullyObscured:
-            widget->core.visible = FALSE;
-            /* do we want to mark our children obscured? */
-            break;
+            case VisibilityFullyObscured:
+                widget->core.visible = FALSE;
+                /* do we want to mark our children obscured? */
+                break;
         }
     }
     UNLOCK_PROCESS;
@@ -877,35 +979,41 @@ XtDispatchEventToWidget(Widget widget, XEvent *event)
         call_tm = True;
 
     cont_to_disp = True;
-    p = widget->core.event_table;
-    if (p) {
-        if (p->next) {
+    p            = widget->core.event_table;
+    if (p)
+    {
+        if (p->next)
+        {
             XtEventHandler proc[EHSIZE];
-            XtPointer closure[EHSIZE];
-            int numprocs = 0;
+            XtPointer      closure[EHSIZE];
+            int            numprocs = 0;
 
             /* Have to copy the procs into an array, because one of them might
              * call XtRemoveEventHandler, which would break our linked list. */
 
-            for (; p; p = p->next) {
+            for (; p; p = p->next)
+            {
                 if ((!p->has_type_specifier && (mask & p->mask)) ||
-                    (p->has_type_specifier && event->type == EXT_TYPE(p))) {
-                    if (numprocs >= EHSIZE)
-                        break;
-                    proc[numprocs] = p->proc;
+                    (p->has_type_specifier && event->type == EXT_TYPE(p)))
+                {
+                    if (numprocs >= EHSIZE) break;
+                    proc[numprocs]    = p->proc;
                     closure[numprocs] = p->closure;
                     numprocs++;
                 }
             }
-            if (numprocs) {
-                if (p) {
+            if (numprocs)
+            {
+                if (p)
+                {
                     cont_to_disp = CallEventHandlers(widget, event, mask);
                 }
-                else {
+                else
+                {
                     int i;
 
                     for (i = 0; i < numprocs && cont_to_disp; i++)
-                        (*(proc[i])) (widget, closure[i], event, &cont_to_disp);
+                        (*(proc[i]))(widget, closure[i], event, &cont_to_disp);
                     /* FUNCTIONS CALLED THROUGH POINTER proc:
                        Selection.c:ReqCleanup,
                        "Shell.c":EventHandler,
@@ -924,13 +1032,13 @@ XtDispatchEventToWidget(Widget widget, XEvent *event)
             }
         }
         else if ((!p->has_type_specifier && (mask & p->mask)) ||
-                 (p->has_type_specifier && event->type == EXT_TYPE(p))) {
-            (*p->proc) (widget, p->closure, event, &cont_to_disp);
+                 (p->has_type_specifier && event->type == EXT_TYPE(p)))
+        {
+            (*p->proc)(widget, p->closure, event, &cont_to_disp);
             was_dispatched = True;
         }
     }
-    if (call_tm && cont_to_disp)
-        _XtTranslateEvent(widget, event);
+    if (call_tm && cont_to_disp) _XtTranslateEvent(widget, event);
     UNLOCK_APP(app);
     return (was_dispatched | call_tm);
 }
@@ -939,12 +1047,13 @@ XtDispatchEventToWidget(Widget widget, XEvent *event)
  * This structure is passed into the check exposure proc.
  */
 
-typedef struct _CheckExposeInfo {
-    int type1, type2;           /* Types of events to check for. */
-    Boolean maximal;            /* Ignore non-exposure events? */
-    Boolean non_matching;       /* Was there an event that did not
+typedef struct _CheckExposeInfo
+{
+    int     type1, type2; /* Types of events to check for. */
+    Boolean maximal; /* Ignore non-exposure events? */
+    Boolean non_matching; /* Was there an event that did not
                                    match either type? */
-    Window window;              /* Window to match. */
+    Window  window; /* Window to match. */
 } CheckExposeInfo;
 
 #define GetCount(ev) (((XExposeEvent *)(ev))->count)
@@ -966,44 +1075,44 @@ static void
 CompressExposures(XEvent *event, Widget widget)
 {
     CheckExposeInfo info;
-    int count;
-    Display *dpy = XtDisplay(widget);
-    XtPerDisplay pd = _XtGetPerDisplay(dpy);
-    XtEnum comp_expose;
-    XtEnum comp_expose_type;
-    Boolean no_region;
+    int             count;
+    Display        *dpy = XtDisplay(widget);
+    XtPerDisplay    pd  = _XtGetPerDisplay(dpy);
+    XtEnum          comp_expose;
+    XtEnum          comp_expose_type;
+    Boolean         no_region;
 
     LOCK_PROCESS;
     comp_expose = COMP_EXPOSE;
     UNLOCK_PROCESS;
     comp_expose_type = comp_expose & 0x0f;
-    no_region = ((comp_expose & XtExposeNoRegion) ? True : False);
+    no_region        = ((comp_expose & XtExposeNoRegion) ? True : False);
 
-    if (no_region)
-        AddExposureToRectangularRegion(event, pd->region);
-    else
-        XtAddExposureToRegion(event, pd->region);
+    if (no_region) AddExposureToRectangularRegion(event, pd->region);
+    else XtAddExposureToRegion(event, pd->region);
 
-    if (GetCount(event) != 0)
-        return;
+    if (GetCount(event) != 0) return;
 
     if ((comp_expose_type == XtExposeCompressSeries) ||
-        (XEventsQueued(dpy, QueuedAfterReading) == 0)) {
+        (XEventsQueued(dpy, QueuedAfterReading) == 0))
+    {
         SendExposureEvent(event, widget, pd);
         return;
     }
 
-    if (comp_expose & XtExposeGraphicsExposeMerged) {
+    if (comp_expose & XtExposeGraphicsExposeMerged)
+    {
         info.type1 = Expose;
         info.type2 = GraphicsExpose;
     }
-    else {
+    else
+    {
         info.type1 = event->type;
         info.type2 = 0;
     }
-    info.maximal = (comp_expose_type == XtExposeCompressMaximal);
+    info.maximal      = (comp_expose_type == XtExposeCompressMaximal);
     info.non_matching = FALSE;
-    info.window = XtWindow(widget);
+    info.window       = XtWindow(widget);
 
     /*
      * We have to be very careful here not to hose down the processor
@@ -1025,28 +1134,29 @@ CompressExposures(XEvent *event, Widget widget)
      */
 
     count = 0;
-    while (TRUE) {
+    while (TRUE)
+    {
         XEvent event_return;
 
-        if (XCheckIfEvent(dpy, &event_return,
-                          CheckExposureEvent, (char *) &info)) {
-
+        if (XCheckIfEvent(dpy,
+                          &event_return,
+                          CheckExposureEvent,
+                          (char *)&info))
+        {
             count = GetCount(&event_return);
             if (no_region)
                 AddExposureToRectangularRegion(&event_return, pd->region);
-            else
-                XtAddExposureToRegion(&event_return, pd->region);
+            else XtAddExposureToRegion(&event_return, pd->region);
         }
-        else if (count != 0) {
-            XIfEvent(dpy, &event_return, CheckExposureEvent, (char *) &info);
+        else if (count != 0)
+        {
+            XIfEvent(dpy, &event_return, CheckExposureEvent, (char *)&info);
             count = GetCount(&event_return);
             if (no_region)
                 AddExposureToRectangularRegion(&event_return, pd->region);
-            else
-                XtAddExposureToRegion(&event_return, pd->region);
+            else XtAddExposureToRegion(&event_return, pd->region);
         }
-        else                    /* count == 0 && XCheckIfEvent Failed. */
-            break;
+        else /* count == 0 && XCheckIfEvent Failed. */ break;
     }
 
     SendExposureEvent(event, widget, pd);
@@ -1055,55 +1165,61 @@ CompressExposures(XEvent *event, Widget widget)
 void
 XtAddExposureToRegion(XEvent *event, Region region)
 {
-    XRectangle rect;
-    XExposeEvent *ev = (XExposeEvent *) event;
+    XRectangle    rect;
+    XExposeEvent *ev = (XExposeEvent *)event;
 
     /* These Expose and GraphicsExpose fields are at identical offsets */
 
-    if (event->type == Expose || event->type == GraphicsExpose) {
-        rect.x = (Position) ev->x;
-        rect.y = (Position) ev->y;
-        rect.width = (Dimension) ev->width;
-        rect.height = (Dimension) ev->height;
+    if (event->type == Expose || event->type == GraphicsExpose)
+    {
+        rect.x      = (Position)ev->x;
+        rect.y      = (Position)ev->y;
+        rect.width  = (Dimension)ev->width;
+        rect.height = (Dimension)ev->height;
         XUnionRectWithRegion(&rect, region, region);
     }
 }
 
 #ifndef MAX
-#define MAX(a,b) (((a) > (b)) ? (a) : (b))
+#  define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #endif
 
 #ifndef MIN
-#define MIN(a,b) (((a) < (b)) ? (a) : (b))
+#  define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #endif
 
 static void
-AddExposureToRectangularRegion(XEvent *event,   /* when called internally, type is always appropriate */
-                               Region region)
+AddExposureToRectangularRegion(
+    XEvent *event, /* when called internally, type is always appropriate */
+    Region  region)
 {
-    XRectangle rect;
-    XExposeEvent *ev = (XExposeEvent *) event;
+    XRectangle    rect;
+    XExposeEvent *ev = (XExposeEvent *)event;
 
     /* These Expose and GraphicsExpose fields are at identical offsets */
 
-    rect.x = (Position) ev->x;
-    rect.y = (Position) ev->y;
-    rect.width = (Dimension) ev->width;
-    rect.height = (Dimension) ev->height;
+    rect.x      = (Position)ev->x;
+    rect.y      = (Position)ev->y;
+    rect.width  = (Dimension)ev->width;
+    rect.height = (Dimension)ev->height;
 
-    if (XEmptyRegion(region)) {
+    if (XEmptyRegion(region))
+    {
         XUnionRectWithRegion(&rect, region, region);
     }
-    else {
+    else
+    {
         XRectangle merged, bbox;
 
         XClipBox(region, &bbox);
         merged.x = MIN(rect.x, bbox.x);
         merged.y = MIN(rect.y, bbox.y);
-        merged.width = (unsigned short) (MAX(rect.x + rect.width,
-                                             bbox.x + bbox.width) - merged.x);
-        merged.height = (unsigned short) (MAX(rect.y + rect.height,
-                                              bbox.y + bbox.height) - merged.y);
+        merged.width =
+            (unsigned short)(MAX(rect.x + rect.width, bbox.x + bbox.width) -
+                             merged.x);
+        merged.height =
+            (unsigned short)(MAX(rect.y + rect.height, bbox.y + bbox.height) -
+                             merged.y);
         XUnionRectWithRegion(&merged, region, region);
     }
 }
@@ -1132,26 +1248,24 @@ _XtEventInitialize(void)
 static void
 SendExposureEvent(XEvent *event, Widget widget, XtPerDisplay pd)
 {
-    XtExposeProc expose;
-    XRectangle rect;
-    XtEnum comp_expose;
-    XExposeEvent *ev = (XExposeEvent *) event;
+    XtExposeProc  expose;
+    XRectangle    rect;
+    XtEnum        comp_expose;
+    XExposeEvent *ev = (XExposeEvent *)event;
 
     XClipBox(pd->region, &rect);
-    ev->x = rect.x;
-    ev->y = rect.y;
-    ev->width = rect.width;
+    ev->x      = rect.x;
+    ev->y      = rect.y;
+    ev->width  = rect.width;
     ev->height = rect.height;
 
     LOCK_PROCESS;
     comp_expose = COMP_EXPOSE;
-    expose = widget->core.widget_class->core_class.expose;
+    expose      = widget->core.widget_class->core_class.expose;
     UNLOCK_PROCESS;
-    if (comp_expose & XtExposeNoRegion)
-        (*expose) (widget, event, NULL);
-    else
-        (*expose) (widget, event, pd->region);
-    (void) XIntersectRegion(nullRegion, pd->region, pd->region);
+    if (comp_expose & XtExposeNoRegion) (*expose)(widget, event, NULL);
+    else (*expose)(widget, event, pd->region);
+    (void)XIntersectRegion(nullRegion, pd->region, pd->region);
 }
 
 /*      Function Name: CheckExposureEvent
@@ -1169,11 +1283,11 @@ SendExposureEvent(XEvent *event, Widget widget, XtPerDisplay pd)
 static Bool
 CheckExposureEvent(Display *disp _X_UNUSED, XEvent *event, char *arg)
 {
-    CheckExposeInfo *info = ((CheckExposeInfo *) arg);
+    CheckExposeInfo *info = ((CheckExposeInfo *)arg);
 
-    if ((info->type1 == event->type) || (info->type2 == event->type)) {
-        if (!info->maximal && info->non_matching)
-            return FALSE;
+    if ((info->type1 == event->type) || (info->type2 == event->type))
+    {
+        if (!info->maximal && info->non_matching) return FALSE;
         if (event->type == GraphicsExpose)
             return (event->xgraphicsexpose.drawable == info->window);
         return (event->xexpose.window == info->window);
@@ -1182,59 +1296,57 @@ CheckExposureEvent(Display *disp _X_UNUSED, XEvent *event, char *arg)
     return (FALSE);
 }
 
-static EventMask const masks[] = {
-    0,                          /* Error, should never see  */
-    0,                          /* Reply, should never see  */
-    KeyPressMask,               /* KeyPress                 */
-    KeyReleaseMask,             /* KeyRelease               */
-    ButtonPressMask,            /* ButtonPress              */
-    ButtonReleaseMask,          /* ButtonRelease            */
-    PointerMotionMask           /* MotionNotify             */
+static const EventMask masks[] = {
+    0, /* Error, should never see  */
+    0, /* Reply, should never see  */
+    KeyPressMask, /* KeyPress                 */
+    KeyReleaseMask, /* KeyRelease               */
+    ButtonPressMask, /* ButtonPress              */
+    ButtonReleaseMask, /* ButtonRelease            */
+    PointerMotionMask /* MotionNotify             */
         | ButtonMotionMask,
-    EnterWindowMask,            /* EnterNotify              */
-    LeaveWindowMask,            /* LeaveNotify              */
-    FocusChangeMask,            /* FocusIn                  */
-    FocusChangeMask,            /* FocusOut                 */
-    KeymapStateMask,            /* KeymapNotify             */
-    ExposureMask,               /* Expose                   */
-    NonMaskableMask,            /* GraphicsExpose, in GC    */
-    NonMaskableMask,            /* NoExpose, in GC          */
-    VisibilityChangeMask,       /* VisibilityNotify         */
-    SubstructureNotifyMask,     /* CreateNotify             */
-    StructureNotifyMask         /* DestroyNotify            */
+    EnterWindowMask, /* EnterNotify              */
+    LeaveWindowMask, /* LeaveNotify              */
+    FocusChangeMask, /* FocusIn                  */
+    FocusChangeMask, /* FocusOut                 */
+    KeymapStateMask, /* KeymapNotify             */
+    ExposureMask, /* Expose                   */
+    NonMaskableMask, /* GraphicsExpose, in GC    */
+    NonMaskableMask, /* NoExpose, in GC          */
+    VisibilityChangeMask, /* VisibilityNotify         */
+    SubstructureNotifyMask, /* CreateNotify             */
+    StructureNotifyMask /* DestroyNotify            */
         | SubstructureNotifyMask,
-    StructureNotifyMask         /* UnmapNotify              */
+    StructureNotifyMask /* UnmapNotify              */
         | SubstructureNotifyMask,
-    StructureNotifyMask         /* MapNotify                */
+    StructureNotifyMask /* MapNotify                */
         | SubstructureNotifyMask,
-    SubstructureRedirectMask,   /* MapRequest               */
-    StructureNotifyMask         /* ReparentNotify           */
+    SubstructureRedirectMask, /* MapRequest               */
+    StructureNotifyMask /* ReparentNotify           */
         | SubstructureNotifyMask,
-    StructureNotifyMask         /* ConfigureNotify          */
+    StructureNotifyMask /* ConfigureNotify          */
         | SubstructureNotifyMask,
-    SubstructureRedirectMask,   /* ConfigureRequest         */
-    StructureNotifyMask         /* GravityNotify            */
+    SubstructureRedirectMask, /* ConfigureRequest         */
+    StructureNotifyMask /* GravityNotify            */
         | SubstructureNotifyMask,
-    ResizeRedirectMask,         /* ResizeRequest            */
-    StructureNotifyMask         /* CirculateNotify          */
+    ResizeRedirectMask, /* ResizeRequest            */
+    StructureNotifyMask /* CirculateNotify          */
         | SubstructureNotifyMask,
-    SubstructureRedirectMask,   /* CirculateRequest         */
-    PropertyChangeMask,         /* PropertyNotify           */
-    NonMaskableMask,            /* SelectionClear           */
-    NonMaskableMask,            /* SelectionRequest         */
-    NonMaskableMask,            /* SelectionNotify          */
-    ColormapChangeMask,         /* ColormapNotify           */
-    NonMaskableMask,            /* ClientMessage            */
-    NonMaskableMask             /* MappingNotify            */
+    SubstructureRedirectMask, /* CirculateRequest         */
+    PropertyChangeMask, /* PropertyNotify           */
+    NonMaskableMask, /* SelectionClear           */
+    NonMaskableMask, /* SelectionRequest         */
+    NonMaskableMask, /* SelectionNotify          */
+    ColormapChangeMask, /* ColormapNotify           */
+    NonMaskableMask, /* ClientMessage            */
+    NonMaskableMask /* MappingNotify            */
 };
 
 EventMask
 _XtConvertTypeToMask(int eventType)
 {
-    if ((Cardinal) eventType < XtNumber(masks))
-        return masks[eventType];
-    else
-        return NoEventMask;
+    if ((Cardinal)eventType < XtNumber(masks)) return masks[eventType];
+    else return NoEventMask;
 }
 
 Boolean
@@ -1242,12 +1354,12 @@ _XtOnGrabList(register Widget widget, XtGrabRec *grabList)
 {
     register XtGrabRec *gl;
 
-    for (; widget != NULL; widget = (Widget) widget->core.parent) {
-        for (gl = grabList; gl != NULL; gl = gl->next) {
-            if (gl->widget == widget)
-                return TRUE;
-            if (gl->exclusive)
-                break;
+    for (; widget != NULL; widget = (Widget)widget->core.parent)
+    {
+        for (gl = grabList; gl != NULL; gl = gl->next)
+        {
+            if (gl->widget == widget) return TRUE;
+            if (gl->exclusive) break;
         }
     }
     return FALSE;
@@ -1258,15 +1370,14 @@ LookupSpringLoaded(XtGrabList grabList)
 {
     XtGrabList gl;
 
-    for (gl = grabList; gl != NULL; gl = gl->next) {
-        if (gl->spring_loaded) {
-            if (XtIsSensitive(gl->widget))
-                return gl->widget;
-            else
-                return NULL;
+    for (gl = grabList; gl != NULL; gl = gl->next)
+    {
+        if (gl->spring_loaded)
+        {
+            if (XtIsSensitive(gl->widget)) return gl->widget;
+            else return NULL;
         }
-        if (gl->exclusive)
-            break;
+        if (gl->exclusive) break;
     }
     return NULL;
 }
@@ -1274,11 +1385,11 @@ LookupSpringLoaded(XtGrabList grabList)
 static Boolean
 DispatchEvent(XEvent *event, Widget widget)
 {
-
-    if (event->type == EnterNotify &&
-        event->xcrossing.mode == NotifyNormal &&
-        widget->core.widget_class->core_class.compress_enterleave) {
-        if (XPending(event->xcrossing.display)) {
+    if (event->type == EnterNotify && event->xcrossing.mode == NotifyNormal &&
+        widget->core.widget_class->core_class.compress_enterleave)
+    {
+        if (XPending(event->xcrossing.display))
+        {
             XEvent nextEvent;
             XPeekEvent(event->xcrossing.display, &nextEvent);
 
@@ -1288,7 +1399,8 @@ DispatchEvent(XEvent *event, Widget widget)
                 ((event->xcrossing.detail != NotifyInferior &&
                   nextEvent.xcrossing.detail != NotifyInferior) ||
                  (event->xcrossing.detail == NotifyInferior &&
-                  nextEvent.xcrossing.detail == NotifyInferior))) {
+                  nextEvent.xcrossing.detail == NotifyInferior)))
+            {
                 /* skip the enter/leave pair */
                 XNextEvent(event->xcrossing.display, &nextEvent);
 
@@ -1298,78 +1410,88 @@ DispatchEvent(XEvent *event, Widget widget)
     }
 
     if (event->type == MotionNotify &&
-        widget->core.widget_class->core_class.compress_motion) {
-        while (XPending(event->xmotion.display)) {
+        widget->core.widget_class->core_class.compress_motion)
+    {
+        while (XPending(event->xmotion.display))
+        {
             XEvent nextEvent;
             XPeekEvent(event->xmotion.display, &nextEvent);
 
             if (nextEvent.type == MotionNotify &&
                 event->xmotion.window == nextEvent.xmotion.window &&
-                event->xmotion.subwindow == nextEvent.xmotion.subwindow) {
+                event->xmotion.subwindow == nextEvent.xmotion.subwindow)
+            {
                 /* replace the current event with the next one */
                 XNextEvent(event->xmotion.display, event);
             }
-            else
-                break;
+            else break;
         }
     }
 
     return XtDispatchEventToWidget(widget, event);
 }
 
-typedef enum _GrabType { pass, ignore, remap } GrabType;
+typedef enum _GrabType
+{
+    pass,
+    ignore,
+    remap
+} GrabType;
 
 static Boolean
 _XtDefaultDispatcher(XEvent *event)
 {
-    register Widget widget;
-    GrabType grabType;
+    register Widget   widget;
+    GrabType          grabType;
     XtPerDisplayInput pdi;
-    XtGrabList grabList;
-    Boolean was_dispatched = False;
+    XtGrabList        grabList;
+    Boolean           was_dispatched = False;
     DPY_TO_APPCON(event->xany.display);
 
     /* the default dispatcher discards all extension events */
-    if (event->type >= LASTEvent)
-        return False;
+    if (event->type >= LASTEvent) return False;
 
     LOCK_APP(app);
 
-    switch (event->type) {
-    case KeyPress:
-    case KeyRelease:
-    case ButtonPress:
-    case ButtonRelease:
-        grabType = remap;
-        break;
-    case MotionNotify:
-    case EnterNotify:
-        grabType = ignore;
-        break;
-    default:
-        grabType = pass;
-        break;
+    switch (event->type)
+    {
+        case KeyPress:
+        case KeyRelease:
+        case ButtonPress:
+        case ButtonRelease:
+            grabType = remap;
+            break;
+        case MotionNotify:
+        case EnterNotify:
+            grabType = ignore;
+            break;
+        default:
+            grabType = pass;
+            break;
     }
 
     widget = XtWindowToWidget(event->xany.display, event->xany.window);
-    pdi = _XtGetPerDisplayInput(event->xany.display);
+    pdi    = _XtGetPerDisplayInput(event->xany.display);
 
     grabList = *_XtGetGrabList(pdi);
 
-    if (widget == NULL) {
-        if (grabType == remap
-            && (widget = LookupSpringLoaded(grabList)) != NULL) {
+    if (widget == NULL)
+    {
+        if (grabType == remap &&
+            (widget = LookupSpringLoaded(grabList)) != NULL)
+        {
             /* event occurred in a non-widget window, but we've promised also
                to dispatch it to the nearest accessible spring_loaded widget */
-            was_dispatched = (XFilterEvent(event, XtWindow(widget))
-                              || XtDispatchEventToWidget(widget, event));
+            was_dispatched = (XFilterEvent(event, XtWindow(widget)) ||
+                              XtDispatchEventToWidget(widget, event));
         }
-        else
-            was_dispatched = (Boolean) XFilterEvent(event, None);
+        else was_dispatched = (Boolean)XFilterEvent(event, None);
     }
-    else if (grabType == pass) {
-        if (event->type == LeaveNotify ||
-            event->type == FocusIn || event->type == FocusOut) {
+    else if (grabType == pass)
+    {
+        if (event->type == LeaveNotify || event->type == FocusIn ||
+            event->type == FocusOut)
+        {
             if (XtIsSensitive(widget))
                 was_dispatched = (XFilterEvent(event, XtWindow(widget)) ||
                                   XtDispatchEventToWidget(widget, event));
@@ -1378,43 +1500,48 @@ _XtDefaultDispatcher(XEvent *event)
             was_dispatched = (XFilterEvent(event, XtWindow(widget)) ||
                               XtDispatchEventToWidget(widget, event));
     }
-    else if (grabType == ignore) {
-        if ((grabList == NULL || _XtOnGrabList(widget, grabList))
-            && XtIsSensitive(widget)) {
-            was_dispatched = (XFilterEvent(event, XtWindow(widget))
-                              || DispatchEvent(event, widget));
+    else if (grabType == ignore)
+    {
+        if ((grabList == NULL || _XtOnGrabList(widget, grabList)) &&
+            XtIsSensitive(widget))
+        {
+            was_dispatched = (XFilterEvent(event, XtWindow(widget)) ||
+                              DispatchEvent(event, widget));
         }
     }
-    else if (grabType == remap) {
+    else if (grabType == remap)
+    {
         EventMask mask = _XtConvertTypeToMask(event->type);
-        Widget dspWidget;
-        Boolean was_filtered = False;
+        Widget    dspWidget;
+        Boolean   was_filtered = False;
 
         dspWidget = _XtFindRemapWidget(event, widget, mask, pdi);
 
-        if ((grabList == NULL || _XtOnGrabList(dspWidget, grabList))
-            && XtIsSensitive(dspWidget)) {
+        if ((grabList == NULL || _XtOnGrabList(dspWidget, grabList)) &&
+            XtIsSensitive(dspWidget))
+        {
             if ((was_filtered =
-                 (Boolean) XFilterEvent(event, XtWindow(dspWidget)))) {
+                     (Boolean)XFilterEvent(event, XtWindow(dspWidget))))
+            {
                 /* If this event activated a device grab, release it. */
                 _XtUngrabBadGrabs(event, widget, mask, pdi);
                 was_dispatched = True;
             }
-            else
-                was_dispatched = XtDispatchEventToWidget(dspWidget, event);
+            else was_dispatched = XtDispatchEventToWidget(dspWidget, event);
         }
-        else
-            _XtUngrabBadGrabs(event, widget, mask, pdi);
+        else _XtUngrabBadGrabs(event, widget, mask, pdi);
 
-        if (!was_filtered) {
+        if (!was_filtered)
+        {
             /* Also dispatch to nearest accessible spring_loaded. */
             /* Fetch this afterward to reflect modal list changes */
             grabList = *_XtGetGrabList(pdi);
-            widget = LookupSpringLoaded(grabList);
-            if (widget != NULL && widget != dspWidget) {
-                was_dispatched = (XFilterEvent(event, XtWindow(widget))
-                                  || XtDispatchEventToWidget(widget, event)
-                                  || was_dispatched);
+            widget   = LookupSpringLoaded(grabList);
+            if (widget != NULL && widget != dspWidget)
+            {
+                was_dispatched =
+                    (XFilterEvent(event, XtWindow(widget)) ||
+                     XtDispatchEventToWidget(widget, event) || was_dispatched);
             }
         }
     }
@@ -1425,11 +1552,11 @@ _XtDefaultDispatcher(XEvent *event)
 Boolean
 XtDispatchEvent(XEvent *event)
 {
-    Boolean was_dispatched, safe;
-    int dispatch_level;
-    int starting_count;
-    XtPerDisplay pd;
-    Time time = 0;
+    Boolean             was_dispatched, safe;
+    int                 dispatch_level;
+    int                 starting_count;
+    XtPerDisplay        pd;
+    Time                time     = 0;
     XtEventDispatchProc dispatch = _XtDefaultDispatcher;
     XtAppContext app = XtDisplayToApplicationContext(event->xany.display);
 
@@ -1437,45 +1564,45 @@ XtDispatchEvent(XEvent *event)
     dispatch_level = ++app->dispatch_level;
     starting_count = app->destroy_count;
 
-    switch (event->type) {
-    case KeyPress:
-    case KeyRelease:
-        time = event->xkey.time;
-        break;
-    case ButtonPress:
-    case ButtonRelease:
-        time = event->xbutton.time;
-        break;
-    case MotionNotify:
-        time = event->xmotion.time;
-        break;
-    case EnterNotify:
-    case LeaveNotify:
-        time = event->xcrossing.time;
-        break;
-    case PropertyNotify:
-        time = event->xproperty.time;
-        break;
-    case SelectionClear:
-        time = event->xselectionclear.time;
-        break;
+    switch (event->type)
+    {
+        case KeyPress:
+        case KeyRelease:
+            time = event->xkey.time;
+            break;
+        case ButtonPress:
+        case ButtonRelease:
+            time = event->xbutton.time;
+            break;
+        case MotionNotify:
+            time = event->xmotion.time;
+            break;
+        case EnterNotify:
+        case LeaveNotify:
+            time = event->xcrossing.time;
+            break;
+        case PropertyNotify:
+            time = event->xproperty.time;
+            break;
+        case SelectionClear:
+            time = event->xselectionclear.time;
+            break;
 
-    case MappingNotify:
-        _XtRefreshMapping(event, True);
-        break;
+        case MappingNotify:
+            _XtRefreshMapping(event, True);
+            break;
     }
     pd = _XtGetPerDisplay(event->xany.display);
 
-    if (time)
-        pd->last_timestamp = time;
+    if (time) pd->last_timestamp = time;
     pd->last_event = *event;
 
-    if (pd->dispatcher_list) {
+    if (pd->dispatcher_list)
+    {
         dispatch = pd->dispatcher_list[event->type];
-        if (dispatch == NULL)
-            dispatch = _XtDefaultDispatcher;
+        if (dispatch == NULL) dispatch = _XtDefaultDispatcher;
     }
-    was_dispatched = (*dispatch) (event);
+    was_dispatched = (*dispatch)(event);
 
     /*
      * To make recursive XtDispatchEvent work, we need to do phase 2 destroys
@@ -1488,23 +1615,21 @@ XtDispatchEvent(XEvent *event)
 
     app->dispatch_level = dispatch_level - 1;
 
-    if ((safe = _XtSafeToDestroy(app))) {
-        if (app->dpy_destroy_count != 0)
-            _XtCloseDisplays(app);
-        if (app->free_bindings)
-            _XtDoFreeBindings(app);
+    if ((safe = _XtSafeToDestroy(app)))
+    {
+        if (app->dpy_destroy_count != 0) _XtCloseDisplays(app);
+        if (app->free_bindings) _XtDoFreeBindings(app);
     }
     UNLOCK_APP(app);
     LOCK_PROCESS;
-    if (_XtAppDestroyCount != 0 && safe)
-        _XtDestroyAppContexts();
+    if (_XtAppDestroyCount != 0 && safe) _XtDestroyAppContexts();
     UNLOCK_PROCESS;
     return was_dispatched;
 }
 
 static void
-GrabDestroyCallback(Widget widget,
-                    XtPointer closure _X_UNUSED,
+GrabDestroyCallback(Widget              widget,
+                    XtPointer closure   _X_UNUSED,
                     XtPointer call_data _X_UNUSED)
 {
     /* Remove widget from grab list if it destroyed */
@@ -1516,8 +1641,8 @@ NewGrabRec(Widget widget, Boolean exclusive, Boolean spring_loaded)
 {
     register XtGrabList gl;
 
-    gl = XtNew(XtGrabRec);
-    gl->next = NULL;
+    gl         = XtNew(XtGrabRec);
+    gl->next   = NULL;
     gl->widget = widget;
     XtSetBit(gl->exclusive, exclusive);
     XtSetBit(gl->spring_loaded, spring_loaded);
@@ -1529,27 +1654,34 @@ void
 XtAddGrab(Widget widget, _XtBoolean exclusive, _XtBoolean spring_loaded)
 {
     register XtGrabList gl;
-    XtGrabList *grabListPtr;
-    XtAppContext app = XtWidgetToApplicationContext(widget);
+    XtGrabList         *grabListPtr;
+    XtAppContext        app = XtWidgetToApplicationContext(widget);
 
     LOCK_APP(app);
     LOCK_PROCESS;
     grabListPtr = _XtGetGrabList(_XtGetPerDisplayInput(XtDisplay(widget)));
 
-    if (spring_loaded && !exclusive) {
-        XtAppWarningMsg(app,
-                        "grabError", "xtAddGrab", XtCXtToolkitError,
-                        "XtAddGrab requires exclusive grab if spring_loaded is TRUE",
-                        NULL, NULL);
+    if (spring_loaded && !exclusive)
+    {
+        XtAppWarningMsg(
+            app,
+            "grabError",
+            "xtAddGrab",
+            XtCXtToolkitError,
+            "XtAddGrab requires exclusive grab if spring_loaded is TRUE",
+            NULL,
+            NULL);
         exclusive = TRUE;
     }
 
-    gl = NewGrabRec(widget, (Boolean) exclusive, (Boolean) spring_loaded);
+    gl       = NewGrabRec(widget, (Boolean)exclusive, (Boolean)spring_loaded);
     gl->next = *grabListPtr;
     *grabListPtr = gl;
 
-    XtAddCallback(widget, XtNdestroyCallback,
-                  GrabDestroyCallback, (XtPointer) NULL);
+    XtAddCallback(widget,
+                  XtNdestroyCallback,
+                  GrabDestroyCallback,
+                  (XtPointer)NULL);
     UNLOCK_PROCESS;
     UNLOCK_APP(app);
 }
@@ -1558,38 +1690,46 @@ void
 XtRemoveGrab(Widget widget)
 {
     register XtGrabList gl;
-    register Boolean done;
-    XtGrabList *grabListPtr;
-    XtAppContext app = XtWidgetToApplicationContext(widget);
+    register Boolean    done;
+    XtGrabList         *grabListPtr;
+    XtAppContext        app = XtWidgetToApplicationContext(widget);
 
     LOCK_APP(app);
     LOCK_PROCESS;
 
     grabListPtr = _XtGetGrabList(_XtGetPerDisplayInput(XtDisplay(widget)));
 
-    for (gl = *grabListPtr; gl != NULL; gl = gl->next) {
-        if (gl->widget == widget)
-            break;
+    for (gl = *grabListPtr; gl != NULL; gl = gl->next)
+    {
+        if (gl->widget == widget) break;
     }
 
-    if (gl == NULL) {
+    if (gl == NULL)
+    {
         XtAppWarningMsg(app,
-                        "grabError", "xtRemoveGrab", XtCXtToolkitError,
+                        "grabError",
+                        "xtRemoveGrab",
+                        XtCXtToolkitError,
                         "XtRemoveGrab asked to remove a widget not on the list",
-                        NULL, NULL);
+                        NULL,
+                        NULL);
         UNLOCK_PROCESS;
         UNLOCK_APP(app);
         return;
     }
 
-    do {
-        gl = *grabListPtr;
-        done = (gl->widget == widget);
+    do
+    {
+        gl           = *grabListPtr;
+        done         = (gl->widget == widget);
         *grabListPtr = gl->next;
-        XtRemoveCallback(gl->widget, XtNdestroyCallback,
-                         GrabDestroyCallback, (XtPointer) NULL);
-        XtFree((char *) gl);
-    } while (!done);
+        XtRemoveCallback(gl->widget,
+                         XtNdestroyCallback,
+                         GrabDestroyCallback,
+                         (XtPointer)NULL);
+        XtFree((char *)gl);
+    }
+    while (!done);
     UNLOCK_PROCESS;
     UNLOCK_APP(app);
     return;
@@ -1608,18 +1748,22 @@ XtAppMainLoop(XtAppContext app)
     XtInputMask t;
 
     LOCK_APP(app);
-    do {
-        if (m == 0) {
+    do
+    {
+        if (m == 0)
+        {
             m = XtIMAll;
             /* wait for any event, blocking */
             XtAppProcessEvent(app, m);
         }
-        else if (((t = XtAppPending(app)) & m)) {
+        else if (((t = XtAppPending(app)) & m))
+        {
             /* wait for certain events, stepping through choices */
             XtAppProcessEvent(app, t & m);
         }
         m >>= 1;
-    } while (app->exit_flag == FALSE);
+    }
+    while (app->exit_flag == FALSE);
     UNLOCK_APP(app);
 }
 
@@ -1629,10 +1773,11 @@ _XtFreeEventTable(XtEventTable *event_table)
     register XtEventTable event;
 
     event = *event_table;
-    while (event != NULL) {
+    while (event != NULL)
+    {
         register XtEventTable next = event->next;
 
-        XtFree((char *) event);
+        XtFree((char *)event);
         event = next;
     }
 }
@@ -1661,8 +1806,7 @@ XtLastEventProcessed(Display *dpy)
 
     LOCK_APP(app);
     le = &_XtGetPerDisplay(dpy)->last_event;
-    if (!le->xany.serial)
-        le = NULL;
+    if (!le->xany.serial) le = NULL;
     UNLOCK_APP(app);
     return le;
 }
@@ -1671,44 +1815,40 @@ void
 _XtSendFocusEvent(Widget child, int type)
 {
     child = XtIsWidget(child) ? child : _XtWindowedAncestor(child);
-    if (XtIsSensitive(child) && !child->core.being_destroyed
-        && XtIsRealized(child)
-        && (XtBuildEventMask(child) & FocusChangeMask)) {
+    if (XtIsSensitive(child) && !child->core.being_destroyed &&
+        XtIsRealized(child) && (XtBuildEventMask(child) & FocusChangeMask))
+    {
         XFocusChangeEvent event;
-        Display *dpy = XtDisplay(child);
+        Display          *dpy = XtDisplay(child);
 
-        event.type = type;
-        event.serial = LastKnownRequestProcessed(dpy);
+        event.type       = type;
+        event.serial     = LastKnownRequestProcessed(dpy);
         event.send_event = True;
-        event.display = dpy;
+        event.display    = dpy;
 
         event.window = XtWindow(child);
-        event.mode = NotifyNormal;
+        event.mode   = NotifyNormal;
         event.detail = NotifyAncestor;
-        if (XFilterEvent((XEvent *) &event, XtWindow(child)))
-            return;
-        XtDispatchEventToWidget(child, (XEvent *) &event);
+        if (XFilterEvent((XEvent *)&event, XtWindow(child))) return;
+        XtDispatchEventToWidget(child, (XEvent *)&event);
     }
 }
 
 static XtEventDispatchProc *
 NewDispatcherList(void)
 {
-    XtEventDispatchProc *l = (XtEventDispatchProc *)
-        __XtCalloc((Cardinal) 128,
-                   (Cardinal)
-                   sizeof(XtEventDispatchProc));
+    XtEventDispatchProc *l = (XtEventDispatchProc *)__XtCalloc(
+        (Cardinal)128,
+        (Cardinal)sizeof(XtEventDispatchProc));
 
     return l;
 }
 
 XtEventDispatchProc
-XtSetEventDispatcher(Display *dpy,
-                     int event_type,
-                     XtEventDispatchProc proc)
+XtSetEventDispatcher(Display *dpy, int event_type, XtEventDispatchProc proc)
 {
-    XtEventDispatchProc *list;
-    XtEventDispatchProc old_proc;
+    XtEventDispatchProc  *list;
+    XtEventDispatchProc   old_proc;
     register XtPerDisplay pd;
 
     DPY_TO_APPCON(dpy);
@@ -1718,57 +1858,63 @@ XtSetEventDispatcher(Display *dpy,
     pd = _XtGetPerDisplay(dpy);
 
     list = pd->dispatcher_list;
-    if (!list) {
-        if (proc)
-            list = pd->dispatcher_list = NewDispatcherList();
-        else
-            return _XtDefaultDispatcher;
+    if (!list)
+    {
+        if (proc) list = pd->dispatcher_list = NewDispatcherList();
+        else return _XtDefaultDispatcher;
     }
-    old_proc = list[event_type];
+    old_proc         = list[event_type];
     list[event_type] = proc;
-    if (old_proc == NULL)
-        old_proc = _XtDefaultDispatcher;
+    if (old_proc == NULL) old_proc = _XtDefaultDispatcher;
     UNLOCK_PROCESS;
     UNLOCK_APP(app);
     return old_proc;
 }
 
 void
-XtRegisterExtensionSelector(Display *dpy,
-                            int min_event_type,
-                            int max_event_type,
+XtRegisterExtensionSelector(Display              *dpy,
+                            int                   min_event_type,
+                            int                   max_event_type,
                             XtExtensionSelectProc proc,
-                            XtPointer client_data)
+                            XtPointer             client_data)
 {
     XtPerDisplay pd;
-    int i;
+    int          i;
 
     DPY_TO_APPCON(dpy);
 
     if (dpy == NULL)
         XtErrorMsg("nullDisplay",
-                   "xtRegisterExtensionSelector", XtCXtToolkitError,
+                   "xtRegisterExtensionSelector",
+                   XtCXtToolkitError,
                    "XtRegisterExtensionSelector requires a non-NULL display",
-                   NULL, NULL);
+                   NULL,
+                   NULL);
 
     LOCK_APP(app);
     LOCK_PROCESS;
     pd = _XtGetPerDisplay(dpy);
 
-    for (i = 0; i < pd->ext_select_count; i++) {
+    for (i = 0; i < pd->ext_select_count; i++)
+    {
         ExtSelectRec *e = &pd->ext_select_list[i];
 
-        if (e->min == min_event_type && e->max == max_event_type) {
-            e->proc = proc;
+        if (e->min == min_event_type && e->max == max_event_type)
+        {
+            e->proc        = proc;
             e->client_data = client_data;
             return;
         }
         if ((min_event_type >= e->min && min_event_type <= e->max) ||
-            (max_event_type >= e->min && max_event_type <= e->max)) {
-            XtErrorMsg("rangeError", "xtRegisterExtensionSelector",
+            (max_event_type >= e->min && max_event_type <= e->max))
+        {
+            XtErrorMsg("rangeError",
+                       "xtRegisterExtensionSelector",
                        XtCXtToolkitError,
-                       "Attempt to register multiple selectors for one extension event type",
-                       NULL, NULL);
+                       "Attempt to register multiple selectors for one "
+                       "extension event type",
+                       NULL,
+                       NULL);
             UNLOCK_PROCESS;
             UNLOCK_APP(app);
             return;
@@ -1776,18 +1922,19 @@ XtRegisterExtensionSelector(Display *dpy,
     }
     pd->ext_select_count++;
     pd->ext_select_list = XtReallocArray(pd->ext_select_list,
-                                         (Cardinal) pd->ext_select_count,
-                                         (Cardinal) sizeof(ExtSelectRec));
-    for (i = pd->ext_select_count - 1; i > 0; i--) {
-        if (pd->ext_select_list[i - 1].min > min_event_type) {
+                                         (Cardinal)pd->ext_select_count,
+                                         (Cardinal)sizeof(ExtSelectRec));
+    for (i = pd->ext_select_count - 1; i > 0; i--)
+    {
+        if (pd->ext_select_list[i - 1].min > min_event_type)
+        {
             pd->ext_select_list[i] = pd->ext_select_list[i - 1];
         }
-        else
-            break;
+        else break;
     }
-    pd->ext_select_list[i].min = min_event_type;
-    pd->ext_select_list[i].max = max_event_type;
-    pd->ext_select_list[i].proc = proc;
+    pd->ext_select_list[i].min         = min_event_type;
+    pd->ext_select_list[i].max         = max_event_type;
+    pd->ext_select_list[i].proc        = proc;
     pd->ext_select_list[i].client_data = client_data;
     UNLOCK_PROCESS;
     UNLOCK_APP(app);
@@ -1796,7 +1943,7 @@ XtRegisterExtensionSelector(Display *dpy,
 void
 _XtExtensionSelect(Widget widget)
 {
-    int i;
+    int          i;
     XtPerDisplay pd;
 
     WIDGET_TO_APPCON(widget);
@@ -1806,7 +1953,8 @@ _XtExtensionSelect(Widget widget)
 
     pd = _XtGetPerDisplay(XtDisplay(widget));
 
-    for (i = 0; i < pd->ext_select_count; i++) {
+    for (i = 0; i < pd->ext_select_count; i++)
+    {
         CallExtensionSelector(widget, pd->ext_select_list + i, FALSE);
     }
     UNLOCK_PROCESS;

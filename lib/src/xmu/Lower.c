@@ -24,9 +24,9 @@ in this Software without prior written authorization from The Open Group.
 
 */
 
-#define  XK_LATIN1
+#define XK_LATIN1
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/keysymdef.h"
 #include "X11/Xmu/CharSet.h"
@@ -38,21 +38,21 @@ in this Software without prior written authorization from The Open Group.
 /*
  * ISO Latin-1 case conversion routine
  */
-#define XmuTolower(c)							 \
-((c) >= XK_a && (c) <= XK_z ?						 \
- (c) : (c) >= XK_A && (c) <= XK_Z ?					 \
- (c) + (XK_a - XK_A) : (c) >= XK_Agrave && (c) <= XK_Odiaeresis ?	 \
- (c) + (XK_agrave - XK_Agrave) : (c) >= XK_Ooblique && (c) <= XK_Thorn ? \
- (c) + (XK_oslash - XK_Ooblique) :					 \
- (c))
+#define XmuTolower(c)                                                          \
+    ((c) >= XK_a && (c) <= XK_z   ? (c)                                        \
+     : (c) >= XK_A && (c) <= XK_Z ? (c) + (XK_a - XK_A)                        \
+     : (c) >= XK_Agrave && (c) <= XK_Odiaeresis                                \
+         ? (c) + (XK_agrave - XK_Agrave)                                       \
+     : (c) >= XK_Ooblique && (c) <= XK_Thorn ? (c) + (XK_oslash - XK_Ooblique) \
+                                             : (c))
 
-#define XmuToupper(c)							 \
-((c) >= XK_A && (c) <= XK_Z ?						 \
- (c) : (c) >= XK_a && (c) <= XK_z ?					 \
- (c) - (XK_a - XK_A) : (c) >= XK_agrave && (c) <= XK_odiaeresis ?	 \
- (c) - (XK_agrave - XK_Agrave) : (c) >= XK_oslash && (c) <= XK_thorn ?	 \
- (c) - (XK_oslash - XK_Ooblique) :					 \
- (c))
+#define XmuToupper(c)                                                        \
+    ((c) >= XK_A && (c) <= XK_Z   ? (c)                                      \
+     : (c) >= XK_a && (c) <= XK_z ? (c) - (XK_a - XK_A)                      \
+     : (c) >= XK_agrave && (c) <= XK_odiaeresis                              \
+         ? (c) - (XK_agrave - XK_Agrave)                                     \
+     : (c) >= XK_oslash && (c) <= XK_thorn ? (c) - (XK_oslash - XK_Ooblique) \
+                                           : (c))
 
 /*
  * Implementation
@@ -60,84 +60,84 @@ in this Software without prior written authorization from The Open Group.
 void
 XmuCopyISOLatin1Lowered(char *dst, _Xconst char *src)
 {
-  unsigned char *dest;
-  _Xconst unsigned char *source;
+    unsigned char         *dest;
+    _Xconst unsigned char *source;
 
-  for (dest = (unsigned char *)dst, source = (_Xconst unsigned char *)src;
-       *source;
-       source++, dest++)
-    *dest = XmuTolower(*source);
-  *dest = '\0';
+    for (dest = (unsigned char *)dst, source = (_Xconst unsigned char *)src;
+         *source;
+         source++, dest++)
+        *dest = XmuTolower(*source);
+    *dest = '\0';
 }
 
 void
 XmuCopyISOLatin1Uppered(char *dst, _Xconst char *src)
 {
-  unsigned char *dest;
-  _Xconst unsigned char *source;
+    unsigned char         *dest;
+    _Xconst unsigned char *source;
 
-  for (dest = (unsigned char *)dst, source = (_Xconst unsigned char *)src;
-       *source;
-       source++, dest++)
-    *dest = XmuToupper(*source);
-  *dest = '\0';
+    for (dest = (unsigned char *)dst, source = (_Xconst unsigned char *)src;
+         *source;
+         source++, dest++)
+        *dest = XmuToupper(*source);
+    *dest = '\0';
 }
 
 int
 XmuCompareISOLatin1(_Xconst char *first, _Xconst char *second)
 {
-  _Xconst unsigned char *ap, *bp;
+    _Xconst unsigned char *ap, *bp;
 
-  for (ap = (_Xconst unsigned char *)first, bp = (_Xconst unsigned char *)second;
-       *ap && *bp && XmuTolower(*ap) == XmuTolower(*bp);
-       ap++, bp++)
-    ;
+    for (ap = (_Xconst unsigned char *)first,
+        bp  = (_Xconst unsigned char *)second;
+         *ap && *bp && XmuTolower(*ap) == XmuTolower(*bp);
+         ap++, bp++)
+        ;
 
-  return ((int)XmuTolower(*ap) - (int)XmuTolower(*bp));
+    return ((int)XmuTolower(*ap) - (int)XmuTolower(*bp));
 }
 
 void
 XmuNCopyISOLatin1Lowered(char *dst, _Xconst char *src, register int size)
 {
-  unsigned char *dest;
-  _Xconst unsigned char *source;
+    unsigned char         *dest;
+    _Xconst unsigned char *source;
 
-  if (size > 0)
+    if (size > 0)
     {
-      for (dest = (unsigned char *)dst, source = (_Xconst unsigned char *)src;
-	   *source && size > 1;
-	   source++, dest++, size--)
-	*dest = XmuTolower(*source);
-      *dest = '\0';
+        for (dest = (unsigned char *)dst, source = (_Xconst unsigned char *)src;
+             *source && size > 1;
+             source++, dest++, size--)
+            *dest = XmuTolower(*source);
+        *dest = '\0';
     }
 }
 
 void
 XmuNCopyISOLatin1Uppered(char *dst, _Xconst char *src, register int size)
 {
-  unsigned char *dest;
-  _Xconst unsigned char *source;
+    unsigned char         *dest;
+    _Xconst unsigned char *source;
 
-  if (size > 0)
+    if (size > 0)
     {
-      for (dest = (unsigned char *)dst, source = ( _Xconst unsigned char *)src;
-	   *source && size > 1;
-	   source++, dest++, size--)
-	*dest = XmuToupper(*source);
-      *dest = '\0';
+        for (dest = (unsigned char *)dst, source = (_Xconst unsigned char *)src;
+             *source && size > 1;
+             source++, dest++, size--)
+            *dest = XmuToupper(*source);
+        *dest = '\0';
     }
 }
 
 int
 XmuSnprintf(char *str, int size, _Xconst char *fmt, ...)
 {
-  va_list ap;
-  int retval;
+    va_list ap;
+    int     retval;
 
-  if (size <= 0)
-    return (size);
+    if (size <= 0) return (size);
 
-  va_start(ap, fmt);
+    va_start(ap, fmt);
 
 #if 0
   retval = vsprintf(str, fmt, ap);
@@ -148,10 +148,10 @@ XmuSnprintf(char *str, int size, _Xconst char *fmt, ...)
       abort();
     }
 #else
-  retval = vsnprintf(str, size, fmt, ap);
+    retval = vsnprintf(str, size, fmt, ap);
 #endif
 
-  va_end(ap);
+    va_end(ap);
 
-  return (retval);
+    return (retval);
 }

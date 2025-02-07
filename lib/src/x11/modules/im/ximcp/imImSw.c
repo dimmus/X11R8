@@ -33,7 +33,7 @@ THIS SOFTWARE.
 ******************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xlcint.h"
@@ -41,15 +41,14 @@ THIS SOFTWARE.
 #include "XimImSw.h"
 
 static Bool
-_XimCheckIfDefault(
-    Xim		im)
+_XimCheckIfDefault(Xim im)
 {
-    return(True);
+    return (True);
 }
 
 XimImsportSW _XimImSportRec[] = {
     { _XimCheckIfLocalProcessing, _XimLocalOpenIM, _XimLocalIMFree },
-    { _XimCheckIfThaiProcessing,	_XimThaiOpenIM,	 _XimThaiIMFree },
+    { _XimCheckIfThaiProcessing,  _XimThaiOpenIM,  _XimThaiIMFree  },
     { _XimCheckIfDefault,         _XimProtoOpenIM, _XimProtoIMFree },
-    { NULL,                       NULL,		 NULL },
+    { NULL,                       NULL,            NULL            },
 };

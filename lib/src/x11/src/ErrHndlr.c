@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
@@ -43,18 +43,19 @@ XSetErrorHandler(XErrorHandler handler)
     _XLockMutex(_Xglobal_lock);
     oldhandler = _XErrorFunction;
 
-    if (!oldhandler)
-	oldhandler = _XDefaultError;
+    if (!oldhandler) oldhandler = _XDefaultError;
 
-    if (handler != NULL) {
-	_XErrorFunction = handler;
+    if (handler != NULL)
+    {
+        _XErrorFunction = handler;
     }
-    else {
-	_XErrorFunction = _XDefaultError;
+    else
+    {
+        _XErrorFunction = _XDefaultError;
     }
     _XUnlockMutex(_Xglobal_lock);
 
-    return (XErrorHandler) oldhandler;
+    return (XErrorHandler)oldhandler;
 }
 
 /*
@@ -71,18 +72,19 @@ XSetIOErrorHandler(XIOErrorHandler handler)
     _XLockMutex(_Xglobal_lock);
     oldhandler = _XIOErrorFunction;
 
-    if (!oldhandler)
-	oldhandler = _XDefaultIOError;
+    if (!oldhandler) oldhandler = _XDefaultIOError;
 
-    if (handler != NULL) {
-	_XIOErrorFunction = handler;
+    if (handler != NULL)
+    {
+        _XIOErrorFunction = handler;
     }
-    else {
-	_XIOErrorFunction = _XDefaultIOError;
+    else
+    {
+        _XIOErrorFunction = _XDefaultIOError;
     }
     _XUnlockMutex(_Xglobal_lock);
 
-    return (XIOErrorHandler) oldhandler;
+    return (XIOErrorHandler)oldhandler;
 }
 
 /*
@@ -92,20 +94,21 @@ XSetIOErrorHandler(XIOErrorHandler handler)
  * calls exit(3).
  */
 void
-XSetIOErrorExitHandler(
-    Display *dpy,
-    XIOErrorExitHandler handler,
-    void *user_data)
+XSetIOErrorExitHandler(Display            *dpy,
+                       XIOErrorExitHandler handler,
+                       void               *user_data)
 {
     LockDisplay(dpy);
 
-    if (handler != NULL) {
-	dpy->exit_handler = handler;
-	dpy->exit_handler_data = user_data;
+    if (handler != NULL)
+    {
+        dpy->exit_handler      = handler;
+        dpy->exit_handler_data = user_data;
     }
-    else {
-	dpy->exit_handler = _XDefaultIOErrorExit;
-	dpy->exit_handler_data = NULL;
+    else
+    {
+        dpy->exit_handler      = _XDefaultIOErrorExit;
+        dpy->exit_handler_data = NULL;
     }
     UnlockDisplay(dpy);
 }

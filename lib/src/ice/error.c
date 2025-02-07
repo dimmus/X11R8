@@ -27,7 +27,7 @@ Author: Ralph Mor, X Consortium
 ******************************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/ICE/ICElib.h"
 #include "ICElibint.h"
@@ -36,383 +36,347 @@ Author: Ralph Mor, X Consortium
 #include <errno.h>
 
 void
-_IceErrorBadMinor (
-	IceConn	iceConn,
-	int	majorOpcode,
-	int	offendingMinor,
-	int	severity
-)
+_IceErrorBadMinor(IceConn iceConn,
+                  int     majorOpcode,
+                  int     offendingMinor,
+                  int     severity)
 {
-    IceErrorHeader (iceConn,
-	majorOpcode, offendingMinor,
-	iceConn->receive_sequence,
-	severity,
-	IceBadMinor,
-	0);
+    IceErrorHeader(iceConn,
+                   majorOpcode,
+                   offendingMinor,
+                   iceConn->receive_sequence,
+                   severity,
+                   IceBadMinor,
+                   0);
 
-    IceFlush (iceConn);
+    IceFlush(iceConn);
 }
 
-
 void
-_IceErrorBadState (
-	IceConn	iceConn,
-	int	majorOpcode,
-	int	offendingMinor,
-	int	severity
-)
+_IceErrorBadState(IceConn iceConn,
+                  int     majorOpcode,
+                  int     offendingMinor,
+                  int     severity)
 {
-    IceErrorHeader (iceConn,
-	majorOpcode, offendingMinor,
-	iceConn->receive_sequence,
-	severity,
-	IceBadState,
-	0);
+    IceErrorHeader(iceConn,
+                   majorOpcode,
+                   offendingMinor,
+                   iceConn->receive_sequence,
+                   severity,
+                   IceBadState,
+                   0);
 
-    IceFlush (iceConn);
+    IceFlush(iceConn);
 }
 
-
 void
-_IceErrorBadLength (
-	IceConn	iceConn,
-	int	majorOpcode,
-	int	offendingMinor,
-	int	severity
-)
+_IceErrorBadLength(IceConn iceConn,
+                   int     majorOpcode,
+                   int     offendingMinor,
+                   int     severity)
 {
-    IceErrorHeader (iceConn,
-	majorOpcode, offendingMinor,
-	iceConn->receive_sequence,
-	severity,
-	IceBadLength,
-	0);
+    IceErrorHeader(iceConn,
+                   majorOpcode,
+                   offendingMinor,
+                   iceConn->receive_sequence,
+                   severity,
+                   IceBadLength,
+                   0);
 
-    IceFlush (iceConn);
+    IceFlush(iceConn);
 }
 
-
 void
-_IceErrorBadValue (
-	IceConn		iceConn,
-	int		majorOpcode,
-	int		offendingMinor,
-	int		offset,
-	int		length,		/* in bytes */
-	IcePointer	value
-)
+_IceErrorBadValue(IceConn    iceConn,
+                  int        majorOpcode,
+                  int        offendingMinor,
+                  int        offset,
+                  int        length,  /* in bytes */
+                  IcePointer value)
 {
-    IceErrorHeader (iceConn,
-	majorOpcode, offendingMinor,
-	iceConn->receive_sequence,
-	IceCanContinue,
-	IceBadValue,
-	WORD64COUNT (8 + length));
+    IceErrorHeader(iceConn,
+                   majorOpcode,
+                   offendingMinor,
+                   iceConn->receive_sequence,
+                   IceCanContinue,
+                   IceBadValue,
+                   WORD64COUNT(8 + length));
 
-    IceWriteData32 (iceConn, 4, &offset);
-    IceWriteData32 (iceConn, 4, &length);
-    IceWriteData (iceConn, length, (char *) value);
+    IceWriteData32(iceConn, 4, &offset);
+    IceWriteData32(iceConn, 4, &length);
+    IceWriteData(iceConn, length, (char *)value);
 
-    if (PAD64 (length))
-	IceWritePad (iceConn, PAD64 (length));
+    if (PAD64(length)) IceWritePad(iceConn, PAD64(length));
 
-    IceFlush (iceConn);
+    IceFlush(iceConn);
 }
 
-
 void
-_IceErrorNoAuthentication (
-	IceConn	iceConn,
-	int	offendingMinor
-)
+_IceErrorNoAuthentication(IceConn iceConn, int offendingMinor)
 {
-    int severity = (offendingMinor == ICE_ConnectionSetup) ?
-	IceFatalToConnection : IceFatalToProtocol;
+    int severity = (offendingMinor == ICE_ConnectionSetup)
+                       ? IceFatalToConnection
+                       : IceFatalToProtocol;
 
-    IceErrorHeader (iceConn,
-	0, offendingMinor,
-	iceConn->receive_sequence,
-	severity,
-	IceNoAuth,
-	0);
+    IceErrorHeader(iceConn,
+                   0,
+                   offendingMinor,
+                   iceConn->receive_sequence,
+                   severity,
+                   IceNoAuth,
+                   0);
 
-    IceFlush (iceConn);
+    IceFlush(iceConn);
 }
 
-
 void
-_IceErrorNoVersion (
-	IceConn	iceConn,
-	int	offendingMinor
-)
+_IceErrorNoVersion(IceConn iceConn, int offendingMinor)
 {
-    int severity = (offendingMinor == ICE_ConnectionSetup) ?
-	IceFatalToConnection : IceFatalToProtocol;
+    int severity = (offendingMinor == ICE_ConnectionSetup)
+                       ? IceFatalToConnection
+                       : IceFatalToProtocol;
 
-    IceErrorHeader (iceConn,
-	0, offendingMinor,
-	iceConn->receive_sequence,
-	severity,
-	IceNoVersion,
-	0);
+    IceErrorHeader(iceConn,
+                   0,
+                   offendingMinor,
+                   iceConn->receive_sequence,
+                   severity,
+                   IceNoVersion,
+                   0);
 
-    IceFlush (iceConn);
+    IceFlush(iceConn);
 }
 
-
 void
-_IceErrorSetupFailed (
-	IceConn	iceConn,
-	int	offendingMinor,
-	const char	*reason
-)
+_IceErrorSetupFailed(IceConn iceConn, int offendingMinor, const char *reason)
 {
     char *pBuf, *pStart;
-    int bytes;
-    int severity = (offendingMinor == ICE_ConnectionSetup) ?
-	IceFatalToConnection : IceFatalToProtocol;
+    int   bytes;
+    int   severity = (offendingMinor == ICE_ConnectionSetup)
+                         ? IceFatalToConnection
+                         : IceFatalToProtocol;
 
-    if (!reason)
-	reason = "";
-    bytes = STRING_BYTES (reason);
+    if (!reason) reason = "";
+    bytes = STRING_BYTES(reason);
 
-    IceErrorHeader (iceConn,
-	0, offendingMinor,
-	iceConn->receive_sequence,
-	severity,
-	IceSetupFailed,
-	WORD64COUNT (bytes));
+    IceErrorHeader(iceConn,
+                   0,
+                   offendingMinor,
+                   iceConn->receive_sequence,
+                   severity,
+                   IceSetupFailed,
+                   WORD64COUNT(bytes));
 
-    pBuf = pStart = IceAllocScratch (iceConn, PADDED_BYTES64 (bytes));
-    STORE_STRING (pBuf, reason);
+    pBuf = pStart = IceAllocScratch(iceConn, PADDED_BYTES64(bytes));
+    STORE_STRING(pBuf, reason);
 
-    IceWriteData (iceConn, PADDED_BYTES64 (bytes), pStart);
-    IceFlush (iceConn);
+    IceWriteData(iceConn, PADDED_BYTES64(bytes), pStart);
+    IceFlush(iceConn);
 }
 
-
 void
-_IceErrorAuthenticationRejected (
-	IceConn	iceConn,
-	int	offendingMinor,
-	const char	*reason
-)
+_IceErrorAuthenticationRejected(IceConn     iceConn,
+                                int         offendingMinor,
+                                const char *reason)
 {
     char *pBuf, *pStart;
-    int bytes;
+    int   bytes;
 
-    if (!reason)
-	reason = "";
-    bytes = STRING_BYTES (reason);
+    if (!reason) reason = "";
+    bytes = STRING_BYTES(reason);
 
-    IceErrorHeader (iceConn,
-	0, offendingMinor,
-	iceConn->receive_sequence,
-	IceFatalToProtocol,
-	IceAuthRejected,
-	WORD64COUNT (bytes));
+    IceErrorHeader(iceConn,
+                   0,
+                   offendingMinor,
+                   iceConn->receive_sequence,
+                   IceFatalToProtocol,
+                   IceAuthRejected,
+                   WORD64COUNT(bytes));
 
-    pBuf = pStart = IceAllocScratch (iceConn, PADDED_BYTES64 (bytes));
-    STORE_STRING (pBuf, reason);
+    pBuf = pStart = IceAllocScratch(iceConn, PADDED_BYTES64(bytes));
+    STORE_STRING(pBuf, reason);
 
-    IceWriteData (iceConn, PADDED_BYTES64 (bytes), pStart);
-    IceFlush (iceConn);
+    IceWriteData(iceConn, PADDED_BYTES64(bytes), pStart);
+    IceFlush(iceConn);
 }
 
-
 void
-_IceErrorAuthenticationFailed (
-	IceConn	iceConn,
-	int	offendingMinor,
-	const char	*reason
-)
+_IceErrorAuthenticationFailed(IceConn     iceConn,
+                              int         offendingMinor,
+                              const char *reason)
 {
     char *pBuf, *pStart;
-    int bytes;
+    int   bytes;
 
-    if (!reason)
-	reason = "";
-    bytes = STRING_BYTES (reason);
+    if (!reason) reason = "";
+    bytes = STRING_BYTES(reason);
 
-    IceErrorHeader (iceConn,
-	0, offendingMinor,
-	iceConn->receive_sequence,
-	IceFatalToProtocol,
-	IceAuthFailed,
-	WORD64COUNT (bytes));
+    IceErrorHeader(iceConn,
+                   0,
+                   offendingMinor,
+                   iceConn->receive_sequence,
+                   IceFatalToProtocol,
+                   IceAuthFailed,
+                   WORD64COUNT(bytes));
 
-    pBuf = pStart = IceAllocScratch (iceConn, PADDED_BYTES64 (bytes));
-    STORE_STRING (pBuf, reason);
+    pBuf = pStart = IceAllocScratch(iceConn, PADDED_BYTES64(bytes));
+    STORE_STRING(pBuf, reason);
 
-    IceWriteData (iceConn, PADDED_BYTES64 (bytes), pStart);
-    IceFlush (iceConn);
+    IceWriteData(iceConn, PADDED_BYTES64(bytes), pStart);
+    IceFlush(iceConn);
 }
 
-
 void
-_IceErrorProtocolDuplicate (
-	IceConn	iceConn,
-	const char	*protocolName
-)
+_IceErrorProtocolDuplicate(IceConn iceConn, const char *protocolName)
 {
     char *pBuf, *pStart;
-    int bytes;
+    int   bytes;
 
-    if (!protocolName)
-	protocolName = "";
-    bytes = STRING_BYTES (protocolName);
+    if (!protocolName) protocolName = "";
+    bytes = STRING_BYTES(protocolName);
 
-    IceErrorHeader (iceConn,
-	0, ICE_ProtocolSetup,
-	iceConn->receive_sequence,
-	IceFatalToProtocol,
-	IceProtocolDuplicate,
-	WORD64COUNT (bytes));
+    IceErrorHeader(iceConn,
+                   0,
+                   ICE_ProtocolSetup,
+                   iceConn->receive_sequence,
+                   IceFatalToProtocol,
+                   IceProtocolDuplicate,
+                   WORD64COUNT(bytes));
 
-    pBuf = pStart = IceAllocScratch (iceConn, PADDED_BYTES64 (bytes));
-    STORE_STRING (pBuf, protocolName);
+    pBuf = pStart = IceAllocScratch(iceConn, PADDED_BYTES64(bytes));
+    STORE_STRING(pBuf, protocolName);
 
-    IceWriteData (iceConn, PADDED_BYTES64 (bytes), pStart);
-    IceFlush (iceConn);
+    IceWriteData(iceConn, PADDED_BYTES64(bytes), pStart);
+    IceFlush(iceConn);
 }
 
-
 void
-_IceErrorMajorOpcodeDuplicate (
-	IceConn	iceConn,
-	int	majorOpcode
-)
+_IceErrorMajorOpcodeDuplicate(IceConn iceConn, int majorOpcode)
 {
-    char mOp[8] = { (char) majorOpcode };
+    char mOp[8] = { (char)majorOpcode };
 
-    IceErrorHeader (iceConn,
-	0, ICE_ProtocolSetup,
-	iceConn->receive_sequence,
-	IceFatalToProtocol,
-	IceMajorOpcodeDuplicate,
-	1 /* length */);
+    IceErrorHeader(iceConn,
+                   0,
+                   ICE_ProtocolSetup,
+                   iceConn->receive_sequence,
+                   IceFatalToProtocol,
+                   IceMajorOpcodeDuplicate,
+                   1 /* length */);
 
-    IceWriteData (iceConn, 8, mOp);
-    IceFlush (iceConn);
+    IceWriteData(iceConn, 8, mOp);
+    IceFlush(iceConn);
 }
 
-
 void
-_IceErrorUnknownProtocol (
-	IceConn	iceConn,
-	const char	*protocolName
-)
+_IceErrorUnknownProtocol(IceConn iceConn, const char *protocolName)
 {
     char *pBuf, *pStart;
-    int bytes;
+    int   bytes;
 
-    if (!protocolName)
-	protocolName = "";
-    bytes = STRING_BYTES (protocolName);
+    if (!protocolName) protocolName = "";
+    bytes = STRING_BYTES(protocolName);
 
-    IceErrorHeader (iceConn,
-	0, ICE_ProtocolSetup,
-	iceConn->receive_sequence,
-	IceFatalToProtocol,
-	IceUnknownProtocol,
-	WORD64COUNT (bytes));
+    IceErrorHeader(iceConn,
+                   0,
+                   ICE_ProtocolSetup,
+                   iceConn->receive_sequence,
+                   IceFatalToProtocol,
+                   IceUnknownProtocol,
+                   WORD64COUNT(bytes));
 
-    pBuf = pStart = IceAllocScratch (iceConn, PADDED_BYTES64 (bytes));
-    STORE_STRING (pBuf, protocolName);
+    pBuf = pStart = IceAllocScratch(iceConn, PADDED_BYTES64(bytes));
+    STORE_STRING(pBuf, protocolName);
 
-    IceWriteData (iceConn, PADDED_BYTES64 (bytes), pStart);
-    IceFlush (iceConn);
+    IceWriteData(iceConn, PADDED_BYTES64(bytes), pStart);
+    IceFlush(iceConn);
 }
-
 
 void
-_IceErrorBadMajor (
-	IceConn	iceConn,
-	int     offendingMajor,
-	int     offendingMinor,
-	int	severity
-)
+_IceErrorBadMajor(IceConn iceConn,
+                  int     offendingMajor,
+                  int     offendingMinor,
+                  int     severity)
 {
-    char maj[8] = { (char) offendingMajor };
+    char maj[8] = { (char)offendingMajor };
 
-    IceErrorHeader (iceConn,
-	0, offendingMinor,
-	iceConn->receive_sequence,
-	severity,
-	IceBadMajor,
-	1 /* length */);
+    IceErrorHeader(iceConn,
+                   0,
+                   offendingMinor,
+                   iceConn->receive_sequence,
+                   severity,
+                   IceBadMajor,
+                   1 /* length */);
 
-    IceWriteData (iceConn, 8, maj);
-    IceFlush (iceConn);
+    IceWriteData(iceConn, 8, maj);
+    IceFlush(iceConn);
 }
-
-
 
 /*
  * Default error handler.
  */
 
 static void
-_IceDefaultErrorHandler (
-	IceConn		iceConn,
-	Bool		swap,
-	int		offendingMinorOpcode,
-	unsigned long	offendingSequence,
-	int 		errorClass,
-	int		severity,
-	IcePointer	values
-)
+_IceDefaultErrorHandler(IceConn       iceConn,
+                        Bool          swap,
+                        int           offendingMinorOpcode,
+                        unsigned long offendingSequence,
+                        int           errorClass,
+                        int           severity,
+                        IcePointer    values)
 {
     const char *str;
-    char *estr;
-    char *pData = (char *) values;
+    char       *estr;
+    char       *pData = (char *)values;
 
     switch (offendingMinorOpcode)
     {
         case ICE_ConnectionSetup:
             str = "ConnectionSetup";
-	    break;
+            break;
         case ICE_AuthRequired:
             str = "AuthRequired";
-	    break;
+            break;
         case ICE_AuthReply:
             str = "AuthReply";
-	    break;
+            break;
         case ICE_AuthNextPhase:
             str = "AuthNextPhase";
-	    break;
+            break;
         case ICE_ConnectionReply:
             str = "ConnectionReply";
-	    break;
+            break;
         case ICE_ProtocolSetup:
             str = "ProtocolSetup";
-	    break;
+            break;
         case ICE_ProtocolReply:
             str = "ProtocolReply";
-	    break;
+            break;
         case ICE_Ping:
             str = "Ping";
-	    break;
+            break;
         case ICE_PingReply:
             str = "PingReply";
-	    break;
+            break;
         case ICE_WantToClose:
             str = "WantToClose";
-	    break;
+            break;
         case ICE_NoClose:
             str = "NoClose";
-	    break;
-	default:
-	    str = "";
-	}
+            break;
+        default:
+            str = "";
+    }
 
-    fprintf (stderr, "\n");
+    fprintf(stderr, "\n");
 
-    fprintf (stderr, "ICE error:  Offending minor opcode    = %d (%s)\n",
-	offendingMinorOpcode, str);
+    fprintf(stderr,
+            "ICE error:  Offending minor opcode    = %d (%s)\n",
+            offendingMinorOpcode,
+            str);
 
-    fprintf (stderr, "            Offending sequence number = %lu\n",
-	offendingSequence);
+    fprintf(stderr,
+            "            Offending sequence number = %lu\n",
+            offendingSequence);
 
     switch (errorClass)
     {
@@ -455,113 +419,109 @@ _IceDefaultErrorHandler (
         case IceUnknownProtocol:
             str = "UnknownProtocol";
             break;
-	default:
-	    str = "???";
+        default:
+            str = "???";
     }
 
-    fprintf (stderr, "            Error class               = %s\n", str);
+    fprintf(stderr, "            Error class               = %s\n", str);
 
-    if (severity == IceCanContinue)
-	str = "CanContinue";
-    else if (severity == IceFatalToProtocol)
-	str = "FatalToProtocol";
-    else if (severity == IceFatalToConnection)
-	str = "FatalToConnection";
-    else
-	str = "???";
+    if (severity == IceCanContinue) str = "CanContinue";
+    else if (severity == IceFatalToProtocol) str = "FatalToProtocol";
+    else if (severity == IceFatalToConnection) str = "FatalToConnection";
+    else str = "???";
 
-    fprintf (stderr, "            Severity                  = %s\n", str);
+    fprintf(stderr, "            Severity                  = %s\n", str);
 
     switch (errorClass)
     {
         case IceBadValue:
-        {
-	    int offset, length, val;
+            {
+                int offset, length, val;
 
-	    EXTRACT_CARD32 (pData, swap, offset);
-	    EXTRACT_CARD32 (pData, swap, length);
+                EXTRACT_CARD32(pData, swap, offset);
+                EXTRACT_CARD32(pData, swap, length);
 
-	    fprintf (stderr,
-		"            BadValue Offset           = %d\n", offset);
-	    fprintf (stderr,
-		"            BadValue Length           = %d\n", length);
+                fprintf(stderr,
+                        "            BadValue Offset           = %d\n",
+                        offset);
+                fprintf(stderr,
+                        "            BadValue Length           = %d\n",
+                        length);
 
-	    if (length <= 4)
-	    {
-		if (length == 1)
-		    val = (int) *pData;
-		else if (length == 2)
-		{
-		    EXTRACT_CARD16 (pData, swap, val);
-		}
-		else
-		{
-		    EXTRACT_CARD32 (pData, swap, val);
-		}
+                if (length <= 4)
+                {
+                    if (length == 1) val = (int)*pData;
+                    else if (length == 2)
+                    {
+                        EXTRACT_CARD16(pData, swap, val);
+                    }
+                    else
+                    {
+                        EXTRACT_CARD32(pData, swap, val);
+                    }
 
-		fprintf (stderr,
-	            "            BadValue                  = %d\n", val);
-	    }
-            break;
-	}
+                    fprintf(stderr,
+                            "            BadValue                  = %d\n",
+                            val);
+                }
+                break;
+            }
 
         case IceBadMajor:
 
-	    fprintf (stderr, "Major opcode : %d\n", (int) *pData);
+            fprintf(stderr, "Major opcode : %d\n", (int)*pData);
             break;
 
         case IceSetupFailed:
 
-            EXTRACT_STRING (pData, swap, estr);
-            fprintf (stderr, "Reason : %s\n", estr);
+            EXTRACT_STRING(pData, swap, estr);
+            fprintf(stderr, "Reason : %s\n", estr);
             free(estr);
             break;
 
         case IceAuthRejected:
 
-            EXTRACT_STRING (pData, swap, estr);
-            fprintf (stderr, "Reason : %s\n", estr);
+            EXTRACT_STRING(pData, swap, estr);
+            fprintf(stderr, "Reason : %s\n", estr);
             free(estr);
             break;
 
         case IceAuthFailed:
 
-            EXTRACT_STRING (pData, swap, estr);
-            fprintf (stderr, "Reason : %s\n", estr);
+            EXTRACT_STRING(pData, swap, estr);
+            fprintf(stderr, "Reason : %s\n", estr);
             free(estr);
             break;
 
         case IceProtocolDuplicate:
 
-            EXTRACT_STRING (pData, swap, estr);
-            fprintf (stderr, "Protocol name : %s\n", estr);
+            EXTRACT_STRING(pData, swap, estr);
+            fprintf(stderr, "Protocol name : %s\n", estr);
             free(estr);
             break;
 
         case IceMajorOpcodeDuplicate:
 
-            fprintf (stderr, "Major opcode : %d\n", (int) *pData);
+            fprintf(stderr, "Major opcode : %d\n", (int)*pData);
             break;
 
         case IceUnknownProtocol:
 
-            EXTRACT_STRING (pData, swap, estr);
-            fprintf (stderr, "Protocol name : %s\n", estr);
+            EXTRACT_STRING(pData, swap, estr);
+            fprintf(stderr, "Protocol name : %s\n", estr);
             free(estr);
             break;
 
-	default:
-	    break;
+        default:
+            break;
     }
 
-    fprintf (stderr, "\n");
+    fprintf(stderr, "\n");
 
-    if (severity != IceCanContinue)
-	exit (1);
+    if (severity != IceCanContinue) exit(1);
 }
 
-IceErrorHandler   _IceErrorHandler   = _IceDefaultErrorHandler;
-
+IceErrorHandler _IceErrorHandler = _IceDefaultErrorHandler;
 
 /*
  * This procedure sets the ICE error handler to be the specified
@@ -570,40 +530,33 @@ IceErrorHandler   _IceErrorHandler   = _IceDefaultErrorHandler;
  */
 
 IceErrorHandler
-IceSetErrorHandler (
-	IceErrorHandler handler
-)
+IceSetErrorHandler(IceErrorHandler handler)
 {
     IceErrorHandler oldHandler = _IceErrorHandler;
 
-    if (handler != NULL)
-	_IceErrorHandler = handler;
-    else
-	_IceErrorHandler = _IceDefaultErrorHandler;
+    if (handler != NULL) _IceErrorHandler = handler;
+    else _IceErrorHandler = _IceDefaultErrorHandler;
 
     return (oldHandler);
 }
-
-
 
 /*
  * Default IO error handler.
  */
 
 static void
-_IceDefaultIOErrorHandler (
-	IceConn		iceConn
-)
+_IceDefaultIOErrorHandler(IceConn iceConn)
 {
-    fprintf (stderr,
-	"ICE default IO error handler doing an exit(), pid = %ld, errno = %d\n",
-	(long)getpid(), errno);
+    fprintf(
+        stderr,
+        "ICE default IO error handler doing an exit(), pid = %ld, errno = %d\n",
+        (long)getpid(),
+        errno);
 
-    exit (1);
+    exit(1);
 }
 
 IceIOErrorHandler _IceIOErrorHandler = _IceDefaultIOErrorHandler;
-
 
 /*
  * This procedure sets the ICE fatal I/O error handler to be the
@@ -613,16 +566,12 @@ IceIOErrorHandler _IceIOErrorHandler = _IceDefaultIOErrorHandler;
  */
 
 IceIOErrorHandler
-IceSetIOErrorHandler (
-	IceIOErrorHandler handler
-)
+IceSetIOErrorHandler(IceIOErrorHandler handler)
 {
     IceIOErrorHandler oldHandler = _IceIOErrorHandler;
 
-    if (handler != NULL)
-	_IceIOErrorHandler = handler;
-    else
-	_IceIOErrorHandler = _IceDefaultIOErrorHandler;
+    if (handler != NULL) _IceIOErrorHandler = handler;
+    else _IceIOErrorHandler = _IceDefaultIOErrorHandler;
 
     return (oldHandler);
 }

@@ -25,50 +25,51 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
-Status XAllocColorPlanes(
-    register Display *dpy,
-    Colormap cmap,
-    Bool contig,
-    unsigned long *pixels, /* LISTofCARD32 */ /* RETURN */
-    int ncolors,
-    int nreds,
-    int ngreens,
-    int nblues,
-    unsigned long *rmask,
-    unsigned long *gmask,
-    unsigned long *bmask) /* CARD32 */ /* RETURN */
+Status
+XAllocColorPlanes(register Display *dpy,
+                  Colormap          cmap,
+                  Bool              contig,
+                  unsigned long    *pixels,
+                  /* LISTofCARD32 */ /* RETURN */
+                  int            ncolors,
+                  int            nreds,
+                  int            ngreens,
+                  int            nblues,
+                  unsigned long *rmask,
+                  unsigned long *gmask,
+                  unsigned long *bmask) /* CARD32 */ /* RETURN */
 {
-    xAllocColorPlanesReply rep;
-    Status status;
+    xAllocColorPlanesReply         rep;
+    Status                         status;
     register xAllocColorPlanesReq *req;
 
     LockDisplay(dpy);
-    GetReq(AllocColorPlanes,req);
+    GetReq(AllocColorPlanes, req);
 
-    req->cmap = cmap;
-    req->colors = ncolors;
-    req->red = nreds;
-    req->green = ngreens;
-    req->blue = nblues;
+    req->cmap       = cmap;
+    req->colors     = ncolors;
+    req->red        = nreds;
+    req->green      = ngreens;
+    req->blue       = nblues;
     req->contiguous = contig;
 
     status = _XReply(dpy, (xReply *)&rep, 0, xFalse);
 
+    if (status)
+    {
+        *rmask = rep.redMask;
+        *gmask = rep.greenMask;
+        *bmask = rep.blueMask;
 
-    if (status) {
-	*rmask = rep.redMask;
-	*gmask = rep.greenMask;
-	*bmask = rep.blueMask;
-
-	/* sizeof(CARD32) = 4 */
-	_XRead32 (dpy, (long *) pixels, (long)(ncolors * 4));
+    /* sizeof(CARD32) = 4 */
+        _XRead32(dpy, (long *)pixels, (long)(ncolors * 4));
     }
 
     UnlockDisplay(dpy);
     SyncHandle();
-    return(status);
+    return (status);
 }

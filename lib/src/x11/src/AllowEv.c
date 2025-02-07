@@ -25,27 +25,21 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XAllowEvents(
-    register Display *dpy,
-    int mode,
-    Time time)
+XAllowEvents(register Display *dpy, int mode, Time time)
 
 {
     register xAllowEventsReq *req;
 
     LockDisplay(dpy);
-    GetReq(AllowEvents,req);
+    GetReq(AllowEvents, req);
     req->mode = mode;
     req->time = time;
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-
-
-

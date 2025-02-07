@@ -69,7 +69,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "IntrinsicI.h"
 #include "Intrinsic.h"
@@ -81,24 +81,26 @@ in this Software without prior written authorization from The Open Group.
 #define TOXRMQUARK(p) ((XrmQuark)(long)(p))     /* avoid LP64 warnings */
 
 void
-XtGetResourceList(WidgetClass widget_class,
+XtGetResourceList(WidgetClass     widget_class,
                   XtResourceList *resources,
-                  Cardinal *num_resources)
+                  Cardinal       *num_resources)
 {
-    int size;
-    register Cardinal i, dest = 0;
+    int                      size;
+    register Cardinal        i, dest = 0;
     register XtResourceList *list, dlist;
 
     LOCK_PROCESS;
     *resources = XtMallocArray(widget_class->core_class.num_resources,
-                               (Cardinal) sizeof(XtResource));
-    size = (int) (widget_class->core_class.num_resources * sizeof(XtResource));
+                               (Cardinal)sizeof(XtResource));
+    size = (int)(widget_class->core_class.num_resources * sizeof(XtResource));
 
-    if (!widget_class->core_class.class_inited) {
+    if (!widget_class->core_class.class_inited)
+    {
         /* Easy case */
 
-        (void) memcpy(*resources, widget_class->core_class.resources,
-                      (size_t) size);
+        (void)memcpy(*resources,
+                     widget_class->core_class.resources,
+                     (size_t)size);
         *num_resources = widget_class->core_class.num_resources;
         UNLOCK_PROCESS;
         return;
@@ -106,22 +108,24 @@ XtGetResourceList(WidgetClass widget_class,
 
     /* Nope, it's the hard case */
 
-    list = (XtResourceList *) widget_class->core_class.resources;
+    list  = (XtResourceList *)widget_class->core_class.resources;
     dlist = *resources;
-    for (i = 0; i < widget_class->core_class.num_resources; i++) {
-        if (list[i] != NULL) {
-            dlist[dest].resource_name = (String)
-                XrmQuarkToString(TOXRMQUARK(list[i]->resource_name));
-            dlist[dest].resource_class = (String)
-                XrmQuarkToString(TOXRMQUARK(list[i]->resource_class));
-            dlist[dest].resource_type = (String)
-                XrmQuarkToString(TOXRMQUARK(list[i]->resource_type));
+    for (i = 0; i < widget_class->core_class.num_resources; i++)
+    {
+        if (list[i] != NULL)
+        {
+            dlist[dest].resource_name =
+                (String)XrmQuarkToString(TOXRMQUARK(list[i]->resource_name));
+            dlist[dest].resource_class =
+                (String)XrmQuarkToString(TOXRMQUARK(list[i]->resource_class));
+            dlist[dest].resource_type =
+                (String)XrmQuarkToString(TOXRMQUARK(list[i]->resource_type));
             dlist[dest].resource_size = list[i]->resource_size;
             /* trust that resource_offset isn't that big */
-            dlist[dest].resource_offset = (Cardinal)
-                -((int) (list[i]->resource_offset + 1));
-            dlist[dest].default_type = (String)
-                XrmQuarkToString(TOXRMQUARK(list[i]->default_type));
+            dlist[dest].resource_offset =
+                (Cardinal) - ((int)(list[i]->resource_offset + 1));
+            dlist[dest].default_type =
+                (String)XrmQuarkToString(TOXRMQUARK(list[i]->default_type));
             dlist[dest].default_addr = list[i]->default_addr;
             dest++;
         }
@@ -133,45 +137,47 @@ XtGetResourceList(WidgetClass widget_class,
 static Boolean
 ClassIsSubclassOf(WidgetClass class, const WidgetClass superclass)
 {
-    for (; class != NULL; class = class->core_class.superclass) {
-        if (class == superclass)
-            return True;
+    for (; class != NULL; class = class->core_class.superclass)
+    {
+        if (class == superclass) return True;
     }
     return False;
 }
 
 void
-XtGetConstraintResourceList(WidgetClass widget_class,
+XtGetConstraintResourceList(WidgetClass     widget_class,
                             XtResourceList *resources,
-                            Cardinal *num_resources)
+                            Cardinal       *num_resources)
 {
-    int size;
-    register Cardinal i, dest = 0;
+    int                      size;
+    register Cardinal        i, dest = 0;
     register XtResourceList *list, dlist;
-    ConstraintWidgetClass class = (ConstraintWidgetClass) widget_class;
+    ConstraintWidgetClass class = (ConstraintWidgetClass)widget_class;
 
     LOCK_PROCESS;
     if ((class->core_class.class_inited &&
-         !(class->core_class.class_inited & ConstraintClassFlag))
-        || (!class->core_class.class_inited &&
-            !ClassIsSubclassOf(widget_class, constraintWidgetClass))
-        || class->constraint_class.num_resources == 0) {
-
-        *resources = NULL;
+         !(class->core_class.class_inited & ConstraintClassFlag)) ||
+        (!class->core_class.class_inited &&
+         !ClassIsSubclassOf(widget_class, constraintWidgetClass)) ||
+        class->constraint_class.num_resources == 0)
+    {
+        *resources     = NULL;
         *num_resources = 0;
         UNLOCK_PROCESS;
         return;
     }
 
     *resources = XtMallocArray(class->constraint_class.num_resources,
-                               (Cardinal) sizeof(XtResource));
-    size = (int) (class->constraint_class.num_resources * sizeof(XtResource));
+                               (Cardinal)sizeof(XtResource));
+    size = (int)(class->constraint_class.num_resources * sizeof(XtResource));
 
-    if (!class->core_class.class_inited) {
+    if (!class->core_class.class_inited)
+    {
         /* Easy case */
 
-        (void) memcpy(*resources, class->constraint_class.resources,
-                      (size_t) size);
+        (void)memcpy(*resources,
+                     class->constraint_class.resources,
+                     (size_t)size);
         *num_resources = class->constraint_class.num_resources;
         UNLOCK_PROCESS;
         return;
@@ -179,22 +185,24 @@ XtGetConstraintResourceList(WidgetClass widget_class,
 
     /* Nope, it's the hard case */
 
-    list = (XtResourceList *) class->constraint_class.resources;
+    list  = (XtResourceList *)class->constraint_class.resources;
     dlist = *resources;
-    for (i = 0; i < class->constraint_class.num_resources; i++) {
-        if (list[i] != NULL) {
-            dlist[dest].resource_name = (String)
-                XrmQuarkToString(TOXRMQUARK(list[i]->resource_name));
-            dlist[dest].resource_class = (String)
-                XrmQuarkToString(TOXRMQUARK(list[i]->resource_class));
-            dlist[dest].resource_type = (String)
-                XrmQuarkToString(TOXRMQUARK(list[i]->resource_type));
+    for (i = 0; i < class->constraint_class.num_resources; i++)
+    {
+        if (list[i] != NULL)
+        {
+            dlist[dest].resource_name =
+                (String)XrmQuarkToString(TOXRMQUARK(list[i]->resource_name));
+            dlist[dest].resource_class =
+                (String)XrmQuarkToString(TOXRMQUARK(list[i]->resource_class));
+            dlist[dest].resource_type =
+                (String)XrmQuarkToString(TOXRMQUARK(list[i]->resource_type));
             dlist[dest].resource_size = list[i]->resource_size;
             /* trust that resource_offset isn't that big */
-            dlist[dest].resource_offset = (Cardinal)
-                -((int) (list[i]->resource_offset + 1));
-            dlist[dest].default_type = (String)
-                XrmQuarkToString(TOXRMQUARK(list[i]->default_type));
+            dlist[dest].resource_offset =
+                (Cardinal) - ((int)(list[i]->resource_offset + 1));
+            dlist[dest].default_type =
+                (String)XrmQuarkToString(TOXRMQUARK(list[i]->default_type));
             dlist[dest].default_addr = list[i]->default_addr;
             dest++;
         }

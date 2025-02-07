@@ -53,7 +53,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/IntrinsicP.h"
 #include "XawI18n.h"
@@ -65,8 +65,8 @@ _Xaw_atowc(int c)
 _Xaw_atowc(unsigned char c)
 #endif
 {
-    wchar_t  wc;
-    char str[2];
+    wchar_t wc;
+    char    str[2];
 
     str[0] = (char)c;
     str[1] = '\0';
@@ -84,7 +84,7 @@ _Xaw_iswalnum(wchar_t ch)
 #else
     unsigned char mb[MB_LEN_MAX];
 
-    wctomb((char*)mb, ch);
+    wctomb((char *)mb, ch);
 
     return (isalnum(*mb));
 #endif

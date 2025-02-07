@@ -25,49 +25,39 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XChangeKeyboardControl(
-    register Display *dpy,
-    unsigned long mask,
-    XKeyboardControl *value_list)
+XChangeKeyboardControl(register Display *dpy,
+                       unsigned long     mask,
+                       XKeyboardControl *value_list)
 {
-    unsigned long values[8];
-    register unsigned long *value = values;
-    long nvalues;
+    unsigned long                       values[8];
+    register unsigned long             *value = values;
+    long                                nvalues;
     register xChangeKeyboardControlReq *req;
 
     LockDisplay(dpy);
     GetReq(ChangeKeyboardControl, req);
     req->mask = mask;
 
-    if (mask & KBKeyClickPercent)
-	*value++ = value_list->key_click_percent;
+    if (mask & KBKeyClickPercent) *value++ = value_list->key_click_percent;
 
-    if (mask & KBBellPercent)
-    	*value++ = value_list->bell_percent;
+    if (mask & KBBellPercent) *value++ = value_list->bell_percent;
 
-    if (mask & KBBellPitch)
-    	*value++ = value_list->bell_pitch;
+    if (mask & KBBellPitch) *value++ = value_list->bell_pitch;
 
-    if (mask & KBBellDuration)
-    	*value++ = value_list->bell_duration;
+    if (mask & KBBellDuration) *value++ = value_list->bell_duration;
 
-    if (mask & KBLed)
-    	*value++ = value_list->led;
+    if (mask & KBLed) *value++ = value_list->led;
 
-    if (mask & KBLedMode)
-	*value++ = value_list->led_mode;
+    if (mask & KBLedMode) *value++ = value_list->led_mode;
 
-    if (mask & KBKey)
-        *value++ = value_list->key;
+    if (mask & KBKey) *value++ = value_list->key;
 
-    if (mask & KBAutoRepeatMode)
-        *value++ = value_list->auto_repeat_mode;
-
+    if (mask & KBAutoRepeatMode) *value++ = value_list->auto_repeat_mode;
 
     req->length += (nvalues = value - values);
 
@@ -76,8 +66,8 @@ XChangeKeyboardControl(
        statement */
 
     nvalues <<= 2;
-    Data32 (dpy, (long *) values, nvalues);
+    Data32(dpy, (long *)values, nvalues);
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
-    }
+}

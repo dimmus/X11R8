@@ -33,13 +33,12 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
 
-
 /*
  *	NAME
  *		XcmsFormatOfPrefix
@@ -58,18 +57,21 @@ XcmsFormatOfPrefix(char *prefix)
  *		Color Space ID if found; zero otherwise.
  */
 {
-    XcmsColorSpace	**papColorSpaces;
-    char		string_buf[64];
-    char		*string_lowered;
-    size_t		len;
+    XcmsColorSpace **papColorSpaces;
+    char             string_buf[64];
+    char            *string_lowered;
+    size_t           len;
 
     /*
      * While copying prefix to string_lowered, convert to lowercase
      */
-    if ((len = strlen(prefix)) >= sizeof(string_buf)) {
-	string_lowered = Xmalloc(len+1);
-    } else {
-	string_lowered = string_buf;
+    if ((len = strlen(prefix)) >= sizeof(string_buf))
+    {
+        string_lowered = Xmalloc(len + 1);
+    }
+    else
+    {
+        string_lowered = string_buf;
     }
     _XcmsCopyISOLatin1Lowered(string_lowered, prefix);
 
@@ -77,30 +79,36 @@ XcmsFormatOfPrefix(char *prefix)
      * First try Device-Independent color spaces
      */
     papColorSpaces = _XcmsDIColorSpaces;
-    if (papColorSpaces != NULL) {
-	while (*papColorSpaces != NULL) {
-	    if (strcmp((*papColorSpaces)->prefix, string_lowered) == 0) {
-		if (len >= sizeof(string_buf)) Xfree(string_lowered);
-		return((*papColorSpaces)->id);
-	    }
-	    papColorSpaces++;
-	}
+    if (papColorSpaces != NULL)
+    {
+        while (*papColorSpaces != NULL)
+        {
+            if (strcmp((*papColorSpaces)->prefix, string_lowered) == 0)
+            {
+                if (len >= sizeof(string_buf)) Xfree(string_lowered);
+                return ((*papColorSpaces)->id);
+            }
+            papColorSpaces++;
+        }
     }
 
     /*
      * Next try Device-Dependent color spaces
      */
     papColorSpaces = _XcmsDDColorSpaces;
-    if (papColorSpaces != NULL) {
-	while (*papColorSpaces != NULL) {
-	    if (strcmp((*papColorSpaces)->prefix, string_lowered) == 0) {
-		if (len >= sizeof(string_buf)) Xfree(string_lowered);
-		return((*papColorSpaces)->id);
-	    }
-	    papColorSpaces++;
-	}
+    if (papColorSpaces != NULL)
+    {
+        while (*papColorSpaces != NULL)
+        {
+            if (strcmp((*papColorSpaces)->prefix, string_lowered) == 0)
+            {
+                if (len >= sizeof(string_buf)) Xfree(string_lowered);
+                return ((*papColorSpaces)->id);
+            }
+            papColorSpaces++;
+        }
     }
 
     if (len >= sizeof(string_buf)) Xfree(string_lowered);
-    return(XcmsUndefinedFormat);
+    return (XcmsUndefinedFormat);
 }

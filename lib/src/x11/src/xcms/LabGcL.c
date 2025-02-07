@@ -31,13 +31,12 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
 
-
 /************************************************************************
  *									*
  *			 PUBLIC ROUTINES				*
@@ -52,12 +51,11 @@
  */
 /* ARGSUSED */
 Status
-XcmsCIELabClipL (
-    XcmsCCC ccc,
-    XcmsColor *pColors_in_out,
-    unsigned int nColors,
-    unsigned int i,
-    Bool *pCompressed)
+XcmsCIELabClipL(XcmsCCC      ccc,
+                XcmsColor   *pColors_in_out,
+                unsigned int nColors,
+                unsigned int i,
+                Bool        *pCompressed)
 /*
  *	DESCRIPTION
  *		Return the closest L* for a specific hue and chroma.
@@ -74,14 +72,14 @@ XcmsCIELabClipL (
  *
  */
 {
-    XcmsCCCRec	myCCC;
-    XcmsColor	*pColor;
-    XcmsColor   Lab_max;
-    XcmsFloat	hue, chroma, maxChroma;
-    Status retval;
+    XcmsCCCRec myCCC;
+    XcmsColor *pColor;
+    XcmsColor  Lab_max;
+    XcmsFloat  hue, chroma, maxChroma;
+    Status     retval;
 
     /* Use my own CCC */
-    memcpy ((char *)&myCCC, (char *)ccc, sizeof(XcmsCCCRec));
+    memcpy((char *)&myCCC, (char *)ccc, sizeof(XcmsCCCRec));
     myCCC.clientWhitePt.format = XcmsUndefinedFormat;/* Inherit Screen WP */
     myCCC.gamutCompProc = (XcmsCompressionProc)NULL;/* no gamut compression */
 
@@ -96,79 +94,113 @@ XcmsCIELabClipL (
 
     pColor = pColors_in_out + i;
 
-    if (ccc->visual->class < StaticColor) {
-	/*
+    if (ccc->visual->class < StaticColor)
+    {
+    /*
 	 * GRAY !
 	 */
-	return(XcmsFailure);
-    } else {
-	/* Convert from CIEXYZ to CIE L*u*v* format */
-	if (_XcmsDIConvertColors(&myCCC, pColor,
-		ScreenWhitePointOfCCC(&myCCC), 1, XcmsCIELabFormat)
-		== XcmsFailure) {
-	    return(XcmsFailure);
-	}
+        return (XcmsFailure);
+    }
+    else
+    {
+    /* Convert from CIEXYZ to CIE L*u*v* format */
+        if (_XcmsDIConvertColors(&myCCC,
+                                 pColor,
+                                 ScreenWhitePointOfCCC(&myCCC),
+                                 1,
+                                 XcmsCIELabFormat) == XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
 
-	hue = XCMS_CIELAB_PMETRIC_HUE(pColor->spec.CIELab.a_star,
-				      pColor->spec.CIELab.b_star);
-	chroma = XCMS_CIELAB_PMETRIC_CHROMA(pColor->spec.CIELab.a_star,
-					    pColor->spec.CIELab.b_star);
-	/* Step 1: compute the maximum L* and chroma for this hue. */
-	/*         This copy may be overkill but it preserves the pixel etc. */
-	memcpy((char *)&Lab_max, (char *)pColor, sizeof(XcmsColor));
-	if (_XcmsCIELabQueryMaxLCRGB (&myCCC, hue, &Lab_max,
-		(XcmsRGBi *)NULL) == XcmsFailure) {
-	    return (XcmsFailure);
-	}
-	maxChroma = XCMS_CIELAB_PMETRIC_CHROMA(Lab_max.spec.CIELab.a_star,
-					       Lab_max.spec.CIELab.b_star);
+        hue    = XCMS_CIELAB_PMETRIC_HUE(pColor->spec.CIELab.a_star,
+                                      pColor->spec.CIELab.b_star);
+        chroma = XCMS_CIELAB_PMETRIC_CHROMA(pColor->spec.CIELab.a_star,
+                                            pColor->spec.CIELab.b_star);
+    /* Step 1: compute the maximum L* and chroma for this hue. */
+        /*         This copy may be overkill but it preserves the pixel etc. */
+        memcpy((char *)&Lab_max, (char *)pColor, sizeof(XcmsColor));
+        if (_XcmsCIELabQueryMaxLCRGB(&myCCC, hue, &Lab_max, (XcmsRGBi *)NULL) ==
+            XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
+        maxChroma = XCMS_CIELAB_PMETRIC_CHROMA(Lab_max.spec.CIELab.a_star,
+                                               Lab_max.spec.CIELab.b_star);
 
-	/* Now check and return the appropriate L* */
-	if (chroma == maxChroma) {
-	    /* When the chroma input is equal to the maximum chroma */
-	    /* merely return the L* for that chroma. */
-	    memcpy((char *)pColor, (char *)&Lab_max, sizeof(XcmsColor));
-	    retval = _XcmsDIConvertColors(&myCCC, pColor,
-		    ScreenWhitePointOfCCC(&myCCC), 1, XcmsCIEXYZFormat);
-	} else if (chroma > maxChroma) {
-	    /* When the chroma input is greater than the maximum chroma */
-	    /* merely return the L* and chroma for the given hue. */
-	    memcpy((char *)pColor, (char *)&Lab_max, sizeof(XcmsColor));
-	    return (XcmsFailure);
-	} else if (pColor->spec.CIELab.L_star < Lab_max.spec.CIELab.L_star) {
-	    /* Find the minimum lightness for the given chroma. */
-	    if (pColor->format != XcmsCIELabFormat) {
-		if (_XcmsDIConvertColors(ccc, pColor,
-			ScreenWhitePointOfCCC(ccc), 1, XcmsCIELabFormat)
-			== XcmsFailure) {
-		    return(XcmsFailure);
-		}
-	    }
-	    if (XcmsCIELabQueryMinL(&myCCC, degrees(hue), chroma, pColor)
-		== XcmsFailure) {
-		    return (XcmsFailure);
-	    }
-	    retval = _XcmsDIConvertColors(&myCCC, pColor,
-		           ScreenWhitePointOfCCC(&myCCC), 1, XcmsCIEXYZFormat);
-	} else {
-	    /* Find the maximum lightness for the given chroma. */
-	    if (pColor->format != XcmsCIELabFormat) {
-		if (_XcmsDIConvertColors(ccc, pColor,
-			      ScreenWhitePointOfCCC(ccc), 1, XcmsCIELabFormat)
-			== XcmsFailure) {
-		    return(XcmsFailure);
-		}
-	    }
-	    if (XcmsCIELabQueryMaxL(&myCCC, degrees(hue), chroma, pColor)
-		== XcmsFailure) {
-		    return (XcmsFailure);
-	    }
-	    retval = _XcmsDIConvertColors(&myCCC, pColor,
-		           ScreenWhitePointOfCCC(&myCCC), 1, XcmsCIEXYZFormat);
-	}
-	if (retval != XcmsFailure && pCompressed != NULL) {
-	    *(pCompressed + i) = True;
-	}
-	return(retval);
+        /* Now check and return the appropriate L* */
+        if (chroma == maxChroma)
+        {
+            /* When the chroma input is equal to the maximum chroma */
+            /* merely return the L* for that chroma. */
+            memcpy((char *)pColor, (char *)&Lab_max, sizeof(XcmsColor));
+            retval = _XcmsDIConvertColors(&myCCC,
+                                          pColor,
+                                          ScreenWhitePointOfCCC(&myCCC),
+                                          1,
+                                          XcmsCIEXYZFormat);
+        }
+        else if (chroma > maxChroma)
+        {
+            /* When the chroma input is greater than the maximum chroma */
+            /* merely return the L* and chroma for the given hue. */
+            memcpy((char *)pColor, (char *)&Lab_max, sizeof(XcmsColor));
+            return (XcmsFailure);
+        }
+        else if (pColor->spec.CIELab.L_star < Lab_max.spec.CIELab.L_star)
+        {
+            /* Find the minimum lightness for the given chroma. */
+            if (pColor->format != XcmsCIELabFormat)
+            {
+                if (_XcmsDIConvertColors(ccc,
+                                         pColor,
+                                         ScreenWhitePointOfCCC(ccc),
+                                         1,
+                                         XcmsCIELabFormat) == XcmsFailure)
+                {
+                    return (XcmsFailure);
+                }
+            }
+            if (XcmsCIELabQueryMinL(&myCCC, degrees(hue), chroma, pColor) ==
+                XcmsFailure)
+            {
+                return (XcmsFailure);
+            }
+            retval = _XcmsDIConvertColors(&myCCC,
+                                          pColor,
+                                          ScreenWhitePointOfCCC(&myCCC),
+                                          1,
+                                          XcmsCIEXYZFormat);
+        }
+        else
+        {
+            /* Find the maximum lightness for the given chroma. */
+            if (pColor->format != XcmsCIELabFormat)
+            {
+                if (_XcmsDIConvertColors(ccc,
+                                         pColor,
+                                         ScreenWhitePointOfCCC(ccc),
+                                         1,
+                                         XcmsCIELabFormat) == XcmsFailure)
+                {
+                    return (XcmsFailure);
+                }
+            }
+            if (XcmsCIELabQueryMaxL(&myCCC, degrees(hue), chroma, pColor) ==
+                XcmsFailure)
+            {
+                return (XcmsFailure);
+            }
+            retval = _XcmsDIConvertColors(&myCCC,
+                                          pColor,
+                                          ScreenWhitePointOfCCC(&myCCC),
+                                          1,
+                                          XcmsCIEXYZFormat);
+        }
+        if (retval != XcmsFailure && pCompressed != NULL)
+        {
+            *(pCompressed + i) = True;
+        }
+        return (retval);
     }
 }

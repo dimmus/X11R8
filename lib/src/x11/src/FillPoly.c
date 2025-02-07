@@ -25,31 +25,30 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XFillPolygon(
-    register Display *dpy,
-    Drawable d,
-    GC gc,
-    XPoint *points,
-    int n_points,
-    int shape,
-    int mode)
+XFillPolygon(register Display *dpy,
+             Drawable          d,
+             GC                gc,
+             XPoint           *points,
+             int               n_points,
+             int               shape,
+             int               mode)
 {
     register xFillPolyReq *req;
-    register long nbytes;
+    register long          nbytes;
 
     LockDisplay(dpy);
     FlushGC(dpy, gc);
     GetReq(FillPoly, req);
 
-    req->drawable = (CARD32) d;
-    req->gc = (CARD32) gc->gid;
-    req->shape = (BYTE) shape;
-    req->coordMode = (BYTE) mode;
+    req->drawable  = (CARD32)d;
+    req->gc        = (CARD32)gc->gid;
+    req->shape     = (BYTE)shape;
+    req->coordMode = (BYTE)mode;
 
     SetReqLen(req, n_points, 65535 - req->length);
 
@@ -57,7 +56,7 @@ XFillPolygon(
 
     nbytes = n_points << 2;
 
-    Data16 (dpy, (short *) points, nbytes);
+    Data16(dpy, (short *)points, nbytes);
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;

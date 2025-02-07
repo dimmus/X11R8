@@ -25,16 +25,14 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlib.h"
 #include "Xlibint.h"
 #include "Cmap.h"
 
 int
-XFreeColormap(
-    register Display *dpy,
-    Colormap cmap)
+XFreeColormap(register Display *dpy, Colormap cmap)
 {
     register xResourceReq *req;
 

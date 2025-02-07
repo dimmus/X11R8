@@ -25,21 +25,18 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XDestroySubwindows(
-    register Display *dpy,
-    Window win)
+XDestroySubwindows(register Display *dpy, Window win)
 {
     register xResourceReq *req;
 
     LockDisplay(dpy);
-    GetResReq (DestroySubwindows,win, req);
+    GetResReq(DestroySubwindows, win, req);
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

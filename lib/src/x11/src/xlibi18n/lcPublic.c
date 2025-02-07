@@ -24,74 +24,52 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "Xlibint.h"
 #include "XlcPubI.h"
 
 static const char *
-default_string(
-    XLCd lcd)
+default_string(XLCd lcd)
 {
     return XLC_PUBLIC(lcd, default_string);
 }
 
-static XLCd create (const char *name, XLCdMethods methods);
-static Bool initialize (XLCd lcd);
-static void destroy (XLCd lcd);
-static char *get_values (XLCd lcd, XlcArgList args, int num_args);
+static XLCd  create(const char *name, XLCdMethods methods);
+static Bool  initialize(XLCd lcd);
+static void  destroy(XLCd lcd);
+static char *get_values(XLCd lcd, XlcArgList args, int num_args);
 
 static XLCdPublicMethodsRec publicMethods = {
-    {
-	destroy,
-	_XlcDefaultMapModifiers,
-	NULL,
-	NULL,
-	_XrmDefaultInitParseInfo,
-	_XmbTextPropertyToTextList,
-	_XwcTextPropertyToTextList,
-	_Xutf8TextPropertyToTextList,
-	_XmbTextListToTextProperty,
-	_XwcTextListToTextProperty,
-	_Xutf8TextListToTextProperty,
-	_XwcFreeStringList,
-	default_string,
-	NULL,
-	NULL
-    },
-    {
-	NULL,
-	create,
-	initialize,
-	destroy,
-	get_values,
-	_XlcGetLocaleDataBase
-    }
+    { destroy,
+     _XlcDefaultMapModifiers, NULL,
+     NULL, _XrmDefaultInitParseInfo,
+     _XmbTextPropertyToTextList, _XwcTextPropertyToTextList,
+     _Xutf8TextPropertyToTextList, _XmbTextListToTextProperty,
+     _XwcTextListToTextProperty, _Xutf8TextListToTextProperty,
+     _XwcFreeStringList, default_string,
+     NULL, NULL },
+    { NULL, create, initialize, destroy, get_values, _XlcGetLocaleDataBase }
 };
 
-XLCdMethods _XlcPublicMethods = (XLCdMethods) &publicMethods;
+XLCdMethods _XlcPublicMethods = (XLCdMethods)&publicMethods;
 
 static XLCd
-create(
-    const char *name,
-    XLCdMethods methods)
+create(const char *name, XLCdMethods methods)
 {
     XLCd lcd;
     XLCdPublicMethods new;
 
     lcd = Xcalloc(1, sizeof(XLCdRec));
-    if (lcd == NULL)
-        return (XLCd) NULL;
+    if (lcd == NULL) return (XLCd)NULL;
 
     lcd->core = Xcalloc(1, sizeof(XLCdPublicRec));
-    if (lcd->core == NULL)
-	goto err;
+    if (lcd->core == NULL) goto err;
 
     new = Xmalloc(sizeof(XLCdPublicMethodsRec));
-    if (new == NULL)
-	goto err;
-    memcpy(new,methods,sizeof(XLCdPublicMethodsRec));
+    if (new == NULL) goto err;
+    memcpy(new, methods, sizeof(XLCdPublicMethodsRec));
     lcd->methods = (XLCdMethods) new;
 
     return lcd;
@@ -99,119 +77,111 @@ create(
 err:
     Xfree(lcd->core);
     Xfree(lcd);
-    return (XLCd) NULL;
+    return (XLCd)NULL;
 }
 
 static Bool
-load_public(
-    XLCd lcd)
+load_public(XLCd lcd)
 {
     XLCdPublicPart *pub = XLC_PUBLIC_PART(lcd);
-    char **values;
-    const char *str;
-    int num;
+    char          **values;
+    const char     *str;
+    int             num;
 
-    if(_XlcCreateLocaleDataBase(lcd) == NULL)
-	return False;
+    if (_XlcCreateLocaleDataBase(lcd) == NULL) return False;
 
     _XlcGetResource(lcd, "XLC_XLOCALE", "mb_cur_max", &values, &num);
-    if (num > 0) {
-	pub->mb_cur_max = atoi(values[0]);
-	if (pub->mb_cur_max < 1)
-	    pub->mb_cur_max = 1;
-    } else
-	pub->mb_cur_max = 1;
+    if (num > 0)
+    {
+        pub->mb_cur_max = atoi(values[0]);
+        if (pub->mb_cur_max < 1) pub->mb_cur_max = 1;
+    }
+    else pub->mb_cur_max = 1;
 
     _XlcGetResource(lcd, "XLC_XLOCALE", "state_depend_encoding", &values, &num);
     if (num > 0 && !_XlcCompareISOLatin1(values[0], "True"))
-	pub->is_state_depend = True;
-    else
-	pub->is_state_depend = False;
+        pub->is_state_depend = True;
+    else pub->is_state_depend = False;
 
     _XlcGetResource(lcd, "XLC_XLOCALE", "encoding_name", &values, &num);
-    str = (num > 0) ? values[0] : "STRING";
+    str                = (num > 0) ? values[0] : "STRING";
     pub->encoding_name = strdup(str);
-    if (pub->encoding_name == NULL)
-	return False;
+    if (pub->encoding_name == NULL) return False;
 
     return True;
 }
 
 static Bool
-initialize_core(
-    XLCd lcd)
+initialize_core(XLCd lcd)
 {
     XLCdMethods methods = lcd->methods;
-    XLCdMethods core = &publicMethods.core;
+    XLCdMethods core    = &publicMethods.core;
 
-    if (methods->close == NULL)
-	methods->close = core->close;
+    if (methods->close == NULL) methods->close = core->close;
 
     if (methods->map_modifiers == NULL)
-	methods->map_modifiers = core->map_modifiers;
+        methods->map_modifiers = core->map_modifiers;
 
     if (methods->open_om == NULL)
 #ifdef USE_DYNAMIC_LC
-	_XInitDefaultOM(lcd);
+        _XInitDefaultOM(lcd);
 #else
-	_XInitOM(lcd);
+        _XInitOM(lcd);
 #endif
 
     if (methods->open_im == NULL)
 #ifdef USE_DYNAMIC_LC
-	_XInitDefaultIM(lcd);
+        _XInitDefaultIM(lcd);
 #else
-	_XInitIM(lcd);
+        _XInitIM(lcd);
 #endif
 
     if (methods->init_parse_info == NULL)
-	methods->init_parse_info = core->init_parse_info;
+        methods->init_parse_info = core->init_parse_info;
 
     if (methods->mb_text_prop_to_list == NULL)
-	methods->mb_text_prop_to_list = core->mb_text_prop_to_list;
+        methods->mb_text_prop_to_list = core->mb_text_prop_to_list;
 
     if (methods->wc_text_prop_to_list == NULL)
-	methods->wc_text_prop_to_list = core->wc_text_prop_to_list;
+        methods->wc_text_prop_to_list = core->wc_text_prop_to_list;
 
     if (methods->utf8_text_prop_to_list == NULL)
-	methods->utf8_text_prop_to_list = core->utf8_text_prop_to_list;
+        methods->utf8_text_prop_to_list = core->utf8_text_prop_to_list;
 
     if (methods->mb_text_list_to_prop == NULL)
-	methods->mb_text_list_to_prop = core->mb_text_list_to_prop;
+        methods->mb_text_list_to_prop = core->mb_text_list_to_prop;
 
     if (methods->wc_text_list_to_prop == NULL)
-	methods->wc_text_list_to_prop = core->wc_text_list_to_prop;
+        methods->wc_text_list_to_prop = core->wc_text_list_to_prop;
 
     if (methods->utf8_text_list_to_prop == NULL)
-	methods->utf8_text_list_to_prop = core->utf8_text_list_to_prop;
+        methods->utf8_text_list_to_prop = core->utf8_text_list_to_prop;
 
     if (methods->wc_free_string_list == NULL)
-	methods->wc_free_string_list = core->wc_free_string_list;
+        methods->wc_free_string_list = core->wc_free_string_list;
 
     if (methods->default_string == NULL)
-	methods->default_string = core->default_string;
+        methods->default_string = core->default_string;
 
     return True;
 }
 
 static Bool
-initialize(
-    XLCd lcd)
+initialize(XLCd lcd)
 {
-    XLCdPublicMethodsPart *methods = XLC_PUBLIC_METHODS(lcd);
+    XLCdPublicMethodsPart *methods     = XLC_PUBLIC_METHODS(lcd);
     XLCdPublicMethodsPart *pub_methods = &publicMethods.pub;
-    XLCdPublicPart *pub = XLC_PUBLIC_PART(lcd);
-    char *name;
+    XLCdPublicPart        *pub         = XLC_PUBLIC_PART(lcd);
+    char                  *name;
 #if !defined(X_LOCALE)
-    int len;
-    char sinamebuf[256];
-    char* siname;
+    int   len;
+    char  sinamebuf[256];
+    char *siname;
 #endif
 
     _XlcInitCTInfo();
 
-    if (initialize_core(lcd) == False)
-	return False;
+    if (initialize_core(lcd) == False) return False;
 
     name = lcd->core->name;
 #if !defined(X_LOCALE)
@@ -219,44 +189,41 @@ initialize(
      * _XlMapOSLocaleName will return the same string or a substring
      * of name, so strlen(name) is okay
      */
-    if ((len = (int) strlen(name)) < sizeof sinamebuf)
-        siname = sinamebuf;
-    else
-        siname = Xmalloc (len + 1);
-    if (siname == NULL)
-        return False;
+    if ((len = (int)strlen(name)) < sizeof sinamebuf) siname = sinamebuf;
+    else siname = Xmalloc(len + 1);
+    if (siname == NULL) return False;
     name = _XlcMapOSLocaleName(name, siname);
 #endif
     /* _XlcResolveLocaleName will lookup the SI's name for the locale */
-    if (_XlcResolveLocaleName(name, pub) == 0) {
+    if (_XlcResolveLocaleName(name, pub) == 0)
+    {
 #if !defined(X_LOCALE)
-	if (siname != sinamebuf) Xfree (siname);
+        if (siname != sinamebuf) Xfree(siname);
 #endif
-	return False;
+        return False;
     }
 #if !defined(X_LOCALE)
-    if (siname != sinamebuf)
-        Xfree (siname);
+    if (siname != sinamebuf) Xfree(siname);
 #endif
 
-    if (pub->default_string == NULL)
-	pub->default_string = "";
+    if (pub->default_string == NULL) pub->default_string = "";
 
     if (methods->get_values == NULL)
-	methods->get_values = pub_methods->get_values;
+        methods->get_values = pub_methods->get_values;
 
     if (methods->get_resource == NULL)
-	methods->get_resource = pub_methods->get_resource;
+        methods->get_resource = pub_methods->get_resource;
 
     return load_public(lcd);
 }
 
 static void
-destroy_core(
-    XLCd lcd)
+destroy_core(XLCd lcd)
 {
-    if (lcd) {
-        if (lcd->core) {
+    if (lcd)
+    {
+        if (lcd->core)
+        {
             Xfree(lcd->core->name);
             Xfree(lcd->core->modifiers);
             Xfree(lcd->core);
@@ -267,8 +234,7 @@ destroy_core(
 }
 
 static void
-destroy(
-    XLCd lcd)
+destroy(XLCd lcd)
 {
     XLCdPublicPart *pub = XLC_PUBLIC_PART(lcd);
 
@@ -281,33 +247,48 @@ destroy(
 }
 
 static XlcResource resources[] = {
-    { XlcNCodeset, NULLQUARK, sizeof(char *),
-      XOffsetOf(XLCdPublicRec, pub.codeset), XlcGetMask },
-    { XlcNDefaultString, NULLQUARK, sizeof(char *),
-      XOffsetOf(XLCdPublicRec, pub.default_string), XlcGetMask },
-    { XlcNEncodingName, NULLQUARK, sizeof(char *),
-      XOffsetOf(XLCdPublicRec, pub.encoding_name), XlcGetMask },
-    { XlcNLanguage, NULLQUARK, sizeof(char *),
-      XOffsetOf(XLCdPublicRec, pub.language), XlcGetMask },
-    { XlcNMbCurMax, NULLQUARK, sizeof(int),
-      XOffsetOf(XLCdPublicRec, pub.mb_cur_max), XlcGetMask },
-    { XlcNStateDependentEncoding, NULLQUARK, sizeof(Bool),
-      XOffsetOf(XLCdPublicRec, pub.is_state_depend), XlcGetMask },
-    { XlcNTerritory, NULLQUARK, sizeof(char *),
-      XOffsetOf(XLCdPublicRec, pub.territory), XlcGetMask }
+    { XlcNCodeset,
+     NULLQUARK, sizeof(char *),
+     XOffsetOf(XLCdPublicRec, pub.codeset),
+     XlcGetMask },
+    { XlcNDefaultString,
+     NULLQUARK, sizeof(char *),
+     XOffsetOf(XLCdPublicRec, pub.default_string),
+     XlcGetMask },
+    { XlcNEncodingName,
+     NULLQUARK, sizeof(char *),
+     XOffsetOf(XLCdPublicRec, pub.encoding_name),
+     XlcGetMask },
+    { XlcNLanguage,
+     NULLQUARK, sizeof(char *),
+     XOffsetOf(XLCdPublicRec, pub.language),
+     XlcGetMask },
+    { XlcNMbCurMax,
+     NULLQUARK, sizeof(int),
+     XOffsetOf(XLCdPublicRec, pub.mb_cur_max),
+     XlcGetMask },
+    { XlcNStateDependentEncoding,
+     NULLQUARK, sizeof(Bool),
+     XOffsetOf(XLCdPublicRec, pub.is_state_depend),
+     XlcGetMask },
+    { XlcNTerritory,
+     NULLQUARK, sizeof(char *),
+     XOffsetOf(XLCdPublicRec, pub.territory),
+     XlcGetMask }
 };
 
 static char *
-get_values(
-    XLCd lcd,
-    XlcArgList args,
-    int num_args)
+get_values(XLCd lcd, XlcArgList args, int num_args)
 {
-    XLCdPublic pub = (XLCdPublic) lcd->core;
+    XLCdPublic pub = (XLCdPublic)lcd->core;
 
     if (resources[0].xrm_name == NULLQUARK)
-	_XlcCompileResourceList(resources, XlcNumber(resources));
+        _XlcCompileResourceList(resources, XlcNumber(resources));
 
-    return _XlcGetValues((XPointer) pub, resources, XlcNumber(resources), args,
-			 num_args, XlcGetMask);
+    return _XlcGetValues((XPointer)pub,
+                         resources,
+                         XlcNumber(resources),
+                         args,
+                         num_args,
+                         XlcGetMask);
 }

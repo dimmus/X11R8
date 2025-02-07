@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
@@ -42,9 +42,7 @@ XDisableAccessControl(register Display *dpy)
 }
 
 int
-XSetAccessControl(
-    register Display *dpy,
-    int mode)
+XSetAccessControl(register Display *dpy, int mode)
 
 {
     register xSetAccessControlReq *req;
@@ -56,4 +54,3 @@ XSetAccessControl(
     SyncHandle();
     return 1;
 }
-

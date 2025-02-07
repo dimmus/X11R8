@@ -45,20 +45,17 @@ from The Open Group.
 /* Written at Waterloo - JMSellens */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include <stdlib.h>
 #include "Xlib.h"
 
 char *
-XDisplayName(
-    _Xconst char *display)
+XDisplayName(_Xconst char *display)
 {
     char *d;
-    if ( display != (char *)NULL && *display != '\0' )
-	return( (char *)display );
-    if ( (d = getenv( "DISPLAY" )) != (char *)NULL )
-	return( d );
-    return( (char *) "" );
+    if (display != (char *)NULL && *display != '\0') return ((char *)display);
+    if ((d = getenv("DISPLAY")) != (char *)NULL) return (d);
+    return ((char *)"");
 }

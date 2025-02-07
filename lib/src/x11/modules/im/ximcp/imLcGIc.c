@@ -27,7 +27,7 @@ PERFORMANCE OF THIS SOFTWARE.
 ******************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xlcint.h"
@@ -36,12 +36,14 @@ PERFORMANCE OF THIS SOFTWARE.
 char *
 _XimLocalGetICValues(XIC xic, XIMArg *values)
 {
-    Xic			 ic = (Xic)xic;
-    XimDefICValues	 ic_values;
+    Xic            ic = (Xic)xic;
+    XimDefICValues ic_values;
 
     _XimGetCurrentICValues(ic, &ic_values);
-    return(_XimGetICValueData(ic, (XPointer)&ic_values,
-				ic->private.local.ic_resources,
-				ic->private.local.ic_num_resources,
-				values, XIM_GETICVALUES));
+    return (_XimGetICValueData(ic,
+                               (XPointer)&ic_values,
+                               ic->private.local.ic_resources,
+                               ic->private.local.ic_num_resources,
+                               values,
+                               XIM_GETICVALUES));
 }

@@ -27,7 +27,7 @@ PERFORMANCE OF THIS SOFTWARE.
 ******************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "X11/Xlib.h"
@@ -37,36 +37,39 @@ PERFORMANCE OF THIS SOFTWARE.
 #include "Ximint.h"
 
 static void
-_XimLocalUnSetFocus(
-    XIC	 xic)
+_XimLocalUnSetFocus(XIC xic)
 {
-    Xic  ic = (Xic)xic;
+    Xic ic                                       = (Xic)xic;
     ((Xim)ic->core.im)->private.local.current_ic = (XIC)NULL;
 
     if (ic->core.focus_window)
-	_XUnregisterFilter(ic->core.im->core.display,
-			ic->core.focus_window, _XimLocalFilter, (XPointer)ic);
+        _XUnregisterFilter(ic->core.im->core.display,
+                           ic->core.focus_window,
+                           _XimLocalFilter,
+                           (XPointer)ic);
     return;
 }
 
 static void
-_XimLocalDestroyIC(
-    XIC	 xic)
+_XimLocalDestroyIC(XIC xic)
 {
-    Xic	 ic = (Xic)xic;
+    Xic ic = (Xic)xic;
 
-    if(((Xim)ic->core.im)->private.local.current_ic == (XIC)ic) {
-	((Xim)ic->core.im)->private.local.current_ic = (XIC)NULL;
+    if (((Xim)ic->core.im)->private.local.current_ic == (XIC)ic)
+    {
+        ((Xim)ic->core.im)->private.local.current_ic = (XIC)NULL;
     }
     if (ic->core.focus_window)
-	_XUnregisterFilter(ic->core.im->core.display,
-			ic->core.focus_window, _XimLocalFilter, (XPointer)ic);
+        _XUnregisterFilter(ic->core.im->core.display,
+                           ic->core.focus_window,
+                           _XimLocalFilter,
+                           (XPointer)ic);
 
     Xfree(ic->private.local.ic_resources);
     ic->private.local.ic_resources = NULL;
 
     Xfree(ic->core.res_name);
-    ic->core.res_name=NULL;
+    ic->core.res_name = NULL;
 
     Xfree(ic->core.res_class);
     ic->core.res_class = NULL;
@@ -75,32 +78,33 @@ _XimLocalDestroyIC(
 }
 
 static void
-_XimLocalSetFocus(
-    XIC	 xic)
+_XimLocalSetFocus(XIC xic)
 {
-    Xic	 ic = (Xic)xic;
-    XIC	 current_ic = ((Xim)ic->core.im)->private.local.current_ic;
+    Xic ic         = (Xic)xic;
+    XIC current_ic = ((Xim)ic->core.im)->private.local.current_ic;
 
-    if (current_ic == (XIC)ic)
-	return;
+    if (current_ic == (XIC)ic) return;
 
-    if (current_ic != (XIC)NULL) {
-	_XimLocalUnSetFocus(current_ic);
+    if (current_ic != (XIC)NULL)
+    {
+        _XimLocalUnSetFocus(current_ic);
     }
     ((Xim)ic->core.im)->private.local.current_ic = (XIC)ic;
 
     if (ic->core.focus_window)
-	_XRegisterFilterByType(ic->core.im->core.display,
-			ic->core.focus_window, KeyPress, KeyRelease,
-			_XimLocalFilter, (XPointer)ic);
+        _XRegisterFilterByType(ic->core.im->core.display,
+                               ic->core.focus_window,
+                               KeyPress,
+                               KeyRelease,
+                               _XimLocalFilter,
+                               (XPointer)ic);
     return;
 }
 
 static void
-_XimLocalReset(
-    XIC	 xic)
+_XimLocalReset(XIC xic)
 {
-    Xic	 ic = (Xic)xic;
+    Xic ic                           = (Xic)xic;
     ic->private.local.composed       = 0;
     ic->private.local.context        = ((Xim)ic->core.im)->private.local.top;
     ic->private.local.brl_pressed    = 0;
@@ -109,53 +113,50 @@ _XimLocalReset(
 }
 
 static char *
-_XimLocalMbReset(
-    XIC	 xic)
+_XimLocalMbReset(XIC xic)
 {
     _XimLocalReset(xic);
     return (char *)NULL;
 }
 
 static wchar_t *
-_XimLocalWcReset(
-    XIC	 xic)
+_XimLocalWcReset(XIC xic)
 {
     _XimLocalReset(xic);
     return (wchar_t *)NULL;
 }
 
 static XICMethodsRec Local_ic_methods = {
-    _XimLocalDestroyIC, 	/* destroy */
-    _XimLocalSetFocus,  	/* set_focus */
-    _XimLocalUnSetFocus,	/* unset_focus */
-    _XimLocalSetICValues,	/* set_values */
-    _XimLocalGetICValues,	/* get_values */
-    _XimLocalMbReset,		/* mb_reset */
-    _XimLocalWcReset,		/* wc_reset */
-    _XimLocalMbReset,		/* utf8_reset */
-    _XimLocalMbLookupString,	/* mb_lookup_string */
-    _XimLocalWcLookupString,	/* wc_lookup_string */
-    _XimLocalUtf8LookupString	/* utf8_lookup_string */
+    _XimLocalDestroyIC,  /* destroy */
+    _XimLocalSetFocus,   /* set_focus */
+    _XimLocalUnSetFocus, /* unset_focus */
+    _XimLocalSetICValues, /* set_values */
+    _XimLocalGetICValues, /* get_values */
+    _XimLocalMbReset,  /* mb_reset */
+    _XimLocalWcReset,  /* wc_reset */
+    _XimLocalMbReset,  /* utf8_reset */
+    _XimLocalMbLookupString, /* mb_lookup_string */
+    _XimLocalWcLookupString, /* wc_lookup_string */
+    _XimLocalUtf8LookupString /* utf8_lookup_string */
 };
 
 XIC
-_XimLocalCreateIC(
-    XIM			 im,
-    XIMArg		*values)
+_XimLocalCreateIC(XIM im, XIMArg *values)
 {
-    Xic			 ic;
-    XimDefICValues	 ic_values={ 0 };
-    XIMResourceList	 res;
-    unsigned int	 num;
-    int			 len;
+    Xic             ic;
+    XimDefICValues  ic_values = { 0 };
+    XIMResourceList res;
+    unsigned int    num;
+    int             len;
 
     ic = Xcalloc(1, sizeof(XicRec));
-    if( ic  == (Xic)NULL) {
-	return ((XIC)NULL);
+    if (ic == (Xic)NULL)
+    {
+        return ((XIC)NULL);
     }
 
-    ic->methods = &Local_ic_methods;
-    ic->core.im = im;
+    ic->methods                      = &Local_ic_methods;
+    ic->core.im                      = im;
     ic->private.local.base           = ((Xim)im)->private.local.base;
     ic->private.local.context        = ((Xim)im)->private.local.top;
     ic->private.local.composed       = 0;
@@ -166,41 +167,55 @@ _XimLocalCreateIC(
     num = im->core.ic_num_resources;
     len = sizeof(XIMResource) * num;
     res = Xmalloc(len);
-    if( res  == (XIMResourceList)NULL) {
-	goto Set_Error;
+    if (res == (XIMResourceList)NULL)
+    {
+        goto Set_Error;
     }
     (void)memcpy((char *)res, (char *)im->core.ic_resources, len);
     ic->private.local.ic_resources     = res;
     ic->private.local.ic_num_resources = num;
 
-     if(_XimCheckLocalInputStyle(ic, (XPointer)&ic_values, values,
-				 im->core.styles, res, num) == False) {
-	goto Set_Error;
+    if (_XimCheckLocalInputStyle(ic,
+                                 (XPointer)&ic_values,
+                                 values,
+                                 im->core.styles,
+                                 res,
+                                 num) == False)
+    {
+        goto Set_Error;
     }
 
     _XimSetICMode(res, num, ic_values.input_style);
 
-    if(_XimSetICValueData(ic, (XPointer)&ic_values,
-			ic->private.local.ic_resources,
-			ic->private.local.ic_num_resources,
-			values, XIM_CREATEIC, True)) {
-	goto Set_Error;
+    if (_XimSetICValueData(ic,
+                           (XPointer)&ic_values,
+                           ic->private.local.ic_resources,
+                           ic->private.local.ic_num_resources,
+                           values,
+                           XIM_CREATEIC,
+                           True))
+    {
+        goto Set_Error;
     }
     ic_values.filter_events = KeyPressMask | KeyReleaseMask;
     _XimSetCurrentICValues(ic, &ic_values);
-    if(_XimSetICDefaults(ic, (XPointer)&ic_values,
-				XIM_SETICDEFAULTS, res, num) == False) {
-	goto Set_Error;
+    if (_XimSetICDefaults(ic,
+                          (XPointer)&ic_values,
+                          XIM_SETICDEFAULTS,
+                          res,
+                          num) == False)
+    {
+        goto Set_Error;
     }
     _XimSetCurrentICValues(ic, &ic_values);
 
-    return((XIC)ic);
+    return ((XIC)ic);
 
-Set_Error :
+Set_Error:
 
     Xfree(ic->private.local.ic_resources);
-     ic->private.local.ic_resources = NULL;
-     
+    ic->private.local.ic_resources = NULL;
+
     Xfree(ic);
-    return((XIC)NULL);
+    return ((XIC)NULL);
 }

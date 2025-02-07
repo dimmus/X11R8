@@ -25,23 +25,22 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XUngrabButton(
-    register Display *dpy,
-    unsigned int button, /* CARD8 */
-    unsigned int modifiers, /* CARD16 */
-    Window grab_window)
+XUngrabButton(register Display *dpy,
+              unsigned int      button, /* CARD8 */
+              unsigned int      modifiers, /* CARD16 */
+              Window            grab_window)
 {
     register xUngrabButtonReq *req;
 
     LockDisplay(dpy);
     GetReq(UngrabButton, req);
-    req->button = button;
-    req->modifiers = modifiers;
+    req->button     = button;
+    req->modifiers  = modifiers;
     req->grabWindow = grab_window;
     UnlockDisplay(dpy);
     SyncHandle();

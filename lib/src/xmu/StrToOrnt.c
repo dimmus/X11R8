@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Intrinsic.h"
 #include "X11/StringDefs.h"
@@ -40,8 +40,8 @@ static void InitializeQuarks(void);
 /*
  * Initialization
  */
-static	XrmQuark Qhorizontal, Qvertical;
-static Boolean haveQuarks;
+static XrmQuark Qhorizontal, Qvertical;
+static Boolean  haveQuarks;
 
 /*
  * Implementation
@@ -49,78 +49,80 @@ static Boolean haveQuarks;
 static void
 InitializeQuarks(void)
 {
-  if (!haveQuarks)
+    if (!haveQuarks)
     {
-      Qhorizontal = XrmPermStringToQuark(XtEhorizontal);
-      Qvertical = XrmPermStringToQuark(XtEvertical);
-      haveQuarks = True;
+        Qhorizontal = XrmPermStringToQuark(XtEhorizontal);
+        Qvertical   = XrmPermStringToQuark(XtEvertical);
+        haveQuarks  = True;
     }
 }
 
 /*ARGSUSED*/
 void
-XmuCvtStringToOrientation(XrmValuePtr args, Cardinal *num_args,
-			  XrmValuePtr fromVal, XrmValuePtr toVal)
+XmuCvtStringToOrientation(XrmValuePtr args,
+                          Cardinal   *num_args,
+                          XrmValuePtr fromVal,
+                          XrmValuePtr toVal)
 {
     static XtOrientation orient;
-    XrmQuark	q;
-  char name[11];
+    XrmQuark             q;
+    char                 name[11];
 
-  InitializeQuarks();
-  XmuNCopyISOLatin1Lowered(name, (char *)fromVal->addr, sizeof(name));
-  q = XrmStringToQuark(name);
+    InitializeQuarks();
+    XmuNCopyISOLatin1Lowered(name, (char *)fromVal->addr, sizeof(name));
+    q = XrmStringToQuark(name);
 
-  toVal->size = sizeof(XtJustify);
-  toVal->addr = (XPointer)&orient;
+    toVal->size = sizeof(XtJustify);
+    toVal->addr = (XPointer)&orient;
 
-  if (q == Qhorizontal)
-    	orient = XtorientHorizontal;
-  else if (q == Qvertical)
-    	orient = XtorientVertical;
-  else
+    if (q == Qhorizontal) orient = XtorientHorizontal;
+    else if (q == Qvertical) orient = XtorientVertical;
+    else
     {
-      toVal->addr = NULL;
-      XtStringConversionWarning((char *)fromVal->addr, XtROrientation);
+        toVal->addr = NULL;
+        XtStringConversionWarning((char *)fromVal->addr, XtROrientation);
     }
 }
 
 /*ARGSUSED*/
 Boolean
-XmuCvtOrientationToString(Display *dpy, XrmValuePtr args, Cardinal *num_args,
-			  XrmValuePtr fromVal, XrmValuePtr toVal,
-			  XtPointer *data)
+XmuCvtOrientationToString(Display    *dpy,
+                          XrmValuePtr args,
+                          Cardinal   *num_args,
+                          XrmValuePtr fromVal,
+                          XrmValuePtr toVal,
+                          XtPointer  *data)
 {
-  static String buffer;
-  Cardinal size;
+    static String buffer;
+    Cardinal      size;
 
-  switch (*(XtOrientation *)fromVal->addr)
+    switch (*(XtOrientation *)fromVal->addr)
     {
-    case XtorientVertical:
-      buffer = XtEvertical;
-      break;
-    case XtorientHorizontal:
-      buffer = XtEhorizontal;
-      break;
-    default:
-      XtWarning("Cannot convert Orientation to String");
-      toVal->addr = NULL;
-      toVal->size = 0;
-      return (False);
+        case XtorientVertical:
+            buffer = XtEvertical;
+            break;
+        case XtorientHorizontal:
+            buffer = XtEhorizontal;
+            break;
+        default:
+            XtWarning("Cannot convert Orientation to String");
+            toVal->addr = NULL;
+            toVal->size = 0;
+            return (False);
     }
 
-  size = strlen(buffer) + 1;
-  if (toVal->addr != NULL)
+    size = strlen(buffer) + 1;
+    if (toVal->addr != NULL)
     {
-      if (toVal->size < size)
-	{
-	  toVal->size = size;
-	  return (False);
-	}
-      strcpy((char *)toVal->addr, buffer);
+        if (toVal->size < size)
+        {
+            toVal->size = size;
+            return (False);
+        }
+        strcpy((char *)toVal->addr, buffer);
     }
-  else
-    toVal->addr = (XPointer)buffer;
-  toVal->size = sizeof(String);
+    else toVal->addr = (XPointer)buffer;
+    toVal->size = sizeof(String);
 
-  return (True);
+    return (True);
 }

@@ -25,24 +25,20 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XSetWindowBackgroundPixmap(
-    register Display *dpy,
-    Window w,
-    Pixmap pixmap)
+XSetWindowBackgroundPixmap(register Display *dpy, Window w, Pixmap pixmap)
 {
     register xChangeWindowAttributesReq *req;
-    LockDisplay (dpy);
-    GetReqExtra (ChangeWindowAttributes, 4, req);
-    req->window = w;
+    LockDisplay(dpy);
+    GetReqExtra(ChangeWindowAttributes, 4, req);
+    req->window    = w;
     req->valueMask = CWBackPixmap;
-    OneDataCard32 (dpy, NEXTPTR(req,xChangeWindowAttributesReq), pixmap);
-    UnlockDisplay (dpy);
+    OneDataCard32(dpy, NEXTPTR(req, xChangeWindowAttributesReq), pixmap);
+    UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

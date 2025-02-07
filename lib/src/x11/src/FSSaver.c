@@ -25,28 +25,26 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
 XActivateScreenSaver(register Display *dpy)
 {
-    XForceScreenSaver (dpy, ScreenSaverActive);
+    XForceScreenSaver(dpy, ScreenSaverActive);
     return 1;
 }
 
 int
 XResetScreenSaver(register Display *dpy)
 {
-    XForceScreenSaver (dpy, ScreenSaverReset);
+    XForceScreenSaver(dpy, ScreenSaverReset);
     return 1;
 }
 
 int
-XForceScreenSaver(
-    register Display *dpy,
-    int mode)
+XForceScreenSaver(register Display *dpy, int mode)
 {
     register xForceScreenSaverReq *req;
 
@@ -57,4 +55,3 @@ XForceScreenSaver(
     SyncHandle();
     return 1;
 }
-

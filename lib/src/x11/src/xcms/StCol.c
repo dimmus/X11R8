@@ -33,13 +33,12 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
 
-
 /************************************************************************
  *									*
  *			PUBLIC ROUTINES					*
@@ -53,10 +52,7 @@
  *	SYNOPSIS
  */
 Status
-XcmsStoreColor(
-    Display *dpy,
-    Colormap colormap,
-    XcmsColor *pColor_in)
+XcmsStoreColor(Display *dpy, Colormap colormap, XcmsColor *pColor_in)
 /*
  *	DESCRIPTION
  *		Given a device-dependent or device-independent color
@@ -77,6 +73,10 @@ XcmsStoreColor(
     XcmsColor tmpColor;
 
     tmpColor = *pColor_in;
-    return(_XcmsSetGetColor(XStoreColor, dpy, colormap,
-			      &tmpColor, XcmsRGBFormat, (Bool *) NULL));
+    return (_XcmsSetGetColor(XStoreColor,
+                             dpy,
+                             colormap,
+                             &tmpColor,
+                             XcmsRGBFormat,
+                             (Bool *)NULL));
 }

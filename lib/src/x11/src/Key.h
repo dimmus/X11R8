@@ -9,12 +9,8 @@
 extern const unsigned char _XkeyTable[];
 #endif
 
-extern int
-_XKeyInitialize(
-    Display *dpy);
+extern int _XKeyInitialize(Display *dpy);
 
-extern XrmDatabase
-_XInitKeysymDB(
-        void);
+extern XrmDatabase _XInitKeysymDB(void);
 
 #endif /* _KEY_H_ */

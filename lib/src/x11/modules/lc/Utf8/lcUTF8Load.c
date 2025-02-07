@@ -31,7 +31,7 @@ OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "Xlibint.h"
@@ -39,29 +39,31 @@ OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "XlcGeneric.h"
 
 XLCd
-_XlcUtf8Loader(
-    const char *name)
+_XlcUtf8Loader(const char *name)
 {
     XLCd lcd;
 
     lcd = _XlcCreateLC(name, _XlcGenericMethods);
-    if (lcd == (XLCd) NULL)
-	return lcd;
+    if (lcd == (XLCd)NULL) return lcd;
 
     /* The official IANA name for UTF-8 is "UTF-8" in upper case with a dash. */
-    if (!XLC_PUBLIC_PART(lcd)->codeset) {
-	_XlcDestroyLC(lcd);
-	return (XLCd) NULL;
+    if (!XLC_PUBLIC_PART(lcd)->codeset)
+    {
+        _XlcDestroyLC(lcd);
+        return (XLCd)NULL;
     }
-    else if (!_XlcCompareISOLatin1(XLC_PUBLIC_PART(lcd)->codeset, "UTF-8")) {
+    else if (!_XlcCompareISOLatin1(XLC_PUBLIC_PART(lcd)->codeset, "UTF-8"))
+    {
         _XlcAddUtf8LocaleConverters(lcd);
     }
-    else if (!_XlcCompareISOLatin1(XLC_PUBLIC_PART(lcd)->codeset, "GB18030")) {
+    else if (!_XlcCompareISOLatin1(XLC_PUBLIC_PART(lcd)->codeset, "GB18030"))
+    {
         _XlcAddGB18030LocaleConverters(lcd);
     }
-    else {
-	_XlcDestroyLC(lcd);
-	return (XLCd) NULL;
+    else
+    {
+        _XlcDestroyLC(lcd);
+        return (XLCd)NULL;
     }
 
     _XlcAddUtf8Converters(lcd);

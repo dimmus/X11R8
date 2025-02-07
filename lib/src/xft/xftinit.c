@@ -25,91 +25,92 @@
 static Bool _XftConfigInitialized;
 
 _X_EXPORT Bool
-XftInit (_Xconst char *config _X_UNUSED)
+XftInit(_Xconst char *config _X_UNUSED)
 {
-    if (_XftConfigInitialized)
-	return True;
+    if (_XftConfigInitialized) return True;
     _XftConfigInitialized = True;
-    if (!FcInit ())
-	return False;
+    if (!FcInit()) return False;
     return True;
 }
 
 _X_EXPORT int
-XftGetVersion (void)
+XftGetVersion(void)
 {
     return XftVersion;
 }
 
-static struct {
+static struct
+{
     const char *name;
-    int	    alloc_count;
-    size_t  alloc_mem;
-    int	    free_count;
-    size_t  free_mem;
+    int         alloc_count;
+    size_t      alloc_mem;
+    int         free_count;
+    size_t      free_mem;
 } XftInUse[XFT_MEM_NUM] = {
-    { "XftDraw",   0, 0, 0, 0 },	/* XFT_MEM_DRAW */
-    { "XftFont",   0, 0, 0, 0 },	/* XFT_MEM_FONT */
-    { "XftFtFile", 0, 0, 0, 0 },	/* XFT_MEM_FILE */
-    { "XftGlyph",  0, 0, 0, 0 },	/* XFT_MEM_GLYPH */
+    { "XftDraw",   0, 0, 0, 0 }, /* XFT_MEM_DRAW */
+    { "XftFont",   0, 0, 0, 0 }, /* XFT_MEM_FONT */
+    { "XftFtFile", 0, 0, 0, 0 }, /* XFT_MEM_FILE */
+    { "XftGlyph",  0, 0, 0, 0 }, /* XFT_MEM_GLYPH */
 };
 
-static int  XftAllocCount;
+static int    XftAllocCount;
 static size_t XftAllocMem;
 
-static int  XftFreeCount;
+static int    XftFreeCount;
 static size_t XftFreeMem;
 
-static const size_t  XftMemNotice = 1*1024*1024;
+static const size_t XftMemNotice = 1 * 1024 * 1024;
 
-static size_t  XftAllocNotify, XftFreeNotify;
+static size_t XftAllocNotify, XftFreeNotify;
 
 _X_HIDDEN void
-XftMemReport (void)
+XftMemReport(void)
 {
-    int	i;
-    printf ("Xft Memory Usage:\n");
-    printf ("\t    Which       Alloc           Free\n");
-    printf ("\t            count   bytes   count   bytes\n");
+    int i;
+    printf("Xft Memory Usage:\n");
+    printf("\t    Which       Alloc           Free\n");
+    printf("\t            count   bytes   count   bytes\n");
     for (i = 0; i < XFT_MEM_NUM; i++)
-	printf ("\t%9.9s%8d%8lu%8d%8lu\n",
-		XftInUse[i].name,
-		XftInUse[i].alloc_count, (unsigned long) XftInUse[i].alloc_mem,
-		XftInUse[i].free_count, (unsigned long) XftInUse[i].free_mem);
-    printf ("\t%9.9s%8d%8lu%8d%8lu\n",
-	    "Total",
-	    XftAllocCount, (unsigned long) XftAllocMem,
-	    XftFreeCount, (unsigned long) XftFreeMem);
+        printf("\t%9.9s%8d%8lu%8d%8lu\n",
+               XftInUse[i].name,
+               XftInUse[i].alloc_count,
+               (unsigned long)XftInUse[i].alloc_mem,
+               XftInUse[i].free_count,
+               (unsigned long)XftInUse[i].free_mem);
+    printf("\t%9.9s%8d%8lu%8d%8lu\n",
+           "Total",
+           XftAllocCount,
+           (unsigned long)XftAllocMem,
+           XftFreeCount,
+           (unsigned long)XftFreeMem);
     XftAllocNotify = 0;
-    XftFreeNotify = 0;
+    XftFreeNotify  = 0;
 }
 
 _X_HIDDEN void
-XftMemAlloc (int kind, size_t size)
+XftMemAlloc(int kind, size_t size)
 {
     if (XftDebug() & XFT_DBG_MEMORY)
     {
-	XftInUse[kind].alloc_count++;
-	XftInUse[kind].alloc_mem += size;
-	XftAllocCount++;
-	XftAllocMem += size;
-	XftAllocNotify += size;
-	if (XftAllocNotify > XftMemNotice)
-	    XftMemReport ();
+        XftInUse[kind].alloc_count++;
+        XftInUse[kind].alloc_mem += size;
+        XftAllocCount++;
+        XftAllocMem += size;
+        XftAllocNotify += size;
+        if (XftAllocNotify > XftMemNotice) XftMemReport();
     }
 }
 
 _X_HIDDEN void
-XftMemFree (int kind, size_t size)
+XftMemFree(int kind, size_t size)
 {
     if (XftDebug() & XFT_DBG_MEMORY)
     {
-	XftInUse[kind].free_count++;
-	XftInUse[kind].free_mem += size;
-	XftFreeCount++;
-	XftFreeMem += size;
-	XftFreeNotify += size;
-	if (XftFreeNotify > XftMemNotice)
-	    XftMemReport ();
+        XftInUse[kind].free_count++;
+        XftInUse[kind].free_mem += size;
+        XftFreeCount++;
+        XftFreeMem += size;
+        XftFreeNotify += size;
+        if (XftFreeNotify > XftMemNotice) XftMemReport();
     }
 }

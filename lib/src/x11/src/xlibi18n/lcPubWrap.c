@@ -24,7 +24,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "XlcPubI.h"
@@ -32,10 +32,10 @@
 char *
 _XGetLCValues(XLCd lcd, ...)
 {
-    va_list var;
-    XlcArgList args;
-    char *ret;
-    int num_args;
+    va_list                var;
+    XlcArgList             args;
+    char                  *ret;
+    int                    num_args;
     XLCdPublicMethodsPart *methods = XLC_PUBLIC_METHODS(lcd);
 
     va_start(var, lcd);
@@ -46,8 +46,7 @@ _XGetLCValues(XLCd lcd, ...)
     _XlcVaToArgList(var, num_args, &args);
     va_end(var);
 
-    if (args == (XlcArgList) NULL)
-	return (char *) NULL;
+    if (args == (XlcArgList)NULL) return (char *)NULL;
 
     ret = (*methods->get_values)(lcd, args, num_args);
 
@@ -57,42 +56,36 @@ _XGetLCValues(XLCd lcd, ...)
 }
 
 void
-_XlcDestroyLC(
-    XLCd lcd)
+_XlcDestroyLC(XLCd lcd)
 {
-    XLCdPublicMethods methods = (XLCdPublicMethods) lcd->methods;
+    XLCdPublicMethods methods = (XLCdPublicMethods)lcd->methods;
 
     (*methods->pub.destroy)(lcd);
 }
 
 XLCd
-_XlcCreateLC(
-    const char *name,
-    XLCdMethods methods)
+_XlcCreateLC(const char *name, XLCdMethods methods)
 {
-    XLCdPublicMethods pub_methods = (XLCdPublicMethods) methods;
-    XLCd lcd;
+    XLCdPublicMethods pub_methods = (XLCdPublicMethods)methods;
+    XLCd              lcd;
 
     lcd = (*pub_methods->pub.create)(name, methods);
-    if (lcd == NULL)
-	return (XLCd) NULL;
+    if (lcd == NULL) return (XLCd)NULL;
 
-    if (lcd->core->name == NULL) {
-	lcd->core->name = strdup(name);
-	if (lcd->core->name == NULL)
-	    goto err;
+    if (lcd->core->name == NULL)
+    {
+        lcd->core->name = strdup(name);
+        if (lcd->core->name == NULL) goto err;
     }
 
-    if (lcd->methods == NULL)
-	lcd->methods = methods;
+    if (lcd->methods == NULL) lcd->methods = methods;
 
-    if ((*pub_methods->pub.initialize)(lcd) == False)
-	goto err;
+    if ((*pub_methods->pub.initialize)(lcd) == False) goto err;
 
     return lcd;
 
 err:
     _XlcDestroyLC(lcd);
 
-    return (XLCd) NULL;
+    return (XLCd)NULL;
 }

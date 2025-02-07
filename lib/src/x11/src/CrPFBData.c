@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlib.h"
 #include <stdio.h>
@@ -48,42 +48,40 @@ in this Software without prior written authorization from The Open Group.
  *    xoffset=0
  *    no extra bytes per line
  */
-Pixmap XCreatePixmapFromBitmapData(
-    Display *display,
-    Drawable d,
-    char *data,
-    unsigned int width,
-    unsigned int height,
-    unsigned long fg,
-    unsigned long bg,
-    unsigned int depth)
+Pixmap
+XCreatePixmapFromBitmapData(Display      *display,
+                            Drawable      d,
+                            char         *data,
+                            unsigned int  width,
+                            unsigned int  height,
+                            unsigned long fg,
+                            unsigned long bg,
+                            unsigned int  depth)
 {
-    Pixmap pix = XCreatePixmap(display, d, width, height, depth);
-    XGCValues gcv = {
-        .foreground = fg,
-        .background = bg
-    };
-    GC gc = XCreateGC(display, pix, GCForeground|GCBackground, &gcv);
-    if (gc == NULL) {
+    Pixmap    pix = XCreatePixmap(display, d, width, height, depth);
+    XGCValues gcv = { .foreground = fg, .background = bg };
+    GC        gc  = XCreateGC(display, pix, GCForeground | GCBackground, &gcv);
+    if (gc == NULL)
+    {
         XFreePixmap(display, pix);
-        return (Pixmap) None;
-    } else {
-        XImage ximage = {
-            .height = height,
-            .width = width,
-            .depth = 1,
-            .bits_per_pixel = 1,
-            .xoffset = 0,
-            .format = XYBitmap,
-            .data = data,
-            .byte_order = LSBFirst,
-            .bitmap_unit = 8,
-            .bitmap_bit_order = LSBFirst,
-            .bitmap_pad = 8,
-            .bytes_per_line = (width + 7) / 8
-        };
+        return (Pixmap)None;
+    }
+    else
+    {
+        XImage ximage = { .height           = height,
+                          .width            = width,
+                          .depth            = 1,
+                          .bits_per_pixel   = 1,
+                          .xoffset          = 0,
+                          .format           = XYBitmap,
+                          .data             = data,
+                          .byte_order       = LSBFirst,
+                          .bitmap_unit      = 8,
+                          .bitmap_bit_order = LSBFirst,
+                          .bitmap_pad       = 8,
+                          .bytes_per_line   = (width + 7) / 8 };
         XPutImage(display, pix, gc, &ximage, 0, 0, 0, 0, width, height);
         XFreeGC(display, gc);
-        return(pix);
+        return (pix);
     }
 }

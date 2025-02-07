@@ -26,14 +26,14 @@
 #include <pthread.h>
 #include <sys/types.h>
 
-struct xshmfence {
+struct xshmfence
+{
     pthread_mutex_t lock;
     pthread_cond_t  wakeup;
     int             value;
     int             waiting;
 };
 
-void
-xshmfence_init(int fd);
+void xshmfence_init(int fd);
 
 #endif /* _XSHMFENCE_PTHREAD_H_ */

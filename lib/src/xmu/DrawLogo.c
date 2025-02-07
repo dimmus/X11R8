@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xlib.h"
 #include "X11/Xmu/Drawing.h"
@@ -40,19 +40,24 @@ in this Software without prior written authorization from The Open Group.
  *  the logo line up as well as possible considering rasterization.
  */
 void
-XmuDrawLogo(Display *dpy, Drawable drawable, GC gcFore, GC gcBack,
-	    int x, int y, unsigned int width, unsigned int height)
+XmuDrawLogo(Display     *dpy,
+            Drawable     drawable,
+            GC           gcFore,
+            GC           gcBack,
+            int          x,
+            int          y,
+            unsigned int width,
+            unsigned int height)
 {
     unsigned int size;
-    int thin, gap, d31;
-    XPoint poly[4];
+    int          thin, gap, d31;
+    XPoint       poly[4];
 
     XFillRectangle(dpy, drawable, gcBack, x, y, width, height);
 
     /* for now, do a centered even-sized square, at least for now */
     size = width;
-    if (height < width)
-	 size = height;
+    if (height < width) size = height;
     size &= ~1;
     x += (width - size) >> 1;
     y += (height - size) >> 1;
@@ -73,12 +78,16 @@ XmuDrawLogo(Display *dpy, Drawable drawable, GC gcFore, GC gcBack,
 
     thin = (size / 11);
     if (thin < 1) thin = 1;
-    gap = (thin+3) / 4;
-    d31 = thin + thin + gap;
-    poly[0].x = x + size;              poly[0].y = y;
-    poly[1].x = x + size-d31;          poly[1].y = y;
-    poly[2].x = x + 0;                 poly[2].y = y + size;
-    poly[3].x = x + d31;               poly[3].y = y + size;
+    gap       = (thin + 3) / 4;
+    d31       = thin + thin + gap;
+    poly[0].x = x + size;
+    poly[0].y = y;
+    poly[1].x = x + size - d31;
+    poly[1].y = y;
+    poly[2].x = x + 0;
+    poly[2].y = y + size;
+    poly[3].x = x + d31;
+    poly[3].y = y + size;
     XFillPolygon(dpy, drawable, gcFore, poly, 4, Convex, CoordModeOrigin);
 
 /*
@@ -92,10 +101,14 @@ XmuDrawLogo(Display *dpy, Drawable drawable, GC gcFore, GC gcBack,
  *      /__/__/
  */
 
-    poly[0].x = x + d31/2;                       poly[0].y = y + size;
-    poly[1].x = x + size / 2;                    poly[1].y = y + size/2;
-    poly[2].x = x + (size/2)+(d31-(d31/2));      poly[2].y = y + size/2;
-    poly[3].x = x + d31;                         poly[3].y = y + size;
+    poly[0].x = x + d31 / 2;
+    poly[0].y = y + size;
+    poly[1].x = x + size / 2;
+    poly[1].y = y + size / 2;
+    poly[2].x = x + (size / 2) + (d31 - (d31 / 2));
+    poly[2].y = y + size / 2;
+    poly[3].x = x + d31;
+    poly[3].y = y + size;
     XFillPolygon(dpy, drawable, gcBack, poly, 4, Convex, CoordModeOrigin);
 
 /*
@@ -109,10 +122,14 @@ XmuDrawLogo(Display *dpy, Drawable drawable, GC gcFore, GC gcBack,
  *      /_____/
  */
 
-    poly[0].x = x + size - d31/2;                poly[0].y = y;
-    poly[1].x = x + size / 2;                    poly[1].y = y + size/2;
-    poly[2].x = x + (size/2)-(d31-(d31/2));      poly[2].y = y + size/2;
-    poly[3].x = x + size - d31;                  poly[3].y = y;
+    poly[0].x = x + size - d31 / 2;
+    poly[0].y = y;
+    poly[1].x = x + size / 2;
+    poly[1].y = y + size / 2;
+    poly[2].x = x + (size / 2) - (d31 - (d31 / 2));
+    poly[2].y = y + size / 2;
+    poly[3].x = x + size - d31;
+    poly[3].y = y;
     XFillPolygon(dpy, drawable, gcBack, poly, 4, Convex, CoordModeOrigin);
 
 /*
@@ -128,10 +145,14 @@ XmuDrawLogo(Display *dpy, Drawable drawable, GC gcFore, GC gcBack,
  *     \____\
  */
 
-    poly[0].x = x;                     poly[0].y = y;
-    poly[1].x = x + size/4;            poly[1].y = y;
-    poly[2].x = x + size;              poly[2].y = y + size;
-    poly[3].x = x + size - size/4;     poly[3].y = y + size;
+    poly[0].x = x;
+    poly[0].y = y;
+    poly[1].x = x + size / 4;
+    poly[1].y = y;
+    poly[2].x = x + size;
+    poly[2].y = y + size;
+    poly[3].x = x + size - size / 4;
+    poly[3].y = y + size;
     XFillPolygon(dpy, drawable, gcFore, poly, 4, Convex, CoordModeOrigin);
 
 /*
@@ -144,9 +165,13 @@ XmuDrawLogo(Display *dpy, Drawable drawable, GC gcFore, GC gcBack,
  *      /
  */
 
-    poly[0].x = x + size- thin;        poly[0].y = y;
-    poly[1].x = x + size-( thin+gap);  poly[1].y = y;
-    poly[2].x = x + thin;              poly[2].y = y + size;
-    poly[3].x = x + thin + gap;        poly[3].y = y + size;
+    poly[0].x = x + size - thin;
+    poly[0].y = y;
+    poly[1].x = x + size - (thin + gap);
+    poly[1].y = y;
+    poly[2].x = x + thin;
+    poly[2].y = y + size;
+    poly[3].x = x + thin + gap;
+    poly[3].y = y + size;
     XFillPolygon(dpy, drawable, gcBack, poly, 4, Convex, CoordModeOrigin);
 }

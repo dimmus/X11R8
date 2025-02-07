@@ -35,57 +35,58 @@
 /* October 2004, source code review by Thomas Biege <thomas@suse.de> */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "XpmI.h"
 #include <sys/stat.h>
 #ifndef WIN32
-#include <unistd.h>
+#  include <unistd.h>
 #endif
 #include <fcntl.h>
 #ifdef WIN32
-#include <io.h>
-#define stat _stat
-#define fstat _fstat
-#define fdopen _fdopen
-#define O_RDONLY _O_RDONLY
+#  include <io.h>
+#  define stat     _stat
+#  define fstat    _fstat
+#  define fdopen   _fdopen
+#  define O_RDONLY _O_RDONLY
 #endif
 
 int
-XpmReadFileToBuffer(
-    const char	 *filename,
-    char	**buffer_return)
+XpmReadFileToBuffer(const char *filename, char **buffer_return)
 {
-    int fd, fcheck;
-    off_t len;
-    char *ptr;
+    int         fd, fcheck;
+    off_t       len;
+    char       *ptr;
     struct stat stats;
-    FILE *fp;
+    FILE       *fp;
 
     *buffer_return = NULL;
 
     fd = open(filename, O_RDONLY | O_CLOEXEC);
-    if (fd < 0)
-	return XpmOpenFailed;
+    if (fd < 0) return XpmOpenFailed;
 
-    if (fstat(fd, &stats)) {
-	close(fd);
-	return XpmOpenFailed;
+    if (fstat(fd, &stats))
+    {
+        close(fd);
+        return XpmOpenFailed;
     }
     fp = fdopen(fd, "r");
-    if (!fp) {
-	close(fd);
-	return XpmOpenFailed;
+    if (!fp)
+    {
+        close(fd);
+        return XpmOpenFailed;
     }
     len = stats.st_size;
-    if (len < 0 || len >= SIZE_MAX) {
-	fclose(fp);
-	return XpmOpenFailed;
+    if (len < 0 || len >= SIZE_MAX)
+    {
+        fclose(fp);
+        return XpmOpenFailed;
     }
-    ptr = (char *) XpmMalloc(len + 1);
-    if (!ptr) {
-	fclose(fp);
-	return XpmNoMemory;
+    ptr = (char *)XpmMalloc(len + 1);
+    if (!ptr)
+    {
+        fclose(fp);
+        return XpmNoMemory;
     }
     fcheck = fread(ptr, 1, len, fp);
     fclose(fp);
@@ -104,14 +105,16 @@ XpmReadFileToBuffer(
        We'll check for 0 for gross error that's all.
     */
     len = fcheck;
-    if (fcheck == 0) {
+    if (fcheck == 0)
+    {
 #else
-    if (fcheck != len) {
+    if (fcheck != len)
+    {
 #endif
-	XpmFree(ptr);
-	return XpmOpenFailed;
+        XpmFree(ptr);
+        return XpmOpenFailed;
     }
-    ptr[len] = '\0';
+    ptr[len]       = '\0';
     *buffer_return = ptr;
     return XpmSuccess;
 }

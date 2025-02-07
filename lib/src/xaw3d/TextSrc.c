@@ -36,7 +36,7 @@ in this Software without prior written authorization from the X Consortium.
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 #include "X11/Xaw3d/Xaw3dP.h"
 #include "X11/IntrinsicP.h"
@@ -47,7 +47,7 @@ in this Software without prior written authorization from the X Consortium.
 #include "X11/Xmu/Atoms.h"
 #include "X11/Xmu/CharSet.h"
 #ifdef XAW_INTERNATIONALIZATION
-#include "XawI18n.h"
+#  include "XawI18n.h"
 #endif
 #include <stdio.h>
 #include <ctype.h>
@@ -62,69 +62,80 @@ in this Software without prior written authorization from the X Consortium.
 
 #define offset(field) XtOffsetOf(TextSrcRec, textSrc.field)
 static XtResource resources[] = {
-    {XtNeditType, XtCEditType, XtREditMode, sizeof(XawTextEditType),
-        offset(edit_mode), XtRString, "read"},
+    { XtNeditType,
+     XtCEditType, XtREditMode,
+     sizeof(XawTextEditType),
+     offset(edit_mode),
+     XtRString, "read" },
 };
 
 static void ClassInitialize(void);
 static void ClassPartInitialize(WidgetClass);
 static void SetSelection(Widget, XawTextPosition, XawTextPosition, Atom);
-static void CvtStringToEditMode(XrmValuePtr, Cardinal *, XrmValuePtr, XrmValuePtr);
-static Boolean ConvertSelection(Widget, Atom *, Atom *, Atom *, XtPointer *,
-                                unsigned long *, int *);
-static XawTextPosition Search(Widget, XawTextPosition, XawTextScanDirection,
-                       XawTextBlock *);
-static XawTextPosition Scan(Widget, XawTextPosition, XawTextScanType,
-                            XawTextScanDirection, int, Boolean);
+static void
+CvtStringToEditMode(XrmValuePtr, Cardinal *, XrmValuePtr, XrmValuePtr);
+static Boolean ConvertSelection(Widget,
+                                Atom *,
+                                Atom *,
+                                Atom *,
+                                XtPointer *,
+                                unsigned long *,
+                                int *);
+static XawTextPosition
+Search(Widget, XawTextPosition, XawTextScanDirection, XawTextBlock *);
+static XawTextPosition Scan(Widget,
+                            XawTextPosition,
+                            XawTextScanType,
+                            XawTextScanDirection,
+                            int,
+                            Boolean);
 static XawTextPosition Read(Widget, XawTextPosition, XawTextBlock *, int);
 static int Replace(Widget, XawTextPosition, XawTextPosition, XawTextBlock *);
 
-#define SuperClass		(&objectClassRec)
+#define SuperClass (&objectClassRec)
 TextSrcClassRec textSrcClassRec = {
-  {
-/* core_class fields */
-    /* superclass	  	*/	(WidgetClass) SuperClass,
-    /* class_name	  	*/	"TextSrc",
-    /* widget_size	  	*/	sizeof(TextSrcRec),
-    /* class_initialize   	*/	ClassInitialize,
-    /* class_part_initialize	*/	ClassPartInitialize,
-    /* class_inited       	*/	FALSE,
-    /* initialize	  	*/	NULL,
-    /* initialize_hook		*/	NULL,
-    /* realize		  	*/	NULL,
-    /* actions		  	*/	NULL,
-    /* num_actions	  	*/	0,
-    /* resources	  	*/	resources,
-    /* num_resources	  	*/	XtNumber(resources),
-    /* xrm_class	  	*/	NULLQUARK,
-    /* compress_motion	  	*/	FALSE,
-    /* compress_exposure  	*/	FALSE,
-    /* compress_enterleave	*/	FALSE,
-    /* visible_interest	  	*/	FALSE,
-    /* destroy		  	*/	NULL,
-    /* resize		  	*/	NULL,
-    /* expose		  	*/	NULL,
-    /* set_values	  	*/	NULL,
-    /* set_values_hook		*/	NULL,
-    /* set_values_almost	*/	NULL,
-    /* get_values_hook		*/	NULL,
-    /* accept_focus	 	*/	NULL,
-    /* version			*/	XtVersion,
-    /* callback_private   	*/	NULL,
-    /* tm_table		   	*/	NULL,
-    /* query_geometry		*/	NULL,
-    /* display_accelerator	*/	NULL,
-    /* extension		*/	NULL,
-  },
+    {
+     /* core_class fields */
+        /* superclass	  	*/ (WidgetClass)SuperClass,
+     /* class_name	  	*/ "TextSrc",
+     /* widget_size	  	*/ sizeof(TextSrcRec),
+     /* class_initialize   	*/ ClassInitialize,
+     /* class_part_initialize	*/ ClassPartInitialize,
+     /* class_inited       	*/ FALSE,
+     /* initialize	  	*/ NULL,
+     /* initialize_hook		*/ NULL,
+     /* realize		  	*/ NULL,
+     /* actions		  	*/ NULL,
+     /* num_actions	  	*/ 0,
+     /* resources	  	*/ resources,
+     /* num_resources	  	*/ XtNumber(resources),
+     /* xrm_class	  	*/ NULLQUARK,
+     /* compress_motion	  	*/ FALSE,
+     /* compress_exposure  	*/ FALSE,
+     /* compress_enterleave	*/ FALSE,
+     /* visible_interest	  	*/ FALSE,
+     /* destroy		  	*/ NULL,
+     /* resize		  	*/ NULL,
+     /* expose		  	*/ NULL,
+     /* set_values	  	*/ NULL,
+     /* set_values_hook		*/ NULL,
+     /* set_values_almost	*/ NULL,
+     /* get_values_hook		*/ NULL,
+     /* accept_focus	 	*/ NULL,
+     /* version			*/ XtVersion,
+     /* callback_private   	*/ NULL,
+     /* tm_table		   	*/ NULL,
+     /* query_geometry		*/ NULL,
+     /* display_accelerator	*/ NULL,
+     /* extension		*/ NULL,
+     },
 /* textSrc_class fields */
-  {
-    /* Read                     */      Read,
-    /* Replace                  */      Replace,
-    /* Scan                     */      Scan,
-    /* Search                   */      Search,
-    /* SetSelection             */      SetSelection,
-    /* ConvertSelection         */      ConvertSelection
-  }
+    { /* Read                     */ Read,
+     /* Replace                  */ Replace,
+     /* Scan                     */ Scan,
+     /* Search                   */ Search,
+     /* SetSelection             */ SetSelection,
+     /* ConvertSelection         */ ConvertSelection }
 };
 
 WidgetClass textSrcObjectClass = (WidgetClass)&textSrcClassRec;
@@ -132,41 +143,40 @@ WidgetClass textSrcObjectClass = (WidgetClass)&textSrcClassRec;
 static void
 ClassInitialize(void)
 {
-    XawInitializeWidgetSet ();
-    XtAddConverter(XtRString, XtREditMode,   CvtStringToEditMode,   NULL, 0);
+    XawInitializeWidgetSet();
+    XtAddConverter(XtRString, XtREditMode, CvtStringToEditMode, NULL, 0);
 }
-
 
 static void
 ClassPartInitialize(WidgetClass wc)
 {
-  TextSrcObjectClass t_src, superC;
+    TextSrcObjectClass t_src, superC;
 
-  t_src = (TextSrcObjectClass) wc;
-  superC = (TextSrcObjectClass) t_src->object_class.superclass;
+    t_src  = (TextSrcObjectClass)wc;
+    superC = (TextSrcObjectClass)t_src->object_class.superclass;
 
 /*
  * We don't need to check for null super since we'll get to TextSrc
  * eventually.
  */
     if (t_src->textSrc_class.Read == XtInheritRead)
-      t_src->textSrc_class.Read = superC->textSrc_class.Read;
+        t_src->textSrc_class.Read = superC->textSrc_class.Read;
 
     if (t_src->textSrc_class.Replace == XtInheritReplace)
-      t_src->textSrc_class.Replace = superC->textSrc_class.Replace;
+        t_src->textSrc_class.Replace = superC->textSrc_class.Replace;
 
     if (t_src->textSrc_class.Scan == XtInheritScan)
-      t_src->textSrc_class.Scan = superC->textSrc_class.Scan;
+        t_src->textSrc_class.Scan = superC->textSrc_class.Scan;
 
     if (t_src->textSrc_class.Search == XtInheritSearch)
-      t_src->textSrc_class.Search = superC->textSrc_class.Search;
+        t_src->textSrc_class.Search = superC->textSrc_class.Search;
 
     if (t_src->textSrc_class.SetSelection == XtInheritSetSelection)
-      t_src->textSrc_class.SetSelection = superC->textSrc_class.SetSelection;
+        t_src->textSrc_class.SetSelection = superC->textSrc_class.SetSelection;
 
     if (t_src->textSrc_class.ConvertSelection == XtInheritConvertSelection)
-      t_src->textSrc_class.ConvertSelection =
-	                               superC->textSrc_class.ConvertSelection;
+        t_src->textSrc_class.ConvertSelection =
+            superC->textSrc_class.ConvertSelection;
 }
 
 /************************************************************
@@ -188,10 +198,10 @@ ClassPartInitialize(WidgetClass wc)
 static XawTextPosition
 Read(Widget w, XawTextPosition pos, XawTextBlock *text, int length)
 {
-  XtAppError(XtWidgetToApplicationContext(w),
-	     "TextSrc Object: No read function is defined.");
+    XtAppError(XtWidgetToApplicationContext(w),
+               "TextSrc Object: No read function is defined.");
 
-  return( (XawTextPosition) 0 ); /* for gcc -Wall and lint */
+    return ((XawTextPosition)0); /* for gcc -Wall and lint */
 }
 
 /*	Function Name: Replace.
@@ -204,9 +214,12 @@ Read(Widget w, XawTextPosition pos, XawTextBlock *text, int length)
 
 /*ARGSUSED*/
 static int
-Replace (Widget w, XawTextPosition startPos, XawTextPosition endPos, XawTextBlock *text)
+Replace(Widget          w,
+        XawTextPosition startPos,
+        XawTextPosition endPos,
+        XawTextBlock   *text)
 {
-  return(XawEditError);
+    return (XawEditError);
 }
 
 /*	Function Name: Scan
@@ -224,15 +237,18 @@ Replace (Widget w, XawTextPosition startPos, XawTextPosition endPos, XawTextBloc
  */
 
 /* ARGSUSED */
-static
-XawTextPosition
-Scan(Widget w, XawTextPosition position, XawTextScanType type,
-     XawTextScanDirection dir, int count, Boolean include)
+static XawTextPosition
+Scan(Widget               w,
+     XawTextPosition      position,
+     XawTextScanType      type,
+     XawTextScanDirection dir,
+     int                  count,
+     Boolean              include)
 {
-  XtAppError(XtWidgetToApplicationContext(w),
-	     "TextSrc Object: No SCAN function is defined.");
+    XtAppError(XtWidgetToApplicationContext(w),
+               "TextSrc Object: No SCAN function is defined.");
 
-  return( (XawTextPosition) 0 ); /* for gcc -Wall and lint */
+    return ((XawTextPosition)0); /* for gcc -Wall and lint */
 }
 
 /*	Function Name: Search
@@ -246,9 +262,12 @@ Scan(Widget w, XawTextPosition position, XawTextScanType type,
 
 /* ARGSUSED */
 static XawTextPosition
-Search(Widget w, XawTextPosition position, XawTextScanDirection dir, XawTextBlock *text)
+Search(Widget               w,
+       XawTextPosition      position,
+       XawTextScanDirection dir,
+       XawTextBlock        *text)
 {
-  return(XawTextSearchError);
+    return (XawTextSearchError);
 }
 
 /*	Function Name: ConvertSelection
@@ -265,10 +284,15 @@ Search(Widget w, XawTextPosition position, XawTextScanDirection dir, XawTextBloc
 
 /* ARGSUSED */
 static Boolean
-ConvertSelection(Widget w, Atom *selection, Atom *target, Atom *type,
-                 XtPointer *value, unsigned long *length, int *format)
+ConvertSelection(Widget         w,
+                 Atom          *selection,
+                 Atom          *target,
+                 Atom          *type,
+                 XtPointer     *value,
+                 unsigned long *length,
+                 int           *format)
 {
-  return(FALSE);
+    return (FALSE);
 }
 
 /*	Function Name: SetSelection
@@ -281,50 +305,56 @@ ConvertSelection(Widget w, Atom *selection, Atom *target, Atom *type,
 
 /* ARGSUSED */
 static void
-SetSelection(Widget w, XawTextPosition left, XawTextPosition right, Atom selection)
+SetSelection(Widget          w,
+             XawTextPosition left,
+             XawTextPosition right,
+             Atom            selection)
 {
   /* This space intentionally left blank. */
 }
 
-
 /* ARGSUSED */
 static void
-CvtStringToEditMode(XrmValuePtr args, Cardinal *num_args, XrmValuePtr fromVal, XrmValuePtr toVal)
+CvtStringToEditMode(XrmValuePtr args,
+                    Cardinal   *num_args,
+                    XrmValuePtr fromVal,
+                    XrmValuePtr toVal)
 {
-  static XawTextEditType editType;
-  static  XrmQuark  QRead, QAppend, QEdit;
-  XrmQuark    q;
-  char        lowerName[40];
-  static Boolean inited = FALSE;
+    static XawTextEditType editType;
+    static XrmQuark        QRead, QAppend, QEdit;
+    XrmQuark               q;
+    char                   lowerName[40];
+    static Boolean         inited = FALSE;
 
-  if ( !inited ) {
-    QRead   = XrmPermStringToQuark(XtEtextRead);
-    QAppend = XrmPermStringToQuark(XtEtextAppend);
-    QEdit   = XrmPermStringToQuark(XtEtextEdit);
-    inited = TRUE;
-  }
-
-  if (strlen ((char*) fromVal->addr) < sizeof lowerName) {
-    XmuCopyISOLatin1Lowered (lowerName, (char *)fromVal->addr);
-    q = XrmStringToQuark(lowerName);
-
-    if      (q == QRead)   editType = XawtextRead;
-    else if (q == QAppend) editType = XawtextAppend;
-    else if (q == QEdit)   editType = XawtextEdit;
-    else {
-      toVal->size = 0;
-      toVal->addr = NULL;
-      return;
+    if (!inited)
+    {
+        QRead   = XrmPermStringToQuark(XtEtextRead);
+        QAppend = XrmPermStringToQuark(XtEtextAppend);
+        QEdit   = XrmPermStringToQuark(XtEtextEdit);
+        inited  = TRUE;
     }
-    toVal->size = sizeof editType;
-    toVal->addr = (XPointer) &editType;
-    return;
-  }
-  toVal->size = 0;
-  toVal->addr = NULL;
+
+    if (strlen((char *)fromVal->addr) < sizeof lowerName)
+    {
+        XmuCopyISOLatin1Lowered(lowerName, (char *)fromVal->addr);
+        q = XrmStringToQuark(lowerName);
+
+        if (q == QRead) editType = XawtextRead;
+        else if (q == QAppend) editType = XawtextAppend;
+        else if (q == QEdit) editType = XawtextEdit;
+        else
+        {
+            toVal->size = 0;
+            toVal->addr = NULL;
+            return;
+        }
+        toVal->size = sizeof editType;
+        toVal->addr = (XPointer)&editType;
+        return;
+    }
+    toVal->size = 0;
+    toVal->addr = NULL;
 }
-
-
 
 /************************************************************
  *
@@ -342,17 +372,20 @@ CvtStringToEditMode(XrmValuePtr args, Cardinal *num_args, XrmValuePtr fromVal, X
  */
 
 XawTextPosition
-XawTextSourceRead(Widget w, XawTextPosition pos, XawTextBlock *text,
-		  int length)
+XawTextSourceRead(Widget w, XawTextPosition pos, XawTextBlock *text, int length)
 {
-  TextSrcObjectClass class = (TextSrcObjectClass) w->core.widget_class;
+    TextSrcObjectClass class = (TextSrcObjectClass)w->core.widget_class;
 
-  if ( !XtIsSubclass( w, textSrcObjectClass ) )
-      XtErrorMsg("bad argument", "textSource", "XawError",
-		"XawTextSourceRead's 1st parameter must be subclass of asciiSrc.",
-		   NULL, NULL);
+    if (!XtIsSubclass(w, textSrcObjectClass))
+        XtErrorMsg(
+            "bad argument",
+            "textSource",
+            "XawError",
+            "XawTextSourceRead's 1st parameter must be subclass of asciiSrc.",
+            NULL,
+            NULL);
 
-  return((*class->textSrc_class.Read)(w, pos, text, length));
+    return ((*class->textSrc_class.Read)(w, pos, text, length));
 }
 
 /*	Function Name: XawTextSourceReplace.
@@ -365,17 +398,23 @@ XawTextSourceRead(Widget w, XawTextPosition pos, XawTextBlock *text,
 
 /*ARGSUSED*/
 int
-XawTextSourceReplace (Widget w, XawTextPosition startPos,
-		      XawTextPosition endPos, XawTextBlock *text)
+XawTextSourceReplace(Widget          w,
+                     XawTextPosition startPos,
+                     XawTextPosition endPos,
+                     XawTextBlock   *text)
 {
-  TextSrcObjectClass class = (TextSrcObjectClass) w->core.widget_class;
+    TextSrcObjectClass class = (TextSrcObjectClass)w->core.widget_class;
 
-  if ( !XtIsSubclass( w, textSrcObjectClass ) )
-      XtErrorMsg("bad argument", "textSource", "XawError",
-		"XawTextSourceReplace's 1st parameter must be subclass of asciiSrc.",
-		   NULL, NULL);
+    if (!XtIsSubclass(w, textSrcObjectClass))
+        XtErrorMsg("bad argument",
+                   "textSource",
+                   "XawError",
+                   "XawTextSourceReplace's 1st parameter must be subclass of "
+                   "asciiSrc.",
+                   NULL,
+                   NULL);
 
-  return((*class->textSrc_class.Replace)(w, startPos, endPos, text));
+    return ((*class->textSrc_class.Replace)(w, startPos, endPos, text));
 }
 
 /*	Function Name: XawTextSourceScan
@@ -393,27 +432,35 @@ XawTextSourceReplace (Widget w, XawTextPosition startPos,
  */
 
 XawTextPosition
-XawTextSourceScan(Widget w, XawTextPosition position,
+XawTextSourceScan(Widget          w,
+                  XawTextPosition position,
 #if NeedWidePrototypes
-		  int type, int dir,
+                  int type,
+                  int dir,
 #else
-		  XawTextScanType type, XawTextScanDirection dir,
+                  XawTextScanType      type,
+                  XawTextScanDirection dir,
 #endif
-		  int count,
+                  int count,
 #if NeedWidePrototypes
-		  int include)
+                  int include)
 #else
-		  Boolean include)
+                  Boolean include)
 #endif
 {
-  TextSrcObjectClass class = (TextSrcObjectClass) w->core.widget_class;
+    TextSrcObjectClass class = (TextSrcObjectClass)w->core.widget_class;
 
-  if ( !XtIsSubclass( w, textSrcObjectClass ) )
-      XtErrorMsg("bad argument", "textSource", "XawError",
-		"XawTextSourceScan's 1st parameter must be subclass of asciiSrc.",
-		   NULL, NULL);
+    if (!XtIsSubclass(w, textSrcObjectClass))
+        XtErrorMsg(
+            "bad argument",
+            "textSource",
+            "XawError",
+            "XawTextSourceScan's 1st parameter must be subclass of asciiSrc.",
+            NULL,
+            NULL);
 
-  return((*class->textSrc_class.Scan)(w, position, type, dir, count, include));
+    return (
+        (*class->textSrc_class.Scan)(w, position, type, dir, count, include));
 }
 
 /*	Function Name: XawTextSourceSearch
@@ -427,22 +474,27 @@ XawTextSourceScan(Widget w, XawTextPosition position,
  */
 
 XawTextPosition
-XawTextSourceSearch(Widget w, XawTextPosition position,
+XawTextSourceSearch(Widget          w,
+                    XawTextPosition position,
 #if NeedWidePrototypes
-		    int dir,
+                    int dir,
 #else
-		    XawTextScanDirection dir,
+                    XawTextScanDirection dir,
 #endif
-		    XawTextBlock *text)
+                    XawTextBlock *text)
 {
-  TextSrcObjectClass class = (TextSrcObjectClass) w->core.widget_class;
+    TextSrcObjectClass class = (TextSrcObjectClass)w->core.widget_class;
 
-  if ( !XtIsSubclass( w, textSrcObjectClass ) )
-      XtErrorMsg("bad argument", "textSource", "XawError",
-		"XawTextSourceSearch's 1st parameter must be subclass of asciiSrc.",
-		   NULL, NULL);
+    if (!XtIsSubclass(w, textSrcObjectClass))
+        XtErrorMsg(
+            "bad argument",
+            "textSource",
+            "XawError",
+            "XawTextSourceSearch's 1st parameter must be subclass of asciiSrc.",
+            NULL,
+            NULL);
 
-  return((*class->textSrc_class.Search)(w, position, dir, text));
+    return ((*class->textSrc_class.Search)(w, position, dir, text));
 }
 
 /*	Function Name: XawTextSourceConvertSelection
@@ -458,19 +510,32 @@ XawTextSourceSearch(Widget w, XawTextPosition position,
  */
 
 Boolean
-XawTextSourceConvertSelection(Widget w, Atom *selection, Atom *target,
-			      Atom *type, XtPointer *value,
-			      unsigned long *length, int *format)
+XawTextSourceConvertSelection(Widget         w,
+                              Atom          *selection,
+                              Atom          *target,
+                              Atom          *type,
+                              XtPointer     *value,
+                              unsigned long *length,
+                              int           *format)
 {
-  TextSrcObjectClass class = (TextSrcObjectClass) w->core.widget_class;
+    TextSrcObjectClass class = (TextSrcObjectClass)w->core.widget_class;
 
-  if ( !XtIsSubclass( w, textSrcObjectClass ) )
-      XtErrorMsg("bad argument", "textSource", "XawError",
-		"XawTextSourceConvertSelectionXawTextSourceConvertSelection's 1st parameter must be subclass of asciiSrc.",
-		   NULL, NULL);
+    if (!XtIsSubclass(w, textSrcObjectClass))
+        XtErrorMsg("bad argument",
+                   "textSource",
+                   "XawError",
+                   "XawTextSourceConvertSelectionXawTextSourceConvertSelection'"
+                   "s 1st parameter must be subclass of asciiSrc.",
+                   NULL,
+                   NULL);
 
-  return((*class->textSrc_class.ConvertSelection)(w, selection, target, type,
-						  value, length, format));
+    return ((*class->textSrc_class.ConvertSelection)(w,
+                                                     selection,
+                                                     target,
+                                                     type,
+                                                     value,
+                                                     length,
+                                                     format));
 }
 
 /*	Function Name: XawTextSourceSetSelection
@@ -482,17 +547,22 @@ XawTextSourceConvertSelection(Widget w, Atom *selection, Atom *target,
  */
 
 void
-XawTextSourceSetSelection(Widget w, XawTextPosition left,
-			  XawTextPosition right, Atom selection)
+XawTextSourceSetSelection(Widget          w,
+                          XawTextPosition left,
+                          XawTextPosition right,
+                          Atom            selection)
 {
-  TextSrcObjectClass class = (TextSrcObjectClass) w->core.widget_class;
+    TextSrcObjectClass class = (TextSrcObjectClass)w->core.widget_class;
 
-  if ( !XtIsSubclass( w, textSrcObjectClass ) )
-      XtErrorMsg("bad argument", "textSource", "XawError",
-		"'s 1st parameter must be subclass of asciiSrc.",
-		   NULL, NULL);
+    if (!XtIsSubclass(w, textSrcObjectClass))
+        XtErrorMsg("bad argument",
+                   "textSource",
+                   "XawError",
+                   "'s 1st parameter must be subclass of asciiSrc.",
+                   NULL,
+                   NULL);
 
-  (*class->textSrc_class.SetSelection)(w, left, right, selection);
+    (*class->textSrc_class.SetSelection)(w, left, right, selection);
 }
 
 /********************************************************************
@@ -509,9 +579,8 @@ XawTextSourceSetSelection(Widget w, XawTextPosition left,
 XrmQuark
 _XawTextFormat(TextWidget tw)
 {
-  return (((TextSrcObject)(tw->text.source))->textSrc.text_format);
+    return (((TextSrcObject)(tw->text.source))->textSrc.text_format);
 }
-
 
 #ifdef XAW_INTERNATIONALIZATION
 /* _XawTextWCToMB():
@@ -524,22 +593,28 @@ _XawTextFormat(TextWidget tw)
  *              As Out, length of returned string.
  */
 
-
 char *
 _XawTextWCToMB(Display *d, wchar_t *wstr, int *len_in_out)
 {
     XTextProperty textprop;
-    if (XwcTextListToTextProperty(d, (wchar_t**)&wstr, 1,
-      XTextStyle, &textprop) < Success) {
-      XtWarningMsg("convertError", "textSource", "XawError",
-                 "Non-character code(s) in buffer.", NULL, NULL);
-      *len_in_out = 0;
-      return( NULL );
+    if (XwcTextListToTextProperty(d,
+                                  (wchar_t **)&wstr,
+                                  1,
+                                  XTextStyle,
+                                  &textprop) < Success)
+    {
+        XtWarningMsg("convertError",
+                     "textSource",
+                     "XawError",
+                     "Non-character code(s) in buffer.",
+                     NULL,
+                     NULL);
+        *len_in_out = 0;
+        return (NULL);
     }
     *len_in_out = textprop.nitems;
-    return((char *)textprop.value);
+    return ((char *)textprop.value);
 }
-
 
 /* _XawTextMBToWC():
  *   convert the string to internal processing codeset WC.
@@ -554,43 +629,62 @@ _XawTextWCToMB(Display *d, wchar_t *wstr, int *len_in_out)
 wchar_t *
 _XawTextMBToWC(Display *d, char *str, int *len_in_out)
 {
-  if (*len_in_out == 0) {
-    return(NULL);
-  } else {
-    XTextProperty textprop;
-    char *buf;
-    wchar_t **wlist, *wstr;
-    int count;
-    buf = XtMalloc(*len_in_out + 1);
-    if (!buf) {
-	XtErrorMsg("convertError", "multiSourceCreate", "XawError",
-		 "No Memory", NULL, NULL);
-	*len_in_out = 0;
-	return (NULL);   /* The above function doesn't really return. */
+    if (*len_in_out == 0)
+    {
+        return (NULL);
     }
-    strncpy(buf, str, *len_in_out);
-    *(buf + *len_in_out) = '\0';
-    if (XmbTextListToTextProperty(d, &buf, 1, XTextStyle, &textprop)
-			!= Success) {
-	XtWarningMsg("convertError", "textSource", "XawError",
-		 "No Memory, or Locale not supported.", NULL, NULL);
-	XtFree(buf);
-	*len_in_out = 0;
-	return (NULL);
+    else
+    {
+        XTextProperty textprop;
+        char         *buf;
+        wchar_t     **wlist, *wstr;
+        int           count;
+        buf = XtMalloc(*len_in_out + 1);
+        if (!buf)
+        {
+            XtErrorMsg("convertError",
+                       "multiSourceCreate",
+                       "XawError",
+                       "No Memory",
+                       NULL,
+                       NULL);
+            *len_in_out = 0;
+            return (NULL);   /* The above function doesn't really return. */
+        }
+        strncpy(buf, str, *len_in_out);
+        *(buf + *len_in_out) = '\0';
+        if (XmbTextListToTextProperty(d, &buf, 1, XTextStyle, &textprop) !=
+            Success)
+        {
+            XtWarningMsg("convertError",
+                         "textSource",
+                         "XawError",
+                         "No Memory, or Locale not supported.",
+                         NULL,
+                         NULL);
+            XtFree(buf);
+            *len_in_out = 0;
+            return (NULL);
+        }
+        XtFree(buf);
+        if (XwcTextPropertyToTextList(d,
+                                      &textprop,
+                                      (wchar_t ***)&wlist,
+                                      &count) != Success)
+        {
+            XtWarningMsg("convertError",
+                         "multiSourceCreate",
+                         "XawError",
+                         "Non-character code(s) in source.",
+                         NULL,
+                         NULL);
+            *len_in_out = 0;
+            return (NULL);
+        }
+        wstr        = wlist[0];
+        *len_in_out = wcslen(wstr);
+        XFree((char **)wlist); /* this is evil */
+        return (wstr);
     }
-    XtFree(buf);
-    if (XwcTextPropertyToTextList(d, &textprop,
-			(wchar_t***)&wlist, &count) != Success) {
-	XtWarningMsg("convertError", "multiSourceCreate", "XawError",
-		 "Non-character code(s) in source.", NULL, NULL);
-	*len_in_out = 0;
-	return (NULL);
-    }
-    wstr = wlist[0];
-    *len_in_out = wcslen(wstr);
-    XFree((char**)wlist); /* this is evil */
-    return(wstr);
-  }
 }
 #endif
-

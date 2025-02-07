@@ -27,39 +27,29 @@ Author: Ralph Mor, X Consortium
 ******************************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/ICE/ICElib.h"
 #include "ICElibint.h"
-
 
 /*
  * NOT IMPLEMENTED YET
  */
 
-
 Status
-IceInitThreads (
-	void
-)
+IceInitThreads(void)
 {
     return (0);
 }
 
-
 void
-IceAppLockConn (
-	IceConn	iceConn
-)
+IceAppLockConn(IceConn iceConn)
 {
-    IceLockConn (iceConn);
+    IceLockConn(iceConn);
 }
 
-
 void
-IceAppUnlockConn (
-	IceConn iceConn
-)
+IceAppUnlockConn(IceConn iceConn)
 {
-    IceUnlockConn (iceConn);
+    IceUnlockConn(iceConn);
 }

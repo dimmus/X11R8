@@ -70,21 +70,22 @@ in this Software without prior written authorization from The Open Group.
  * Contains XtAppAddActionHook, XtRemoveActionHook
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "IntrinsicI.h"
 
 static void
-FreeActionHookList(Widget widget _X_UNUSED,
-		   XtPointer closure,  /* ActionHook* */
+FreeActionHookList(Widget widget       _X_UNUSED,
+                   XtPointer           closure,  /* ActionHook* */
                    XtPointer call_data _X_UNUSED)
 {
-    ActionHook list = *(ActionHook *) closure;
+    ActionHook list = *(ActionHook *)closure;
 
-    while (list != NULL) {
+    while (list != NULL)
+    {
         ActionHook next = list->next;
 
-        XtFree((XtPointer) list);
+        XtFree((XtPointer)list);
         list = next;
     }
 }
@@ -95,40 +96,50 @@ XtAppAddActionHook(XtAppContext app, XtActionHookProc proc, XtPointer closure)
     ActionHook hook = XtNew(ActionHookRec);
 
     LOCK_APP(app);
-    hook->next = app->action_hook_list;
-    hook->app = app;
-    hook->proc = proc;
+    hook->next    = app->action_hook_list;
+    hook->app     = app;
+    hook->proc    = proc;
     hook->closure = closure;
-    if (app->action_hook_list == NULL) {
+    if (app->action_hook_list == NULL)
+    {
         _XtAddCallback(&app->destroy_callbacks,
-                       FreeActionHookList, (XtPointer) &app->action_hook_list);
+                       FreeActionHookList,
+                       (XtPointer)&app->action_hook_list);
     }
     app->action_hook_list = hook;
     UNLOCK_APP(app);
-    return (XtActionHookId) hook;
+    return (XtActionHookId)hook;
 }
 
 void
 XtRemoveActionHook(XtActionHookId id)
 {
-    ActionHook *p, hook = (ActionHook) id;
+    ActionHook  *p, hook = (ActionHook)id;
     XtAppContext app = hook->app;
 
     LOCK_APP(app);
-    for (p = &app->action_hook_list; p != NULL && *p != hook; p = &(*p)->next);
-    if (p) {
+    for (p = &app->action_hook_list; p != NULL && *p != hook; p = &(*p)->next)
+        ;
+    if (p)
+    {
         *p = hook->next;
-        XtFree((XtPointer) hook);
+        XtFree((XtPointer)hook);
         if (app->action_hook_list == NULL)
-            _XtRemoveCallback(&app->destroy_callbacks, FreeActionHookList,
-                              (XtPointer) &app->action_hook_list);
+            _XtRemoveCallback(&app->destroy_callbacks,
+                              FreeActionHookList,
+                              (XtPointer)&app->action_hook_list);
     }
 #ifdef DEBUG
-    else {
-        XtAppWarningMsg(app, "badId", "xtRemoveActionHook", XtCXtToolkitError,
+    else
+    {
+        XtAppWarningMsg(app,
+                        "badId",
+                        "xtRemoveActionHook",
+                        XtCXtToolkitError,
                         "XtRemoveActionHook called with bad or old hook id",
-                        NULL, NULL);
+                        NULL,
+                        NULL);
     }
 #endif /*DEBUG*/
-        UNLOCK_APP(app);
+    UNLOCK_APP(app);
 }

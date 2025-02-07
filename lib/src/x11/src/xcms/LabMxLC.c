@@ -39,7 +39,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
@@ -48,14 +48,13 @@
 /*
  *	DEFINES
  */
-#define MIN(x,y)	((x) > (y) ? (y) : (x))
-#define MIN3(x,y,z)	((x) > (MIN((y), (z))) ? (MIN((y), (z))) : (x))
-#define MAX(x,y)	((x) > (y) ? (x) : (y))
-#define MAX3(x,y,z)	((x) > (MAX((y), (z))) ? (x) : (MAX((y), (z))))
-#define START_LSTAR	(XcmsFloat)40.0
-#define START_CHROMA	(XcmsFloat)3.6
+#define MIN(x, y)     ((x) > (y) ? (y) : (x))
+#define MIN3(x, y, z) ((x) > (MIN((y), (z))) ? (MIN((y), (z))) : (x))
+#define MAX(x, y)     ((x) > (y) ? (x) : (y))
+#define MAX3(x, y, z) ((x) > (MAX((y), (z))) ? (x) : (MAX((y), (z))))
+#define START_LSTAR   (XcmsFloat)40.0
+#define START_CHROMA  (XcmsFloat)3.6
 
-
 /************************************************************************
  *									*
  *			 API PRIVATE ROUTINES				*
@@ -69,11 +68,10 @@
  *	SYNOPSIS
  */
 Status
-_XcmsCIELabQueryMaxLCRGB(
-    XcmsCCC	ccc,
-    XcmsFloat	hue,		    /* hue in radians */
-    XcmsColor   *pColor_return,
-    XcmsRGBi    *pRGB_return)
+_XcmsCIELabQueryMaxLCRGB(XcmsCCC    ccc,
+                         XcmsFloat  hue,      /* hue in radians */
+                         XcmsColor *pColor_return,
+                         XcmsRGBi  *pRGB_return)
 /*
  *	DESCRIPTION
  *		Return the maximum psychometric chroma for a specified
@@ -101,7 +99,7 @@ _XcmsCIELabQueryMaxLCRGB(
     XcmsFloat nSmall, nLarge;
     XcmsColor tmp;
 
-    tmp.format = XcmsCIELabFormat;
+    tmp.format             = XcmsCIELabFormat;
     /*  Use some unreachable color on the given hue */
     tmp.spec.CIELab.L_star = START_LSTAR;
     tmp.spec.CIELab.a_star = XCMS_CIEASTAROFHUE(hue, START_CHROMA);
@@ -113,50 +111,55 @@ _XcmsCIELabQueryMaxLCRGB(
      * out of bounds RGBi values in tmp when the ccc->gamutCompProc
      * is NULL.
      */
-    if ((_XcmsConvertColorsWithWhitePt(ccc, &tmp, ScreenWhitePointOfCCC(ccc),
-		               (unsigned int)1, XcmsRGBiFormat, (Bool *) NULL)
-	    == XcmsFailure) && tmp.format != XcmsRGBiFormat) {
-	return (XcmsFailure);
+    if ((_XcmsConvertColorsWithWhitePt(ccc,
+                                       &tmp,
+                                       ScreenWhitePointOfCCC(ccc),
+                                       (unsigned int)1,
+                                       XcmsRGBiFormat,
+                                       (Bool *)NULL) == XcmsFailure) &&
+        tmp.format != XcmsRGBiFormat)
+    {
+        return (XcmsFailure);
     }
 
     /* Now pick the smallest RGB */
-    nSmall = MIN3(tmp.spec.RGBi.red,
-		  tmp.spec.RGBi.green,
-		  tmp.spec.RGBi.blue);
+    nSmall = MIN3(tmp.spec.RGBi.red, tmp.spec.RGBi.green, tmp.spec.RGBi.blue);
     /* Make the smallest RGB equal to zero */
-    tmp.spec.RGBi.red   -= nSmall;
+    tmp.spec.RGBi.red -= nSmall;
     tmp.spec.RGBi.green -= nSmall;
-    tmp.spec.RGBi.blue  -= nSmall;
+    tmp.spec.RGBi.blue -= nSmall;
 
     /* Now pick the largest RGB */
-    nLarge = MAX3(tmp.spec.RGBi.red,
-		  tmp.spec.RGBi.green,
-		  tmp.spec.RGBi.blue);
+    nLarge = MAX3(tmp.spec.RGBi.red, tmp.spec.RGBi.green, tmp.spec.RGBi.blue);
     /* Scale the RGB values based on the largest one */
-    tmp.spec.RGBi.red   /= nLarge;
+    tmp.spec.RGBi.red /= nLarge;
     tmp.spec.RGBi.green /= nLarge;
-    tmp.spec.RGBi.blue  /= nLarge;
+    tmp.spec.RGBi.blue /= nLarge;
     tmp.format = XcmsRGBiFormat;
 
     /* If the calling routine wants RGB value give them the ones used. */
-    if (pRGB_return) {
-	pRGB_return->red   = tmp.spec.RGBi.red;
-	pRGB_return->green = tmp.spec.RGBi.green;
-	pRGB_return->blue  = tmp.spec.RGBi.blue;
+    if (pRGB_return)
+    {
+        pRGB_return->red   = tmp.spec.RGBi.red;
+        pRGB_return->green = tmp.spec.RGBi.green;
+        pRGB_return->blue  = tmp.spec.RGBi.blue;
     }
 
     /* Convert from RGBi to Lab */
-    if (_XcmsConvertColorsWithWhitePt(ccc, &tmp,
-	       ScreenWhitePointOfCCC(ccc), 1, XcmsCIELabFormat, (Bool *) NULL)
-	    == XcmsFailure) {
-	return (XcmsFailure);
+    if (_XcmsConvertColorsWithWhitePt(ccc,
+                                      &tmp,
+                                      ScreenWhitePointOfCCC(ccc),
+                                      1,
+                                      XcmsCIELabFormat,
+                                      (Bool *)NULL) == XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
     memcpy((char *)pColor_return, (char *)&tmp, sizeof(XcmsColor));
     return (XcmsSuccess);
 }
 
-
 /************************************************************************
  *									*
  *			 PUBLIC ROUTINES				*
@@ -170,10 +173,9 @@ _XcmsCIELabQueryMaxLCRGB(
  *	SYNOPSIS
  */
 Status
-XcmsCIELabQueryMaxLC (
-    XcmsCCC ccc,
-    XcmsFloat hue_angle,	    /* hue_angle in degrees */
-    XcmsColor *pColor_return)
+XcmsCIELabQueryMaxLC(XcmsCCC    ccc,
+                     XcmsFloat  hue_angle,     /* hue_angle in degrees */
+                     XcmsColor *pColor_return)
 
 /*
  *	DESCRIPTION
@@ -197,22 +199,27 @@ XcmsCIELabQueryMaxLC (
     /*
      * Check Arguments
      */
-    if (ccc == NULL || pColor_return == NULL) {
-	return(XcmsFailure);
+    if (ccc == NULL || pColor_return == NULL)
+    {
+        return (XcmsFailure);
     }
 
     /* Use my own CCC */
-    memcpy ((char *)&myCCC, (char *)ccc, sizeof(XcmsCCCRec));
+    memcpy((char *)&myCCC, (char *)ccc, sizeof(XcmsCCCRec));
     myCCC.clientWhitePt.format = XcmsUndefinedFormat;
-    myCCC.gamutCompProc = (XcmsCompressionProc)NULL;
+    myCCC.gamutCompProc        = (XcmsCompressionProc)NULL;
 
-    while (hue_angle < 0.0) {
-	hue_angle += 360.0;
+    while (hue_angle < 0.0)
+    {
+        hue_angle += 360.0;
     }
-    while (hue_angle >= 360.0) {
-	hue_angle -= 360.0;
+    while (hue_angle >= 360.0)
+    {
+        hue_angle -= 360.0;
     }
 
-    return(_XcmsCIELabQueryMaxLCRGB (&myCCC, radians(hue_angle), pColor_return,
-	    (XcmsRGBi *)NULL));
+    return (_XcmsCIELabQueryMaxLCRGB(&myCCC,
+                                     radians(hue_angle),
+                                     pColor_return,
+                                     (XcmsRGBi *)NULL));
 }

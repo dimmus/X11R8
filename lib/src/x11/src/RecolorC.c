@@ -25,30 +25,28 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XRecolorCursor(
-     register Display *dpy,
-     Cursor cursor,
-     XColor *foreground,
-     XColor *background)
+XRecolorCursor(register Display *dpy,
+               Cursor            cursor,
+               XColor           *foreground,
+               XColor           *background)
 {
     register xRecolorCursorReq *req;
 
     LockDisplay(dpy);
     GetReq(RecolorCursor, req);
-    req->cursor = cursor;
-    req->foreRed = foreground->red;
+    req->cursor    = cursor;
+    req->foreRed   = foreground->red;
     req->foreGreen = foreground->green;
-    req->foreBlue = foreground->blue;
-    req->backRed = background->red;
+    req->foreBlue  = foreground->blue;
+    req->backRed   = background->red;
     req->backGreen = background->green;
-    req->backBlue = background->blue;
+    req->backBlue  = background->blue;
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

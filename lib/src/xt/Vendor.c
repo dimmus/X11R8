@@ -47,7 +47,7 @@ SOFTWARE.
 /* Make sure all wm properties can make it out of the resource manager */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "IntrinsicI.h"
 #include "StringDefs.h"
@@ -67,15 +67,17 @@ SOFTWARE.
 /* to fix the EditRes problem because of wrong linker semantics */
 extern WidgetClass vendorShellWidgetClass;
 
-int __stdcall
-DllMain(unsigned long mod_handle, unsigned long flag, void *routine)
+int __stdcall DllMain(unsigned long mod_handle,
+                      unsigned long flag,
+                      void         *routine)
 {
-    switch (flag) {
-    case 1:                    /* DLL_PROCESS_ATTACH - process attach */
-        vendorShellWidgetClass = (WidgetClass) (&vendorShellClassRec);
-        break;
-    case 0:                    /* DLL_PROCESS_DETACH - process detach */
-        break;
+    switch (flag)
+    {
+        case 1:                    /* DLL_PROCESS_ATTACH - process attach */
+            vendorShellWidgetClass = (WidgetClass)(&vendorShellClassRec);
+            break;
+        case 0:                    /* DLL_PROCESS_DETACH - process detach */
+            break;
     }
     return 1;
 }
@@ -85,10 +87,8 @@ DllMain(unsigned long mod_handle, unsigned long flag, void *routine)
 #if defined(__APPLE__)
 __attribute__((weak))
 #endif
-externaldef(vendorshellclassrec)
-VendorShellClassRec vendorShellClassRec = {
-    {
-     /* superclass            */ (WidgetClass) &wmShellClassRec,
+externaldef(vendorshellclassrec) VendorShellClassRec vendorShellClassRec = {
+    { /* superclass            */ (WidgetClass)&wmShellClassRec,
      /* class_name            */ "VendorShell",
      /* size                  */ sizeof(VendorShellRec),
      /* Class Initializer     */ NULL,
@@ -119,24 +119,15 @@ VendorShellClassRec vendorShellClassRec = {
      /* tm_table              */ NULL,
      /* query_geometry        */ NULL,
      /* display_accelerator   */ NULL,
-     /* extension             */ NULL
-     },
-     {
-       /* geometry_manager    */ XtInheritGeometryManager,
-       /* change_managed      */ XtInheritChangeManaged,
-       /* insert_child        */ XtInheritInsertChild,
-       /* delete_child        */ XtInheritDeleteChild,
-       /* extension           */ NULL
-     },
-     {
-       /* extension           */ NULL
-     },
-     {
-       /* extension           */ NULL
-     },
-     {
-       /* extension           */ NULL
-     }
+     /* extension             */ NULL },
+    { /* geometry_manager    */ XtInheritGeometryManager,
+     /* change_managed      */ XtInheritChangeManaged,
+     /* insert_child        */ XtInheritInsertChild,
+     /* delete_child        */ XtInheritDeleteChild,
+     /* extension           */ NULL },
+    { /* extension           */ NULL },
+    { /* extension           */ NULL },
+    { /* extension           */ NULL }
 };
 /* *INDENT-ON* */
 
@@ -144,4 +135,4 @@ VendorShellClassRec vendorShellClassRec = {
 __attribute__((weak))
 #endif
 externaldef(vendorshellwidgetclass)
-WidgetClass vendorShellWidgetClass = (WidgetClass) (&vendorShellClassRec);
+    WidgetClass vendorShellWidgetClass = (WidgetClass)(&vendorShellClassRec);

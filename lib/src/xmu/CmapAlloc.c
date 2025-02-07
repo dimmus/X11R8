@@ -29,7 +29,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xlib.h"
 #include "X11/Xatom.h"
@@ -42,12 +42,16 @@ in this Software without prior written authorization from The Open Group.
 /*
  * Prototypes
  */
-static void best_allocation(XVisualInfo*, unsigned long*, unsigned long*,
-			    unsigned long*);
-static int default_allocation(XVisualInfo*, unsigned long*,
-			      unsigned long*, unsigned long*);
-static void gray_allocation(int, unsigned long*, unsigned long*,
-			    unsigned long*);
+static void best_allocation(XVisualInfo *,
+                            unsigned long *,
+                            unsigned long *,
+                            unsigned long *);
+static int  default_allocation(XVisualInfo *,
+                               unsigned long *,
+                               unsigned long *,
+                               unsigned long *);
+static void
+gray_allocation(int, unsigned long *, unsigned long *, unsigned long *);
 static int icbrt(int);
 static int icbrt_with_bits(int, int);
 static int icbrt_with_guess(int, int);
@@ -65,41 +69,41 @@ static int icbrt_with_guess(int, int);
  */
 
 Status
-XmuGetColormapAllocation(XVisualInfo *vinfo, Atom property,
-			 unsigned long *red_max,
-			 unsigned long *green_max,
-			 unsigned long *blue_max)
+XmuGetColormapAllocation(XVisualInfo   *vinfo,
+                         Atom           property,
+                         unsigned long *red_max,
+                         unsigned long *green_max,
+                         unsigned long *blue_max)
 {
-    Status 	status = 1;
+    Status status = 1;
 
-    if (vinfo->colormap_size <= 2)
-	return 0;
+    if (vinfo->colormap_size <= 2) return 0;
 
     switch (property)
     {
-      case XA_RGB_DEFAULT_MAP:
-	status = default_allocation(vinfo, red_max, green_max, blue_max);
-	break;
-      case XA_RGB_BEST_MAP:
-	best_allocation(vinfo, red_max, green_max, blue_max);
-	break;
-      case XA_RGB_GRAY_MAP:
-	gray_allocation(vinfo->colormap_size, red_max, green_max, blue_max);
-	break;
-      case XA_RGB_RED_MAP:
-	*red_max = vinfo->colormap_size - 1;
-	*green_max = *blue_max = 0;
-	break;
-      case XA_RGB_GREEN_MAP:
-	*green_max = vinfo->colormap_size - 1;
-	*red_max = *blue_max = 0;
-	break;
-      case XA_RGB_BLUE_MAP:
-	*blue_max = vinfo->colormap_size - 1;
-	*red_max = *green_max = 0;
-	break;
-      default:
-	status = 0;
+        case XA_RGB_DEFAULT_MAP:
+            status = default_allocation(vinfo, red_max, green_max, blue_max);
+            break;
+        case XA_RGB_BEST_MAP:
+            best_allocation(vinfo, red_max, green_max, blue_max);
+            break;
+        case XA_RGB_GRAY_MAP:
+            gray_allocation(vinfo->colormap_size, red_max, green_max, blue_max);
+            break;
+        case XA_RGB_RED_MAP:
+            *red_max   = vinfo->colormap_size - 1;
+            *green_max = *blue_max = 0;
+            break;
+        case XA_RGB_GREEN_MAP:
+            *green_max = vinfo->colormap_size - 1;
+            *red_max = *blue_max = 0;
+            break;
+        case XA_RGB_BLUE_MAP:
+            *blue_max = vinfo->colormap_size - 1;
+            *red_max = *green_max = 0;
+            break;
+        default:
+            status = 0;
     }
     return status;
 }
@@ -111,12 +115,14 @@ XmuGetColormapAllocation(XVisualInfo *vinfo, Atom property,
  */
 
 static void
-gray_allocation(int n, unsigned long *red_max, unsigned long *green_max,
-		unsigned long *blue_max)
+gray_allocation(int            n,
+                unsigned long *red_max,
+                unsigned long *green_max,
+                unsigned long *blue_max)
 {
-    *red_max = (n * 30) / 100;
+    *red_max   = (n * 30) / 100;
     *green_max = (n * 59) / 100;
-    *blue_max = (n * 11) / 100;
+    *blue_max  = (n * 11) / 100;
     *green_max += ((n - 1) - (*red_max + *green_max + *blue_max));
 }
 
@@ -135,57 +141,53 @@ gray_allocation(int n, unsigned long *red_max, unsigned long *green_max,
  */
 
 static int
-default_allocation(XVisualInfo *vinfo, unsigned long *red,
-		   unsigned long *green, unsigned long *blue)
+default_allocation(XVisualInfo   *vinfo,
+                   unsigned long *red,
+                   unsigned long *green,
+                   unsigned long *blue)
 {
-    int			ngrays;		/* number of gray cells */
+    int ngrays;  /* number of gray cells */
 
-    switch (vinfo->class) {
-      case PseudoColor:
+    switch (vinfo->class)
+    {
+        case PseudoColor:
 
-	if (vinfo->colormap_size > 65000)
-	    /* intended for displays with 16 planes */
-	    *red = *green = *blue = (unsigned long) 27;
-	else if (vinfo->colormap_size > 4000)
-	    /* intended for displays with 12 planes */
-	    *red = *green = *blue = (unsigned long) 12;
-	else if (vinfo->colormap_size < 250)
-	    return 0;
-	else
-	    /* intended for displays with 8 planes */
-	    *red = *green = *blue = (unsigned long)
-		(icbrt(vinfo->colormap_size - 125) - 1);
-	break;
+            if (vinfo->colormap_size > 65000)
+        /* intended for displays with 16 planes */
+                *red = *green = *blue = (unsigned long)27;
+            else if (vinfo->colormap_size > 4000)
+        /* intended for displays with 12 planes */
+                *red = *green = *blue = (unsigned long)12;
+            else if (vinfo->colormap_size < 250) return 0;
+            else     /* intended for displays with 8 planes */
+                *red = *green = *blue =
+                    (unsigned long)(icbrt(vinfo->colormap_size - 125) - 1);
+            break;
 
-      case DirectColor:
+        case DirectColor:
 
-	if (vinfo->colormap_size < 10)
-	    return 0;
-	*red = *green = *blue = vinfo->colormap_size / 2 - 1;
-	break;
+            if (vinfo->colormap_size < 10) return 0;
+            *red = *green = *blue = vinfo->colormap_size / 2 - 1;
+            break;
 
-      case TrueColor:
+        case TrueColor:
 
-	*red = vinfo->red_mask / lowbit(vinfo->red_mask);
-	*green = vinfo->green_mask / lowbit(vinfo->green_mask);
-	*blue = vinfo->blue_mask / lowbit(vinfo->blue_mask);
-	break;
+            *red   = vinfo->red_mask / lowbit(vinfo->red_mask);
+            *green = vinfo->green_mask / lowbit(vinfo->green_mask);
+            *blue  = vinfo->blue_mask / lowbit(vinfo->blue_mask);
+            break;
 
-      case GrayScale:
+        case GrayScale:
 
-	if (vinfo->colormap_size > 65000)
-	    ngrays = 4096;
-	else if (vinfo->colormap_size > 4000)
-	    ngrays = 512;
-	else if (vinfo->colormap_size < 250)
-	    return 0;
-	else
-	    ngrays = 12;
-	gray_allocation(ngrays, red, green, blue);
-	break;
+            if (vinfo->colormap_size > 65000) ngrays = 4096;
+            else if (vinfo->colormap_size > 4000) ngrays = 512;
+            else if (vinfo->colormap_size < 250) return 0;
+            else ngrays = 12;
+            gray_allocation(ngrays, red, green, blue);
+            break;
 
-      default:
-	return 0;
+        default:
+            return 0;
     }
     return 1;
 }
@@ -209,63 +211,64 @@ default_allocation(XVisualInfo *vinfo, unsigned long *red,
  */
 
 static void
-best_allocation(XVisualInfo *vinfo, unsigned long *red, unsigned long *green,
-		unsigned long *blue)
+best_allocation(XVisualInfo   *vinfo,
+                unsigned long *red,
+                unsigned long *green,
+                unsigned long *blue)
 {
-
-    if (vinfo->class == DirectColor ||	vinfo->class == TrueColor)
+    if (vinfo->class == DirectColor || vinfo->class == TrueColor)
     {
-	*red = vinfo->red_mask;
-	while ((*red & 01) == 0)
-	    *red >>= 1;
-	*green = vinfo->green_mask;
-	while ((*green & 01) == 0)
-	    *green >>=1;
-	*blue = vinfo->blue_mask;
-	while ((*blue & 01) == 0)
-	    *blue >>= 1;
+        *red = vinfo->red_mask;
+        while ((*red & 01) == 0)
+            *red >>= 1;
+        *green = vinfo->green_mask;
+        while ((*green & 01) == 0)
+            *green >>= 1;
+        *blue = vinfo->blue_mask;
+        while ((*blue & 01) == 0)
+            *blue >>= 1;
     }
     else
     {
-	register int bits, n;
+        register int bits, n;
 
-	/* Determine n such that n is the least integral power of 2 which is
+    /* Determine n such that n is the least integral power of 2 which is
 	 * greater than or equal to the number of entries in the colormap.
          */
-	n = 1;
-	bits = 0;
-	while (vinfo->colormap_size > n)
-	{
-	    n = n << 1;
-	    bits++;
-	}
+        n    = 1;
+        bits = 0;
+        while (vinfo->colormap_size > n)
+        {
+            n = n << 1;
+            bits++;
+        }
 
-	/* If the number of entries in the colormap is a power of 2, determine
+    /* If the number of entries in the colormap is a power of 2, determine
 	 * the allocation by "dealing" the bits, first to green, then red, then
 	 * blue.  If not, find the maximum integral red, green, and blue values
 	 * which, when multiplied together, do not exceed the number of
 
 	 * colormap entries.
 	 */
-	if (n == vinfo->colormap_size)
-	{
-	    register int r, g, b;
-	    b = bits / 3;
-	    g = b + ((bits % 3) ? 1 : 0);
-	    r = b + (((bits % 3) == 2) ? 1 : 0);
-	    *red = 1 << r;
-	    *green = 1 << g;
-	    *blue = 1 << b;
-	}
-	else
-	{
-	    *red = icbrt_with_bits(vinfo->colormap_size, bits);
-	    *blue = *red;
-	    *green = (vinfo->colormap_size / ((*red) * (*blue)));
-	}
-	(*red)--;
-	(*green)--;
-	(*blue)--;
+        if (n == vinfo->colormap_size)
+        {
+            register int r, g, b;
+            b      = bits / 3;
+            g      = b + ((bits % 3) ? 1 : 0);
+            r      = b + (((bits % 3) == 2) ? 1 : 0);
+            *red   = 1 << r;
+            *green = 1 << g;
+            *blue  = 1 << b;
+        }
+        else
+        {
+            *red   = icbrt_with_bits(vinfo->colormap_size, bits);
+            *blue  = *red;
+            *green = (vinfo->colormap_size / ((*red) * (*blue)));
+        }
+        (*red)--;
+        (*green)--;
+        (*blue)--;
     }
     return;
 }
@@ -279,23 +282,22 @@ best_allocation(XVisualInfo *vinfo, unsigned long *red, unsigned long *green,
 static int
 icbrt(int a)
 {
-    register int bits = 0;
-    register unsigned n = a;
+    register int      bits = 0;
+    register unsigned n    = a;
 
     while (n)
     {
-	bits++;
-	n >>= 1;
+        bits++;
+        n >>= 1;
     }
     return icbrt_with_bits(a, bits);
 }
-
 
 static int
 icbrt_with_bits(int a, int bits)
      /* bits - log 2 of a */
 {
-    return icbrt_with_guess(a, a>>2*bits/3);
+    return icbrt_with_guess(a, a >> 2 * bits / 3);
 }
 
 #ifdef _X_ROOT_STATS
@@ -320,24 +322,23 @@ icbrt_with_guess(int a, int guess)
 #ifdef _X_ROOT_STATS
     icbrt_loopcount = 0;
 #endif
-    if (a <= 0)
-	return 0;
-    if (guess < 1)
-	guess = 1;
+    if (a <= 0) return 0;
+    if (guess < 1) guess = 1;
 
-    do {
+    do
+    {
 #ifdef _X_ROOT_STATS
-	icbrt_loopcount++;
+        icbrt_loopcount++;
 #endif
-	delta = (guess - a/(guess*guess))/3;
+        delta = (guess - a / (guess * guess)) / 3;
 #if defined(DEBUG) && defined(_X_ROOT_STATS)
-	printf("pass %d: guess=%d, delta=%d\n", icbrt_loopcount, guess, delta);
+        printf("pass %d: guess=%d, delta=%d\n", icbrt_loopcount, guess, delta);
 #endif
-	guess -= delta;
-    } while (delta != 0);
+        guess -= delta;
+    }
+    while (delta != 0);
 
-    if (guess*guess*guess > a)
-	guess--;
+    if (guess * guess * guess > a) guess--;
 
     return guess;
 }

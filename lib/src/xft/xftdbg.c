@@ -23,24 +23,23 @@
 #include "xftint.h"
 
 _X_HIDDEN int
-XftDebug (void)
+XftDebug(void)
 {
-    static int  initialized;
-    static int  debug;
+    static int initialized;
+    static int debug;
 
     if (!initialized)
     {
-	char    *e;
+        char *e;
 
-	initialized = 1;
-        e = getenv ("XFT_DEBUG");
-	if (e)
-	{
-	    printf ("XFT_DEBUG=%s\n", e);
-	    debug = atoi (e);
-	    if (debug <= 0)
-		debug = 1;
-	}
+        initialized = 1;
+        e           = getenv("XFT_DEBUG");
+        if (e)
+        {
+            printf("XFT_DEBUG=%s\n", e);
+            debug = atoi(e);
+            if (debug <= 0) debug = 1;
+        }
     }
     return debug;
 }

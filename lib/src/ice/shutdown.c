@@ -27,27 +27,22 @@ Author: Ralph Mor, X Consortium
 ******************************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/ICE/ICElib.h"
 #include "ICElibint.h"
 #include "X11/Xtrans/Xtrans.h"
 
-
 Status
-IceProtocolShutdown (
-	IceConn iceConn,
-	int	majorOpcode
-)
+IceProtocolShutdown(IceConn iceConn, int majorOpcode)
 {
     int i;
 
     if (iceConn->proto_ref_count == 0 || iceConn->process_msg_info == NULL ||
         majorOpcode < 1 || majorOpcode > _IceLastMajorOpcode)
     {
-	return (0);
+        return (0);
     }
-
 
     /*
      * Make sure this majorOpcode is really being used.
@@ -55,53 +50,39 @@ IceProtocolShutdown (
 
     for (i = iceConn->his_min_opcode; i <= iceConn->his_max_opcode; i++)
     {
-	int n = i - iceConn->his_min_opcode;
-	if (iceConn->process_msg_info[n].in_use &&
-	    iceConn->process_msg_info[n].my_opcode == majorOpcode)
-	{
-
-	    /*
+        int n = i - iceConn->his_min_opcode;
+        if (iceConn->process_msg_info[n].in_use &&
+            iceConn->process_msg_info[n].my_opcode == majorOpcode)
+        {
+        /*
 	     * OK, we can shut down the protocol.
 	     */
 
-	    iceConn->process_msg_info[n].in_use = False;
-	    iceConn->proto_ref_count--;
-	    return (1);
-	}
+            iceConn->process_msg_info[n].in_use = False;
+            iceConn->proto_ref_count--;
+            return (1);
+        }
     }
 
     return (0);
 }
 
-
-
 void
-IceSetShutdownNegotiation (
-	IceConn     	iceConn,
-	Bool		negotiate
-)
+IceSetShutdownNegotiation(IceConn iceConn, Bool negotiate)
 {
     iceConn->skip_want_to_close = negotiate ? False : True;
 }
 
-
-
 Bool
-IceCheckShutdownNegotiation (
-	IceConn     iceConn
-)
+IceCheckShutdownNegotiation(IceConn iceConn)
 {
     return (iceConn->skip_want_to_close ? False : True);
 }
 
-
-
 IceCloseStatus
-IceCloseConnection (
-	IceConn     iceConn
-)
+IceCloseConnection(IceConn iceConn)
 {
-    int refCountReachedZero;
+    int            refCountReachedZero;
     IceCloseStatus status;
 
     /*
@@ -112,14 +93,12 @@ IceCloseConnection (
      * some other reason).
      */
 
-    if (iceConn->listen_obj &&
-	iceConn->connection_status != IceConnectAccepted)
+    if (iceConn->listen_obj && iceConn->connection_status != IceConnectAccepted)
     {
-	_IceConnectionClosed (iceConn);		/* invoke watch procs */
-	_IceFreeConnection (iceConn);
-	return (IceClosedNow);
+        _IceConnectionClosed(iceConn);  /* invoke watch procs */
+        _IceFreeConnection(iceConn);
+        return (IceClosedNow);
     }
-
 
     /*---------------------------------------------------------------
 
@@ -173,121 +152,111 @@ IceCloseConnection (
 
     ---------------------------------------------------------------*/
 
-    if (iceConn->open_ref_count > 0)
-	iceConn->open_ref_count--;
+    if (iceConn->open_ref_count > 0) iceConn->open_ref_count--;
 
-    refCountReachedZero = iceConn->open_ref_count == 0 &&
-	iceConn->proto_ref_count == 0;
+    refCountReachedZero =
+        iceConn->open_ref_count == 0 && iceConn->proto_ref_count == 0;
 
     status = IceConnectionInUse;
 
-    if (!iceConn->free_asap && (!iceConn->io_ok ||
-	(iceConn->io_ok && refCountReachedZero &&
-	iceConn->skip_want_to_close)))
+    if (!iceConn->free_asap &&
+        (!iceConn->io_ok || (iceConn->io_ok && refCountReachedZero &&
+                             iceConn->skip_want_to_close)))
     {
-	/*
+    /*
 	 * Invoke the watch procedures now.
 	 */
 
-	_IceConnectionClosed (iceConn);
-	status = IceClosedNow;	     /* may be overwritten by IceClosedASAP */
+        _IceConnectionClosed(iceConn);
+        status = IceClosedNow;      /* may be overwritten by IceClosedASAP */
     }
 
     if (!iceConn->free_asap && iceConn->dispatch_level != 0 &&
-	(!iceConn->io_ok ||
-	(iceConn->io_ok && refCountReachedZero &&
-	iceConn->skip_want_to_close)))
+        (!iceConn->io_ok || (iceConn->io_ok && refCountReachedZero &&
+                             iceConn->skip_want_to_close)))
     {
-	/*
+    /*
 	 * Set flag so we free the connection as soon as possible.
 	 */
 
-	iceConn->free_asap = True;
-	status = IceClosedASAP;
+        iceConn->free_asap = True;
+        status             = IceClosedASAP;
     }
 
     if (iceConn->io_ok && iceConn->dispatch_level == 0 &&
-	!iceConn->skip_want_to_close && refCountReachedZero)
+        !iceConn->skip_want_to_close && refCountReachedZero)
     {
-	/*
+    /*
 	 * Initiate shutdown negotiation.
 	 */
 
-	IceSimpleMessage (iceConn, 0, ICE_WantToClose);
-	IceFlush (iceConn);
+        IceSimpleMessage(iceConn, 0, ICE_WantToClose);
+        IceFlush(iceConn);
 
-	iceConn->want_to_close = 1;
+        iceConn->want_to_close = 1;
 
-	status = IceStartedShutdownNegotiation;
+        status = IceStartedShutdownNegotiation;
     }
     else if (iceConn->dispatch_level == 0 &&
-	(!iceConn->io_ok || (iceConn->io_ok && iceConn->skip_want_to_close &&
-	(iceConn->free_asap || (!iceConn->free_asap && refCountReachedZero)))))
+             (!iceConn->io_ok ||
+              (iceConn->io_ok && iceConn->skip_want_to_close &&
+               (iceConn->free_asap ||
+                (!iceConn->free_asap && refCountReachedZero)))))
     {
-	/*
+    /*
 	 * Free the connection.
 	 */
 
-	_IceFreeConnection (iceConn);
+        _IceFreeConnection(iceConn);
 
-	status = IceClosedNow;
+        status = IceClosedNow;
     }
 
     return (status);
 }
 
-
-
 void
-_IceFreeConnection (
-	IceConn iceConn
-)
+_IceFreeConnection(IceConn iceConn)
 {
     if (iceConn->listen_obj == NULL)
     {
-	/*
+    /*
 	 * This iceConn was created with IceOpenConnection.
 	 * We keep track of all open IceConn's, so we need
 	 * to remove it from the list.
 	 */
 
-	int i;
+        int i;
 
-	for (i = 0; i < _IceConnectionCount; i++)
-	    if (_IceConnectionObjs[i] == iceConn)
-		break;
+        for (i = 0; i < _IceConnectionCount; i++)
+            if (_IceConnectionObjs[i] == iceConn) break;
 
-	if (i < _IceConnectionCount)
-	{
-	    if (i < _IceConnectionCount - 1)
-	    {
-		_IceConnectionObjs[i] =
-		    _IceConnectionObjs[_IceConnectionCount - 1];
-		_IceConnectionStrings[i] =
-		    _IceConnectionStrings[_IceConnectionCount - 1];
-	    }
+        if (i < _IceConnectionCount)
+        {
+            if (i < _IceConnectionCount - 1)
+            {
+                _IceConnectionObjs[i] =
+                    _IceConnectionObjs[_IceConnectionCount - 1];
+                _IceConnectionStrings[i] =
+                    _IceConnectionStrings[_IceConnectionCount - 1];
+            }
 
-	    _IceConnectionCount--;
-	}
+            _IceConnectionCount--;
+        }
     }
 
-    if (iceConn->trans_conn)
-	_IceTransClose (iceConn->trans_conn);
+    if (iceConn->trans_conn) _IceTransClose(iceConn->trans_conn);
 
-    free (iceConn->connection_string);
-    free (iceConn->vendor);
-    free (iceConn->release);
-    free (iceConn->inbuf);
-    free (iceConn->outbuf);
-    free (iceConn->scratch);
-    free (iceConn->process_msg_info);
-    free (iceConn->connect_to_you);
-    free (iceConn->protosetup_to_you);
-    free (iceConn->connect_to_me);
-    free (iceConn->protosetup_to_me);
-    free (iceConn);
+    free(iceConn->connection_string);
+    free(iceConn->vendor);
+    free(iceConn->release);
+    free(iceConn->inbuf);
+    free(iceConn->outbuf);
+    free(iceConn->scratch);
+    free(iceConn->process_msg_info);
+    free(iceConn->connect_to_you);
+    free(iceConn->protosetup_to_you);
+    free(iceConn->connect_to_me);
+    free(iceConn->protosetup_to_me);
+    free(iceConn);
 }
-
-
-
-

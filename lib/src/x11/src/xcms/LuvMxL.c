@@ -32,7 +32,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
@@ -42,11 +42,10 @@
 /*
  *	DEFINES
  */
-#define MAXBISECTCOUNT	100
-#define EPS		(XcmsFloat)0.001
-#define START_L_STAR	(XcmsFloat)40.0
+#define MAXBISECTCOUNT 100
+#define EPS            (XcmsFloat)0.001
+#define START_L_STAR   (XcmsFloat)40.0
 
-
 /************************************************************************
  *									*
  *			 PUBLIC ROUTINES				*
@@ -60,11 +59,10 @@
  *	SYNOPSIS
  */
 Status
-XcmsCIELuvQueryMaxL(
-    XcmsCCC ccc,
-    XcmsFloat hue_angle,	    /* hue angle in degrees */
-    XcmsFloat chroma,
-    XcmsColor *pColor_return)
+XcmsCIELuvQueryMaxL(XcmsCCC    ccc,
+                    XcmsFloat  hue_angle,     /* hue angle in degrees */
+                    XcmsFloat  chroma,
+                    XcmsColor *pColor_return)
 /*
  *	DESCRIPTION
  *		Return the maximum Lstar for a specified hue_angle and chroma.
@@ -81,59 +79,64 @@ XcmsCIELuvQueryMaxL(
  *
  */
 {
-    XcmsCCCRec	myCCC;
-    XcmsColor   max_lc, tmp, prev;
-    XcmsFloat   max_chroma, tmp_chroma;
-    XcmsFloat   hue, nT, nChroma, lastChroma, prevChroma;
-    XcmsFloat   rFactor;
-    XcmsRGBi    rgb_saved;
-    int         nCount, nMaxCount;
+    XcmsCCCRec myCCC;
+    XcmsColor  max_lc, tmp, prev;
+    XcmsFloat  max_chroma, tmp_chroma;
+    XcmsFloat  hue, nT, nChroma, lastChroma, prevChroma;
+    XcmsFloat  rFactor;
+    XcmsRGBi   rgb_saved;
+    int        nCount, nMaxCount;
 
     /*
      * Check Arguments
      */
-    if (ccc == NULL || pColor_return == NULL) {
-	return(XcmsFailure);
+    if (ccc == NULL || pColor_return == NULL)
+    {
+        return (XcmsFailure);
     }
 
     /* setup the CCC to use for the conversions. */
-    memcpy ((char *) &myCCC, (char *) ccc, sizeof(XcmsCCCRec));
+    memcpy((char *)&myCCC, (char *)ccc, sizeof(XcmsCCCRec));
     myCCC.clientWhitePt.format = XcmsUndefinedFormat;
-    myCCC.gamutCompProc = (XcmsCompressionProc) NULL;
+    myCCC.gamutCompProc        = (XcmsCompressionProc)NULL;
 
-    while (hue_angle < 0.0) {
-	hue_angle += 360.0;
+    while (hue_angle < 0.0)
+    {
+        hue_angle += 360.0;
     }
-    while (hue_angle >= 360.0) {
-	hue_angle -= 360.0;
+    while (hue_angle >= 360.0)
+    {
+        hue_angle -= 360.0;
     }
 
-    hue = radians(hue_angle);
+    hue                    = radians(hue_angle);
     tmp.spec.CIELuv.L_star = START_L_STAR;
     tmp.spec.CIELuv.u_star = XCMS_CIEUSTAROFHUE(hue, chroma);
     tmp.spec.CIELuv.v_star = XCMS_CIEVSTAROFHUE(hue, chroma);
-    tmp.pixel = pColor_return->pixel;
-    tmp.format = XcmsCIELuvFormat;
+    tmp.pixel              = pColor_return->pixel;
+    tmp.format             = XcmsCIELuvFormat;
 
     /* Step 1: Obtain the maximum L_star and chroma for this hue. */
-    if (_XcmsCIELuvQueryMaxLCRGB(&myCCC, hue, &max_lc, &rgb_saved)
-	    == XcmsFailure) {
-	return(XcmsFailure);
+    if (_XcmsCIELuvQueryMaxLCRGB(&myCCC, hue, &max_lc, &rgb_saved) ==
+        XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
     max_chroma = XCMS_CIELUV_PMETRIC_CHROMA(max_lc.spec.CIELuv.u_star,
-					    max_lc.spec.CIELuv.v_star);
+                                            max_lc.spec.CIELuv.v_star);
 
-    if (max_chroma <= chroma) {
-	/*
+    if (max_chroma <= chroma)
+    {
+    /*
 	 *  If the chroma is greater than the chroma for the
 	 *  maximum L/chroma point then the L_star is the
 	 *  the L_star for the maximum L_star/chroma point.
 	 *  This is an error but I return the best approximation I can.
          *  Thus the inconsistency.
 	 */
-	memcpy ((char *) pColor_return, (char *) &max_lc, sizeof (XcmsColor));
-	return(XcmsSuccess);
+        memcpy((char *)pColor_return, (char *)&max_lc, sizeof(XcmsColor));
+        return (XcmsSuccess);
     }
 
     /*
@@ -150,67 +153,79 @@ XcmsCIELuvQueryMaxL(
     /* must do a bisection here to compute the maximum L* */
     /* save the structure input so that any elements that */
     /* are not touched are recopied later in the routine. */
-    nChroma = chroma;
+    nChroma    = chroma;
     tmp_chroma = max_chroma;
     lastChroma = -1.0;
-    nMaxCount = MAXBISECTCOUNT;
-    rFactor = 1.0;
+    nMaxCount  = MAXBISECTCOUNT;
+    rFactor    = 1.0;
 
-    for (nCount = 0; nCount < nMaxCount; nCount++) {
-	prevChroma = lastChroma;
-	lastChroma = tmp_chroma;
-	nT = (1.0 - (nChroma / max_chroma)) * rFactor;
-	memcpy ((char *)&prev, (char *)&tmp, sizeof(XcmsColor));
-	tmp.spec.RGBi.red   = rgb_saved.red * (1.0 - nT) + nT;
-	tmp.spec.RGBi.green = rgb_saved.green * (1.0 - nT) + nT;
-	tmp.spec.RGBi.blue  = rgb_saved.blue * (1.0 - nT) + nT;
-	tmp.format = XcmsRGBiFormat;
+    for (nCount = 0; nCount < nMaxCount; nCount++)
+    {
+        prevChroma = lastChroma;
+        lastChroma = tmp_chroma;
+        nT         = (1.0 - (nChroma / max_chroma)) * rFactor;
+        memcpy((char *)&prev, (char *)&tmp, sizeof(XcmsColor));
+        tmp.spec.RGBi.red   = rgb_saved.red * (1.0 - nT) + nT;
+        tmp.spec.RGBi.green = rgb_saved.green * (1.0 - nT) + nT;
+        tmp.spec.RGBi.blue  = rgb_saved.blue * (1.0 - nT) + nT;
+        tmp.format          = XcmsRGBiFormat;
 
-	/* convert from RGB to CIELuv */
-	if (_XcmsConvertColorsWithWhitePt(&myCCC, &tmp,
-		ScreenWhitePointOfCCC(&myCCC), 1, XcmsCIELuvFormat,
-		(Bool *) NULL) == XcmsFailure) {
-	    return(XcmsFailure);
-	}
+    /* convert from RGB to CIELuv */
+        if (_XcmsConvertColorsWithWhitePt(&myCCC,
+                                          &tmp,
+                                          ScreenWhitePointOfCCC(&myCCC),
+                                          1,
+                                          XcmsCIELuvFormat,
+                                          (Bool *)NULL) == XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
 
-	/* Now check the return against what is expected */
-	tmp_chroma = XCMS_CIELUV_PMETRIC_CHROMA(tmp.spec.CIELuv.u_star,
-						tmp.spec.CIELuv.v_star);
-	if (tmp_chroma <= chroma + EPS && tmp_chroma >= chroma - EPS) {
-	    /* Found It! */
-	    memcpy ((char *) pColor_return, (char *) &tmp, sizeof (XcmsColor));
-	    return(XcmsSuccess);
-	}
-	nChroma += chroma - tmp_chroma;
-	if (nChroma > max_chroma) {
-	    nChroma = max_chroma;
-	    rFactor *= 0.5;  /* selective relaxation employed */
-	} else if (nChroma < 0.0) {
-	    if (XCMS_FABS(lastChroma - chroma) <
-		XCMS_FABS(tmp_chroma - chroma)) {
-		memcpy ((char *)pColor_return, (char *)&prev,
- 			sizeof(XcmsColor));
-	    } else {
-		memcpy ((char *)pColor_return, (char *)&tmp,
- 			sizeof(XcmsColor));
-	    }
-	    return(XcmsSuccess);
-	} else if (tmp_chroma <= prevChroma + EPS &&
-		   tmp_chroma >= prevChroma - EPS) {
-	    rFactor *= 0.5;  /* selective relaxation employed */
-	}
+    /* Now check the return against what is expected */
+        tmp_chroma = XCMS_CIELUV_PMETRIC_CHROMA(tmp.spec.CIELuv.u_star,
+                                                tmp.spec.CIELuv.v_star);
+        if (tmp_chroma <= chroma + EPS && tmp_chroma >= chroma - EPS)
+        {
+        /* Found It! */
+            memcpy((char *)pColor_return, (char *)&tmp, sizeof(XcmsColor));
+            return (XcmsSuccess);
+        }
+        nChroma += chroma - tmp_chroma;
+        if (nChroma > max_chroma)
+        {
+            nChroma = max_chroma;
+            rFactor *= 0.5;  /* selective relaxation employed */
+        }
+        else if (nChroma < 0.0)
+        {
+            if (XCMS_FABS(lastChroma - chroma) < XCMS_FABS(tmp_chroma - chroma))
+            {
+                memcpy((char *)pColor_return, (char *)&prev, sizeof(XcmsColor));
+            }
+            else
+            {
+                memcpy((char *)pColor_return, (char *)&tmp, sizeof(XcmsColor));
+            }
+            return (XcmsSuccess);
+        }
+        else if (tmp_chroma <= prevChroma + EPS &&
+                 tmp_chroma >= prevChroma - EPS)
+        {
+            rFactor *= 0.5;  /* selective relaxation employed */
+        }
     }
 
-    if (nCount >= nMaxCount) {
-	if (XCMS_FABS(lastChroma - chroma) <
-	    XCMS_FABS(tmp_chroma - chroma)) {
-		memcpy ((char *)pColor_return, (char *)&prev,
- 			sizeof(XcmsColor));
-	    } else {
-		memcpy ((char *)pColor_return, (char *)&tmp,
- 			sizeof(XcmsColor));
-	}
+    if (nCount >= nMaxCount)
+    {
+        if (XCMS_FABS(lastChroma - chroma) < XCMS_FABS(tmp_chroma - chroma))
+        {
+            memcpy((char *)pColor_return, (char *)&prev, sizeof(XcmsColor));
+        }
+        else
+        {
+            memcpy((char *)pColor_return, (char *)&tmp, sizeof(XcmsColor));
+        }
     }
-    memcpy ((char *) pColor_return, (char *) &tmp, sizeof (XcmsColor));
-    return(XcmsSuccess);
+    memcpy((char *)pColor_return, (char *)&tmp, sizeof(XcmsColor));
+    return (XcmsSuccess);
 }

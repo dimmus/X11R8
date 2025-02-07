@@ -21,7 +21,7 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include "xshmfenceint.h"
@@ -29,15 +29,17 @@
 #include <fcntl.h>
 
 #ifndef HAVE_MEMFD_CREATE
-#ifdef HAVE_DECL___NR_MEMFD_CREATE
-#include <asm/unistd.h>
-static int memfd_create(const char *name,
-			    unsigned int flags)
+#  ifdef HAVE_DECL___NR_MEMFD_CREATE
+#    include <asm/unistd.h>
+
+static int
+memfd_create(const char *name, unsigned int flags)
 {
-	return syscall(__NR_memfd_create, name, flags);
+    return syscall(__NR_memfd_create, name, flags);
 }
-#define HAVE_MEMFD_CREATE	1
-#endif
+
+#    define HAVE_MEMFD_CREATE 1
+#  endif
 #endif
 
 #ifdef HAVE_MEMFD_CREATE
@@ -46,13 +48,13 @@ static int memfd_create(const char *name,
  * header if available, or just defining the constants otherwise
  */
 
-#ifdef HAVE_SYS_MEMFD_H
-#include <sys/memfd.h>
-#else
+#  ifdef HAVE_SYS_MEMFD_H
+#    include <sys/memfd.h>
+#  else
 /* flags for memfd_create(2) (unsigned int) */
-#define MFD_CLOEXEC		1U
-#define MFD_ALLOW_SEALING	2U
-#endif
+#    define MFD_CLOEXEC       1U
+#    define MFD_ALLOW_SEALING 2U
+#  endif
 
 #endif
 
@@ -68,58 +70,60 @@ static int memfd_create(const char *name,
 int
 xshmfence_alloc_shm(void)
 {
-	char	template[] = SHMDIR "/shmfd-XXXXXX";
-	int	fd = -1;
+    char template[] = SHMDIR "/shmfd-XXXXXX";
+    int fd          = -1;
 #ifndef HAVE_MKOSTEMP
-	int	flags;
+    int flags;
 #endif
 
 #ifdef HAVE_MEMFD_CREATE
-	static int disable_memfd = -1;
+    static int disable_memfd = -1;
 
-	if (disable_memfd == -1) {
-		const char *val = getenv("XSHMFENCE_NO_MEMFD");
-		disable_memfd = val ? !!atoi(val) : 0;
-	}
+    if (disable_memfd == -1)
+    {
+        const char *val = getenv("XSHMFENCE_NO_MEMFD");
+        disable_memfd   = val ? !!atoi(val) : 0;
+    }
 
-	if (disable_memfd <= 0)
-		fd = memfd_create("xshmfence", MFD_CLOEXEC|MFD_ALLOW_SEALING);
+    if (disable_memfd <= 0)
+        fd = memfd_create("xshmfence", MFD_CLOEXEC | MFD_ALLOW_SEALING);
 
-	if (fd < 0)
+    if (fd < 0)
 #endif
 #ifdef SHM_ANON
-	fd = shm_open(SHM_ANON, O_RDWR|O_CLOEXEC, 0600);
-	if (fd < 0)
+        fd = shm_open(SHM_ANON, O_RDWR | O_CLOEXEC, 0600);
+    if (fd < 0)
 #endif
-	{
+    {
 #ifdef O_TMPFILE
-		fd = open(SHMDIR, O_TMPFILE|O_RDWR|O_CLOEXEC|O_EXCL, 0666);
-		if (fd < 0)
+        fd = open(SHMDIR, O_TMPFILE | O_RDWR | O_CLOEXEC | O_EXCL, 0666);
+        if (fd < 0)
 #endif
-		{
+        {
 #ifdef HAVE_MKOSTEMP
-			fd = mkostemp(template, O_CLOEXEC);
+            fd = mkostemp(template, O_CLOEXEC);
 #else
-			fd = mkstemp(template);
+            fd = mkstemp(template);
 #endif
-			if (fd < 0)
-				return fd;
-			unlink(template);
+            if (fd < 0) return fd;
+            unlink(template);
 #ifndef HAVE_MKOSTEMP
-			flags = fcntl(fd, F_GETFD);
-			if (flags != -1) {
-				flags |= FD_CLOEXEC;
-				fcntl(fd, F_SETFD, &flags);
-			}
+            flags = fcntl(fd, F_GETFD);
+            if (flags != -1)
+            {
+                flags |= FD_CLOEXEC;
+                fcntl(fd, F_SETFD, &flags);
+            }
 #endif
-		}
-	}
-	if (ftruncate(fd, sizeof (struct xshmfence)) < 0) {
-            close(fd);
-            return -1;
         }
-        xshmfence_init(fd);
-	return fd;
+    }
+    if (ftruncate(fd, sizeof(struct xshmfence)) < 0)
+    {
+        close(fd);
+        return -1;
+    }
+    xshmfence_init(fd);
+    return fd;
 }
 
 /**
@@ -133,13 +137,19 @@ xshmfence_alloc_shm(void)
 struct xshmfence *
 xshmfence_map_shm(int fd)
 {
-	struct xshmfence *addr;
-	addr = mmap (NULL, sizeof (struct xshmfence) , PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
-	if (addr == MAP_FAILED) {
-		close (fd);
-		return 0;
-	}
-	return addr;
+    struct xshmfence *addr;
+    addr = mmap(NULL,
+                sizeof(struct xshmfence),
+                PROT_READ | PROT_WRITE,
+                MAP_SHARED,
+                fd,
+                0);
+    if (addr == MAP_FAILED)
+    {
+        close(fd);
+        return 0;
+    }
+    return addr;
 }
 
 /**
@@ -150,5 +160,5 @@ xshmfence_map_shm(int fd)
 void
 xshmfence_unmap_shm(struct xshmfence *f)
 {
-        munmap(f, sizeof (struct xshmfence));
+    munmap(f, sizeof(struct xshmfence));
 }

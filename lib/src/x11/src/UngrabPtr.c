@@ -25,14 +25,12 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XUngrabPointer(
-    register Display *dpy,
-    Time time)
+XUngrabPointer(register Display *dpy, Time time)
 {
     register xResourceReq *req;
 

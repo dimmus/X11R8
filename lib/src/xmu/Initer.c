@@ -30,47 +30,49 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Intrinsic.h"
 #include "X11/Xmu/Initer.h"
 
-struct InitializerList {
-  XmuInitializerProc function;	/* function to call */
-  XPointer data;		/* Data to pass the function. */
-  XtAppContext * app_con_list;	/* a null terminated list of app_contexts. */
+struct InitializerList
+{
+    XmuInitializerProc function; /* function to call */
+    XPointer           data;  /* Data to pass the function. */
+    XtAppContext *app_con_list; /* a null terminated list of app_contexts. */
 };
 
 /*
  * Prototypes
  */
-static Bool AddToAppconList(XtAppContext**, XtAppContext);
+static Bool AddToAppconList(XtAppContext **, XtAppContext);
 
-static struct InitializerList * init_list = NULL;
-static Cardinal init_list_length = 0;
+static struct InitializerList *init_list        = NULL;
+static Cardinal                init_list_length = 0;
 
 void
 XmuAddInitializer(XmuInitializerProc func, XPointer data)
 {
-  init_list_length++;
-  init_list = (struct InitializerList *) XtRealloc( (char *) init_list,
-					    (sizeof(struct InitializerList) *
-					     init_list_length) );
+    init_list_length++;
+    init_list = (struct InitializerList *)XtRealloc(
+        (char *)init_list,
+        (sizeof(struct InitializerList) * init_list_length));
 
-  init_list[init_list_length - 1].function = func;
-  init_list[init_list_length - 1].data = data;
-  init_list[init_list_length - 1].app_con_list = NULL;
+    init_list[init_list_length - 1].function     = func;
+    init_list[init_list_length - 1].data         = data;
+    init_list[init_list_length - 1].app_con_list = NULL;
 }
 
 void
 XmuCallInitializers(XtAppContext app_con)
 {
-  unsigned i;
+    unsigned i;
 
-  for (i = 0 ; i < init_list_length ; i++) {
-    if (AddToAppconList(&(init_list[i].app_con_list), app_con))
-      (init_list[i].function) (app_con, init_list[i].data);
-  }
+    for (i = 0; i < init_list_length; i++)
+    {
+        if (AddToAppconList(&(init_list[i].app_con_list), app_con))
+            (init_list[i].function)(app_con, init_list[i].data);
+    }
 }
 
 /*
@@ -92,23 +94,23 @@ XmuCallInitializers(XtAppContext app_con)
 static Bool
 AddToAppconList(XtAppContext **app_list, XtAppContext app_con)
 {
-  int i;
-  XtAppContext *local_list;
+    int           i;
+    XtAppContext *local_list;
 
-  i = 0;
-  local_list = *app_list;
-  if (*app_list != NULL) {
-    for ( ; *local_list != NULL ; i++, local_list++) {
-      if (*local_list == app_con)
-	return (False);
+    i          = 0;
+    local_list = *app_list;
+    if (*app_list != NULL)
+    {
+        for (; *local_list != NULL; i++, local_list++)
+        {
+            if (*local_list == app_con) return (False);
+        }
     }
-  }
 
-  *app_list = (XtAppContext *)  XtRealloc((char *)(*app_list),
-					  sizeof(XtAppContext *) * (i + 2) );
-  (*app_list)[i++] = app_con;
-  (*app_list)[i] = NULL;
+    *app_list        = (XtAppContext *)XtRealloc((char *)(*app_list),
+                                          sizeof(XtAppContext *) * (i + 2));
+    (*app_list)[i++] = app_con;
+    (*app_list)[i]   = NULL;
 
-  return (True);
+    return (True);
 }
-

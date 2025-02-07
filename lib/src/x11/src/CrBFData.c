@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlib.h"
 
@@ -46,35 +46,38 @@ in this Software without prior written authorization from The Open Group.
  *    xoffset=0
  *    no extra bytes per line
  */
-Pixmap XCreateBitmapFromData(
-     Display *display,
-     Drawable d,
-     _Xconst char *data,
-     unsigned int width,
-     unsigned int height)
+Pixmap
+XCreateBitmapFromData(Display      *display,
+                      Drawable      d,
+                      _Xconst char *data,
+                      unsigned int  width,
+                      unsigned int  height)
 {
     Pixmap pix = XCreatePixmap(display, d, width, height, 1);
-    GC gc = XCreateGC(display, pix, (unsigned long) 0, (XGCValues *) 0);
-    if (gc == NULL) {
+    GC     gc  = XCreateGC(display, pix, (unsigned long)0, (XGCValues *)0);
+    if (gc == NULL)
+    {
         XFreePixmap(display, pix);
-        return (Pixmap) None;
-    } else {
+        return (Pixmap)None;
+    }
+    else
+    {
         XImage ximage = {
-            .height = height,
-            .width = width,
-            .depth = 1,
-            .bits_per_pixel = 1,
-            .xoffset = 0,
-            .format = XYPixmap,
-            .data = (char *) data,
-            .byte_order = LSBFirst,
-            .bitmap_unit = 8,
+            .height           = height,
+            .width            = width,
+            .depth            = 1,
+            .bits_per_pixel   = 1,
+            .xoffset          = 0,
+            .format           = XYPixmap,
+            .data             = (char *)data,
+            .byte_order       = LSBFirst,
+            .bitmap_unit      = 8,
             .bitmap_bit_order = LSBFirst,
-            .bitmap_pad = 8,
-            .bytes_per_line = (width + 7) / 8,
+            .bitmap_pad       = 8,
+            .bytes_per_line   = (width + 7) / 8,
         };
         XPutImage(display, pix, gc, &ximage, 0, 0, 0, 0, width, height);
         XFreeGC(display, gc);
-        return(pix);
+        return (pix);
     }
 }

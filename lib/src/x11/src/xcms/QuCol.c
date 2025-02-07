@@ -33,13 +33,12 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
 
-
 /************************************************************************
  *									*
  *			PUBLIC ROUTINES					*
@@ -53,11 +52,10 @@
  *	SYNOPSIS
  */
 Status
-XcmsQueryColor(
-    Display *dpy,
-    Colormap colormap,
-    XcmsColor *pXcmsColor_in_out,
-    XcmsColorFormat result_format)
+XcmsQueryColor(Display        *dpy,
+               Colormap        colormap,
+               XcmsColor      *pXcmsColor_in_out,
+               XcmsColorFormat result_format)
 /*
  *	DESCRIPTION
  *		This routine uses XQueryColor to obtain the X RGB values
@@ -73,6 +71,10 @@ XcmsQueryColor(
  *		specified pixel.
  */
 {
-    return(_XcmsSetGetColor(XQueryColor, dpy, colormap,
-	    pXcmsColor_in_out, result_format, (Bool *) NULL));
+    return (_XcmsSetGetColor(XQueryColor,
+                             dpy,
+                             colormap,
+                             pXcmsColor_in_out,
+                             result_format,
+                             (Bool *)NULL));
 }

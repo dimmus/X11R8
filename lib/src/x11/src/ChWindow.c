@@ -25,16 +25,15 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XResizeWindow(
-    register Display *dpy,
-    Window w,
-    unsigned int width,
-    unsigned int height)
+XResizeWindow(register Display *dpy,
+              Window            w,
+              unsigned int      width,
+              unsigned int      height)
 {
     register xConfigureWindowReq *req;
 
@@ -42,11 +41,11 @@ XResizeWindow(
     GetReqExtra(ConfigureWindow, 8, req); /* 2 4-byte quantities */
 
     req->window = w;
-    req->mask = CWWidth | CWHeight;
+    req->mask   = CWWidth | CWHeight;
     {
-	CARD32 *valuePtr = (CARD32 *) NEXTPTR(req,xConfigureWindowReq);
-	*valuePtr++ = width;
-	*valuePtr = height;
+        CARD32 *valuePtr = (CARD32 *)NEXTPTR(req, xConfigureWindowReq);
+        *valuePtr++      = width;
+        *valuePtr        = height;
     }
     UnlockDisplay(dpy);
     SyncHandle();

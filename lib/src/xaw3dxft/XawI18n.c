@@ -54,18 +54,18 @@ in this Software without prior written authorization from the X Consortium.
 */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <X11/IntrinsicP.h>
 #include "XawI18n.h"
 
-wchar_t _Xaw_atowc(
-    unsigned char c)
+wchar_t
+_Xaw_atowc(unsigned char c)
 {
-    wchar_t  wc;
-    char str[2];
+    wchar_t wc;
+    char    str[2];
 
     str[0] = c;
     str[1] = '\0';
@@ -75,12 +75,12 @@ wchar_t _Xaw_atowc(
 }
 
 #ifdef NCR
-int _Xaw_iswspace(wchar_t w)
+int
+_Xaw_iswspace(wchar_t w)
 {
-    int ret = 0;
-    wchar_t s = _Xaw_atowc(' ');
-    if (s == w)
-	ret = 1;
+    int     ret = 0;
+    wchar_t s   = _Xaw_atowc(' ');
+    if (s == w) ret = 1;
     return ret;
 }
 #endif

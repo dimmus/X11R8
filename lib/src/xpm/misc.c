@@ -33,30 +33,26 @@
 \*****************************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "XpmI.h"
 
 unsigned int
-xpmatoui(
-    register char	*p,
-    unsigned int	 l,
-    unsigned int	*ui_return)
+xpmatoui(register char *p, unsigned int l, unsigned int *ui_return)
 {
     register unsigned int n, i;
 
     n = 0;
     for (i = 0; i < l; i++)
-	if (*p >= '0' && *p <= '9')
-	    n = n * 10 + *p++ - '0';
-	else
-	    break;
+        if (*p >= '0' && *p <= '9') n = n * 10 + *p++ - '0';
+        else break;
 
-    if (i != 0 && i == l) {
-	*ui_return = n;
-	return 1;
-    } else
-	return 0;
+    if (i != 0 && i == l)
+    {
+        *ui_return = n;
+        return 1;
+    }
+    else return 0;
 }
 
 /*
@@ -65,21 +61,22 @@ xpmatoui(
 char *
 XpmGetErrorString(int errcode)
 {
-    switch (errcode) {
-    case XpmColorError:
-	return ("XpmColorError");
-    case XpmSuccess:
-	return ("XpmSuccess");
-    case XpmOpenFailed:
-	return ("XpmOpenFailed");
-    case XpmFileInvalid:
-	return ("XpmFileInvalid");
-    case XpmNoMemory:
-	return ("XpmNoMemory");
-    case XpmColorFailed:
-	return ("XpmColorFailed");
-    default:
-	return ("Invalid XpmError");
+    switch (errcode)
+    {
+        case XpmColorError:
+            return ("XpmColorError");
+        case XpmSuccess:
+            return ("XpmSuccess");
+        case XpmOpenFailed:
+            return ("XpmOpenFailed");
+        case XpmFileInvalid:
+            return ("XpmFileInvalid");
+        case XpmNoMemory:
+            return ("XpmNoMemory");
+        case XpmColorFailed:
+            return ("XpmColorFailed");
+        default:
+            return ("Invalid XpmError");
     }
 }
 
@@ -93,10 +90,9 @@ XpmLibraryVersion(void)
     return XpmIncludeVersion;
 }
 
-
 /* The following should help people wanting to use their own functions */
 #ifdef XpmFree
-#undef XpmFree
+#  undef XpmFree
 #endif
 
 void

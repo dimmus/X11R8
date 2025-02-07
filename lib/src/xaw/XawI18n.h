@@ -25,67 +25,54 @@ in this Software without prior written authorization from The Open Group.
 ********************************************************/
 
 #ifdef HAVE_WCTYPE_H
-#include <wctype.h>
-#ifdef HAVE_WIDEC_H
-#include <widec.h>
-#define wcslen(c) wslen(c)
-#define wcscpy(d, s)		wscpy(d, s)
-#define wcsncpy(d, s, l)	wsncpy(d, s, l)
-#endif
+#  include <wctype.h>
+#  ifdef HAVE_WIDEC_H
+#    include <widec.h>
+#    define wcslen(c)        wslen(c)
+#    define wcscpy(d, s)     wscpy(d, s)
+#    define wcsncpy(d, s, l) wsncpy(d, s, l)
+#  endif
 #endif
 
 #ifdef HAVE_WCHAR_H
-#include <wchar.h>
+#  include <wchar.h>
 #endif
 
 #include <stdlib.h>
 
 #ifdef USE_XWCHAR_STRING
-int _Xwcslen
-(
- wchar_t		*wstr
- );
+int _Xwcslen(wchar_t *wstr);
 
-#define wcslen(c) _Xwcslen(c)
+#  define wcslen(c) _Xwcslen(c)
 
-wchar_t *_Xwcscpy
-(
- wchar_t		*wstr1,
- wchar_t		*wstr2
- );
+wchar_t *_Xwcscpy(wchar_t *wstr1, wchar_t *wstr2);
 
-#define wcscpy(d,s) _Xwcscpy(d,s)
+#  define wcscpy(d, s) _Xwcscpy(d, s)
 
-wchar_t *_Xwcsncpy
-(
- wchar_t		*wstr1,
- wchar_t		*wstr2,
- int			len
- );
+wchar_t *_Xwcsncpy(wchar_t *wstr1, wchar_t *wstr2, int len);
 
-#define wcsncpy(d, s, l)	_Xwcsncpy(d, s, l)
+#  define wcsncpy(d, s, l) _Xwcsncpy(d, s, l)
 
-#ifdef USE_XMBTOWC
-#define mbtowc(wc, s, l)	_Xmbtowc(wc, s, l)
-#endif
+#  ifdef USE_XMBTOWC
+#    define mbtowc(wc, s, l) _Xmbtowc(wc, s, l)
+#  endif
 #endif
 
-wchar_t _Xaw_atowc
-(
+wchar_t _Xaw_atowc(
 #if NeedWidePrototypes
- int			c
+    int c
 #else
- unsigned char		c
+    unsigned char c
 #endif
- );
+);
 
 #ifndef HAS_ISW_FUNCS
 #  include <ctype.h>
 #  ifndef isascii
-#    define isascii(c)  ((unsigned char)(c) < 127)
+#    define isascii(c) ((unsigned char)(c) < 127)
 #  endif
 #  ifndef toascii
-#    define toascii(c)  ((c) & 0x7f)
+#    define toascii(c) ((c) & 0x7f)
 #  endif
 #  ifndef iswspace
 #    define iswspace(c) (isascii(c) && isspace(toascii(c)))
@@ -93,9 +80,6 @@ wchar_t _Xaw_atowc
 #endif
 
 #if !defined(iswalnum) && !defined(HAVE_ISWALNUM)
-#define iswalnum(c) _Xaw_iswalnum(c)
+#  define iswalnum(c) _Xaw_iswalnum(c)
 #endif
-int _Xaw_iswalnum
-(
- wchar_t		c
- );
+int _Xaw_iswalnum(wchar_t c);

@@ -26,7 +26,7 @@ in this Software without prior written authorization from the X Consortium.
 */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 #include <X11/IntrinsicP.h>
 #include <X11/StringDefs.h>
@@ -35,61 +35,60 @@ in this Software without prior written authorization from the X Consortium.
 static XtResource resources[] = {
 #define offset(field) XtOffsetOf(TemplateRec, template.field)
     /* {name, class, type, size, offset, default_type, default_addr}, */
-    { XtNtemplateResource, XtCTemplateResource, XtRTemplateResource,
-	  sizeof(char*), offset(resource), XtRString, (XtPointer) "default" },
+    { XtNtemplateResource,
+     XtCTemplateResource, XtRTemplateResource,
+     sizeof(char *),
+     offset(resource),
+     XtRString, (XtPointer) "default" },
 #undef offset
 };
 
 static void TemplateAction(/* Widget, XEvent*, String*, Cardinal* */);
 
-static XtActionsRec actions[] =
-{
+static XtActionsRec actions[] = {
   /* {name, procedure}, */
-    {"template",	TemplateAction},
+    { "template", TemplateAction },
 };
 
-static char translations[] =
-"<Key>:		template()	\n\
+static char translations[] = "<Key>:		template()	\n\
 ";
 
 TemplateClassRec templateClassRec = {
-  { /* core fields */
-    /* superclass		*/	(WidgetClass) &widgetClassRec,
-    /* class_name		*/	"Template",
-    /* widget_size		*/	sizeof(TemplateRec),
-    /* class_initialize		*/	NULL,
-    /* class_part_initialize	*/	NULL,
-    /* class_inited		*/	FALSE,
-    /* initialize		*/	NULL,
-    /* initialize_hook		*/	NULL,
-    /* realize			*/	XtInheritRealize,
-    /* actions			*/	actions,
-    /* num_actions		*/	XtNumber(actions),
-    /* resources		*/	resources,
-    /* num_resources		*/	XtNumber(resources),
-    /* xrm_class		*/	NULLQUARK,
-    /* compress_motion		*/	TRUE,
-    /* compress_exposure	*/	TRUE,
-    /* compress_enterleave	*/	TRUE,
-    /* visible_interest		*/	FALSE,
-    /* destroy			*/	NULL,
-    /* resize			*/	NULL,
-    /* expose			*/	NULL,
-    /* set_values		*/	NULL,
-    /* set_values_hook		*/	NULL,
-    /* set_values_almost	*/	XtInheritSetValuesAlmost,
-    /* get_values_hook		*/	NULL,
-    /* accept_focus		*/	NULL,
-    /* version			*/	XtVersion,
-    /* callback_private		*/	NULL,
-    /* tm_table			*/	translations,
-    /* query_geometry		*/	XtInheritQueryGeometry,
-    /* display_accelerator	*/	XtInheritDisplayAccelerator,
-    /* extension		*/	NULL
-  },
-  { /* template fields */
-    /* empty			*/	0
-  }
+    { /* core fields */
+      /* superclass		*/ (WidgetClass)&widgetClassRec,
+     /* class_name		*/ "Template",
+     /* widget_size		*/ sizeof(TemplateRec),
+     /* class_initialize		*/ NULL,
+     /* class_part_initialize	*/ NULL,
+     /* class_inited		*/ FALSE,
+     /* initialize		*/ NULL,
+     /* initialize_hook		*/ NULL,
+     /* realize			*/ XtInheritRealize,
+     /* actions			*/ actions,
+     /* num_actions		*/ XtNumber(actions),
+     /* resources		*/ resources,
+     /* num_resources		*/ XtNumber(resources),
+     /* xrm_class		*/ NULLQUARK,
+     /* compress_motion		*/ TRUE,
+     /* compress_exposure	*/ TRUE,
+     /* compress_enterleave	*/ TRUE,
+     /* visible_interest		*/ FALSE,
+     /* destroy			*/ NULL,
+     /* resize			*/ NULL,
+     /* expose			*/ NULL,
+     /* set_values		*/ NULL,
+     /* set_values_hook		*/ NULL,
+     /* set_values_almost	*/ XtInheritSetValuesAlmost,
+     /* get_values_hook		*/ NULL,
+     /* accept_focus		*/ NULL,
+     /* version			*/ XtVersion,
+     /* callback_private		*/ NULL,
+     /* tm_table			*/ translations,
+     /* query_geometry		*/ XtInheritQueryGeometry,
+     /* display_accelerator	*/ XtInheritDisplayAccelerator,
+     /* extension		*/ NULL },
+    { /* template fields */
+      /* empty			*/ 0 }
 };
 
 WidgetClass templateWidgetClass = (WidgetClass)&templateClassRec;

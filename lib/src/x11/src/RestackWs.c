@@ -25,37 +25,31 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XRestackWindows (
-    register Display *dpy,
-    register Window *windows,
-    int n)
+XRestackWindows(register Display *dpy, register Window *windows, int n)
 {
     int i = 0;
 
     LockDisplay(dpy);
-    while (windows++, ++i < n) {
-	register xConfigureWindowReq *req;
+    while (windows++, ++i < n)
+    {
+        register xConfigureWindowReq *req;
 
-    	GetReqExtra (ConfigureWindow, 8, req);
-	req->window = *windows;
-	req->mask = CWSibling | CWStackMode;
-	{
-	    register CARD32 *values = (CARD32 *)
-	      NEXTPTR(req,xConfigureWindowReq);
-	    *values++ = *(windows-1);
-	    *values   = Below;
-	}
-	}
+        GetReqExtra(ConfigureWindow, 8, req);
+        req->window = *windows;
+        req->mask   = CWSibling | CWStackMode;
+        {
+            register CARD32 *values =
+                (CARD32 *)NEXTPTR(req, xConfigureWindowReq);
+            *values++ = *(windows - 1);
+            *values   = Below;
+        }
+    }
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
-    }
-
-
-
-
+}

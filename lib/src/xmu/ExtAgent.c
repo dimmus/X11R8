@@ -25,15 +25,14 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Intrinsic.h"
 #include "X11/Xmu/ExtAgent.h"
 
 /* ARGSUSED */
 void
-XmuRegisterExternalAgent(Widget w, XtPointer data,
-			 XEvent *event, Boolean *cont)
+XmuRegisterExternalAgent(Widget w, XtPointer data, XEvent *event, Boolean *cont)
 {
 /*
 * This is a stub.  Writers of protocol libraries

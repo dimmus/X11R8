@@ -32,12 +32,11 @@
 extern "C" {
 #endif
 
-struct libxcvt_mode_info *
-libxcvt_gen_mode_info(int   hdisplay,
-                      int   vdisplay,
-                      float vrefresh,
-                      bool  reduced,
-                      bool  interlaced);
+struct libxcvt_mode_info *libxcvt_gen_mode_info(int   hdisplay,
+                                                int   vdisplay,
+                                                float vrefresh,
+                                                bool  reduced,
+                                                bool  interlaced);
 
 #ifdef __cplusplus
 }

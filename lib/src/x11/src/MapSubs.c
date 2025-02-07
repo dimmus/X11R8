@@ -25,14 +25,12 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XMapSubwindows(
-    register Display *dpy,
-    Window win)
+XMapSubwindows(register Display *dpy, Window win)
 {
     register xResourceReq *req;
     LockDisplay(dpy);

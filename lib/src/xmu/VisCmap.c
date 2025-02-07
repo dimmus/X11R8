@@ -29,7 +29,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include <math.h>
@@ -69,8 +69,12 @@ in this Software without prior written authorization from The Open Group.
  */
 
 Status
-XmuVisualStandardColormaps(Display *dpy, int screen, VisualID visualid,
-			   unsigned int depth, Bool replace, Bool retain)
+XmuVisualStandardColormaps(Display     *dpy,
+                           int          screen,
+                           VisualID     visualid,
+                           unsigned int depth,
+                           Bool         replace,
+                           Bool         retain)
      /*
       * dpy			- specifies server connection
       * screen			- specifies screen number
@@ -80,101 +84,147 @@ XmuVisualStandardColormaps(Display *dpy, int screen, VisualID visualid,
       * retain			- specifies whether to retain
       */
 {
-    Status		status;
-    int			n;
-    long		vinfo_mask;
-    XVisualInfo		vinfo_template, *vinfo;
+    Status      status;
+    int         n;
+    long        vinfo_mask;
+    XVisualInfo vinfo_template, *vinfo;
 
-    status = 0;
-    vinfo_template.screen = screen;
+    status                  = 0;
+    vinfo_template.screen   = screen;
     vinfo_template.visualid = visualid;
-    vinfo_template.depth = depth;
-    vinfo_mask = VisualScreenMask | VisualIDMask | VisualDepthMask;
+    vinfo_template.depth    = depth;
+    vinfo_mask              = VisualScreenMask | VisualIDMask | VisualDepthMask;
     if ((vinfo = XGetVisualInfo(dpy, vinfo_mask, &vinfo_template, &n)) == NULL)
-	return 0;
+        return 0;
 
-    if (vinfo->colormap_size <= 2) {
-	/* Monochrome visuals have no standard maps; considered successful */
-	XFree((char *) vinfo);
-	return 1;
+    if (vinfo->colormap_size <= 2)
+    {
+    /* Monochrome visuals have no standard maps; considered successful */
+        XFree((char *)vinfo);
+        return 1;
     }
 
     switch (vinfo->class)
     {
-      case PseudoColor:
-      case DirectColor:
-	status = XmuLookupStandardColormap(dpy, screen, visualid, depth,
-					   XA_RGB_DEFAULT_MAP, replace,retain);
-	if (!status) break;
+        case PseudoColor:
+        case DirectColor:
+            status = XmuLookupStandardColormap(dpy,
+                                               screen,
+                                               visualid,
+                                               depth,
+                                               XA_RGB_DEFAULT_MAP,
+                                               replace,
+                                               retain);
+            if (!status) break;
 
-	status = XmuLookupStandardColormap(dpy, screen, visualid, depth,
-					   XA_RGB_GRAY_MAP, replace, retain);
-	if (!status) {
-	    XmuDeleteStandardColormap(dpy, screen, XA_RGB_DEFAULT_MAP);
-	    break;
-	}
+            status = XmuLookupStandardColormap(dpy,
+                                               screen,
+                                               visualid,
+                                               depth,
+                                               XA_RGB_GRAY_MAP,
+                                               replace,
+                                               retain);
+            if (!status)
+            {
+                XmuDeleteStandardColormap(dpy, screen, XA_RGB_DEFAULT_MAP);
+                break;
+            }
 
-	status = XmuLookupStandardColormap(dpy, screen, visualid, depth,
-					   XA_RGB_RED_MAP, replace, retain);
-	if (!status) {
-	    XmuDeleteStandardColormap(dpy, screen, XA_RGB_DEFAULT_MAP);
-	    XmuDeleteStandardColormap(dpy, screen, XA_RGB_GRAY_MAP);
-	    break;
-	}
+            status = XmuLookupStandardColormap(dpy,
+                                               screen,
+                                               visualid,
+                                               depth,
+                                               XA_RGB_RED_MAP,
+                                               replace,
+                                               retain);
+            if (!status)
+            {
+                XmuDeleteStandardColormap(dpy, screen, XA_RGB_DEFAULT_MAP);
+                XmuDeleteStandardColormap(dpy, screen, XA_RGB_GRAY_MAP);
+                break;
+            }
 
-	status = XmuLookupStandardColormap(dpy, screen, visualid, depth,
-					   XA_RGB_GREEN_MAP, replace, retain);
-	if (!status) {
-	    XmuDeleteStandardColormap(dpy, screen, XA_RGB_DEFAULT_MAP);
-	    XmuDeleteStandardColormap(dpy, screen, XA_RGB_GRAY_MAP);
-	    XmuDeleteStandardColormap(dpy, screen, XA_RGB_RED_MAP);
-	    break;
-	}
+            status = XmuLookupStandardColormap(dpy,
+                                               screen,
+                                               visualid,
+                                               depth,
+                                               XA_RGB_GREEN_MAP,
+                                               replace,
+                                               retain);
+            if (!status)
+            {
+                XmuDeleteStandardColormap(dpy, screen, XA_RGB_DEFAULT_MAP);
+                XmuDeleteStandardColormap(dpy, screen, XA_RGB_GRAY_MAP);
+                XmuDeleteStandardColormap(dpy, screen, XA_RGB_RED_MAP);
+                break;
+            }
 
-	status = XmuLookupStandardColormap(dpy, screen, visualid, depth,
-					   XA_RGB_BLUE_MAP, replace, retain);
-	if (!status) {
-	    XmuDeleteStandardColormap(dpy, screen, XA_RGB_DEFAULT_MAP);
-	    XmuDeleteStandardColormap(dpy, screen, XA_RGB_GRAY_MAP);
-	    XmuDeleteStandardColormap(dpy, screen, XA_RGB_RED_MAP);
-	    XmuDeleteStandardColormap(dpy, screen, XA_RGB_GREEN_MAP);
-	    break;
-	}
-	/* fall through */
+            status = XmuLookupStandardColormap(dpy,
+                                               screen,
+                                               visualid,
+                                               depth,
+                                               XA_RGB_BLUE_MAP,
+                                               replace,
+                                               retain);
+            if (!status)
+            {
+                XmuDeleteStandardColormap(dpy, screen, XA_RGB_DEFAULT_MAP);
+                XmuDeleteStandardColormap(dpy, screen, XA_RGB_GRAY_MAP);
+                XmuDeleteStandardColormap(dpy, screen, XA_RGB_RED_MAP);
+                XmuDeleteStandardColormap(dpy, screen, XA_RGB_GREEN_MAP);
+                break;
+            }
+    /* fall through */
 
-      case StaticColor:
-      case TrueColor:
+        case StaticColor:
+        case TrueColor:
 
-	status = XmuLookupStandardColormap(dpy, screen, visualid, depth,
-					   XA_RGB_BEST_MAP, replace, retain);
-	if (!status && (vinfo->class == PseudoColor ||
-			vinfo->class == DirectColor)) {
-	    XmuDeleteStandardColormap(dpy, screen, XA_RGB_DEFAULT_MAP);
-	    XmuDeleteStandardColormap(dpy, screen, XA_RGB_GRAY_MAP);
-	    XmuDeleteStandardColormap(dpy, screen, XA_RGB_RED_MAP);
-	    XmuDeleteStandardColormap(dpy, screen, XA_RGB_GREEN_MAP);
-	    XmuDeleteStandardColormap(dpy, screen, XA_RGB_BLUE_MAP);
-	}
-	break;
-	/* the end for PseudoColor, DirectColor, StaticColor, and TrueColor */
+            status = XmuLookupStandardColormap(dpy,
+                                               screen,
+                                               visualid,
+                                               depth,
+                                               XA_RGB_BEST_MAP,
+                                               replace,
+                                               retain);
+            if (!status &&
+                (vinfo->class == PseudoColor || vinfo->class == DirectColor))
+            {
+                XmuDeleteStandardColormap(dpy, screen, XA_RGB_DEFAULT_MAP);
+                XmuDeleteStandardColormap(dpy, screen, XA_RGB_GRAY_MAP);
+                XmuDeleteStandardColormap(dpy, screen, XA_RGB_RED_MAP);
+                XmuDeleteStandardColormap(dpy, screen, XA_RGB_GREEN_MAP);
+                XmuDeleteStandardColormap(dpy, screen, XA_RGB_BLUE_MAP);
+            }
+            break;
+            /* the end for PseudoColor, DirectColor, StaticColor, and TrueColor */
 
-      case GrayScale:
-	status = XmuLookupStandardColormap(dpy, screen, visualid, depth,
-					   XA_RGB_DEFAULT_MAP, replace,
-					   retain);
-	if (! status) break;
-	/*FALLTHROUGH*/
+        case GrayScale:
+            status = XmuLookupStandardColormap(dpy,
+                                               screen,
+                                               visualid,
+                                               depth,
+                                               XA_RGB_DEFAULT_MAP,
+                                               replace,
+                                               retain);
+            if (!status) break;
+            /*FALLTHROUGH*/
 
-      case StaticGray:
+        case StaticGray:
 
-	status = XmuLookupStandardColormap(dpy, screen, visualid, depth,
-					   XA_RGB_GRAY_MAP, replace, retain);
-	if (! status && vinfo->class == GrayScale) {
-	    XmuDeleteStandardColormap(dpy, screen, XA_RGB_DEFAULT_MAP);
-	    break;
-	}
+            status = XmuLookupStandardColormap(dpy,
+                                               screen,
+                                               visualid,
+                                               depth,
+                                               XA_RGB_GRAY_MAP,
+                                               replace,
+                                               retain);
+            if (!status && vinfo->class == GrayScale)
+            {
+                XmuDeleteStandardColormap(dpy, screen, XA_RGB_DEFAULT_MAP);
+                break;
+            }
     }
 
-    XFree((char *) vinfo);
+    XFree((char *)vinfo);
     return status;
 }

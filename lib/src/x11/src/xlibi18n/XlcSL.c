@@ -59,32 +59,27 @@ Sun Microsystems, Inc. or its licensors is granted.
  * DEALINGS IN THE SOFTWARE.
  */
 
-
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xlcint.h"
 
-extern XIM _XDefaultOpenIM(
-	XLCd, Display *, XrmDatabase, char *, char *
-			   );
+extern XIM _XDefaultOpenIM(XLCd, Display *, XrmDatabase, char *, char *);
 
 Bool
 _XInitDefaultIM(XLCd lcd)
 {
-    if(lcd == (XLCd)NULL)
-	return False;
+    if (lcd == (XLCd)NULL) return False;
 
-    lcd->methods->open_im = _XDefaultOpenIM;
-    lcd->methods->register_callback = NULL;
+    lcd->methods->open_im             = _XDefaultOpenIM;
+    lcd->methods->register_callback   = NULL;
     lcd->methods->unregister_callback = NULL;
     return True;
 }
 
-extern XOM _XDefaultOpenOM(
-    XLCd, Display*, XrmDatabase, _Xconst char*, _Xconst char*
-			   );
+extern XOM
+_XDefaultOpenOM(XLCd, Display *, XrmDatabase, _Xconst char *, _Xconst char *);
 
 Bool
 _XInitDefaultOM(XLCd lcd)

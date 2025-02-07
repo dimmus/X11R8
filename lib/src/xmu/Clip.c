@@ -26,15 +26,15 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdlib.h>
 
 #include "X11/IntrinsicP.h"
 #include "X11/Xmu/Xmu.h"
 
-#define XmuMax(a, b)	((a) > (b) ? (a) : (b))
-#define XmuMin(a, b)	((a) < (b) ? (a) : (b))
+#define XmuMax(a, b) ((a) > (b) ? (a) : (b))
+#define XmuMin(a, b) ((a) < (b) ? (a) : (b))
 
 /*
  * Function:
@@ -52,18 +52,17 @@
 XmuArea *
 XmuNewArea(int x1, int y1, int x2, int y2)
 {
-  XmuArea *area;
+    XmuArea *area;
 
-  area = (XmuArea *)XtMalloc(sizeof(XmuArea));
-  if (x2 > x1 && y2 > y1)
+    area = (XmuArea *)XtMalloc(sizeof(XmuArea));
+    if (x2 > x1 && y2 > y1)
     {
-      area->scanline = XmuNewScanline(y1, x1, x2);
-      area->scanline->next = XmuNewScanline(y2, 0, 0);
+        area->scanline       = XmuNewScanline(y1, x1, x2);
+        area->scanline->next = XmuNewScanline(y2, 0, 0);
     }
-  else
-    area->scanline = (XmuScanline *)NULL;
+    else area->scanline = (XmuScanline *)NULL;
 
-  return (area);
+    return (area);
 }
 
 /*
@@ -79,14 +78,13 @@ XmuNewArea(int x1, int y1, int x2, int y2)
 XmuArea *
 XmuAreaDup(XmuArea *area)
 {
-  XmuArea *dst;
+    XmuArea *dst;
 
-  if (!area)
-    return ((XmuArea *)NULL);
+    if (!area) return ((XmuArea *)NULL);
 
-  dst = XmuCreateArea();
-  XmuAreaCopy(dst, area);
-  return (dst);
+    dst = XmuCreateArea();
+    XmuAreaCopy(dst, area);
+    return (dst);
 }
 
 /*
@@ -104,51 +102,48 @@ XmuAreaDup(XmuArea *area)
 XmuArea *
 XmuAreaCopy(XmuArea *dst, XmuArea *src)
 {
-  XmuScanline *z, *p, *Z;
+    XmuScanline *z, *p, *Z;
 
-  if (!dst || !src || dst == src)
-    return (dst);
+    if (!dst || !src || dst == src) return (dst);
 
-  z = p = dst->scanline;
-  Z = src->scanline;
+    z = p = dst->scanline;
+    Z     = src->scanline;
 
   /*CONSTCOND*/
-  while (1)
+    while (1)
     {
-      if (!Z)
-	{
-	  if (z == dst->scanline)
-	    {
-	      XmuDestroyScanlineList(dst->scanline);
-	      dst->scanline = (XmuScanline *)NULL;
-	    }
-	  else
-	    {
-	      XmuDestroyScanlineList(p->next);
-	      p->next = (XmuScanline *)NULL;
-	    }
-	  return (dst);
-	}
-      if (z)
-	{
-	  XmuScanlineCopy(z, Z);
-	  z->y = Z->y;
-	}
-      else
-	{
-	  z = XmuNewScanline(Z->y, 0, 0);
-	  XmuScanlineCopy(z, Z);
-	  if (p == dst->scanline && !dst->scanline)
-	    p = dst->scanline = z;
-	  else
-	    p->next = z;
-	}
-      p = z;
-      z = z->next;
-      Z = Z->next;
+        if (!Z)
+        {
+            if (z == dst->scanline)
+            {
+                XmuDestroyScanlineList(dst->scanline);
+                dst->scanline = (XmuScanline *)NULL;
+            }
+            else
+            {
+                XmuDestroyScanlineList(p->next);
+                p->next = (XmuScanline *)NULL;
+            }
+            return (dst);
+        }
+        if (z)
+        {
+            XmuScanlineCopy(z, Z);
+            z->y = Z->y;
+        }
+        else
+        {
+            z = XmuNewScanline(Z->y, 0, 0);
+            XmuScanlineCopy(z, Z);
+            if (p == dst->scanline && !dst->scanline) p = dst->scanline = z;
+            else p->next = z;
+        }
+        p = z;
+        z = z->next;
+        Z = Z->next;
     }
 
-  return (dst);
+    return (dst);
 }
 
 /*
@@ -182,62 +177,64 @@ XmuAreaCopy(XmuArea *dst, XmuArea *src)
 XmuArea *
 XmuAreaNot(XmuArea *area, int x1, int y1, int x2, int y2)
 {
-  XmuScanline *z;
-  XmuArea *and;
+    XmuScanline *z;
+    XmuArea *and;
 
-  if (!area)
-    return (area);
+    if (!area) return (area);
 
-  if (x1 > x2)
+    if (x1 > x2)
     {
-      x1 ^= x2; x2 ^= x1; x1 ^= x2;
+        x1 ^= x2;
+        x2 ^= x1;
+        x1 ^= x2;
     }
     if (y1 > y2)
-      {
-	y1 ^= y2; y2 ^= y1; y1 ^= y2;
-      }
+    {
+        y1 ^= y2;
+        y2 ^= y1;
+        y1 ^= y2;
+    }
     if (!area->scanline)
-      {
-	if ((area->scanline = XmuNewScanline(y1, x1, x2)) != NULL)
-	  area->scanline->next = XmuNewScanline(y2, 0, 0);
-	return (area);
-      }
+    {
+        if ((area->scanline = XmuNewScanline(y1, x1, x2)) != NULL)
+            area->scanline->next = XmuNewScanline(y2, 0, 0);
+        return (area);
+    }
     and = XmuNewArea(x1, y1, x2, y2);
     XmuAreaAnd(area, and);
     XmuDestroyArea(and);
     z = area->scanline;
     if (z->y != y1)
-      {
-	XmuScanline *q = XmuNewScanline(y1, x1, x2);
-	q->next = z;
-	area->scanline = q;
-      }
+    {
+        XmuScanline *q = XmuNewScanline(y1, x1, x2);
+        q->next        = z;
+        area->scanline = q;
+    }
     else
-      {
-	area->scanline = area->scanline->next;
-	XmuDestroyScanline(z);
-	XmuOptimizeArea(area);
-	if((z = area->scanline) == (XmuScanline *)NULL)
-	  return (area);
-      }
+    {
+        area->scanline = area->scanline->next;
+        XmuDestroyScanline(z);
+        XmuOptimizeArea(area);
+        if ((z = area->scanline) == (XmuScanline *)NULL) return (area);
+    }
 
     /* CONSTCOND */
     while (1)
-      {
-	XmuScanlineNot(z, x1, x2);
-	if (!z->next)
-	  {
-	    z->next = XmuNewScanline(y2, 0, 0);
-	    break;
-	  }
-	if (z->next->y == y2)
-	  {
-	    XmuDestroyScanlineList(z->next);
-	    z->next = XmuNewScanline(y2, 0, 0);
-	    break;
-	  }
-	z = z->next;
-      }
+    {
+        XmuScanlineNot(z, x1, x2);
+        if (!z->next)
+        {
+            z->next = XmuNewScanline(y2, 0, 0);
+            break;
+        }
+        if (z->next->y == y2)
+        {
+            XmuDestroyScanlineList(z->next);
+            z->next = XmuNewScanline(y2, 0, 0);
+            break;
+        }
+        z = z->next;
+    }
 
     return (area);
 }
@@ -257,154 +254,142 @@ XmuAreaNot(XmuArea *area, int x1, int y1, int x2, int y2)
 XmuArea *
 XmuAreaOrXor(XmuArea *dst, XmuArea *src, Bool or)
 {
-  XmuScanline *z, *p, *Z, *P, *ins, *top;
+    XmuScanline *z, *p, *Z, *P, *ins, *top;
 
-  if (!dst || !src)
-    return (dst);
+    if (!dst || !src) return (dst);
 
-  if (dst == src)
+    if (dst == src)
     {
-      if (or)
-	return (dst);
-      XmuDestroyScanlineList(dst->scanline);
-      dst->scanline = (XmuScanline *)NULL;
-      return (dst);
+        if (or) return (dst);
+        XmuDestroyScanlineList(dst->scanline);
+        dst->scanline = (XmuScanline *)NULL;
+        return (dst);
     }
-  if (!XmuValidArea(src))
-    return (dst);
-  if (!XmuValidArea(dst))
+    if (!XmuValidArea(src)) return (dst);
+    if (!XmuValidArea(dst))
     {
-      XmuAreaCopy(dst, src);
-      return (dst);
+        XmuAreaCopy(dst, src);
+        return (dst);
     }
 
-  p = z = dst->scanline;
-  P = Z = src->scanline;
-  ins = XmuNewScanline(dst->scanline->y, 0, 0);
-  top = XmuNewScanline(dst->scanline->y, 0, 0);
-  XmuScanlineCopy(ins, dst->scanline);
-  XmuScanlineCopy(top, dst->scanline);
+    p = z = dst->scanline;
+    P = Z = src->scanline;
+    ins   = XmuNewScanline(dst->scanline->y, 0, 0);
+    top   = XmuNewScanline(dst->scanline->y, 0, 0);
+    XmuScanlineCopy(ins, dst->scanline);
+    XmuScanlineCopy(top, dst->scanline);
 
   /*CONSTCOND*/
-  while (1)
+    while (1)
     {
-      if (!Z)
-	break;
-      else if (Z->y < z->y)
-	{
-	  XmuScanline  *q = XmuNewScanline(Z->y, 0, 0);
-	  XmuScanlineCopy(q, Z);
+        if (!Z) break;
+        else if (Z->y < z->y)
+        {
+            XmuScanline *q = XmuNewScanline(Z->y, 0, 0);
+            XmuScanlineCopy(q, Z);
 
-	  if (z == dst->scanline)
-	    {
-	      dst->scanline = p = q;
-	      q->next = z;
+            if (z == dst->scanline)
+            {
+                dst->scanline = p = q;
+                q->next           = z;
             }
-	  else
-	    {
-	      p->next = q;
-	      q->next = z;
-	      if (Z->y >= p->y)
-		{
-		  if (ins->y >= top->y
-		      && (p->y != P->y || !XmuScanlineEqu(p, P)
-			  || (ins->y <= P->y && !XmuScanlineEqu(ins, P))))
-		    {
-		      if (or)
-			XmuScanlineOr(q, ins);
-		      else
-			XmuScanlineXor(q, ins);
+            else
+            {
+                p->next = q;
+                q->next = z;
+                if (Z->y >= p->y)
+                {
+                    if (ins->y >= top->y &&
+                        (p->y != P->y || !XmuScanlineEqu(p, P) ||
+                         (ins->y <= P->y && !XmuScanlineEqu(ins, P))))
+                    {
+                        if (or) XmuScanlineOr(q, ins);
+                        else XmuScanlineXor(q, ins);
                     }
-		  else if (Z->y >= top->y
-			   && (top->y == p->y || top->y > ins->y
-			       || !XmuValidScanline(Z)
-			       || (p->y == P->y && XmuValidScanline(p)
-				   && XmuValidScanline(P))
-			       || XmuScanlineEqu(ins, top)))
-		    {
-		      if (or)
-			XmuScanlineOr(q, top);
-		      else
-			XmuScanlineXor(q, top);
-		    }
-		  if (ins->y != p->y && p->y != P->y)
-		    {
-		      XmuScanlineCopy(ins, p);
-		      ins->y = p->y;
-		    }
-		}
-	      if (!XmuValidScanline(p) || Z->y <= p->y)
-		{
-		  XmuScanlineCopy(top, p);
-		  top->y = p->y;
+                    else if (Z->y >= top->y &&
+                             (top->y == p->y || top->y > ins->y ||
+                              !XmuValidScanline(Z) ||
+                              (p->y == P->y && XmuValidScanline(p) &&
+                               XmuValidScanline(P)) ||
+                              XmuScanlineEqu(ins, top)))
+                    {
+                        if (or) XmuScanlineOr(q, top);
+                        else XmuScanlineXor(q, top);
+                    }
+                    if (ins->y != p->y && p->y != P->y)
+                    {
+                        XmuScanlineCopy(ins, p);
+                        ins->y = p->y;
+                    }
                 }
-	      p = q;
-	    }
-	  P = Z;
-	  Z = Z->next;
-	  continue;
+                if (!XmuValidScanline(p) || Z->y <= p->y)
+                {
+                    XmuScanlineCopy(top, p);
+                    top->y = p->y;
+                }
+                p = q;
+            }
+            P = Z;
+            Z = Z->next;
+            continue;
         }
-      else if (Z->y == z->y)
-	{
-	  if (top->y != z->y)
-	    {
-	      XmuScanlineCopy(top, z);
-	      top->y = z->y;
-	    }
-	  if (or)
-	    XmuScanlineOr(z, Z);
-	  else
-	    XmuScanlineXor(z, Z);
-	  P = Z;
-	  Z = Z->next;
-	}
-      else if (P != Z)		/* && Z->y > z->y */
-	{
-	  if (top->y == ins->y && top->y != z->y)
-	    {
-	      XmuScanlineCopy(top, z);
-	      top->y = z->y;
-	    }
-	  if (ins->y != z->y)
-	    {
-	      XmuScanlineCopy(ins, z);
-	      ins->y = z->y;
-	    }
-	  if (or)
-	    XmuScanlineOr(z, P);
-	  else
-	    XmuScanlineXor(z, P);
-	}
-      else if (ins->y != z->y)
-	{
-	  XmuScanlineCopy(ins, z);
-	  ins->y = z->y;
-	}
-      p = z;
-      z = z->next;
-      if (!z)
-	{
-	  while (Z)
-	    {
-	      p->next = XmuNewScanline(Z->y, 0, 0);
-	      XmuScanlineCopy(p->next, Z);
-	      p = p->next;
-	      Z = Z->next;
-	    }
-	  break;
-	}
-      else if (ins->y > top->y && !XmuValidScanline(z)
-	       && XmuValidScanline(ins))
-	{
-	  XmuScanlineCopy(top, ins);
-	  top->y = ins->y;
-	}
+        else if (Z->y == z->y)
+        {
+            if (top->y != z->y)
+            {
+                XmuScanlineCopy(top, z);
+                top->y = z->y;
+            }
+            if (or) XmuScanlineOr(z, Z);
+            else XmuScanlineXor(z, Z);
+            P = Z;
+            Z = Z->next;
+        }
+        else if (P != Z)  /* && Z->y > z->y */
+        {
+            if (top->y == ins->y && top->y != z->y)
+            {
+                XmuScanlineCopy(top, z);
+                top->y = z->y;
+            }
+            if (ins->y != z->y)
+            {
+                XmuScanlineCopy(ins, z);
+                ins->y = z->y;
+            }
+            if (or) XmuScanlineOr(z, P);
+            else XmuScanlineXor(z, P);
+        }
+        else if (ins->y != z->y)
+        {
+            XmuScanlineCopy(ins, z);
+            ins->y = z->y;
+        }
+        p = z;
+        z = z->next;
+        if (!z)
+        {
+            while (Z)
+            {
+                p->next = XmuNewScanline(Z->y, 0, 0);
+                XmuScanlineCopy(p->next, Z);
+                p = p->next;
+                Z = Z->next;
+            }
+            break;
+        }
+        else if (ins->y > top->y && !XmuValidScanline(z) &&
+                 XmuValidScanline(ins))
+        {
+            XmuScanlineCopy(top, ins);
+            top->y = ins->y;
+        }
     }
-  XmuOptimizeArea(dst);
-  XmuDestroyScanline(ins);
-  XmuDestroyScanline(top);
+    XmuOptimizeArea(dst);
+    XmuDestroyScanline(ins);
+    XmuDestroyScanline(top);
 
-  return (dst);
+    return (dst);
 }
 
 /*
@@ -421,85 +406,83 @@ XmuAreaOrXor(XmuArea *dst, XmuArea *src, Bool or)
 XmuArea *
 XmuAreaAnd(XmuArea *dst, XmuArea *src)
 {
-  XmuScanline *z, *p, *Z, *P, *top;
+    XmuScanline *z, *p, *Z, *P, *top;
 
-  if (!dst || !src || dst == src)
-    return (dst);
-  if (!XmuValidArea(dst) || !XmuValidArea(src))
+    if (!dst || !src || dst == src) return (dst);
+    if (!XmuValidArea(dst) || !XmuValidArea(src))
     {
-      XmuDestroyScanlineList(dst->scanline);
-      dst->scanline = (XmuScanline *)NULL;
-      return (dst);
+        XmuDestroyScanlineList(dst->scanline);
+        dst->scanline = (XmuScanline *)NULL;
+        return (dst);
     }
-  z = p = dst->scanline;
-  Z = P = src->scanline;
-  top = XmuNewScanline(dst->scanline->y, 0, 0);
-  XmuScanlineCopy(top, dst->scanline);
+    z = p = dst->scanline;
+    Z = P = src->scanline;
+    top   = XmuNewScanline(dst->scanline->y, 0, 0);
+    XmuScanlineCopy(top, dst->scanline);
 
-  while (z)
+    while (z)
     {
-      while (Z->next && Z->next->y < z->y)
-	{
-	  P = Z;
-	  Z = Z->next;
-	  if (Z->y >= p->y)
-	    {
-	      XmuScanline *q = XmuNewScanline(Z->y, 0, 0);
-	      XmuScanlineCopy(q, Z);
+        while (Z->next && Z->next->y < z->y)
+        {
+            P = Z;
+            Z = Z->next;
+            if (Z->y >= p->y)
+            {
+                XmuScanline *q = XmuNewScanline(Z->y, 0, 0);
+                XmuScanlineCopy(q, Z);
 
-	      XmuScanlineAnd(q, top);
-	      if (p->y != P->y)
-		{
-		  XmuScanlineAnd(p, P);
-		  p->y = XmuMax(p->y, P->y);
-		}
-	      p->next = q;
-	      q->next = z;
-	      p = q;
-	    }
-	}
-      if (!z->next)
-	{
-	  z->y = XmuMax(z->y, Z->y);
-	  break;
+                XmuScanlineAnd(q, top);
+                if (p->y != P->y)
+                {
+                    XmuScanlineAnd(p, P);
+                    p->y = XmuMax(p->y, P->y);
+                }
+                p->next = q;
+                q->next = z;
+                p       = q;
+            }
         }
-      while (Z->y >= z->next->y)
-	{
-	  if (z == dst->scanline)
-	    {
-	      p = dst->scanline = dst->scanline->next;
-	      XmuDestroyScanline(z);
-	      z = dst->scanline;
-	    }
-	  else
-	    {
-	      p->next = z->next;
-	      XmuDestroyScanline(z);
-	      z = p;
-	    }
-	  if (!z || !z->next)
-	    {
-	      XmuOptimizeArea(dst);
-	      XmuDestroyScanline(top);
+        if (!z->next)
+        {
+            z->y = XmuMax(z->y, Z->y);
+            break;
+        }
+        while (Z->y >= z->next->y)
+        {
+            if (z == dst->scanline)
+            {
+                p = dst->scanline = dst->scanline->next;
+                XmuDestroyScanline(z);
+                z = dst->scanline;
+            }
+            else
+            {
+                p->next = z->next;
+                XmuDestroyScanline(z);
+                z = p;
+            }
+            if (!z || !z->next)
+            {
+                XmuOptimizeArea(dst);
+                XmuDestroyScanline(top);
 
-	      return (dst);
-	    }
-	}
-      if (Z->y > p->y)
-	z->y = XmuMax(z->y, Z->y);
-      if (top->y != z->y)
-	{
-	  XmuScanlineCopy(top, z);
-	  top->y = z->y;
-	}
-      XmuScanlineAnd(z, Z);
-      p = z;
-      z = z->next;
+                return (dst);
+            }
+        }
+        if (Z->y > p->y) z->y = XmuMax(z->y, Z->y);
+        if (top->y != z->y)
+        {
+            XmuScanlineCopy(top, z);
+            top->y = z->y;
+        }
+        XmuScanlineAnd(z, Z);
+        p = z;
+        z = z->next;
     }
-  XmuOptimizeArea(dst);
-  XmuDestroyScanline(top);
+    XmuOptimizeArea(dst);
+    XmuDestroyScanline(top);
 
-  return (dst);
+    return (dst);
 }
 
 /*
@@ -515,20 +498,18 @@ XmuAreaAnd(XmuArea *dst, XmuArea *src)
 Bool
 XmuValidArea(XmuArea *area)
 {
-  XmuScanline *at;
+    XmuScanline *at;
 
-  if (!area || !area->scanline)
-    return (False);
+    if (!area || !area->scanline) return (False);
 
-  at = area->scanline;
-  while (at)
+    at = area->scanline;
+    while (at)
     {
-      if (XmuValidScanline(at))
-	return (True);
-      at = at->next;
+        if (XmuValidScanline(at)) return (True);
+        at = at->next;
     }
 
-  return (False);
+    return (False);
 }
 
 /*
@@ -544,20 +525,18 @@ XmuValidArea(XmuArea *area)
 Bool
 XmuValidScanline(XmuScanline *scanline)
 {
-  XmuSegment *z;
+    XmuSegment *z;
 
-  if (!scanline)
-    return (False);
+    if (!scanline) return (False);
 
-  z = scanline->segment;
-  while (z)
+    z = scanline->segment;
+    while (z)
     {
-      if (XmuValidSegment(z))
-	return (True);
-      z = z->next;
+        if (XmuValidSegment(z)) return (True);
+        z = z->next;
     }
 
-  return (False);
+    return (False);
 }
 
 /*
@@ -574,27 +553,22 @@ XmuValidScanline(XmuScanline *scanline)
 Bool
 XmuScanlineEqu(XmuScanline *s1, XmuScanline *s2)
 {
-  XmuSegment *z, *Z;
+    XmuSegment *z, *Z;
 
-  if ((!s1 && !s2) || s1 == s2)
-    return (True);
-  if (!s1 || !s2)
-    return (False);
+    if ((!s1 && !s2) || s1 == s2) return (True);
+    if (!s1 || !s2) return (False);
 
-  z = s1->segment;
-  Z = s2->segment;
+    z = s1->segment;
+    Z = s2->segment;
 
   /*CONSTCOND*/
-  while (1)
+    while (1)
     {
-      if (!z && !Z)
-	return (True);
-      if (!z || !Z)
-	return (False);
-      if (!XmuSegmentEqu(z, Z))
-	return (False);
-      z = z->next;
-      Z = Z->next;
+        if (!z && !Z) return (True);
+        if (!z || !Z) return (False);
+        if (!XmuSegmentEqu(z, Z)) return (False);
+        z = z->next;
+        Z = Z->next;
     }
   /*NOTREACHED*/
 }
@@ -616,16 +590,16 @@ XmuScanlineEqu(XmuScanline *s1, XmuScanline *s2)
 XmuSegment *
 XmuNewSegment(int x1, int x2)
 {
-  XmuSegment *segment;
+    XmuSegment *segment;
 
-  if ((segment = (XmuSegment *)XtMalloc(sizeof(XmuSegment))) == NULL)
+    if ((segment = (XmuSegment *)XtMalloc(sizeof(XmuSegment))) == NULL)
+        return (segment);
+
+    segment->x1   = x1;
+    segment->x2   = x2;
+    segment->next = (XmuSegment *)NULL;
+
     return (segment);
-
-  segment->x1 = x1;
-  segment->x2 = x2;
-  segment->next = (XmuSegment *)NULL;
-
-  return (segment);
 }
 
 /*
@@ -641,16 +615,15 @@ XmuNewSegment(int x1, int x2)
 void
 XmuDestroySegmentList(XmuSegment *segment)
 {
-  XmuSegment *z;
+    XmuSegment *z;
 
-  if (!segment)
-    return;
+    if (!segment) return;
 
-  while (segment)
+    while (segment)
     {
-      z = segment;
-      segment = segment->next;
-      XmuDestroySegment(z);
+        z       = segment;
+        segment = segment->next;
+        XmuDestroySegment(z);
     }
 }
 
@@ -668,42 +641,37 @@ XmuDestroySegmentList(XmuSegment *segment)
 XmuScanline *
 XmuScanlineCopy(XmuScanline *dst, XmuScanline *src)
 {
-  XmuSegment *z, *p, *Z;
+    XmuSegment *z, *p, *Z;
 
-  if (!dst || !src || dst == src)
-    return (dst);
+    if (!dst || !src || dst == src) return (dst);
 
-  z = p = dst->segment;
-  Z = src->segment;
+    z = p = dst->segment;
+    Z     = src->segment;
 
   /*CONSTCOND*/
-  while (1)
+    while (1)
     {
-      if (!Z)
-	{
-	  if (z == dst->segment)
-	    dst->segment = (XmuSegment *)NULL;
-	  else
-	    p->next = (XmuSegment *)NULL;
-	  XmuDestroySegmentList(z);
-	  return (dst);
-	}
-      if (z)
-	{
-	  z->x1 = Z->x1;
-	  z->x2 = Z->x2;
-	}
-      else
-	{
-	  z = XmuNewSegment(Z->x1, Z->x2);
-	  if (p == dst->segment && !dst->segment)
-	    p = dst->segment = z;
-	  else
-	    p->next = z;
-	}
-      p = z;
-      z = z->next;
-      Z = Z->next;
+        if (!Z)
+        {
+            if (z == dst->segment) dst->segment = (XmuSegment *)NULL;
+            else p->next = (XmuSegment *)NULL;
+            XmuDestroySegmentList(z);
+            return (dst);
+        }
+        if (z)
+        {
+            z->x1 = Z->x1;
+            z->x2 = Z->x2;
+        }
+        else
+        {
+            z = XmuNewSegment(Z->x1, Z->x2);
+            if (p == dst->segment && !dst->segment) p = dst->segment = z;
+            else p->next = z;
+        }
+        p = z;
+        z = z->next;
+        Z = Z->next;
     }
   /*NOTREACHED*/
 }
@@ -722,25 +690,23 @@ XmuScanlineCopy(XmuScanline *dst, XmuScanline *src)
 Bool
 XmuAppendSegment(XmuSegment *segment, XmuSegment *append)
 {
-  if (!segment || !append)
-    return (False);
+    if (!segment || !append) return (False);
 
-  if (segment->next)
-    /* Should not happen! */
-    XmuDestroySegmentList(segment->next);
+    if (segment->next)    /* Should not happen! */
+        XmuDestroySegmentList(segment->next);
 
-  while (append)
+    while (append)
     {
-      if (XmuValidSegment(append))
-	{
-	  if ((segment->next = XmuNewSegment(append->x1, append->x2)) == NULL)
-	    return (False);
-	  segment = segment->next;
-	}
-      append = append->next;
+        if (XmuValidSegment(append))
+        {
+            if ((segment->next = XmuNewSegment(append->x1, append->x2)) == NULL)
+                return (False);
+            segment = segment->next;
+        }
+        append = append->next;
     }
 
-  return (True);
+    return (True);
 }
 
 /*
@@ -758,25 +724,25 @@ XmuAppendSegment(XmuSegment *segment, XmuSegment *append)
 XmuScanline *
 XmuOptimizeScanline(XmuScanline *scanline)
 {
-  XmuSegment *z, *p;
+    XmuSegment *z, *p;
 
-  while (scanline->segment && !XmuValidSegment(scanline->segment))
+    while (scanline->segment && !XmuValidSegment(scanline->segment))
     {
-      XmuSegment *s = scanline->segment;
+        XmuSegment *s = scanline->segment;
 
-      scanline->segment = scanline->segment->next;
-      XmuDestroySegment(s);
+        scanline->segment = scanline->segment->next;
+        XmuDestroySegment(s);
     }
-  for (z = p = scanline->segment; z; p = z, z = z->next)
+    for (z = p = scanline->segment; z; p = z, z = z->next)
     {
-      if (!XmuValidSegment(z))
-	{
-	  p->next = z->next;
-	  XmuDestroySegment(z);
-	  z = p;
-	}
+        if (!XmuValidSegment(z))
+        {
+            p->next = z->next;
+            XmuDestroySegment(z);
+            z = p;
+        }
     }
-  return (scanline);
+    return (scanline);
 }
 
 /*
@@ -797,57 +763,57 @@ XmuOptimizeScanline(XmuScanline *scanline)
 XmuScanline *
 XmuScanlineNot(XmuScanline *scanline, int minx, int maxx)
 {
-  XmuSegment *z;
-  static XmuSegment x = { 0, 0, NULL };
-  static XmuScanline and = { 0, &x, NULL };
+    XmuSegment        *z;
+    static XmuSegment  x   = { 0, 0, NULL };
+    static XmuScanline and = { 0, &x, NULL };
 
-  if (!scanline)
-    return (scanline);
+    if (!scanline) return (scanline);
 
-  XmuOptimizeScanline(scanline);
-  if (minx > maxx)
+    XmuOptimizeScanline(scanline);
+    if (minx > maxx)
     {
-      minx ^= maxx; maxx ^= minx; minx ^= maxx;
+        minx ^= maxx;
+        maxx ^= minx;
+        minx ^= maxx;
     }
-  and.segment->x1 = minx;
-  and.segment->x2 = maxx;
-  XmuScanlineAnd(scanline, &and);
-  if (!scanline->segment)
+    and.segment->x1 = minx;
+    and.segment->x2 = maxx;
+    XmuScanlineAnd(scanline, &and);
+    if (!scanline->segment)
     {
-      scanline->segment = XmuNewSegment(minx, maxx);
-      return (scanline);
+        scanline->segment = XmuNewSegment(minx, maxx);
+        return (scanline);
     }
-  z = scanline->segment;
-  if (z->x1 != minx)
+    z = scanline->segment;
+    if (z->x1 != minx)
     {
-      XmuSegment *q = XmuNewSegment(minx, z->x1);
+        XmuSegment *q = XmuNewSegment(minx, z->x1);
 
-      q->next = z;
-      scanline->segment = q;
+        q->next           = z;
+        scanline->segment = q;
     }
 
   /*CONSTCOND*/
-  while (1)
+    while (1)
     {
-      z->x1 = z->x2;
-      if (!z->next)
-	{
-	  z->x2 = maxx;
-	  break;
-	}
-      z->x2 = z->next->x1;
-      if (z->next->x2 == maxx)
-	{
-	  XmuDestroySegment(z->next);
-	  z->next = (XmuSegment *)NULL;
-	  break;
-	}
-      z = z->next;
+        z->x1 = z->x2;
+        if (!z->next)
+        {
+            z->x2 = maxx;
+            break;
+        }
+        z->x2 = z->next->x1;
+        if (z->next->x2 == maxx)
+        {
+            XmuDestroySegment(z->next);
+            z->next = (XmuSegment *)NULL;
+            break;
+        }
+        z = z->next;
     }
 
-  return (scanline);
+    return (scanline);
 }
-
 
 /*
  * Function:
@@ -865,86 +831,83 @@ XmuScanlineNot(XmuScanline *scanline, int minx, int maxx)
 XmuScanline *
 XmuScanlineOrSegment(XmuScanline *dst, XmuSegment *src)
 {
-  XmuSegment *z, *p, ins;
+    XmuSegment *z, *p, ins;
 
-  if (!src || !dst || !XmuValidSegment(src))
-    return (dst);
+    if (!src || !dst || !XmuValidSegment(src)) return (dst);
 
-  if (!dst->segment)
+    if (!dst->segment)
     {
-      dst->segment = XmuNewSegment(src->x1, src->x2);
-      return (dst);
+        dst->segment = XmuNewSegment(src->x1, src->x2);
+        return (dst);
     }
 
-  z = p = dst->segment;
-  ins.x1 = src->x1;
-  ins.x2 = src->x2;
+    z = p  = dst->segment;
+    ins.x1 = src->x1;
+    ins.x2 = src->x2;
 
   /*CONSTCOND*/
-  while (1)
+    while (1)
     {
-      if (!z)
-	{
+        if (!z)
+        {
             XmuSegment *q = XmuNewSegment(ins.x1, ins.x2);
 
-	    if (p == dst->segment && z == p)
-	      dst->segment = q;
-	    else
-	      p->next = q;
-	    break;
-	}
-      else if (ins.x2 < z->x1)
-	{
-	  XmuSegment *q = XmuNewSegment(ins.x1, ins.x2);
-
-	  if (p == dst->segment && z == p)
-	    {
-	      q->next = dst->segment;
-	      dst->segment = q;
-	    }
-	  else
-	    {
-	      p->next = q;
-	      q->next = z;
-	    }
-	  break;
+            if (p == dst->segment && z == p) dst->segment = q;
+            else p->next = q;
+            break;
         }
-      else if (ins.x2 <= z->x2)
-	{
-	  z->x1 = XmuMin(z->x1, ins.x1);
-	  break;
-	}
-      else if (ins.x1 <= z->x2)
-	{
-	  ins.x1 = XmuMin(z->x1, ins.x1);
-	  if (!z->next)
-	    {
-	      z->x1 = ins.x1;
-	      z->x2 = ins.x2;
-	      break;
-	    }
-	  else
-	    {
-	      if (z == dst->segment)
-		{
-		  p = dst->segment = dst->segment->next;
-		  XmuDestroySegment(z);
-		  z = dst->segment;
-		  continue;
-		}
-	      else
-		{
-		  p->next = z->next;
-		  XmuDestroySegment(z);
-		  z = p;
-		}
-	    }
-	}
-      p = z;
-      z = z->next;
+        else if (ins.x2 < z->x1)
+        {
+            XmuSegment *q = XmuNewSegment(ins.x1, ins.x2);
+
+            if (p == dst->segment && z == p)
+            {
+                q->next      = dst->segment;
+                dst->segment = q;
+            }
+            else
+            {
+                p->next = q;
+                q->next = z;
+            }
+            break;
+        }
+        else if (ins.x2 <= z->x2)
+        {
+            z->x1 = XmuMin(z->x1, ins.x1);
+            break;
+        }
+        else if (ins.x1 <= z->x2)
+        {
+            ins.x1 = XmuMin(z->x1, ins.x1);
+            if (!z->next)
+            {
+                z->x1 = ins.x1;
+                z->x2 = ins.x2;
+                break;
+            }
+            else
+            {
+                if (z == dst->segment)
+                {
+                    p = dst->segment = dst->segment->next;
+                    XmuDestroySegment(z);
+                    z = dst->segment;
+                    continue;
+                }
+                else
+                {
+                    p->next = z->next;
+                    XmuDestroySegment(z);
+                    z = p;
+                }
+            }
+        }
+        p = z;
+        z = z->next;
     }
 
-  return (dst);
+    return (dst);
 }
 
 /*
@@ -963,49 +926,47 @@ XmuScanlineOrSegment(XmuScanline *dst, XmuSegment *src)
 XmuScanline *
 XmuScanlineAndSegment(XmuScanline *dst, XmuSegment *src)
 {
-  XmuSegment *z, *p;
+    XmuSegment *z, *p;
 
-  if (!dst || !src)
-    return (dst);
+    if (!dst || !src) return (dst);
 
-  if (!XmuValidSegment(src))
+    if (!XmuValidSegment(src))
     {
-      XmuDestroySegmentList(dst->segment);
-      dst->segment = (XmuSegment *)NULL;
-      return (dst);
+        XmuDestroySegmentList(dst->segment);
+        dst->segment = (XmuSegment *)NULL;
+        return (dst);
     }
-  if (!dst->segment)
-    return (dst);
+    if (!dst->segment) return (dst);
 
-  z = p = dst->segment;
-  while (z)
+    z = p = dst->segment;
+    while (z)
     {
-      if (src->x2 <= z->x1 || src->x1 >= z->x2)
-	{
-	  if (z == dst->segment)
-	    {
-	      p = dst->segment = dst->segment->next;
-	      XmuDestroySegment(z);
-	      z = dst->segment;
-	      continue;
-	    }
-	  else
-	    {
-	      p->next = z->next;
-	      XmuDestroySegment(z);
-	      z = p;
-	    }
-	}
-      else
-	{
-	  z->x1 = XmuMax(z->x1, src->x1);
-	  z->x2 = XmuMin(z->x2, src->x2);
-	}
-      p = z;
-      z = z->next;
+        if (src->x2 <= z->x1 || src->x1 >= z->x2)
+        {
+            if (z == dst->segment)
+            {
+                p = dst->segment = dst->segment->next;
+                XmuDestroySegment(z);
+                z = dst->segment;
+                continue;
+            }
+            else
+            {
+                p->next = z->next;
+                XmuDestroySegment(z);
+                z = p;
+            }
+        }
+        else
+        {
+            z->x1 = XmuMax(z->x1, src->x1);
+            z->x2 = XmuMin(z->x2, src->x2);
+        }
+        p = z;
+        z = z->next;
     }
 
-  return (dst);
+    return (dst);
 }
 
 /*
@@ -1024,96 +985,89 @@ XmuScanlineAndSegment(XmuScanline *dst, XmuSegment *src)
 XmuScanline *
 XmuScanlineXorSegment(XmuScanline *dst, XmuSegment *src)
 {
-  XmuSegment *p, *z, ins;
-  int tmp1, tmp2;
+    XmuSegment *p, *z, ins;
+    int         tmp1, tmp2;
 
-  if (!dst || !src || !XmuValidSegment(src))
-    return (dst);
-  if (!dst->segment)
+    if (!dst || !src || !XmuValidSegment(src)) return (dst);
+    if (!dst->segment)
     {
-      dst->segment = XmuNewSegment(src->x1, src->x2);
-      return (dst);
+        dst->segment = XmuNewSegment(src->x1, src->x2);
+        return (dst);
     }
 
-  p = z = dst->segment;
-  ins.x1 = src->x1;
-  ins.x2 = src->x2;
+    p = z  = dst->segment;
+    ins.x1 = src->x1;
+    ins.x2 = src->x2;
 
   /*CONSTCOND*/
-  while (1)
+    while (1)
     {
-      if (!XmuValidSegment((&ins)))
-	break;
-      if (!z || ins.x2 < z->x1)
-	{
-	  XmuSegment *q = XmuNewSegment(ins.x1, ins.x2);
+        if (!XmuValidSegment((&ins))) break;
+        if (!z || ins.x2 < z->x1)
+        {
+            XmuSegment *q = XmuNewSegment(ins.x1, ins.x2);
 
-	  q->next = z;
-	  if (z == dst->segment)
-	    dst->segment = q;
-	  else
-	    p->next = q;
-	  break;
-	}
-      else if (ins.x2 == z->x1)
-	{
-	  z->x1 = ins.x1;
-	  break;
-	}
-      else if (ins.x1 < z->x2)
-	{
-	  if (ins.x1 < z->x1)
-	    {
-	      tmp1 = ins.x2;
-	      tmp2 = z->x2;
-	      ins.x2 = XmuMax(ins.x2, z->x2);
-	      z->x2 = z->x1;
-	      z->x1 = ins.x1;
-	      ins.x1 = XmuMin(tmp1, tmp2);
-	    }
-	  else if (ins.x1 > z->x1)
-	    {
-	      tmp1 = ins.x1;
-	      ins.x1 = XmuMin(ins.x2, z->x2);
-	      ins.x2 = XmuMax(z->x2, ins.x2);
-	      z->x2 = tmp1;
-	    }
-	  else	/* ins.x1 == z->x1 */
-	    {
-	      if (ins.x2 < z->x2)
-		{
-		  z->x1 = ins.x2;
-		  break;
-		}
-	      else
-		{
-		  ins.x1 = z->x2;
-		  if (z == dst->segment)
-		    p = dst->segment = dst->segment->next;
-		  else
-		    p->next = z->next;
-		  XmuDestroySegment(z);
-		  z = p;
-		  continue;
-		}
-	    }
-	}
-      else if (ins.x1 == z->x2)
-	{
-	  ins.x1 = z->x1;
-	  if (z == dst->segment)
-	    p = dst->segment = dst->segment->next;
-	  else
-	    p->next = z->next;
-	  XmuDestroySegment(z);
-	  z = p;
-	  continue;
-	}
-      p = z;
-      z = z->next;
+            q->next = z;
+            if (z == dst->segment) dst->segment = q;
+            else p->next = q;
+            break;
+        }
+        else if (ins.x2 == z->x1)
+        {
+            z->x1 = ins.x1;
+            break;
+        }
+        else if (ins.x1 < z->x2)
+        {
+            if (ins.x1 < z->x1)
+            {
+                tmp1   = ins.x2;
+                tmp2   = z->x2;
+                ins.x2 = XmuMax(ins.x2, z->x2);
+                z->x2  = z->x1;
+                z->x1  = ins.x1;
+                ins.x1 = XmuMin(tmp1, tmp2);
+            }
+            else if (ins.x1 > z->x1)
+            {
+                tmp1   = ins.x1;
+                ins.x1 = XmuMin(ins.x2, z->x2);
+                ins.x2 = XmuMax(z->x2, ins.x2);
+                z->x2  = tmp1;
+            }
+            else /* ins.x1 == z->x1 */
+            {
+                if (ins.x2 < z->x2)
+                {
+                    z->x1 = ins.x2;
+                    break;
+                }
+                else
+                {
+                    ins.x1 = z->x2;
+                    if (z == dst->segment)
+                        p = dst->segment = dst->segment->next;
+                    else p->next = z->next;
+                    XmuDestroySegment(z);
+                    z = p;
+                    continue;
+                }
+            }
+        }
+        else if (ins.x1 == z->x2)
+        {
+            ins.x1 = z->x1;
+            if (z == dst->segment) p = dst->segment = dst->segment->next;
+            else p->next = z->next;
+            XmuDestroySegment(z);
+            z = p;
+            continue;
+        }
+        p = z;
+        z = z->next;
     }
 
-  return (dst);
+    return (dst);
 }
 
 /*
@@ -1132,118 +1086,113 @@ XmuScanlineXorSegment(XmuScanline *dst, XmuSegment *src)
 XmuScanline *
 XmuScanlineOr(XmuScanline *dst, XmuScanline *src)
 {
-  XmuSegment *z, *p, *Z, ins;
+    XmuSegment *z, *p, *Z, ins;
 
-  if (!src || !src->segment || !dst || dst == src)
-    return (dst);
-  if (!dst->segment)
+    if (!src || !src->segment || !dst || dst == src) return (dst);
+    if (!dst->segment)
     {
-      XmuScanlineCopy(dst, src);
-      return (dst);
+        XmuScanlineCopy(dst, src);
+        return (dst);
     }
 
-  z = p = dst->segment;
-  Z = src->segment;
-  ins.x1 = Z->x1;
-  ins.x2 = Z->x2;
+    z = p  = dst->segment;
+    Z      = src->segment;
+    ins.x1 = Z->x1;
+    ins.x2 = Z->x2;
 
   /*CONSTCOND*/
-  while (1)
+    while (1)
     {
-      while (!XmuValidSegment((&ins)))
-	{
-	  if ((Z = Z->next) == (XmuSegment *)NULL)
-	    return (dst);
-	  ins.x1 = Z->x1;
-	  ins.x2 = Z->x2;
-	}
+        while (!XmuValidSegment((&ins)))
+        {
+            if ((Z = Z->next) == (XmuSegment *)NULL) return (dst);
+            ins.x1 = Z->x1;
+            ins.x2 = Z->x2;
+        }
         if (!z)
-	  {
+        {
             XmuSegment *q = XmuNewSegment(ins.x1, ins.x2);
 
-            if (p == dst->segment && z == p)
-	      dst->segment = p = q;
+            if (p == dst->segment && z == p) dst->segment = p = q;
             else
-	      {
-		p->next = q;
-		p = q;
-	      }
-	    Z = Z->next;
-	    XmuAppendSegment(p, Z);
-	    break;
-	  }
+            {
+                p->next = q;
+                p       = q;
+            }
+            Z = Z->next;
+            XmuAppendSegment(p, Z);
+            break;
+        }
         else if (ins.x2 < z->x1)
-	  {
-	    XmuSegment *r = XmuNewSegment(ins.x1, ins.x2);
+        {
+            XmuSegment *r = XmuNewSegment(ins.x1, ins.x2);
 
-	    if (p == dst->segment && z == p)
-	      {
-		r->next = dst->segment;
-		dst->segment = p = r;
-	      }
-	    else
-	      {
-		p->next = r;
-		r->next = z;
-		p = r;
-	      }
-	    Z = Z->next;
-            if (!Z)
-	      break;
+            if (p == dst->segment && z == p)
+            {
+                r->next      = dst->segment;
+                dst->segment = p = r;
+            }
             else
-	      {
-		ins.x1 = Z->x1;
-		ins.x2 = Z->x2;
-		continue;
-	      }
-	  }
-	else if (ins.x2 <= z->x2)
-	  {
-	    z->x1 = XmuMin(z->x1, ins.x1);
-	    Z = Z->next;
-	    if (!Z)
-	      break;
+            {
+                p->next = r;
+                r->next = z;
+                p       = r;
+            }
+            Z = Z->next;
+            if (!Z) break;
             else
-	      {
-		ins.x1 = Z->x1;
-		ins.x2 = Z->x2;
-		continue;
-	      }
-	  }
-	else if (ins.x1 <= z->x2)
-	  {
-	    ins.x1 = XmuMin(z->x1, ins.x1);
-	    if (!z->next)
-	      {
-		z->x1 = ins.x1;
-		z->x2 = ins.x2;
-		p = z;
-		Z = Z->next;
-		XmuAppendSegment(p, Z);
-		break;
-	      }
+            {
+                ins.x1 = Z->x1;
+                ins.x2 = Z->x2;
+                continue;
+            }
+        }
+        else if (ins.x2 <= z->x2)
+        {
+            z->x1 = XmuMin(z->x1, ins.x1);
+            Z     = Z->next;
+            if (!Z) break;
             else
-	      {
-		if (z == dst->segment)
-		  {
-		    p = dst->segment = dst->segment->next;
-		    XmuDestroySegment(z);
-		    z = p;
-		    continue;
-		  }
+            {
+                ins.x1 = Z->x1;
+                ins.x2 = Z->x2;
+                continue;
+            }
+        }
+        else if (ins.x1 <= z->x2)
+        {
+            ins.x1 = XmuMin(z->x1, ins.x1);
+            if (!z->next)
+            {
+                z->x1 = ins.x1;
+                z->x2 = ins.x2;
+                p     = z;
+                Z     = Z->next;
+                XmuAppendSegment(p, Z);
+                break;
+            }
+            else
+            {
+                if (z == dst->segment)
+                {
+                    p = dst->segment = dst->segment->next;
+                    XmuDestroySegment(z);
+                    z = p;
+                    continue;
+                }
                 else
-		  {
-		    p->next = z->next;
-		    XmuDestroySegment(z);
-		    z = p;
-		  }
-	      }
-	  }
-	p = z;
-	z = z->next;
+                {
+                    p->next = z->next;
+                    XmuDestroySegment(z);
+                    z = p;
+                }
+            }
+        }
+        p = z;
+        z = z->next;
     }
 
-  return (dst);
+    return (dst);
 }
 
 /*
@@ -1262,71 +1211,68 @@ XmuScanlineOr(XmuScanline *dst, XmuScanline *src)
 XmuScanline *
 XmuScanlineAnd(XmuScanline *dst, XmuScanline *src)
 {
-  XmuSegment  *z, *p, *Z;
+    XmuSegment *z, *p, *Z;
 
-  if (!dst || !src || dst == src || !dst->segment) {
+    if (!dst || !src || dst == src || !dst->segment)
+    {
         return (dst);
-  }
-  if (!src->segment)
-    {
-      XmuDestroySegmentList(dst->segment);
-      dst->segment = (XmuSegment *)NULL;
-      return (dst);
     }
-  z = p = dst->segment;
-  Z = src->segment;
-
-  while (z)
+    if (!src->segment)
     {
-      while (!XmuValidSegment(Z) || Z->x2 <= z->x1)
-	{
-	  Z = Z->next;
-	  if (!Z)
-	    {
-	      if (z == dst->segment)
-		dst->segment = (XmuSegment *)NULL;
-	      else
-		p->next = (XmuSegment *)0;
-	      XmuDestroySegmentList(z);
-	      return (dst);
-	    }
-	}
-      if (Z->x1 >= z->x2)
-	{
-	  if (z == dst->segment)
-	    {
-	      p = dst->segment = dst->segment->next;
-	      XmuDestroySegment(z);
-	      z = dst->segment;
-	    }
-	  else
-	    {
-	      p->next = z->next;
-	      XmuDestroySegment(z);
-	      z = p->next;
-	    }
-	  if (!z)
-	    return (dst);
-	  else
-	    continue;
-	}
+        XmuDestroySegmentList(dst->segment);
+        dst->segment = (XmuSegment *)NULL;
+        return (dst);
+    }
+    z = p = dst->segment;
+    Z     = src->segment;
+
+    while (z)
+    {
+        while (!XmuValidSegment(Z) || Z->x2 <= z->x1)
+        {
+            Z = Z->next;
+            if (!Z)
+            {
+                if (z == dst->segment) dst->segment = (XmuSegment *)NULL;
+                else p->next = (XmuSegment *)0;
+                XmuDestroySegmentList(z);
+                return (dst);
+            }
+        }
+        if (Z->x1 >= z->x2)
+        {
+            if (z == dst->segment)
+            {
+                p = dst->segment = dst->segment->next;
+                XmuDestroySegment(z);
+                z = dst->segment;
+            }
+            else
+            {
+                p->next = z->next;
+                XmuDestroySegment(z);
+                z = p->next;
+            }
+            if (!z) return (dst);
+            else continue;
+        }
         z->x1 = XmuMax(z->x1, Z->x1);
-	if (z->x2 > Z->x2)
-	  {
+        if (z->x2 > Z->x2)
+        {
             if (Z->next)
-	      {
+            {
                 XmuSegment *q = XmuNewSegment(Z->x2, z->x2);
 
-		q->next = z->next;
-		z->next = q;
-	      }
-	    z->x2 = Z->x2;
-	  }
-	p = z;
-	z = z->next;
+                q->next = z->next;
+                z->next = q;
+            }
+            z->x2 = Z->x2;
+        }
+        p = z;
+        z = z->next;
     }
 
-  return (dst);
+    return (dst);
 }
 
 /*
@@ -1345,146 +1291,132 @@ XmuScanlineAnd(XmuScanline *dst, XmuScanline *src)
 XmuScanline *
 XmuScanlineXor(XmuScanline *dst, XmuScanline *src)
 {
-  XmuSegment *z, *p, *Z, ins;
-  int tmp1, tmp2;
+    XmuSegment *z, *p, *Z, ins;
+    int         tmp1, tmp2;
 
-  if (!src || !dst || !src->segment)
-    return (dst);
-  if (src == dst)
+    if (!src || !dst || !src->segment) return (dst);
+    if (src == dst)
     {
-      XmuDestroySegmentList(dst->segment);
-      dst->segment = (XmuSegment *)NULL;
-      return (dst);
+        XmuDestroySegmentList(dst->segment);
+        dst->segment = (XmuSegment *)NULL;
+        return (dst);
     }
-  if (!dst->segment)
+    if (!dst->segment)
     {
-      XmuScanlineCopy(dst, src);
-      return (dst);
+        XmuScanlineCopy(dst, src);
+        return (dst);
     }
 
-  z = p = dst->segment;
-  Z = src->segment;
-  ins.x1 = Z->x1;
-  ins.x2 = Z->x2;
+    z = p  = dst->segment;
+    Z      = src->segment;
+    ins.x1 = Z->x1;
+    ins.x2 = Z->x2;
 
   /*CONSTCOND*/
-  while (1)
+    while (1)
     {
-      while (!XmuValidSegment((&ins)))
-	{
-	  if ((Z = Z->next) == (XmuSegment *)NULL)
-	    return (dst);
-	  ins.x1 = Z->x1;
-	  ins.x2 = Z->x2;
-	}
-      if (!z)
-	{
-	  XmuSegment *q = XmuNewSegment(ins.x1, ins.x2);
+        while (!XmuValidSegment((&ins)))
+        {
+            if ((Z = Z->next) == (XmuSegment *)NULL) return (dst);
+            ins.x1 = Z->x1;
+            ins.x2 = Z->x2;
+        }
+        if (!z)
+        {
+            XmuSegment *q = XmuNewSegment(ins.x1, ins.x2);
 
-            if (!dst->segment)
-	      dst->segment = q;
+            if (!dst->segment) dst->segment = q;
+            else p->next = q;
+            p = q;
+            Z = Z->next;
+            XmuAppendSegment(p, Z);
+            break;
+        }
+        else if (ins.x2 < z->x1)
+        {
+            XmuSegment *q = XmuNewSegment(ins.x1, ins.x2);
+
+            q->next = z;
+            if (z == dst->segment) dst->segment = q;
+            else p->next = q;
+            if ((Z = Z->next) == (XmuSegment *)NULL) return (dst);
+
+            p      = q;
+            ins.x1 = Z->x1;
+            ins.x2 = Z->x2;
+            continue;
+        }
+        else if (ins.x2 == z->x1)
+        {
+            z->x1 = ins.x1;
+            if ((Z = Z->next) == (XmuSegment *)NULL) break;
+            ins.x1 = Z->x1;
+            ins.x2 = Z->x2;
+            continue;
+        }
+        else if (ins.x1 < z->x2)
+        {
+            if (ins.x1 == z->x1)
+            {
+                if (ins.x2 < z->x2)
+                {
+                    z->x1 = ins.x2;
+                    if ((Z = Z->next) == (XmuSegment *)NULL) break;
+                    ins.x1 = Z->x1;
+                    ins.x2 = Z->x2;
+                    continue;
+                }
+                else
+                {
+                    ins.x1 = z->x2;
+                    if (z == dst->segment)
+                        p = dst->segment = dst->segment->next;
+                    else p->next = z->next;
+                    XmuDestroySegment(z);
+                    z = p;
+                    continue;
+                }
+            }
             else
-	      p->next = q;
-	    p = q;
-	    Z = Z->next;
-	    XmuAppendSegment(p, Z);
-	    break;
-	}
-      else if (ins.x2 < z->x1)
-	{
-	  XmuSegment *q = XmuNewSegment(ins.x1, ins.x2);
+            {
+                if (Z->x2 < z->x2)
+                {
+                    XmuSegment *q = XmuNewSegment(XmuMin(ins.x1, z->x1),
+                                                  XmuMax(z->x1, ins.x1));
 
-	  q->next = z;
-	  if (z == dst->segment)
-	    dst->segment = q;
-	  else
-	    p->next = q;
-	  if ((Z = Z->next) == (XmuSegment *)NULL)
-	    return (dst);
-
-	  p = q;
-	  ins.x1 = Z->x1;
-	  ins.x2 = Z->x2;
-	  continue;
-	}
-      else if (ins.x2 == z->x1)
-	{
-	  z->x1 = ins.x1;
-	  if ((Z = Z->next) == (XmuSegment *)NULL)
-	    break;
-	  ins.x1 = Z->x1;
-	  ins.x2 = Z->x2;
-	  continue;
-	}
-      else if (ins.x1 < z->x2)
-	{
-	  if (ins.x1 == z->x1)
-	    {
-	      if (ins.x2 < z->x2)
-		{
-		  z->x1 = ins.x2;
-		  if ((Z = Z->next) == (XmuSegment *)NULL)
-		    break;
-		  ins.x1 = Z->x1;
-		  ins.x2 = Z->x2;
-		  continue;
-		}
-	      else
-		{
-		  ins.x1 = z->x2;
-		  if (z == dst->segment)
-		    p = dst->segment = dst->segment->next;
-		  else
-		    p->next = z->next;
-		  XmuDestroySegment(z);
-		  z = p;
-		  continue;
-		}
-	    }
-	  else
-	    {
-	      if (Z->x2 < z->x2)
-		{
-		  XmuSegment  *q = XmuNewSegment(XmuMin(ins.x1, z->x1),
-						 XmuMax(z->x1, ins.x1));
-
-		  q->next = z;
-		  if (z == dst->segment)
-		    dst->segment = q;
-		  else
-		    p->next = q;
-		  ins.x1 = z->x2;
-		  z->x1 = ins.x2;
-		  p = q;
-		  continue;
-		}
-	      else
-		{
-		  tmp1 = ins.x2;
-		  tmp2 = z->x2;
-		  ins.x2 = XmuMax(ins.x2, z->x2);
-		  z->x2 = XmuMax(z->x1, ins.x1);
-		  z->x1 = XmuMin(ins.x1, z->x1);
-		  ins.x1 = XmuMin(tmp1, tmp2);
-		}
-	    }
-	}
-      else if (ins.x1 == z->x2)
-	{
-	  ins.x1 = z->x1;
-	  if (z == dst->segment)
-	    p = dst->segment = dst->segment->next;
-	  else
-	    p->next = z->next;
-	  XmuDestroySegment(z);
-	  z = p;
-	  continue;
-	}
-      p = z;
-      z = z->next;
+                    q->next = z;
+                    if (z == dst->segment) dst->segment = q;
+                    else p->next = q;
+                    ins.x1 = z->x2;
+                    z->x1  = ins.x2;
+                    p      = q;
+                    continue;
+                }
+                else
+                {
+                    tmp1   = ins.x2;
+                    tmp2   = z->x2;
+                    ins.x2 = XmuMax(ins.x2, z->x2);
+                    z->x2  = XmuMax(z->x1, ins.x1);
+                    z->x1  = XmuMin(ins.x1, z->x1);
+                    ins.x1 = XmuMin(tmp1, tmp2);
+                }
+            }
+        }
+        else if (ins.x1 == z->x2)
+        {
+            ins.x1 = z->x1;
+            if (z == dst->segment) p = dst->segment = dst->segment->next;
+            else p->next = z->next;
+            XmuDestroySegment(z);
+            z = p;
+            continue;
+        }
+        p = z;
+        z = z->next;
     }
 
-  return (dst);
+    return (dst);
 }
 
 /*
@@ -1502,18 +1434,16 @@ XmuScanlineXor(XmuScanline *dst, XmuScanline *src)
 XmuScanline *
 XmuNewScanline(int y, int x1, int x2)
 {
-  XmuScanline *scanline;
+    XmuScanline *scanline;
 
-  scanline = (XmuScanline *)XtMalloc(sizeof(XmuScanline));
-  scanline->y = y;
-  if (x1 < x2)
-    scanline->segment = XmuNewSegment(x1, x2);
-  else
-    scanline->segment = (XmuSegment *)NULL;
+    scanline    = (XmuScanline *)XtMalloc(sizeof(XmuScanline));
+    scanline->y = y;
+    if (x1 < x2) scanline->segment = XmuNewSegment(x1, x2);
+    else scanline->segment = (XmuSegment *)NULL;
 
-  scanline->next = (XmuScanline *)NULL;
+    scanline->next = (XmuScanline *)NULL;
 
-  return (scanline);
+    return (scanline);
 }
 
 /*
@@ -1534,16 +1464,15 @@ XmuNewScanline(int y, int x1, int x2)
 void
 XmuDestroyScanlineList(XmuScanline *scanline)
 {
-  XmuScanline *z;
+    XmuScanline *z;
 
-  if (!scanline)
-    return;
+    if (!scanline) return;
 
-  while (scanline)
+    while (scanline)
     {
-      z = scanline;
-      scanline = scanline->next;
-      XmuDestroyScanline(z);
+        z        = scanline;
+        scanline = scanline->next;
+        XmuDestroyScanline(z);
     }
 }
 
@@ -1561,54 +1490,53 @@ XmuDestroyScanlineList(XmuScanline *scanline)
  *	correct data (but can left unnecessary data in the area, to avoid
  *	to much paranoia tests).
  */
-XmuArea *XmuOptimizeArea(XmuArea *area)
+XmuArea *
+XmuOptimizeArea(XmuArea *area)
 {
-  XmuScanline *pr, *at;
+    XmuScanline *pr, *at;
 
-  if (!area || !area->scanline)
+    if (!area || !area->scanline) return (area);
+
+    if (!area->scanline->next)
+    {
+        XmuDestroyScanlineList(area->scanline);
+        area->scanline = (XmuScanline *)0;
+        return (area);
+    }
+
+    pr = area->scanline;
+    at = area->scanline->next;
+    while (area->scanline && (!XmuValidScanline(area->scanline) ||
+                              (area->scanline->next &&
+                               area->scanline->y >= area->scanline->next->y)))
+    {
+        area->scanline = area->scanline->next;
+        XmuDestroyScanline(pr);
+        pr = area->scanline;
+        if (pr) at = pr->next;
+    }
+
+    for (; at; pr = at, at = at->next)
+    {
+        if (XmuScanlineEqu(at, pr) ||
+            (!XmuValidScanline(at) && !XmuValidScanline(pr)) ||
+            (at->next && at->y >= at->next->y))
+        {
+            pr->next = at->next;
+            XmuDestroyScanline(at);
+            at = pr;
+        }
+    }
+    if (pr && XmuValidScanline(pr))
+    {
+        XmuDestroySegmentList(pr->segment);
+        pr->segment = (XmuSegment *)NULL;
+    }
+    if (area->scanline && !area->scanline->next)
+    {
+        XmuDestroyScanlineList(area->scanline);
+        area->scanline = (XmuScanline *)NULL;
+    }
+
     return (area);
-
-  if (!area->scanline->next)
-    {
-      XmuDestroyScanlineList(area->scanline);
-      area->scanline = (XmuScanline *)0;
-      return (area);
-    }
-
-  pr = area->scanline;
-  at = area->scanline->next;
-  while (area->scanline && (!XmuValidScanline(area->scanline)
-			    || (area->scanline->next && area->scanline->y
-				>= area->scanline->next->y)))
-    {
-      area->scanline = area->scanline->next;
-      XmuDestroyScanline(pr);
-      pr = area->scanline;
-      if (pr)
-	at = pr->next;
-    }
-
-  for (; at; pr = at, at = at->next)
-    {
-      if (XmuScanlineEqu(at, pr)
-	  || (!XmuValidScanline(at) && !XmuValidScanline(pr))
-	  || (at->next && at->y >= at->next->y))
-	{
-	  pr->next = at->next;
-	  XmuDestroyScanline(at);
-	  at = pr;
-	}
-    }
-  if (pr && XmuValidScanline(pr))
-    {
-      XmuDestroySegmentList(pr->segment);
-      pr->segment = (XmuSegment *)NULL;
-    }
-  if (area->scanline && !area->scanline->next)
-    {
-      XmuDestroyScanlineList(area->scanline);
-      area->scanline = (XmuScanline *)NULL;
-    }
-
-  return (area);
 }

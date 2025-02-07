@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xos.h"
 #include "X11/X.h"
@@ -43,44 +43,38 @@ in this Software without prior written authorization from The Open Group.
  * Examine the XDMCP specification for the correct algorithm
  */
 
-#include "Wrap.h"
+#  include "Wrap.h"
 
 void
-XdmcpWrap (
-    unsigned char	*input,
-    unsigned char	*wrapper,
-    unsigned char	*output,
-    int			bytes)
+XdmcpWrap(unsigned char *input,
+          unsigned char *wrapper,
+          unsigned char *output,
+          int            bytes)
 {
-    int			i, j;
-    int			len;
-    unsigned char	tmp[8];
-    unsigned char	expand_wrapper[8];
-    auth_wrapper_schedule	schedule;
+    int                   i, j;
+    int                   len;
+    unsigned char         tmp[8];
+    unsigned char         expand_wrapper[8];
+    auth_wrapper_schedule schedule;
 
-    _XdmcpWrapperToOddParity (wrapper, expand_wrapper);
-    _XdmcpAuthSetup (expand_wrapper, schedule);
+    _XdmcpWrapperToOddParity(wrapper, expand_wrapper);
+    _XdmcpAuthSetup(expand_wrapper, schedule);
     for (j = 0; j < bytes; j += 8)
     {
-	len = 8;
-	if (bytes - j < len)
-	    len = bytes - j;
-	/* block chaining */
-	for (i = 0; i < len; i++)
-	{
-	    if (j == 0)
-		tmp[i] = input[i];
-	    else
-		tmp[i] = input[j + i] ^ output[j - 8 + i];
-	}
-	for (; i < 8; i++)
-	{
-	    if (j == 0)
-		tmp[i] = 0;
-	    else
-		tmp[i] = 0 ^ output[j - 8 + i];
-	}
-	_XdmcpAuthDoIt (tmp, (output + j), schedule, 1);
+        len = 8;
+        if (bytes - j < len) len = bytes - j;
+    /* block chaining */
+        for (i = 0; i < len; i++)
+        {
+            if (j == 0) tmp[i] = input[i];
+            else tmp[i] = input[j + i] ^ output[j - 8 + i];
+        }
+        for (; i < 8; i++)
+        {
+            if (j == 0) tmp[i] = 0;
+            else tmp[i] = 0 ^ output[j - 8 + i];
+        }
+        _XdmcpAuthDoIt(tmp, (output + j), schedule, 1);
     }
 }
 
@@ -90,7 +84,7 @@ XdmcpWrap (
  */
 
 static int
-OddParity (unsigned char c)
+OddParity(unsigned char c)
 {
     c = c ^ (c >> 4);
     c = c ^ (c >> 2);
@@ -104,24 +98,22 @@ OddParity (unsigned char c)
  */
 
 void
-_XdmcpWrapperToOddParity (
-    unsigned char   *in,
-    unsigned char   *out)
+_XdmcpWrapperToOddParity(unsigned char *in, unsigned char *out)
 {
-    int		    ashift, bshift;
-    int		    i;
-    unsigned char   c;
+    int           ashift, bshift;
+    int           i;
+    unsigned char c;
 
     ashift = 7;
     bshift = 1;
     for (i = 0; i < 7; i++)
     {
-	c = ((in[i] << ashift) | (in[i+1] >> bshift)) & 0x7f;
-	out[i] = (c << 1) | OddParity (c);
-	ashift--;
-	bshift++;
+        c      = ((in[i] << ashift) | (in[i + 1] >> bshift)) & 0x7f;
+        out[i] = (c << 1) | OddParity(c);
+        ashift--;
+        bshift++;
     }
-    c = in[i];
+    c      = in[i];
     out[i] = (c << 1) | OddParity(c);
 }
 

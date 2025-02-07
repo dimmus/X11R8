@@ -24,119 +24,101 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "XlcPubI.h"
 
 int
-_Xlcmbtowc(
-    XLCd lcd,
-    wchar_t *wstr,
-    char *str,
-    int len)
+_Xlcmbtowc(XLCd lcd, wchar_t *wstr, char *str, int len)
 {
-    XlcConv conv;
+    XlcConv  conv;
     XPointer from, to;
-    int from_left, to_left;
-    wchar_t tmp_wc;
-    int ret;
+    int      from_left, to_left;
+    wchar_t  tmp_wc;
+    int      ret;
 
-    if (lcd == NULL) {
-	lcd = _XlcCurrentLC();
-	if (lcd == NULL)
-	    return -1;
+    if (lcd == NULL)
+    {
+        lcd = _XlcCurrentLC();
+        if (lcd == NULL) return -1;
     }
-    if (str == NULL)
-	return XLC_PUBLIC(lcd, is_state_depend);
+    if (str == NULL) return XLC_PUBLIC(lcd, is_state_depend);
 
     conv = _XlcOpenConverter(lcd, XlcNMultiByte, lcd, XlcNWideChar);
-    if (conv == NULL)
-	    return -1;
+    if (conv == NULL) return -1;
 
-    from = (XPointer) str;
+    from      = (XPointer)str;
     from_left = len;
-    to = (XPointer) (wstr ? wstr : &tmp_wc);
-    to_left = 1;
+    to        = (XPointer)(wstr ? wstr : &tmp_wc);
+    to_left   = 1;
 
     if (_XlcConvert(conv, &from, &from_left, &to, &to_left, NULL, 0) < 0)
-	ret = -1;
-    else
-	ret = len - from_left;
+        ret = -1;
+    else ret = len - from_left;
 
     _XlcCloseConverter(conv);
     return ret;
 }
 
 int
-_Xlcwctomb(
-    XLCd lcd,
-    char *str,
-    wchar_t wc)
+_Xlcwctomb(XLCd lcd, char *str, wchar_t wc)
 {
-    XlcConv conv;
+    XlcConv  conv;
     XPointer from, to;
-    int from_left, to_left, length;
-    int ret;
+    int      from_left, to_left, length;
+    int      ret;
 
-    if (lcd == NULL) {
-	lcd = _XlcCurrentLC();
-	if (lcd == NULL)
-	    return -1;
+    if (lcd == NULL)
+    {
+        lcd = _XlcCurrentLC();
+        if (lcd == NULL) return -1;
     }
-    if (str == NULL)
-	return XLC_PUBLIC(lcd, is_state_depend);
+    if (str == NULL) return XLC_PUBLIC(lcd, is_state_depend);
 
     conv = _XlcOpenConverter(lcd, XlcNWideChar, lcd, XlcNMultiByte);
-    if (conv == NULL)
-	return -1;
+    if (conv == NULL) return -1;
 
-    from = (XPointer) &wc;
+    from      = (XPointer)&wc;
     from_left = 1;
-    to = (XPointer) str;
+    to        = (XPointer)str;
     length = to_left = XLC_PUBLIC(lcd, mb_cur_max);
 
     if (_XlcConvert(conv, &from, &from_left, &to, &to_left, NULL, 0) < 0)
-	ret = -1;
-    else
-        ret = length - to_left;
+        ret = -1;
+    else ret = length - to_left;
 
     _XlcCloseConverter(conv);
     return ret;
 }
 
 int
-_Xlcmbstowcs(
-    XLCd lcd,
-    wchar_t *wstr,
-    char *str,
-    int len)
+_Xlcmbstowcs(XLCd lcd, wchar_t *wstr, char *str, int len)
 {
-    XlcConv conv;
+    XlcConv  conv;
     XPointer from, to;
-    int from_left, to_left, ret;
+    int      from_left, to_left, ret;
 
-    if (lcd == NULL) {
-	lcd = _XlcCurrentLC();
-	if (lcd == NULL)
-	    return -1;
+    if (lcd == NULL)
+    {
+        lcd = _XlcCurrentLC();
+        if (lcd == NULL) return -1;
     }
 
     conv = _XlcOpenConverter(lcd, XlcNMultiByte, lcd, XlcNWideChar);
-    if (conv == NULL)
-	return -1;
+    if (conv == NULL) return -1;
 
-    from = (XPointer) str;
-    from_left = (int) strlen(str);
-    to = (XPointer) wstr;
-    to_left = len;
+    from      = (XPointer)str;
+    from_left = (int)strlen(str);
+    to        = (XPointer)wstr;
+    to_left   = len;
 
     if (_XlcConvert(conv, &from, &from_left, &to, &to_left, NULL, 0) < 0)
-	ret = -1;
-    else {
-	ret = len - to_left;
-	if (wstr && to_left > 0)
-	    wstr[ret] = (wchar_t) 0;
+        ret = -1;
+    else
+    {
+        ret = len - to_left;
+        if (wstr && to_left > 0) wstr[ret] = (wchar_t)0;
     }
 
     _XlcCloseConverter(conv);
@@ -145,37 +127,32 @@ _Xlcmbstowcs(
 }
 
 int
-_Xlcwcstombs(
-    XLCd lcd,
-    char *str,
-    wchar_t *wstr,
-    int len)
+_Xlcwcstombs(XLCd lcd, char *str, wchar_t *wstr, int len)
 {
-    XlcConv conv;
+    XlcConv  conv;
     XPointer from, to;
-    int from_left, to_left, ret;
+    int      from_left, to_left, ret;
 
-    if (lcd == NULL) {
-	lcd = _XlcCurrentLC();
-	if (lcd == NULL)
-	    return -1;
+    if (lcd == NULL)
+    {
+        lcd = _XlcCurrentLC();
+        if (lcd == NULL) return -1;
     }
 
     conv = _XlcOpenConverter(lcd, XlcNWideChar, lcd, XlcNMultiByte);
-    if (conv == NULL)
-	return -1;
+    if (conv == NULL) return -1;
 
-    from = (XPointer) wstr;
+    from      = (XPointer)wstr;
     from_left = _Xwcslen(wstr);
-    to = (XPointer) str;
-    to_left = len;
+    to        = (XPointer)str;
+    to_left   = len;
 
     if (_XlcConvert(conv, &from, &from_left, &to, &to_left, NULL, 0) < 0)
-	ret = -1;
-    else {
-	ret = len - to_left;
-	if (str && to_left > 0)
-	    str[ret] = '\0';
+        ret = -1;
+    else
+    {
+        ret = len - to_left;
+        if (str && to_left > 0) str[ret] = '\0';
     }
 
     _XlcCloseConverter(conv);
@@ -183,152 +160,119 @@ _Xlcwcstombs(
     return ret;
 }
 
-
 int
-_Xmbtowc(
-    wchar_t *wstr,
-    char *str,
-    int len
-    )
+_Xmbtowc(wchar_t *wstr, char *str, int len)
 {
-    return _Xlcmbtowc((XLCd) NULL, wstr, str, len);
+    return _Xlcmbtowc((XLCd)NULL, wstr, str, len);
 }
 
 int
-_Xmblen(
-    char *str,
-    int len
-    )
+_Xmblen(char *str, int len)
 {
-    return _Xmbtowc((wchar_t *) NULL, str, len);
+    return _Xmbtowc((wchar_t *)NULL, str, len);
 }
 
 int
-_Xwctomb(
-    char *str,
-    wchar_t wc)
+_Xwctomb(char *str, wchar_t wc)
 {
-    return _Xlcwctomb((XLCd) NULL, str, wc);
+    return _Xlcwctomb((XLCd)NULL, str, wc);
 }
 
 int
-_Xmbstowcs(
-    wchar_t *wstr,
-    char *str,
-    int len)
+_Xmbstowcs(wchar_t *wstr, char *str, int len)
 {
-    return _Xlcmbstowcs((XLCd) NULL, wstr, str, len);
+    return _Xlcmbstowcs((XLCd)NULL, wstr, str, len);
 }
 
 int
-_Xwcstombs(
-    char *str,
-    wchar_t *wstr,
-    int len)
+_Xwcstombs(char *str, wchar_t *wstr, int len)
 {
-    return _Xlcwcstombs((XLCd) NULL, str, wstr, len);
+    return _Xlcwcstombs((XLCd)NULL, str, wstr, len);
 }
 
 wchar_t *
-_Xwcscpy(
-    register wchar_t *wstr1, register wchar_t *wstr2)
+_Xwcscpy(register wchar_t *wstr1, register wchar_t *wstr2)
 {
     wchar_t *wstr_tmp = wstr1;
 
     while ((*wstr1++ = *wstr2++))
-	;
+        ;
 
     return wstr_tmp;
 }
 
 wchar_t *
-_Xwcsncpy(
-    register wchar_t *wstr1, register wchar_t *wstr2,
-    register int len)
+_Xwcsncpy(register wchar_t *wstr1, register wchar_t *wstr2, register int len)
 {
     wchar_t *wstr_tmp = wstr1;
 
     while (len-- > 0)
-	if (!(*wstr1++ = *wstr2++))
-	    break;
+        if (!(*wstr1++ = *wstr2++)) break;
 
     while (len-- > 0)
-	*wstr1++ = (wchar_t) 0;
+        *wstr1++ = (wchar_t)0;
 
     return wstr_tmp;
 }
 
 int
-_Xwcslen(
-    register wchar_t *wstr)
+_Xwcslen(register wchar_t *wstr)
 {
     register wchar_t *wstr_ptr = wstr;
 
     while (*wstr_ptr)
-	wstr_ptr++;
+        wstr_ptr++;
 
-    return (int) (wstr_ptr - wstr);
+    return (int)(wstr_ptr - wstr);
 }
 
 int
-_Xwcscmp(
-    register wchar_t *wstr1, register wchar_t *wstr2)
+_Xwcscmp(register wchar_t *wstr1, register wchar_t *wstr2)
 {
-    for ( ; *wstr1 && *wstr2; wstr1++, wstr2++)
-	if (*wstr1 != *wstr2)
-	    break;
+    for (; *wstr1 && *wstr2; wstr1++, wstr2++)
+        if (*wstr1 != *wstr2) break;
 
     return *wstr1 - *wstr2;
 }
 
 int
-_Xwcsncmp(
-    register wchar_t *wstr1, register wchar_t *wstr2,
-    register int len)
+_Xwcsncmp(register wchar_t *wstr1, register wchar_t *wstr2, register int len)
 {
-    for ( ; *wstr1 && *wstr2 && len > 0; wstr1++, wstr2++, len--)
-	if (*wstr1 != *wstr2)
-	    break;
+    for (; *wstr1 && *wstr2 && len > 0; wstr1++, wstr2++, len--)
+        if (*wstr1 != *wstr2) break;
 
-    if (len <= 0)
-	return 0;
+    if (len <= 0) return 0;
 
     return *wstr1 - *wstr2;
 }
 
-
 int
-_Xlcmbstoutf8(
-    XLCd lcd,
-    char *ustr,
-    const char *str,
-    int len)
+_Xlcmbstoutf8(XLCd lcd, char *ustr, const char *str, int len)
 {
-    XlcConv conv;
+    XlcConv  conv;
     XPointer from, to;
-    int from_left, to_left, ret;
+    int      from_left, to_left, ret;
 
-    if (lcd == NULL) {
-	lcd = _XlcCurrentLC();
-	if (lcd == NULL)
-	    return -1;
+    if (lcd == NULL)
+    {
+        lcd = _XlcCurrentLC();
+        if (lcd == NULL) return -1;
     }
 
     conv = _XlcOpenConverter(lcd, XlcNMultiByte, lcd, XlcNUtf8String);
-    if (conv == NULL)
-	return -1;
+    if (conv == NULL) return -1;
 
-    from = (XPointer) str;
-    from_left = (int) strlen(str);
-    to = (XPointer) ustr;
-    to_left = len;
+    from      = (XPointer)str;
+    from_left = (int)strlen(str);
+    to        = (XPointer)ustr;
+    to_left   = len;
 
     if (_XlcConvert(conv, &from, &from_left, &to, &to_left, NULL, 0) < 0)
-	ret = -1;
-    else {
-	ret = len - to_left;
-	if (ustr && to_left > 0)
-	    ustr[ret] = '\0';
+        ret = -1;
+    else
+    {
+        ret = len - to_left;
+        if (ustr && to_left > 0) ustr[ret] = '\0';
     }
 
     _XlcCloseConverter(conv);
@@ -337,10 +281,7 @@ _Xlcmbstoutf8(
 }
 
 int
-_Xmbstoutf8(
-    char *ustr,
-    const char *str,
-    int len)
+_Xmbstoutf8(char *ustr, const char *str, int len)
 {
-    return _Xlcmbstoutf8((XLCd) NULL, ustr, str, len);
+    return _Xlcmbstoutf8((XLCd)NULL, ustr, str, len);
 }

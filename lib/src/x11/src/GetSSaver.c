@@ -25,32 +25,30 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XGetScreenSaver(
-     register Display *dpy,
+XGetScreenSaver(register Display *dpy,
      /* the following are return only vars */
-     int *timeout,
-     int *interval,
-     int *prefer_blanking,
-     int *allow_exp)  /*boolean */
+                int *timeout,
+                int *interval,
+                int *prefer_blanking,
+                int *allow_exp)  /*boolean */
 
 {
-    xGetScreenSaverReply rep;
+    xGetScreenSaverReply     rep;
     _X_UNUSED register xReq *req;
     LockDisplay(dpy);
     GetEmptyReq(GetScreenSaver, req);
 
-    (void) _XReply (dpy, (xReply *)&rep, 0, xTrue);
-    *timeout = rep.timeout;
-    *interval = rep.interval;
+    (void)_XReply(dpy, (xReply *)&rep, 0, xTrue);
+    *timeout         = rep.timeout;
+    *interval        = rep.interval;
     *prefer_blanking = rep.preferBlanking;
-    *allow_exp = rep.allowExposures;
+    *allow_exp       = rep.allowExposures;
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

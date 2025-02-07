@@ -22,39 +22,37 @@
 
 #include "xftint.h"
 
-_X_EXPORT FcPattern
-*XftNameParse (const char *name)
+_X_EXPORT FcPattern *
+XftNameParse(const char *name)
 {
-    return FcNameParse ((const FcChar8 *) name);
+    return FcNameParse((const FcChar8 *)name);
 }
 
 _X_EXPORT FcBool
-XftNameUnparse (FcPattern *pat, char *dest, int len)
+XftNameUnparse(FcPattern *pat, char *dest, int len)
 {
     FcChar8 *name;
 
-    name = FcNameUnparse (pat);
-    if (!name)
-	return FcFalse;
-    if (strlen ((char *) name) + 1 > (size_t) len)
+    name = FcNameUnparse(pat);
+    if (!name) return FcFalse;
+    if (strlen((char *)name) + 1 > (size_t)len)
     {
-	FcPattern *new = FcPatternDuplicate (pat);
-	free (name);
-	FcPatternDel (new, FC_LANG);
-	FcPatternDel (new, FC_CHARSET);
-	name = FcNameUnparse (new);
-	FcPatternDestroy (new);
-	if (!name)
-	    return FcFalse;
-	if (strlen ((char *) name) + 1 > (size_t) len)
-	{
-	    strncpy (dest, ((char *) name), (size_t) len - 1);
-	    dest[len - 1] = '\0';
-	    free (name);
-	    return FcFalse;
-	}
+        FcPattern *new = FcPatternDuplicate(pat);
+        free(name);
+        FcPatternDel(new, FC_LANG);
+        FcPatternDel(new, FC_CHARSET);
+        name = FcNameUnparse(new);
+        FcPatternDestroy(new);
+        if (!name) return FcFalse;
+        if (strlen((char *)name) + 1 > (size_t)len)
+        {
+            strncpy(dest, ((char *)name), (size_t)len - 1);
+            dest[len - 1] = '\0';
+            free(name);
+            return FcFalse;
+        }
     }
-    strcpy (dest, ((char *) name));
-    free (name);
+    strcpy(dest, ((char *)name));
+    free(name);
     return FcTrue;
 }

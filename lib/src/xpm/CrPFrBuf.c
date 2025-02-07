@@ -33,64 +33,65 @@
 \*****************************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "XpmI.h"
 
 int
-XpmCreatePixmapFromBuffer(
-    Display		*display,
-    Drawable		 d,
-    char		*buffer,
-    Pixmap		*pixmap_return,
-    Pixmap		*shapemask_return,
-    XpmAttributes	*attributes)
+XpmCreatePixmapFromBuffer(Display       *display,
+                          Drawable       d,
+                          char          *buffer,
+                          Pixmap        *pixmap_return,
+                          Pixmap        *shapemask_return,
+                          XpmAttributes *attributes)
 {
     XImage *ximage = NULL, *shapeimage = NULL;
-    int ErrorStatus;
+    int     ErrorStatus;
 
     /* initialize return values */
-    if (pixmap_return)
-	*pixmap_return = 0;
-    if (shapemask_return)
-	*shapemask_return = 0;
+    if (pixmap_return) *pixmap_return = 0;
+    if (shapemask_return) *shapemask_return = 0;
 
     /* create the images */
-    ErrorStatus = XpmCreateImageFromBuffer(display, buffer,
-					   (pixmap_return ? &ximage : NULL),
-					   (shapemask_return ?
-					    &shapeimage : NULL),
-					   attributes);
+    ErrorStatus =
+        XpmCreateImageFromBuffer(display,
+                                 buffer,
+                                 (pixmap_return ? &ximage : NULL),
+                                 (shapemask_return ? &shapeimage : NULL),
+                                 attributes);
 
-    if (ErrorStatus < 0)		/* fatal error */
-	goto cleanup;
+    if (ErrorStatus < 0)  /* fatal error */
+        goto cleanup;
 
     /* create the pixmaps and destroy images */
-    if (pixmap_return && ximage) {
-	ErrorStatus =
-	    xpmCreatePixmapFromImage(display, d, ximage, pixmap_return);
-	if (ErrorStatus < 0)		/* fatal error */
-	    goto cleanup;
+    if (pixmap_return && ximage)
+    {
+        ErrorStatus =
+            xpmCreatePixmapFromImage(display, d, ximage, pixmap_return);
+        if (ErrorStatus < 0)  /* fatal error */
+            goto cleanup;
     }
-    if (shapemask_return && shapeimage) {
-	ErrorStatus =
-	    xpmCreatePixmapFromImage(display, d, shapeimage, shapemask_return);
+    if (shapemask_return && shapeimage)
+    {
+        ErrorStatus =
+            xpmCreatePixmapFromImage(display, d, shapeimage, shapemask_return);
     }
 
-  cleanup:
-    if (ximage != NULL)
-	XDestroyImage(ximage);
-    if (shapeimage != NULL)
-	XDestroyImage(shapeimage);
-    if (ErrorStatus < 0) {
-	if (pixmap_return && *pixmap_return) {
-	    XFreePixmap(display, *pixmap_return);
-	    *pixmap_return = 0;
-	}
-	if (shapemask_return && *shapemask_return) {
-	    XFreePixmap(display, *shapemask_return);
-	    *shapemask_return = 0;
-	}
+cleanup:
+    if (ximage != NULL) XDestroyImage(ximage);
+    if (shapeimage != NULL) XDestroyImage(shapeimage);
+    if (ErrorStatus < 0)
+    {
+        if (pixmap_return && *pixmap_return)
+        {
+            XFreePixmap(display, *pixmap_return);
+            *pixmap_return = 0;
+        }
+        if (shapemask_return && *shapemask_return)
+        {
+            XFreePixmap(display, *shapemask_return);
+            *shapemask_return = 0;
+        }
     }
     return (ErrorStatus);
 }

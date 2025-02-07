@@ -27,38 +27,31 @@ Author: Ralph Mor, X Consortium
 ******************************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/ICE/ICElib.h"
 #include "ICElibint.h"
 
 Status
-IcePing (
-	IceConn		 iceConn,
-	IcePingReplyProc pingReplyProc,
-	IcePointer	 clientData
-)
+IcePing(IceConn iceConn, IcePingReplyProc pingReplyProc, IcePointer clientData)
 {
-    _IcePingWait *newping = malloc (sizeof (_IcePingWait));
-    _IcePingWait *ptr = iceConn->ping_waits;
+    _IcePingWait *newping = malloc(sizeof(_IcePingWait));
+    _IcePingWait *ptr     = iceConn->ping_waits;
 
-    if (newping == NULL)
-	return (0);
+    if (newping == NULL) return (0);
 
     newping->ping_reply_proc = pingReplyProc;
-    newping->client_data = clientData;
-    newping->next = NULL;
+    newping->client_data     = clientData;
+    newping->next            = NULL;
 
     while (ptr && ptr->next)
-	ptr = ptr->next;
+        ptr = ptr->next;
 
-    if (ptr == NULL)
-	iceConn->ping_waits = newping;
-    else
-	ptr->next = newping;
+    if (ptr == NULL) iceConn->ping_waits = newping;
+    else ptr->next = newping;
 
-    IceSimpleMessage (iceConn, 0, ICE_Ping);
-    IceFlush (iceConn);
+    IceSimpleMessage(iceConn, 0, ICE_Ping);
+    IceFlush(iceConn);
 
     return (1);
 }

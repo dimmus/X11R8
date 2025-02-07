@@ -49,7 +49,7 @@ from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xlibint.h"
 #include "X11/Xatom.h"
@@ -57,37 +57,33 @@ from The Open Group.
 #include "X11/Xos.h"
 #include <stdio.h>
 
-void XSetTextProperty (
-    Display *dpy,
-    Window w,
-    XTextProperty *tp,
-    Atom property)
+void
+XSetTextProperty(Display *dpy, Window w, XTextProperty *tp, Atom property)
 {
-    XChangeProperty (dpy, w, property, tp->encoding, tp->format,
-		     PropModeReplace, tp->value, tp->nitems);
+    XChangeProperty(dpy,
+                    w,
+                    property,
+                    tp->encoding,
+                    tp->format,
+                    PropModeReplace,
+                    tp->value,
+                    tp->nitems);
 }
 
-void XSetWMName (
-    Display *dpy,
-    Window w,
-    XTextProperty *tp)
+void
+XSetWMName(Display *dpy, Window w, XTextProperty *tp)
 {
-    XSetTextProperty (dpy, w, tp, XA_WM_NAME);
+    XSetTextProperty(dpy, w, tp, XA_WM_NAME);
 }
 
-void XSetWMIconName (
-    Display *dpy,
-    Window w,
-    XTextProperty *tp)
+void
+XSetWMIconName(Display *dpy, Window w, XTextProperty *tp)
 {
-    XSetTextProperty (dpy, w, tp, XA_WM_ICON_NAME);
+    XSetTextProperty(dpy, w, tp, XA_WM_ICON_NAME);
 }
 
-void XSetWMClientMachine (
-    Display *dpy,
-    Window w,
-    XTextProperty *tp)
+void
+XSetWMClientMachine(Display *dpy, Window w, XTextProperty *tp)
 {
-    XSetTextProperty (dpy, w, tp, XA_WM_CLIENT_MACHINE);
+    XSetTextProperty(dpy, w, tp, XA_WM_CLIENT_MACHINE);
 }
-

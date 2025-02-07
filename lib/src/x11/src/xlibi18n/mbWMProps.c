@@ -27,7 +27,7 @@ from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xlibint.h"
 #include "X11/Xutil.h"
@@ -35,35 +35,43 @@ from The Open Group.
 #include "X11/Xlocale.h"
 
 void
-XmbSetWMProperties (
-    Display *dpy,
-    Window w,
-    _Xconst char *windowName,
-    _Xconst char *iconName,
-    char **argv,
-    int argc,
-    XSizeHints *sizeHints,
-    XWMHints *wmHints,
-    XClassHint *classHints)
+XmbSetWMProperties(Display      *dpy,
+                   Window        w,
+                   _Xconst char *windowName,
+                   _Xconst char *iconName,
+                   char        **argv,
+                   int           argc,
+                   XSizeHints   *sizeHints,
+                   XWMHints     *wmHints,
+                   XClassHint   *classHints)
 {
-    XTextProperty wname, iname;
+    XTextProperty  wname, iname;
     XTextProperty *wprop = NULL;
     XTextProperty *iprop = NULL;
 
-    if (windowName &&
-	XmbTextListToTextProperty(dpy, (char**)&windowName, 1,
-				  XStdICCTextStyle, &wname) >= Success)
-	wprop = &wname;
-    if (iconName &&
-	XmbTextListToTextProperty(dpy, (char**)&iconName, 1,
-				  XStdICCTextStyle, &iname) >= Success)
-	iprop = &iname;
-    XSetWMProperties(dpy, w, wprop, iprop, argv, argc,
-		     sizeHints, wmHints, classHints);
-    if (wprop)
-	Xfree(wname.value);
-    if (iprop)
-	Xfree(iname.value);
+    if (windowName && XmbTextListToTextProperty(dpy,
+                                                (char **)&windowName,
+                                                1,
+                                                XStdICCTextStyle,
+                                                &wname) >= Success)
+        wprop = &wname;
+    if (iconName && XmbTextListToTextProperty(dpy,
+                                              (char **)&iconName,
+                                              1,
+                                              XStdICCTextStyle,
+                                              &iname) >= Success)
+        iprop = &iname;
+    XSetWMProperties(dpy,
+                     w,
+                     wprop,
+                     iprop,
+                     argv,
+                     argc,
+                     sizeHints,
+                     wmHints,
+                     classHints);
+    if (wprop) Xfree(wname.value);
+    if (iprop) Xfree(iname.value);
 
     /* Note: The WM_LOCALE_NAME property is set by XSetWMProperties. */
 }

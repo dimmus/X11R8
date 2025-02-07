@@ -27,7 +27,7 @@ PERFORMANCE OF THIS SOFTWARE.
 ******************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xatom.h"
 #include "X11/Xlib.h"
@@ -37,37 +37,39 @@ PERFORMANCE OF THIS SOFTWARE.
 #include "Ximint.h"
 #include "XimImSw.h"
 
-static Xim 		*_XimCurrentIMlist  = (Xim *)NULL;
-static int		 _XimCurrentIMcount = 0;
+static Xim *_XimCurrentIMlist  = (Xim *)NULL;
+static int  _XimCurrentIMcount = 0;
 
 static Bool
-_XimSetIMStructureList(
-    Xim		  im)
+_XimSetIMStructureList(Xim im)
 {
-    register int  i;
-    Xim		 *xim;
+    register int i;
+    Xim         *xim;
 
-    if(!(_XimCurrentIMlist)) {
-	if(!(_XimCurrentIMlist = Xmalloc(sizeof(Xim))))
-	    return False;
-	_XimCurrentIMlist[0] = im;
-	_XimCurrentIMcount   = 1;
+    if (!(_XimCurrentIMlist))
+    {
+        if (!(_XimCurrentIMlist = Xmalloc(sizeof(Xim)))) return False;
+        _XimCurrentIMlist[0] = im;
+        _XimCurrentIMcount   = 1;
     }
-    else {
-	for(i = 0; i < _XimCurrentIMcount; i++) {
-	    if(!( _XimCurrentIMlist[i])) {
-		_XimCurrentIMlist[i] = im;
-		break;
-	    }
-	}
-	if(i >= _XimCurrentIMcount) {
-	    if(!(xim = Xrealloc(_XimCurrentIMlist,
-					 ((i + 1) * sizeof(Xim)))))
-		return False;
-	    _XimCurrentIMlist			  = xim;
-	    _XimCurrentIMlist[_XimCurrentIMcount] = im;
-	    _XimCurrentIMcount++;
-	}
+    else
+    {
+        for (i = 0; i < _XimCurrentIMcount; i++)
+        {
+            if (!(_XimCurrentIMlist[i]))
+            {
+                _XimCurrentIMlist[i] = im;
+                break;
+            }
+        }
+        if (i >= _XimCurrentIMcount)
+        {
+            if (!(xim = Xrealloc(_XimCurrentIMlist, ((i + 1) * sizeof(Xim)))))
+                return False;
+            _XimCurrentIMlist                     = xim;
+            _XimCurrentIMlist[_XimCurrentIMcount] = im;
+            _XimCurrentIMcount++;
+        }
     }
     return True;
 }
@@ -75,13 +77,15 @@ _XimSetIMStructureList(
 void
 _XimDestroyIMStructureList(Xim im)
 {
-    register int  i;
+    register int i;
 
-    for(i = 0; i < _XimCurrentIMcount; i++) {
-	if(_XimCurrentIMlist[i] == im) {
-	    _XimCurrentIMlist[i] = NULL;
-	    break;
-	}
+    for (i = 0; i < _XimCurrentIMcount; i++)
+    {
+        if (_XimCurrentIMlist[i] == im)
+        {
+            _XimCurrentIMlist[i] = NULL;
+            break;
+        }
     }
     return;
 }
@@ -89,33 +93,38 @@ _XimDestroyIMStructureList(Xim im)
 void
 _XimServerDestroy(Xim im_2_destroy)
 {
-    register int  i;
-    Xim		  im;
-    XIC		  ic;
+    register int i;
+    Xim          im;
+    XIC          ic;
 
-    for(i = 0; i < _XimCurrentIMcount; i++) {
-	if(!(im = _XimCurrentIMlist[i]))
-	    continue;
-	/*
+    for (i = 0; i < _XimCurrentIMcount; i++)
+    {
+        if (!(im = _XimCurrentIMlist[i])) continue;
+    /*
 	 * Only continue if this im is the one to be destroyed.
 	 */
-	if (im != im_2_destroy)
-	    continue;
+        if (im != im_2_destroy) continue;
 
-	if (im->core.destroy_callback.callback)
-	    (*im->core.destroy_callback.callback)((XIM)im,
-			im->core.destroy_callback.client_data, NULL);
-	for (ic = im->core.ic_chain; ic; ic = ic->core.next) {
-	    if (ic->core.destroy_callback.callback) {
-		(*ic->core.destroy_callback.callback)(ic,
-			ic->core.destroy_callback.client_data, NULL);
-	    }
-	}
-	_XimResetIMInstantiateCallback( im );
-	(void)im->methods->close((XIM)im);
-	Xfree(im);
-	_XimCurrentIMlist[i] = NULL;
-	return;
+        if (im->core.destroy_callback.callback)
+            (*im->core.destroy_callback.callback)(
+                (XIM)im,
+                im->core.destroy_callback.client_data,
+                NULL);
+        for (ic = im->core.ic_chain; ic; ic = ic->core.next)
+        {
+            if (ic->core.destroy_callback.callback)
+            {
+                (*ic->core.destroy_callback.callback)(
+                    ic,
+                    ic->core.destroy_callback.client_data,
+                    NULL);
+            }
+        }
+        _XimResetIMInstantiateCallback(im);
+        (void)im->methods->close((XIM)im);
+        Xfree(im);
+        _XimCurrentIMlist[i] = NULL;
+        return;
     }
 }
 
@@ -123,89 +132,96 @@ _XimServerDestroy(Xim im_2_destroy)
 void
 _XimServerReconectableDestroy(void)
 {
-    register int  i;
-    Xim		  im;
-    XIC		  ic;
+    register int i;
+    Xim          im;
+    XIC          ic;
 
-    for(i = 0; i < _XimCurrentIMcount; i++) {
-	if(!(im = _XimCurrentIMlist[i]))
-	    continue;
+    for (i = 0; i < _XimCurrentIMcount; i++)
+    {
+        if (!(im = _XimCurrentIMlist[i])) continue;
 
-	if (im->core.destroy_callback.callback)
-	    (*im->core.destroy_callback.callback)(im,
-			im->core.destroy_callback.client_data, NULL);
-	for (ic = im->core.ic_chain; ic; ic = ic->core.next) {
-	    if (ic->core.destroy_callback.callback) {
-		(*ic->core.destroy_callback.callback)(ic,
-			ic->core.destroy_callback.client_data, NULL);
-	    }
-	}
-	_XimResetIMInstantiateCallback( im );
-	(void)im->methods->close((XIM)im);
+        if (im->core.destroy_callback.callback)
+            (*im->core.destroy_callback.callback)(
+                im,
+                im->core.destroy_callback.client_data,
+                NULL);
+        for (ic = im->core.ic_chain; ic; ic = ic->core.next)
+        {
+            if (ic->core.destroy_callback.callback)
+            {
+                (*ic->core.destroy_callback.callback)(
+                    ic,
+                    ic->core.destroy_callback.client_data,
+                    NULL);
+            }
+        }
+        _XimResetIMInstantiateCallback(im);
+        (void)im->methods->close((XIM)im);
     }
     return;
 }
 #endif /* XIM_CONNECTABLE */
 
 static const char *
-_XimStrstr(
-    register const char *src,
-    register const char *dest)
+_XimStrstr(register const char *src, register const char *dest)
 {
-    int			 len;
+    int len;
 
     len = strlen(dest);
-    while((src = strchr(src, *dest))) {
-	if(!strncmp(src, dest, len))
-	    return src;
-	src++;
+    while ((src = strchr(src, *dest)))
+    {
+        if (!strncmp(src, dest, len)) return src;
+        src++;
     }
     return NULL;
 }
 
 static char *
-_XimMakeImName(
-    XLCd	   lcd)
+_XimMakeImName(XLCd lcd)
 {
-    const char* begin = NULL;
-    const char* end = NULL;
-    char* ret = NULL;
-    const char* ximmodifier = XIMMODIFIER;
+    const char *begin       = NULL;
+    const char *end         = NULL;
+    char       *ret         = NULL;
+    const char *ximmodifier = XIMMODIFIER;
 
-    if(lcd->core->modifiers != NULL && *lcd->core->modifiers != '\0') {
-	begin = _XimStrstr(lcd->core->modifiers, ximmodifier);
-	if (begin != NULL) {
-	    end = begin += strlen(ximmodifier);
-	    while (*end && *end != '@')
-		end++;
-	}
+    if (lcd->core->modifiers != NULL && *lcd->core->modifiers != '\0')
+    {
+        begin = _XimStrstr(lcd->core->modifiers, ximmodifier);
+        if (begin != NULL)
+        {
+            end = begin += strlen(ximmodifier);
+            while (*end && *end != '@')
+                end++;
+        }
     }
     ret = Xmalloc(end - begin + 1);
-    if (ret != NULL) {
-	if (begin != NULL && end != NULL) {
-	    (void)strncpy(ret, begin, end - begin);
-	    ret[end - begin] = '\0';
-	} else {
-	    ret[0] = '\0';
-	}
+    if (ret != NULL)
+    {
+        if (begin != NULL && end != NULL)
+        {
+            (void)strncpy(ret, begin, end - begin);
+            ret[end - begin] = '\0';
+        }
+        else
+        {
+            ret[0] = '\0';
+        }
     }
 
     return ret;
 }
 
 XIM
-_XimOpenIM(
-    XLCd		 lcd,
-    Display		*dpy,
-    XrmDatabase		 rdb,
-    char		*res_name,
-    char		*res_class)
+_XimOpenIM(XLCd        lcd,
+           Display    *dpy,
+           XrmDatabase rdb,
+           char       *res_name,
+           char       *res_class)
 {
-    Xim			 im;
-    register int	 i;
+    Xim          im;
+    register int i;
 
-    if (!(im = Xcalloc(1, sizeof(XimRec))))
-	return (XIM)NULL;
+    if (!(im = Xcalloc(1, sizeof(XimRec)))) return (XIM)NULL;
 
     im->core.lcd       = lcd;
     im->core.ic_chain  = (XIC)NULL;
@@ -213,32 +229,31 @@ _XimOpenIM(
     im->core.rdb       = rdb;
     im->core.res_name  = NULL;
     im->core.res_class = NULL;
-    if((res_name != NULL) && (*res_name != '\0')){
-	if(!(im->core.res_name  = strdup(res_name)))
-	    goto Error1;
+    if ((res_name != NULL) && (*res_name != '\0'))
+    {
+        if (!(im->core.res_name = strdup(res_name))) goto Error1;
     }
-    if((res_class != NULL) && (*res_class != '\0')){
-	if(!(im->core.res_class = strdup(res_class)))
-	    goto Error2;
+    if ((res_class != NULL) && (*res_class != '\0'))
+    {
+        if (!(im->core.res_class = strdup(res_class))) goto Error2;
     }
-    if(!(im->core.im_name = _XimMakeImName(lcd)))
-	goto Error3;
+    if (!(im->core.im_name = _XimMakeImName(lcd))) goto Error3;
 
-    for(i= 0; ; i++) {
-	if(_XimImSportRec[i].checkprocessing(im)) {
-	    if(!(_XimImSportRec[i].im_open(im)))
-		goto Error4;
-	    if(!_XimSetIMStructureList(im))
-		goto Error4;
-	    return (XIM)im;
-	}
+    for (i = 0;; i++)
+    {
+        if (_XimImSportRec[i].checkprocessing(im))
+        {
+            if (!(_XimImSportRec[i].im_open(im))) goto Error4;
+            if (!_XimSetIMStructureList(im)) goto Error4;
+            return (XIM)im;
+        }
     }
 
-Error4 :
+Error4:
     _XimImSportRec[i].im_free(im);
     Xfree(im);
     return NULL;
-Error3 :
+Error3:
     Xfree(im->core.im_name);
 Error2:
     Xfree(im->core.res_class);
@@ -251,10 +266,9 @@ Error1:
 Bool
 _XInitIM(XLCd lcd)
 {
-    if(lcd == (XLCd)NULL)
-	return False;
-    lcd->methods->open_im = _XimOpenIM;
-    lcd->methods->register_callback = _XimRegisterIMInstantiateCallback;
+    if (lcd == (XLCd)NULL) return False;
+    lcd->methods->open_im             = _XimOpenIM;
+    lcd->methods->register_callback   = _XimRegisterIMInstantiateCallback;
     lcd->methods->unregister_callback = _XimUnRegisterIMInstantiateCallback;
     return True;
 }

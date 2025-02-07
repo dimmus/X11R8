@@ -27,37 +27,33 @@ Author: Ralph Mor, X Consortium
 ******************************************************************************/
 
 #ifdef WIN32
-#define _WILLWINSOCK_
+#  define _WILLWINSOCK_
 #endif
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/ICE/ICElib.h"
 #include "ICElibint.h"
 #include "X11/Xtrans/Xtrans.h"
 #include <stdio.h>
 #ifdef WIN32
-#include "X11/Xwinsock.h"
-#include "X11/Xw32defs.h"
+#  include "X11/Xwinsock.h"
+#  include "X11/Xw32defs.h"
 #endif
-
 
 /*
  * scratch buffer
  */
 
 char *
-IceAllocScratch (
-	IceConn		iceConn,
-	unsigned long	size
-)
+IceAllocScratch(IceConn iceConn, unsigned long size)
 {
     if (!iceConn->scratch || size > iceConn->scratch_size)
     {
-	free (iceConn->scratch);
+        free(iceConn->scratch);
 
-	iceConn->scratch = malloc (size);
-	iceConn->scratch_size = size;
+        iceConn->scratch      = malloc(size);
+        iceConn->scratch_size = size;
     }
 
     return (iceConn->scratch);
@@ -69,44 +65,41 @@ IceAllocScratch (
  */
 
 static void _X_COLD
-IceFatalIOError (
-	IceConn	iceConn
-)
+IceFatalIOError(IceConn iceConn)
 {
     iceConn->io_ok = False;
 
     if (iceConn->connection_status == IceConnectPending)
     {
-	/*
+    /*
 	 * Don't invoke IO error handler if we are in the
 	 * middle of a connection setup.
 	 */
 
-	return;
+        return;
     }
 
     if (iceConn->process_msg_info)
     {
-	for (int i = iceConn->his_min_opcode;
-	     i <= iceConn->his_max_opcode; i++)
-	{
-	    _IceProcessMsgInfo *process;
+        for (int i = iceConn->his_min_opcode; i <= iceConn->his_max_opcode; i++)
+        {
+            _IceProcessMsgInfo *process;
 
-	    process = &iceConn->process_msg_info[i - iceConn->his_min_opcode];
+            process = &iceConn->process_msg_info[i - iceConn->his_min_opcode];
 
-	    if ((process != NULL) && process->in_use)
-	    {
-		IceIOErrorProc IOErrProc = process->accept_flag ?
-		    process->protocol->accept_client->io_error_proc :
-		    process->protocol->orig_client->io_error_proc;
+            if ((process != NULL) && process->in_use)
+            {
+                IceIOErrorProc IOErrProc =
+                    process->accept_flag
+                        ? process->protocol->accept_client->io_error_proc
+                        : process->protocol->orig_client->io_error_proc;
 
-		if (IOErrProc)
-		    (*IOErrProc) (iceConn);
-	    }
-	}
+                if (IOErrProc) (*IOErrProc)(iceConn);
+            }
+        }
     }
 
-    (*_IceIOErrorHandler) (iceConn);
+    (*_IceIOErrorHandler)(iceConn);
     return;
 }
 
@@ -115,9 +108,7 @@ IceFatalIOError (
  */
 
 int
-IceFlush (
-	IceConn iceConn
-)
+IceFlush(IceConn iceConn)
 {
     /*
      * Should be impossible, unless we messed up our buffer math somewhere,
@@ -125,137 +116,97 @@ IceFlush (
      */
     if (_X_UNLIKELY(iceConn->outbufptr > iceConn->outbufmax))
     {
-	IceFatalIOError (iceConn);
-	return 0;
+        IceFatalIOError(iceConn);
+        return 0;
     }
 
-    _IceWrite (iceConn,
-	(unsigned long) (iceConn->outbufptr - iceConn->outbuf),
-	iceConn->outbuf);
+    _IceWrite(iceConn,
+              (unsigned long)(iceConn->outbufptr - iceConn->outbuf),
+              iceConn->outbuf);
 
     iceConn->outbufptr = iceConn->outbuf;
     return 1;
 }
 
-
 int
-IceGetOutBufSize (
-	IceConn iceConn
-)
+IceGetOutBufSize(IceConn iceConn)
 {
     return (iceConn->outbufmax - iceConn->outbuf);
 }
 
-
 int
-IceGetInBufSize (
-	IceConn iceConn
-)
+IceGetInBufSize(IceConn iceConn)
 {
     return (iceConn->inbufmax - iceConn->inbuf);
 }
-
-
 
 /*
  * informational functions
  */
 
 IceConnectStatus
-IceConnectionStatus (
-	IceConn iceConn
-)
+IceConnectionStatus(IceConn iceConn)
 {
     return (iceConn->connection_status);
 }
 
-
 char *
-IceVendor (
-	IceConn iceConn
-)
+IceVendor(IceConn iceConn)
 {
     return strdup(iceConn->vendor);
 }
 
-
 char *
-IceRelease (
-	IceConn iceConn
-)
+IceRelease(IceConn iceConn)
 {
     return strdup(iceConn->release);
 }
 
-
 int
-IceProtocolVersion (
-	IceConn iceConn
-)
+IceProtocolVersion(IceConn iceConn)
 {
     return (_IceVersions[iceConn->my_ice_version_index].major_version);
 }
 
-
 int
-IceProtocolRevision (
-	IceConn iceConn
-)
+IceProtocolRevision(IceConn iceConn)
 {
     return (_IceVersions[iceConn->my_ice_version_index].minor_version);
 }
 
-
 int
-IceConnectionNumber (
-	IceConn iceConn
-)
+IceConnectionNumber(IceConn iceConn)
 {
-    return (_IceTransGetConnectionNumber (iceConn->trans_conn));
+    return (_IceTransGetConnectionNumber(iceConn->trans_conn));
 }
 
-
 char *
-IceConnectionString (
-	IceConn iceConn
-)
+IceConnectionString(IceConn iceConn)
 {
     if (iceConn->connection_string)
     {
-	return strdup(iceConn->connection_string);
+        return strdup(iceConn->connection_string);
     }
-    else
-	return (NULL);
+    else return (NULL);
 }
 
-
 unsigned long
-IceLastSentSequenceNumber (
-	IceConn iceConn
-)
+IceLastSentSequenceNumber(IceConn iceConn)
 {
     return (iceConn->send_sequence);
 }
 
-
 unsigned long
-IceLastReceivedSequenceNumber (
-	IceConn iceConn
-)
+IceLastReceivedSequenceNumber(IceConn iceConn)
 {
     return (iceConn->receive_sequence);
 }
 
-
 Bool
-IceSwapping (
-	IceConn iceConn
-)
+IceSwapping(IceConn iceConn)
 {
     return (iceConn->swap);
 }
-
-
 
 /*
  * Read "n" bytes from a connection.
@@ -265,55 +216,48 @@ IceSwapping (
  */
 
 Status
-_IceRead (
-	register IceConn iceConn,
-	unsigned long	 nbytes,
-	register char	 *ptr
-)
+_IceRead(register IceConn iceConn, unsigned long nbytes, register char *ptr)
 {
     register unsigned long nleft;
 
     nleft = nbytes;
     while (nleft > 0)
     {
-	int nread;
+        int nread;
 
-	if (iceConn->io_ok)
-	    nread = _IceTransRead (iceConn->trans_conn, ptr, (int) nleft);
-	else
-	    return (1);
+        if (iceConn->io_ok)
+            nread = _IceTransRead(iceConn->trans_conn, ptr, (int)nleft);
+        else return (1);
 
-	if (nread <= 0)
-	{
+        if (nread <= 0)
+        {
 #ifdef WIN32
-	    errno = WSAGetLastError();
+            errno = WSAGetLastError();
 #endif
-	    if (iceConn->want_to_close)
-	    {
-		/*
+            if (iceConn->want_to_close)
+            {
+        /*
 		 * We sent a WantToClose message and now we detected that
 		 * the other side closed the connection.
 		 */
 
-		_IceConnectionClosed (iceConn);	    /* invoke watch procs */
+                _IceConnectionClosed(iceConn);     /* invoke watch procs */
 
-		return (0);
-	    }
-	    else
-	    {
-		IceFatalIOError (iceConn);
-		return (1);
-	    }
-	}
+                return (0);
+            }
+            else
+            {
+                IceFatalIOError(iceConn);
+                return (1);
+            }
+        }
 
-	nleft -= nread;
-	ptr   += nread;
+        nleft -= nread;
+        ptr += nread;
     }
 
     return (1);
 }
-
-
 
 /*
  * If we read a message header with a bad major or minor opcode,
@@ -322,164 +266,148 @@ _IceRead (
  */
 
 void
-_IceReadSkip (
-	register IceConn	iceConn,
-	register unsigned long	nbytes
-)
+_IceReadSkip(register IceConn iceConn, register unsigned long nbytes)
 {
     char temp[512];
 
     while (nbytes > 0)
     {
-	unsigned long rbytes = nbytes > 512 ? 512 : nbytes;
+        unsigned long rbytes = nbytes > 512 ? 512 : nbytes;
 
-	_IceRead (iceConn, rbytes, temp);
-	nbytes -= rbytes;
+        _IceRead(iceConn, rbytes, temp);
+        nbytes -= rbytes;
     }
 }
-
-
 
 /*
  * Write "n" bytes to a connection.
  */
 
 void
-_IceWrite (
-	register IceConn iceConn,
-	unsigned long	 nbytes,
-	register char	 *ptr
-)
+_IceWrite(register IceConn iceConn, unsigned long nbytes, register char *ptr)
 {
     register unsigned long nleft;
 
     nleft = nbytes;
     while (nleft > 0)
     {
-	int nwritten;
+        int nwritten;
 
-	if (iceConn->io_ok)
-	    nwritten = _IceTransWrite (iceConn->trans_conn, ptr, (int) nleft);
-	else
-	    return;
+        if (iceConn->io_ok)
+            nwritten = _IceTransWrite(iceConn->trans_conn, ptr, (int)nleft);
+        else return;
 
-	if (nwritten <= 0)
-	{
+        if (nwritten <= 0)
+        {
 #ifdef WIN32
-	    errno = WSAGetLastError();
+            errno = WSAGetLastError();
 #endif
-	    IceFatalIOError (iceConn);
-	    return;
-	}
+            IceFatalIOError(iceConn);
+            return;
+        }
 
-	nleft -= nwritten;
-	ptr   += nwritten;
+        nleft -= nwritten;
+        ptr += nwritten;
     }
 }
 
-
-
 void
-_IceAddOpcodeMapping (
-	IceConn	iceConn,
-	int 	hisOpcode,
-	int 	myOpcode
-)
+_IceAddOpcodeMapping(IceConn iceConn, int hisOpcode, int myOpcode)
 {
     if (hisOpcode <= 0 || hisOpcode > 255)
     {
-	return;
+        return;
     }
     else if (iceConn->process_msg_info == NULL)
     {
-	iceConn->process_msg_info = malloc (sizeof (_IceProcessMsgInfo));
-	iceConn->his_min_opcode = iceConn->his_max_opcode = hisOpcode;
+        iceConn->process_msg_info = malloc(sizeof(_IceProcessMsgInfo));
+        iceConn->his_min_opcode = iceConn->his_max_opcode = hisOpcode;
     }
     else if (hisOpcode < iceConn->his_min_opcode)
     {
-	_IceProcessMsgInfo *oldVec = iceConn->process_msg_info;
-	int oldsize = iceConn->his_max_opcode - iceConn->his_min_opcode + 1;
-	int newsize = iceConn->his_max_opcode - hisOpcode + 1;
-	int i;
+        _IceProcessMsgInfo *oldVec = iceConn->process_msg_info;
+        int oldsize = iceConn->his_max_opcode - iceConn->his_min_opcode + 1;
+        int newsize = iceConn->his_max_opcode - hisOpcode + 1;
+        int i;
 
-	iceConn->process_msg_info = malloc (
-	    newsize * sizeof (_IceProcessMsgInfo));
+        iceConn->process_msg_info =
+            malloc(newsize * sizeof(_IceProcessMsgInfo));
 
-	if (iceConn->process_msg_info == NULL) {
-	    iceConn->process_msg_info = oldVec;
-	    return;
-	}
+        if (iceConn->process_msg_info == NULL)
+        {
+            iceConn->process_msg_info = oldVec;
+            return;
+        }
 
-	memcpy (&iceConn->process_msg_info[
-	    iceConn->his_min_opcode - hisOpcode], oldVec,
-	    oldsize * sizeof (_IceProcessMsgInfo));
+        memcpy(&iceConn->process_msg_info[iceConn->his_min_opcode - hisOpcode],
+               oldVec,
+               oldsize * sizeof(_IceProcessMsgInfo));
 
-	free (oldVec);
+        free(oldVec);
 
-	for (i = hisOpcode + 1; i < iceConn->his_min_opcode; i++)
-	{
-	    iceConn->process_msg_info[i -
-		iceConn->his_min_opcode].in_use = False;
+        for (i = hisOpcode + 1; i < iceConn->his_min_opcode; i++)
+        {
+            iceConn->process_msg_info[i - iceConn->his_min_opcode].in_use =
+                False;
 
-	    iceConn->process_msg_info[i -
-		iceConn->his_min_opcode].protocol = NULL;
-	}
+            iceConn->process_msg_info[i - iceConn->his_min_opcode].protocol =
+                NULL;
+        }
 
-	iceConn->his_min_opcode = hisOpcode;
+        iceConn->his_min_opcode = hisOpcode;
     }
     else if (hisOpcode > iceConn->his_max_opcode)
     {
-	_IceProcessMsgInfo *oldVec = iceConn->process_msg_info;
-	int oldsize = iceConn->his_max_opcode - iceConn->his_min_opcode + 1;
-	int newsize = hisOpcode - iceConn->his_min_opcode + 1;
-	int i;
+        _IceProcessMsgInfo *oldVec = iceConn->process_msg_info;
+        int oldsize = iceConn->his_max_opcode - iceConn->his_min_opcode + 1;
+        int newsize = hisOpcode - iceConn->his_min_opcode + 1;
+        int i;
 
-	iceConn->process_msg_info = malloc (
-	    newsize * sizeof (_IceProcessMsgInfo));
+        iceConn->process_msg_info =
+            malloc(newsize * sizeof(_IceProcessMsgInfo));
 
-	if (iceConn->process_msg_info == NULL) {
-	    iceConn->process_msg_info = oldVec;
-	    return;
-	}
+        if (iceConn->process_msg_info == NULL)
+        {
+            iceConn->process_msg_info = oldVec;
+            return;
+        }
 
-	memcpy (iceConn->process_msg_info, oldVec,
-	    oldsize * sizeof (_IceProcessMsgInfo));
+        memcpy(iceConn->process_msg_info,
+               oldVec,
+               oldsize * sizeof(_IceProcessMsgInfo));
 
-	free (oldVec);
+        free(oldVec);
 
-	for (i = iceConn->his_max_opcode + 1; i < hisOpcode; i++)
-	{
-	    iceConn->process_msg_info[i -
-		iceConn->his_min_opcode].in_use = False;
+        for (i = iceConn->his_max_opcode + 1; i < hisOpcode; i++)
+        {
+            iceConn->process_msg_info[i - iceConn->his_min_opcode].in_use =
+                False;
 
-	    iceConn->process_msg_info[i -
-		iceConn->his_min_opcode].protocol = NULL;
-	}
+            iceConn->process_msg_info[i - iceConn->his_min_opcode].protocol =
+                NULL;
+        }
 
-	iceConn->his_max_opcode = hisOpcode;
+        iceConn->his_max_opcode = hisOpcode;
     }
 
-    iceConn->process_msg_info[hisOpcode -
-	iceConn->his_min_opcode].in_use = True;
+    iceConn->process_msg_info[hisOpcode - iceConn->his_min_opcode].in_use =
+        True;
 
-    iceConn->process_msg_info[hisOpcode -
-	iceConn->his_min_opcode].my_opcode = myOpcode;
+    iceConn->process_msg_info[hisOpcode - iceConn->his_min_opcode].my_opcode =
+        myOpcode;
 
-    iceConn->process_msg_info[hisOpcode -
-	iceConn->his_min_opcode].protocol = &_IceProtocols[myOpcode - 1];
+    iceConn->process_msg_info[hisOpcode - iceConn->his_min_opcode].protocol =
+        &_IceProtocols[myOpcode - 1];
 }
 
-
-
 char *
-IceGetPeerName (IceConn iceConn)
+IceGetPeerName(IceConn iceConn)
 {
-    return (_IceTransGetPeerNetworkId (iceConn->trans_conn));
+    return (_IceTransGetPeerNetworkId(iceConn->trans_conn));
 }
 
-
 char *
-_IceGetPeerName (IceConn iceConn)
+_IceGetPeerName(IceConn iceConn)
 {
     return (IceGetPeerName(iceConn));
 }

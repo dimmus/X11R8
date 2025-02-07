@@ -29,7 +29,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "X11/Xlib.h"
@@ -39,30 +39,30 @@ in this Software without prior written authorization from The Open Group.
 /*
  * Prototypes
  */
-static int _DQCloseDisplay(Display*, XPointer);
+static int _DQCloseDisplay(Display *, XPointer);
 
-#define CallCloseCallback(q,e) (void) (*((q)->closefunc)) ((q), (e))
-#define CallFreeCallback(q) (void) (*((q)->freefunc)) ((q))
+#define CallCloseCallback(q, e) (void)(*((q)->closefunc))((q), (e))
+#define CallFreeCallback(q)     (void)(*((q)->freefunc))((q))
 
 /*
  * XmuDQCreate - create a display queue
  */
 XmuDisplayQueue *
 XmuDQCreate(XmuCloseDisplayQueueProc closefunc,
-	    XmuFreeDisplayQueueProc freefunc,
-	    XPointer data)
+            XmuFreeDisplayQueueProc  freefunc,
+            XPointer                 data)
 {
-    XmuDisplayQueue *q = malloc (sizeof (XmuDisplayQueue));
-    if (q) {
-	q->nentries = 0;
-	q->head = q->tail = NULL;
-	q->closefunc = closefunc;
-	q->freefunc = freefunc;
-	q->data = data;
+    XmuDisplayQueue *q = malloc(sizeof(XmuDisplayQueue));
+    if (q)
+    {
+        q->nentries = 0;
+        q->head = q->tail = NULL;
+        q->closefunc      = closefunc;
+        q->freefunc       = freefunc;
+        q->data           = data;
     }
     return q;
 }
-
 
 /*
  * XmuDQDestroy - free all storage associated with this display queue,
@@ -74,16 +74,16 @@ XmuDQDestroy(XmuDisplayQueue *q, Bool docallbacks)
 {
     XmuDisplayQueueEntry *e = q->head;
 
-    while (e) {
-	XmuDisplayQueueEntry *nexte = e->next;
-	if (docallbacks && q->closefunc) CallCloseCallback (q, e);
-	free (e);
-	e = nexte;
+    while (e)
+    {
+        XmuDisplayQueueEntry *nexte = e->next;
+        if (docallbacks && q->closefunc) CallCloseCallback(q, e);
+        free(e);
+        e = nexte;
     }
-    free (q);
+    free(q);
     return True;
 }
-
 
 /*
  * XmuDQLookupDisplay - finds the indicated display on the given queue
@@ -93,12 +93,12 @@ XmuDQLookupDisplay(XmuDisplayQueue *q, Display *dpy)
 {
     XmuDisplayQueueEntry *e;
 
-    for (e = q->head; e; e = e->next) {
-	if (e->display == dpy) return e;
+    for (e = q->head; e; e = e->next)
+    {
+        if (e->display == dpy) return e;
     }
     return NULL;
 }
-
 
 /*
  * XmuDQAddDisplay - add the specified display to the queue; set data as a
@@ -109,31 +109,35 @@ XmuDQAddDisplay(XmuDisplayQueue *q, Display *dpy, XPointer data)
 {
     XmuDisplayQueueEntry *e;
 
-    if (!(e = malloc (sizeof (XmuDisplayQueueEntry)))) {
-	return NULL;
+    if (!(e = malloc(sizeof(XmuDisplayQueueEntry))))
+    {
+        return NULL;
     }
-    if (!(e->closehook = XmuAddCloseDisplayHook (dpy, _DQCloseDisplay,
-						 (XPointer) q))) {
-	free (e);
-	return NULL;
+    if (!(e->closehook =
+              XmuAddCloseDisplayHook(dpy, _DQCloseDisplay, (XPointer)q)))
+    {
+        free(e);
+        return NULL;
     }
 
     e->display = dpy;
-    e->next = NULL;
-    e->data = data;
+    e->next    = NULL;
+    e->data    = data;
 
-    if (q->tail) {
-	q->tail->next = e;
-	e->prev = q->tail;
-    } else {
-	q->head = e;
-	e->prev = NULL;
+    if (q->tail)
+    {
+        q->tail->next = e;
+        e->prev       = q->tail;
+    }
+    else
+    {
+        q->head = e;
+        e->prev = NULL;
     }
     q->tail = e;
     q->nentries++;
     return e;
 }
-
 
 /*
  * XmuDQRemoveDisplay - remove the specified display from the queue
@@ -143,26 +147,27 @@ XmuDQRemoveDisplay(XmuDisplayQueue *q, Display *dpy)
 {
     XmuDisplayQueueEntry *e;
 
-    for (e = q->head; e; e = e->next) {
-	if (e->display == dpy) {
-	    if (q->head == e)
-	      q->head = e->next;	/* if at head, then bump head */
-	    else
-	      e->prev->next = e->next;	/* else splice out */
-	    if (q->tail == e)
-	      q->tail = e->prev;	/* if at tail, then bump tail */
-	    else
-	      e->next->prev = e->prev;	/* else splice out */
-	    (void) XmuRemoveCloseDisplayHook (dpy, e->closehook,
-					      _DQCloseDisplay, (XPointer) q);
-	    free (e);
-	    q->nentries--;
-	    return True;
-	}
+    for (e = q->head; e; e = e->next)
+    {
+        if (e->display == dpy)
+        {
+            if (q->head == e)
+                q->head = e->next; /* if at head, then bump head */
+            else e->prev->next = e->next; /* else splice out */
+            if (q->tail == e)
+                q->tail = e->prev; /* if at tail, then bump tail */
+            else e->next->prev = e->prev; /* else splice out */
+            (void)XmuRemoveCloseDisplayHook(dpy,
+                                            e->closehook,
+                                            _DQCloseDisplay,
+                                            (XPointer)q);
+            free(e);
+            q->nentries--;
+            return True;
+        }
     }
     return False;
 }
-
 
 /*****************************************************************************
  *			       private functions                             *
@@ -175,16 +180,18 @@ XmuDQRemoveDisplay(XmuDisplayQueue *q, Display *dpy)
 static int
 _DQCloseDisplay(Display *dpy, XPointer arg)
 {
-    XmuDisplayQueue *q = (XmuDisplayQueue *) arg;
+    XmuDisplayQueue      *q = (XmuDisplayQueue *)arg;
     XmuDisplayQueueEntry *e;
 
-    for (e = q->head; e; e = e->next) {
-	if (e->display == dpy) {
-	    if (q->closefunc) CallCloseCallback (q, e);
-	    (void) XmuDQRemoveDisplay (q, dpy);
-	    if (q->nentries == 0 && q->freefunc) CallFreeCallback (q);
-	    return 1;
-	}
+    for (e = q->head; e; e = e->next)
+    {
+        if (e->display == dpy)
+        {
+            if (q->closefunc) CallCloseCallback(q, e);
+            (void)XmuDQRemoveDisplay(q, dpy);
+            if (q->nentries == 0 && q->freefunc) CallFreeCallback(q);
+            return 1;
+        }
     }
 
     return 0;

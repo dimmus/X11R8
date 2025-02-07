@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xos.h"
 #include "X11/X.h"
@@ -35,96 +35,92 @@ in this Software without prior written authorization from The Open Group.
 
 #ifndef HAVE_ARC4RANDOM_BUF
 static void
-getbits (long data, unsigned char *dst)
+getbits(long data, unsigned char *dst)
 {
-    dst[0] = (data      ) & 0xff;
-    dst[1] = (data >>  8) & 0xff;
+    dst[0] = (data) & 0xff;
+    dst[1] = (data >> 8) & 0xff;
     dst[2] = (data >> 16) & 0xff;
     dst[3] = (data >> 24) & 0xff;
 }
 
-#define Time_t time_t
+#  define Time_t time_t
 
-#if defined(HAVE_LRAND48) && defined(HAVE_SRAND48)
-#define srandom srand48
-#define random lrand48
-#endif
-#ifdef WIN32
-#include <process.h>
-#define srandom srand
-#define random rand
-#define getpid(x) _getpid(x)
-#endif
+#  if defined(HAVE_LRAND48) && defined(HAVE_SRAND48)
+#    define srandom srand48
+#    define random  lrand48
+#  endif
+#  ifdef WIN32
+#    include <process.h>
+#    define srandom   srand
+#    define random    rand
+#    define getpid(x) _getpid(x)
+#  endif
 
 /* Solaris 11.3.0 - 11.4.15 only define getentropy() in <sys/random.h> */
-#if HAVE_GETENTROPY && HAVE_SYS_RANDOM_H
-# include <sys/random.h>
-#endif
+#  if HAVE_GETENTROPY && HAVE_SYS_RANDOM_H
+#    include <sys/random.h>
+#  endif
 
 static void
-insecure_getrandom_buf (unsigned char *auth, int len)
+insecure_getrandom_buf(unsigned char *auth, int len)
 {
-    long    lowbits, highbits;
+    long lowbits, highbits;
 
-    srandom ((int)getpid() ^ time((Time_t *)0));
-    lowbits = random ();
-    highbits = random ();
-    getbits (lowbits, auth);
-    getbits (highbits, auth + 4);
+    srandom((int)getpid() ^ time((Time_t *)0));
+    lowbits  = random();
+    highbits = random();
+    getbits(lowbits, auth);
+    getbits(highbits, auth + 4);
 }
 
 static void
-arc4random_buf (void *auth, int len)
+arc4random_buf(void *auth, int len)
 {
-#if HAVE_GETENTROPY
-    int	    ret;
+#  if HAVE_GETENTROPY
+    int ret;
 
     /* weak emulation of arc4random through the getentropy libc call */
-    ret = getentropy (auth, len);
-    if (ret == 0)
-	return;
-#endif /* HAVE_GETENTROPY */
+    ret = getentropy(auth, len);
+    if (ret == 0) return;
+#  endif /* HAVE_GETENTROPY */
 
-    insecure_getrandom_buf (auth, len);
+    insecure_getrandom_buf(auth, len);
 }
 
 #endif /* !defined(HAVE_ARC4RANDOM_BUF) */
 
 void
-XdmcpGenerateKey (XdmAuthKeyPtr key)
+XdmcpGenerateKey(XdmAuthKeyPtr key)
 {
     arc4random_buf(key->data, 8);
 }
 
 int
-XdmcpCompareKeys (const XdmAuthKeyPtr a, const XdmAuthKeyPtr b)
+XdmcpCompareKeys(const XdmAuthKeyPtr a, const XdmAuthKeyPtr b)
 {
-    int	i;
+    int i;
 
     for (i = 0; i < 8; i++)
-	if (a->data[i] != b->data[i])
-	    return FALSE;
+        if (a->data[i] != b->data[i]) return FALSE;
     return TRUE;
 }
 
 void
-XdmcpIncrementKey (XdmAuthKeyPtr key)
+XdmcpIncrementKey(XdmAuthKeyPtr key)
 {
-    int	i;
+    int i;
 
     i = 7;
     while (++key->data[i] == 0)
-	if (--i < 0)
-	    break;
+        if (--i < 0) break;
 }
 
 void
-XdmcpDecrementKey (XdmAuthKeyPtr key)
+XdmcpDecrementKey(XdmAuthKeyPtr key)
 {
-    int	i;
+    int i;
 
     i = 7;
     while (key->data[i]-- == 0)
-	if (--i < 0)
-	    break;
+        if (--i < 0) break;
 }

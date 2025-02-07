@@ -47,41 +47,49 @@ SOFTWARE.
 ******************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "X11/Xatom.h"
 #include <stdio.h>
 
-Status XGetWMColormapWindows (
-    Display *dpy,
-    Window w,
-    Window **colormapWindows,
-    int *countReturn)
+Status
+XGetWMColormapWindows(Display *dpy,
+                      Window   w,
+                      Window **colormapWindows,
+                      int     *countReturn)
 {
-    Atom *data = NULL;
-    Atom actual_type;
-    Atom prop;
-    int actual_format;
+    Atom         *data = NULL;
+    Atom          actual_type;
+    Atom          prop;
+    int           actual_format;
     unsigned long leftover, nitems;
 
-    prop =  XInternAtom(dpy, "WM_COLORMAP_WINDOWS", False);
+    prop = XInternAtom(dpy, "WM_COLORMAP_WINDOWS", False);
     if (prop == None) return False;
 
     /* get the property */
-    if (XGetWindowProperty (dpy, w, prop,
-    			    0L, 1000000L, False,
-			    XA_WINDOW, &actual_type, &actual_format,
-			    &nitems, &leftover, (unsigned char **) &data)
-	!= Success)
-      return False;
+    if (XGetWindowProperty(dpy,
+                           w,
+                           prop,
+                           0L,
+                           1000000L,
+                           False,
+                           XA_WINDOW,
+                           &actual_type,
+                           &actual_format,
+                           &nitems,
+                           &leftover,
+                           (unsigned char **)&data) != Success)
+        return False;
 
-    if (actual_type != XA_WINDOW || actual_format != 32) {
-        Xfree (data);
-	return False;
+    if (actual_type != XA_WINDOW || actual_format != 32)
+    {
+        Xfree(data);
+        return False;
     }
 
-    *colormapWindows = (Window *) data;
-    *countReturn = (int) nitems;
+    *colormapWindows = (Window *)data;
+    *countReturn     = (int)nitems;
     return True;
 }

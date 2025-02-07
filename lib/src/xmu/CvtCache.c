@@ -29,7 +29,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "X11/Xlib.h"
@@ -40,15 +40,14 @@ in this Software without prior written authorization from The Open Group.
 /*
  * Prototypes
  */
-static int _CloseDisplay(XmuDisplayQueue*, XmuDisplayQueueEntry*);
-static int _FreeCCDQ(XmuDisplayQueue*);
-static void _InitializeCvtCache(XmuCvtCache*);
+static int  _CloseDisplay(XmuDisplayQueue *, XmuDisplayQueueEntry *);
+static int  _FreeCCDQ(XmuDisplayQueue *);
+static void _InitializeCvtCache(XmuCvtCache *);
 
 /*
  * Initialization
  */
 static XmuDisplayQueue *dq = NULL;
-
 
 /*
  * internal utility callbacks
@@ -57,21 +56,20 @@ static XmuDisplayQueue *dq = NULL;
 static int
 _FreeCCDQ(XmuDisplayQueue *q)
 {
-    XmuDQDestroy (dq, False);
+    XmuDQDestroy(dq, False);
     dq = NULL;
     return (0);
 }
-
 
 static int
 _CloseDisplay(XmuDisplayQueue *q, XmuDisplayQueueEntry *e)
 {
     XmuCvtCache *c;
 
-    if (e && (c = (XmuCvtCache *)(e->data))) {
-	_XmuStringToBitmapFreeCache (c);
-	/* insert calls to free any cached memory */
-
+    if (e && (c = (XmuCvtCache *)(e->data)))
+    {
+        _XmuStringToBitmapFreeCache(c);
+    /* insert calls to free any cached memory */
     }
     return 0;
 }
@@ -79,10 +77,9 @@ _CloseDisplay(XmuDisplayQueue *q, XmuDisplayQueueEntry *e)
 static void
 _InitializeCvtCache(register XmuCvtCache *c)
 {
-    _XmuStringToBitmapInitCache (c);
+    _XmuStringToBitmapInitCache(c);
     /* insert calls to init any cached memory */
 }
-
 
 /*
  * XmuCCLookupDisplay - return the cache entry for the indicated display;
@@ -96,32 +93,35 @@ _XmuCCLookupDisplay(Display *dpy)
     /*
      * If no displays have been added before this, create the display queue.
      */
-    if (!dq) {
-	dq = XmuDQCreate (_CloseDisplay, _FreeCCDQ, NULL);
-	if (!dq) return NULL;
+    if (!dq)
+    {
+        dq = XmuDQCreate(_CloseDisplay, _FreeCCDQ, NULL);
+        if (!dq) return NULL;
     }
 
     /*
      * See if the display is already there
      */
-    e = XmuDQLookupDisplay (dq, dpy);	/* see if it's there */
-    if (!e) {				/* else create it */
-	XmuCvtCache *c = malloc (sizeof (XmuCvtCache));
-	if (!c) return NULL;
+    e = XmuDQLookupDisplay(dq, dpy); /* see if it's there */
+    if (!e)
+    {    /* else create it */
+        XmuCvtCache *c = malloc(sizeof(XmuCvtCache));
+        if (!c) return NULL;
 
-	/*
+    /*
 	 * Add the display to the queue
 	 */
-	e = XmuDQAddDisplay (dq, dpy, (XPointer) c);
-	if (!e) {
-	    free (c);
-	    return NULL;
-	}
+        e = XmuDQAddDisplay(dq, dpy, (XPointer)c);
+        if (!e)
+        {
+            free(c);
+            return NULL;
+        }
 
-	/*
+    /*
 	 * initialize fields in cache
 	 */
-	_InitializeCvtCache (c);
+        _InitializeCvtCache(c);
     }
 
     /*
@@ -129,5 +129,3 @@ _XmuCCLookupDisplay(Display *dpy)
      */
     return (XmuCvtCache *)(e->data);
 }
-
-

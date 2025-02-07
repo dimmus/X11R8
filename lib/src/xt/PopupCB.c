@@ -45,7 +45,7 @@ SOFTWARE.
 ******************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "IntrinsicI.h"
 
@@ -53,24 +53,23 @@ void
 XtCallbackNone(Widget widget, XtPointer closure, XtPointer call_data _X_UNUSED)
 {
     XtSetSensitive(widget, FALSE);
-    _XtPopup((Widget) closure, XtGrabNone, FALSE);
+    _XtPopup((Widget)closure, XtGrabNone, FALSE);
 }                               /* XtCallbackNone */
 
 void
-XtCallbackNonexclusive(Widget widget,
-                       XtPointer closure,
+XtCallbackNonexclusive(Widget              widget,
+                       XtPointer           closure,
                        XtPointer call_data _X_UNUSED)
 {
-
     XtSetSensitive(widget, FALSE);
-    _XtPopup((Widget) closure, XtGrabNonexclusive, FALSE);
+    _XtPopup((Widget)closure, XtGrabNonexclusive, FALSE);
 }                               /* XtCallbackNonexclusive */
 
 void
-XtCallbackExclusive(Widget widget,
-                    XtPointer closure,
+XtCallbackExclusive(Widget              widget,
+                    XtPointer           closure,
                     XtPointer call_data _X_UNUSED)
 {
     XtSetSensitive(widget, FALSE);
-    _XtPopup((Widget) closure, XtGrabExclusive, FALSE);
+    _XtPopup((Widget)closure, XtGrabExclusive, FALSE);
 }                               /* XtCallbackExclusive */

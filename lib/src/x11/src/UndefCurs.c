@@ -25,25 +25,22 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XUndefineCursor (
-    register Display *dpy,
-    Window w)
+XUndefineCursor(register Display *dpy, Window w)
 {
     register xChangeWindowAttributesReq *req;
-    unsigned long defcurs = None;
+    unsigned long                        defcurs = None;
 
     LockDisplay(dpy);
-    GetReqExtra (ChangeWindowAttributes, 4, req);
-    req->window = w;
+    GetReqExtra(ChangeWindowAttributes, 4, req);
+    req->window    = w;
     req->valueMask = CWCursor;
-    OneDataCard32 (dpy, NEXTPTR(req,xChangeWindowAttributesReq), defcurs);
+    OneDataCard32(dpy, NEXTPTR(req, xChangeWindowAttributesReq), defcurs);
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

@@ -25,25 +25,21 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XSetWindowColormap(
-    register Display *dpy,
-    Window w,
-    Colormap colormap)
+XSetWindowColormap(register Display *dpy, Window w, Colormap colormap)
 {
     register xChangeWindowAttributesReq *req;
 
     LockDisplay(dpy);
-    GetReqExtra (ChangeWindowAttributes, 4, req);
-    req->window = w;
+    GetReqExtra(ChangeWindowAttributes, 4, req);
+    req->window    = w;
     req->valueMask = CWColormap;
-    OneDataCard32 (dpy, NEXTPTR(req,xChangeWindowAttributesReq), colormap);
+    OneDataCard32(dpy, NEXTPTR(req, xChangeWindowAttributesReq), colormap);
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

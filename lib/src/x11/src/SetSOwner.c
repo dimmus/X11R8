@@ -25,24 +25,23 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XSetSelectionOwner(
-    register Display *dpy,
-    Atom selection,
-    Window owner,
-    Time time)
+XSetSelectionOwner(register Display *dpy,
+                   Atom              selection,
+                   Window            owner,
+                   Time              time)
 {
     register xSetSelectionOwnerReq *req;
 
     LockDisplay(dpy);
-    GetReq(SetSelectionOwner,req);
+    GetReq(SetSelectionOwner, req);
     req->selection = selection;
-    req->window = owner;
-    req->time = time;
+    req->window    = owner;
+    req->time      = time;
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;

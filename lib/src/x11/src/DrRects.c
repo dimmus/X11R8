@@ -25,39 +25,40 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XDrawRectangles(
-    register Display *dpy,
-    Drawable d,
-    GC gc,
-    XRectangle *rects,
-    int n_rects)
+XDrawRectangles(register Display *dpy,
+                Drawable          d,
+                GC                gc,
+                XRectangle       *rects,
+                int               n_rects)
 {
     register xPolyRectangleReq *req;
-    long len;
-    int n;
+    long                        len;
+    int                         n;
 
     LockDisplay(dpy);
     FlushGC(dpy, gc);
-    while (n_rects) {
-	GetReq(PolyRectangle, req);
-	req->drawable = (CARD32) d;
-	req->gc = (CARD32) gc->gid;
-	n = n_rects;
-	len = ((long)n) << 1;
-	if (!dpy->bigreq_size && len > (dpy->max_request_size - req->length)) {
-	    n = (int) ((dpy->max_request_size - req->length) >> 1);
-	    len = ((long)n) << 1;
-	}
-	SetReqLen(req, len, len);
-	len <<= 2; /* watch out for macros... */
-	Data16 (dpy, (short *) rects, len);
-	n_rects -= n;
-	rects += n;
+    while (n_rects)
+    {
+        GetReq(PolyRectangle, req);
+        req->drawable = (CARD32)d;
+        req->gc       = (CARD32)gc->gid;
+        n             = n_rects;
+        len           = ((long)n) << 1;
+        if (!dpy->bigreq_size && len > (dpy->max_request_size - req->length))
+        {
+            n   = (int)((dpy->max_request_size - req->length) >> 1);
+            len = ((long)n) << 1;
+        }
+        SetReqLen(req, len, len);
+        len <<= 2; /* watch out for macros... */
+        Data16(dpy, (short *)rects, len);
+        n_rects -= n;
+        rects += n;
     }
     UnlockDisplay(dpy);
     SyncHandle();

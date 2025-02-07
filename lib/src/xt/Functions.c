@@ -50,7 +50,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "IntrinsicI.h"
 #include "X11/Shell.h"
@@ -63,6 +63,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #undef XtIsRectObj
+
 Boolean
 XtIsRectObj(Widget object)
 {
@@ -70,6 +71,7 @@ XtIsRectObj(Widget object)
 }
 
 #undef XtIsWidget
+
 Boolean
 XtIsWidget(Widget object)
 {
@@ -77,6 +79,7 @@ XtIsWidget(Widget object)
 }
 
 #undef XtIsComposite
+
 Boolean
 XtIsComposite(Widget object)
 {
@@ -84,6 +87,7 @@ XtIsComposite(Widget object)
 }
 
 #undef XtIsConstraint
+
 Boolean
 XtIsConstraint(Widget object)
 {
@@ -91,6 +95,7 @@ XtIsConstraint(Widget object)
 }
 
 #undef XtIsShell
+
 Boolean
 XtIsShell(Widget object)
 {
@@ -98,14 +103,18 @@ XtIsShell(Widget object)
 }
 
 #undef XtIsOverrideShell
+
 Boolean
 XtIsOverrideShell(Widget object)
 {
-    return _XtIsSubclassOf(object, (WidgetClass) overrideShellWidgetClass,
-                           (WidgetClass) shellWidgetClass, 0x20);
+    return _XtIsSubclassOf(object,
+                           (WidgetClass)overrideShellWidgetClass,
+                           (WidgetClass)shellWidgetClass,
+                           0x20);
 }
 
 #undef XtIsWMShell
+
 Boolean
 XtIsWMShell(Widget object)
 {
@@ -113,6 +122,7 @@ XtIsWMShell(Widget object)
 }
 
 #undef XtIsVendorShell
+
 Boolean
 XtIsVendorShell(Widget object)
 {
@@ -125,23 +135,28 @@ XtIsVendorShell(Widget object)
  * We don't refer to vendorShell directly, because some shared libraries
  * bind local references tightly.
  */
-                             (WidgetClass) vendorShellWidgetClass,
+                             (WidgetClass)vendorShellWidgetClass,
 #endif
                              transientShellWidgetClass->core_class.superclass,
-                             (WidgetClass) wmShellWidgetClass, 0x40);
+                             (WidgetClass)wmShellWidgetClass,
+                             0x40);
     UNLOCK_PROCESS;
     return retval;
 }
 
 #undef XtIsTransientShell
+
 Boolean
 XtIsTransientShell(Widget object)
 {
-    return _XtIsSubclassOf(object, (WidgetClass) transientShellWidgetClass,
-                           (WidgetClass) wmShellWidgetClass, 0x40);
+    return _XtIsSubclassOf(object,
+                           (WidgetClass)transientShellWidgetClass,
+                           (WidgetClass)wmShellWidgetClass,
+                           0x40);
 }
 
 #undef XtIsTopLevelShell
+
 Boolean
 XtIsTopLevelShell(Widget object)
 {
@@ -149,22 +164,29 @@ XtIsTopLevelShell(Widget object)
 }
 
 #undef XtIsApplicationShell
+
 Boolean
 XtIsApplicationShell(Widget object)
 {
-    return _XtIsSubclassOf(object, (WidgetClass) applicationShellWidgetClass,
-                           (WidgetClass) topLevelShellWidgetClass, 0x80);
+    return _XtIsSubclassOf(object,
+                           (WidgetClass)applicationShellWidgetClass,
+                           (WidgetClass)topLevelShellWidgetClass,
+                           0x80);
 }
 
 #undef XtIsSessionShell
+
 Boolean
 XtIsSessionShell(Widget object)
 {
-    return _XtIsSubclassOf(object, (WidgetClass) sessionShellWidgetClass,
-                           (WidgetClass) topLevelShellWidgetClass, 0x80);
+    return _XtIsSubclassOf(object,
+                           (WidgetClass)sessionShellWidgetClass,
+                           (WidgetClass)topLevelShellWidgetClass,
+                           0x80);
 }
 
 #undef XtMapWidget
+
 void
 XtMapWidget(Widget w)
 {
@@ -175,19 +197,21 @@ XtMapWidget(Widget w)
     LOCK_APP(app);
     XMapWindow(XtDisplay(w), XtWindow(w));
     hookobj = XtHooksOfDisplay(XtDisplay(w));
-    if (XtHasCallbacks(hookobj, XtNchangeHook) == XtCallbackHasSome) {
+    if (XtHasCallbacks(hookobj, XtNchangeHook) == XtCallbackHasSome)
+    {
         XtChangeHookDataRec call_data;
 
-        call_data.type = XtHmapWidget;
+        call_data.type   = XtHmapWidget;
         call_data.widget = w;
         XtCallCallbackList(hookobj,
-                           ((HookObject) hookobj)->hooks.changehook_callbacks,
-                           (XtPointer) &call_data);
+                           ((HookObject)hookobj)->hooks.changehook_callbacks,
+                           (XtPointer)&call_data);
     }
     UNLOCK_APP(app);
 }
 
 #undef XtUnmapWidget
+
 void
 XtUnmapWidget(Widget w)
 {
@@ -198,24 +222,25 @@ XtUnmapWidget(Widget w)
     LOCK_APP(app);
     XUnmapWindow(XtDisplay(w), XtWindow(w));
     hookobj = XtHooksOfDisplay(XtDisplay(w));
-    if (XtHasCallbacks(hookobj, XtNchangeHook) == XtCallbackHasSome) {
+    if (XtHasCallbacks(hookobj, XtNchangeHook) == XtCallbackHasSome)
+    {
         XtChangeHookDataRec call_data;
 
-        call_data.type = XtHunmapWidget;
+        call_data.type   = XtHunmapWidget;
         call_data.widget = w;
         XtCallCallbackList(hookobj,
-                           ((HookObject) hookobj)->hooks.changehook_callbacks,
-                           (XtPointer) &call_data);
+                           ((HookObject)hookobj)->hooks.changehook_callbacks,
+                           (XtPointer)&call_data);
     }
     UNLOCK_APP(app);
 }
 
 #undef XtNewString
+
 String
 XtNewString(String str)
 {
-    if (str == NULL)
-        return NULL;
+    if (str == NULL) return NULL;
 
     return strdup(str);
 }

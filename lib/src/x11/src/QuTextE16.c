@@ -25,57 +25,58 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XQueryTextExtents16 (
-    register Display *dpy,
-    Font fid,
-    _Xconst XChar2b *string,
-    register int nchars,
-    int *dir,
-    int *font_ascent,
-    int *font_descent,
-    register XCharStruct *overall)
+XQueryTextExtents16(register Display     *dpy,
+                    Font                  fid,
+                    _Xconst XChar2b      *string,
+                    register int          nchars,
+                    int                  *dir,
+                    int                  *font_ascent,
+                    int                  *font_descent,
+                    register XCharStruct *overall)
 {
-    register long i;
-    register unsigned char *ptr;
-    char *buf;
-    xQueryTextExtentsReply rep;
-    long nbytes;
+    register long                  i;
+    register unsigned char        *ptr;
+    char                          *buf;
+    xQueryTextExtentsReply         rep;
+    long                           nbytes;
     register xQueryTextExtentsReq *req;
 
     LockDisplay(dpy);
     nbytes = nchars << 1;
     GetReq(QueryTextExtents, req);
     req->fid = fid;
-    if ((buf = _XAllocScratch (dpy, (unsigned long) nbytes))) {
-	req->length += (nbytes + 3)>>2;
-	req->oddLength = nchars & 1;
-	for (ptr = (unsigned char *)buf, i = nchars; --i >= 0; string++) {
-	    *ptr++ = string->byte1;
-	    *ptr++ = string->byte2;
-	}
-	Data (dpy, buf, nbytes);
+    if ((buf = _XAllocScratch(dpy, (unsigned long)nbytes)))
+    {
+        req->length += (nbytes + 3) >> 2;
+        req->oddLength = nchars & 1;
+        for (ptr = (unsigned char *)buf, i = nchars; --i >= 0; string++)
+        {
+            *ptr++ = string->byte1;
+            *ptr++ = string->byte2;
+        }
+        Data(dpy, buf, nbytes);
     }
-    if (!_XReply (dpy, (xReply *)&rep, 0, xTrue) || !buf) {
+    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue) || !buf)
+    {
         UnlockDisplay(dpy);
-	SyncHandle();
-	return 0;
+        SyncHandle();
+        return 0;
     }
-    *dir = rep.drawDirection;
-    *font_ascent = cvtINT16toInt (rep.fontAscent);
-    *font_descent = cvtINT16toInt (rep.fontDescent);
-    overall->ascent = (short) cvtINT16toShort (rep.overallAscent);
-    overall->descent = (short) cvtINT16toShort (rep.overallDescent);
+    *dir              = rep.drawDirection;
+    *font_ascent      = cvtINT16toInt(rep.fontAscent);
+    *font_descent     = cvtINT16toInt(rep.fontDescent);
+    overall->ascent   = (short)cvtINT16toShort(rep.overallAscent);
+    overall->descent  = (short)cvtINT16toShort(rep.overallDescent);
     /* XXX bogus - we're throwing away information!!! */
-    overall->width  = (short) cvtINT32toInt (rep.overallWidth);
-    overall->lbearing = (short) cvtINT32toInt (rep.overallLeft);
-    overall->rbearing = (short) cvtINT32toInt (rep.overallRight);
+    overall->width    = (short)cvtINT32toInt(rep.overallWidth);
+    overall->lbearing = (short)cvtINT32toInt(rep.overallLeft);
+    overall->rbearing = (short)cvtINT32toInt(rep.overallRight);
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

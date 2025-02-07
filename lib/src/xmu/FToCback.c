@@ -25,17 +25,19 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
-#include	"X11/Intrinsic.h"
+#include "X11/Intrinsic.h"
 #include "X11/Xmu/Converters.h"
 
 /* ARGSUSED */
 void
-XmuCvtFunctionToCallback(XrmValue *args, Cardinal *num_args,
-			 XrmValuePtr fromVal, XrmValuePtr toVal)
+XmuCvtFunctionToCallback(XrmValue   *args,
+                         Cardinal   *num_args,
+                         XrmValuePtr fromVal,
+                         XrmValuePtr toVal)
 {
-    static XtCallbackRec callback[2]; /* K&R: initialized to NULL */
+    static XtCallbackRec  callback[2]; /* K&R: initialized to NULL */
     static XtCallbackList callback_list = callback;
 
     callback[0].callback = *(XtCallbackProc *)fromVal->addr;

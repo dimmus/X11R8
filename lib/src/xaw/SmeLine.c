@@ -35,7 +35,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "X11/IntrinsicP.h"
@@ -48,11 +48,10 @@ in this Software without prior written authorization from The Open Group.
 /*
  * Class Methods
  */
-static void XawSmeLineDestroy(Widget);
-static void XawSmeLineInitialize(Widget, Widget, ArgList, Cardinal*);
-static void XawSmeLineRedisplay(Widget, XEvent*, Region);
-static Boolean XawSmeLineSetValues(Widget, Widget, Widget,
-				   ArgList, Cardinal*);
+static void    XawSmeLineDestroy(Widget);
+static void    XawSmeLineInitialize(Widget, Widget, ArgList, Cardinal *);
+static void    XawSmeLineRedisplay(Widget, XEvent *, Region);
+static Boolean XawSmeLineSetValues(Widget, Widget, Widget, ArgList, Cardinal *);
 
 /*
  * Prototypes
@@ -63,86 +62,74 @@ static void DestroyGC(Widget);
 /*
  * Initialization
  */
-#define offset(field)	XtOffsetOf(SmeLineRec, sme_line.field)
+#define offset(field) XtOffsetOf(SmeLineRec, sme_line.field)
 static XtResource resources[] = {
-  {
-    XtNlineWidth,
-    XtCLineWidth,
-    XtRDimension,
-    sizeof(Dimension),
-    offset(line_width),
-    XtRImmediate,
-    (XtPointer)1
-  },
-  {
-    XtNstipple,
-    XtCStipple,
-    XtRBitmap,
-    sizeof(Pixmap),
-    offset(stipple),
-    XtRImmediate,
-    (XtPointer)XtUnspecifiedPixmap
-  },
-  {
-    XtNforeground,
-    XtCForeground,
-    XtRPixel,
-    sizeof(Pixel),
-    offset(foreground),
-    XtRString,
-    (XtPointer)XtDefaultForeground
-  },
+    { XtNlineWidth,
+     XtCLineWidth,  XtRDimension,
+     sizeof(Dimension),
+     offset(line_width),
+     XtRImmediate, (XtPointer)1                   },
+    { XtNstipple,
+     XtCStipple,    XtRBitmap,
+     sizeof(Pixmap),
+     offset(stipple),
+     XtRImmediate, (XtPointer)XtUnspecifiedPixmap },
+    { XtNforeground,
+     XtCForeground, XtRPixel,
+     sizeof(Pixel),
+     offset(foreground),
+     XtRString,    (XtPointer)XtDefaultForeground },
 };
 #undef offset
 
-#define Superclass	(&smeClassRec)
+#define Superclass (&smeClassRec)
 SmeLineClassRec smeLineClassRec = {
   /* rectangle */
-  {
-    (WidgetClass)Superclass,		/* superclass */
-    "SmeLine",				/* class_name */
-    sizeof(SmeLineRec),			/* widget_size */
-    XawInitializeWidgetSet,		/* class_initialize */
-    NULL,				/* class_part_initialize */
-    False,				/* class inited */
-    XawSmeLineInitialize,		/* initialize */
-    NULL,				/* initialize_hook */
-    NULL,				/* realize */
-    NULL,				/* actions */
-    0,					/* num_actions */
-    resources,				/* resources */
-    XtNumber(resources),		/* num_resources */
-    NULLQUARK,				/* xrm_class */
-    False,				/* compress_motion */
-    False,				/* compress_exposure */
-    False,				/* compress_enterleave */
-    False,				/* visible_interest */
-    XawSmeLineDestroy,			/* destroy */
-    NULL,				/* resize */
-    XawSmeLineRedisplay,		/* expose */
-    XawSmeLineSetValues,		/* set_values */
-    NULL,				/* set_values_hook */
-    XtInheritSetValuesAlmost,		/* set_values_almost */
-    NULL,				/* get_values_hook */
-    NULL,				/* accept_focus */
-    XtVersion,				/* intrinsics version */
-    NULL,				/* callback offsets */
-    NULL,				/* tm_table */
-    XtInheritQueryGeometry,		/* query_geometry */
-    NULL,				/* display_accelerator */
-    NULL,				/* extension */
-  },
+    {
+     (WidgetClass)Superclass,  /* superclass */
+        "SmeLine",    /* class_name */
+        sizeof(SmeLineRec),   /* widget_size */
+        XawInitializeWidgetSet,  /* class_initialize */
+        NULL,    /* class_part_initialize */
+        False,    /* class inited */
+        XawSmeLineInitialize,  /* initialize */
+        NULL,    /* initialize_hook */
+        NULL,    /* realize */
+        NULL,    /* actions */
+        0,     /* num_actions */
+        resources,    /* resources */
+        XtNumber(resources),  /* num_resources */
+        NULLQUARK,    /* xrm_class */
+        False,    /* compress_motion */
+        False,    /* compress_exposure */
+        False,    /* compress_enterleave */
+        False,    /* visible_interest */
+        XawSmeLineDestroy,   /* destroy */
+        NULL,    /* resize */
+        XawSmeLineRedisplay,  /* expose */
+        XawSmeLineSetValues,  /* set_values */
+        NULL,    /* set_values_hook */
+        XtInheritSetValuesAlmost,  /* set_values_almost */
+        NULL,    /* get_values_hook */
+        NULL,    /* accept_focus */
+        XtVersion,    /* intrinsics version */
+        NULL,    /* callback offsets */
+        NULL,    /* tm_table */
+        XtInheritQueryGeometry,  /* query_geometry */
+        NULL,    /* display_accelerator */
+        NULL,    /* extension */
+    },
   /* sme */
-  {
-    XtInheritHighlight,			/* highlight */
-    XtInheritUnhighlight,		/* unhighlight */
-    XtInheritNotify,			/* notify */
-    NULL,				/* extension */
-  },
+    {
+     XtInheritHighlight,   /* highlight */
+        XtInheritUnhighlight,  /* unhighlight */
+        XtInheritNotify,   /* notify */
+        NULL,    /* extension */
+    },
   /* sme_line */
-  {
-    NULL,				/* extension */
-  }
+    {
+     NULL,    /* extension */
+    }
 };
 
 WidgetClass smeLineObjectClass = (WidgetClass)&smeLineClassRec;
@@ -152,13 +139,14 @@ WidgetClass smeLineObjectClass = (WidgetClass)&smeLineClassRec;
  */
 /*ARGSUSED*/
 static void
-XawSmeLineInitialize(Widget request _X_UNUSED, Widget cnew,
-		     ArgList args _X_UNUSED, Cardinal *num_args _X_UNUSED)
+XawSmeLineInitialize(Widget request     _X_UNUSED,
+                     Widget             cnew,
+                     ArgList args       _X_UNUSED,
+                     Cardinal *num_args _X_UNUSED)
 {
     SmeLineObject entry = (SmeLineObject)cnew;
 
-    if (XtHeight(entry) == 0)
-	XtHeight(entry) = entry->sme_line.line_width;
+    if (XtHeight(entry) == 0) XtHeight(entry) = entry->sme_line.line_width;
 
     CreateGC(cnew);
 }
@@ -180,25 +168,24 @@ XawSmeLineInitialize(Widget request _X_UNUSED, Widget cnew,
 static void
 CreateGC(Widget w)
 {
-    SmeLineObject entry = (SmeLineObject)w;
-    XtGCMask mask = GCForeground | GCGraphicsExposures | GCLineWidth;
-    XGCValues values = {
-        .foreground = entry->sme_line.foreground,
-        .graphics_exposures = False,
-        .line_width = entry->sme_line.line_width
-    };
+    SmeLineObject entry  = (SmeLineObject)w;
+    XtGCMask      mask   = GCForeground | GCGraphicsExposures | GCLineWidth;
+    XGCValues     values = { .foreground         = entry->sme_line.foreground,
+                             .graphics_exposures = False,
+                             .line_width         = entry->sme_line.line_width };
 
-    if (entry->sme_line.stipple != XtUnspecifiedPixmap) {
-	values.stipple = entry->sme_line.stipple;
-	values.fill_style = FillStippled;
-	mask |= GCStipple | GCFillStyle;
+    if (entry->sme_line.stipple != XtUnspecifiedPixmap)
+    {
+        values.stipple    = entry->sme_line.stipple;
+        values.fill_style = FillStippled;
+        mask |= GCStipple | GCFillStyle;
 
-	entry->sme_line.gc = XCreateGC(XtDisplayOfObject(w),
-				      RootWindowOfScreen(XtScreenOfObject(w)),
-				      mask, &values);
+        entry->sme_line.gc = XCreateGC(XtDisplayOfObject(w),
+                                       RootWindowOfScreen(XtScreenOfObject(w)),
+                                       mask,
+                                       &values);
     }
-    else
-	entry->sme_line.gc = XtGetGC(w, mask, &values);
+    else entry->sme_line.gc = XtGetGC(w, mask, &values);
 }
 
 static void
@@ -213,9 +200,8 @@ DestroyGC(Widget w)
     SmeLineObject entry = (SmeLineObject)w;
 
     if (entry->sme_line.stipple != XtUnspecifiedPixmap)
-	XFreeGC(XtDisplayOfObject(w), entry->sme_line.gc);
-    else
-	XtReleaseGC(w, entry->sme_line.gc);
+        XFreeGC(XtDisplayOfObject(w), entry->sme_line.gc);
+    else XtReleaseGC(w, entry->sme_line.gc);
 }
 
 /*ARGSUSED*/
@@ -226,11 +212,15 @@ XawSmeLineRedisplay(Widget w, XEvent *event _X_UNUSED, Region region _X_UNUSED)
     int y = XtY(w) + (((int)XtHeight(w) - entry->sme_line.line_width) >> 1);
 
     if (entry->sme_line.stipple != XtUnspecifiedPixmap)
-	XSetTSOrigin(XtDisplayOfObject(w), entry->sme_line.gc, 0, y);
+        XSetTSOrigin(XtDisplayOfObject(w), entry->sme_line.gc, 0, y);
 
-    XFillRectangle(XtDisplayOfObject(w), XtWindowOfObject(w),
-		   entry->sme_line.gc, XtX(w), y,
-		   XtWidth(w), entry->sme_line.line_width);
+    XFillRectangle(XtDisplayOfObject(w),
+                   XtWindowOfObject(w),
+                   entry->sme_line.gc,
+                   XtX(w),
+                   y,
+                   XtWidth(w),
+                   entry->sme_line.line_width);
 }
 
 /*
@@ -247,17 +237,21 @@ XawSmeLineRedisplay(Widget w, XEvent *event _X_UNUSED, Region region _X_UNUSED)
  */
 /*ARGSUSED*/
 static Boolean
-XawSmeLineSetValues(Widget current, Widget request _X_UNUSED, Widget cnew,
-		    ArgList args _X_UNUSED, Cardinal *num_args _X_UNUSED)
+XawSmeLineSetValues(Widget             current,
+                    Widget request     _X_UNUSED,
+                    Widget             cnew,
+                    ArgList args       _X_UNUSED,
+                    Cardinal *num_args _X_UNUSED)
 {
-    SmeLineObject entry = (SmeLineObject)cnew;
+    SmeLineObject entry     = (SmeLineObject)cnew;
     SmeLineObject old_entry = (SmeLineObject)current;
 
     if (entry->sme_line.line_width != old_entry->sme_line.line_width &&
-	entry->sme_line.stipple != old_entry->sme_line.stipple) {
-	DestroyGC(current);
-	CreateGC(cnew);
-	return (True);
+        entry->sme_line.stipple != old_entry->sme_line.stipple)
+    {
+        DestroyGC(current);
+        CreateGC(cnew);
+        return (True);
     }
 
     return (False);

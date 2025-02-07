@@ -25,25 +25,21 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XGetInputFocus(
-     register Display *dpy,
-     Window *focus,
-     int *revert_to)
+XGetInputFocus(register Display *dpy, Window *focus, int *revert_to)
 {
-    xGetInputFocusReply rep;
+    xGetInputFocusReply      rep;
     _X_UNUSED register xReq *req;
     LockDisplay(dpy);
     GetEmptyReq(GetInputFocus, req);
-    (void) _XReply (dpy, (xReply *)&rep, 0, xTrue);
-    *focus = rep.focus;
+    (void)_XReply(dpy, (xReply *)&rep, 0, xTrue);
+    *focus     = rep.focus;
     *revert_to = rep.revertTo;
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

@@ -25,21 +25,18 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XDeleteProperty(
-    register Display *dpy,
-    Window window,
-    Atom property)
+XDeleteProperty(register Display *dpy, Window window, Atom property)
 {
     register xDeletePropertyReq *req;
 
     LockDisplay(dpy);
     GetReq(DeleteProperty, req);
-    req->window = window;
+    req->window   = window;
     req->property = property;
     UnlockDisplay(dpy);
     SyncHandle();

@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "X11/Xlibint.h"
@@ -40,112 +40,154 @@ in this Software without prior written authorization from The Open Group.
 int
 XmuPrintDefaultErrorMessage(Display *dpy, XErrorEvent *event, FILE *fp)
 {
-    char buffer[BUFSIZ];
-    char mesg[BUFSIZ];
-    char number[32];
-    _Xconst char *mtype = "XlibMessage";
-    register _XExtension *ext = (_XExtension *)NULL;
-    _XExtension *bext = (_XExtension *)NULL;
+    char                  buffer[BUFSIZ];
+    char                  mesg[BUFSIZ];
+    char                  number[32];
+    _Xconst char         *mtype = "XlibMessage";
+    register _XExtension *ext   = (_XExtension *)NULL;
+    _XExtension          *bext  = (_XExtension *)NULL;
     XGetErrorText(dpy, event->error_code, buffer, BUFSIZ);
     XGetErrorDatabaseText(dpy, mtype, "XError", "X Error", mesg, BUFSIZ);
-    (void) fprintf(fp, "%s:  %s\n  ", mesg, buffer);
-    XGetErrorDatabaseText(dpy, mtype, "MajorCode", "Request Major code %d",
-	mesg, BUFSIZ);
-    (void) fprintf(fp, mesg, event->request_code);
-    if (event->request_code < 128) {
-	XmuSnprintf(number, sizeof(number), "%d", event->request_code);
-	XGetErrorDatabaseText(dpy, "XRequest", number, "", buffer, BUFSIZ);
-    } else {
-	/* XXX this is non-portable */
-	for (ext = dpy->ext_procs;
-	     ext && (ext->codes.major_opcode != event->request_code);
-	     ext = ext->next)
-	  ;
-	if (ext)
-	  XmuSnprintf(buffer, sizeof(buffer), "%s", ext->name);
-	else
-	    buffer[0] = '\0';
+    (void)fprintf(fp, "%s:  %s\n  ", mesg, buffer);
+    XGetErrorDatabaseText(dpy,
+                          mtype,
+                          "MajorCode",
+                          "Request Major code %d",
+                          mesg,
+                          BUFSIZ);
+    (void)fprintf(fp, mesg, event->request_code);
+    if (event->request_code < 128)
+    {
+        XmuSnprintf(number, sizeof(number), "%d", event->request_code);
+        XGetErrorDatabaseText(dpy, "XRequest", number, "", buffer, BUFSIZ);
     }
-    (void) fprintf(fp, " (%s)", buffer);
+    else
+    {
+    /* XXX this is non-portable */
+        for (ext = dpy->ext_procs;
+             ext && (ext->codes.major_opcode != event->request_code);
+             ext = ext->next)
+            ;
+        if (ext) XmuSnprintf(buffer, sizeof(buffer), "%s", ext->name);
+        else buffer[0] = '\0';
+    }
+    (void)fprintf(fp, " (%s)", buffer);
     fputs("\n  ", fp);
-    if (event->request_code >= 128) {
-	XGetErrorDatabaseText(dpy, mtype, "MinorCode", "Request Minor code %d",
-			      mesg, BUFSIZ);
-	(void) fprintf(fp, mesg, event->minor_code);
-	if (ext) {
-	    XmuSnprintf(mesg, sizeof(mesg),
-			"%s.%d", ext->name, event->minor_code);
-	    XGetErrorDatabaseText(dpy, "XRequest", mesg, "", buffer, BUFSIZ);
-	    (void) fprintf(fp, " (%s)", buffer);
-	}
-	fputs("\n  ", fp);
+    if (event->request_code >= 128)
+    {
+        XGetErrorDatabaseText(dpy,
+                              mtype,
+                              "MinorCode",
+                              "Request Minor code %d",
+                              mesg,
+                              BUFSIZ);
+        (void)fprintf(fp, mesg, event->minor_code);
+        if (ext)
+        {
+            XmuSnprintf(mesg,
+                        sizeof(mesg),
+                        "%s.%d",
+                        ext->name,
+                        event->minor_code);
+            XGetErrorDatabaseText(dpy, "XRequest", mesg, "", buffer, BUFSIZ);
+            (void)fprintf(fp, " (%s)", buffer);
+        }
+        fputs("\n  ", fp);
     }
-    if (event->error_code >= 128) {
-	/* kludge, try to find the extension that caused it */
-	buffer[0] = '\0';
-	for (ext = dpy->ext_procs; ext; ext = ext->next) {
-	    if (ext->error_string)
-		(*ext->error_string)(dpy, event->error_code, &ext->codes,
-				     buffer, BUFSIZ);
-	    if (buffer[0]) {
-		bext = ext;
-		break;
-	    }
-	    if (ext->codes.first_error &&
-		ext->codes.first_error < event->error_code &&
-		(!bext || ext->codes.first_error > bext->codes.first_error))
-		bext = ext;
-	}
-	if (bext)
-	    XmuSnprintf(buffer, sizeof(buffer), "%s.%d", bext->name,
-			event->error_code - bext->codes.first_error);
-	else
-	    strcpy(buffer, "Value");
-	XGetErrorDatabaseText(dpy, mtype, buffer, "", mesg, BUFSIZ);
-	if (mesg[0]) {
-	    fputs("  ", fp);
-	    (void) fprintf(fp, mesg, event->resourceid);
-	    fputs("\n", fp);
-	}
-	/* let extensions try to print the values */
-	for (ext = dpy->ext_procs; ext; ext = ext->next) {
-	    if (ext->error_values)
-		(*ext->error_values)(dpy, event, fp);
-	}
-    } else if ((event->error_code == BadWindow) ||
-	       (event->error_code == BadPixmap) ||
-	       (event->error_code == BadCursor) ||
-	       (event->error_code == BadFont) ||
-	       (event->error_code == BadDrawable) ||
-	       (event->error_code == BadColor) ||
-	       (event->error_code == BadGC) ||
-	       (event->error_code == BadIDChoice) ||
-	       (event->error_code == BadValue) ||
-	       (event->error_code == BadAtom)) {
-	if (event->error_code == BadValue)
-	    XGetErrorDatabaseText(dpy, mtype, "Value", "Value 0x%x",
-				  mesg, BUFSIZ);
-	else if (event->error_code == BadAtom)
-	    XGetErrorDatabaseText(dpy, mtype, "AtomID", "AtomID 0x%x",
-				  mesg, BUFSIZ);
-	else
-	    XGetErrorDatabaseText(dpy, mtype, "ResourceID", "ResourceID 0x%x",
-				  mesg, BUFSIZ);
-	(void) fprintf(fp, mesg, event->resourceid);
-	fputs("\n  ", fp);
+    if (event->error_code >= 128)
+    {
+    /* kludge, try to find the extension that caused it */
+        buffer[0] = '\0';
+        for (ext = dpy->ext_procs; ext; ext = ext->next)
+        {
+            if (ext->error_string)
+                (*ext->error_string)(dpy,
+                                     event->error_code,
+                                     &ext->codes,
+                                     buffer,
+                                     BUFSIZ);
+            if (buffer[0])
+            {
+                bext = ext;
+                break;
+            }
+            if (ext->codes.first_error &&
+                ext->codes.first_error < event->error_code &&
+                (!bext || ext->codes.first_error > bext->codes.first_error))
+                bext = ext;
+        }
+        if (bext)
+            XmuSnprintf(buffer,
+                        sizeof(buffer),
+                        "%s.%d",
+                        bext->name,
+                        event->error_code - bext->codes.first_error);
+        else strcpy(buffer, "Value");
+        XGetErrorDatabaseText(dpy, mtype, buffer, "", mesg, BUFSIZ);
+        if (mesg[0])
+        {
+            fputs("  ", fp);
+            (void)fprintf(fp, mesg, event->resourceid);
+            fputs("\n", fp);
+        }
+    /* let extensions try to print the values */
+        for (ext = dpy->ext_procs; ext; ext = ext->next)
+        {
+            if (ext->error_values) (*ext->error_values)(dpy, event, fp);
+        }
     }
-    XGetErrorDatabaseText(dpy, mtype, "ErrorSerial", "Error Serial #%d",
-	mesg, BUFSIZ);
-    (void) fprintf(fp, mesg, event->serial);
+    else if ((event->error_code == BadWindow) ||
+             (event->error_code == BadPixmap) ||
+             (event->error_code == BadCursor) ||
+             (event->error_code == BadFont) ||
+             (event->error_code == BadDrawable) ||
+             (event->error_code == BadColor) || (event->error_code == BadGC) ||
+             (event->error_code == BadIDChoice) ||
+             (event->error_code == BadValue) || (event->error_code == BadAtom))
+    {
+        if (event->error_code == BadValue)
+            XGetErrorDatabaseText(dpy,
+                                  mtype,
+                                  "Value",
+                                  "Value 0x%x",
+                                  mesg,
+                                  BUFSIZ);
+        else if (event->error_code == BadAtom)
+            XGetErrorDatabaseText(dpy,
+                                  mtype,
+                                  "AtomID",
+                                  "AtomID 0x%x",
+                                  mesg,
+                                  BUFSIZ);
+        else
+            XGetErrorDatabaseText(dpy,
+                                  mtype,
+                                  "ResourceID",
+                                  "ResourceID 0x%x",
+                                  mesg,
+                                  BUFSIZ);
+        (void)fprintf(fp, mesg, event->resourceid);
+        fputs("\n  ", fp);
+    }
+    XGetErrorDatabaseText(dpy,
+                          mtype,
+                          "ErrorSerial",
+                          "Error Serial #%d",
+                          mesg,
+                          BUFSIZ);
+    (void)fprintf(fp, mesg, event->serial);
     fputs("\n  ", fp);
-    XGetErrorDatabaseText(dpy, mtype, "CurrentSerial", "Current Serial #%d",
-	mesg, BUFSIZ);
-    (void) fprintf(fp, mesg, NextRequest(dpy)-1);
+    XGetErrorDatabaseText(dpy,
+                          mtype,
+                          "CurrentSerial",
+                          "Current Serial #%d",
+                          mesg,
+                          BUFSIZ);
+    (void)fprintf(fp, mesg, NextRequest(dpy) - 1);
     fputs("\n", fp);
     if (event->error_code == BadImplementation) return 0;
     return 1;
 }
-
 
 /*
  * XmuSimpleErrorHandler - ignore errors for XQueryTree, XGetWindowAttributes,
@@ -155,15 +197,16 @@ XmuPrintDefaultErrorMessage(Display *dpy, XErrorEvent *event, FILE *fp)
 int
 XmuSimpleErrorHandler(Display *dpy, XErrorEvent *errorp)
 {
-    switch (errorp->request_code) {
-      case X_QueryTree:
-      case X_GetWindowAttributes:
-        if (errorp->error_code == BadWindow) return 0;
-	break;
-      case X_GetGeometry:
-	if (errorp->error_code == BadDrawable) return 0;
-	break;
+    switch (errorp->request_code)
+    {
+        case X_QueryTree:
+        case X_GetWindowAttributes:
+            if (errorp->error_code == BadWindow) return 0;
+            break;
+        case X_GetGeometry:
+            if (errorp->error_code == BadDrawable) return 0;
+            break;
     }
     /* got a "real" X error */
-    return XmuPrintDefaultErrorMessage (dpy, errorp, stderr);
+    return XmuPrintDefaultErrorMessage(dpy, errorp, stderr);
 }

@@ -25,39 +25,32 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XRotateWindowProperties(
-    register Display *dpy,
-    Window w,
-    Atom *properties,
-    register int nprops,
-    int npositions)
+XRotateWindowProperties(register Display *dpy,
+                        Window            w,
+                        Atom             *properties,
+                        register int      nprops,
+                        int               npositions)
 {
-    register long nbytes;
+    register long                  nbytes;
     register xRotatePropertiesReq *req;
 
     LockDisplay(dpy);
-    GetReq (RotateProperties, req);
-    req->window = w;
-    req->nAtoms = nprops;
+    GetReq(RotateProperties, req);
+    req->window     = w;
+    req->nAtoms     = nprops;
     req->nPositions = npositions;
 
     req->length += nprops;
     nbytes = nprops << 2;
 /* XXX Cray needs packing here.... */
-    Data32 (dpy, (long *) properties, nbytes);
-
+    Data32(dpy, (long *)properties, nbytes);
 
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
-    }
-
-
-
-
-
+}

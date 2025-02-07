@@ -25,29 +25,29 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
-struct kmap {
-  char map[32];
+struct kmap
+{
+    char map[32];
 };
 
 int
-XQueryKeymap(
-    register Display *dpy,
-    char keys[32])
+XQueryKeymap(register Display *dpy, char keys[32])
 {
-    xQueryKeymapReply rep;
+    xQueryKeymapReply        rep;
     _X_UNUSED register xReq *req;
 
     LockDisplay(dpy);
     GetEmptyReq(QueryKeymap, req);
-    (void) _XReply(dpy, (xReply *)&rep,
-       (SIZEOF(xQueryKeymapReply) - SIZEOF(xReply)) >> 2, xTrue);
-    *(struct kmap *) keys = *(struct kmap *)rep.map;  /* faster than memcpy */
+    (void)_XReply(dpy,
+                  (xReply *)&rep,
+                  (SIZEOF(xQueryKeymapReply) - SIZEOF(xReply)) >> 2,
+                  xTrue);
+    *(struct kmap *)keys = *(struct kmap *)rep.map;  /* faster than memcpy */
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

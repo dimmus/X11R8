@@ -35,16 +35,17 @@
 /* October 2004, source code review by Thomas Biege <thomas@suse.de> */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "XpmI.h"
 
-#define MAXPRINTABLE 92			/* number of printable ascii chars
+#define MAXPRINTABLE \
+    92   /* number of printable ascii chars
 					 * minus \ and " for string compat
 					 * and ? to avoid ANSI trigraphs. */
 
 static const char *printable =
-" .XoO+@#$%&*=-;:>,<1234567890qwertyuipasdfghjklzxcvbnmMNBVCZ\
+    " .XoO+@#$%&*=-;:>,<1234567890qwertyuipasdfghjklzxcvbnmMNBVCZ\
 ASDFGHJKLPIUYTREWQ!~^/()_`'][{}|";
 
 /*
@@ -53,155 +54,176 @@ ASDFGHJKLPIUYTREWQ!~^/()_`'][{}|";
  * char follow by "nothing" (a space) in the readable xpm file
  */
 
-
-typedef struct {
-    Pixel *pixels;
+typedef struct
+{
+    Pixel        *pixels;
     unsigned int *pixelindex;
-    unsigned int size;
-    unsigned int ncolors;
-    unsigned int mask_pixel;		/* whether there is or not */
-}      PixelsMap;
+    unsigned int  size;
+    unsigned int  ncolors;
+    unsigned int  mask_pixel;  /* whether there is or not */
+} PixelsMap;
 
-LFUNC(storePixel, int, (Pixel pixel, PixelsMap *pmap,
-			unsigned int *index_return));
+LFUNC(storePixel,
+      int,
+      (Pixel pixel, PixelsMap *pmap, unsigned int *index_return));
 
-LFUNC(storeMaskPixel, int, (Pixel pixel, PixelsMap *pmap,
-			    unsigned int *index_return));
+LFUNC(storeMaskPixel,
+      int,
+      (Pixel pixel, PixelsMap *pmap, unsigned int *index_return));
 
-typedef int (*storeFuncPtr)(Pixel pixel, PixelsMap *pmap,
-			    unsigned int *index_return);
+typedef int (*storeFuncPtr)(Pixel         pixel,
+                            PixelsMap    *pmap,
+                            unsigned int *index_return);
 
-LFUNC(GetImagePixels, int, (XImage *image, unsigned int width,
-			    unsigned int height, PixelsMap *pmap));
+LFUNC(
+    GetImagePixels,
+    int,
+    (XImage * image, unsigned int width, unsigned int height, PixelsMap *pmap));
 
-LFUNC(GetImagePixels32, int, (XImage *image, unsigned int width,
-			      unsigned int height, PixelsMap *pmap));
+LFUNC(
+    GetImagePixels32,
+    int,
+    (XImage * image, unsigned int width, unsigned int height, PixelsMap *pmap));
 
-LFUNC(GetImagePixels16, int, (XImage *image, unsigned int width,
-			      unsigned int height, PixelsMap *pmap));
+LFUNC(
+    GetImagePixels16,
+    int,
+    (XImage * image, unsigned int width, unsigned int height, PixelsMap *pmap));
 
-LFUNC(GetImagePixels8, int, (XImage *image, unsigned int width,
-			     unsigned int height, PixelsMap *pmap));
+LFUNC(
+    GetImagePixels8,
+    int,
+    (XImage * image, unsigned int width, unsigned int height, PixelsMap *pmap));
 
-LFUNC(GetImagePixels1, int, (XImage *image, unsigned int width,
-			     unsigned int height, PixelsMap *pmap,
-			     storeFuncPtr storeFunc));
+LFUNC(GetImagePixels1,
+      int,
+      (XImage * image,
+       unsigned int width,
+       unsigned int height,
+       PixelsMap   *pmap,
+       storeFuncPtr storeFunc));
 
-LFUNC(ScanTransparentColor, int, (XpmColor *color, unsigned int cpp,
-				  XpmAttributes *attributes));
+LFUNC(ScanTransparentColor,
+      int,
+      (XpmColor * color, unsigned int cpp, XpmAttributes *attributes));
 
-LFUNC(ScanOtherColors, int, (Display *display, XpmColor *colors,
-			     unsigned int ncolors,
-			     Pixel *pixels, unsigned int mask,
-			     unsigned int cpp, XpmAttributes *attributes));
+LFUNC(ScanOtherColors,
+      int,
+      (Display * display,
+       XpmColor      *colors,
+       unsigned int   ncolors,
+       Pixel         *pixels,
+       unsigned int   mask,
+       unsigned int   cpp,
+       XpmAttributes *attributes));
 
 /*
  * This function stores the given pixel in the given arrays which are grown
  * if not large enough.
  */
 static int
-storePixel(
-    Pixel		 pixel,
-    PixelsMap		*pmap,
-    unsigned int	*index_return)
+storePixel(Pixel pixel, PixelsMap *pmap, unsigned int *index_return)
 {
     unsigned int i;
-    Pixel *p;
+    Pixel       *p;
     unsigned int ncolors;
 
-    if (*index_return) {		/* this is a transparent pixel! */
-	*index_return = 0;
-	return 0;
+    if (*index_return)
+    {  /* this is a transparent pixel! */
+        *index_return = 0;
+        return 0;
     }
     ncolors = pmap->ncolors;
-    p = pmap->pixels + pmap->mask_pixel;
+    p       = pmap->pixels + pmap->mask_pixel;
     for (i = pmap->mask_pixel; i < ncolors; i++, p++)
-	if (*p == pixel)
-	    break;
-    if (i == ncolors) {
-	if (ncolors >= pmap->size) {
-	    pmap->size *= 2;
-	    p = (Pixel *) XpmRealloc(pmap->pixels, sizeof(Pixel) * pmap->size);
-	    if (!p)
-		return (1);
-	    pmap->pixels = p;
-
-	}
-	(pmap->pixels)[ncolors] = pixel;
-	pmap->ncolors++;
+        if (*p == pixel) break;
+    if (i == ncolors)
+    {
+        if (ncolors >= pmap->size)
+        {
+            pmap->size *= 2;
+            p = (Pixel *)XpmRealloc(pmap->pixels, sizeof(Pixel) * pmap->size);
+            if (!p) return (1);
+            pmap->pixels = p;
+        }
+        (pmap->pixels)[ncolors] = pixel;
+        pmap->ncolors++;
     }
     *index_return = i;
     return 0;
 }
 
 static int
-storeMaskPixel(
-    Pixel		 pixel,
-    PixelsMap		*pmap,
-    unsigned int	*index_return)
+storeMaskPixel(Pixel pixel, PixelsMap *pmap, unsigned int *index_return)
 {
-    if (!pixel) {
-	if (!pmap->ncolors) {
-	    pmap->ncolors = 1;
-	    (pmap->pixels)[0] = 0;
-	    pmap->mask_pixel = 1;
-	}
-	*index_return = 1;
-    } else
-	*index_return = 0;
+    if (!pixel)
+    {
+        if (!pmap->ncolors)
+        {
+            pmap->ncolors     = 1;
+            (pmap->pixels)[0] = 0;
+            pmap->mask_pixel  = 1;
+        }
+        *index_return = 1;
+    }
+    else *index_return = 0;
     return 0;
 }
 
 /* function call in case of error */
 #undef RETURN
-#define RETURN(status) \
-do { \
-      ErrorStatus = status; \
-      goto error; \
-} while(0)
+#define RETURN(status)        \
+    do                        \
+    {                         \
+        ErrorStatus = status; \
+        goto error;           \
+    }                         \
+    while (0)
 
 /*
  * This function scans the given image and stores the found information in
  * the given XpmImage structure.
  */
 int
-XpmCreateXpmImageFromImage(
-    Display		*display,
-    XImage		*image,
-    XImage		*shapeimage,
-    XpmImage		*xpmimage,
-    XpmAttributes	*attributes)
+XpmCreateXpmImageFromImage(Display       *display,
+                           XImage        *image,
+                           XImage        *shapeimage,
+                           XpmImage      *xpmimage,
+                           XpmAttributes *attributes)
 {
     /* variables stored in the XpmAttributes structure */
     unsigned int cpp;
 
     /* variables to return */
     PixelsMap pmap;
-    XpmColor *colorTable = NULL;
-    int ErrorStatus = 0;
+    XpmColor *colorTable  = NULL;
+    int       ErrorStatus = 0;
 
     /* calculation variables */
-    unsigned int width = 0;
+    unsigned int width  = 0;
     unsigned int height = 0;
-    unsigned int cppm;			/* minimum chars per pixel */
+    unsigned int cppm;   /* minimum chars per pixel */
     unsigned int c;
 
     /* initialize pmap */
-    pmap.pixels = NULL;
+    pmap.pixels     = NULL;
     pmap.pixelindex = NULL;
-    pmap.size = 256;			/* should be enough most of the time */
-    pmap.ncolors = 0;
+    pmap.size       = 256;   /* should be enough most of the time */
+    pmap.ncolors    = 0;
     pmap.mask_pixel = 0;
 
     /*
      * get geometry
      */
-    if (image) {
-	width = image->width;
-	height = image->height;
-    } else if (shapeimage) {
-	width = shapeimage->width;
-	height = shapeimage->height;
+    if (image)
+    {
+        width  = image->width;
+        height = image->height;
+    }
+    else if (shapeimage)
+    {
+        width  = shapeimage->width;
+        height = shapeimage->height;
     }
 
     /*
@@ -209,35 +231,31 @@ XpmCreateXpmImageFromImage(
      */
     if (attributes && (attributes->valuemask & XpmCharsPerPixel
 /* 3.2 backward compatibility code */
-		       || attributes->valuemask & XpmInfos))
+                       || attributes->valuemask & XpmInfos))
 /* end 3.2 bc */
-	cpp = attributes->cpp;
-    else
-	cpp = 0;
+        cpp = attributes->cpp;
+    else cpp = 0;
 
     if ((height > 0 && width >= UINT_MAX / height) ||
-	width * height >= UINT_MAX / sizeof(unsigned int))
-	RETURN(XpmNoMemory);
+        width * height >= UINT_MAX / sizeof(unsigned int))
+        RETURN(XpmNoMemory);
     pmap.pixelindex =
-	(unsigned int *) XpmCalloc(width * height, sizeof(unsigned int));
-    if (!pmap.pixelindex)
-	RETURN(XpmNoMemory);
+        (unsigned int *)XpmCalloc(width * height, sizeof(unsigned int));
+    if (!pmap.pixelindex) RETURN(XpmNoMemory);
 
-    if (pmap.size >= UINT_MAX / sizeof(Pixel))
-	RETURN(XpmNoMemory);
+    if (pmap.size >= UINT_MAX / sizeof(Pixel)) RETURN(XpmNoMemory);
 
-    pmap.pixels = (Pixel *) XpmMalloc(sizeof(Pixel) * pmap.size);
-    if (!pmap.pixels)
-	RETURN(XpmNoMemory);
+    pmap.pixels = (Pixel *)XpmMalloc(sizeof(Pixel) * pmap.size);
+    if (!pmap.pixels) RETURN(XpmNoMemory);
 
     /*
      * scan shape mask if any
      */
-    if (shapeimage) {
-	ErrorStatus = GetImagePixels1(shapeimage, width, height, &pmap,
-				      storeMaskPixel);
-	if (ErrorStatus != XpmSuccess)
-	    RETURN(ErrorStatus);
+    if (shapeimage)
+    {
+        ErrorStatus =
+            GetImagePixels1(shapeimage, width, height, &pmap, storeMaskPixel);
+        if (ErrorStatus != XpmSuccess) RETURN(ErrorStatus);
     }
 
     /*
@@ -248,274 +266,281 @@ XpmCreateXpmImageFromImage(
      *
      */
 
-    if (image) {
-	if (((image->bits_per_pixel | image->depth) == 1)  &&
-	    (image->byte_order == image->bitmap_bit_order))
-	    ErrorStatus = GetImagePixels1(image, width, height, &pmap,
-					  storePixel);
-	else if (image->format == ZPixmap) {
-	    if (image->bits_per_pixel == 8)
-		ErrorStatus = GetImagePixels8(image, width, height, &pmap);
-	    else if (image->bits_per_pixel == 16)
-		ErrorStatus = GetImagePixels16(image, width, height, &pmap);
-	    else if (image->bits_per_pixel == 32)
-		ErrorStatus = GetImagePixels32(image, width, height, &pmap);
-	} else
-	    ErrorStatus = GetImagePixels(image, width, height, &pmap);
-	if (ErrorStatus != XpmSuccess)
-	    RETURN(ErrorStatus);
+    if (image)
+    {
+        if (((image->bits_per_pixel | image->depth) == 1) &&
+            (image->byte_order == image->bitmap_bit_order))
+            ErrorStatus =
+                GetImagePixels1(image, width, height, &pmap, storePixel);
+        else if (image->format == ZPixmap)
+        {
+            if (image->bits_per_pixel == 8)
+                ErrorStatus = GetImagePixels8(image, width, height, &pmap);
+            else if (image->bits_per_pixel == 16)
+                ErrorStatus = GetImagePixels16(image, width, height, &pmap);
+            else if (image->bits_per_pixel == 32)
+                ErrorStatus = GetImagePixels32(image, width, height, &pmap);
+        }
+        else ErrorStatus = GetImagePixels(image, width, height, &pmap);
+        if (ErrorStatus != XpmSuccess) RETURN(ErrorStatus);
     }
 
     /*
      * get rgb values and a string of char, and possibly a name for each
      * color
      */
-    if (pmap.ncolors >= UINT_MAX / sizeof(XpmColor))
-	RETURN(XpmNoMemory);
-    colorTable = (XpmColor *) XpmCalloc(pmap.ncolors, sizeof(XpmColor));
-    if (!colorTable)
-	RETURN(XpmNoMemory);
+    if (pmap.ncolors >= UINT_MAX / sizeof(XpmColor)) RETURN(XpmNoMemory);
+    colorTable = (XpmColor *)XpmCalloc(pmap.ncolors, sizeof(XpmColor));
+    if (!colorTable) RETURN(XpmNoMemory);
 
     /* compute the minimal cpp */
     for (cppm = 1, c = MAXPRINTABLE; pmap.ncolors > c; cppm++)
-	c *= MAXPRINTABLE;
-    if (cpp < cppm)
-	cpp = cppm;
+        c *= MAXPRINTABLE;
+    if (cpp < cppm) cpp = cppm;
 
-    if (pmap.mask_pixel) {
-	ErrorStatus = ScanTransparentColor(colorTable, cpp, attributes);
-	if (ErrorStatus != XpmSuccess)
-	    RETURN(ErrorStatus);
+    if (pmap.mask_pixel)
+    {
+        ErrorStatus = ScanTransparentColor(colorTable, cpp, attributes);
+        if (ErrorStatus != XpmSuccess) RETURN(ErrorStatus);
     }
 
-    ErrorStatus = ScanOtherColors(display, colorTable, pmap.ncolors,
-				  pmap.pixels, pmap.mask_pixel, cpp,
-				  attributes);
-    if (ErrorStatus != XpmSuccess)
-	RETURN(ErrorStatus);
+    ErrorStatus = ScanOtherColors(display,
+                                  colorTable,
+                                  pmap.ncolors,
+                                  pmap.pixels,
+                                  pmap.mask_pixel,
+                                  cpp,
+                                  attributes);
+    if (ErrorStatus != XpmSuccess) RETURN(ErrorStatus);
 
     /*
      * store found information in the XpmImage structure
      */
-    xpmimage->width = width;
-    xpmimage->height = height;
-    xpmimage->cpp = cpp;
-    xpmimage->ncolors = pmap.ncolors;
+    xpmimage->width      = width;
+    xpmimage->height     = height;
+    xpmimage->cpp        = cpp;
+    xpmimage->ncolors    = pmap.ncolors;
     xpmimage->colorTable = colorTable;
-    xpmimage->data = pmap.pixelindex;
+    xpmimage->data       = pmap.pixelindex;
 
     XpmFree(pmap.pixels);
     return (XpmSuccess);
 
 /* exit point in case of error, free only locally allocated variables */
 error:
-    if (pmap.pixelindex)
-	XpmFree(pmap.pixelindex);
-    if (pmap.pixels)
-	XpmFree(pmap.pixels);
-    if (colorTable)
-	xpmFreeColorTable(colorTable, pmap.ncolors);
+    if (pmap.pixelindex) XpmFree(pmap.pixelindex);
+    if (pmap.pixels) XpmFree(pmap.pixels);
+    if (colorTable) xpmFreeColorTable(colorTable, pmap.ncolors);
 
     return (ErrorStatus);
 }
 
 static int
-ScanTransparentColor(
-    XpmColor		*color,
-    unsigned int	 cpp,
-    XpmAttributes	*attributes)
+ScanTransparentColor(XpmColor      *color,
+                     unsigned int   cpp,
+                     XpmAttributes *attributes)
 {
-    char *s;
+    char        *s;
     unsigned int a, b, c;
 
     /* first get a character string */
     a = 0;
-    if (cpp >= UINT_MAX - 1)
-	return (XpmNoMemory);
-    if (!(s = color->string = (char *) XpmMalloc(cpp + 1)))
-	return (XpmNoMemory);
+    if (cpp >= UINT_MAX - 1) return (XpmNoMemory);
+    if (!(s = color->string = (char *)XpmMalloc(cpp + 1))) return (XpmNoMemory);
     *s++ = printable[c = a % MAXPRINTABLE];
     for (b = 1; b < cpp; b++, s++)
-	*s = printable[c = ((a - c) / MAXPRINTABLE) % MAXPRINTABLE];
+        *s = printable[c = ((a - c) / MAXPRINTABLE) % MAXPRINTABLE];
     *s = '\0';
 
     /* then retrieve related info from the attributes if any */
-    if (attributes && (attributes->valuemask & XpmColorTable
+    if (attributes &&
+        (attributes->valuemask & XpmColorTable
 /* 3.2 backward compatibility code */
-		       || attributes->valuemask & XpmInfos)
+         || attributes->valuemask & XpmInfos)
 /* end 3.2 bc */
-	&& attributes->mask_pixel != XpmUndefPixel) {
+        && attributes->mask_pixel != XpmUndefPixel)
+    {
+        unsigned int key;
+        char       **defaults = (char **)color;
+        char       **mask_defaults;
 
-	unsigned int key;
-	char **defaults = (char **) color;
-	char **mask_defaults;
-
 /* 3.2 backward compatibility code */
-	if (attributes->valuemask & XpmColorTable)
-/* end 3.2 bc */
-	    mask_defaults = (char **) (
-		attributes->colorTable + attributes->mask_pixel);
+        if (attributes->valuemask & XpmColorTable)/* end 3.2 bc */
+            mask_defaults =
+                (char **)(attributes->colorTable + attributes->mask_pixel);
 /* 3.2 backward compatibility code */
-	else
-	    mask_defaults = (char **)
-		((XpmColor **) attributes->colorTable)[attributes->mask_pixel];
+        else
+            mask_defaults =
+                (char **)((XpmColor **)
+                              attributes->colorTable)[attributes->mask_pixel];
 /* end 3.2 bc */
-	for (key = 1; key <= NKEYS; key++) {
-	    if ((s = mask_defaults[key])) {
-		defaults[key] = strdup(s);
-		if (!defaults[key])
-		    return (XpmNoMemory);
-	    }
-	}
-    } else {
-	color->c_color = strdup(TRANSPARENT_COLOR);
-	if (!color->c_color)
-	    return (XpmNoMemory);
+        for (key = 1; key <= NKEYS; key++)
+        {
+            if ((s = mask_defaults[key]))
+            {
+                defaults[key] = strdup(s);
+                if (!defaults[key]) return (XpmNoMemory);
+            }
+        }
+    }
+    else
+    {
+        color->c_color = strdup(TRANSPARENT_COLOR);
+        if (!color->c_color) return (XpmNoMemory);
     }
     return (XpmSuccess);
 }
 
 static int
-ScanOtherColors(
-    Display		*display,
-    XpmColor		*colors,
-    unsigned int	 ncolors,
-    Pixel		*pixels,
-    unsigned int	 mask,
-    unsigned int	 cpp,
-    XpmAttributes	*attributes)
+ScanOtherColors(Display       *display,
+                XpmColor      *colors,
+                unsigned int   ncolors,
+                Pixel         *pixels,
+                unsigned int   mask,
+                unsigned int   cpp,
+                XpmAttributes *attributes)
 {
     /* variables stored in the XpmAttributes structure */
     Colormap colormap;
-    char *rgb_fname;
+    char    *rgb_fname;
 
-    xpmRgbName rgbn[MAX_RGBNAMES];
-    int rgbn_max = 0;
+    xpmRgbName   rgbn[MAX_RGBNAMES];
+    int          rgbn_max = 0;
     unsigned int i, j, c, i2;
-    XpmColor *color;
-    XColor *xcolors = NULL, *xcolor;
-    char *colorname, *s;
-    XpmColor *colorTable = NULL, **oldColorTable = NULL;
-    unsigned int ancolors = 0;
-    Pixel *apixels = NULL;
+    XpmColor    *color;
+    XColor      *xcolors = NULL, *xcolor;
+    char        *colorname, *s;
+    XpmColor    *colorTable = NULL, **oldColorTable = NULL;
+    unsigned int ancolors   = 0;
+    Pixel       *apixels    = NULL;
     unsigned int mask_pixel = 0;
-    Bool found;
+    Bool         found;
 
     /* retrieve information from the XpmAttributes */
     if (attributes && (attributes->valuemask & XpmColormap))
-	colormap = attributes->colormap;
-    else
-	colormap = XDefaultColormap(display, XDefaultScreen(display));
+        colormap = attributes->colormap;
+    else colormap = XDefaultColormap(display, XDefaultScreen(display));
     if (attributes && (attributes->valuemask & XpmRgbFilename))
-	rgb_fname = attributes->rgb_fname;
-    else
-	rgb_fname = NULL;
+        rgb_fname = attributes->rgb_fname;
+    else rgb_fname = NULL;
 
     /* start from the right element */
-    if (mask) {
-	colors++;
-	ncolors--;
-	pixels++;
+    if (mask)
+    {
+        colors++;
+        ncolors--;
+        pixels++;
     }
 
     /* first get character strings and rgb values */
     if (ncolors >= UINT_MAX / sizeof(XColor) || cpp >= UINT_MAX - 1)
-	return (XpmNoMemory);
-    xcolors = (XColor *) XpmMalloc(sizeof(XColor) * ncolors);
-    if (!xcolors)
-	return (XpmNoMemory);
+        return (XpmNoMemory);
+    xcolors = (XColor *)XpmMalloc(sizeof(XColor) * ncolors);
+    if (!xcolors) return (XpmNoMemory);
 
-    for (i = 0, i2 = mask, color = colors, xcolor = xcolors;
-	 i < ncolors; i++, i2++, color++, xcolor++, pixels++) {
+    for (i = 0, i2 = mask, color = colors, xcolor = xcolors; i < ncolors;
+         i++, i2++, color++, xcolor++, pixels++)
+    {
+        if (!(s = color->string = (char *)XpmMalloc(cpp + 1)))
+        {
+            XpmFree(xcolors);
+            return (XpmNoMemory);
+        }
+        *s++ = printable[c = i2 % MAXPRINTABLE];
+        for (j = 1; j < cpp; j++, s++)
+            *s = printable[c = ((i2 - c) / MAXPRINTABLE) % MAXPRINTABLE];
+        *s = '\0';
 
-	if (!(s = color->string = (char *) XpmMalloc(cpp + 1))) {
-	    XpmFree(xcolors);
-	    return (XpmNoMemory);
-	}
-	*s++ = printable[c = i2 % MAXPRINTABLE];
-	for (j = 1; j < cpp; j++, s++)
-	    *s = printable[c = ((i2 - c) / MAXPRINTABLE) % MAXPRINTABLE];
-	*s = '\0';
-
-	xcolor->pixel = *pixels;
+        xcolor->pixel = *pixels;
     }
     XQueryColors(display, colormap, xcolors, ncolors);
 
     /* read the rgb file if any was specified */
-    if (rgb_fname)
-	rgbn_max = xpmReadRgbNames(attributes->rgb_fname, rgbn);
+    if (rgb_fname) rgbn_max = xpmReadRgbNames(attributes->rgb_fname, rgbn);
 
-    if (attributes && attributes->valuemask & XpmColorTable) {
-	colorTable = attributes->colorTable;
-	ancolors = attributes->ncolors;
-	apixels = attributes->pixels;
-	mask_pixel = attributes->mask_pixel;
+    if (attributes && attributes->valuemask & XpmColorTable)
+    {
+        colorTable = attributes->colorTable;
+        ancolors   = attributes->ncolors;
+        apixels    = attributes->pixels;
+        mask_pixel = attributes->mask_pixel;
     }
 /* 3.2 backward compatibility code */
-    else if (attributes && attributes->valuemask & XpmInfos) {
-	oldColorTable = (XpmColor **) attributes->colorTable;
-	ancolors = attributes->ncolors;
-	apixels = attributes->pixels;
-	mask_pixel = attributes->mask_pixel;
+    else if (attributes && attributes->valuemask & XpmInfos)
+    {
+        oldColorTable = (XpmColor **)attributes->colorTable;
+        ancolors      = attributes->ncolors;
+        apixels       = attributes->pixels;
+        mask_pixel    = attributes->mask_pixel;
     }
 /* end 3.2 bc */
 
     for (i = 0, color = colors, xcolor = xcolors; i < ncolors;
-						  i++, color++, xcolor++) {
+         i++, color++, xcolor++)
+    {
+    /* look for related info from the attributes if any */
+        found = False;
+        if (ancolors)
+        {
+            unsigned int offset = 0;
 
-	/* look for related info from the attributes if any */
-	found = False;
-	if (ancolors) {
-	    unsigned int offset = 0;
-
-	    for (j = 0; j < ancolors; j++) {
-		if (j == mask_pixel) {
-		    offset = 1;
-		    continue;
-		}
-		if (apixels[j - offset] == xcolor->pixel)
-		    break;
-	    }
-	    if (j != ancolors) {
-		unsigned int key;
-		char **defaults = (char **) color;
-		char **adefaults;
+            for (j = 0; j < ancolors; j++)
+            {
+                if (j == mask_pixel)
+                {
+                    offset = 1;
+                    continue;
+                }
+                if (apixels[j - offset] == xcolor->pixel) break;
+            }
+            if (j != ancolors)
+            {
+                unsigned int key;
+                char       **defaults = (char **)color;
+                char       **adefaults;
 
 /* 3.2 backward compatibility code */
-		if (oldColorTable)
-		    adefaults = (char **) oldColorTable[j];
-		else
-/* end 3.2 bc */
-		    adefaults = (char **) (colorTable + j);
+                if (oldColorTable) adefaults = (char **)oldColorTable[j];
+                else/* end 3.2 bc */
+                    adefaults = (char **)(colorTable + j);
 
-		found = True;
-		for (key = 1; key <= NKEYS; key++) {
-		    if ((s = adefaults[key]))
-			defaults[key] = strdup(s);
-		}
-	    }
-	}
-	if (!found) {
-	    /* if nothing found look for a color name */
-	    colorname = NULL;
-	    if (rgbn_max)
-		colorname = xpmGetRgbName(rgbn, rgbn_max, xcolor->red,
-					  xcolor->green, xcolor->blue);
-	    if (colorname)
-		color->c_color = strdup(colorname);
-	    else {
-		/* at last store the rgb value */
-		char buf[BUFSIZ];
-		snprintf(buf, sizeof(buf), "#%04X%04X%04X",
-			xcolor->red, xcolor->green, xcolor->blue);
-		color->c_color = strdup(buf);
-	    }
-	    if (!color->c_color) {
-		XpmFree(xcolors);
-		xpmFreeRgbNames(rgbn, rgbn_max);
-		return (XpmNoMemory);
-	    }
-	}
+                found = True;
+                for (key = 1; key <= NKEYS; key++)
+                {
+                    if ((s = adefaults[key])) defaults[key] = strdup(s);
+                }
+            }
+        }
+        if (!found)
+        {
+        /* if nothing found look for a color name */
+            colorname = NULL;
+            if (rgbn_max)
+                colorname = xpmGetRgbName(rgbn,
+                                          rgbn_max,
+                                          xcolor->red,
+                                          xcolor->green,
+                                          xcolor->blue);
+            if (colorname) color->c_color = strdup(colorname);
+            else
+            {
+        /* at last store the rgb value */
+                char buf[BUFSIZ];
+                snprintf(buf,
+                         sizeof(buf),
+                         "#%04X%04X%04X",
+                         xcolor->red,
+                         xcolor->green,
+                         xcolor->blue);
+                color->c_color = strdup(buf);
+            }
+            if (!color->c_color)
+            {
+                XpmFree(xcolors);
+                xpmFreeRgbNames(rgbn, rgbn_max);
+                return (XpmNoMemory);
+            }
+        }
     }
 
     XpmFree(xcolors);
@@ -532,16 +557,13 @@ ScanOtherColors(
  * level.
  */
 
-static unsigned long const low_bits_table[] = {
-    0x00000000, 0x00000001, 0x00000003, 0x00000007,
-    0x0000000f, 0x0000001f, 0x0000003f, 0x0000007f,
-    0x000000ff, 0x000001ff, 0x000003ff, 0x000007ff,
-    0x00000fff, 0x00001fff, 0x00003fff, 0x00007fff,
-    0x0000ffff, 0x0001ffff, 0x0003ffff, 0x0007ffff,
-    0x000fffff, 0x001fffff, 0x003fffff, 0x007fffff,
-    0x00ffffff, 0x01ffffff, 0x03ffffff, 0x07ffffff,
-    0x0fffffff, 0x1fffffff, 0x3fffffff, 0x7fffffff,
-    0xffffffff
+static const unsigned long low_bits_table[] = {
+    0x00000000, 0x00000001, 0x00000003, 0x00000007, 0x0000000f, 0x0000001f,
+    0x0000003f, 0x0000007f, 0x000000ff, 0x000001ff, 0x000003ff, 0x000007ff,
+    0x00000fff, 0x00001fff, 0x00003fff, 0x00007fff, 0x0000ffff, 0x0001ffff,
+    0x0003ffff, 0x0007ffff, 0x000fffff, 0x001fffff, 0x003fffff, 0x007fffff,
+    0x00ffffff, 0x01ffffff, 0x03ffffff, 0x07ffffff, 0x0fffffff, 0x1fffffff,
+    0x3fffffff, 0x7fffffff, 0xffffffff
 };
 
 /*
@@ -555,100 +577,100 @@ static unsigned long const low_bits_table[] = {
  */
 
 static int
-GetImagePixels(
-    XImage		*image,
-    unsigned int	 width,
-    unsigned int	 height,
-    PixelsMap		*pmap)
+GetImagePixels(XImage      *image,
+               unsigned int width,
+               unsigned int height,
+               PixelsMap   *pmap)
 {
-    char *src;
-    char *dst;
+    char         *src;
+    char         *dst;
     unsigned int *iptr;
-    char *data;
-    unsigned int x, y;
-    int bits, depth, ibu, ibpp, offset, i;
+    char         *data;
+    unsigned int  x, y;
+    int           bits, depth, ibu, ibpp, offset, i;
     unsigned long lbt;
-    Pixel pixel, px;
+    Pixel         pixel, px;
 
-    data = image->data;
-    iptr = pmap->pixelindex;
-    depth = image->depth;
-    lbt = low_bits_table[depth];
-    ibpp = image->bits_per_pixel;
+    data   = image->data;
+    iptr   = pmap->pixelindex;
+    depth  = image->depth;
+    lbt    = low_bits_table[depth];
+    ibpp   = image->bits_per_pixel;
     offset = image->xoffset;
 
-    if (image->bitmap_unit < 0)
-	    return (XpmNoMemory);
+    if (image->bitmap_unit < 0) return (XpmNoMemory);
 
-    if ((image->bits_per_pixel | image->depth) == 1) {
-	ibu = image->bitmap_unit;
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
-		src = &data[XYINDEX(x, y, image)];
-		dst = (char *) &pixel;
-		pixel = 0;
-		for (i = ibu >> 3; --i >= 0;)
-		    *dst++ = *src++;
-		XYNORMALIZE(&pixel, image);
-		bits = (x + offset) % ibu;
-		pixel = ((((char *) &pixel)[bits >> 3]) >> (bits & 7)) & 1;
-		if (ibpp != depth)
-		    pixel &= lbt;
-		if (storePixel(pixel, pmap, iptr))
-		    return (XpmNoMemory);
-	    }
-    } else if (image->format == XYPixmap) {
-	int nbytes, bpl, j;
-	long plane = 0;
-	ibu = image->bitmap_unit;
-	nbytes = ibu >> 3;
-	bpl = image->bytes_per_line;
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
-		pixel = 0;
-		plane = 0;
-		for (i = depth; --i >= 0;) {
-		    src = &data[XYINDEX(x, y, image) + plane];
-		    dst = (char *) &px;
-		    px = 0;
-		    for (j = nbytes; --j >= 0;)
-			*dst++ = *src++;
-		    XYNORMALIZE(&px, image);
-		    bits = (x + offset) % ibu;
-		    pixel = (pixel << 1) |
-			    (((((char *) &px)[bits >> 3]) >> (bits & 7)) & 1);
-		    plane = plane + (bpl * height);
-		}
-		if (ibpp != depth)
-		    pixel &= lbt;
-		if (storePixel(pixel, pmap, iptr))
-		    return (XpmNoMemory);
-	    }
-    } else if (image->format == ZPixmap) {
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
-		src = &data[ZINDEX(x, y, image)];
-		dst = (char *) &px;
-		px = 0;
-		for (i = (ibpp + 7) >> 3; --i >= 0;)
-		    *dst++ = *src++;
-		ZNORMALIZE(&px, image);
-		pixel = 0;
-		for (i = sizeof(unsigned long); --i >= 0;)
-		    pixel = (pixel << 8) | ((unsigned char *) &px)[i];
-		if (ibpp == 4) {
-		    if (x & 1)
-			pixel >>= 4;
-		    else
-			pixel &= 0xf;
-		}
-		if (ibpp != depth)
-		    pixel &= lbt;
-		if (storePixel(pixel, pmap, iptr))
-		    return (XpmNoMemory);
-	    }
-    } else
-	return (XpmColorError); /* actually a bad image */
+    if ((image->bits_per_pixel | image->depth) == 1)
+    {
+        ibu = image->bitmap_unit;
+        for (y = 0; y < height; y++)
+            for (x = 0; x < width; x++, iptr++)
+            {
+                src   = &data[XYINDEX(x, y, image)];
+                dst   = (char *)&pixel;
+                pixel = 0;
+                for (i = ibu >> 3; --i >= 0;)
+                    *dst++ = *src++;
+                XYNORMALIZE(&pixel, image);
+                bits  = (x + offset) % ibu;
+                pixel = ((((char *)&pixel)[bits >> 3]) >> (bits & 7)) & 1;
+                if (ibpp != depth) pixel &= lbt;
+                if (storePixel(pixel, pmap, iptr)) return (XpmNoMemory);
+            }
+    }
+    else if (image->format == XYPixmap)
+    {
+        int  nbytes, bpl, j;
+        long plane = 0;
+        ibu        = image->bitmap_unit;
+        nbytes     = ibu >> 3;
+        bpl        = image->bytes_per_line;
+        for (y = 0; y < height; y++)
+            for (x = 0; x < width; x++, iptr++)
+            {
+                pixel = 0;
+                plane = 0;
+                for (i = depth; --i >= 0;)
+                {
+                    src = &data[XYINDEX(x, y, image) + plane];
+                    dst = (char *)&px;
+                    px  = 0;
+                    for (j = nbytes; --j >= 0;)
+                        *dst++ = *src++;
+                    XYNORMALIZE(&px, image);
+                    bits  = (x + offset) % ibu;
+                    pixel = (pixel << 1) |
+                            (((((char *)&px)[bits >> 3]) >> (bits & 7)) & 1);
+                    plane = plane + (bpl * height);
+                }
+                if (ibpp != depth) pixel &= lbt;
+                if (storePixel(pixel, pmap, iptr)) return (XpmNoMemory);
+            }
+    }
+    else if (image->format == ZPixmap)
+    {
+        for (y = 0; y < height; y++)
+            for (x = 0; x < width; x++, iptr++)
+            {
+                src = &data[ZINDEX(x, y, image)];
+                dst = (char *)&px;
+                px  = 0;
+                for (i = (ibpp + 7) >> 3; --i >= 0;)
+                    *dst++ = *src++;
+                ZNORMALIZE(&px, image);
+                pixel = 0;
+                for (i = sizeof(unsigned long); --i >= 0;)
+                    pixel = (pixel << 8) | ((unsigned char *)&px)[i];
+                if (ibpp == 4)
+                {
+                    if (x & 1) pixel >>= 4;
+                    else pixel &= 0xf;
+                }
+                if (ibpp != depth) pixel &= lbt;
+                if (storePixel(pixel, pmap, iptr)) return (XpmNoMemory);
+            }
+    }
+    else return (XpmColorError); /* actually a bad image */
     return (XpmSuccess);
 }
 
@@ -661,63 +683,59 @@ static unsigned long byteorderpixel = MSBFirst << 24;
 #endif
 
 static int
-GetImagePixels32(
-    XImage		 *image,
-    unsigned int	 width,
-    unsigned int	 height,
-    PixelsMap		*pmap)
+GetImagePixels32(XImage      *image,
+                 unsigned int width,
+                 unsigned int height,
+                 PixelsMap   *pmap)
 {
     unsigned char *addr;
     unsigned char *data;
-    unsigned int *iptr;
-    unsigned int x, y;
-    unsigned long lbt;
-    Pixel pixel;
-    int depth;
+    unsigned int  *iptr;
+    unsigned int   x, y;
+    unsigned long  lbt;
+    Pixel          pixel;
+    int            depth;
 
-    data = (unsigned char *) image->data;
-    iptr = pmap->pixelindex;
+    data  = (unsigned char *)image->data;
+    iptr  = pmap->pixelindex;
     depth = image->depth;
-    lbt = low_bits_table[depth];
+    lbt   = low_bits_table[depth];
 #if !defined(WORD64) && !defined(LONG64)
-    if (*((char *) &byteorderpixel) == image->byte_order) {
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
-		addr = &data[ZINDEX32(x, y, image)];
-		pixel = *((unsigned long *) addr);
-		if (depth != 32)
-		    pixel &= lbt;
-		if (storePixel(pixel, pmap, iptr))
-		    return (XpmNoMemory);
-	    }
-    } else
-#endif
-    if (image->byte_order == MSBFirst)
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
-		addr = &data[ZINDEX32(x, y, image)];
-		pixel = ((unsigned long) addr[0] << 24 |
-			 (unsigned long) addr[1] << 16 |
-			 (unsigned long) addr[2] << 8 |
-			 addr[3]);
-		if (depth != 32)
-		    pixel &= lbt;
-		if (storePixel(pixel, pmap, iptr))
-		    return (XpmNoMemory);
-	    }
+    if (*((char *)&byteorderpixel) == image->byte_order)
+    {
+        for (y = 0; y < height; y++)
+            for (x = 0; x < width; x++, iptr++)
+            {
+                addr  = &data[ZINDEX32(x, y, image)];
+                pixel = *((unsigned long *)addr);
+                if (depth != 32) pixel &= lbt;
+                if (storePixel(pixel, pmap, iptr)) return (XpmNoMemory);
+            }
+    }
     else
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
-		addr = &data[ZINDEX32(x, y, image)];
-		pixel = (addr[0] |
-			 (unsigned long) addr[1] << 8 |
-			 (unsigned long) addr[2] << 16 |
-			 (unsigned long) addr[3] << 24);
-		if (depth != 32)
-		    pixel &= lbt;
-		if (storePixel(pixel, pmap, iptr))
-		    return (XpmNoMemory);
-	    }
+#endif
+        if (image->byte_order == MSBFirst)
+        for (y = 0; y < height; y++)
+            for (x = 0; x < width; x++, iptr++)
+            {
+                addr  = &data[ZINDEX32(x, y, image)];
+                pixel = ((unsigned long)addr[0] << 24 |
+                         (unsigned long)addr[1] << 16 |
+                         (unsigned long)addr[2] << 8 | addr[3]);
+                if (depth != 32) pixel &= lbt;
+                if (storePixel(pixel, pmap, iptr)) return (XpmNoMemory);
+            }
+    else
+        for (y = 0; y < height; y++)
+            for (x = 0; x < width; x++, iptr++)
+            {
+                addr  = &data[ZINDEX32(x, y, image)];
+                pixel = (addr[0] | (unsigned long)addr[1] << 8 |
+                         (unsigned long)addr[2] << 16 |
+                         (unsigned long)addr[3] << 24);
+                if (depth != 32) pixel &= lbt;
+                if (storePixel(pixel, pmap, iptr)) return (XpmNoMemory);
+            }
     return (XpmSuccess);
 }
 
@@ -726,44 +744,41 @@ GetImagePixels32(
  */
 
 static int
-GetImagePixels16(
-    XImage		*image,
-    unsigned int	 width,
-    unsigned int	 height,
-    PixelsMap		*pmap)
+GetImagePixels16(XImage      *image,
+                 unsigned int width,
+                 unsigned int height,
+                 PixelsMap   *pmap)
 {
     unsigned char *addr;
     unsigned char *data;
-    unsigned int *iptr;
-    unsigned int x, y;
-    unsigned long lbt;
-    Pixel pixel;
-    int depth;
+    unsigned int  *iptr;
+    unsigned int   x, y;
+    unsigned long  lbt;
+    Pixel          pixel;
+    int            depth;
 
-    data = (unsigned char *) image->data;
-    iptr = pmap->pixelindex;
+    data  = (unsigned char *)image->data;
+    iptr  = pmap->pixelindex;
     depth = image->depth;
-    lbt = low_bits_table[depth];
+    lbt   = low_bits_table[depth];
     if (image->byte_order == MSBFirst)
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
-		addr = &data[ZINDEX16(x, y, image)];
-		pixel = addr[0] << 8 | addr[1];
-		if (depth != 16)
-		    pixel &= lbt;
-		if (storePixel(pixel, pmap, iptr))
-		    return (XpmNoMemory);
-	    }
+        for (y = 0; y < height; y++)
+            for (x = 0; x < width; x++, iptr++)
+            {
+                addr  = &data[ZINDEX16(x, y, image)];
+                pixel = addr[0] << 8 | addr[1];
+                if (depth != 16) pixel &= lbt;
+                if (storePixel(pixel, pmap, iptr)) return (XpmNoMemory);
+            }
     else
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
-		addr = &data[ZINDEX16(x, y, image)];
-		pixel = addr[0] | addr[1] << 8;
-		if (depth != 16)
-		    pixel &= lbt;
-		if (storePixel(pixel, pmap, iptr))
-		    return (XpmNoMemory);
-	    }
+        for (y = 0; y < height; y++)
+            for (x = 0; x < width; x++, iptr++)
+            {
+                addr  = &data[ZINDEX16(x, y, image)];
+                pixel = addr[0] | addr[1] << 8;
+                if (depth != 16) pixel &= lbt;
+                if (storePixel(pixel, pmap, iptr)) return (XpmNoMemory);
+            }
     return (XpmSuccess);
 }
 
@@ -772,31 +787,29 @@ GetImagePixels16(
  */
 
 static int
-GetImagePixels8(
-    XImage		*image,
-    unsigned int	 width,
-    unsigned int	 height,
-    PixelsMap		*pmap)
+GetImagePixels8(XImage      *image,
+                unsigned int width,
+                unsigned int height,
+                PixelsMap   *pmap)
 {
-    unsigned int *iptr;
+    unsigned int  *iptr;
     unsigned char *data;
-    unsigned int x, y;
-    unsigned long lbt;
-    Pixel pixel;
-    int depth;
+    unsigned int   x, y;
+    unsigned long  lbt;
+    Pixel          pixel;
+    int            depth;
 
-    data = (unsigned char *) image->data;
-    iptr = pmap->pixelindex;
+    data  = (unsigned char *)image->data;
+    iptr  = pmap->pixelindex;
     depth = image->depth;
-    lbt = low_bits_table[depth];
+    lbt   = low_bits_table[depth];
     for (y = 0; y < height; y++)
-	for (x = 0; x < width; x++, iptr++) {
-	    pixel = data[ZINDEX8(x, y, image)];
-	    if (depth != 8)
-		pixel &= lbt;
-	    if (storePixel(pixel, pmap, iptr))
-		return (XpmNoMemory);
-	}
+        for (x = 0; x < width; x++, iptr++)
+        {
+            pixel = data[ZINDEX8(x, y, image)];
+            if (depth != 8) pixel &= lbt;
+            if (storePixel(pixel, pmap, iptr)) return (XpmNoMemory);
+        }
     return (XpmSuccess);
 }
 
@@ -805,82 +818,85 @@ GetImagePixels8(
  */
 
 static int
-GetImagePixels1(
-    XImage		*image,
-    unsigned int	 width,
-    unsigned int	 height,
-    PixelsMap		 *pmap,
-    storeFuncPtr	 storeFunc)
+GetImagePixels1(XImage      *image,
+                unsigned int width,
+                unsigned int height,
+                PixelsMap   *pmap,
+                storeFuncPtr storeFunc)
 {
     unsigned int *iptr;
-    unsigned int x, y;
-    char *data;
-    Pixel pixel;
-    int xoff, yoff, offset, bpl;
+    unsigned int  x, y;
+    char         *data;
+    Pixel         pixel;
+    int           xoff, yoff, offset, bpl;
 
-    data = image->data;
-    iptr = pmap->pixelindex;
+    data   = image->data;
+    iptr   = pmap->pixelindex;
     offset = image->xoffset;
-    bpl = image->bytes_per_line;
+    bpl    = image->bytes_per_line;
 
     if (image->bitmap_bit_order == MSBFirst)
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
-		xoff = x + offset;
-		yoff = y * bpl + (xoff >> 3);
-		xoff &= 7;
-		pixel = (data[yoff] & (0x80 >> xoff)) ? 1 : 0;
-		if ((*storeFunc) (pixel, pmap, iptr))
-		    return (XpmNoMemory);
-	    }
+        for (y = 0; y < height; y++)
+            for (x = 0; x < width; x++, iptr++)
+            {
+                xoff = x + offset;
+                yoff = y * bpl + (xoff >> 3);
+                xoff &= 7;
+                pixel = (data[yoff] & (0x80 >> xoff)) ? 1 : 0;
+                if ((*storeFunc)(pixel, pmap, iptr)) return (XpmNoMemory);
+            }
     else
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
-		xoff = x + offset;
-		yoff = y * bpl + (xoff >> 3);
-		xoff &= 7;
-		pixel = (data[yoff] & (1 << xoff)) ? 1 : 0;
-		if ((*storeFunc) (pixel, pmap, iptr))
-		    return (XpmNoMemory);
-	    }
+        for (y = 0; y < height; y++)
+            for (x = 0; x < width; x++, iptr++)
+            {
+                xoff = x + offset;
+                yoff = y * bpl + (xoff >> 3);
+                xoff &= 7;
+                pixel = (data[yoff] & (1 << xoff)) ? 1 : 0;
+                if ((*storeFunc)(pixel, pmap, iptr)) return (XpmNoMemory);
+            }
     return (XpmSuccess);
 }
 
 int
-XpmCreateXpmImageFromPixmap(
-    Display		*display,
-    Pixmap		 pixmap,
-    Pixmap		 shapemask,
-    XpmImage		*xpmimage,
-    XpmAttributes	*attributes)
+XpmCreateXpmImageFromPixmap(Display       *display,
+                            Pixmap         pixmap,
+                            Pixmap         shapemask,
+                            XpmImage      *xpmimage,
+                            XpmAttributes *attributes)
 {
-    XImage *ximage = NULL;
-    XImage *shapeimage = NULL;
-    unsigned int width = 0;
-    unsigned int height = 0;
-    int ErrorStatus;
+    XImage      *ximage     = NULL;
+    XImage      *shapeimage = NULL;
+    unsigned int width      = 0;
+    unsigned int height     = 0;
+    int          ErrorStatus;
 
     /* get geometry */
-    if (attributes && attributes->valuemask & XpmSize) {
-	width = attributes->width;
-	height = attributes->height;
+    if (attributes && attributes->valuemask & XpmSize)
+    {
+        width  = attributes->width;
+        height = attributes->height;
     }
     /* get the ximages */
     if (pixmap)
-	xpmCreateImageFromPixmap(display, pixmap, &ximage, &width, &height);
+        xpmCreateImageFromPixmap(display, pixmap, &ximage, &width, &height);
     if (shapemask)
-	xpmCreateImageFromPixmap(display, shapemask, &shapeimage,
-				 &width, &height);
+        xpmCreateImageFromPixmap(display,
+                                 shapemask,
+                                 &shapeimage,
+                                 &width,
+                                 &height);
 
     /* create the related XpmImage */
-    ErrorStatus = XpmCreateXpmImageFromImage(display, ximage, shapeimage,
-					     xpmimage, attributes);
+    ErrorStatus = XpmCreateXpmImageFromImage(display,
+                                             ximage,
+                                             shapeimage,
+                                             xpmimage,
+                                             attributes);
 
     /* destroy the ximages */
-    if (ximage)
-	XDestroyImage(ximage);
-    if (shapeimage)
-	XDestroyImage(shapeimage);
+    if (ximage) XDestroyImage(ximage);
+    if (shapeimage) XDestroyImage(shapeimage);
 
     return (ErrorStatus);
 }

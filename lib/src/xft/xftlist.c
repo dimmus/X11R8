@@ -23,36 +23,34 @@
 #include "xftint.h"
 
 _X_HIDDEN FcFontSet *
-XftListFontsPatternObjects (Display	    *dpy _X_UNUSED,
-			    int		    screen _X_UNUSED,
-			    FcPattern	    *pattern,
-			    FcObjectSet	    *os)
+XftListFontsPatternObjects(Display *dpy _X_UNUSED,
+                           int screen   _X_UNUSED,
+                           FcPattern   *pattern,
+                           FcObjectSet *os)
 {
-    return FcFontList (NULL, pattern, os);
+    return FcFontList(NULL, pattern, os);
 }
 
 _X_EXPORT FcFontSet *
-XftListFonts (Display	*dpy,
-	      int	screen,
-	      ...)
+XftListFonts(Display *dpy, int screen, ...)
 {
-    va_list	    va;
-    FcFontSet	    *fs;
-    FcObjectSet	    *os;
-    FcPattern	    *pattern;
-    const char	    *first;
+    va_list      va;
+    FcFontSet   *fs;
+    FcObjectSet *os;
+    FcPattern   *pattern;
+    const char  *first;
 
-    va_start (va, screen);
+    va_start(va, screen);
 
-    FcPatternVapBuild (pattern, NULL, va);
+    FcPatternVapBuild(pattern, NULL, va);
 
-    first = va_arg (va, const char *);
-    FcObjectSetVapBuild (os, first, va);
+    first = va_arg(va, const char *);
+    FcObjectSetVapBuild(os, first, va);
 
-    va_end (va);
+    va_end(va);
 
-    fs = XftListFontsPatternObjects (dpy, screen, pattern, os);
-    FcPatternDestroy (pattern);
-    FcObjectSetDestroy (os);
+    fs = XftListFontsPatternObjects(dpy, screen, pattern, os);
+    FcPatternDestroy(pattern);
+    FcObjectSetDestroy(os);
     return fs;
 }

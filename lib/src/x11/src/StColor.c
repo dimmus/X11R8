@@ -25,17 +25,14 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XStoreColor(
-    register Display *dpy,
-    Colormap cmap,
-    XColor *def)
+XStoreColor(register Display *dpy, Colormap cmap, XColor *def)
 {
-    xColorItem *citem;
+    xColorItem               *citem;
     register xStoreColorsReq *req;
 
     LockDisplay(dpy);
@@ -43,15 +40,14 @@ XStoreColor(
 
     req->cmap = cmap;
 
-    citem = (xColorItem *) NEXTPTR(req,xStoreColorsReq);
+    citem = (xColorItem *)NEXTPTR(req, xStoreColorsReq);
 
     citem->pixel = def->pixel;
-    citem->red = def->red;
+    citem->red   = def->red;
     citem->green = def->green;
-    citem->blue = def->blue;
+    citem->blue  = def->blue;
     citem->flags = def->flags; /* do_red, do_green, do_blue */
-    citem->pad = 0;
-
+    citem->pad   = 0;
 
     UnlockDisplay(dpy);
     SyncHandle();

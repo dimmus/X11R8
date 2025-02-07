@@ -25,87 +25,95 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "reallocarray.h"
 #include <limits.h>
 
-char **XListExtensions(
-    register Display *dpy,
-    int *nextensions)	/* RETURN */
+char **
+XListExtensions(register Display *dpy, int *nextensions) /* RETURN */
 {
-	xListExtensionsReply rep;
-	char **list = NULL;
-	char *ch = NULL;
-	char *chend;
-	int count = 0;
-	register unsigned i;
-	register int length;
-	_X_UNUSED register xReq *req;
-	unsigned long rlen = 0;
+    xListExtensionsReply     rep;
+    char                   **list = NULL;
+    char                    *ch   = NULL;
+    char                    *chend;
+    int                      count = 0;
+    register unsigned        i;
+    register int             length;
+    _X_UNUSED register xReq *req;
+    unsigned long            rlen = 0;
 
-	LockDisplay(dpy);
-	GetEmptyReq (ListExtensions, req);
+    LockDisplay(dpy);
+    GetEmptyReq(ListExtensions, req);
 
-	if (! _XReply (dpy, (xReply *) &rep, 0, xFalse)) {
-	    UnlockDisplay(dpy);
-	    SyncHandle();
-	    return (char **) NULL;
-	}
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return (char **)NULL;
+    }
 
-	if (rep.nExtensions) {
-	    list = Xmallocarray (rep.nExtensions, sizeof (char *));
-	    if (rep.length > 0 && rep.length < (INT_MAX >> 2)) {
-		rlen = rep.length << 2;
-		ch = Xmalloc (rlen + 1);
+    if (rep.nExtensions)
+    {
+        list = Xmallocarray(rep.nExtensions, sizeof(char *));
+        if (rep.length > 0 && rep.length < (INT_MAX >> 2))
+        {
+            rlen = rep.length << 2;
+            ch   = Xmalloc(rlen + 1);
                 /* +1 to leave room for last null-terminator */
-	    }
+        }
 
-	    if ((!list) || (!ch)) {
-		Xfree(list);
-		Xfree(ch);
-		_XEatDataWords(dpy, rep.length);
-		UnlockDisplay(dpy);
-		SyncHandle();
-		return (char **) NULL;
-	    }
+        if ((!list) || (!ch))
+        {
+            Xfree(list);
+            Xfree(ch);
+            _XEatDataWords(dpy, rep.length);
+            UnlockDisplay(dpy);
+            SyncHandle();
+            return (char **)NULL;
+        }
 
-	    _XReadPad (dpy, ch, rlen);
-	    /*
+        _XReadPad(dpy, ch, rlen);
+        /*
 	     * unpack into null terminated strings.
 	     */
-	    chend = ch + rlen;
-	    length = *(unsigned char *)ch;
-	    for (i = 0; i < rep.nExtensions; i++) {
-		if (ch + length < chend) {
-		    list[i] = ch+1;  /* skip over length */
-		    ch += length + 1; /* find next length ... */
-		    length = *(unsigned char *)ch;
-		    *ch = '\0'; /* and replace with null-termination */
-		    count++;
-		} else if (i == 0) {
-		    Xfree(list);
-		    Xfree(ch);
-		    list = NULL;
-		    break;
-		} else
-		    list[i] = NULL;
-	    }
-	}
+        chend  = ch + rlen;
+        length = *(unsigned char *)ch;
+        for (i = 0; i < rep.nExtensions; i++)
+        {
+            if (ch + length < chend)
+            {
+                list[i] = ch + 1;  /* skip over length */
+                ch += length + 1; /* find next length ... */
+                length = *(unsigned char *)ch;
+                *ch    = '\0'; /* and replace with null-termination */
+                count++;
+            }
+            else if (i == 0)
+            {
+                Xfree(list);
+                Xfree(ch);
+                list = NULL;
+                break;
+            }
+            else list[i] = NULL;
+        }
+    }
 
-	*nextensions = count;
-	UnlockDisplay(dpy);
-	SyncHandle();
-	return (list);
+    *nextensions = count;
+    UnlockDisplay(dpy);
+    SyncHandle();
+    return (list);
 }
 
 int
-XFreeExtensionList (char **list)
+XFreeExtensionList(char **list)
 {
-	if (list != NULL) {
-	    Xfree (list[0]-1);
-	    Xfree (list);
-	}
-	return 1;
+    if (list != NULL)
+    {
+        Xfree(list[0] - 1);
+        Xfree(list);
+    }
+    return 1;
 }

@@ -29,7 +29,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xlib.h"
 #include <stdlib.h>
@@ -42,49 +42,47 @@ in this Software without prior written authorization from The Open Group.
  * distinguishable or not.  Somewhat arbitrary meaning.
  */
 
-#define MIN_DISTINGUISH	10000.0
+#define MIN_DISTINGUISH 10000.0
 
 Bool
-XmuDistinguishableColors(XColor	*colors, int count)
+XmuDistinguishableColors(XColor *colors, int count)
 {
-    double	    deltaRed, deltaGreen, deltaBlue;
-    double	    dist;
-    int		    i, j;
+    double deltaRed, deltaGreen, deltaBlue;
+    double dist;
+    int    i, j;
 
     for (i = 0; i < count - 1; i++)
-	for (j = i + 1; j < count; j++)
-	{
-     	    deltaRed = (double)colors[i].red - (double)colors[j].red;
-    	    deltaGreen = (double)colors[i].green - (double)colors[j].green;
-    	    deltaBlue = (double)colors[i].blue - (double)colors[j].blue;
-    	    dist = deltaRed * deltaRed +
-	       	   deltaGreen * deltaGreen +
- 	       	   deltaBlue * deltaBlue;
-	    if (dist <= MIN_DISTINGUISH * MIN_DISTINGUISH)
-		return False;
-	}
+        for (j = i + 1; j < count; j++)
+        {
+            deltaRed   = (double)colors[i].red - (double)colors[j].red;
+            deltaGreen = (double)colors[i].green - (double)colors[j].green;
+            deltaBlue  = (double)colors[i].blue - (double)colors[j].blue;
+            dist       = deltaRed * deltaRed + deltaGreen * deltaGreen +
+                   deltaBlue * deltaBlue;
+            if (dist <= MIN_DISTINGUISH * MIN_DISTINGUISH) return False;
+        }
     return True;
 }
 
 Bool
-XmuDistinguishablePixels(Display *dpy, Colormap cmap,
-			 unsigned long *pixels, int  count)
+XmuDistinguishablePixels(Display       *dpy,
+                         Colormap       cmap,
+                         unsigned long *pixels,
+                         int            count)
 {
-    XColor  *defs;
-    int	    i, j;
+    XColor *defs;
+    int     i, j;
     Bool    ret;
 
     for (i = 0; i < count - 1; i++)
-	for (j = i + 1; j < count; j++)
-	    if (pixels[i] == pixels[j])
-		return False;
-    defs = Xmumallocarray (count, sizeof (XColor));
-    if (!defs)
-	return False;
+        for (j = i + 1; j < count; j++)
+            if (pixels[i] == pixels[j]) return False;
+    defs = Xmumallocarray(count, sizeof(XColor));
+    if (!defs) return False;
     for (i = 0; i < count; i++)
-	defs[i].pixel = pixels[i];
-    XQueryColors (dpy, cmap, defs, count);
-    ret = XmuDistinguishableColors (defs, count);
-    free (defs);
+        defs[i].pixel = pixels[i];
+    XQueryColors(dpy, cmap, defs, count);
+    ret = XmuDistinguishableColors(defs, count);
+    free(defs);
     return ret;
 }

@@ -33,14 +33,13 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
 #include "reallocarray.h"
 
-
 /************************************************************************
  *									*
  *			PUBLIC ROUTINES					*
@@ -54,12 +53,11 @@
  *	SYNOPSIS
  */
 Status
-XcmsStoreColors(
-    Display *dpy,
-    Colormap colormap,
-    XcmsColor *pColors_in,
-    unsigned int nColors,
-    Bool *pCompressed)
+XcmsStoreColors(Display     *dpy,
+                Colormap     colormap,
+                XcmsColor   *pColors_in,
+                unsigned int nColors,
+                Bool        *pCompressed)
 /*
  *	DESCRIPTION
  *		Given device-dependent or device-independent color
@@ -77,39 +75,48 @@ XcmsStoreColors(
  *		stored.
  */
 {
-    XcmsColor Color1;
+    XcmsColor  Color1;
     XcmsColor *pColors_tmp;
-    Status retval;
+    Status     retval;
 
     /*
      * Make copy of array of color specifications so we don't
      * overwrite the contents.
      */
-    if (nColors > 1) {
-	pColors_tmp = Xmallocarray(nColors, sizeof(XcmsColor));
-	if (pColors_tmp == NULL)
-	    return(XcmsFailure);
-    } else {
-	pColors_tmp = &Color1;
+    if (nColors > 1)
+    {
+        pColors_tmp = Xmallocarray(nColors, sizeof(XcmsColor));
+        if (pColors_tmp == NULL) return (XcmsFailure);
     }
-    memcpy((char *)pColors_tmp, (char *)pColors_in,
- 	    nColors * sizeof(XcmsColor));
+    else
+    {
+        pColors_tmp = &Color1;
+    }
+    memcpy((char *)pColors_tmp,
+           (char *)pColors_in,
+           nColors * sizeof(XcmsColor));
 
     /*
      * Call routine to store colors using the copied color structures
      */
-    retval = _XcmsSetGetColors (XStoreColors, dpy, colormap,
-	    pColors_tmp, nColors, XcmsRGBFormat, pCompressed);
+    retval = _XcmsSetGetColors(XStoreColors,
+                               dpy,
+                               colormap,
+                               pColors_tmp,
+                               nColors,
+                               XcmsRGBFormat,
+                               pCompressed);
 
     /*
      * Free copies as needed.
      */
-    if (nColors > 1) {
-	Xfree(pColors_tmp);
+    if (nColors > 1)
+    {
+        Xfree(pColors_tmp);
     }
 
     /*
      * Ah, finally return.
      */
-    return(retval);
+    return (retval);
 }

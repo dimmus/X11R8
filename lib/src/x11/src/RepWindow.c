@@ -25,17 +25,12 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XReparentWindow(
-    register Display *dpy,
-    Window w,
-    Window p,
-    int x,
-    int y)
+XReparentWindow(register Display *dpy, Window w, Window p, int x, int y)
 {
     register xReparentWindowReq *req;
 
@@ -43,10 +38,9 @@ XReparentWindow(
     GetReq(ReparentWindow, req);
     req->window = w;
     req->parent = p;
-    req->x = x;
-    req->y = y;
+    req->x      = x;
+    req->y      = y;
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

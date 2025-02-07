@@ -33,25 +33,22 @@
 \*****************************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "XpmI.h"
 
 int
-XpmWriteFileFromData(
-    const char	 *filename,
-    char	**data)
+XpmWriteFileFromData(const char *filename, char **data)
 {
     XpmImage image;
-    XpmInfo info;
-    int ErrorStatus;
+    XpmInfo  info;
+    int      ErrorStatus;
 
     info.valuemask = XpmReturnComments | XpmReturnExtensions;
 
     ErrorStatus = XpmCreateXpmImageFromData(data, &image, &info);
 
-    if (ErrorStatus != XpmSuccess)
-	return (ErrorStatus);
+    if (ErrorStatus != XpmSuccess) return (ErrorStatus);
 
     ErrorStatus = XpmWriteFileFromXpmImage(filename, &image, &info);
 

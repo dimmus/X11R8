@@ -29,7 +29,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "X11/Xlib.h"
@@ -41,19 +41,20 @@ XmuUpdateMapHints(Display *dpy, Window w, XSizeHints *hints)
 {
     static XSizeHints *shp = NULL;
 
-    if (!hints) {				/* get them first */
-	long supp;
+    if (!hints)
+    {    /* get them first */
+        long supp;
 
-	if (!shp) {
-	    shp = XAllocSizeHints();
-	    if (!shp) return False;
-	}
-	if (!XGetWMNormalHints (dpy, w, shp, &supp)) return False;
-	hints = shp;
+        if (!shp)
+        {
+            shp = XAllocSizeHints();
+            if (!shp) return False;
+        }
+        if (!XGetWMNormalHints(dpy, w, shp, &supp)) return False;
+        hints = shp;
     }
-    hints->flags &= ~(PPosition|PSize);
-    hints->flags |= (USPosition|USSize);
-    XSetWMNormalHints (dpy, w, hints);
+    hints->flags &= ~(PPosition | PSize);
+    hints->flags |= (USPosition | USSize);
+    XSetWMNormalHints(dpy, w, hints);
     return True;
 }
-

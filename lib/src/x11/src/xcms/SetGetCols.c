@@ -38,13 +38,12 @@
  *              program using this package.
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
 
-
 /************************************************************************
  *									*
  *			API PRIVATE ROUTINES				*
@@ -58,16 +57,14 @@
  *	SYNOPSIS
  */
 Status
-_XcmsSetGetColor(
-    Status (*xColorProc)(
-        Display*            /* display */,
-        Colormap            /* colormap */,
-        XColor*             /* screen_in_out */),
-    Display *dpy,
-    Colormap cmap,
-    XcmsColor *pColors_in_out,
-    XcmsColorFormat result_format,
-    Bool *pCompressed)
+_XcmsSetGetColor(Status (*xColorProc)(Display * /* display */,
+                                      Colormap /* colormap */,
+                                      XColor * /* screen_in_out */),
+                 Display        *dpy,
+                 Colormap        cmap,
+                 XcmsColor      *pColors_in_out,
+                 XcmsColorFormat result_format,
+                 Bool           *pCompressed)
 /*
  *	DESCRIPTION
  *		Routine containing code common to:
@@ -83,8 +80,8 @@ _XcmsSetGetColor(
  */
 {
     XcmsCCC ccc;
-    XColor XColors_in_out;
-    Status retval = XcmsSuccess;
+    XColor  XColors_in_out;
+    Status  retval = XcmsSuccess;
 
     /*
      * Argument Checking
@@ -95,33 +92,42 @@ _XcmsSetGetColor(
      *	5. Assume method_in is valid (should be checked by Server)
      */
 
-    if (dpy == NULL) {
-	return(XcmsFailure);
+    if (dpy == NULL)
+    {
+        return (XcmsFailure);
     }
 
-    if (result_format == XcmsUndefinedFormat) {
-	return(XcmsFailure);
+    if (result_format == XcmsUndefinedFormat)
+    {
+        return (XcmsFailure);
     }
 
-    if ( !((*xColorProc == XAllocColor) || (*xColorProc == XStoreColor)
-	    || (*xColorProc == XQueryColor)) ) {
-	return(XcmsFailure);
+    if (!((*xColorProc == XAllocColor) || (*xColorProc == XStoreColor) ||
+          (*xColorProc == XQueryColor)))
+    {
+        return (XcmsFailure);
     }
 
-    if ((ccc = XcmsCCCOfColormap(dpy, cmap)) == (XcmsCCC)NULL) {
-	return(XcmsFailure);
+    if ((ccc = XcmsCCCOfColormap(dpy, cmap)) == (XcmsCCC)NULL)
+    {
+        return (XcmsFailure);
     }
 
-    if (*xColorProc == XQueryColor) {
-	goto Query;
+    if (*xColorProc == XQueryColor)
+    {
+        goto Query;
     }
 
     /*
      * Convert to RGB, adjusting for white point differences if necessary.
      */
-    if ((retval = XcmsConvertColors(ccc, pColors_in_out, 1, XcmsRGBFormat,
-	    pCompressed)) == XcmsFailure) {
-	return(XcmsFailure);
+    if ((retval = XcmsConvertColors(ccc,
+                                    pColors_in_out,
+                                    1,
+                                    XcmsRGBFormat,
+                                    pCompressed)) == XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
 Query:
@@ -133,19 +139,26 @@ Query:
     /*
      * Now make appropriate X Call
      */
-    if (*xColorProc == XAllocColor) {
-	if ((*xColorProc)(ccc->dpy, cmap, &XColors_in_out) == 0) {
-	    return(XcmsFailure);
-	}
-    } else if ((*xColorProc == XQueryColor) || (*xColorProc == XStoreColor)) {
-	/* Note: XQueryColor and XStoreColor do not return any Status */
-	(*xColorProc)(ccc->dpy, cmap, &XColors_in_out);
-    } else {
-	return(XcmsFailure);
+    if (*xColorProc == XAllocColor)
+    {
+        if ((*xColorProc)(ccc->dpy, cmap, &XColors_in_out) == 0)
+        {
+            return (XcmsFailure);
+        }
+    }
+    else if ((*xColorProc == XQueryColor) || (*xColorProc == XStoreColor))
+    {
+    /* Note: XQueryColor and XStoreColor do not return any Status */
+        (*xColorProc)(ccc->dpy, cmap, &XColors_in_out);
+    }
+    else
+    {
+        return (XcmsFailure);
     }
 
-    if ((*xColorProc == XStoreColor)) {
-	return(retval);
+    if ((*xColorProc == XStoreColor))
+    {
+        return (retval);
     }
 
     /*
@@ -159,13 +172,18 @@ Query:
      *    pCompressed.
      */
 
-    if (result_format != XcmsRGBFormat) {
-	if (XcmsConvertColors(ccc, pColors_in_out, 1, result_format,
-		(Bool *) NULL) == XcmsFailure) {
-	    return(XcmsFailure);
-	}
+    if (result_format != XcmsRGBFormat)
+    {
+        if (XcmsConvertColors(ccc,
+                              pColors_in_out,
+                              1,
+                              result_format,
+                              (Bool *)NULL) == XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
     }
-    return(retval);
+    return (retval);
 }
 
 /*
@@ -175,18 +193,16 @@ Query:
  *	SYNOPSIS
  */
 Status
-_XcmsSetGetColors(
-    Status (*xColorProc)(
-        Display*            /* display */,
-        Colormap            /* colormap */,
-        XColor*             /* screen_in_out */,
-        int                 /* nColors */),
-    Display *dpy,
-    Colormap cmap,
-    XcmsColor *pColors_in_out,
-    int nColors,
-    XcmsColorFormat result_format,
-    Bool *pCompressed)
+_XcmsSetGetColors(Status (*xColorProc)(Display * /* display */,
+                                       Colormap /* colormap */,
+                                       XColor * /* screen_in_out */,
+                                       int /* nColors */),
+                  Display        *dpy,
+                  Colormap        cmap,
+                  XcmsColor      *pColors_in_out,
+                  int             nColors,
+                  XcmsColorFormat result_format,
+                  Bool           *pCompressed)
 /*
  *	DESCRIPTION
  *		Routine containing code common to:
@@ -202,7 +218,7 @@ _XcmsSetGetColors(
 {
     XcmsCCC ccc;
     XColor *pXColors_in_out;
-    Status retval = XcmsSuccess;
+    Status  retval = XcmsSuccess;
 
     /*
      * Argument Checking
@@ -214,45 +230,55 @@ _XcmsSetGetColors(
      *	6. Insure nColors > 0
      */
 
-    if (dpy == NULL) {
-	return(XcmsFailure);
+    if (dpy == NULL)
+    {
+        return (XcmsFailure);
     }
 
-    if (nColors == 0) {
-	return(XcmsSuccess);
+    if (nColors == 0)
+    {
+        return (XcmsSuccess);
     }
 
-    if (result_format == XcmsUndefinedFormat) {
-	return(XcmsFailure);
+    if (result_format == XcmsUndefinedFormat)
+    {
+        return (XcmsFailure);
     }
 
-    if ( !((*xColorProc == XStoreColors) || (*xColorProc == XQueryColors)) ) {
-	return(XcmsFailure);
+    if (!((*xColorProc == XStoreColors) || (*xColorProc == XQueryColors)))
+    {
+        return (XcmsFailure);
     }
 
-    if ((ccc = XcmsCCCOfColormap(dpy, cmap)) == (XcmsCCC)NULL) {
-	return(XcmsFailure);
+    if ((ccc = XcmsCCCOfColormap(dpy, cmap)) == (XcmsCCC)NULL)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Allocate space for XColors
      */
-    if ((pXColors_in_out = Xcalloc(nColors, sizeof(XColor))) ==
-	    NULL) {
-	return(XcmsFailure);
+    if ((pXColors_in_out = Xcalloc(nColors, sizeof(XColor))) == NULL)
+    {
+        return (XcmsFailure);
     }
 
-    if (*xColorProc == XQueryColors) {
-	goto Query;
+    if (*xColorProc == XQueryColors)
+    {
+        goto Query;
     }
 
     /*
      * Convert to RGB, adjusting for white point differences if necessary.
      */
-    if ((retval = XcmsConvertColors(ccc, pColors_in_out, nColors, XcmsRGBFormat,
-	    pCompressed)) == XcmsFailure) {
+    if ((retval = XcmsConvertColors(ccc,
+                                    pColors_in_out,
+                                    nColors,
+                                    XcmsRGBFormat,
+                                    pCompressed)) == XcmsFailure)
+    {
         Xfree(pXColors_in_out);
-	return(XcmsFailure);
+        return (XcmsFailure);
     }
 
 Query:
@@ -264,17 +290,21 @@ Query:
     /*
      * Now make appropriate X Call
      */
-    if ((*xColorProc == XQueryColors) || (*xColorProc == XStoreColors)){
-	/* Note: XQueryColors and XStoreColors do not return any Status */
-	(*xColorProc)(ccc->dpy, cmap, pXColors_in_out, nColors);
-    } else {
-	Xfree(pXColors_in_out);
-	return(XcmsFailure);
+    if ((*xColorProc == XQueryColors) || (*xColorProc == XStoreColors))
+    {
+    /* Note: XQueryColors and XStoreColors do not return any Status */
+        (*xColorProc)(ccc->dpy, cmap, pXColors_in_out, nColors);
+    }
+    else
+    {
+        Xfree(pXColors_in_out);
+        return (XcmsFailure);
     }
 
-    if (*xColorProc == XStoreColors) {
-	Xfree(pXColors_in_out);
-	return(retval);
+    if (*xColorProc == XStoreColors)
+    {
+        Xfree(pXColors_in_out);
+        return (retval);
     }
 
     /*
@@ -288,14 +318,19 @@ Query:
      *    format.  Note that we must use NULL instead of passing
      *    pCompressed.
      */
-    if (result_format != XcmsRGBFormat) {
-	if (XcmsConvertColors(ccc, pColors_in_out, nColors, result_format,
-		(Bool *) NULL) == XcmsFailure) {
-	    return(XcmsFailure);
-	}
+    if (result_format != XcmsRGBFormat)
+    {
+        if (XcmsConvertColors(ccc,
+                              pColors_in_out,
+                              nColors,
+                              result_format,
+                              (Bool *)NULL) == XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
     }
 
-    return(retval);
+    return (retval);
 }
 
 /* ### EOF ### */

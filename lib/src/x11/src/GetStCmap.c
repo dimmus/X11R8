@@ -46,7 +46,7 @@ SOFTWARE.
 ******************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xlibint.h"
 #include "X11/Xutil.h"
@@ -60,57 +60,64 @@ SOFTWARE.
  * in the XStandardColormap structure.
  */
 
-Status XGetStandardColormap (
-    Display *dpy,
-    Window w,
-    XStandardColormap *cmap,
-    Atom property)		/* XA_RGB_BEST_MAP, etc. */
+Status
+XGetStandardColormap(Display           *dpy,
+                     Window             w,
+                     XStandardColormap *cmap,
+                     Atom               property)  /* XA_RGB_BEST_MAP, etc. */
 {
-    Status stat;			/* return value */
-    XStandardColormap *stdcmaps;	/* will get malloced value */
-    int nstdcmaps;			/* count of above */
+    Status             stat;   /* return value */
+    XStandardColormap *stdcmaps; /* will get malloced value */
+    int                nstdcmaps;   /* count of above */
 
-    stat = XGetRGBColormaps (dpy, w, &stdcmaps, &nstdcmaps, property);
-    if (stat) {
-	XStandardColormap *use;
+    stat = XGetRGBColormaps(dpy, w, &stdcmaps, &nstdcmaps, property);
+    if (stat)
+    {
+        XStandardColormap *use;
 
-	if (nstdcmaps > 1) {
-	    VisualID vid;
-	    Screen *sp = _XScreenOfWindow (dpy, w);
-	    int i;
+        if (nstdcmaps > 1)
+        {
+            VisualID vid;
+            Screen  *sp = _XScreenOfWindow(dpy, w);
+            int      i;
 
-	    if (!sp) {
-		Xfree (stdcmaps);
-		return False;
-	    }
-	    vid = sp->root_visual->visualid;
+            if (!sp)
+            {
+                Xfree(stdcmaps);
+                return False;
+            }
+            vid = sp->root_visual->visualid;
 
-	    for (i = 0; i < nstdcmaps; i++) {
-		if (stdcmaps[i].visualid == vid) break;
-	    }
+            for (i = 0; i < nstdcmaps; i++)
+            {
+                if (stdcmaps[i].visualid == vid) break;
+            }
 
-	    if (i == nstdcmaps) {	/* not found */
-		Xfree (stdcmaps);
-		return False;
-	    }
-	    use = &stdcmaps[i];
-	} else {
-	    use = stdcmaps;
-	}
+            if (i == nstdcmaps)
+            { /* not found */
+                Xfree(stdcmaps);
+                return False;
+            }
+            use = &stdcmaps[i];
+        }
+        else
+        {
+            use = stdcmaps;
+        }
 
-	/*
+    /*
 	 * assign only those fields which were in the pre-ICCCM version
 	 */
-	cmap->colormap	 = use->colormap;
-	cmap->red_max	 = use->red_max;
-	cmap->red_mult	 = use->red_mult;
-	cmap->green_max	 = use->green_max;
-	cmap->green_mult = use->green_mult;
-	cmap->blue_max	 = use->blue_max;
-	cmap->blue_mult	 = use->blue_mult;
-	cmap->base_pixel = use->base_pixel;
+        cmap->colormap   = use->colormap;
+        cmap->red_max    = use->red_max;
+        cmap->red_mult   = use->red_mult;
+        cmap->green_max  = use->green_max;
+        cmap->green_mult = use->green_mult;
+        cmap->blue_max   = use->blue_max;
+        cmap->blue_mult  = use->blue_mult;
+        cmap->base_pixel = use->base_pixel;
 
-	Xfree (stdcmaps);	/* don't need allocated memory */
+        Xfree(stdcmaps); /* don't need allocated memory */
     }
     return stat;
 }

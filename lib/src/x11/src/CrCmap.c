@@ -25,26 +25,22 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
 
-
-Colormap XCreateColormap(
-    register Display *dpy,
-    Window w,
-    Visual *visual,
-    int alloc)
+Colormap
+XCreateColormap(register Display *dpy, Window w, Visual *visual, int alloc)
 {
     register xCreateColormapReq *req;
-    Colormap mid;
+    Colormap                     mid;
 
     LockDisplay(dpy);
     GetReq(CreateColormap, req);
     req->window = w;
     mid = req->mid = XAllocID(dpy);
-    req->alloc = alloc;
+    req->alloc     = alloc;
     if (visual == CopyFromParent) req->visual = CopyFromParent;
     else req->visual = visual->visualid;
 
@@ -55,5 +51,5 @@ Colormap XCreateColormap(
     _XcmsAddCmapRec(dpy, mid, w, visual);
 #endif
 
-    return(mid);
+    return (mid);
 }

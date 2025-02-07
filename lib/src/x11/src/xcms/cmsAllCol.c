@@ -33,13 +33,12 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
 
-
 /*
  *	NAME
  *		XcmsAllocColor - Allocate Color
@@ -47,11 +46,10 @@
  *	SYNOPSIS
  */
 Status
-XcmsAllocColor(
-    Display *dpy,
-    Colormap colormap,
-    XcmsColor *pXcmsColor_in_out,
-    XcmsColorFormat result_format)
+XcmsAllocColor(Display        *dpy,
+               Colormap        colormap,
+               XcmsColor      *pXcmsColor_in_out,
+               XcmsColorFormat result_format)
 /*
  *	DESCRIPTION
  *		Given a device-dependent or device-independent color
@@ -69,6 +67,10 @@ XcmsAllocColor(
  *
  */
 {
-    return(_XcmsSetGetColor(XAllocColor, dpy, colormap, pXcmsColor_in_out,
-	    result_format, (Bool *)NULL));
+    return (_XcmsSetGetColor(XAllocColor,
+                             dpy,
+                             colormap,
+                             pXcmsColor_in_out,
+                             result_format,
+                             (Bool *)NULL));
 }

@@ -44,13 +44,12 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
 
-
 /************************************************************************
  *									*
  *			 PUBLIC ROUTINES				*
@@ -65,11 +64,10 @@
  *	SYNOPSIS
  */
 Status
-XcmsTekHVCQueryMaxVSamples(
-    XcmsCCC ccc,
-    XcmsFloat hue,
-    XcmsColor *pColor_in_out,
-    unsigned int nSamples)
+XcmsTekHVCQueryMaxVSamples(XcmsCCC      ccc,
+                           XcmsFloat    hue,
+                           XcmsColor   *pColor_in_out,
+                           unsigned int nSamples)
 
 /*
  *	DESCRIPTION
@@ -93,69 +91,80 @@ XcmsTekHVCQueryMaxVSamples(
  *
  */
 {
-    XcmsCCCRec myCCC;
-    XcmsColor *pHVC;
-    XcmsRGBi rgb_saved;
+    XcmsCCCRec     myCCC;
+    XcmsColor     *pHVC;
+    XcmsRGBi       rgb_saved;
     unsigned short nI;
-    XcmsFloat nT;
+    XcmsFloat      nT;
 
     /*
      * Check Arguments
      */
-    if (ccc == NULL || pColor_in_out == NULL || nSamples == 0) {
-	return(XcmsFailure);
+    if (ccc == NULL || pColor_in_out == NULL || nSamples == 0)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Insure TekHVC installed
      */
-    if (XcmsAddColorSpace(&XcmsTekHVCColorSpace) == XcmsFailure) {
-	return(XcmsFailure);
+    if (XcmsAddColorSpace(&XcmsTekHVCColorSpace) == XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
     /* setup the CCC to use for the conversions. */
-    memcpy ((char *) &myCCC, (char *) ccc, sizeof(XcmsCCCRec));
+    memcpy((char *)&myCCC, (char *)ccc, sizeof(XcmsCCCRec));
     myCCC.clientWhitePt.format = XcmsUndefinedFormat;
-    myCCC.gamutCompProc = (XcmsCompressionProc) NULL;
+    myCCC.gamutCompProc        = (XcmsCompressionProc)NULL;
 
     /* Step 1: compute the maximum value and chroma for this hue. */
 
-
     /* save the Hue for use later. */
-    while (hue < 0.0) {
-	hue += 360.0;
+    while (hue < 0.0)
+    {
+        hue += 360.0;
     }
-    while (hue > 360.0) {
-	hue -= 360.0;
+    while (hue > 360.0)
+    {
+        hue -= 360.0;
     }
     pColor_in_out->spec.TekHVC.H = hue;
-    pColor_in_out->format = XcmsTekHVCFormat;
+    pColor_in_out->format        = XcmsTekHVCFormat;
 
     /* Get the maximum value and chroma point for this hue */
-    if (_XcmsTekHVCQueryMaxVCRGB(&myCCC, pColor_in_out->spec.TekHVC.H,
-	    pColor_in_out, (XcmsRGBi *)&rgb_saved) == XcmsFailure) {
-	return (XcmsFailure);
+    if (_XcmsTekHVCQueryMaxVCRGB(&myCCC,
+                                 pColor_in_out->spec.TekHVC.H,
+                                 pColor_in_out,
+                                 (XcmsRGBi *)&rgb_saved) == XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
     /* Step 2:  Convert each of the RGBi's to HVC's */
     pHVC = pColor_in_out;
-    for (nI = 0; nI < nSamples; nI++, pHVC++) {
-	nT = (XcmsFloat) nI / (XcmsFloat) nSamples;
-	pHVC->spec.RGBi.red   = rgb_saved.red * (1.0 - nT) + nT;
-	pHVC->spec.RGBi.green = rgb_saved.green * (1.0 - nT) + nT;
-	pHVC->spec.RGBi.blue  = rgb_saved.blue * (1.0 - nT) + nT;
-	pHVC->format          = XcmsRGBiFormat;
-	pHVC->pixel           = pColor_in_out->pixel;
-	/* convert from RGB to HVC */
-	if (_XcmsConvertColorsWithWhitePt(&myCCC, pHVC,
-		&myCCC.pPerScrnInfo->screenWhitePt, 1, XcmsTekHVCFormat,
-		(Bool *) NULL) == XcmsFailure) {
-	    return(XcmsFailure);
-	}
+    for (nI = 0; nI < nSamples; nI++, pHVC++)
+    {
+        nT                    = (XcmsFloat)nI / (XcmsFloat)nSamples;
+        pHVC->spec.RGBi.red   = rgb_saved.red * (1.0 - nT) + nT;
+        pHVC->spec.RGBi.green = rgb_saved.green * (1.0 - nT) + nT;
+        pHVC->spec.RGBi.blue  = rgb_saved.blue * (1.0 - nT) + nT;
+        pHVC->format          = XcmsRGBiFormat;
+        pHVC->pixel           = pColor_in_out->pixel;
+    /* convert from RGB to HVC */
+        if (_XcmsConvertColorsWithWhitePt(&myCCC,
+                                          pHVC,
+                                          &myCCC.pPerScrnInfo->screenWhitePt,
+                                          1,
+                                          XcmsTekHVCFormat,
+                                          (Bool *)NULL) == XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
 
-	/* make sure to return the input hue */
-	pHVC->spec.TekHVC.H = hue;
+    /* make sure to return the input hue */
+        pHVC->spec.TekHVC.H = hue;
     }
 
-    return(XcmsSuccess);
+    return (XcmsSuccess);
 }

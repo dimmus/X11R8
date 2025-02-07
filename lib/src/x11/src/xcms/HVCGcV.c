@@ -44,13 +44,12 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
 
-
 /************************************************************************
  *									*
  *			 PUBLIC ROUTINES				*
@@ -65,12 +64,11 @@
  */
 /* ARGSUSED */
 Status
-XcmsTekHVCClipV (
-    XcmsCCC ccc,
-    XcmsColor *pColors_in_out,
-    unsigned int nColors,
-    unsigned int i,
-    Bool *pCompressed)
+XcmsTekHVCClipV(XcmsCCC      ccc,
+                XcmsColor   *pColors_in_out,
+                unsigned int nColors,
+                unsigned int i,
+                Bool        *pCompressed)
 /*
  *	DESCRIPTION
  *		Return the closest value for a specific hue and chroma.
@@ -87,20 +85,21 @@ XcmsTekHVCClipV (
  *
  */
 {
-    XcmsColor  *pColor;
+    XcmsColor *pColor;
     XcmsColor  hvc_max;
     XcmsCCCRec myCCC;
-    Status retval;
+    Status     retval;
 
     /*
      * Insure TekHVC installed
      */
-    if (XcmsAddColorSpace(&XcmsTekHVCColorSpace) == XcmsFailure) {
-	return(XcmsFailure);
+    if (XcmsAddColorSpace(&XcmsTekHVCColorSpace) == XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
     /* Use my own CCC */
-    memcpy ((char *)&myCCC, (char *)ccc, sizeof(XcmsCCCRec));
+    memcpy((char *)&myCCC, (char *)ccc, sizeof(XcmsCCCRec));
     myCCC.clientWhitePt.format = XcmsUndefinedFormat;/* Inherit Screen WP */
     myCCC.gamutCompProc = (XcmsCompressionProc)NULL;/* no gamut compression */
 
@@ -116,86 +115,121 @@ XcmsTekHVCClipV (
     pColor = pColors_in_out + i;
 
     if (ccc->visual->class < StaticColor &&
-	    FunctionSetOfCCC(ccc) != (XPointer) &XcmsLinearRGBFunctionSet) {
-	/*
+        FunctionSetOfCCC(ccc) != (XPointer)&XcmsLinearRGBFunctionSet)
+    {
+    /*
 	 * GRAY !
 	 */
-	return(XcmsFailure);
-    } else {
-	/* Convert from CIEXYZ to TekHVC format */
-	if (_XcmsDIConvertColors(&myCCC, pColor,
-		&myCCC.pPerScrnInfo->screenWhitePt, 1, XcmsTekHVCFormat)
-		== XcmsFailure) {
-	    return(XcmsFailure);
-	}
+        return (XcmsFailure);
+    }
+    else
+    {
+    /* Convert from CIEXYZ to TekHVC format */
+        if (_XcmsDIConvertColors(&myCCC,
+                                 pColor,
+                                 &myCCC.pPerScrnInfo->screenWhitePt,
+                                 1,
+                                 XcmsTekHVCFormat) == XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
 
-	/* check to make sure we have a valid TekHVC number */
-	if (!_XcmsTekHVC_CheckModify (pColor)) {
-	    return (XcmsFailure);
-	}
+    /* check to make sure we have a valid TekHVC number */
+        if (!_XcmsTekHVC_CheckModify(pColor))
+        {
+            return (XcmsFailure);
+        }
 
-	/* Step 1: compute the maximum value and chroma for this hue. */
-	/*         This copy may be overkill but it preserves the pixel etc. */
-	memcpy((char *)&hvc_max, (char *)pColor, sizeof(XcmsColor));
-	if (_XcmsTekHVCQueryMaxVCRGB (&myCCC, hvc_max.spec.TekHVC.H, &hvc_max,
-		(XcmsRGBi *)NULL) == XcmsFailure) {
-	    return (XcmsFailure);
-	}
+    /* Step 1: compute the maximum value and chroma for this hue. */
+        /*         This copy may be overkill but it preserves the pixel etc. */
+        memcpy((char *)&hvc_max, (char *)pColor, sizeof(XcmsColor));
+        if (_XcmsTekHVCQueryMaxVCRGB(&myCCC,
+                                     hvc_max.spec.TekHVC.H,
+                                     &hvc_max,
+                                     (XcmsRGBi *)NULL) == XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
 
-	/* Now check and return the appropriate value */
-	if (pColor->spec.TekHVC.C == hvc_max.spec.TekHVC.C) {
-	    /* When the chroma input is equal to the maximum chroma */
-	    /* merely return the value for that chroma. */
-	    pColor->spec.TekHVC.V = hvc_max.spec.TekHVC.V;
-	    if (!_XcmsTekHVC_CheckModify (pColor)) {
-		return (XcmsFailure);
-	    }
-	    retval = _XcmsDIConvertColors(&myCCC, pColor,
-		    &myCCC.pPerScrnInfo->screenWhitePt, 1, XcmsCIEXYZFormat);
-	} else if (pColor->spec.TekHVC.C > hvc_max.spec.TekHVC.C) {
-	    /* When the chroma input is greater than the maximum chroma */
-	    /* merely return the value and chroma for the given hue. */
-	    pColor->spec.TekHVC.C = hvc_max.spec.TekHVC.C;
-	    pColor->spec.TekHVC.V = hvc_max.spec.TekHVC.V;
-	    return (XcmsFailure);
-	} else if (pColor->spec.TekHVC.V < hvc_max.spec.TekHVC.V) {
-	    /* When the value input is less than the maximum value point */
-	    /* compute the intersection of the line from 0,0 to max_V, max_C */
-	    /* using the chroma input. */
-	    pColor->spec.TekHVC.V = pColor->spec.TekHVC.C *
-				    hvc_max.spec.TekHVC.V / hvc_max.spec.TekHVC.C;
-	    if (pColor->spec.TekHVC.V >= hvc_max.spec.TekHVC.V) {
-		pColor->spec.TekHVC.C = hvc_max.spec.TekHVC.C;
-		pColor->spec.TekHVC.V = hvc_max.spec.TekHVC.V;
-	    }
-	    if (!_XcmsTekHVC_CheckModify (pColor)) {
-		return (XcmsFailure);
-	    }
-	    retval = _XcmsDIConvertColors(&myCCC, pColor,
-		    &myCCC.pPerScrnInfo->screenWhitePt, 1, XcmsCIEXYZFormat);
-	} else {
-	    /* When the value input is greater than the maximum value point */
-	    /* use HvcMaxValue to find the maximum value for the given chroma. */
-	    if (pColor->format != XcmsTekHVCFormat) {
-		if (_XcmsDIConvertColors(ccc, pColor,
-			&ccc->pPerScrnInfo->screenWhitePt, 1, XcmsCIEXYZFormat)
-			== XcmsFailure) {
-		    return(XcmsFailure);
-		}
-	    }
-	    if (XcmsTekHVCQueryMaxV(&myCCC,
-		    pColor->spec.TekHVC.H,
-		    pColor->spec.TekHVC.C,
-		    pColor)
-		    == XcmsFailure) {
-		return (XcmsFailure);
-	    }
-	    retval = _XcmsDIConvertColors(&myCCC, pColor,
-		    &myCCC.pPerScrnInfo->screenWhitePt, 1, XcmsCIEXYZFormat);
-	}
-	if (retval != XcmsFailure && pCompressed != NULL) {
-	    *(pCompressed + i) = True;
-	}
-	return(retval);
+        /* Now check and return the appropriate value */
+        if (pColor->spec.TekHVC.C == hvc_max.spec.TekHVC.C)
+        {
+            /* When the chroma input is equal to the maximum chroma */
+            /* merely return the value for that chroma. */
+            pColor->spec.TekHVC.V = hvc_max.spec.TekHVC.V;
+            if (!_XcmsTekHVC_CheckModify(pColor))
+            {
+                return (XcmsFailure);
+            }
+            retval = _XcmsDIConvertColors(&myCCC,
+                                          pColor,
+                                          &myCCC.pPerScrnInfo->screenWhitePt,
+                                          1,
+                                          XcmsCIEXYZFormat);
+        }
+        else if (pColor->spec.TekHVC.C > hvc_max.spec.TekHVC.C)
+        {
+            /* When the chroma input is greater than the maximum chroma */
+            /* merely return the value and chroma for the given hue. */
+            pColor->spec.TekHVC.C = hvc_max.spec.TekHVC.C;
+            pColor->spec.TekHVC.V = hvc_max.spec.TekHVC.V;
+            return (XcmsFailure);
+        }
+        else if (pColor->spec.TekHVC.V < hvc_max.spec.TekHVC.V)
+        {
+            /* When the value input is less than the maximum value point */
+            /* compute the intersection of the line from 0,0 to max_V, max_C */
+            /* using the chroma input. */
+            pColor->spec.TekHVC.V = pColor->spec.TekHVC.C *
+                                    hvc_max.spec.TekHVC.V /
+                                    hvc_max.spec.TekHVC.C;
+            if (pColor->spec.TekHVC.V >= hvc_max.spec.TekHVC.V)
+            {
+                pColor->spec.TekHVC.C = hvc_max.spec.TekHVC.C;
+                pColor->spec.TekHVC.V = hvc_max.spec.TekHVC.V;
+            }
+            if (!_XcmsTekHVC_CheckModify(pColor))
+            {
+                return (XcmsFailure);
+            }
+            retval = _XcmsDIConvertColors(&myCCC,
+                                          pColor,
+                                          &myCCC.pPerScrnInfo->screenWhitePt,
+                                          1,
+                                          XcmsCIEXYZFormat);
+        }
+        else
+        {
+            /* When the value input is greater than the maximum value point */
+            /* use HvcMaxValue to find the maximum value for the given chroma. */
+            if (pColor->format != XcmsTekHVCFormat)
+            {
+                if (_XcmsDIConvertColors(ccc,
+                                         pColor,
+                                         &ccc->pPerScrnInfo->screenWhitePt,
+                                         1,
+                                         XcmsCIEXYZFormat) == XcmsFailure)
+                {
+                    return (XcmsFailure);
+                }
+            }
+            if (XcmsTekHVCQueryMaxV(&myCCC,
+                                    pColor->spec.TekHVC.H,
+                                    pColor->spec.TekHVC.C,
+                                    pColor) == XcmsFailure)
+            {
+                return (XcmsFailure);
+            }
+            retval = _XcmsDIConvertColors(&myCCC,
+                                          pColor,
+                                          &myCCC.pPerScrnInfo->screenWhitePt,
+                                          1,
+                                          XcmsCIEXYZFormat);
+        }
+        if (retval != XcmsFailure && pCompressed != NULL)
+        {
+            *(pCompressed + i) = True;
+        }
+        return (retval);
     }
 }

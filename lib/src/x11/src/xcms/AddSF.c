@@ -33,7 +33,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
@@ -43,10 +43,9 @@
  *      DEFINES
  */
 #define NextUnregDdCsID(lastid) \
-	    (XCMS_UNREG_ID(lastid) ? ++lastid : XCMS_FIRST_UNREG_DD_ID)
-#define MIN(x,y) ((x) > (y) ? (y) : (x))
+    (XCMS_UNREG_ID(lastid) ? ++lastid : XCMS_FIRST_UNREG_DD_ID)
+#define MIN(x, y) ((x) > (y) ? (y) : (x))
 
-
 /*
  *	NAME
  *		XcmsAddFunctionSet - Add an Screen Color Characterization
@@ -80,66 +79,77 @@ XcmsAddFunctionSet(XcmsFunctionSet *pNewFS)
  */
 {
     XcmsFunctionSet **papSCCFuncSets = _XcmsSCCFuncSets;
-    XcmsColorSpace **papNewCSs;
-    XcmsColorSpace *pNewCS, **paptmpCS;
-    XcmsColorFormat lastID = 0;
+    XcmsColorSpace  **papNewCSs;
+    XcmsColorSpace   *pNewCS, **paptmpCS;
+    XcmsColorFormat   lastID = 0;
 
-
-    if (papSCCFuncSets != NULL) {
-	if ((papNewCSs = pNewFS->DDColorSpaces) == NULL) {
-	    /*
+    if (papSCCFuncSets != NULL)
+    {
+        if ((papNewCSs = pNewFS->DDColorSpaces) == NULL)
+        {
+        /*
 	     * Error, new Screen Color Characterization Function Set
 	     *	missing color spaces
 	     */
-	    return(XcmsFailure);
-	}
-	while ((pNewCS = *papNewCSs++) != NULL) {
-	    if ((pNewCS->id = _XcmsRegFormatOfPrefix(pNewCS->prefix)) != 0) {
-		if (XCMS_DI_ID(pNewCS->id)) {
-		    /* This is a Device-Independent Color Space */
-		    return(XcmsFailure);
-		}
-		/*
+            return (XcmsFailure);
+        }
+        while ((pNewCS = *papNewCSs++) != NULL)
+        {
+            if ((pNewCS->id = _XcmsRegFormatOfPrefix(pNewCS->prefix)) != 0)
+            {
+                if (XCMS_DI_ID(pNewCS->id))
+                {
+            /* This is a Device-Independent Color Space */
+                    return (XcmsFailure);
+                }
+        /*
 		 * REGISTERED DD Color Space
 		 *    therefore use the registered ID.
 		 */
-	    } else {
-		/*
+            }
+            else
+            {
+        /*
 		 * UNREGISTERED DD Color Space
 		 *    then see if the color space is already in
 		 *    _XcmsDDColorSpaces.
 		 *	    a. If same prefix, then use the same ID.
 		 *	    b. Otherwise, use a new ID.
 		 */
-		for (paptmpCS = _XcmsDDColorSpaces; *paptmpCS != NULL;
-			paptmpCS++){
-		    lastID = MIN(lastID, (*paptmpCS)->id);
-		    if (strcmp(pNewCS->prefix, (*paptmpCS)->prefix) == 0) {
-			pNewCS->id = (*paptmpCS)->id;
-			break;
-		    }
-		}
-		if (pNewCS->id == 0) {
-		    /* still haven't found one */
-		    pNewCS->id = NextUnregDdCsID(lastID);
-		    if ((paptmpCS = (XcmsColorSpace **)_XcmsPushPointerArray(
-		   	    (XPointer *) _XcmsDDColorSpaces,
-			    (XPointer) pNewCS,
-			    (XPointer *) _XcmsDDColorSpacesInit)) == NULL) {
-			return(XcmsFailure);
-		    }
-		    _XcmsDDColorSpaces = paptmpCS;
-		}
-	    }
-	}
+                for (paptmpCS = _XcmsDDColorSpaces; *paptmpCS != NULL;
+                     paptmpCS++)
+                {
+                    lastID = MIN(lastID, (*paptmpCS)->id);
+                    if (strcmp(pNewCS->prefix, (*paptmpCS)->prefix) == 0)
+                    {
+                        pNewCS->id = (*paptmpCS)->id;
+                        break;
+                    }
+                }
+                if (pNewCS->id == 0)
+                {
+            /* still haven't found one */
+                    pNewCS->id = NextUnregDdCsID(lastID);
+                    if ((paptmpCS = (XcmsColorSpace **)_XcmsPushPointerArray(
+                             (XPointer *)_XcmsDDColorSpaces,
+                             (XPointer)pNewCS,
+                             (XPointer *)_XcmsDDColorSpacesInit)) == NULL)
+                    {
+                        return (XcmsFailure);
+                    }
+                    _XcmsDDColorSpaces = paptmpCS;
+                }
+            }
+        }
     }
-    if ((papSCCFuncSets = (XcmsFunctionSet **)
-	    _XcmsPushPointerArray((XPointer *) _XcmsSCCFuncSets,
-	    (XPointer) pNewFS,
-	    (XPointer *)_XcmsSCCFuncSetsInit)) == NULL) {
-	return(XcmsFailure);
+    if ((papSCCFuncSets = (XcmsFunctionSet **)_XcmsPushPointerArray(
+             (XPointer *)_XcmsSCCFuncSets,
+             (XPointer)pNewFS,
+             (XPointer *)_XcmsSCCFuncSetsInit)) == NULL)
+    {
+        return (XcmsFailure);
     }
     _XcmsSCCFuncSets = papSCCFuncSets;
 
-    return(XcmsSuccess);
+    return (XcmsSuccess);
 }

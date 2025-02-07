@@ -33,13 +33,11 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
-
-
 
 /************************************************************************
  *									*
@@ -54,14 +52,13 @@
  *	SYNOPSIS
  */
 Status
-XcmsCIELuvWhiteShiftColors(
-    XcmsCCC ccc,
-    XcmsColor *pWhitePtFrom,
-    XcmsColor *pWhitePtTo,
-    XcmsColorFormat destSpecFmt,
-    XcmsColor *pColors_in_out,
-    unsigned int nColors,
-    Bool *pCompressed)
+XcmsCIELuvWhiteShiftColors(XcmsCCC         ccc,
+                           XcmsColor      *pWhitePtFrom,
+                           XcmsColor      *pWhitePtTo,
+                           XcmsColorFormat destSpecFmt,
+                           XcmsColor      *pColors_in_out,
+                           unsigned int    nColors,
+                           Bool           *pCompressed)
 /*
  *	DESCRIPTION
  *		Adjusts color specifications in an array of XcmsColor
@@ -74,8 +71,9 @@ XcmsCIELuvWhiteShiftColors(
  *			gamut compression.
  */
 {
-    if (pWhitePtFrom == NULL || pWhitePtTo == NULL || pColors_in_out == NULL) {
-	return(XcmsFailure);
+    if (pWhitePtFrom == NULL || pWhitePtTo == NULL || pColors_in_out == NULL)
+    {
+        return (XcmsFailure);
     }
 
     /*
@@ -83,14 +81,23 @@ XcmsCIELuvWhiteShiftColors(
      *    We can ignore return value for compression because we are converting
      *    to XcmsCIELuvFormat which is device-independent, not device-dependent.
      */
-    if (_XcmsConvertColorsWithWhitePt(ccc, pColors_in_out, pWhitePtFrom,
-	    nColors, XcmsCIELuvFormat, pCompressed) == XcmsFailure) {
-	return(XcmsFailure);
+    if (_XcmsConvertColorsWithWhitePt(ccc,
+                                      pColors_in_out,
+                                      pWhitePtFrom,
+                                      nColors,
+                                      XcmsCIELuvFormat,
+                                      pCompressed) == XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Convert from CIELuv to destSpecFmt using pWhitePtTo
      */
-    return(_XcmsConvertColorsWithWhitePt(ccc, pColors_in_out, pWhitePtTo,
-	    nColors, destSpecFmt, pCompressed));
+    return (_XcmsConvertColorsWithWhitePt(ccc,
+                                          pColors_in_out,
+                                          pWhitePtTo,
+                                          nColors,
+                                          destSpecFmt,
+                                          pCompressed));
 }

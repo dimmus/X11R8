@@ -28,7 +28,7 @@ from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xutil.h"
@@ -49,114 +49,105 @@ static int
 ReadInteger(char *string, char **NextString)
 {
     register int Result = 0;
-    int Sign = 1;
+    int          Sign   = 1;
 
-    if (*string == '+')
-	string++;
+    if (*string == '+') string++;
     else if (*string == '-')
     {
-	string++;
-	Sign = -1;
+        string++;
+        Sign = -1;
     }
     for (; (*string >= '0') && (*string <= '9'); string++)
     {
-	Result = (Result * 10) + (*string - '0');
+        Result = (Result * 10) + (*string - '0');
     }
     *NextString = string;
-    if (Sign >= 0)
-	return (Result);
-    else
-	return (-Result);
+    if (Sign >= 0) return (Result);
+    else return (-Result);
 }
 
 int
-XParseGeometry (
-_Xconst char *string,
-int *x,
-int *y,
-unsigned int *width,    /* RETURN */
-unsigned int *height)    /* RETURN */
+XParseGeometry(_Xconst char *string,
+               int          *x,
+               int          *y,
+               unsigned int *width,    /* RETURN */
+               unsigned int *height)    /* RETURN */
 {
-	int mask = NoValue;
-	register char *strind;
-	unsigned int tempWidth = 0, tempHeight = 0;
-	int tempX = 0, tempY = 0;
-	char *nextCharacter;
+    int            mask = NoValue;
+    register char *strind;
+    unsigned int   tempWidth = 0, tempHeight = 0;
+    int            tempX = 0, tempY = 0;
+    char          *nextCharacter;
 
-	if ( (string == NULL) || (*string == '\0')) return(mask);
-	if (*string == '=')
-		string++;  /* ignore possible '=' at beg of geometry spec */
+    if ((string == NULL) || (*string == '\0')) return (mask);
+    if (*string == '=')
+        string++;  /* ignore possible '=' at beg of geometry spec */
 
-	strind = (char *)string;
-	if (*strind != '+' && *strind != '-' && *strind != 'x') {
-		tempWidth = ReadInteger(strind, &nextCharacter);
-		if (strind == nextCharacter)
-		    return (0);
-		strind = nextCharacter;
-		mask |= WidthValue;
-	}
+    strind = (char *)string;
+    if (*strind != '+' && *strind != '-' && *strind != 'x')
+    {
+        tempWidth = ReadInteger(strind, &nextCharacter);
+        if (strind == nextCharacter) return (0);
+        strind = nextCharacter;
+        mask |= WidthValue;
+    }
 
-	if (*strind == 'x' || *strind == 'X') {
-		strind++;
-		tempHeight = ReadInteger(strind, &nextCharacter);
-		if (strind == nextCharacter)
-		    return (0);
-		strind = nextCharacter;
-		mask |= HeightValue;
-	}
+    if (*strind == 'x' || *strind == 'X')
+    {
+        strind++;
+        tempHeight = ReadInteger(strind, &nextCharacter);
+        if (strind == nextCharacter) return (0);
+        strind = nextCharacter;
+        mask |= HeightValue;
+    }
 
-	if ((*strind == '+') || (*strind == '-')) {
-		if (*strind == '-') {
-  			strind++;
-			tempX = -ReadInteger(strind, &nextCharacter);
-			if (strind == nextCharacter)
-			    return (0);
-			strind = nextCharacter;
-			mask |= XNegative;
+    if ((*strind == '+') || (*strind == '-'))
+    {
+        if (*strind == '-')
+        {
+            strind++;
+            tempX = -ReadInteger(strind, &nextCharacter);
+            if (strind == nextCharacter) return (0);
+            strind = nextCharacter;
+            mask |= XNegative;
+        }
+        else
+        {
+            strind++;
+            tempX = ReadInteger(strind, &nextCharacter);
+            if (strind == nextCharacter) return (0);
+            strind = nextCharacter;
+        }
+        mask |= XValue;
+        if ((*strind == '+') || (*strind == '-'))
+        {
+            if (*strind == '-')
+            {
+                strind++;
+                tempY = -ReadInteger(strind, &nextCharacter);
+                if (strind == nextCharacter) return (0);
+                strind = nextCharacter;
+                mask |= YNegative;
+            }
+            else
+            {
+                strind++;
+                tempY = ReadInteger(strind, &nextCharacter);
+                if (strind == nextCharacter) return (0);
+                strind = nextCharacter;
+            }
+            mask |= YValue;
+        }
+    }
 
-		}
-		else
-		{	strind++;
-			tempX = ReadInteger(strind, &nextCharacter);
-			if (strind == nextCharacter)
-			    return(0);
-			strind = nextCharacter;
-		}
-		mask |= XValue;
-		if ((*strind == '+') || (*strind == '-')) {
-			if (*strind == '-') {
-				strind++;
-				tempY = -ReadInteger(strind, &nextCharacter);
-				if (strind == nextCharacter)
-			    	    return(0);
-				strind = nextCharacter;
-				mask |= YNegative;
-
-			}
-			else
-			{
-				strind++;
-				tempY = ReadInteger(strind, &nextCharacter);
-				if (strind == nextCharacter)
-			    	    return(0);
-				strind = nextCharacter;
-			}
-			mask |= YValue;
-		}
-	}
-
-	/* If strind isn't at the end of the string the it's an invalid
+    /* If strind isn't at the end of the string the it's an invalid
 		geometry specification. */
 
-	if (*strind != '\0') return (0);
+    if (*strind != '\0') return (0);
 
-	if (mask & XValue)
-	    *x = tempX;
- 	if (mask & YValue)
-	    *y = tempY;
-	if (mask & WidthValue)
-            *width = tempWidth;
-	if (mask & HeightValue)
-            *height = tempHeight;
-	return (mask);
+    if (mask & XValue) *x = tempX;
+    if (mask & YValue) *y = tempY;
+    if (mask & WidthValue) *width = tempWidth;
+    if (mask & HeightValue) *height = tempHeight;
+    return (mask);
 }

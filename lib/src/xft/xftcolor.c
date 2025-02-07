@@ -23,101 +23,97 @@
 #include "xftint.h"
 
 _X_EXPORT Bool
-XftColorAllocName (Display          *dpy,
-		   _Xconst Visual   *visual _X_UNUSED,
-		   Colormap          cmap,
-		   _Xconst char	    *name,
-		   XftColor         *result)
+XftColorAllocName(Display               *dpy,
+                  _Xconst Visual *visual _X_UNUSED,
+                  Colormap               cmap,
+                  _Xconst char          *name,
+                  XftColor              *result)
 {
-    XColor  screen, exact;
+    XColor screen, exact;
 
-    if (!XAllocNamedColor (dpy, cmap, name, &screen, &exact))
+    if (!XAllocNamedColor(dpy, cmap, name, &screen, &exact))
     {
-	/* XXX stick standard colormap stuff here */
-	return False;
+    /* XXX stick standard colormap stuff here */
+        return False;
     }
 
-    result->pixel = screen.pixel;
-    result->color.red = exact.red;
+    result->pixel       = screen.pixel;
+    result->color.red   = exact.red;
     result->color.green = exact.green;
-    result->color.blue = exact.blue;
+    result->color.blue  = exact.blue;
     result->color.alpha = 0xffff;
     return True;
 }
 
 static short
-maskbase (unsigned long m)
+maskbase(unsigned long m)
 {
-    short        i;
+    short i;
 
-    if (!m)
-	return 0;
+    if (!m) return 0;
     i = 0;
-    while (!(m&1))
+    while (!(m & 1))
     {
-	m>>=1;
-	i++;
+        m >>= 1;
+        i++;
     }
     return i;
 }
 
 static short
-masklen (unsigned long m)
+masklen(unsigned long m)
 {
     unsigned long y;
 
-    y = (m >> 1) &033333333333;
-    y = m - y - ((y >>1) & 033333333333);
-    return (short) (((y + (y >> 3)) & 030707070707) % 077);
+    y = (m >> 1) & 033333333333;
+    y = m - y - ((y >> 1) & 033333333333);
+    return (short)(((y + (y >> 3)) & 030707070707) % 077);
 }
 
 _X_EXPORT Bool
-XftColorAllocValue (Display	    *dpy,
-		    Visual	    *visual,
-		    Colormap	    cmap,
-		    _Xconst XRenderColor    *color,
-		    XftColor	    *result)
+XftColorAllocValue(Display              *dpy,
+                   Visual               *visual,
+                   Colormap              cmap,
+                   _Xconst XRenderColor *color,
+                   XftColor             *result)
 {
     if (visual->class == TrueColor)
     {
-	int	    red_shift, red_len;
-	int	    green_shift, green_len;
-	int	    blue_shift, blue_len;
+        int red_shift, red_len;
+        int green_shift, green_len;
+        int blue_shift, blue_len;
 
-	red_shift = maskbase (visual->red_mask);
-	red_len = masklen (visual->red_mask);
-	green_shift = maskbase (visual->green_mask);
-	green_len = masklen (visual->green_mask);
-	blue_shift = maskbase (visual->blue_mask);
-	blue_len = masklen (visual->blue_mask);
-	result->pixel = (unsigned long)(((color->red   >> (16 - red_len))   << red_shift) |
-					((color->green >> (16 - green_len)) << green_shift) |
-					((color->blue  >> (16 - blue_len))  << blue_shift));
+        red_shift   = maskbase(visual->red_mask);
+        red_len     = masklen(visual->red_mask);
+        green_shift = maskbase(visual->green_mask);
+        green_len   = masklen(visual->green_mask);
+        blue_shift  = maskbase(visual->blue_mask);
+        blue_len    = masklen(visual->blue_mask);
+        result->pixel =
+            (unsigned long)(((color->red >> (16 - red_len)) << red_shift) |
+                            ((color->green >> (16 - green_len))
+                             << green_shift) |
+                            ((color->blue >> (16 - blue_len)) << blue_shift));
     }
     else
     {
-	XColor  xcolor;
+        XColor xcolor;
 
-	xcolor.red = color->red;
-	xcolor.green = color->green;
-	xcolor.blue = color->blue;
-	if (!XAllocColor (dpy, cmap, &xcolor))
-	    return False;
-	result->pixel = xcolor.pixel;
+        xcolor.red   = color->red;
+        xcolor.green = color->green;
+        xcolor.blue  = color->blue;
+        if (!XAllocColor(dpy, cmap, &xcolor)) return False;
+        result->pixel = xcolor.pixel;
     }
-    result->color.red = color->red;
+    result->color.red   = color->red;
     result->color.green = color->green;
-    result->color.blue = color->blue;
+    result->color.blue  = color->blue;
     result->color.alpha = color->alpha;
     return True;
 }
 
 _X_EXPORT void
-XftColorFree (Display	*dpy,
-	      Visual	*visual,
-	      Colormap	cmap,
-	      XftColor	*color)
+XftColorFree(Display *dpy, Visual *visual, Colormap cmap, XftColor *color)
 {
-    if (visual->class != TrueColor)
-	XFreeColors (dpy, cmap, &color->pixel, 1, 0);
+    if (visual->class != TrueColor) XFreeColors(dpy, cmap, &color->pixel, 1, 0);
 }

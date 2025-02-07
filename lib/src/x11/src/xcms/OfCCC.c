@@ -34,12 +34,10 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlib.h"
 #include "Xcms.h"
-
-
 
 /************************************************************************
  *									*
@@ -55,8 +53,7 @@
  */
 
 Display *
-XcmsDisplayOfCCC(
-    XcmsCCC ccc)
+XcmsDisplayOfCCC(XcmsCCC ccc)
 /*
  *	DESCRIPTION
  *		Queries the Display of the specified CCC.
@@ -66,10 +63,9 @@ XcmsDisplayOfCCC(
  *
  */
 {
-    return(ccc->dpy);
+    return (ccc->dpy);
 }
 
-
 /*
  *	NAME
  *		XcmsVisualOfCCC
@@ -78,8 +74,7 @@ XcmsDisplayOfCCC(
  */
 
 Visual *
-XcmsVisualOfCCC(
-    XcmsCCC ccc)
+XcmsVisualOfCCC(XcmsCCC ccc)
 /*
  *	DESCRIPTION
  *		Queries the Visual of the specified CCC.
@@ -89,10 +84,9 @@ XcmsVisualOfCCC(
  *
  */
 {
-    return(ccc->visual);
+    return (ccc->visual);
 }
 
-
 /*
  *	NAME
  *		XcmsScreenNumberOfCCC
@@ -101,8 +95,7 @@ XcmsVisualOfCCC(
  */
 
 int
-XcmsScreenNumberOfCCC(
-    XcmsCCC ccc)
+XcmsScreenNumberOfCCC(XcmsCCC ccc)
 /*
  *	DESCRIPTION
  *		Queries the screen number of the specified CCC.
@@ -112,10 +105,9 @@ XcmsScreenNumberOfCCC(
  *
  */
 {
-    return(ccc->screenNumber);
+    return (ccc->screenNumber);
 }
 
-
 /*
  *	NAME
  *		XcmsScreenWhitePointOfCCC
@@ -124,8 +116,7 @@ XcmsScreenNumberOfCCC(
  */
 
 XcmsColor *
-XcmsScreenWhitePointOfCCC(
-    XcmsCCC ccc)
+XcmsScreenWhitePointOfCCC(XcmsCCC ccc)
 /*
  *	DESCRIPTION
  *		Queries the screen white point of the specified CCC.
@@ -135,10 +126,9 @@ XcmsScreenWhitePointOfCCC(
  *
  */
 {
-    return(&ccc->pPerScrnInfo->screenWhitePt);
+    return (&ccc->pPerScrnInfo->screenWhitePt);
 }
 
-
 /*
  *	NAME
  *		XcmsClientWhitePointOfCCC
@@ -147,8 +137,7 @@ XcmsScreenWhitePointOfCCC(
  */
 
 XcmsColor *
-XcmsClientWhitePointOfCCC(
-    XcmsCCC ccc)
+XcmsClientWhitePointOfCCC(XcmsCCC ccc)
 /*
  *	DESCRIPTION
  *		Queries the client white point of the specified CCC.
@@ -158,5 +147,5 @@ XcmsClientWhitePointOfCCC(
  *
  */
 {
-    return(&ccc->clientWhitePt);
+    return (&ccc->clientWhitePt);
 }

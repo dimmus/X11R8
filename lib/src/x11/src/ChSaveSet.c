@@ -25,39 +25,32 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XChangeSaveSet(
-    register Display *dpy,
-    Window win,
-    int mode)
+XChangeSaveSet(register Display *dpy, Window win, int mode)
 {
     register xChangeSaveSetReq *req;
 
     LockDisplay(dpy);
     GetReq(ChangeSaveSet, req);
     req->window = win;
-    req->mode = mode;
+    req->mode   = mode;
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
 
 int
-XAddToSaveSet(
-    register Display *dpy,
-    Window win)
+XAddToSaveSet(register Display *dpy, Window win)
 {
-    return XChangeSaveSet(dpy,win,SetModeInsert);
+    return XChangeSaveSet(dpy, win, SetModeInsert);
 }
 
 int
-XRemoveFromSaveSet (
-    register Display *dpy,
-    Window win)
+XRemoveFromSaveSet(register Display *dpy, Window win)
 {
-    return XChangeSaveSet(dpy,win,SetModeDelete);
+    return XChangeSaveSet(dpy, win, SetModeDelete);
 }

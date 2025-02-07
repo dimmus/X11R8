@@ -36,7 +36,7 @@ in this Software without prior written authorization from the X Consortium.
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 #include <stdio.h>
 #include <X11/IntrinsicP.h>
@@ -50,12 +50,21 @@ in this Software without prior written authorization from the X Consortium.
 
 #define offset(field) XtOffsetOf(SmeLineRec, sme_line.field)
 static XtResource resources[] = {
-  {XtNlineWidth, XtCLineWidth, XtRDimension, sizeof(Dimension),
-     offset(line_width), XtRImmediate, (XtPointer) 1},
-  {XtNstipple, XtCStipple, XtRBitmap, sizeof(Pixmap),
-     offset(stipple), XtRImmediate, (XtPointer) XtUnspecifiedPixmap},
-  {XtNforeground, XtCForeground, XtRPixel, sizeof(Pixel),
-     offset(foreground), XtRString, XtDefaultForeground},
+    { XtNlineWidth,
+     XtCLineWidth,  XtRDimension,
+     sizeof(Dimension),
+     offset(line_width),
+     XtRImmediate, (XtPointer)1                   },
+    { XtNstipple,
+     XtCStipple,    XtRBitmap,
+     sizeof(Pixmap),
+     offset(stipple),
+     XtRImmediate, (XtPointer)XtUnspecifiedPixmap },
+    { XtNforeground,
+     XtCForeground, XtRPixel,
+     sizeof(Pixel),
+     offset(foreground),
+     XtRString,    XtDefaultForeground            },
 };
 #undef offset
 
@@ -63,64 +72,60 @@ static XtResource resources[] = {
  * Function definitions.
  */
 
-static void Redisplay(Widget, XEvent *, Region);
-static void Initialize(Widget, Widget, ArgList, Cardinal *);
-static void DestroyGC(Widget);
-static void CreateGC(Widget);
+static void    Redisplay(Widget, XEvent *, Region);
+static void    Initialize(Widget, Widget, ArgList, Cardinal *);
+static void    DestroyGC(Widget);
+static void    CreateGC(Widget);
 static Boolean SetValues(Widget, Widget, Widget, ArgList, Cardinal *);
-static XtGeometryResult QueryGeometry(Widget, XtWidgetGeometry *, XtWidgetGeometry *);
-
+static XtGeometryResult
+QueryGeometry(Widget, XtWidgetGeometry *, XtWidgetGeometry *);
 
 #define SUPERCLASS (&smeClassRec)
 
 SmeLineClassRec smeLineClassRec = {
-  {
-    /* superclass         */    (WidgetClass) SUPERCLASS,
-    /* class_name         */    "SmeLine",
-    /* size               */    sizeof(SmeLineRec),
-    /* class_initialize   */	XawInitializeWidgetSet,
-    /* class_part_initialize*/	NULL,
-    /* Class init'ed      */	FALSE,
-    /* initialize         */    Initialize,
-    /* initialize_hook    */	NULL,
-    /* realize            */    NULL,
-    /* actions            */    NULL,
-    /* num_actions        */    ZERO,
-    /* resources          */    resources,
-    /* resource_count     */	XtNumber(resources),
-    /* xrm_class          */    NULLQUARK,
-    /* compress_motion    */    FALSE,
-    /* compress_exposure  */    FALSE,
-    /* compress_enterleave*/ 	FALSE,
-    /* visible_interest   */    FALSE,
-    /* destroy            */    DestroyGC,
-    /* resize             */    NULL,
-    /* expose             */    Redisplay,
-    /* set_values         */    SetValues,
-    /* set_values_hook    */	NULL,
-    /* set_values_almost  */	XtInheritSetValuesAlmost,
-    /* get_values_hook    */	NULL,
-    /* accept_focus       */    NULL,
-    /* intrinsics version */	XtVersion,
-    /* callback offsets   */    NULL,
-    /* tm_table		  */    NULL,
-    /* query_geometry	  */    QueryGeometry,
-    /* display_accelerator*/    NULL,
-    /* extension	  */    NULL
-  },{
-    /* Menu Entry Fields */
+    { /* superclass         */ (WidgetClass)SUPERCLASS,
+     /* class_name         */ "SmeLine",
+     /* size               */ sizeof(SmeLineRec),
+     /* class_initialize   */ XawInitializeWidgetSet,
+     /* class_part_initialize*/ NULL,
+     /* Class init'ed      */ FALSE,
+     /* initialize         */ Initialize,
+     /* initialize_hook    */ NULL,
+     /* realize            */ NULL,
+     /* actions            */ NULL,
+     /* num_actions        */ ZERO,
+     /* resources          */ resources,
+     /* resource_count     */ XtNumber(resources),
+     /* xrm_class          */ NULLQUARK,
+     /* compress_motion    */ FALSE,
+     /* compress_exposure  */ FALSE,
+     /* compress_enterleave*/ FALSE,
+     /* visible_interest   */ FALSE,
+     /* destroy            */ DestroyGC,
+     /* resize             */ NULL,
+     /* expose             */ Redisplay,
+     /* set_values         */ SetValues,
+     /* set_values_hook    */ NULL,
+     /* set_values_almost  */ XtInheritSetValuesAlmost,
+     /* get_values_hook    */ NULL,
+     /* accept_focus       */ NULL,
+     /* intrinsics version */ XtVersion,
+     /* callback offsets   */ NULL,
+     /* tm_table		  */ NULL,
+     /* query_geometry	  */ QueryGeometry,
+     /* display_accelerator*/ NULL,
+     /* extension	  */ NULL },
+    {    /* Menu Entry Fields */
 
-    /* highlight */             XtInheritHighlight,
-    /* unhighlight */           XtInheritUnhighlight,
-    /* notify */		XtInheritNotify,
-    /* extension */             NULL
-  },{
-    /* Line Menu Entry Fields */
-    /* extension */             NULL
-  }
+      /* highlight */ XtInheritHighlight,
+     /* unhighlight */ XtInheritUnhighlight,
+     /* notify */ XtInheritNotify,
+     /* extension */ NULL },
+    {    /* Line Menu Entry Fields */
+      /* extension */ NULL }
 };
 
-WidgetClass smeLineObjectClass = (WidgetClass) &smeLineClassRec;
+WidgetClass smeLineObjectClass = (WidgetClass)&smeLineClassRec;
 
 /************************************************************
  *
@@ -143,7 +148,7 @@ Initialize(Widget request, Widget new, ArgList args, Cardinal *num_args)
     SmeLineObject entry = (SmeLineObject) new;
 
     if (entry->rectangle.height == 0)
-	entry->rectangle.height = entry->sme_line.line_width;
+        entry->rectangle.height = entry->sme_line.line_width;
 
     CreateGC(new);
 }
@@ -160,25 +165,26 @@ Initialize(Widget request, Widget new, ArgList args, Cardinal *num_args)
 static void
 CreateGC(Widget w)
 {
-    SmeLineObject entry = (SmeLineObject) w;
-    XGCValues values;
-    XtGCMask mask = GCForeground | GCGraphicsExposures | GCLineWidth ;
+    SmeLineObject entry = (SmeLineObject)w;
+    XGCValues     values;
+    XtGCMask      mask = GCForeground | GCGraphicsExposures | GCLineWidth;
 
-    values.foreground = entry->sme_line.foreground;
+    values.foreground         = entry->sme_line.foreground;
     values.graphics_exposures = FALSE;
-    values.line_width = entry->sme_line.line_width;
+    values.line_width         = entry->sme_line.line_width;
 
-    if (entry->sme_line.stipple != XtUnspecifiedPixmap) {
-	values.stipple = entry->sme_line.stipple;
-	values.fill_style = FillStippled;
-	mask |= GCStipple | GCFillStyle;
+    if (entry->sme_line.stipple != XtUnspecifiedPixmap)
+    {
+        values.stipple    = entry->sme_line.stipple;
+        values.fill_style = FillStippled;
+        mask |= GCStipple | GCFillStyle;
 
-	entry->sme_line.gc = XCreateGC(XtDisplayOfObject(w),
-				      RootWindowOfScreen(XtScreenOfObject(w)),
-				      mask, &values);
+        entry->sme_line.gc = XCreateGC(XtDisplayOfObject(w),
+                                       RootWindowOfScreen(XtScreenOfObject(w)),
+                                       mask,
+                                       &values);
     }
-    else
-	entry->sme_line.gc = XtGetGC(w, mask, &values);
+    else entry->sme_line.gc = XtGetGC(w, mask, &values);
 }
 
 /*	Function Name: DestroyGC
@@ -190,12 +196,11 @@ CreateGC(Widget w)
 static void
 DestroyGC(Widget w)
 {
-    SmeLineObject entry = (SmeLineObject) w;
+    SmeLineObject entry = (SmeLineObject)w;
 
     if (entry->sme_line.stipple != XtUnspecifiedPixmap)
-	XFreeGC(XtDisplayOfObject(w), entry->sme_line.gc);
-    else
-	XtReleaseGC(w, entry->sme_line.gc);
+        XFreeGC(XtDisplayOfObject(w), entry->sme_line.gc);
+    else XtReleaseGC(w, entry->sme_line.gc);
 }
 
 /*	Function Name: Redisplay
@@ -209,20 +214,23 @@ DestroyGC(Widget w)
 static void
 Redisplay(Widget w, XEvent *event, Region region)
 {
-    SmeLineObject entry = (SmeLineObject) w;
-    SimpleMenuWidget smw = (SimpleMenuWidget) XtParent (w);
-    ThreeDWidget tdw = (ThreeDWidget) smw->simple_menu.threeD;
-    Dimension s = tdw->threeD.shadow_width;
-    int y = entry->rectangle.y +
-	    (int)(entry->rectangle.height - entry->sme_line.line_width) / 2;
+    SmeLineObject    entry = (SmeLineObject)w;
+    SimpleMenuWidget smw   = (SimpleMenuWidget)XtParent(w);
+    ThreeDWidget     tdw   = (ThreeDWidget)smw->simple_menu.threeD;
+    Dimension        s     = tdw->threeD.shadow_width;
+    int              y     = entry->rectangle.y +
+            (int)(entry->rectangle.height - entry->sme_line.line_width) / 2;
 
     if (entry->sme_line.stipple != XtUnspecifiedPixmap)
-	XSetTSOrigin(XtDisplayOfObject(w), entry->sme_line.gc, 0, y);
+        XSetTSOrigin(XtDisplayOfObject(w), entry->sme_line.gc, 0, y);
 
-    XFillRectangle(XtDisplayOfObject(w), XtWindowOfObject(w),
-		   entry->sme_line.gc,
-		   s, y, (unsigned int) entry->rectangle.width - 2 * s,
-		   (unsigned int) entry->sme_line.line_width );
+    XFillRectangle(XtDisplayOfObject(w),
+                   XtWindowOfObject(w),
+                   entry->sme_line.gc,
+                   s,
+                   y,
+                   (unsigned int)entry->rectangle.width - 2 * s,
+                   (unsigned int)entry->sme_line.line_width);
 }
 
 /*      Function Name: SetValues
@@ -235,18 +243,23 @@ Redisplay(Widget w, XEvent *event, Region region)
 
 /* ARGSUSED */
 static Boolean
-SetValues(Widget current, Widget request, Widget new, ArgList args, Cardinal *num_args)
+SetValues(Widget current,
+          Widget request,
+          Widget new,
+          ArgList   args,
+          Cardinal *num_args)
 {
-    SmeLineObject entry = (SmeLineObject) new;
-    SmeLineObject old_entry = (SmeLineObject) current;
+    SmeLineObject entry     = (SmeLineObject) new;
+    SmeLineObject old_entry = (SmeLineObject)current;
 
-    if ( (entry->sme_line.line_width != old_entry->sme_line.line_width) &&
-	 (entry->sme_line.stipple != old_entry->sme_line.stipple) ) {
-	DestroyGC(current);
-	CreateGC(new);
-	return(TRUE);
+    if ((entry->sme_line.line_width != old_entry->sme_line.line_width) &&
+        (entry->sme_line.stipple != old_entry->sme_line.stipple))
+    {
+        DestroyGC(current);
+        CreateGC(new);
+        return (TRUE);
     }
-    return(FALSE);
+    return (FALSE);
 }
 
 /*	Function Name: QueryGeometry.
@@ -261,24 +274,26 @@ SetValues(Widget current, Widget request, Widget new, ArgList args, Cardinal *nu
  */
 
 static XtGeometryResult
-QueryGeometry(Widget w, XtWidgetGeometry *intended, XtWidgetGeometry *return_val)
+QueryGeometry(Widget            w,
+              XtWidgetGeometry *intended,
+              XtWidgetGeometry *return_val)
 {
-    SmeObject entry = (SmeObject) w;
-    Dimension width;
+    SmeObject        entry = (SmeObject)w;
+    Dimension        width;
     XtGeometryResult ret_val = XtGeometryYes;
-    XtGeometryMask mode = intended->request_mode;
+    XtGeometryMask   mode    = intended->request_mode;
 
-    width = 1;			/* we can be really small. */
+    width = 1;   /* we can be really small. */
 
-    if ( ((mode & CWWidth) && (intended->width != width)) ||
-	 !(mode & CWWidth) ) {
-	return_val->request_mode |= CWWidth;
-	return_val->width = width;
-	mode = return_val->request_mode;
+    if (((mode & CWWidth) && (intended->width != width)) || !(mode & CWWidth))
+    {
+        return_val->request_mode |= CWWidth;
+        return_val->width = width;
+        mode              = return_val->request_mode;
 
-	if ( (mode & CWWidth) && (width == entry->rectangle.width) )
-	    return(XtGeometryNo);
-	return(XtGeometryAlmost);
+        if ((mode & CWWidth) && (width == entry->rectangle.width))
+            return (XtGeometryNo);
+        return (XtGeometryAlmost);
     }
-    return(ret_val);
+    return (ret_val);
 }

@@ -25,16 +25,12 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XMoveWindow (
-    register Display *dpy,
-    Window w,
-    int x,
-    int y)
+XMoveWindow(register Display *dpy, Window w, int x, int y)
 {
     register xConfigureWindowReq *req;
 
@@ -42,15 +38,14 @@ XMoveWindow (
     GetReqExtra(ConfigureWindow, 8, req);
 
     req->window = w;
-    req->mask = CWX | CWY;
+    req->mask   = CWX | CWY;
 
     {
-	CARD32 *valuePtr = (CARD32 *) NEXTPTR(req,xConfigureWindowReq);
-	*valuePtr++ = x;
-	*valuePtr = y;
+        CARD32 *valuePtr = (CARD32 *)NEXTPTR(req, xConfigureWindowReq);
+        *valuePtr++      = x;
+        *valuePtr        = y;
     }
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

@@ -35,7 +35,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "Xlibint.h"
@@ -44,13 +44,12 @@
 #include "reallocarray.h"
 
 #ifndef XCMSCOMPPROC
-#  define XCMSCOMPPROC	XcmsTekHVCClipC
+#  define XCMSCOMPPROC XcmsTekHVCClipC
 #endif
 
 /* forward/static */
 static void _XcmsFreeDefaultCCCs(Display *dpy);
 
-
 /************************************************************************
  *									*
  *			   API PRIVATE ROUTINES				*
@@ -64,8 +63,7 @@ static void _XcmsFreeDefaultCCCs(Display *dpy);
  *	SYNOPSIS
  */
 XPointer *
-_XcmsCopyPointerArray(
-    XPointer *pap)
+_XcmsCopyPointerArray(XPointer *pap)
 /*
  *	DESCRIPTION
  *		Copies an array of NULL terminated pointers.
@@ -77,17 +75,18 @@ _XcmsCopyPointerArray(
  */
 {
     XPointer *newArray;
-    char **tmp;
-    int n;
+    char    **tmp;
+    int       n;
 
-    for (tmp = pap, n = 0; *tmp != NULL; tmp++, n++);
+    for (tmp = pap, n = 0; *tmp != NULL; tmp++, n++)
+        ;
     n++; /* add 1 to include the NULL pointer */
 
-    if ((newArray = Xmallocarray(n, sizeof(XPointer)))) {
-	memcpy((char *)newArray, (char *)pap,
-	       (unsigned)(n * sizeof(XPointer)));
+    if ((newArray = Xmallocarray(n, sizeof(XPointer))))
+    {
+        memcpy((char *)newArray, (char *)pap, (unsigned)(n * sizeof(XPointer)));
     }
-    return((XPointer *)newArray);
+    return ((XPointer *)newArray);
 }
 
 /*
@@ -97,8 +96,7 @@ _XcmsCopyPointerArray(
  *	SYNOPSIS
  */
 void
-_XcmsFreePointerArray(
-    XPointer *pap)
+_XcmsFreePointerArray(XPointer *pap)
 /*
  *	DESCRIPTION
  *		Frees an array of NULL terminated pointers.
@@ -118,10 +116,7 @@ _XcmsFreePointerArray(
  *	SYNOPSIS
  */
 XPointer *
-_XcmsPushPointerArray(
-    XPointer *pap,
-    XPointer p,
-    XPointer *papNoFree)
+_XcmsPushPointerArray(XPointer *pap, XPointer p, XPointer *papNoFree)
 /*
  *	DESCRIPTION
  *		Places the specified pointer at the head of an array of NULL
@@ -134,23 +129,27 @@ _XcmsPushPointerArray(
  */
 {
     XPointer *newArray;
-    char **tmp;
-    int n;
+    char    **tmp;
+    int       n;
 
-    for (tmp = pap, n = 0; *tmp != NULL; tmp++, n++);
+    for (tmp = pap, n = 0; *tmp != NULL; tmp++, n++)
+        ;
 
     /* add 2: 1 for the new pointer and another for the NULL pointer */
     n += 2;
 
-    if ((newArray = Xmallocarray(n, sizeof(XPointer)))) {
-	memcpy((char *)(newArray+1),(char *)pap,
-	       (unsigned)((n-1) * sizeof(XPointer)));
-	*newArray = p;
+    if ((newArray = Xmallocarray(n, sizeof(XPointer))))
+    {
+        memcpy((char *)(newArray + 1),
+               (char *)pap,
+               (unsigned)((n - 1) * sizeof(XPointer)));
+        *newArray = p;
     }
-    if (pap != papNoFree) {
+    if (pap != papNoFree)
+    {
         _XcmsFreePointerArray(pap);
     }
-    return((XPointer *)newArray);
+    return ((XPointer *)newArray);
 }
 
 /*
@@ -160,8 +159,7 @@ _XcmsPushPointerArray(
  *	SYNOPSIS
  */
 int
-_XcmsInitDefaultCCCs(
-    Display *dpy)
+_XcmsInitDefaultCCCs(Display *dpy)
 /*
  *	DESCRIPTION
  *		Initializes the Xcms per Display Info structure
@@ -172,29 +170,32 @@ _XcmsInitDefaultCCCs(
  *
  */
 {
-    int nScrn = ScreenCount(dpy);
-    int i;
+    int     nScrn = ScreenCount(dpy);
+    int     i;
     XcmsCCC ccc;
 
-    if (nScrn <= 0) {
-	return(0);
+    if (nScrn <= 0)
+    {
+        return (0);
     }
 
     /*
      * Create an array of XcmsCCC structures, one for each screen.
      * They serve as the screen's default CCC.
      */
-    if (!(ccc = Xcalloc((unsigned)nScrn, sizeof(XcmsCCCRec)))) {
-	return(0);
+    if (!(ccc = Xcalloc((unsigned)nScrn, sizeof(XcmsCCCRec))))
+    {
+        return (0);
     }
-    dpy->cms.defaultCCCs = (XPointer)ccc;
+    dpy->cms.defaultCCCs         = (XPointer)ccc;
     dpy->free_funcs->defaultCCCs = _XcmsFreeDefaultCCCs;
 
-    for (i = 0; i < nScrn; i++, ccc++) {
-	ccc->dpy = dpy;
-	ccc->screenNumber = i;
-	ccc->visual = DefaultVisual(dpy, i);
-	/*
+    for (i = 0; i < nScrn; i++, ccc++)
+    {
+        ccc->dpy           = dpy;
+        ccc->screenNumber  = i;
+        ccc->visual        = DefaultVisual(dpy, i);
+    /*
 	 * Used calloc to allocate memory so:
 	 *	ccc->clientWhitePt->format == XcmsUndefinedFormat
 	 *	ccc->gamutCompProc == NULL
@@ -206,13 +207,12 @@ _XcmsInitDefaultCCCs(
 	 * Note that the XcmsDefaultCCC routine calls _XcmsInitScrnInto
 	 * to do this.
 	 */
-	ccc->gamutCompProc = XCMSCOMPPROC;
+        ccc->gamutCompProc = XCMSCOMPPROC;
     }
 
-    return(1);
+    return (1);
 }
 
-
 /*
  *	NAME
  *		_XcmsFreeDefaultCCCs - Free Default CCCs and its PerScrnInfo
@@ -220,8 +220,7 @@ _XcmsInitDefaultCCCs(
  *	SYNOPSIS
  */
 static void
-_XcmsFreeDefaultCCCs(
-    Display *dpy)
+_XcmsFreeDefaultCCCs(Display *dpy)
 /*
  *	DESCRIPTION
  *		This routine frees the default XcmsCCC's associated with
@@ -233,9 +232,9 @@ _XcmsFreeDefaultCCCs(
  *
  */
 {
-    int nScrn = ScreenCount(dpy);
+    int     nScrn = ScreenCount(dpy);
     XcmsCCC ccc;
-    int i;
+    int     i;
 
     /*
      * Free Screen data in each DefaultCCC
@@ -243,8 +242,9 @@ _XcmsFreeDefaultCCCs(
      *		DefaultCCC's.
      */
     ccc = (XcmsCCC)dpy->cms.defaultCCCs;
-    for (i = nScrn; i--; ccc++) {
-	/*
+    for (i = nScrn; i--; ccc++)
+    {
+    /*
 	 * Check if XcmsPerScrnInfo exists.
 	 *
 	 * This is the only place where XcmsPerScrnInfo structures
@@ -252,15 +252,17 @@ _XcmsFreeDefaultCCCs(
 	 * It just so happens that we place its reference in the
 	 * default CCC.
 	 */
-	if (ccc->pPerScrnInfo) {
-	    /* Check if SCCData exists */
-	    if (ccc->pPerScrnInfo->state != XcmsInitNone
-		    && ccc->pPerScrnInfo->screenData) {
-		(*((XcmsFunctionSet *)ccc->pPerScrnInfo->functionSet)->screenFreeProc)
-			(ccc->pPerScrnInfo->screenData);
-	    }
-	    Xfree(ccc->pPerScrnInfo);
-	}
+        if (ccc->pPerScrnInfo)
+        {
+        /* Check if SCCData exists */
+            if (ccc->pPerScrnInfo->state != XcmsInitNone &&
+                ccc->pPerScrnInfo->screenData)
+            {
+                (*((XcmsFunctionSet *)ccc->pPerScrnInfo->functionSet)
+                      ->screenFreeProc)(ccc->pPerScrnInfo->screenData);
+            }
+            Xfree(ccc->pPerScrnInfo);
+        }
     }
 
     /*
@@ -270,8 +272,6 @@ _XcmsFreeDefaultCCCs(
     dpy->cms.defaultCCCs = (XPointer)NULL;
 }
 
-
-
 /*
  *	NAME
  *		_XcmsInitScrnInfo
@@ -279,9 +279,7 @@ _XcmsFreeDefaultCCCs(
  *	SYNOPSIS
  */
 int
-_XcmsInitScrnInfo(
-    register Display *dpy,
-    int screenNumber)
+_XcmsInitScrnInfo(register Display *dpy, int screenNumber)
 /*
  *	DESCRIPTION
  *		Given a display and screen number, this routine attempts
@@ -293,17 +291,19 @@ _XcmsInitScrnInfo(
  */
 {
     XcmsFunctionSet **papSCCFuncSet = _XcmsSCCFuncSets;
-    XcmsCCC defaultccc;
+    XcmsCCC           defaultccc;
 
     /*
      * Check if the XcmsCCC's for each screen has been created.
      * Really don't need to be created until some routine uses the Xcms
      * API routines.
      */
-    if ((XcmsCCC)dpy->cms.defaultCCCs == NULL) {
-	if (!_XcmsInitDefaultCCCs(dpy)) {
-	    return(0);
-	}
+    if ((XcmsCCC)dpy->cms.defaultCCCs == NULL)
+    {
+        if (!_XcmsInitDefaultCCCs(dpy))
+        {
+            return (0);
+        }
     }
 
     defaultccc = (XcmsCCC)dpy->cms.defaultCCCs + screenNumber;
@@ -313,8 +313,9 @@ _XcmsInitScrnInfo(
      *	If the function succeeds, then we got it!
      */
 
-    if (!defaultccc->pPerScrnInfo) {
-	/*
+    if (!defaultccc->pPerScrnInfo)
+    {
+    /*
 	 * This is one of two places where XcmsPerScrnInfo structures
 	 * are allocated.  There is one allocated per Screen that is
 	 * shared among visuals that do not have specific intensity
@@ -322,29 +323,32 @@ _XcmsInitScrnInfo(
 	 * for the latter (see XcmsCreateCCC).  The ones created
 	 * here are referenced by the default CCC.
 	 */
-	if (!(defaultccc->pPerScrnInfo =
-		Xcalloc(1, sizeof(XcmsPerScrnInfo)))) {
-	    return(0);
-	}
-	defaultccc->pPerScrnInfo->state = XcmsInitNone;
+        if (!(defaultccc->pPerScrnInfo = Xcalloc(1, sizeof(XcmsPerScrnInfo))))
+        {
+            return (0);
+        }
+        defaultccc->pPerScrnInfo->state = XcmsInitNone;
     }
 
-    while (*papSCCFuncSet != NULL) {
-	if ((*(*papSCCFuncSet)->screenInitProc)(dpy, screenNumber,
-		defaultccc->pPerScrnInfo)) {
-	    defaultccc->pPerScrnInfo->state = XcmsInitSuccess;
-	    return(1);
-	}
-	papSCCFuncSet++;
+    while (*papSCCFuncSet != NULL)
+    {
+        if ((*(*papSCCFuncSet)->screenInitProc)(dpy,
+                                                screenNumber,
+                                                defaultccc->pPerScrnInfo))
+        {
+            defaultccc->pPerScrnInfo->state = XcmsInitSuccess;
+            return (1);
+        }
+        papSCCFuncSet++;
     }
 
     /*
      * Use Default SCCData
      */
-    return(_XcmsLRGB_InitScrnDefault(dpy, screenNumber, defaultccc->pPerScrnInfo));
+    return (
+        _XcmsLRGB_InitScrnDefault(dpy, screenNumber, defaultccc->pPerScrnInfo));
 }
 
-
 /*
  *	NAME
  *		_XcmsFreeIntensityMaps
@@ -352,8 +356,7 @@ _XcmsInitScrnInfo(
  *	SYNOPSIS
  */
 void
-_XcmsFreeIntensityMaps(
-    Display *dpy)
+_XcmsFreeIntensityMaps(Display *dpy)
 /*
  *	DESCRIPTION
  *		Frees all XcmsIntensityMap structures in the linked list
@@ -367,17 +370,17 @@ _XcmsFreeIntensityMaps(
     XcmsIntensityMap *pNext, *pFree;
 
     pNext = (XcmsIntensityMap *)dpy->cms.perVisualIntensityMaps;
-    while (pNext != NULL) {
-	pFree = pNext;
-	pNext = pNext->pNext;
-	(*pFree->pFreeScreenData)(pFree->screenData);
-	/* Now free the XcmsIntensityMap structure */
-	Xfree(pFree);
+    while (pNext != NULL)
+    {
+        pFree = pNext;
+        pNext = pNext->pNext;
+        (*pFree->pFreeScreenData)(pFree->screenData);
+    /* Now free the XcmsIntensityMap structure */
+        Xfree(pFree);
     }
     dpy->cms.perVisualIntensityMaps = (XPointer)NULL;
 }
 
-
 /*
  *	NAME
  *		_XcmsGetIntensityMap
@@ -385,9 +388,7 @@ _XcmsFreeIntensityMaps(
  *	SYNOPSIS
  */
 XcmsIntensityMap *
-_XcmsGetIntensityMap(
-    Display *dpy,
-    Visual *visual)
+_XcmsGetIntensityMap(Display *dpy, Visual *visual)
 /*
  *	DESCRIPTION
  *		Attempts to return a per-Visual intensity map.
@@ -398,15 +399,17 @@ _XcmsGetIntensityMap(
  *
  */
 {
-    VisualID targetID = visual->visualid;
+    VisualID          targetID = visual->visualid;
     XcmsIntensityMap *pNext;
 
     pNext = (XcmsIntensityMap *)dpy->cms.perVisualIntensityMaps;
-    while (pNext != NULL) {
-	if (targetID == pNext->visualID) {
-	    return(pNext);
-	}
-	pNext = pNext->pNext;
+    while (pNext != NULL)
+    {
+        if (targetID == pNext->visualID)
+        {
+            return (pNext);
+        }
+        pNext = pNext->pNext;
     }
-    return((XcmsIntensityMap *)NULL);
+    return ((XcmsIntensityMap *)NULL);
 }

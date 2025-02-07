@@ -49,7 +49,7 @@ SOFTWARE.
 #define SMALL_COORDINATE -LARGE_COORDINATE
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xutil.h"
@@ -67,26 +67,25 @@ SOFTWARE.
  *
  */
 static void
-InsertEdgeInET(
-    EdgeTable *ET,
-    EdgeTableEntry *ETE,
-    int scanline,
-    ScanLineListBlock **SLLBlock,
-    int *iSLLBlock)
+InsertEdgeInET(EdgeTable          *ET,
+               EdgeTableEntry     *ETE,
+               int                 scanline,
+               ScanLineListBlock **SLLBlock,
+               int                *iSLLBlock)
 {
     register EdgeTableEntry *start, *prev;
-    register ScanLineList *pSLL, *pPrevSLL;
-    ScanLineListBlock *tmpSLLBlock;
+    register ScanLineList   *pSLL, *pPrevSLL;
+    ScanLineListBlock       *tmpSLLBlock;
 
     /*
      * find the right bucket to put the edge into
      */
     pPrevSLL = &ET->scanlines;
-    pSLL = pPrevSLL->next;
+    pSLL     = pPrevSLL->next;
     while (pSLL && (pSLL->scanline < scanline))
     {
         pPrevSLL = pSLL;
-        pSLL = pSLL->next;
+        pSLL     = pSLL->next;
     }
 
     /*
@@ -94,17 +93,17 @@ InsertEdgeInET(
      */
     if ((!pSLL) || (pSLL->scanline > scanline))
     {
-        if (*iSLLBlock > SLLSPERBLOCK-1)
+        if (*iSLLBlock > SLLSPERBLOCK - 1)
         {
-            tmpSLLBlock = Xmalloc(sizeof(ScanLineListBlock));
+            tmpSLLBlock       = Xmalloc(sizeof(ScanLineListBlock));
             (*SLLBlock)->next = tmpSLLBlock;
             tmpSLLBlock->next = (ScanLineListBlock *)NULL;
-            *SLLBlock = tmpSLLBlock;
-            *iSLLBlock = 0;
+            *SLLBlock         = tmpSLLBlock;
+            *iSLLBlock        = 0;
         }
         pSLL = &((*SLLBlock)->SLLs[(*iSLLBlock)++]);
 
-        pSLL->next = pPrevSLL->next;
+        pSLL->next     = pPrevSLL->next;
         pSLL->edgelist = (EdgeTableEntry *)NULL;
         pPrevSLL->next = pSLL;
     }
@@ -113,21 +112,19 @@ InsertEdgeInET(
     /*
      * now insert the edge in the right bucket
      */
-    prev = (EdgeTableEntry *)NULL;
+    prev  = (EdgeTableEntry *)NULL;
     start = pSLL->edgelist;
     while (start && (start->bres.minor_axis < ETE->bres.minor_axis))
     {
-        prev = start;
+        prev  = start;
         start = start->next;
     }
     ETE->next = start;
 
-    if (prev)
-        prev->next = ETE;
-    else
-        pSLL->edgelist = ETE;
+    if (prev) prev->next = ETE;
+    else pSLL->edgelist = ETE;
 }
-
+
 /*
  *     CreateEdgeTable
  *
@@ -154,38 +151,37 @@ InsertEdgeInET(
  */
 
 static void
-CreateETandAET(
-    register int count,
-    register XPoint *pts,
-    EdgeTable *ET,
-    EdgeTableEntry *AET,
-    register EdgeTableEntry *pETEs,
-    ScanLineListBlock   *pSLLBlock)
+CreateETandAET(register int             count,
+               register XPoint         *pts,
+               EdgeTable               *ET,
+               EdgeTableEntry          *AET,
+               register EdgeTableEntry *pETEs,
+               ScanLineListBlock       *pSLLBlock)
 {
     register XPoint *top, *bottom;
     register XPoint *PrevPt, *CurrPt;
-    int iSLLBlock = 0;
-    int dy;
+    int              iSLLBlock = 0;
+    int              dy;
 
-    if (count < 2)  return;
+    if (count < 2) return;
 
     /*
      *  initialize the Active Edge Table
      */
-    AET->next = (EdgeTableEntry *)NULL;
-    AET->back = (EdgeTableEntry *)NULL;
-    AET->nextWETE = (EdgeTableEntry *)NULL;
+    AET->next            = (EdgeTableEntry *)NULL;
+    AET->back            = (EdgeTableEntry *)NULL;
+    AET->nextWETE        = (EdgeTableEntry *)NULL;
     AET->bres.minor_axis = SMALL_COORDINATE;
 
     /*
      *  initialize the Edge Table.
      */
     ET->scanlines.next = (ScanLineList *)NULL;
-    ET->ymax = SMALL_COORDINATE;
-    ET->ymin = LARGE_COORDINATE;
-    pSLLBlock->next = (ScanLineListBlock *)NULL;
+    ET->ymax           = SMALL_COORDINATE;
+    ET->ymin           = LARGE_COORDINATE;
+    pSLLBlock->next    = (ScanLineListBlock *)NULL;
 
-    PrevPt = &pts[count-1];
+    PrevPt = &pts[count - 1];
 
     /*
      *  for each vertex in the array of points.
@@ -215,7 +211,7 @@ CreateETandAET(
          */
         if (bottom->y != top->y)
         {
-            pETEs->ymax = bottom->y-1;  /* -1 so we don't get last scanline */
+            pETEs->ymax = bottom->y - 1; /* -1 so we don't get last scanline */
 
             /*
              *  initialize integer edge algorithm
@@ -225,17 +221,15 @@ CreateETandAET(
 
             InsertEdgeInET(ET, pETEs, top->y, &pSLLBlock, &iSLLBlock);
 
-	    if (PrevPt->y > ET->ymax)
-		ET->ymax = PrevPt->y;
-	    if (PrevPt->y < ET->ymin)
-		ET->ymin = PrevPt->y;
+            if (PrevPt->y > ET->ymax) ET->ymax = PrevPt->y;
+            if (PrevPt->y < ET->ymin) ET->ymin = PrevPt->y;
             pETEs++;
         }
 
         PrevPt = CurrPt;
     }
 }
-
+
 /*
  *     loadAET
  *
@@ -246,34 +240,31 @@ CreateETandAET(
  */
 
 static void
-loadAET(
-    register EdgeTableEntry *AET,
-    register EdgeTableEntry *ETEs)
+loadAET(register EdgeTableEntry *AET, register EdgeTableEntry *ETEs)
 {
     register EdgeTableEntry *pPrevAET;
     register EdgeTableEntry *tmp;
 
     pPrevAET = AET;
-    AET = AET->next;
+    AET      = AET->next;
     while (ETEs)
     {
         while (AET && (AET->bres.minor_axis < ETEs->bres.minor_axis))
         {
             pPrevAET = AET;
-            AET = AET->next;
+            AET      = AET->next;
         }
-        tmp = ETEs->next;
+        tmp        = ETEs->next;
         ETEs->next = AET;
-        if (AET)
-            AET->back = ETEs;
-        ETEs->back = pPrevAET;
+        if (AET) AET->back = ETEs;
+        ETEs->back     = pPrevAET;
         pPrevAET->next = ETEs;
-        pPrevAET = ETEs;
+        pPrevAET       = ETEs;
 
         ETEs = tmp;
     }
 }
-
+
 /*
  *     computeWAET
  *
@@ -295,35 +286,31 @@ loadAET(
  *
  */
 static void
-computeWAET(
-    register EdgeTableEntry *AET)
+computeWAET(register EdgeTableEntry *AET)
 {
     register EdgeTableEntry *pWETE;
-    register int inside = 1;
-    register int isInside = 0;
+    register int             inside   = 1;
+    register int             isInside = 0;
 
     AET->nextWETE = (EdgeTableEntry *)NULL;
-    pWETE = AET;
-    AET = AET->next;
+    pWETE         = AET;
+    AET           = AET->next;
     while (AET)
     {
-        if (AET->ClockWise)
-            isInside++;
-        else
-            isInside--;
+        if (AET->ClockWise) isInside++;
+        else isInside--;
 
-        if ((!inside && !isInside) ||
-            ( inside &&  isInside))
+        if ((!inside && !isInside) || (inside && isInside))
         {
             pWETE->nextWETE = AET;
-            pWETE = AET;
-            inside = !inside;
+            pWETE           = AET;
+            inside          = !inside;
         }
         AET = AET->next;
     }
     pWETE->nextWETE = (EdgeTableEntry *)NULL;
 }
-
+
 /*
  *     InsertionSort
  *
@@ -334,47 +321,44 @@ computeWAET(
  */
 
 static int
-InsertionSort(
-    register EdgeTableEntry *AET)
+InsertionSort(register EdgeTableEntry *AET)
 {
     register EdgeTableEntry *pETEchase;
     register EdgeTableEntry *pETEinsert;
     register EdgeTableEntry *pETEchaseBackTMP;
-    register int changed = 0;
+    register int             changed = 0;
 
     AET = AET->next;
     while (AET)
     {
         pETEinsert = AET;
-        pETEchase = AET;
+        pETEchase  = AET;
         while (pETEchase->back->bres.minor_axis > AET->bres.minor_axis)
             pETEchase = pETEchase->back;
 
         AET = AET->next;
         if (pETEchase != pETEinsert)
         {
-            pETEchaseBackTMP = pETEchase->back;
+            pETEchaseBackTMP       = pETEchase->back;
             pETEinsert->back->next = AET;
-            if (AET)
-                AET->back = pETEinsert->back;
-            pETEinsert->next = pETEchase;
+            if (AET) AET->back = pETEinsert->back;
+            pETEinsert->next      = pETEchase;
             pETEchase->back->next = pETEinsert;
-            pETEchase->back = pETEinsert;
-            pETEinsert->back = pETEchaseBackTMP;
-            changed = 1;
+            pETEchase->back       = pETEinsert;
+            pETEinsert->back      = pETEchaseBackTMP;
+            changed               = 1;
         }
     }
-    return(changed);
+    return (changed);
 }
-
+
 /*
  *     Clean up our act.
  */
 static void
-FreeStorage(
-    register ScanLineListBlock   *pSLLBlock)
+FreeStorage(register ScanLineListBlock *pSLLBlock)
 {
-    register ScanLineListBlock   *tmpSLLBlock;
+    register ScanLineListBlock *tmpSLLBlock;
 
     while (pSLLBlock)
     {
@@ -392,74 +376,79 @@ FreeStorage(
  *     stack by the calling procedure.
  *
  */
-static int PtsToRegion(
-    register int numFullPtBlocks,
-    register int iCurPtBlock,
-    POINTBLOCK *FirstPtBlock,
-    REGION *reg)
+static int
+PtsToRegion(register int numFullPtBlocks,
+            register int iCurPtBlock,
+            POINTBLOCK  *FirstPtBlock,
+            REGION      *reg)
 {
-    register BOX  *rects;
-    register XPoint *pts;
+    register BOX        *rects;
+    register XPoint     *pts;
     register POINTBLOCK *CurPtBlock;
-    register int i;
-    register BOX *extents;
-    register int numRects;
-    BOX *prevRects = reg->rects;
+    register int         i;
+    register BOX        *extents;
+    register int         numRects;
+    BOX                 *prevRects = reg->rects;
 
     extents = &reg->extents;
 
     numRects = ((numFullPtBlocks * NUMPTSTOBUFFER) + iCurPtBlock) >> 1;
 
-    if (!(reg->rects = Xreallocarray(reg->rects, numRects, sizeof(BOX)))) {
-	Xfree(prevRects);
-	return(0);
+    if (!(reg->rects = Xreallocarray(reg->rects, numRects, sizeof(BOX))))
+    {
+        Xfree(prevRects);
+        return (0);
     }
 
-    reg->size = numRects;
-    CurPtBlock = FirstPtBlock;
-    rects = reg->rects - 1;
-    numRects = 0;
-    extents->x1 = MAXSHORT,  extents->x2 = MINSHORT;
+    reg->size   = numRects;
+    CurPtBlock  = FirstPtBlock;
+    rects       = reg->rects - 1;
+    numRects    = 0;
+    extents->x1 = MAXSHORT, extents->x2 = MINSHORT;
 
-    for ( ; numFullPtBlocks >= 0; numFullPtBlocks--) {
-	/* the loop uses 2 points per iteration */
-	i = NUMPTSTOBUFFER >> 1;
-	if (!numFullPtBlocks)
-	    i = iCurPtBlock >> 1;
-	for (pts = CurPtBlock->pts; i--; pts += 2) {
-	    if (pts->x == pts[1].x)
-		continue;
-	    if (numRects && pts->x == rects->x1 && pts->y == rects->y2 &&
-		pts[1].x == rects->x2 &&
-		(numRects == 1 || rects[-1].y1 != rects->y1) &&
-		(i && pts[2].y > pts[1].y)) {
-		rects->y2 = pts[1].y + 1;
-		continue;
-	    }
-	    numRects++;
-	    rects++;
-	    rects->x1 = pts->x;  rects->y1 = pts->y;
-	    rects->x2 = pts[1].x;  rects->y2 = pts[1].y + 1;
-	    if (rects->x1 < extents->x1)
-		extents->x1 = rects->x1;
-	    if (rects->x2 > extents->x2)
-		extents->x2 = rects->x2;
+    for (; numFullPtBlocks >= 0; numFullPtBlocks--)
+    {
+        /* the loop uses 2 points per iteration */
+        i = NUMPTSTOBUFFER >> 1;
+        if (!numFullPtBlocks) i = iCurPtBlock >> 1;
+        for (pts = CurPtBlock->pts; i--; pts += 2)
+        {
+            if (pts->x == pts[1].x) continue;
+            if (numRects && pts->x == rects->x1 && pts->y == rects->y2 &&
+                pts[1].x == rects->x2 &&
+                (numRects == 1 || rects[-1].y1 != rects->y1) &&
+                (i && pts[2].y > pts[1].y))
+            {
+                rects->y2 = pts[1].y + 1;
+                continue;
+            }
+            numRects++;
+            rects++;
+            rects->x1 = pts->x;
+            rects->y1 = pts->y;
+            rects->x2 = pts[1].x;
+            rects->y2 = pts[1].y + 1;
+            if (rects->x1 < extents->x1) extents->x1 = rects->x1;
+            if (rects->x2 > extents->x2) extents->x2 = rects->x2;
         }
-	CurPtBlock = CurPtBlock->next;
+        CurPtBlock = CurPtBlock->next;
     }
 
-    if (numRects) {
-	extents->y1 = reg->rects->y1;
-	extents->y2 = rects->y2;
-    } else {
-	extents->x1 = 0;
-	extents->y1 = 0;
-	extents->x2 = 0;
-	extents->y2 = 0;
+    if (numRects)
+    {
+        extents->y1 = reg->rects->y1;
+        extents->y2 = rects->y2;
+    }
+    else
+    {
+        extents->x1 = 0;
+        extents->y1 = 0;
+        extents->x2 = 0;
+        extents->y2 = 0;
     }
     reg->numRects = numRects;
 
-    return(TRUE);
+    return (TRUE);
 }
 
 /*
@@ -470,144 +459,154 @@ static int PtsToRegion(
  *     encoding is in the form of an array of rectangles.
  */
 Region
-XPolygonRegion(
-    XPoint     *Pts,		     /* the pts                 */
-    int       Count,                 /* number of pts           */
-    int	rule)			     /* winding rule */
+XPolygonRegion(XPoint *Pts, /* the pts                 */
+               int     Count, /* number of pts           */
+               int     rule) /* winding rule */
 {
-    Region region;
-    register EdgeTableEntry *pAET;   /* Active Edge Table       */
-    register int y;                  /* current scanline        */
-    register int iPts = 0;           /* number of pts in buffer */
-    register EdgeTableEntry *pWETE;  /* Winding Edge Table Entry*/
-    register ScanLineList *pSLL;     /* current scanLineList    */
-    register XPoint *pts;             /* output buffer           */
-    EdgeTableEntry *pPrevAET;        /* ptr to previous AET     */
-    EdgeTable ET;                    /* header node for ET      */
-    EdgeTableEntry AET;              /* header node for AET     */
-    EdgeTableEntry *pETEs;           /* EdgeTableEntries pool   */
-    ScanLineListBlock SLLBlock;      /* header for scanlinelist */
-    int fixWAET = FALSE;
-    POINTBLOCK FirstPtBlock, *curPtBlock; /* PtBlock buffers    */
-    POINTBLOCK *tmpPtBlock;
-    int numFullPtBlocks = 0;
+    Region                   region;
+    register EdgeTableEntry *pAET; /* Active Edge Table       */
+    register int             y; /* current scanline        */
+    register int             iPts = 0; /* number of pts in buffer */
+    register EdgeTableEntry *pWETE; /* Winding Edge Table Entry*/
+    register ScanLineList   *pSLL; /* current scanLineList    */
+    register XPoint         *pts; /* output buffer           */
+    EdgeTableEntry          *pPrevAET; /* ptr to previous AET     */
+    EdgeTable                ET; /* header node for ET      */
+    EdgeTableEntry           AET; /* header node for AET     */
+    EdgeTableEntry          *pETEs; /* EdgeTableEntries pool   */
+    ScanLineListBlock        SLLBlock; /* header for scanlinelist */
+    int                      fixWAET = FALSE;
+    POINTBLOCK               FirstPtBlock, *curPtBlock; /* PtBlock buffers    */
+    POINTBLOCK              *tmpPtBlock;
+    int                      numFullPtBlocks = 0;
 
-    if (! (region = XCreateRegion())) return (Region) NULL;
+    if (!(region = XCreateRegion())) return (Region)NULL;
 
     /* special case a rectangle */
     pts = Pts;
     if (((Count == 4) ||
-	 ((Count == 5) && (pts[4].x == pts[0].x) && (pts[4].y == pts[0].y))) &&
-	(((pts[0].y == pts[1].y) &&
-	  (pts[1].x == pts[2].x) &&
-	  (pts[2].y == pts[3].y) &&
-	  (pts[3].x == pts[0].x)) ||
-	 ((pts[0].x == pts[1].x) &&
-	  (pts[1].y == pts[2].y) &&
-	  (pts[2].x == pts[3].x) &&
-	  (pts[3].y == pts[0].y)))) {
-	region->extents.x1 = min(pts[0].x, pts[2].x);
-	region->extents.y1 = min(pts[0].y, pts[2].y);
-	region->extents.x2 = max(pts[0].x, pts[2].x);
-	region->extents.y2 = max(pts[0].y, pts[2].y);
-	if ((region->extents.x1 != region->extents.x2) &&
-	    (region->extents.y1 != region->extents.y2)) {
-	    region->numRects = 1;
-	    *(region->rects) = region->extents;
-	}
-	return(region);
+         ((Count == 5) && (pts[4].x == pts[0].x) && (pts[4].y == pts[0].y))) &&
+        (((pts[0].y == pts[1].y) && (pts[1].x == pts[2].x) &&
+          (pts[2].y == pts[3].y) && (pts[3].x == pts[0].x)) ||
+         ((pts[0].x == pts[1].x) && (pts[1].y == pts[2].y) &&
+          (pts[2].x == pts[3].x) && (pts[3].y == pts[0].y))))
+    {
+        region->extents.x1 = min(pts[0].x, pts[2].x);
+        region->extents.y1 = min(pts[0].y, pts[2].y);
+        region->extents.x2 = max(pts[0].x, pts[2].x);
+        region->extents.y2 = max(pts[0].y, pts[2].y);
+        if ((region->extents.x1 != region->extents.x2) &&
+            (region->extents.y1 != region->extents.y2))
+        {
+            region->numRects = 1;
+            *(region->rects) = region->extents;
+        }
+        return (region);
     }
 
     if (Count < 2) return region;
 
-    if (! (pETEs = Xmallocarray(Count, sizeof(EdgeTableEntry)))) {
-	XDestroyRegion(region);
-	return (Region) NULL;
+    if (!(pETEs = Xmallocarray(Count, sizeof(EdgeTableEntry))))
+    {
+        XDestroyRegion(region);
+        return (Region)NULL;
     }
 
     pts = FirstPtBlock.pts;
     CreateETandAET(Count, Pts, &ET, &AET, pETEs, &SLLBlock);
-    pSLL = ET.scanlines.next;
+    pSLL       = ET.scanlines.next;
     curPtBlock = &FirstPtBlock;
 
-    if (rule == EvenOddRule) {
+    if (rule == EvenOddRule)
+    {
         /*
          *  for each scanline
          */
-        for (y = ET.ymin; y < ET.ymax; y++) {
+        for (y = ET.ymin; y < ET.ymax; y++)
+        {
             /*
              *  Add a new edge to the active edge table when we
              *  get to the next edge.
              */
-            if (pSLL != NULL && y == pSLL->scanline) {
+            if (pSLL != NULL && y == pSLL->scanline)
+            {
                 loadAET(&AET, pSLL->edgelist);
                 pSLL = pSLL->next;
             }
             pPrevAET = &AET;
-            pAET = AET.next;
+            pAET     = AET.next;
 
             /*
              *  for each active edge
              */
-            while (pAET) {
-                pts->x = pAET->bres.minor_axis,  pts->y = y;
+            while (pAET)
+            {
+                pts->x = pAET->bres.minor_axis, pts->y = y;
                 pts++, iPts++;
 
                 /*
                  *  send out the buffer
                  */
-                if (iPts == NUMPTSTOBUFFER) {
-                    tmpPtBlock = Xmalloc(sizeof(POINTBLOCK));
+                if (iPts == NUMPTSTOBUFFER)
+                {
+                    tmpPtBlock       = Xmalloc(sizeof(POINTBLOCK));
                     curPtBlock->next = tmpPtBlock;
-                    curPtBlock = tmpPtBlock;
-                    pts = curPtBlock->pts;
+                    curPtBlock       = tmpPtBlock;
+                    pts              = curPtBlock->pts;
                     numFullPtBlocks++;
                     iPts = 0;
                 }
                 EVALUATEEDGEEVENODD(pAET, pPrevAET, y);
             }
-            (void) InsertionSort(&AET);
+            (void)InsertionSort(&AET);
         }
     }
-    else {
+    else
+    {
         /*
          *  for each scanline
          */
-        for (y = ET.ymin; y < ET.ymax; y++) {
+        for (y = ET.ymin; y < ET.ymax; y++)
+        {
             /*
              *  Add a new edge to the active edge table when we
              *  get to the next edge.
              */
-            if (pSLL != NULL && y == pSLL->scanline) {
+            if (pSLL != NULL && y == pSLL->scanline)
+            {
                 loadAET(&AET, pSLL->edgelist);
                 computeWAET(&AET);
                 pSLL = pSLL->next;
             }
             pPrevAET = &AET;
-            pAET = AET.next;
-            pWETE = pAET;
+            pAET     = AET.next;
+            pWETE    = pAET;
 
             /*
              *  for each active edge
              */
-            while (pAET) {
+            while (pAET)
+            {
                 /*
                  *  add to the buffer only those edges that
                  *  are in the Winding active edge table.
                  */
-                if (pWETE == pAET) {
-                    pts->x = pAET->bres.minor_axis,  pts->y = y;
+                if (pWETE == pAET)
+                {
+                    pts->x = pAET->bres.minor_axis, pts->y = y;
                     pts++, iPts++;
 
                     /*
                      *  send out the buffer
                      */
-                    if (iPts == NUMPTSTOBUFFER) {
-                        tmpPtBlock = Xmalloc(sizeof(POINTBLOCK));
+                    if (iPts == NUMPTSTOBUFFER)
+                    {
+                        tmpPtBlock       = Xmalloc(sizeof(POINTBLOCK));
                         curPtBlock->next = tmpPtBlock;
-                        curPtBlock = tmpPtBlock;
-                        pts = curPtBlock->pts;
-                        numFullPtBlocks++;    iPts = 0;
+                        curPtBlock       = tmpPtBlock;
+                        pts              = curPtBlock->pts;
+                        numFullPtBlocks++;
+                        iPts = 0;
                     }
                     pWETE = pWETE->nextWETE;
                 }
@@ -618,19 +617,21 @@ XPolygonRegion(
              *  recompute the winding active edge table if
              *  we just resorted or have exited an edge.
              */
-            if (InsertionSort(&AET) || fixWAET) {
+            if (InsertionSort(&AET) || fixWAET)
+            {
                 computeWAET(&AET);
                 fixWAET = FALSE;
             }
         }
     }
     FreeStorage(SLLBlock.next);
-    (void) PtsToRegion(numFullPtBlocks, iPts, &FirstPtBlock, region);
-    for (curPtBlock = FirstPtBlock.next; --numFullPtBlocks >= 0;) {
-	tmpPtBlock = curPtBlock->next;
-	Xfree(curPtBlock);
-	curPtBlock = tmpPtBlock;
+    (void)PtsToRegion(numFullPtBlocks, iPts, &FirstPtBlock, region);
+    for (curPtBlock = FirstPtBlock.next; --numFullPtBlocks >= 0;)
+    {
+        tmpPtBlock = curPtBlock->next;
+        Xfree(curPtBlock);
+        curPtBlock = tmpPtBlock;
     }
     Xfree(pETEs);
-    return(region);
+    return (region);
 }

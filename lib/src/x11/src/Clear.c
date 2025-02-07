@@ -25,14 +25,12 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XClearWindow(
-    register Display *dpy,
-    Window w)
+XClearWindow(register Display *dpy, Window w)
 {
     register xClearAreaReq *req;
 
@@ -41,9 +39,8 @@ XClearWindow(
     req->window = w;
     req->x = req->y = req->width = req->height = 0;
         /* these values mean "clear the entire window" */
-    req->exposures = xFalse;
+    req->exposures                             = xFalse;
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

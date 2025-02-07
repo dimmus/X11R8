@@ -25,10 +25,10 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef WIN32
-#define _WILLWINSOCK_
+#  define _WILLWINSOCK_
 #endif
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xos.h"
 #include "X11/X.h"
@@ -36,18 +36,21 @@ in this Software without prior written authorization from The Open Group.
 #include "X11/Xdmcp.h"
 
 #ifdef WIN32
-#include "X11/Xwinsock.h"
+#  include "X11/Xwinsock.h"
 #else
-#include <sys/socket.h>
+#  include <sys/socket.h>
 #endif
 
 int
-XdmcpFlush (int fd, XdmcpBufferPtr buffer, XdmcpNetaddr to, int tolen)
+XdmcpFlush(int fd, XdmcpBufferPtr buffer, XdmcpNetaddr to, int tolen)
 {
     int result;
-    result = sendto (fd, (char *)buffer->data, buffer->pointer, 0,
-		     (struct sockaddr *)to, tolen);
-    if (result != buffer->pointer)
-	return FALSE;
+    result = sendto(fd,
+                    (char *)buffer->data,
+                    buffer->pointer,
+                    0,
+                    (struct sockaddr *)to,
+                    tolen);
+    if (result != buffer->pointer) return FALSE;
     return TRUE;
 }

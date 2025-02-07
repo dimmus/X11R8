@@ -40,36 +40,34 @@ from The Open Group.
  */
 
 #ifdef USE_DYNAMIC_LOADER
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-#include <stdio.h>
-#include <string.h>
-#include <dlfcn.h>
+#  ifdef HAVE_CONFIG_H
+#    include <config.h>
+#  endif
+#  include <stdio.h>
+#  include <string.h>
+#  include <dlfcn.h>
 
-#include "Xlibint.h"
-#include "Xlcint.h"
+#  include "Xlibint.h"
+#  include "Xlcint.h"
 
-#ifndef XLOCALEDIR
-#define XLOCALEDIR "/usr/lib/X11/locale"
-#endif
+#  ifndef XLOCALEDIR
+#    define XLOCALEDIR "/usr/lib/X11/locale"
+#  endif
 
-#define LCLIBNAME    "xi18n.so"
+#  define LCLIBNAME "xi18n.so"
 
 XLCd
-_XlcDynamicLoader(
-    const char *name)
+_XlcDynamicLoader(const char *name)
 {
-    char libpath[1024];
+    char        libpath[1024];
     XLCdMethods _XlcGenericMethods;
-    XLCd lcd;
-    void *nlshandler;
+    XLCd        lcd;
+    void       *nlshandler;
 
-    snprintf(libpath, sizeof(libpath), "%s/%s/%s",
-	     XLOCALEDIR, name, LCLIBNAME);
-    nlshandler = dlopen(libpath,LAZY);
-    _XlcGenericMethods = (XLCdMethods)dlsym(nlshandler,"genericMethods");
-    lcd = _XlcCreateLC(name,_XlcGenericMethods);
+    snprintf(libpath, sizeof(libpath), "%s/%s/%s", XLOCALEDIR, name, LCLIBNAME);
+    nlshandler         = dlopen(libpath, LAZY);
+    _XlcGenericMethods = (XLCdMethods)dlsym(nlshandler, "genericMethods");
+    lcd                = _XlcCreateLC(name, _XlcGenericMethods);
 
     return lcd;
 }

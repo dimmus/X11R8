@@ -24,7 +24,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "Xlibint.h"
@@ -33,8 +33,9 @@
 
 /* The list of all known XlcCharSets. They are identified by their name. */
 
-typedef struct _XlcCharSetListRec {
-    XlcCharSet charset;
+typedef struct _XlcCharSetListRec
+{
+    XlcCharSet                 charset;
     struct _XlcCharSetListRec *next;
 } XlcCharSetListRec, *XlcCharSetList;
 
@@ -43,96 +44,105 @@ static XlcCharSetList charset_list = NULL;
 /* Returns the charset with the given name (including side suffix).
    Returns NULL if not found. */
 XlcCharSet
-_XlcGetCharSet(
-    const char *name)
+_XlcGetCharSet(const char *name)
 {
     XlcCharSetList list;
-    XrmQuark xrm_name;
+    XrmQuark       xrm_name;
 
     xrm_name = XrmStringToQuark(name);
 
-    for (list = charset_list; list; list = list->next) {
-	if (xrm_name == list->charset->xrm_name)
-	    return (XlcCharSet) list->charset;
+    for (list = charset_list; list; list = list->next)
+    {
+        if (xrm_name == list->charset->xrm_name)
+            return (XlcCharSet)list->charset;
     }
 
-    return (XlcCharSet) NULL;
+    return (XlcCharSet)NULL;
 }
 
 /* Returns the charset with the given encoding (no side suffix) and
    responsible for at least the given side (XlcGL or XlcGR).
    Returns NULL if not found. */
 XlcCharSet
-_XlcGetCharSetWithSide(
-    const char *encoding_name,
-    XlcSide side)
+_XlcGetCharSetWithSide(const char *encoding_name, XlcSide side)
 {
     XlcCharSetList list;
-    XrmQuark xrm_encoding_name;
+    XrmQuark       xrm_encoding_name;
 
     xrm_encoding_name = XrmStringToQuark(encoding_name);
 
-    for (list = charset_list; list; list = list->next) {
-	if (list->charset->xrm_encoding_name == xrm_encoding_name
-	    && (list->charset->side == XlcGLGR || list->charset->side == side))
-	    return (XlcCharSet) list->charset;
+    for (list = charset_list; list; list = list->next)
+    {
+        if (list->charset->xrm_encoding_name == xrm_encoding_name &&
+            (list->charset->side == XlcGLGR || list->charset->side == side))
+            return (XlcCharSet)list->charset;
     }
 
-    return (XlcCharSet) NULL;
+    return (XlcCharSet)NULL;
 }
 
 /* Registers an XlcCharSet in the list of character sets.
    Returns True if successful. */
 Bool
-_XlcAddCharSet(
-    XlcCharSet charset)
+_XlcAddCharSet(XlcCharSet charset)
 {
     XlcCharSetList list;
 
-    if (_XlcGetCharSet(charset->name))
-	return False;
+    if (_XlcGetCharSet(charset->name)) return False;
 
     list = Xmalloc(sizeof(XlcCharSetListRec));
-    if (list == NULL)
-	return False;
+    if (list == NULL) return False;
 
     list->charset = charset;
-    list->next = charset_list;
-    charset_list = list;
+    list->next    = charset_list;
+    charset_list  = list;
 
     return True;
 }
 
 /* List of resources for XlcCharSet. */
 static XlcResource resources[] = {
-    { XlcNName, NULLQUARK, sizeof(char *),
-      XOffsetOf(XlcCharSetRec, name), XlcGetMask },
-    { XlcNEncodingName, NULLQUARK, sizeof(char *),
-      XOffsetOf(XlcCharSetRec, encoding_name), XlcGetMask },
-    { XlcNSide, NULLQUARK, sizeof(XlcSide),
-      XOffsetOf(XlcCharSetRec, side), XlcGetMask },
-    { XlcNCharSize, NULLQUARK, sizeof(int),
-      XOffsetOf(XlcCharSetRec, char_size), XlcGetMask },
-    { XlcNSetSize, NULLQUARK, sizeof(int),
-      XOffsetOf(XlcCharSetRec, set_size), XlcGetMask },
-    { XlcNControlSequence, NULLQUARK, sizeof(char *),
-      XOffsetOf(XlcCharSetRec, ct_sequence), XlcGetMask }
+    { XlcNName,
+     NULLQUARK, sizeof(char *),
+     XOffsetOf(XlcCharSetRec, name),
+     XlcGetMask },
+    { XlcNEncodingName,
+     NULLQUARK, sizeof(char *),
+     XOffsetOf(XlcCharSetRec, encoding_name),
+     XlcGetMask },
+    { XlcNSide,
+     NULLQUARK, sizeof(XlcSide),
+     XOffsetOf(XlcCharSetRec, side),
+     XlcGetMask },
+    { XlcNCharSize,
+     NULLQUARK, sizeof(int),
+     XOffsetOf(XlcCharSetRec, char_size),
+     XlcGetMask },
+    { XlcNSetSize,
+     NULLQUARK, sizeof(int),
+     XOffsetOf(XlcCharSetRec, set_size),
+     XlcGetMask },
+    { XlcNControlSequence,
+     NULLQUARK, sizeof(char *),
+     XOffsetOf(XlcCharSetRec, ct_sequence),
+     XlcGetMask }
 };
 
 /* Retrieves a number of attributes of an XlcCharSet.
    Return NULL if successful, otherwise the name of the first argument
    specifying a nonexistent attribute. */
 static char *
-get_values(
-    XlcCharSet charset,
-    XlcArgList args,
-    int num_args)
+get_values(XlcCharSet charset, XlcArgList args, int num_args)
 {
     if (resources[0].xrm_name == NULLQUARK)
-	_XlcCompileResourceList(resources, XlcNumber(resources));
+        _XlcCompileResourceList(resources, XlcNumber(resources));
 
-    return _XlcGetValues((XPointer) charset, resources, XlcNumber(resources),
-			 args, num_args, XlcGetMask);
+    return _XlcGetValues((XPointer)charset,
+                         resources,
+                         XlcNumber(resources),
+                         args,
+                         num_args,
+                         XlcGetMask);
 }
 
 /* Retrieves a number of attributes of an XlcCharSet.
@@ -141,10 +151,10 @@ get_values(
 char *
 _XlcGetCSValues(XlcCharSet charset, ...)
 {
-    va_list var;
+    va_list    var;
     XlcArgList args;
-    char *ret;
-    int num_args;
+    char      *ret;
+    int        num_args;
 
     va_start(var, charset);
     _XlcCountVaList(var, &num_args);
@@ -154,8 +164,7 @@ _XlcGetCSValues(XlcCharSet charset, ...)
     _XlcVaToArgList(var, num_args, &args);
     va_end(var);
 
-    if (args == (XlcArgList) NULL)
-	return (char *) NULL;
+    if (args == (XlcArgList)NULL) return (char *)NULL;
 
     ret = get_values(charset, args, num_args);
 
@@ -167,53 +176,55 @@ _XlcGetCSValues(XlcCharSet charset, ...)
 /* Creates a new XlcCharSet, given its name (including side suffix) and
    Compound Text ESC sequence (normally at most 4 bytes). */
 XlcCharSet
-_XlcCreateDefaultCharSet(
-    const char *name,
-    const char *ct_sequence)
+_XlcCreateDefaultCharSet(const char *name, const char *ct_sequence)
 {
-    XlcCharSet charset;
-    size_t name_len, ct_sequence_len;
+    XlcCharSet  charset;
+    size_t      name_len, ct_sequence_len;
     const char *colon;
-    char *tmp;
+    char       *tmp;
 
     charset = Xcalloc(1, sizeof(XlcCharSetRec));
-    if (charset == NULL)
-	return (XlcCharSet) NULL;
+    if (charset == NULL) return (XlcCharSet)NULL;
 
-    name_len = strlen(name);
+    name_len        = strlen(name);
     ct_sequence_len = strlen(ct_sequence);
 
     /* Fill in name and xrm_name.  */
     tmp = Xmalloc(name_len + 1 + ct_sequence_len + 1);
-    if (tmp == NULL) {
-	Xfree(charset);
-	return (XlcCharSet) NULL;
+    if (tmp == NULL)
+    {
+        Xfree(charset);
+        return (XlcCharSet)NULL;
     }
-    memcpy(tmp, name, name_len+1);
-    charset->name = tmp;
+    memcpy(tmp, name, name_len + 1);
+    charset->name     = tmp;
     charset->xrm_name = XrmStringToQuark(charset->name);
 
     /* Fill in encoding_name and xrm_encoding_name.  */
-    if ((colon = strchr(charset->name, ':')) != NULL) {
-        size_t length = (size_t)(colon - charset->name);
-        char *encoding_tmp = Xmalloc(length + 1);
-        if (encoding_tmp == NULL) {
-            Xfree((char *) charset->name);
+    if ((colon = strchr(charset->name, ':')) != NULL)
+    {
+        size_t length       = (size_t)(colon - charset->name);
+        char  *encoding_tmp = Xmalloc(length + 1);
+        if (encoding_tmp == NULL)
+        {
+            Xfree((char *)charset->name);
             Xfree(charset);
-            return (XlcCharSet) NULL;
+            return (XlcCharSet)NULL;
         }
         memcpy(encoding_tmp, charset->name, length);
-        encoding_tmp[length] = '\0';
-        charset->encoding_name = encoding_tmp;
+        encoding_tmp[length]       = '\0';
+        charset->encoding_name     = encoding_tmp;
         charset->xrm_encoding_name = XrmStringToQuark(charset->encoding_name);
-    } else {
-        charset->encoding_name = charset->name;
+    }
+    else
+    {
+        charset->encoding_name     = charset->name;
         charset->xrm_encoding_name = charset->xrm_name;
     }
 
     /* Fill in ct_sequence.  */
     tmp += name_len + 1;
-    memcpy(tmp, ct_sequence, ct_sequence_len+1);
+    memcpy(tmp, ct_sequence, ct_sequence_len + 1);
     charset->ct_sequence = tmp;
 
     /* Fill in side, char_size, set_size. */
@@ -221,5 +232,5 @@ _XlcCreateDefaultCharSet(
         /* If ct_sequence is not usable in Compound Text, remove it. */
         charset->ct_sequence = "";
 
-    return (XlcCharSet) charset;
+    return (XlcCharSet)charset;
 }

@@ -25,21 +25,19 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XSetFont (
-    register Display *dpy,
-    GC gc,
-    Font font)
+XSetFont(register Display *dpy, GC gc, Font font)
 {
     LockDisplay(dpy);
-    if (gc->values.font != font) {
+    if (gc->values.font != font)
+    {
         gc->values.font = font;
-	gc->dirty |= GCFont;
-	_XFlushGCCache(dpy, gc);
+        gc->dirty |= GCFont;
+        _XFlushGCCache(dpy, gc);
     }
     UnlockDisplay(dpy);
     SyncHandle();

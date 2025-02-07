@@ -27,7 +27,7 @@ from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include <sys/types.h>
@@ -62,88 +62,118 @@ _XkbHandleSpecialSym(KeySym keysym, char *buffer, int nbytes, int *extra_rtrn)
           (keysym == XK_KP_Equal) || (keysym == XK_Delete)))
         return 0;
 
-    if (nbytes < 1) {
-        if (extra_rtrn)
-            *extra_rtrn = 1;
+    if (nbytes < 1)
+    {
+        if (extra_rtrn) *extra_rtrn = 1;
         return 0;
     }
     /* if X keysym, convert to ascii by grabbing low 7 bits */
     if (keysym == XK_KP_Space)
         buffer[0] = XK_space & 0x7F;            /* patch encoding botch */
-    else
-        buffer[0] = (char) (keysym & 0x7F);
+    else buffer[0] = (char)(keysym & 0x7F);
     return 1;
 }
 
 /*ARGSUSED*/
 static int
 _XkbKSToKnownSet(XPointer priv,
-                 KeySym keysym,
-                 char *buffer,
-                 int nbytes,
-                 int *extra_rtrn)
+                 KeySym   keysym,
+                 char    *buffer,
+                 int      nbytes,
+                 int     *extra_rtrn)
 {
     char tbuf[8], *buf;
 
-    if (extra_rtrn)
-        *extra_rtrn = 0;
+    if (extra_rtrn) *extra_rtrn = 0;
 
     /* convert "dead" diacriticals for dumb applications */
-    if ((keysym & 0xffffff00) == 0xfe00) {
-        switch (keysym) {
-        case XK_dead_grave:            keysym = XK_grave; break;
-        case XK_dead_acute:            keysym = XK_acute; break;
-        case XK_dead_circumflex:       keysym = XK_asciicircum; break;
-        case XK_dead_tilde:            keysym = XK_asciitilde; break;
-        case XK_dead_macron:           keysym = XK_macron; break;
-        case XK_dead_breve:            keysym = XK_breve; break;
-        case XK_dead_abovedot:         keysym = XK_abovedot; break;
-        case XK_dead_diaeresis:        keysym = XK_diaeresis; break;
-        case XK_dead_abovering:        keysym = XK_degree; break;
-        case XK_dead_doubleacute:      keysym = XK_doubleacute; break;
-        case XK_dead_caron:            keysym = XK_caron; break;
-        case XK_dead_cedilla:          keysym = XK_cedilla; break;
-        case XK_dead_ogonek:           keysym = XK_ogonek; break;
-        case XK_dead_iota:             keysym = XK_Greek_iota; break;
+    if ((keysym & 0xffffff00) == 0xfe00)
+    {
+        switch (keysym)
+        {
+            case XK_dead_grave:
+                keysym = XK_grave;
+                break;
+            case XK_dead_acute:
+                keysym = XK_acute;
+                break;
+            case XK_dead_circumflex:
+                keysym = XK_asciicircum;
+                break;
+            case XK_dead_tilde:
+                keysym = XK_asciitilde;
+                break;
+            case XK_dead_macron:
+                keysym = XK_macron;
+                break;
+            case XK_dead_breve:
+                keysym = XK_breve;
+                break;
+            case XK_dead_abovedot:
+                keysym = XK_abovedot;
+                break;
+            case XK_dead_diaeresis:
+                keysym = XK_diaeresis;
+                break;
+            case XK_dead_abovering:
+                keysym = XK_degree;
+                break;
+            case XK_dead_doubleacute:
+                keysym = XK_doubleacute;
+                break;
+            case XK_dead_caron:
+                keysym = XK_caron;
+                break;
+            case XK_dead_cedilla:
+                keysym = XK_cedilla;
+                break;
+            case XK_dead_ogonek:
+                keysym = XK_ogonek;
+                break;
+            case XK_dead_iota:
+                keysym = XK_Greek_iota;
+                break;
 #ifdef XK_KATAKANA
-        case XK_dead_voiced_sound:     keysym = XK_voicedsound; break;
-        case XK_dead_semivoiced_sound: keysym = XK_semivoicedsound; break;
+            case XK_dead_voiced_sound:
+                keysym = XK_voicedsound;
+                break;
+            case XK_dead_semivoiced_sound:
+                keysym = XK_semivoicedsound;
+                break;
 #endif
         }
     }
 
-    if (nbytes < 1)
-        buf = tbuf;
-    else
-        buf = buffer;
+    if (nbytes < 1) buf = tbuf;
+    else buf = buffer;
 
-    if ((keysym & 0xffffff00) == 0xff00) {
+    if ((keysym & 0xffffff00) == 0xff00)
+    {
         return _XkbHandleSpecialSym(keysym, buf, nbytes, extra_rtrn);
     }
-    return _XimGetCharCode(priv, keysym, (unsigned char *) buf, nbytes);
+    return _XimGetCharCode(priv, keysym, (unsigned char *)buf, nbytes);
 }
 
-typedef struct _XkbToKS {
+typedef struct _XkbToKS
+{
     unsigned prefix;
-    char *map;
+    char    *map;
 } XkbToKS;
 
 /*ARGSUSED*/
 static KeySym
 _XkbKnownSetToKS(XPointer priv, char *buffer, int nbytes, Status *status)
 {
-    if (nbytes != 1)
-        return NoSymbol;
-    if (((buffer[0] & 0x80) == 0) && (buffer[0] >= 32))
-        return buffer[0];
-    else if ((buffer[0] & 0x7f) >= 32) {
-        XkbToKS *map = (XkbToKS *) priv;
+    if (nbytes != 1) return NoSymbol;
+    if (((buffer[0] & 0x80) == 0) && (buffer[0] >= 32)) return buffer[0];
+    else if ((buffer[0] & 0x7f) >= 32)
+    {
+        XkbToKS *map = (XkbToKS *)priv;
 
-        if (map) {
-            if (map->map)
-                return map->prefix | map->map[buffer[0] & 0x7f];
-            else
-                return map->prefix | buffer[0];
+        if (map)
+        {
+            if (map->map) return map->prefix | map->map[buffer[0] & 0x7f];
+            else return map->prefix | buffer[0];
         }
         return buffer[0];
     }
@@ -173,9 +203,9 @@ Strcmp(char *str1, char *str2)
     if (strlen(str1) >= sizeof(str))    /* almost certain it's a mismatch */
         return 1;
 
-    for (s = str; (c = *str1++);) {
-        if (isupper(c))
-            c = tolower(c);
+    for (s = str; (c = *str1++);)
+    {
+        if (isupper(c)) c = tolower(c);
         *s++ = c;
     }
     *s = '\0';
@@ -184,16 +214,15 @@ Strcmp(char *str1, char *str2)
 #endif
 
 int
-_XkbGetConverters(const char *encoding_name, XkbConverters * cvt_rtrn)
+_XkbGetConverters(const char *encoding_name, XkbConverters *cvt_rtrn)
 {
-    if (!cvt_rtrn)
-        return 0;
+    if (!cvt_rtrn) return 0;
 
-    cvt_rtrn->KSToMB = _XkbKSToKnownSet;
+    cvt_rtrn->KSToMB     = _XkbKSToKnownSet;
     cvt_rtrn->KSToMBPriv = _XimGetLocaleCode(encoding_name);
-    cvt_rtrn->MBToKS = _XkbKnownSetToKS;
+    cvt_rtrn->MBToKS     = _XkbKnownSetToKS;
     cvt_rtrn->MBToKSPriv = NULL;
-    cvt_rtrn->KSToUpper = __XkbDefaultToUpper;
+    cvt_rtrn->KSToUpper  = __XkbDefaultToUpper;
     return 1;
 }
 
@@ -212,7 +241,7 @@ _XkbGetConverters(const char *encoding_name, XkbConverters * cvt_rtrn)
  * an simplify integration by these companies.
  */
 
-#define	CHARSET_FILE	"/usr/lib/X11/input/charsets"
+#  define CHARSET_FILE "/usr/lib/X11/input/charsets"
 static char *_XkbKnownLanguages =
     "c=ascii:da,de,en,es,fr,is,it,nl,no,pt,sv=iso8859-1:hu,pl,cs=iso8859-2:"
     "eo=iso8859-3:sp=iso8859-5:ar,ara=iso8859-6:el=iso8859-7:he=iso8859-8:"
@@ -228,84 +257,87 @@ _XkbGetCharset(void)
      * instead of bss
      */
     static char buf[100] = { 0 };
-    char lang[256];
-    char *start, *tmp, *end, *next, *set;
-    char *country, *charset;
-    char *locale;
+    char        lang[256];
+    char       *start, *tmp, *end, *next, *set;
+    char       *country, *charset;
+    char       *locale;
 
     tmp = getenv("_XKB_CHARSET");
-    if (tmp)
-        return tmp;
+    if (tmp) return tmp;
     locale = setlocale(LC_CTYPE, NULL);
 
-    if (locale == NULL)
-        return NULL;
+    if (locale == NULL) return NULL;
 
-    if (strlen(locale) >= sizeof(lang))
-        return NULL;
+    if (strlen(locale) >= sizeof(lang)) return NULL;
 
-    for (tmp = lang; *tmp = *locale++; tmp++) {
-        if (isupper(*tmp))
-            *tmp = tolower(*tmp);
+    for (tmp = lang; *tmp = *locale++; tmp++)
+    {
+        if (isupper(*tmp)) *tmp = tolower(*tmp);
     }
     country = strchr(lang, '_');
-    if (country) {
+    if (country)
+    {
         *country++ = '\0';
-        charset = strchr(country, '.');
+        charset    = strchr(country, '.');
+        if (charset) *charset++ = '\0';
         if (charset)
-            *charset++ = '\0';
-        if (charset) {
+        {
             strncpy(buf, charset, 99);
             buf[99] = '\0';
             return buf;
         }
     }
-    else {
+    else
+    {
         charset = NULL;
     }
 
-    if ((tmp = getenv("_XKB_LOCALE_CHARSETS")) != NULL) {
+    if ((tmp = getenv("_XKB_LOCALE_CHARSETS")) != NULL)
+    {
         start = _XkbAlloc(strlen(tmp) + 1);
         strcpy(start, tmp);
         tmp = start;
     }
-    else {
+    else
+    {
         struct stat sbuf;
-        FILE *file;
-        char *cf = CHARSET_FILE;
+        FILE       *file;
+        char       *cf = CHARSET_FILE;
 
-#ifndef S_ISREG
-# define S_ISREG(mode)   (((mode) & S_IFMT) == S_IFREG)
-#endif
+#  ifndef S_ISREG
+#    define S_ISREG(mode) (((mode) & S_IFMT) == S_IFREG)
+#  endif
 
         if ((stat(cf, &sbuf) == 0) && S_ISREG(sbuf.st_mode) &&
-            (file = fopen(cf, "r"))) {
+            (file = fopen(cf, "r")))
+        {
             tmp = _XkbAlloc(sbuf.st_size + 1);
-            if (tmp != NULL) {
-                sbuf.st_size = (long) fread(tmp, 1, sbuf.st_size, file);
+            if (tmp != NULL)
+            {
+                sbuf.st_size      = (long)fread(tmp, 1, sbuf.st_size, file);
                 tmp[sbuf.st_size] = '\0';
             }
             fclose(file);
         }
     }
 
-    if (tmp == NULL) {
+    if (tmp == NULL)
+    {
         tmp = _XkbAlloc(strlen(_XkbKnownLanguages) + 1);
-        if (!tmp)
-            return NULL;
+        if (!tmp) return NULL;
         strcpy(tmp, _XkbKnownLanguages);
     }
     start = tmp;
-    do {
-        if ((set = strchr(tmp, '=')) == NULL)
-            break;
+    do
+    {
+        if ((set = strchr(tmp, '=')) == NULL) break;
         *set++ = '\0';
-        if ((next = strchr(set, ':')) != NULL)
-            *next++ = '\0';
-        while (tmp && *tmp) {
-            if ((end = strchr(tmp, ',')) != NULL)
-                *end++ = '\0';
-            if (Strcmp(tmp, lang) == 0) {
+        if ((next = strchr(set, ':')) != NULL) *next++ = '\0';
+        while (tmp && *tmp)
+        {
+            if ((end = strchr(tmp, ',')) != NULL) *end++ = '\0';
+            if (Strcmp(tmp, lang) == 0)
+            {
                 strncpy(buf, set, 100);
                 buf[99] = '\0';
                 Xfree(start);
@@ -314,7 +346,8 @@ _XkbGetCharset(void)
             tmp = end;
         }
         tmp = next;
-    } while (tmp && *tmp);
+    }
+    while (tmp && *tmp);
     Xfree(start);
     return NULL;
 }
@@ -323,15 +356,13 @@ char *
 _XkbGetCharset(void)
 {
     char *tmp;
-    XLCd lcd;
+    XLCd  lcd;
 
     tmp = getenv("_XKB_CHARSET");
-    if (tmp)
-        return tmp;
+    if (tmp) return tmp;
 
     lcd = _XlcCurrentLC();
-    if (lcd)
-        return XLC_PUBLIC(lcd, encoding_name);
+    if (lcd) return XLC_PUBLIC(lcd, encoding_name);
 
     return NULL;
 }

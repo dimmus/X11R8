@@ -26,46 +26,41 @@
 #include "X11/Xutil.h"
 
 XcursorCursors *
-XcursorCursorsCreate (Display *dpy, int size)
+XcursorCursorsCreate(Display *dpy, int size)
 {
-    XcursorCursors  *cursors;
+    XcursorCursors *cursors;
 
-    cursors = malloc (sizeof (XcursorCursors) +
-		      (size_t) size * sizeof (Cursor));
-    if (!cursors)
-	return NULL;
-    cursors->ref = 1;
-    cursors->dpy = dpy;
+    cursors = malloc(sizeof(XcursorCursors) + (size_t)size * sizeof(Cursor));
+    if (!cursors) return NULL;
+    cursors->ref     = 1;
+    cursors->dpy     = dpy;
     cursors->ncursor = 0;
-    cursors->cursors = (Cursor *) (cursors + 1);
+    cursors->cursors = (Cursor *)(cursors + 1);
     return cursors;
 }
 
 void
-XcursorCursorsDestroy (XcursorCursors *cursors)
+XcursorCursorsDestroy(XcursorCursors *cursors)
 {
-    int	    n;
+    int n;
 
-    if (!cursors)
-      return;
+    if (!cursors) return;
 
     --cursors->ref;
-    if (cursors->ref > 0)
-	return;
+    if (cursors->ref > 0) return;
 
     for (n = 0; n < cursors->ncursor; n++)
-	XFreeCursor (cursors->dpy, cursors->cursors[n]);
-    free (cursors);
+        XFreeCursor(cursors->dpy, cursors->cursors[n]);
+    free(cursors);
 }
 
 XcursorAnimate *
-XcursorAnimateCreate (XcursorCursors *cursors)
+XcursorAnimateCreate(XcursorCursors *cursors)
 {
-    XcursorAnimate  *animate;
+    XcursorAnimate *animate;
 
-    animate = malloc (sizeof (XcursorAnimate));
-    if (!animate)
-	return NULL;
+    animate = malloc(sizeof(XcursorAnimate));
+    if (!animate) return NULL;
     animate->cursors = cursors;
     cursors->ref++;
     animate->sequence = 0;
@@ -73,43 +68,40 @@ XcursorAnimateCreate (XcursorCursors *cursors)
 }
 
 void
-XcursorAnimateDestroy (XcursorAnimate *animate)
+XcursorAnimateDestroy(XcursorAnimate *animate)
 {
-    if (!animate)
-      return;
+    if (!animate) return;
 
-    XcursorCursorsDestroy (animate->cursors);
-    free (animate);
+    XcursorCursorsDestroy(animate->cursors);
+    free(animate);
 }
 
 Cursor
-XcursorAnimateNext (XcursorAnimate *animate)
+XcursorAnimateNext(XcursorAnimate *animate)
 {
-    Cursor  cursor = animate->cursors->cursors[animate->sequence++];
+    Cursor cursor = animate->cursors->cursors[animate->sequence++];
 
-    if (animate->sequence >= animate->cursors->ncursor)
-	animate->sequence = 0;
+    if (animate->sequence >= animate->cursors->ncursor) animate->sequence = 0;
     return cursor;
 }
 
 #if RENDER_MAJOR > 0 || RENDER_MINOR >= 5
 static int
-nativeByteOrder (void)
+nativeByteOrder(void)
 {
-    int	x = 1;
+    int x = 1;
 
-    return (*((char *) &x) == 1) ? LSBFirst : MSBFirst;
+    return (*((char *)&x) == 1) ? LSBFirst : MSBFirst;
 }
 #endif
 
 static XcursorUInt
-_XcursorPixelBrightness (XcursorPixel p)
+_XcursorPixelBrightness(XcursorPixel p)
 {
-    XcursorPixel    alpha = p >> 24;
-    XcursorPixel    r, g, b;
+    XcursorPixel alpha = p >> 24;
+    XcursorPixel r, g, b;
 
-    if (!alpha)
-	return 0;
+    if (!alpha) return 0;
     r = ((p >> 8) & 0xff00) / alpha;
     if (r > 0xff) r = 0xff;
     g = ((p >> 0) & 0xff00) / alpha;
@@ -120,139 +112,132 @@ _XcursorPixelBrightness (XcursorPixel p)
 }
 
 static unsigned short
-_XcursorDivideAlpha (XcursorUInt value, XcursorUInt alpha)
+_XcursorDivideAlpha(XcursorUInt value, XcursorUInt alpha)
 {
-    if (!alpha)
-	return 0;
+    if (!alpha) return 0;
     value = value * 255 / alpha;
-    if (value > 255)
-	value = 255;
-    return (unsigned short) (value | (value << 8));
+    if (value > 255) value = 255;
+    return (unsigned short)(value | (value << 8));
 }
 
 static void
-_XcursorPixelToColor (XcursorPixel p, XColor *color)
+_XcursorPixelToColor(XcursorPixel p, XColor *color)
 {
-    XcursorPixel    alpha = p >> 24;
+    XcursorPixel alpha = p >> 24;
 
     color->pixel = 0;
-    color->red =   _XcursorDivideAlpha ((p >> 16) & 0xff, alpha);
-    color->green = _XcursorDivideAlpha ((p >>  8) & 0xff, alpha);
-    color->blue =  _XcursorDivideAlpha ((p >>  0) & 0xff, alpha);
-    color->flags = DoRed|DoGreen|DoBlue;
+    color->red   = _XcursorDivideAlpha((p >> 16) & 0xff, alpha);
+    color->green = _XcursorDivideAlpha((p >> 8) & 0xff, alpha);
+    color->blue  = _XcursorDivideAlpha((p >> 0) & 0xff, alpha);
+    color->flags = DoRed | DoGreen | DoBlue;
 }
 
 #undef DEBUG_IMAGE
 #ifdef DEBUG_IMAGE
 static void
-_XcursorDumpImage (XImage *image)
+_XcursorDumpImage(XImage *image)
 {
-    FILE    *f = fopen ("/tmp/images", "a" FOPEN_CLOEXEC);
-    int	    x, y;
-    if (!f)
-	return;
-    fprintf (f, "%d x %x\n", image->width, image->height);
+    FILE *f = fopen("/tmp/images", "a" FOPEN_CLOEXEC);
+    int   x, y;
+    if (!f) return;
+    fprintf(f, "%d x %x\n", image->width, image->height);
     for (y = 0; y < image->height; y++)
     {
-	for (x = 0; x < image->width; x++)
-	    fprintf (f, "%c", XGetPixel (image, x, y) ? '*' : ' ');
-	fprintf (f, "\n");
+        for (x = 0; x < image->width; x++)
+            fprintf(f, "%c", XGetPixel(image, x, y) ? '*' : ' ');
+        fprintf(f, "\n");
     }
-    fflush (f);
-    fclose (f);
+    fflush(f);
+    fclose(f);
 }
 
 static void
-_XcursorDumpColor (XColor *color, char *name)
+_XcursorDumpColor(XColor *color, char *name)
 {
-    FILE    *f = fopen ("/tmp/images", "a" FOPEN_CLOEXEC);
-    fprintf (f, "%s: %x %x %x\n", name,
-	     color->red, color->green, color->blue);
-    fflush (f);
-    fclose (f);
+    FILE *f = fopen("/tmp/images", "a" FOPEN_CLOEXEC);
+    fprintf(f, "%s: %x %x %x\n", name, color->red, color->green, color->blue);
+    fflush(f);
+    fclose(f);
 }
 #endif
 
 static int
-_XcursorCompareRed (const void *a, const void *b)
+_XcursorCompareRed(const void *a, const void *b)
 {
-    const XcursorPixel    *ap = a, *bp = b;
+    const XcursorPixel *ap = a, *bp = b;
 
-    return (int) (((*ap >> 16) & 0xff) - ((*bp >> 16) & 0xff));
+    return (int)(((*ap >> 16) & 0xff) - ((*bp >> 16) & 0xff));
 }
 
 static int
-_XcursorCompareGreen (const void *a, const void *b)
+_XcursorCompareGreen(const void *a, const void *b)
 {
-    const XcursorPixel    *ap = a, *bp = b;
+    const XcursorPixel *ap = a, *bp = b;
 
-    return (int) (((*ap >> 8) & 0xff) - ((*bp >> 8) & 0xff));
+    return (int)(((*ap >> 8) & 0xff) - ((*bp >> 8) & 0xff));
 }
 
 static int
-_XcursorCompareBlue (const void *a, const void *b)
+_XcursorCompareBlue(const void *a, const void *b)
 {
-    const XcursorPixel    *ap = a, *bp = b;
+    const XcursorPixel *ap = a, *bp = b;
 
-    return (int) (((*ap >> 0) & 0xff) - ((*bp >> 0) & 0xff));
+    return (int)(((*ap >> 0) & 0xff) - ((*bp >> 0) & 0xff));
 }
 
-#define ScaledPixels(c,n) ((c)/(XcursorPixel)(n))
+#define ScaledPixels(c, n) ((c) / (XcursorPixel)(n))
 
 static XcursorPixel
-_XcursorAverageColor (XcursorPixel *pixels, int npixels)
+_XcursorAverageColor(XcursorPixel *pixels, int npixels)
 {
-    XcursorPixel    p;
-    XcursorPixel    red, green, blue;
-    int		    n = npixels;
+    XcursorPixel p;
+    XcursorPixel red, green, blue;
+    int          n = npixels;
 
-    if (n < 1)
-	return 0;
+    if (n < 1) return 0;
 
     blue = green = red = 0;
     while (n--)
     {
-	p = *pixels++;
-	red += (p >> 16) & 0xff;
-	green += (p >> 8) & 0xff;
-	blue += (p >> 0) & 0xff;
+        p = *pixels++;
+        red += (p >> 16) & 0xff;
+        green += (p >> 8) & 0xff;
+        blue += (p >> 0) & 0xff;
     }
-    return (0xffU << 24)
-	    | (ScaledPixels(red, npixels) << 16)
-	    | (ScaledPixels(green, npixels) << 8)
-	    |  ScaledPixels(blue, npixels);
+    return (0xffU << 24) | (ScaledPixels(red, npixels) << 16) |
+           (ScaledPixels(green, npixels) << 8) | ScaledPixels(blue, npixels);
 }
 
-typedef struct XcursorCoreCursor {
-    XImage  *src_image;
-    XImage  *msk_image;
+typedef struct XcursorCoreCursor
+{
+    XImage *src_image;
+    XImage *msk_image;
     XColor  on_color;
     XColor  off_color;
 } XcursorCoreCursor;
 
 static Bool
-_XcursorHeckbertMedianCut (const XcursorImage *image, XcursorCoreCursor *core)
+_XcursorHeckbertMedianCut(const XcursorImage *image, XcursorCoreCursor *core)
 {
-    XImage	    *src_image = core->src_image, *msk_image = core->msk_image;
-    unsigned int    npixels = image->width * image->height;
-    int		    ncolors;
-    int		    n;
-    XcursorPixel    *po, *pn, *pc;
-    XcursorPixel    p;
-    XcursorPixel    red, green, blue, alpha;
-    XcursorPixel    max_red, min_red, max_green, min_green, max_blue, min_blue;
-    XcursorPixel    *temp, *pixels, *colors;
-    int		    split;
-    XcursorPixel    leftColor, centerColor, rightColor;
-    int		    (*compare) (const void *, const void *);
-    int		    x, y;
+    XImage       *src_image = core->src_image, *msk_image = core->msk_image;
+    unsigned int  npixels = image->width * image->height;
+    int           ncolors;
+    int           n;
+    XcursorPixel *po, *pn, *pc;
+    XcursorPixel  p;
+    XcursorPixel  red, green, blue, alpha;
+    XcursorPixel  max_red, min_red, max_green, min_green, max_blue, min_blue;
+    XcursorPixel *temp, *pixels, *colors;
+    int           split;
+    XcursorPixel  leftColor, centerColor, rightColor;
+    int (*compare)(const void *, const void *);
+    int x, y;
 
     /*
      * Temp space for converted image and converted colors
      */
-    temp = malloc (npixels * sizeof (XcursorPixel) * 2);
-    if (!temp)
-	return False;
+    temp = malloc(npixels * sizeof(XcursorPixel) * 2);
+    if (!temp) return False;
 
     pixels = temp;
     colors = pixels + npixels;
@@ -261,88 +246,84 @@ _XcursorHeckbertMedianCut (const XcursorImage *image, XcursorCoreCursor *core)
      * Convert to 2-value alpha and build
      * array of opaque color values and an
      */
-    po = image->pixels;
-    pn = pixels;
-    pc = colors;
+    po       = image->pixels;
+    pn       = pixels;
+    pc       = colors;
     max_blue = max_green = max_red = 0;
     min_blue = min_green = min_red = 255;
-    n = (int) npixels;
+    n                              = (int)npixels;
     while (n--)
     {
-	p = *po++;
-	alpha = (p >> 24) & 0xff;
-	red = (p >> 16) & 0xff;
-	green = (p >> 8) & 0xff;
-	blue = (p >> 0) & 0xff;
-	if (alpha >= 0x80)
-	{
-	    red = red * 255 / alpha;
-	    green = green * 255 / alpha;
-	    blue = blue * 255 / alpha;
-	    if (red < min_red) min_red = red;
-	    if (red > max_red) max_red = red;
-	    if (green < min_green) min_green = green;
-	    if (green > max_green) max_green = green;
-	    if (blue < min_blue) min_blue = blue;
-	    if (blue > max_blue) max_blue = blue;
-	    p = ((0xffU << 24) | (red << 16) |
-		 (green << 8) | (blue << 0));
-	    *pc++ = p;
-	}
-	else
-	    p = 0;
-	*pn++ = p;
+        p     = *po++;
+        alpha = (p >> 24) & 0xff;
+        red   = (p >> 16) & 0xff;
+        green = (p >> 8) & 0xff;
+        blue  = (p >> 0) & 0xff;
+        if (alpha >= 0x80)
+        {
+            red   = red * 255 / alpha;
+            green = green * 255 / alpha;
+            blue  = blue * 255 / alpha;
+            if (red < min_red) min_red = red;
+            if (red > max_red) max_red = red;
+            if (green < min_green) min_green = green;
+            if (green > max_green) max_green = green;
+            if (blue < min_blue) min_blue = blue;
+            if (blue > max_blue) max_blue = blue;
+            p     = ((0xffU << 24) | (red << 16) | (green << 8) | (blue << 0));
+            *pc++ = p;
+        }
+        else p = 0;
+        *pn++ = p;
     }
-    ncolors = (int) (pc - colors);
+    ncolors = (int)(pc - colors);
 
     /*
      * Compute longest dimension and sort
      */
     if ((max_green - min_green) >= (max_red - min_red) &&
-	(max_green - min_green) >= (max_blue - min_blue))
-	compare = _XcursorCompareGreen;
+        (max_green - min_green) >= (max_blue - min_blue))
+        compare = _XcursorCompareGreen;
     else if ((max_red - min_red) >= (max_blue - min_blue))
-	compare = _XcursorCompareRed;
-    else
-	compare = _XcursorCompareBlue;
-    qsort (colors, (size_t) ncolors, sizeof (XcursorPixel), compare);
+        compare = _XcursorCompareRed;
+    else compare = _XcursorCompareBlue;
+    qsort(colors, (size_t)ncolors, sizeof(XcursorPixel), compare);
     /*
      * Compute average colors on both sides of the cut
      */
-    split = ncolors >> 1;
-    leftColor  = _XcursorAverageColor (colors, split);
+    split       = ncolors >> 1;
+    leftColor   = _XcursorAverageColor(colors, split);
     centerColor = colors[split];
-    rightColor = _XcursorAverageColor (colors + split, ncolors - split);
+    rightColor  = _XcursorAverageColor(colors + split, ncolors - split);
     /*
      * Select best color for each pixel
      */
-    pn = pixels;
-    for (y = 0; (unsigned) y < image->height; y++)
-	for (x = 0; (unsigned) x < image->width; x++)
-	{
-	    p = *pn++;
-	    if (p & 0xff000000)
-	    {
-		XPutPixel (msk_image, x, y, 1);
-		if ((*compare) (&p, &centerColor) >= 0)
-		    XPutPixel (src_image, x, y, 0);
-		else
-		    XPutPixel (src_image, x, y, 1);
-	    }
-	    else
-	    {
-		XPutPixel (msk_image, x, y, 0);
-		XPutPixel (src_image, x, y, 0);
-	    }
-	}
-    free (temp);
-    _XcursorPixelToColor (rightColor, &core->off_color);
-    _XcursorPixelToColor (leftColor, &core->on_color);
+    pn          = pixels;
+    for (y = 0; (unsigned)y < image->height; y++)
+        for (x = 0; (unsigned)x < image->width; x++)
+        {
+            p = *pn++;
+            if (p & 0xff000000)
+            {
+                XPutPixel(msk_image, x, y, 1);
+                if ((*compare)(&p, &centerColor) >= 0)
+                    XPutPixel(src_image, x, y, 0);
+                else XPutPixel(src_image, x, y, 1);
+            }
+            else
+            {
+                XPutPixel(msk_image, x, y, 0);
+                XPutPixel(src_image, x, y, 0);
+            }
+        }
+    free(temp);
+    _XcursorPixelToColor(rightColor, &core->off_color);
+    _XcursorPixelToColor(leftColor, &core->on_color);
     return True;
 }
 
 #if 0
-#define DITHER_DIM  4
+#  define DITHER_DIM 4
 static XcursorPixel orderedDither[4][4] = {
     {  1,  9,  3, 11 },
     { 13,  5, 15,  7 },
@@ -350,424 +331,457 @@ static XcursorPixel orderedDither[4][4] = {
     { 16,  8, 14,  6 }
 };
 #else
-#define DITHER_DIM 2
+#  define DITHER_DIM 2
 static XcursorPixel orderedDither[2][2] = {
-    {  1,  3,  },
-    {  4,  2,  },
+    {
+     1, 3,
+     },
+    {
+     4, 2,
+     },
 };
 #endif
 
-#define DITHER_SIZE  ((sizeof orderedDither / sizeof orderedDither[0][0]) + 1)
+#define DITHER_SIZE ((sizeof orderedDither / sizeof orderedDither[0][0]) + 1)
 
 static Bool
-_XcursorBayerOrderedDither (const XcursorImage *image, XcursorCoreCursor *core)
+_XcursorBayerOrderedDither(const XcursorImage *image, XcursorCoreCursor *core)
 {
-    int		    x, y;
-    XcursorPixel    *pixel, p;
-    XcursorPixel    a, i, d;
+    int           x, y;
+    XcursorPixel *pixel, p;
+    XcursorPixel  a, i, d;
 
     pixel = image->pixels;
-    for (y = 0; (unsigned) y < image->height; y++)
-	for (x = 0; (unsigned) x < image->width; x++)
-	{
-	    p = *pixel++;
-	    a = (XcursorPixel) (((p >> 24) * DITHER_SIZE + 127) / 255);
-	    i = (XcursorPixel) ((_XcursorPixelBrightness (p) * DITHER_SIZE + 127) / 255);
-	    d = orderedDither[y&(DITHER_DIM-1)][x&(DITHER_DIM-1)];
-	    if (a > d)
-	    {
-		XPutPixel (core->msk_image, x, y, 1);
-		if (i > d)
-		    XPutPixel (core->src_image, x, y, 0);   /* white */
-		else
-		    XPutPixel (core->src_image, x, y, 1);   /* black */
-	    }
-	    else
-	    {
-		XPutPixel (core->msk_image, x, y, 0);
-		XPutPixel (core->src_image, x, y, 0);
-	    }
-	}
-    core->on_color.red = 0;
-    core->on_color.green = 0;
-    core->on_color.blue = 0;
-    core->off_color.red = 0xffff;
+    for (y = 0; (unsigned)y < image->height; y++)
+        for (x = 0; (unsigned)x < image->width; x++)
+        {
+            p = *pixel++;
+            a = (XcursorPixel)(((p >> 24) * DITHER_SIZE + 127) / 255);
+            i = (XcursorPixel)((_XcursorPixelBrightness(p) * DITHER_SIZE +
+                                127) /
+                               255);
+            d = orderedDither[y & (DITHER_DIM - 1)][x & (DITHER_DIM - 1)];
+            if (a > d)
+            {
+                XPutPixel(core->msk_image, x, y, 1);
+                if (i > d) XPutPixel(core->src_image, x, y, 0);   /* white */
+                else XPutPixel(core->src_image, x, y, 1);   /* black */
+            }
+            else
+            {
+                XPutPixel(core->msk_image, x, y, 0);
+                XPutPixel(core->src_image, x, y, 0);
+            }
+        }
+    core->on_color.red    = 0;
+    core->on_color.green  = 0;
+    core->on_color.blue   = 0;
+    core->off_color.red   = 0xffff;
     core->off_color.green = 0xffff;
-    core->off_color.blue = 0xffff;
+    core->off_color.blue  = 0xffff;
     return True;
 }
 
 static Bool
-_XcursorFloydSteinberg (const XcursorImage *image, XcursorCoreCursor *core)
+_XcursorFloydSteinberg(const XcursorImage *image, XcursorCoreCursor *core)
 {
-    int		    *aPicture, *iPicture, *aP, *iP;
-    XcursorPixel    *pixel, p;
-    int		    aR, iR, aA, iA;
-    unsigned int    npixels = image->width * image->height;
-    int		    n;
-    int		    right = 1;
-    int		    belowLeft = (int) (image->width - 1);
-    int		    below = (int) image->width;
-    int		    belowRight = (int) (image->width + 1);
-    int		    iError, aError;
-    int		    iErrorRight, aErrorRight;
-    int		    iErrorBelowLeft, aErrorBelowLeft;
-    int		    iErrorBelow, aErrorBelow;
-    int		    iErrorBelowRight, aErrorBelowRight;
-    int		    x, y;
-    int		    max_inten, min_inten, mean_inten;
+    int          *aPicture, *iPicture, *aP, *iP;
+    XcursorPixel *pixel, p;
+    int           aR, iR, aA, iA;
+    unsigned int  npixels = image->width * image->height;
+    int           n;
+    int           right      = 1;
+    int           belowLeft  = (int)(image->width - 1);
+    int           below      = (int)image->width;
+    int           belowRight = (int)(image->width + 1);
+    int           iError, aError;
+    int           iErrorRight, aErrorRight;
+    int           iErrorBelowLeft, aErrorBelowLeft;
+    int           iErrorBelow, aErrorBelow;
+    int           iErrorBelowRight, aErrorBelowRight;
+    int           x, y;
+    int           max_inten, min_inten, mean_inten;
 
-    iPicture = malloc (npixels * sizeof (int) * 2);
-    if (!iPicture)
-	return False;
+    iPicture = malloc(npixels * sizeof(int) * 2);
+    if (!iPicture) return False;
     aPicture = iPicture + npixels;
 
     /*
      * Compute raw gray and alpha arrays
      */
-    pixel = image->pixels;
-    iP = iPicture;
-    aP = aPicture;
-    n = (int) npixels;
+    pixel     = image->pixels;
+    iP        = iPicture;
+    aP        = aPicture;
+    n         = (int)npixels;
     max_inten = 0;
     min_inten = 0xff;
     while (n-- > 0)
     {
-	p = *pixel++;
-	*aP++ = (int) (p >> 24);
-	iR = (int) _XcursorPixelBrightness (p);
-	if (iR > max_inten) max_inten = iR;
-	if (iR < min_inten) min_inten = iR;
-	*iP++ = iR;
+        p     = *pixel++;
+        *aP++ = (int)(p >> 24);
+        iR    = (int)_XcursorPixelBrightness(p);
+        if (iR > max_inten) max_inten = iR;
+        if (iR < min_inten) min_inten = iR;
+        *iP++ = iR;
     }
     /*
      * Draw the image while diffusing the error
      */
-    iP = iPicture;
-    aP = aPicture;
+    iP         = iPicture;
+    aP         = aPicture;
     mean_inten = (max_inten + min_inten + 1) >> 1;
-    for (y = 0; (unsigned) y < image->height; y++)
-	for (x = 0; (unsigned) x < image->width; x++)
-	{
-	    aR = *aP;
-	    iR = *iP;
-	    if (aR >= 0x80)
-	    {
-		XPutPixel (core->msk_image, x, y, 1);
-		aA = 0xff;
-	    }
-	    else
-	    {
-		XPutPixel (core->msk_image, x, y, 0);
-		aA = 0x00;
-	    }
-	    if (iR >= mean_inten)
-	    {
-		XPutPixel (core->src_image, x, y, 0);
-		iA = max_inten;
-	    }
-	    else
-	    {
-		XPutPixel (core->src_image, x, y, 1);
-		iA = min_inten;
-	    }
-	    iError = iR - iA;
-	    aError = aR - aA;
-	    iErrorRight = (iError * 7) >> 4;
-	    iErrorBelowLeft = (iError * 3) >> 4;
-	    iErrorBelow = (iError * 5) >> 4;
-	    iErrorBelowRight = (iError - iErrorRight -
-				iErrorBelowLeft - iErrorBelow);
-	    aErrorRight = (aError * 7) >> 4;
-	    aErrorBelowLeft = (aError * 3) >> 4;
-	    aErrorBelow = (aError * 5) >> 4;
-	    aErrorBelowRight = (aError - aErrorRight -
-				aErrorBelowLeft - aErrorBelow);
-	    if (x < ((int)image->width - 1))
-	    {
-		iP[right] += iErrorRight;
-		aP[right] += aErrorRight;
-	    }
-	    if (y < ((int)image->height - 1))
-	    {
-		if (x)
-		{
-		    iP[belowLeft] += iErrorBelowLeft;
-		    aP[belowLeft] += aErrorBelowLeft;
-		}
-		iP[below] += iErrorBelow;
-		aP[below] += aErrorBelow;
-		if (x < ((int)image->width - 1))
-		{
-		    iP[belowRight] += iErrorBelowRight;
-		    aP[belowRight] += aErrorBelowRight;
-		}
-	    }
-	    aP++;
-	    iP++;
-	}
-    free (iPicture);
-    core->on_color.red =
-    core->on_color.green =
-    core->on_color.blue = (unsigned short) (min_inten | min_inten << 8);
-    core->off_color.red =
-    core->off_color.green =
-    core->off_color.blue = (unsigned short) (max_inten | max_inten << 8);
+    for (y = 0; (unsigned)y < image->height; y++)
+        for (x = 0; (unsigned)x < image->width; x++)
+        {
+            aR = *aP;
+            iR = *iP;
+            if (aR >= 0x80)
+            {
+                XPutPixel(core->msk_image, x, y, 1);
+                aA = 0xff;
+            }
+            else
+            {
+                XPutPixel(core->msk_image, x, y, 0);
+                aA = 0x00;
+            }
+            if (iR >= mean_inten)
+            {
+                XPutPixel(core->src_image, x, y, 0);
+                iA = max_inten;
+            }
+            else
+            {
+                XPutPixel(core->src_image, x, y, 1);
+                iA = min_inten;
+            }
+            iError          = iR - iA;
+            aError          = aR - aA;
+            iErrorRight     = (iError * 7) >> 4;
+            iErrorBelowLeft = (iError * 3) >> 4;
+            iErrorBelow     = (iError * 5) >> 4;
+            iErrorBelowRight =
+                (iError - iErrorRight - iErrorBelowLeft - iErrorBelow);
+            aErrorRight     = (aError * 7) >> 4;
+            aErrorBelowLeft = (aError * 3) >> 4;
+            aErrorBelow     = (aError * 5) >> 4;
+            aErrorBelowRight =
+                (aError - aErrorRight - aErrorBelowLeft - aErrorBelow);
+            if (x < ((int)image->width - 1))
+            {
+                iP[right] += iErrorRight;
+                aP[right] += aErrorRight;
+            }
+            if (y < ((int)image->height - 1))
+            {
+                if (x)
+                {
+                    iP[belowLeft] += iErrorBelowLeft;
+                    aP[belowLeft] += aErrorBelowLeft;
+                }
+                iP[below] += iErrorBelow;
+                aP[below] += aErrorBelow;
+                if (x < ((int)image->width - 1))
+                {
+                    iP[belowRight] += iErrorBelowRight;
+                    aP[belowRight] += aErrorBelowRight;
+                }
+            }
+            aP++;
+            iP++;
+        }
+    free(iPicture);
+    core->on_color.red = core->on_color.green = core->on_color.blue =
+        (unsigned short)(min_inten | min_inten << 8);
+    core->off_color.red = core->off_color.green = core->off_color.blue =
+        (unsigned short)(max_inten | max_inten << 8);
     return True;
 }
 
 static Bool
-_XcursorThreshold (const XcursorImage *image, XcursorCoreCursor *core)
+_XcursorThreshold(const XcursorImage *image, XcursorCoreCursor *core)
 {
-    XcursorPixel    *pixel, p;
-    int		    x, y;
+    XcursorPixel *pixel, p;
+    int           x, y;
 
     /*
      * Draw the image, picking black for dark pixels and white for light
      */
     pixel = image->pixels;
-    for (y = 0; (unsigned) y < image->height; y++)
-	for (x = 0; (unsigned) x < image->width; x++)
-	{
-	    p = *pixel++;
-	    if ((p >> 24) >= 0x80)
-	    {
-		XPutPixel (core->msk_image, x, y, 1);
-		if (_XcursorPixelBrightness (p) > 0x80)
-		    XPutPixel (core->src_image, x, y, 0);
-		else
-		    XPutPixel (core->src_image, x, y, 1);
-	    }
-	    else
-	    {
-		XPutPixel (core->msk_image, x, y, 0);
-		XPutPixel (core->src_image, x, y, 0);
-	    }
-	}
-    core->on_color.red =
-    core->on_color.green =
-    core->on_color.blue = 0;
-    core->off_color.red =
-    core->off_color.green =
-    core->off_color.blue = 0xffff;
+    for (y = 0; (unsigned)y < image->height; y++)
+        for (x = 0; (unsigned)x < image->width; x++)
+        {
+            p = *pixel++;
+            if ((p >> 24) >= 0x80)
+            {
+                XPutPixel(core->msk_image, x, y, 1);
+                if (_XcursorPixelBrightness(p) > 0x80)
+                    XPutPixel(core->src_image, x, y, 0);
+                else XPutPixel(core->src_image, x, y, 1);
+            }
+            else
+            {
+                XPutPixel(core->msk_image, x, y, 0);
+                XPutPixel(core->src_image, x, y, 0);
+            }
+        }
+    core->on_color.red = core->on_color.green = core->on_color.blue = 0;
+    core->off_color.red = core->off_color.green = core->off_color.blue = 0xffff;
     return True;
 }
 
 Cursor
-XcursorImageLoadCursor (Display *dpy, const XcursorImage *image)
+XcursorImageLoadCursor(Display *dpy, const XcursorImage *image)
 {
-    Cursor  cursor;
+    Cursor cursor;
 
 #if RENDER_MAJOR > 0 || RENDER_MINOR >= 5
-    if (XcursorSupportsARGB (dpy))
+    if (XcursorSupportsARGB(dpy))
     {
-	XImage		    ximage;
-	int		    screen = DefaultScreen (dpy);
-	Pixmap		    pixmap;
-	Picture		    picture;
-	GC		    gc;
-	XRenderPictFormat   *format;
+        XImage             ximage;
+        int                screen = DefaultScreen(dpy);
+        Pixmap             pixmap;
+        Picture            picture;
+        GC                 gc;
+        XRenderPictFormat *format;
 
-	ximage.width = (int) image->width;
-	ximage.height = (int) image->height;
-	ximage.xoffset = 0;
-	ximage.format = ZPixmap;
-	ximage.data = (char *) image->pixels;
-	ximage.byte_order = nativeByteOrder ();
-	ximage.bitmap_unit = 32;
-	ximage.bitmap_bit_order = ximage.byte_order;
-	ximage.bitmap_pad = 32;
-	ximage.depth = 32;
-	ximage.bits_per_pixel = 32;
-	ximage.bytes_per_line = (int) (image->width * 4);
-	ximage.red_mask = 0xff0000;
-	ximage.green_mask = 0x00ff00;
-	ximage.blue_mask = 0x0000ff;
-	ximage.obdata = NULL;
-	if (!XInitImage (&ximage))
-	    return None;
-	pixmap = XCreatePixmap (dpy, RootWindow (dpy, screen),
-				image->width, image->height, 32);
-	gc = XCreateGC (dpy, pixmap, 0, NULL);
-	XPutImage (dpy, pixmap, gc, &ximage,
-		   0, 0, 0, 0, image->width, image->height);
-	XFreeGC (dpy, gc);
-	format = XRenderFindStandardFormat (dpy, PictStandardARGB32);
-	picture = XRenderCreatePicture (dpy, pixmap, format, 0, NULL);
-	XFreePixmap (dpy, pixmap);
-	cursor = XRenderCreateCursor (dpy, picture,
-				      image->xhot, image->yhot);
-	XRenderFreePicture (dpy, picture);
+        ximage.width            = (int)image->width;
+        ximage.height           = (int)image->height;
+        ximage.xoffset          = 0;
+        ximage.format           = ZPixmap;
+        ximage.data             = (char *)image->pixels;
+        ximage.byte_order       = nativeByteOrder();
+        ximage.bitmap_unit      = 32;
+        ximage.bitmap_bit_order = ximage.byte_order;
+        ximage.bitmap_pad       = 32;
+        ximage.depth            = 32;
+        ximage.bits_per_pixel   = 32;
+        ximage.bytes_per_line   = (int)(image->width * 4);
+        ximage.red_mask         = 0xff0000;
+        ximage.green_mask       = 0x00ff00;
+        ximage.blue_mask        = 0x0000ff;
+        ximage.obdata           = NULL;
+        if (!XInitImage(&ximage)) return None;
+        pixmap = XCreatePixmap(dpy,
+                               RootWindow(dpy, screen),
+                               image->width,
+                               image->height,
+                               32);
+        gc     = XCreateGC(dpy, pixmap, 0, NULL);
+        XPutImage(dpy,
+                  pixmap,
+                  gc,
+                  &ximage,
+                  0,
+                  0,
+                  0,
+                  0,
+                  image->width,
+                  image->height);
+        XFreeGC(dpy, gc);
+        format  = XRenderFindStandardFormat(dpy, PictStandardARGB32);
+        picture = XRenderCreatePicture(dpy, pixmap, format, 0, NULL);
+        XFreePixmap(dpy, pixmap);
+        cursor = XRenderCreateCursor(dpy, picture, image->xhot, image->yhot);
+        XRenderFreePicture(dpy, picture);
     }
     else
 #endif
     {
-	XcursorDisplayInfo  *info = _XcursorGetDisplayInfo (dpy);
-	int		    screen = DefaultScreen (dpy);
-	XcursorCoreCursor   core;
-	Pixmap		    src_pixmap, msk_pixmap;
-	GC		    gc;
-	XGCValues	    gcv;
+        XcursorDisplayInfo *info   = _XcursorGetDisplayInfo(dpy);
+        int                 screen = DefaultScreen(dpy);
+        XcursorCoreCursor   core;
+        Pixmap              src_pixmap, msk_pixmap;
+        GC                  gc;
+        XGCValues           gcv;
 
-	if (!info)
-	    return 0;
+        if (!info) return 0;
 
-	core.src_image = XCreateImage (dpy, NULL, 1, ZPixmap,
-				       0, NULL, image->width, image->height,
-				       32, 0);
-	core.src_image->data = Xmalloc (image->height *
-					(unsigned) core.src_image->bytes_per_line);
-	core.msk_image = XCreateImage (dpy, NULL, 1, ZPixmap,
-				       0, NULL, image->width, image->height,
-				       32, 0);
-	core.msk_image->data = Xmalloc (image->height *
-					(unsigned) core.msk_image->bytes_per_line);
+        core.src_image = XCreateImage(dpy,
+                                      NULL,
+                                      1,
+                                      ZPixmap,
+                                      0,
+                                      NULL,
+                                      image->width,
+                                      image->height,
+                                      32,
+                                      0);
+        core.src_image->data =
+            Xmalloc(image->height * (unsigned)core.src_image->bytes_per_line);
+        core.msk_image = XCreateImage(dpy,
+                                      NULL,
+                                      1,
+                                      ZPixmap,
+                                      0,
+                                      NULL,
+                                      image->width,
+                                      image->height,
+                                      32,
+                                      0);
+        core.msk_image->data =
+            Xmalloc(image->height * (unsigned)core.msk_image->bytes_per_line);
 
-	switch (info->dither) {
-	case XcursorDitherThreshold:
-	    if (!_XcursorThreshold (image, &core))
-		return 0;
-	    break;
-	case XcursorDitherMedian:
-	    if (!_XcursorHeckbertMedianCut (image, &core))
-		return 0;
-	    break;
-	case XcursorDitherOrdered:
-	    if (!_XcursorBayerOrderedDither (image, &core))
-		return 0;
-	    break;
-	case XcursorDitherDiffuse:
-	    if (!_XcursorFloydSteinberg (image, &core))
-		return 0;
-	    break;
-	default:
-	    return 0;
-	}
+        switch (info->dither)
+        {
+            case XcursorDitherThreshold:
+                if (!_XcursorThreshold(image, &core)) return 0;
+                break;
+            case XcursorDitherMedian:
+                if (!_XcursorHeckbertMedianCut(image, &core)) return 0;
+                break;
+            case XcursorDitherOrdered:
+                if (!_XcursorBayerOrderedDither(image, &core)) return 0;
+                break;
+            case XcursorDitherDiffuse:
+                if (!_XcursorFloydSteinberg(image, &core)) return 0;
+                break;
+            default:
+                return 0;
+        }
 
-	/*
+    /*
 	 * Create the cursor
 	 */
-	src_pixmap = XCreatePixmap (dpy, RootWindow (dpy, screen),
-				    image->width, image->height, 1);
-	msk_pixmap = XCreatePixmap (dpy, RootWindow (dpy, screen),
-				    image->width, image->height, 1);
-	gcv.foreground = 1;
-	gcv.background = 0;
-	gc = XCreateGC (dpy, src_pixmap,
-			GCForeground|GCBackground,
-			&gcv);
-	XPutImage (dpy, src_pixmap, gc, core.src_image,
-		   0, 0, 0, 0, image->width, image->height);
+        src_pixmap     = XCreatePixmap(dpy,
+                                   RootWindow(dpy, screen),
+                                   image->width,
+                                   image->height,
+                                   1);
+        msk_pixmap     = XCreatePixmap(dpy,
+                                   RootWindow(dpy, screen),
+                                   image->width,
+                                   image->height,
+                                   1);
+        gcv.foreground = 1;
+        gcv.background = 0;
+        gc = XCreateGC(dpy, src_pixmap, GCForeground | GCBackground, &gcv);
+        XPutImage(dpy,
+                  src_pixmap,
+                  gc,
+                  core.src_image,
+                  0,
+                  0,
+                  0,
+                  0,
+                  image->width,
+                  image->height);
 
-	XPutImage (dpy, msk_pixmap, gc, core.msk_image,
-		   0, 0, 0, 0, image->width, image->height);
-	XFreeGC (dpy, gc);
+        XPutImage(dpy,
+                  msk_pixmap,
+                  gc,
+                  core.msk_image,
+                  0,
+                  0,
+                  0,
+                  0,
+                  image->width,
+                  image->height);
+        XFreeGC(dpy, gc);
 
 #ifdef DEBUG_IMAGE
-	_XcursorDumpColor (&core.on_color, "on_color");
-	_XcursorDumpColor (&core.off_color, "off_color");
-	_XcursorDumpImage (core.src_image);
-	_XcursorDumpImage (core.msk_image);
+        _XcursorDumpColor(&core.on_color, "on_color");
+        _XcursorDumpColor(&core.off_color, "off_color");
+        _XcursorDumpImage(core.src_image);
+        _XcursorDumpImage(core.msk_image);
 #endif
-	XDestroyImage (core.src_image);
-	XDestroyImage (core.msk_image);
+        XDestroyImage(core.src_image);
+        XDestroyImage(core.msk_image);
 
-	cursor = XCreatePixmapCursor (dpy, src_pixmap, msk_pixmap,
-				      &core.on_color, &core.off_color,
-				      image->xhot, image->yhot);
-	XFreePixmap (dpy, src_pixmap);
-	XFreePixmap (dpy, msk_pixmap);
+        cursor = XCreatePixmapCursor(dpy,
+                                     src_pixmap,
+                                     msk_pixmap,
+                                     &core.on_color,
+                                     &core.off_color,
+                                     image->xhot,
+                                     image->yhot);
+        XFreePixmap(dpy, src_pixmap);
+        XFreePixmap(dpy, msk_pixmap);
     }
     return cursor;
 }
 
 XcursorCursors *
-XcursorImagesLoadCursors (Display *dpy, const XcursorImages *images)
+XcursorImagesLoadCursors(Display *dpy, const XcursorImages *images)
 {
-    XcursorCursors  *cursors = XcursorCursorsCreate (dpy, images->nimage);
-    int		    n;
+    XcursorCursors *cursors = XcursorCursorsCreate(dpy, images->nimage);
+    int             n;
 
-    if (!cursors)
-	return NULL;
+    if (!cursors) return NULL;
     for (n = 0; n < images->nimage; n++)
     {
-	cursors->cursors[n] = XcursorImageLoadCursor (dpy, images->images[n]);
-	if (!cursors->cursors[n])
-	{
-	    XcursorCursorsDestroy (cursors);
-	    return NULL;
-	}
-	cursors->ncursor++;
+        cursors->cursors[n] = XcursorImageLoadCursor(dpy, images->images[n]);
+        if (!cursors->cursors[n])
+        {
+            XcursorCursorsDestroy(cursors);
+            return NULL;
+        }
+        cursors->ncursor++;
     }
     return cursors;
 }
 
 Cursor
-XcursorImagesLoadCursor (Display *dpy, const XcursorImages *images)
+XcursorImagesLoadCursor(Display *dpy, const XcursorImages *images)
 {
-    Cursor  cursor;
-    if (images->nimage == 1 || !XcursorSupportsAnim (dpy))
-	cursor = XcursorImageLoadCursor (dpy, images->images[0]);
+    Cursor cursor;
+    if (images->nimage == 1 || !XcursorSupportsAnim(dpy))
+        cursor = XcursorImageLoadCursor(dpy, images->images[0]);
     else
     {
-	XcursorCursors	*cursors = XcursorImagesLoadCursors (dpy, images);
-	XAnimCursor	*anim;
-	int		n;
+        XcursorCursors *cursors = XcursorImagesLoadCursors(dpy, images);
+        XAnimCursor    *anim;
+        int             n;
 
-	if (!cursors)
-	    return 0;
-	anim = malloc ((size_t) cursors->ncursor * sizeof (XAnimCursor));
-	if (!anim)
-	{
-	    XcursorCursorsDestroy (cursors);
-	    return 0;
-	}
-	for (n = 0; n < cursors->ncursor; n++)
-	{
-	    anim[n].cursor = cursors->cursors[n];
-	    anim[n].delay = images->images[n]->delay;
-	}
-	cursor = XRenderCreateAnimCursor (dpy, cursors->ncursor, anim);
-	XcursorCursorsDestroy(cursors);
-	free (anim);
+        if (!cursors) return 0;
+        anim = malloc((size_t)cursors->ncursor * sizeof(XAnimCursor));
+        if (!anim)
+        {
+            XcursorCursorsDestroy(cursors);
+            return 0;
+        }
+        for (n = 0; n < cursors->ncursor; n++)
+        {
+            anim[n].cursor = cursors->cursors[n];
+            anim[n].delay  = images->images[n]->delay;
+        }
+        cursor = XRenderCreateAnimCursor(dpy, cursors->ncursor, anim);
+        XcursorCursorsDestroy(cursors);
+        free(anim);
     }
 #if defined HAVE_XFIXES && XFIXES_MAJOR >= 2
-    if (images->name)
-	XFixesSetCursorName (dpy, cursor, images->name);
+    if (images->name) XFixesSetCursorName(dpy, cursor, images->name);
 #endif
     return cursor;
 }
 
-
 Cursor
-XcursorFilenameLoadCursor (Display *dpy, const char *file)
+XcursorFilenameLoadCursor(Display *dpy, const char *file)
 {
-    int		    size = XcursorGetDefaultSize (dpy);
-    XcursorBool     resize = XcursorGetResizable (dpy);
-    XcursorImages   *images;
-    Cursor	    cursor;
+    int            size   = XcursorGetDefaultSize(dpy);
+    XcursorBool    resize = XcursorGetResizable(dpy);
+    XcursorImages *images;
+    Cursor         cursor;
 
-    images = _XcursorFilenameLoadImages (file, size, resize);
-    if (!images)
-	return None;
-    cursor = XcursorImagesLoadCursor (dpy, images);
-    XcursorImagesDestroy (images);
+    images = _XcursorFilenameLoadImages(file, size, resize);
+    if (!images) return None;
+    cursor = XcursorImagesLoadCursor(dpy, images);
+    XcursorImagesDestroy(images);
     return cursor;
 }
 
 XcursorCursors *
-XcursorFilenameLoadCursors (Display *dpy, const char *file)
+XcursorFilenameLoadCursors(Display *dpy, const char *file)
 {
-    int		    size = XcursorGetDefaultSize (dpy);
-    XcursorBool     resize = XcursorGetResizable (dpy);
-    XcursorImages   *images;
-    XcursorCursors  *cursors;
+    int             size   = XcursorGetDefaultSize(dpy);
+    XcursorBool     resize = XcursorGetResizable(dpy);
+    XcursorImages  *images;
+    XcursorCursors *cursors;
 
-    images = _XcursorFilenameLoadImages (file, size, resize);
-    if (!images)
-	return NULL;
-    cursors = XcursorImagesLoadCursors (dpy, images);
-    XcursorImagesDestroy (images);
+    images = _XcursorFilenameLoadImages(file, size, resize);
+    if (!images) return NULL;
+    cursors = XcursorImagesLoadCursors(dpy, images);
+    XcursorImagesDestroy(images);
     return cursors;
 }
 
@@ -776,30 +790,30 @@ XcursorFilenameLoadCursors (Display *dpy, const char *file)
  */
 
 Cursor
-_XcursorCreateGlyphCursor(Display	    *dpy,
-			  Font		    source_font,
-			  Font		    mask_font,
-			  unsigned int	    source_char,
-			  unsigned int	    mask_char,
-			  XColor _Xconst    *foreground,
-			  XColor _Xconst    *background)
+_XcursorCreateGlyphCursor(Display        *dpy,
+                          Font            source_font,
+                          Font            mask_font,
+                          unsigned int    source_char,
+                          unsigned int    mask_char,
+                          XColor _Xconst *foreground,
+                          XColor _Xconst *background)
 {
-    Cursor cid;
+    Cursor                          cid;
     register xCreateGlyphCursorReq *req;
 
     LockDisplay(dpy);
     GetReq(CreateGlyphCursor, req);
-    cid = req->cid = (CARD32) XAllocID(dpy);
-    req->source = (CARD32) source_font;
-    req->mask = (CARD32) mask_font;
-    req->sourceChar = (CARD16) source_char;
-    req->maskChar = (CARD16) mask_char;
-    req->foreRed = foreground->red;
-    req->foreGreen = foreground->green;
-    req->foreBlue = foreground->blue;
-    req->backRed = background->red;
-    req->backGreen = background->green;
-    req->backBlue = background->blue;
+    cid = req->cid  = (CARD32)XAllocID(dpy);
+    req->source     = (CARD32)source_font;
+    req->mask       = (CARD32)mask_font;
+    req->sourceChar = (CARD16)source_char;
+    req->maskChar   = (CARD16)mask_char;
+    req->foreRed    = foreground->red;
+    req->foreGreen  = foreground->green;
+    req->foreBlue   = foreground->blue;
+    req->backRed    = background->red;
+    req->backGreen  = background->green;
+    req->backBlue   = background->blue;
     UnlockDisplay(dpy);
     SyncHandle();
     return (cid);
@@ -810,7 +824,7 @@ _XcursorCreateGlyphCursor(Display	    *dpy,
  */
 
 Cursor
-_XcursorCreateFontCursor (Display *dpy, unsigned int shape)
+_XcursorCreateFontCursor(Display *dpy, unsigned int shape)
 {
 #define DATA(c) { 0UL, c, c, c, 0, 0 }
     static XColor _Xconst foreground = DATA(0);  /* black */
@@ -826,12 +840,15 @@ _XcursorCreateFontCursor (Display *dpy, unsigned int shape)
 
     if (dpy->cursor_font == None)
     {
-	dpy->cursor_font = XLoadFont (dpy, CURSORFONT);
-	if (dpy->cursor_font == None)
-	    return None;
+        dpy->cursor_font = XLoadFont(dpy, CURSORFONT);
+        if (dpy->cursor_font == None) return None;
     }
 
-    return _XcursorCreateGlyphCursor (dpy, dpy->cursor_font, dpy->cursor_font,
-				      shape, shape + 1, &foreground, &background);
+    return _XcursorCreateGlyphCursor(dpy,
+                                     dpy->cursor_font,
+                                     dpy->cursor_font,
+                                     shape,
+                                     shape + 1,
+                                     &foreground,
+                                     &background);
 }
-

@@ -25,21 +25,21 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-_XFreeExtData (XExtData *extension)
+_XFreeExtData(XExtData *extension)
 {
-	XExtData *temp;
-	while (extension) {
-		if (extension->free_private)
-		    (*extension->free_private)(extension);
-		else Xfree (extension->private_data);
-		temp = extension->next;
-		Xfree (extension);
-		extension = temp;
-	}
-	return 0;
+    XExtData *temp;
+    while (extension)
+    {
+        if (extension->free_private) (*extension->free_private)(extension);
+        else Xfree(extension->private_data);
+        temp = extension->next;
+        Xfree(extension);
+        extension = temp;
+    }
+    return 0;
 }

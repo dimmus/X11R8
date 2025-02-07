@@ -25,20 +25,20 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XSetPlaneMask (
-    register Display *dpy,
-    GC gc,
-    unsigned long planemask) /* CARD32 */
+XSetPlaneMask(register Display *dpy,
+              GC                gc,
+              unsigned long     planemask) /* CARD32 */
 {
     LockDisplay(dpy);
-    if (gc->values.plane_mask != planemask) {
-	gc->values.plane_mask = planemask;
-	gc->dirty |= GCPlaneMask;
+    if (gc->values.plane_mask != planemask)
+    {
+        gc->values.plane_mask = planemask;
+        gc->dirty |= GCPlaneMask;
     }
     UnlockDisplay(dpy);
     SyncHandle();

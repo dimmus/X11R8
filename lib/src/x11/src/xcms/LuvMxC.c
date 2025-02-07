@@ -34,7 +34,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
@@ -44,12 +44,11 @@
 /*
  *	DEFINES
  */
-#define MAXBISECTCOUNT	100
-#define EPS	        (XcmsFloat)0.001
-#define START_CHROMA	(XcmsFloat)2.2
-#define TOPL		(XcmsFloat)100.0
+#define MAXBISECTCOUNT 100
+#define EPS            (XcmsFloat)0.001
+#define START_CHROMA   (XcmsFloat)2.2
+#define TOPL           (XcmsFloat)100.0
 
-
 /************************************************************************
  *									*
  *			 PUBLIC ROUTINES				*
@@ -63,11 +62,10 @@
  *	SYNOPSIS
  */
 Status
-XcmsCIELuvQueryMaxC(
-    XcmsCCC ccc,
-    XcmsFloat hue_angle,	    /* hue angle in degrees */
-    XcmsFloat L_star,
-    XcmsColor *pColor_return)
+XcmsCIELuvQueryMaxC(XcmsCCC    ccc,
+                    XcmsFloat  hue_angle,     /* hue angle in degrees */
+                    XcmsFloat  L_star,
+                    XcmsColor *pColor_return)
 /*
  *	DESCRIPTION
  *		Return the maximum chroma for a specific hue_angle and L_star.
@@ -86,45 +84,49 @@ XcmsCIELuvQueryMaxC(
  *
  */
 {
-    XcmsCCCRec	myCCC;
+    XcmsCCCRec myCCC;
     XcmsColor  tmp;
     XcmsColor  max_lc;
-    XcmsFloat n_L_star, last_L_star, prev_L_star;
-    XcmsFloat hue, lastuStar, lastvStar, /*lastChroma,*/ maxDist, nT, rFactor;
+    XcmsFloat  n_L_star, last_L_star, prev_L_star;
+    XcmsFloat  hue, lastuStar, lastvStar, /*lastChroma,*/ maxDist, nT, rFactor;
     XcmsRGBi   rgb_saved;
-    int nCount, nMaxCount;
+    int        nCount, nMaxCount;
 
     /*
      * Check Arguments
      */
-    if (ccc == NULL || pColor_return == NULL) {
-	return(XcmsFailure);
+    if (ccc == NULL || pColor_return == NULL)
+    {
+        return (XcmsFailure);
     }
 
     /* Use my own CCC  and inherit screen white Pt */
-    memcpy ((char *)&myCCC, (char *)ccc, sizeof(XcmsCCCRec));
+    memcpy((char *)&myCCC, (char *)ccc, sizeof(XcmsCCCRec));
     myCCC.clientWhitePt.format = XcmsUndefinedFormat;
     myCCC.gamutCompProc = (XcmsCompressionProc)NULL;/* no gamut comp func */
 
-    while (hue_angle < 0.0) {
-	hue_angle += 360.0;
+    while (hue_angle < 0.0)
+    {
+        hue_angle += 360.0;
     }
-    while (hue_angle >= 360.0) {
-	hue_angle -= 360.0;
+    while (hue_angle >= 360.0)
+    {
+        hue_angle -= 360.0;
     }
 
-    hue = radians(hue_angle);
+    hue                    = radians(hue_angle);
     tmp.spec.CIELuv.L_star = L_star;
     tmp.spec.CIELuv.u_star = XCMS_CIEUSTAROFHUE(hue, START_CHROMA);
     tmp.spec.CIELuv.v_star = XCMS_CIEVSTAROFHUE(hue, START_CHROMA);
-    tmp.pixel = pColor_return->pixel;
-    tmp.format = XcmsCIELuvFormat;
+    tmp.pixel              = pColor_return->pixel;
+    tmp.format             = XcmsCIELuvFormat;
 
     /* Step 1: compute the maximum L_star and chroma for this hue. */
     memcpy((char *)&max_lc, (char *)&tmp, sizeof(XcmsColor));
-    if (_XcmsCIELuvQueryMaxLCRGB(&myCCC, hue, &max_lc, &rgb_saved)
-	== XcmsFailure) {
-	    return(XcmsFailure);
+    if (_XcmsCIELuvQueryMaxLCRGB(&myCCC, hue, &max_lc, &rgb_saved) ==
+        XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
     /*
@@ -132,73 +134,91 @@ XcmsCIELuvQueryMaxC(
      *          Note the differences between when the point to be found
      *          is above the maximum LC point and when it is below.
      */
-    if (L_star <= max_lc.spec.CIELuv.L_star) {
-	maxDist = max_lc.spec.CIELuv.L_star;
-    } else {
-	maxDist = TOPL - max_lc.spec.CIELuv.L_star;
+    if (L_star <= max_lc.spec.CIELuv.L_star)
+    {
+        maxDist = max_lc.spec.CIELuv.L_star;
+    }
+    else
+    {
+        maxDist = TOPL - max_lc.spec.CIELuv.L_star;
     }
 
-    n_L_star = L_star;
+    n_L_star    = L_star;
     last_L_star = -1.0;
-    nMaxCount = MAXBISECTCOUNT;
-    rFactor = 1.0;
+    nMaxCount   = MAXBISECTCOUNT;
+    rFactor     = 1.0;
 
-    for (nCount = 0; nCount < nMaxCount; nCount++) {
-	prev_L_star =  last_L_star;
-	last_L_star =  tmp.spec.CIELuv.L_star;
+    for (nCount = 0; nCount < nMaxCount; nCount++)
+    {
+        prev_L_star = last_L_star;
+        last_L_star = tmp.spec.CIELuv.L_star;
 /*	lastChroma = XCMS_CIELUV_PMETRIC_CHROMA(tmp.spec.CIELuv.u_star,  */
 /*						tmp.spec.CIELuv.v_star); */
-	lastuStar = tmp.spec.CIELuv.u_star;
-	lastvStar = tmp.spec.CIELuv.v_star;
-	nT = (n_L_star - max_lc.spec.CIELuv.L_star) / maxDist * rFactor;
+        lastuStar   = tmp.spec.CIELuv.u_star;
+        lastvStar   = tmp.spec.CIELuv.v_star;
+        nT = (n_L_star - max_lc.spec.CIELuv.L_star) / maxDist * rFactor;
         /* printf("(n_L_star, nT) = %lf %lf ", n_L_star, nT); */
-	if (nT > 0) {
-	    tmp.spec.RGBi.red = rgb_saved.red * (1.0 - nT) + nT;
-	    tmp.spec.RGBi.green = rgb_saved.green * (1.0 - nT) + nT;
-	    tmp.spec.RGBi.blue  = rgb_saved.blue * (1.0 - nT) + nT;
-	} else {
-	    tmp.spec.RGBi.red = rgb_saved.red + (rgb_saved.red * nT);
-	    tmp.spec.RGBi.green = rgb_saved.green + (rgb_saved.green * nT);
-	    tmp.spec.RGBi.blue = rgb_saved.blue + (rgb_saved.blue * nT);
-	}
-	tmp.format = XcmsRGBiFormat;
+        if (nT > 0)
+        {
+            tmp.spec.RGBi.red   = rgb_saved.red * (1.0 - nT) + nT;
+            tmp.spec.RGBi.green = rgb_saved.green * (1.0 - nT) + nT;
+            tmp.spec.RGBi.blue  = rgb_saved.blue * (1.0 - nT) + nT;
+        }
+        else
+        {
+            tmp.spec.RGBi.red   = rgb_saved.red + (rgb_saved.red * nT);
+            tmp.spec.RGBi.green = rgb_saved.green + (rgb_saved.green * nT);
+            tmp.spec.RGBi.blue  = rgb_saved.blue + (rgb_saved.blue * nT);
+        }
+        tmp.format = XcmsRGBiFormat;
 
-	/* convert from RGB to CIELuv */
-	if (_XcmsConvertColorsWithWhitePt(&myCCC, &tmp,
-			    ScreenWhitePointOfCCC(&myCCC), 1, XcmsCIELuvFormat,
-			    (Bool *) NULL) == XcmsFailure) {
-	    return(XcmsFailure);
-	}
+    /* convert from RGB to CIELuv */
+        if (_XcmsConvertColorsWithWhitePt(&myCCC,
+                                          &tmp,
+                                          ScreenWhitePointOfCCC(&myCCC),
+                                          1,
+                                          XcmsCIELuvFormat,
+                                          (Bool *)NULL) == XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
 
-	/*
+    /*
 	 * Now check if we've reached the target L_star
 	 */
-	/* printf("result Lstar = %lf\n", tmp.spec.CIELuv.L_star); */
-	if (tmp.spec.CIELuv.L_star <= L_star + EPS &&
-	    tmp.spec.CIELuv.L_star >= L_star - EPS) {
-		memcpy((char *)pColor_return, (char *)&tmp, sizeof(XcmsColor));
-		return(XcmsSuccess);
-	}
-	if (nT > 0) {
-	    n_L_star += ((TOPL - n_L_star) *
-			 (L_star - tmp.spec.CIELuv.L_star)) / (TOPL - L_star);
-	} else {
-	    n_L_star *= L_star / tmp.spec.CIELuv.L_star;
-	}
-	if (tmp.spec.CIELuv.L_star <= prev_L_star + EPS &&
-	    tmp.spec.CIELuv.L_star >= prev_L_star - EPS) {
-		rFactor *= 0.5;  /* selective relaxation employed */
-		/* printf("rFactor = %lf\n", rFactor); */
-	}
+    /* printf("result Lstar = %lf\n", tmp.spec.CIELuv.L_star); */
+        if (tmp.spec.CIELuv.L_star <= L_star + EPS &&
+            tmp.spec.CIELuv.L_star >= L_star - EPS)
+        {
+            memcpy((char *)pColor_return, (char *)&tmp, sizeof(XcmsColor));
+            return (XcmsSuccess);
+        }
+        if (nT > 0)
+        {
+            n_L_star +=
+                ((TOPL - n_L_star) * (L_star - tmp.spec.CIELuv.L_star)) /
+                (TOPL - L_star);
+        }
+        else
+        {
+            n_L_star *= L_star / tmp.spec.CIELuv.L_star;
+        }
+        if (tmp.spec.CIELuv.L_star <= prev_L_star + EPS &&
+            tmp.spec.CIELuv.L_star >= prev_L_star - EPS)
+        {
+            rFactor *= 0.5;  /* selective relaxation employed */
+        /* printf("rFactor = %lf\n", rFactor); */
+        }
     }
     if (XCMS_FABS(last_L_star - L_star) <
-	XCMS_FABS(tmp.spec.CIELuv.L_star - L_star)) {
-	    tmp.spec.CIELuv.u_star = lastuStar;
-	    tmp.spec.CIELuv.v_star = lastvStar;
+        XCMS_FABS(tmp.spec.CIELuv.L_star - L_star))
+    {
+        tmp.spec.CIELuv.u_star = lastuStar;
+        tmp.spec.CIELuv.v_star = lastvStar;
 /*	    tmp.spec.CIELuv.u_star = XCMS_CIEUSTAROFHUE(hue, lastChroma); */
 /*	    tmp.spec.CIELuv.v_star = XCMS_CIEVSTAROFHUE(hue, lastChroma); */
     }
     tmp.spec.CIELuv.L_star = L_star;
     memcpy((char *)pColor_return, (char *)&tmp, sizeof(XcmsColor));
-    return(XcmsSuccess);
+    return (XcmsSuccess);
 }

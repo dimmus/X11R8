@@ -25,24 +25,23 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XChangeActivePointerGrab(
-    register Display *dpy,
-    unsigned int event_mask, /* CARD16 */
-    Cursor curs,
-    Time time)
+XChangeActivePointerGrab(register Display *dpy,
+                         unsigned int      event_mask, /* CARD16 */
+                         Cursor            curs,
+                         Time              time)
 {
     register xChangeActivePointerGrabReq *req;
 
     LockDisplay(dpy);
     GetReq(ChangeActivePointerGrab, req);
     req->eventMask = event_mask;
-    req->cursor = curs;
-    req->time = time;
+    req->cursor    = curs;
+    req->time      = time;
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;

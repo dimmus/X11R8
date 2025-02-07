@@ -25,14 +25,12 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XSetCloseDownMode(
-    register Display *dpy,
-    int mode)
+XSetCloseDownMode(register Display *dpy, int mode)
 {
     register xSetCloseDownModeReq *req;
 
@@ -43,4 +41,3 @@ XSetCloseDownMode(
     SyncHandle();
     return 1;
 }
-

@@ -27,27 +27,28 @@
 /*----------------------------------------------------------------------*/
 /*	This file contains Xlcint.h extension for AIX.			*/
 /************************************************************************/
-#ifndef	_Xaixlcint_h
-#define	_Xaixlcint_h
+#ifndef _Xaixlcint_h
+#define _Xaixlcint_h
 
 #include "Xlcint.h"
 #include <sys/lc_core.h>
 
-#define	_LC_LDX		11
-#define	_LC_LDX_R6	(_LC_LDX+1)
-#define	_LC_VERSION_R5	5
-#define	_LC_VERSION_R6	6
+#define _LC_LDX        11
+#define _LC_LDX_R6     (_LC_LDX + 1)
+#define _LC_VERSION_R5 5
+#define _LC_VERSION_R6 6
 
-typedef	struct	_LC_core_ldx_t	{
-    _LC_object_t	lc_object_header;
-    XLCd		(*default_loader)();
-    Bool		sticky;
+typedef struct _LC_core_ldx_t
+{
+    _LC_object_t lc_object_header;
+    XLCd (*default_loader)();
+    Bool sticky;
 } _XlcCoreObjRec, *_XlcCoreObj;
 
 #if _LC_VERSION < 0x40000000
-#define __type_id type_id
-#define __magic magic
-#define __version version
+#  define __type_id type_id
+#  define __magic   magic
+#  define __version version
 #endif
 
-#endif	/*_Xaixlcint_h*/
+#endif /*_Xaixlcint_h*/

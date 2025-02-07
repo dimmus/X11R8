@@ -69,7 +69,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "IntrinsicI.h"
 #include <stdio.h>
@@ -80,25 +80,22 @@ in this Software without prior written authorization from The Open Group.
    GLOBALERRORS to be FALSE (or 0). */
 
 #ifndef GLOBALERRORS
-#define GLOBALERRORS 1
+#  define GLOBALERRORS 1
 #endif
 
 static void InitErrorHandling(XrmDatabase *);
 
 #if GLOBALERRORS
-static XrmDatabase errorDB = NULL;
-static Boolean error_inited = FALSE;
+static XrmDatabase errorDB      = NULL;
+static Boolean     error_inited = FALSE;
 void _XtDefaultErrorMsg(String, String, String, String, String *, Cardinal *);
 void _XtDefaultWarningMsg(String, String, String, String, String *, Cardinal *);
-void
-_XtDefaultError(String)
-    _X_NORETURN;
-void
-_XtDefaultWarning(String);
-static XtErrorMsgHandler errorMsgHandler = _XtDefaultErrorMsg;
-static XtErrorMsgHandler warningMsgHandler = _XtDefaultWarningMsg;
-static XtErrorHandler errorHandler _X_NORETURN = _XtDefaultError;
-static XtErrorHandler warningHandler = _XtDefaultWarning;
+void _XtDefaultError(String) _X_NORETURN;
+void _XtDefaultWarning(String);
+static XtErrorMsgHandler           errorMsgHandler   = _XtDefaultErrorMsg;
+static XtErrorMsgHandler           warningMsgHandler = _XtDefaultWarningMsg;
+static XtErrorHandler errorHandler _X_NORETURN       = _XtDefaultError;
+static XtErrorHandler              warningHandler    = _XtDefaultWarning;
 #endif                          /* GLOBALERRORS */
 
 XrmDatabase *
@@ -138,87 +135,102 @@ XtGetErrorDatabaseText(register _Xconst char *name,
                        register _Xconst char *type,
                        register _Xconst char *class,
                        _Xconst char *defaultp,
-                       _XtString buffer, int nbytes)
+                       _XtString     buffer,
+                       int           nbytes)
 {
 #if GLOBALERRORS
     XtAppGetErrorDatabaseText(NULL,
-                              name, type, class, defaultp, buffer, nbytes,
+                              name,
+                              type,
+                              class,
+                              defaultp,
+                              buffer,
+                              nbytes,
                               NULL);
 #else
     XtAppGetErrorDatabaseText(_XtDefaultAppContext(),
-                              name, type, class, defaultp, buffer, nbytes,
+                              name,
+                              type,
+                              class,
+                              defaultp,
+                              buffer,
+                              nbytes,
                               NULL);
 #endif                          /* GLOBALERRORS */
 }
 
 void
-XtAppGetErrorDatabaseText(XtAppContext app _X_UNUSED,
+XtAppGetErrorDatabaseText(XtAppContext app       _X_UNUSED,
                           register _Xconst char *name,
                           register _Xconst char *type,
                           register _Xconst char *class,
                           _Xconst char *defaultp,
-                          _XtString buffer,
-                          int nbytes,
-                          XrmDatabase db)
+                          _XtString     buffer,
+                          int           nbytes,
+                          XrmDatabase   db)
 {
-    String str_class;
+    String    str_class;
     _XtString type_str;
-    XrmValue result;
-    char *str_name = NULL;
-    char *temp = NULL;
+    XrmValue  result;
+    char     *str_name = NULL;
+    char     *temp     = NULL;
 
 #if GLOBALERRORS
     LOCK_PROCESS;
-    if (error_inited == FALSE) {
+    if (error_inited == FALSE)
+    {
         InitErrorHandling(&errorDB);
         error_inited = TRUE;
     }
 #else
     LOCK_APP(app);
-    if (app->error_inited == FALSE) {
+    if (app->error_inited == FALSE)
+    {
         InitErrorHandling(&app->errorDB);
         app->error_inited = TRUE;
     }
 #endif                          /* GLOBALERRORS */
     if (!(str_name = ALLOCATE_LOCAL(strlen(name) + strlen(type) + 2)))
         _XtAllocError(NULL);
-    (void) sprintf(str_name, "%s.%s", name, type);
+    (void)sprintf(str_name, "%s.%s", name, type);
     /* XrmGetResource requires the name and class to be fully qualified
      * and to have the same number of components. */
     str_class = (String) class;
-    if (!strchr(class, '.')) {
+    if (!strchr(class, '.'))
+    {
         if (!(temp = ALLOCATE_LOCAL(2 * strlen(class) + 2)))
             _XtAllocError(NULL);
-        (void) sprintf(temp, "%s.%s", class, class);
+        (void)sprintf(temp, "%s.%s", class, class);
         str_class = temp;
     }
-    if (db == NULL) {
+    if (db == NULL)
+    {
 #if GLOBALERRORS
-        (void) XrmGetResource(errorDB, str_name, str_class, &type_str, &result);
+        (void)XrmGetResource(errorDB, str_name, str_class, &type_str, &result);
 #else
-        (void) XrmGetResource(app->errorDB, str_name, str_class, &type_str,
-                              &result);
+        (void)XrmGetResource(app->errorDB,
+                             str_name,
+                             str_class,
+                             &type_str,
+                             &result);
 #endif                          /* GLOBALERRORS */
     }
-    else
-        (void) XrmGetResource(db, str_name, str_class, &type_str, &result);
-    if (result.addr) {
-        (void) strncpy(buffer, result.addr, (size_t) nbytes);
-        if (result.size > (unsigned) nbytes)
-            buffer[nbytes - 1] = 0;
+    else (void)XrmGetResource(db, str_name, str_class, &type_str, &result);
+    if (result.addr)
+    {
+        (void)strncpy(buffer, result.addr, (size_t)nbytes);
+        if (result.size > (unsigned)nbytes) buffer[nbytes - 1] = 0;
     }
-    else {
-        int len = (int) strlen(defaultp);
+    else
+    {
+        int len = (int)strlen(defaultp);
 
-        if (len >= nbytes)
-            len = nbytes - 1;
-        (void) memmove(buffer, defaultp, (size_t) len);
+        if (len >= nbytes) len = nbytes - 1;
+        (void)memmove(buffer, defaultp, (size_t)len);
         buffer[len] = '\0';
     }
-    if (str_name)
-        DEALLOCATE_LOCAL(str_name);
-    if (temp)
-        DEALLOCATE_LOCAL(temp);
+    if (str_name) DEALLOCATE_LOCAL(str_name);
+    if (temp) DEALLOCATE_LOCAL(temp);
 #if GLOBALERRORS
     UNLOCK_PROCESS;
 #else
@@ -239,48 +251,58 @@ static void
 DefaultMsg(String name,
            String type,
            String class,
-           String defaultp,
-           String *params,
+           String          defaultp,
+           String         *params,
            const Cardinal *num_params,
-           Bool error,
-           void (*fn) (_Xconst _XtString))
+           Bool            error,
+           void (*fn)(_Xconst _XtString))
 {
 #define BIGBUF 1024
-    char buffer[BIGBUF];
+    char  buffer[BIGBUF];
     char *message;
 
     XtGetErrorDatabaseText(name, type, class, defaultp, buffer, BIGBUF);
 /*need better solution here, perhaps use lower level printf primitives? */
-    if (params == NULL || num_params == NULL || *num_params == 0)
-        (*fn) (buffer);
+    if (params == NULL || num_params == NULL || *num_params == 0) (*fn)(buffer);
 #ifndef WIN32                   /* and OS/2 */
-    else if ((getuid() != geteuid()) || getuid() == 0) {
+    else if ((getuid() != geteuid()) || getuid() == 0)
+    {
         if ((error && errorHandler == _XtDefaultError) ||
-            (!error && warningHandler == _XtDefaultWarning)) {
+            (!error && warningHandler == _XtDefaultWarning))
+        {
             /*
              * if it's just going to go to stderr anyway, then we'll
              * fprintf to stderr ourselves and skip the insecure sprintf.
              */
             Cardinal i = *num_params;
-            String par[10];
+            String   par[10];
 
-            if (i > 10)
-                i = 10;
-            (void) memcpy(par, params, i * sizeof(String));
+            if (i > 10) i = 10;
+            (void)memcpy(par, params, i * sizeof(String));
             memset(&par[i], 0, (10 - i) * sizeof(String));
-            (void) fprintf(stderr, "%s%s",
-                           error ? XTERROR_PREFIX : XTWARNING_PREFIX,
-                           error ? "Error: " : "Warning: ");
-            (void) fprintf(stderr, buffer,
-                           par[0], par[1], par[2], par[3], par[4],
-                           par[5], par[6], par[7], par[8], par[9]);
-            (void) fprintf(stderr, "%c", '\n');
+            (void)fprintf(stderr,
+                          "%s%s",
+                          error ? XTERROR_PREFIX : XTWARNING_PREFIX,
+                          error ? "Error: " : "Warning: ");
+            (void)fprintf(stderr,
+                          buffer,
+                          par[0],
+                          par[1],
+                          par[2],
+                          par[3],
+                          par[4],
+                          par[5],
+                          par[6],
+                          par[7],
+                          par[8],
+                          par[9]);
+            (void)fprintf(stderr, "%c", '\n');
             if (i != *num_params)
-                (*fn) ("Some arguments in previous message were lost");
-            else if (error)
-                exit(1);
+                (*fn)("Some arguments in previous message were lost");
+            else if (error) exit(1);
         }
-        else {
+        else
+        {
             /*
              * can't tell what it might do, so we'll play it safe
              */
@@ -289,11 +311,12 @@ This program is an suid-root program or is being run by the root user.\n\
 The full text of the error or warning message cannot be safely formatted\n\
 in this environment. You may get a more descriptive message by running the\n\
 program as a non-root user or by removing the suid bit on the executable.");
-            (*fn) (buffer);     /* if *fn is an ErrorHandler it should exit */
+            (*fn)(buffer);     /* if *fn is an ErrorHandler it should exit */
         }
     }
 #endif
-    else {
+    else
+    {
         /*
          * If you have snprintf the worst thing that could happen is you'd
          * lose some information. Without snprintf you're probably going to
@@ -301,11 +324,10 @@ program as a non-root user or by removing the suid bit on the executable.");
          * If it hurts when you go like this then don't go like this! :-)
          */
         Cardinal i = *num_params;
-        String par[10];
+        String   par[10];
 
-        if (i > 10)
-            i = 10;
-        (void) memcpy(par, params, i * sizeof(String));
+        if (i > 10) i = 10;
+        (void)memcpy(par, params, i * sizeof(String));
         memset(&par[i], 0, (10 - i) * sizeof(String));
         if (i != *num_params)
             XtWarning("Some arguments in following message were lost");
@@ -316,17 +338,29 @@ program as a non-root user or by removing the suid bit on the executable.");
          * messages shouldn't be called frequently enough for this
          * to be a performance issue.
          */
-        if ((message = __XtMalloc(BIGBUF))) {
-            (void) snprintf(message, BIGBUF, buffer,
-                            par[0], par[1], par[2], par[3], par[4],
-                            par[5], par[6], par[7], par[8], par[9]);
-            (*fn) (message);
+        if ((message = __XtMalloc(BIGBUF)))
+        {
+            (void)snprintf(message,
+                           BIGBUF,
+                           buffer,
+                           par[0],
+                           par[1],
+                           par[2],
+                           par[3],
+                           par[4],
+                           par[5],
+                           par[6],
+                           par[7],
+                           par[8],
+                           par[9]);
+            (*fn)(message);
             XtFree(message);
         }
-        else {
-            XtWarning
-                ("Memory allocation failed, arguments in the following message were lost");
-            (*fn) (buffer);
+        else
+        {
+            XtWarning("Memory allocation failed, arguments in the following "
+                      "message were lost");
+            (*fn)(buffer);
         }
     }
 }
@@ -335,8 +369,8 @@ void
 _XtDefaultErrorMsg(String name,
                    String type,
                    String class,
-                   String defaultp,
-                   String *params,
+                   String    defaultp,
+                   String   *params,
                    Cardinal *num_params)
 {
     DefaultMsg(name, type, class, defaultp, params, num_params, True, XtError);
@@ -346,11 +380,17 @@ void
 _XtDefaultWarningMsg(String name,
                      String type,
                      String class,
-                     String defaultp,
-                     String *params,
+                     String    defaultp,
+                     String   *params,
                      Cardinal *num_params)
 {
-    DefaultMsg(name, type, class, defaultp, params, num_params, False,
+    DefaultMsg(name,
+               type,
+               class,
+               defaultp,
+               params,
+               num_params,
+               False,
                XtWarning);
 }
 
@@ -359,39 +399,52 @@ XtErrorMsg(_Xconst char *name,
            _Xconst char *type,
            _Xconst char *class,
            _Xconst char *defaultp,
-           String *params,
-           Cardinal *num_params)
+           String       *params,
+           Cardinal     *num_params)
 {
 #if GLOBALERRORS
     LOCK_PROCESS;
-    (*errorMsgHandler) ((String) name, (String) type, (String) class,
-                        (String) defaultp, params, num_params);
+    (*errorMsgHandler)((String)name,
+                       (String)type,
+                       (String) class,
+                       (String)defaultp,
+                       params,
+                       num_params);
     UNLOCK_PROCESS;
     exit(1);
 #else
-    XtAppErrorMsg(_XtDefaultAppContext(), name, type, class,
-                  defaultp, params, num_params);
+    XtAppErrorMsg(_XtDefaultAppContext(),
+                  name,
+                  type,
+                  class,
+                  defaultp,
+                  params,
+                  num_params);
 #endif                          /* GLOBALERRORS */
 }
 
 void
 XtAppErrorMsg(XtAppContext app _X_UNUSED,
-              _Xconst char *name,
-              _Xconst char *type,
+              _Xconst char    *name,
+              _Xconst char    *type,
               _Xconst char *class,
               _Xconst char *defaultp,
-              String *params,
-              Cardinal *num_params)
+              String       *params,
+              Cardinal     *num_params)
 {
 #if GLOBALERRORS
     LOCK_PROCESS;
-    (*errorMsgHandler) ((String) name, (String) type, (String) class,
-                        (String) defaultp, params, num_params);
+    (*errorMsgHandler)((String)name,
+                       (String)type,
+                       (String) class,
+                       (String)defaultp,
+                       params,
+                       num_params);
     UNLOCK_PROCESS;
     exit(1);
 #else
     LOCK_APP(app);
-    (*app->errorMsgHandler) (name, type, class, defaultp, params, num_params);
+    (*app->errorMsgHandler)(name, type, class, defaultp, params, num_params);
     UNLOCK_APP(app);
 #endif                          /* GLOBALERRORS */
 }
@@ -401,37 +454,50 @@ XtWarningMsg(_Xconst char *name,
              _Xconst char *type,
              _Xconst char *class,
              _Xconst char *defaultp,
-             String *params,
-             Cardinal *num_params)
+             String       *params,
+             Cardinal     *num_params)
 {
 #if GLOBALERRORS
     LOCK_PROCESS;
-    (*warningMsgHandler) ((String) name, (String) type, (String) class,
-                          (String) defaultp, params, num_params);
+    (*warningMsgHandler)((String)name,
+                         (String)type,
+                         (String) class,
+                         (String)defaultp,
+                         params,
+                         num_params);
     UNLOCK_PROCESS;
 #else
-    XtAppWarningMsg(_XtDefaultAppContext(), name, type, class,
-                    defaultp, params, num_params);
+    XtAppWarningMsg(_XtDefaultAppContext(),
+                    name,
+                    type,
+                    class,
+                    defaultp,
+                    params,
+                    num_params);
 #endif                          /* GLOBALERRORS */
 }
 
 void
 XtAppWarningMsg(XtAppContext app _X_UNUSED,
-                _Xconst char *name,
-                _Xconst char *type,
+                _Xconst char    *name,
+                _Xconst char    *type,
                 _Xconst char *class,
                 _Xconst char *defaultp,
-                String *params,
-                Cardinal *num_params)
+                String       *params,
+                Cardinal     *num_params)
 {
 #if GLOBALERRORS
     LOCK_PROCESS;
-    (*warningMsgHandler) ((String) name, (String) type, (String) class,
-                          (String) defaultp, params, num_params);
+    (*warningMsgHandler)((String)name,
+                         (String)type,
+                         (String) class,
+                         (String)defaultp,
+                         params,
+                         num_params);
     UNLOCK_PROCESS;
 #else
     LOCK_APP(app);
-    (*app->warningMsgHandler) (name, type, class, defaultp, params, num_params);
+    (*app->warningMsgHandler)(name, type, class, defaultp, params, num_params);
     UNLOCK_APP(app);
 #endif                          /* GLOBALERRORS */
 }
@@ -441,10 +507,8 @@ XtSetErrorMsgHandler(XtErrorMsgHandler handler _X_NORETURN)
 {
 #if GLOBALERRORS
     LOCK_PROCESS;
-    if (handler != NULL)
-        errorMsgHandler = handler;
-    else
-        errorMsgHandler = _XtDefaultErrorMsg;
+    if (handler != NULL) errorMsgHandler = handler;
+    else errorMsgHandler = _XtDefaultErrorMsg;
     UNLOCK_PROCESS;
 #else
     XtAppSetErrorMsgHandler(_XtDefaultAppContext(), handler);
@@ -452,7 +516,7 @@ XtSetErrorMsgHandler(XtErrorMsgHandler handler _X_NORETURN)
 }
 
 XtErrorMsgHandler
-XtAppSetErrorMsgHandler(XtAppContext app _X_UNUSED,
+XtAppSetErrorMsgHandler(XtAppContext app          _X_UNUSED,
                         XtErrorMsgHandler handler _X_NORETURN)
 {
     XtErrorMsgHandler old;
@@ -460,18 +524,14 @@ XtAppSetErrorMsgHandler(XtAppContext app _X_UNUSED,
 #if GLOBALERRORS
     LOCK_PROCESS;
     old = errorMsgHandler;
-    if (handler != NULL)
-        errorMsgHandler = handler;
-    else
-        errorMsgHandler = _XtDefaultErrorMsg;
+    if (handler != NULL) errorMsgHandler = handler;
+    else errorMsgHandler = _XtDefaultErrorMsg;
     UNLOCK_PROCESS;
 #else
     LOCK_APP(app);
     old = app->errorMsgHandler;
-    if (handler != NULL)
-        app->errorMsgHandler = handler;
-    else
-        app->errorMsgHandler = _XtDefaultErrorMsg;
+    if (handler != NULL) app->errorMsgHandler = handler;
+    else app->errorMsgHandler = _XtDefaultErrorMsg;
     UNLOCK_APP(app);
 #endif                          /* GLOBALERRORS */
     return old;
@@ -482,10 +542,8 @@ XtSetWarningMsgHandler(XtErrorMsgHandler handler)
 {
 #if GLOBALERRORS
     LOCK_PROCESS;
-    if (handler != NULL)
-        warningMsgHandler = handler;
-    else
-        warningMsgHandler = _XtDefaultWarningMsg;
+    if (handler != NULL) warningMsgHandler = handler;
+    else warningMsgHandler = _XtDefaultWarningMsg;
     UNLOCK_PROCESS;
 #else
     XtAppSetWarningMsgHandler(_XtDefaultAppContext(), handler);
@@ -500,18 +558,14 @@ XtAppSetWarningMsgHandler(XtAppContext app _X_UNUSED, XtErrorMsgHandler handler)
 #if GLOBALERRORS
     LOCK_PROCESS;
     old = warningMsgHandler;
-    if (handler != NULL)
-        warningMsgHandler = handler;
-    else
-        warningMsgHandler = _XtDefaultWarningMsg;
+    if (handler != NULL) warningMsgHandler = handler;
+    else warningMsgHandler = _XtDefaultWarningMsg;
     UNLOCK_PROCESS;
 #else
     LOCK_APP(app);
     old = app->warningMsgHandler;
-    if (handler != NULL)
-        app->warningMsgHandler = handler;
-    else
-        app->warningMsgHandler = _XtDefaultWarningMsg;
+    if (handler != NULL) app->warningMsgHandler = handler;
+    else app->warningMsgHandler = _XtDefaultWarningMsg;
     UNLOCK_APP(app);
 #endif                          /* GLOBALERRORS */
     return old;
@@ -521,7 +575,7 @@ void
 _XtDefaultError(String message)
 {
     if (message && *message)
-        (void) fprintf(stderr, "%sError: %s\n", XTERROR_PREFIX, message);
+        (void)fprintf(stderr, "%sError: %s\n", XTERROR_PREFIX, message);
     exit(1);
 }
 
@@ -529,7 +583,7 @@ void
 _XtDefaultWarning(String message)
 {
     if (message && *message)
-        (void) fprintf(stderr, "%sWarning: %s\n", XTWARNING_PREFIX, message);
+        (void)fprintf(stderr, "%sWarning: %s\n", XTWARNING_PREFIX, message);
     return;
 }
 
@@ -538,7 +592,7 @@ XtError(_Xconst char *message)
 {
 #if GLOBALERRORS
     LOCK_PROCESS;
-    (*errorHandler) ((String) message);
+    (*errorHandler)((String)message);
     UNLOCK_PROCESS;
 #else
     XtAppError(_XtDefaultAppContext(), message);
@@ -550,11 +604,11 @@ XtAppError(XtAppContext app _X_UNUSED, _Xconst char *message)
 {
 #if GLOBALERRORS
     LOCK_PROCESS;
-    (*errorHandler) ((String) message);
+    (*errorHandler)((String)message);
     UNLOCK_PROCESS;
 #else
     LOCK_APP(app);
-    (*app->errorHandler) (message);
+    (*app->errorHandler)(message);
     UNLOCK_APP(app);
 #endif                          /* GLOBALERRORS */
 }
@@ -564,7 +618,7 @@ XtWarning(_Xconst char *message)
 {
 #if GLOBALERRORS
     LOCK_PROCESS;
-    (*warningHandler) ((String) message);
+    (*warningHandler)((String)message);
     UNLOCK_PROCESS;
 #else
     XtAppWarning(_XtDefaultAppContext(), message);
@@ -576,11 +630,11 @@ XtAppWarning(XtAppContext app _X_UNUSED, _Xconst char *message)
 {
 #if GLOBALERRORS
     LOCK_PROCESS;
-    (*warningHandler) ((String) message);
+    (*warningHandler)((String)message);
     UNLOCK_PROCESS;
 #else
     LOCK_APP(app);
-    (*app->warningHandler) (message);
+    (*app->warningHandler)(message);
     UNLOCK_APP(app);
 #endif                          /* GLOBALERRORS */
 }
@@ -590,10 +644,8 @@ XtSetErrorHandler(XtErrorHandler handler _X_NORETURN)
 {
 #if GLOBALERRORS
     LOCK_PROCESS;
-    if (handler != NULL)
-        errorHandler = handler;
-    else
-        errorHandler = _XtDefaultError;
+    if (handler != NULL) errorHandler = handler;
+    else errorHandler = _XtDefaultError;
     UNLOCK_PROCESS;
 #else
     XtAppSetErrorHandler(_XtDefaultAppContext(), handler);
@@ -601,7 +653,7 @@ XtSetErrorHandler(XtErrorHandler handler _X_NORETURN)
 }
 
 XtErrorHandler
-XtAppSetErrorHandler(XtAppContext app _X_UNUSED,
+XtAppSetErrorHandler(XtAppContext app       _X_UNUSED,
                      XtErrorHandler handler _X_NORETURN)
 {
     XtErrorHandler old;
@@ -609,18 +661,14 @@ XtAppSetErrorHandler(XtAppContext app _X_UNUSED,
 #if GLOBALERRORS
     LOCK_PROCESS;
     old = errorHandler;
-    if (handler != NULL)
-        errorHandler = handler;
-    else
-        errorHandler = _XtDefaultError;
+    if (handler != NULL) errorHandler = handler;
+    else errorHandler = _XtDefaultError;
     UNLOCK_PROCESS;
 #else
     LOCK_APP(app);
     old = app->errorHandler;
-    if (handler != NULL)
-        app->errorHandler = handler;
-    else
-        app->errorHandler = _XtDefaultError;
+    if (handler != NULL) app->errorHandler = handler;
+    else app->errorHandler = _XtDefaultError;
     UNLOCK_APP(app);
 #endif                          /* GLOBALERRORS */
     return old;
@@ -631,10 +679,8 @@ XtSetWarningHandler(XtErrorHandler handler)
 {
 #if GLOBALERRORS
     LOCK_PROCESS;
-    if (handler != NULL)
-        warningHandler = handler;
-    else
-        warningHandler = _XtDefaultWarning;
+    if (handler != NULL) warningHandler = handler;
+    else warningHandler = _XtDefaultWarning;
     UNLOCK_PROCESS;
 #else
     XtAppSetWarningHandler(_XtDefaultAppContext(), handler);
@@ -649,35 +695,31 @@ XtAppSetWarningHandler(XtAppContext app _X_UNUSED, XtErrorHandler handler)
 #if GLOBALERRORS
     LOCK_PROCESS;
     old = warningHandler;
-    if (handler != NULL)
-        warningHandler = handler;
-    else
-        warningHandler = _XtDefaultWarning;
+    if (handler != NULL) warningHandler = handler;
+    else warningHandler = _XtDefaultWarning;
     UNLOCK_PROCESS;
 #else
     LOCK_APP(app);
     old = app->warningHandler;
-    if (handler != NULL)
-        app->warningHandler = handler;
-    else
-        app->warningHandler = _XtDefaultWarning;
+    if (handler != NULL) app->warningHandler = handler;
+    else app->warningHandler = _XtDefaultWarning;
     UNLOCK_APP(app);
 #endif                          /* GLOBALERRORS */
     return old;
 }
 
 void
-_XtSetDefaultErrorHandlers(XtErrorMsgHandler *errMsg _X_UNUSED,
+_XtSetDefaultErrorHandlers(XtErrorMsgHandler *errMsg  _X_UNUSED,
                            XtErrorMsgHandler *warnMsg _X_UNUSED,
-                           XtErrorHandler *err _X_UNUSED,
-                           XtErrorHandler *warn _X_UNUSED)
+                           XtErrorHandler *err        _X_UNUSED,
+                           XtErrorHandler *warn       _X_UNUSED)
 {
 #ifndef GLOBALERRORS
     LOCK_PROCESS;
-    *errMsg = _XtDefaultErrorMsg;
+    *errMsg  = _XtDefaultErrorMsg;
     *warnMsg = _XtDefaultWarningMsg;
-    *err = _XtDefaultError;
-    *warn = _XtDefaultWarning;
+    *err     = _XtDefaultError;
+    *warn    = _XtDefaultWarning;
     UNLOCK_PROCESS;
 #endif                          /* GLOBALERRORS */
 }

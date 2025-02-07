@@ -50,9 +50,8 @@ from The Open Group.
 
 */
 
-
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xlibint.h"
 #include "X11/Xatom.h"
@@ -60,68 +59,72 @@ from The Open Group.
 #include "X11/Xutil.h"
 #include <stdio.h>
 
-Status XGetWMSizeHints (
-    Display *dpy,
-    Window w,
-    XSizeHints *hints,
-    long *supplied,
-    Atom property)
+Status
+XGetWMSizeHints(Display    *dpy,
+                Window      w,
+                XSizeHints *hints,
+                long       *supplied,
+                Atom        property)
 {
     xPropSizeHints *prop = NULL;
-    Atom actual_type;
-    int actual_format;
-    unsigned long leftover;
-    unsigned long nitems;
+    Atom            actual_type;
+    int             actual_format;
+    unsigned long   leftover;
+    unsigned long   nitems;
 
-    if (XGetWindowProperty (dpy, w, property, 0L,
-			    (long)NumPropSizeElements,
-			    False, XA_WM_SIZE_HINTS, &actual_type,
-			    &actual_format, &nitems, &leftover,
-			    (unsigned char **)&prop)
-	!= Success)
-      return False;
+    if (XGetWindowProperty(dpy,
+                           w,
+                           property,
+                           0L,
+                           (long)NumPropSizeElements,
+                           False,
+                           XA_WM_SIZE_HINTS,
+                           &actual_type,
+                           &actual_format,
+                           &nitems,
+                           &leftover,
+                           (unsigned char **)&prop) != Success)
+        return False;
 
     if ((actual_type != XA_WM_SIZE_HINTS) ||
-	(nitems < OldNumPropSizeElements) || (actual_format != 32)) {
-	Xfree (prop);
-	return False;
+        (nitems < OldNumPropSizeElements) || (actual_format != 32))
+    {
+        Xfree(prop);
+        return False;
     }
 
-    hints->flags	  = prop->flags;
+    hints->flags        = prop->flags;
     /* XSizeHints misdeclares these as int instead of long */
-    hints->x = cvtINT32toInt (prop->x);
-    hints->y = cvtINT32toInt (prop->y);
-    hints->width = cvtINT32toInt (prop->width);
-    hints->height = cvtINT32toInt (prop->height);
-    hints->min_width  = cvtINT32toInt (prop->minWidth);
-    hints->min_height = cvtINT32toInt (prop->minHeight);
-    hints->max_width  = cvtINT32toInt (prop->maxWidth);
-    hints->max_height = cvtINT32toInt (prop->maxHeight);
-    hints->width_inc  = cvtINT32toInt (prop->widthInc);
-    hints->height_inc = cvtINT32toInt (prop->heightInc);
-    hints->min_aspect.x = cvtINT32toInt (prop->minAspectX);
-    hints->min_aspect.y = cvtINT32toInt (prop->minAspectY);
-    hints->max_aspect.x = cvtINT32toInt (prop->maxAspectX);
-    hints->max_aspect.y = cvtINT32toInt (prop->maxAspectY);
+    hints->x            = cvtINT32toInt(prop->x);
+    hints->y            = cvtINT32toInt(prop->y);
+    hints->width        = cvtINT32toInt(prop->width);
+    hints->height       = cvtINT32toInt(prop->height);
+    hints->min_width    = cvtINT32toInt(prop->minWidth);
+    hints->min_height   = cvtINT32toInt(prop->minHeight);
+    hints->max_width    = cvtINT32toInt(prop->maxWidth);
+    hints->max_height   = cvtINT32toInt(prop->maxHeight);
+    hints->width_inc    = cvtINT32toInt(prop->widthInc);
+    hints->height_inc   = cvtINT32toInt(prop->heightInc);
+    hints->min_aspect.x = cvtINT32toInt(prop->minAspectX);
+    hints->min_aspect.y = cvtINT32toInt(prop->minAspectY);
+    hints->max_aspect.x = cvtINT32toInt(prop->maxAspectX);
+    hints->max_aspect.y = cvtINT32toInt(prop->maxAspectY);
 
     *supplied = (USPosition | USSize | PAllHints);
-    if (nitems >= NumPropSizeElements) {
-	hints->base_width= cvtINT32toInt (prop->baseWidth);
-	hints->base_height= cvtINT32toInt (prop->baseHeight);
-	hints->win_gravity= cvtINT32toInt (prop->winGravity);
-	*supplied |= (PBaseSize | PWinGravity);
+    if (nitems >= NumPropSizeElements)
+    {
+        hints->base_width  = cvtINT32toInt(prop->baseWidth);
+        hints->base_height = cvtINT32toInt(prop->baseHeight);
+        hints->win_gravity = cvtINT32toInt(prop->winGravity);
+        *supplied |= (PBaseSize | PWinGravity);
     }
-    hints->flags &= (*supplied);	/* get rid of unwanted bits */
+    hints->flags &= (*supplied); /* get rid of unwanted bits */
     Xfree(prop);
     return True;
 }
 
-
-Status XGetWMNormalHints (
-    Display *dpy,
-    Window w,
-    XSizeHints *hints,
-    long *supplied)
+Status
+XGetWMNormalHints(Display *dpy, Window w, XSizeHints *hints, long *supplied)
 {
-    return (XGetWMSizeHints (dpy, w, hints, supplied, XA_WM_NORMAL_HINTS));
+    return (XGetWMSizeHints(dpy, w, hints, supplied, XA_WM_NORMAL_HINTS));
 }

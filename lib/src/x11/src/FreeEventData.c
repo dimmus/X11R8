@@ -23,20 +23,18 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 void
 XFreeEventData(Display *dpy, XGenericEventCookie *event)
 {
-
-    if (_XIsEventCookie(dpy, (XEvent*)event) && event->data)
+    if (_XIsEventCookie(dpy, (XEvent *)event) && event->data)
     {
         XFree(event->data);
-        event->data = NULL;
+        event->data   = NULL;
         event->cookie = 0;
     }
     return;
 }
-

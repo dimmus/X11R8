@@ -23,13 +23,14 @@
 #include "xftint.h"
 
 _X_HIDDEN int
-_XftMatchSymbolic (XftSymbolic *s, int n, const char *name, int def)
+_XftMatchSymbolic(XftSymbolic *s, int n, const char *name, int def)
 {
     while (n--)
     {
-	if (!FcStrCmpIgnoreCase ((const FcChar8 *) s->name, (const FcChar8 *) name))
-	    return s->value;
-	s++;
+        if (!FcStrCmpIgnoreCase((const FcChar8 *)s->name,
+                                (const FcChar8 *)name))
+            return s->value;
+        s++;
     }
     return def;
 }

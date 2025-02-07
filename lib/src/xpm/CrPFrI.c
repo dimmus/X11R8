@@ -33,36 +33,46 @@
 \*****************************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "XpmI.h"
 #include <stdint.h>
 
 int
-xpmCreatePixmapFromImage(
-    Display	*display,
-    Drawable	 d,
-    XImage	*ximage,
-    Pixmap	*pixmap_return)
+xpmCreatePixmapFromImage(Display *display,
+                         Drawable d,
+                         XImage  *ximage,
+                         Pixmap  *pixmap_return)
 {
-    GC gc;
+    GC        gc;
     XGCValues values;
 
     /* X Pixmaps are limited to unsigned 16-bit height/width */
-    if ((ximage->width > UINT16_MAX) || (ximage->height > UINT16_MAX)) {
-	return XpmNoMemory;
+    if ((ximage->width > UINT16_MAX) || (ximage->height > UINT16_MAX))
+    {
+        return XpmNoMemory;
     }
 
-    *pixmap_return = XCreatePixmap(display, d, ximage->width,
-				   ximage->height, ximage->depth);
+    *pixmap_return =
+        XCreatePixmap(display, d, ximage->width, ximage->height, ximage->depth);
     /* set fg and bg in case we have an XYBitmap */
     values.foreground = 1;
     values.background = 0;
-    gc = XCreateGC(display, *pixmap_return,
-		   GCForeground | GCBackground, &values);
+    gc                = XCreateGC(display,
+                   *pixmap_return,
+                   GCForeground | GCBackground,
+                   &values);
 
-    XPutImage(display, *pixmap_return, gc, ximage, 0, 0, 0, 0,
-	      ximage->width, ximage->height);
+    XPutImage(display,
+              *pixmap_return,
+              gc,
+              ximage,
+              0,
+              0,
+              0,
+              0,
+              ximage->width,
+              ximage->height);
 
     XFreeGC(display, gc);
 

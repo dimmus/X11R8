@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <limits.h>
 #include "Xlibint.h"
@@ -33,57 +33,56 @@ in this Software without prior written authorization from The Open Group.
 #define safestrlen(s) ((s) ? strlen(s) : 0)
 
 int
-XSetFontPath (
-    register Display *dpy,
-    char **directories,
-    int ndirs)
+XSetFontPath(register Display *dpy, char **directories, int ndirs)
 {
-	register xSetFontPathReq *req;
-	int retCode;
+    register xSetFontPathReq *req;
+    int                       retCode;
 
-        LockDisplay(dpy);
-	GetReq (SetFontPath, req);
-	req->nFonts = ndirs;
-	if (ndirs > 0) {
-		size_t n = 0;
-		int nbytes;
-		char *p;
+    LockDisplay(dpy);
+    GetReq(SetFontPath, req);
+    req->nFonts = ndirs;
+    if (ndirs > 0)
+    {
+        size_t n = 0;
+        int    nbytes;
+        char  *p;
 
-		for (int i = 0; i < ndirs; i++) {
-			n = n + (safestrlen (directories[i]) + 1);
-			if (n >= USHRT_MAX) {
-				UnlockDisplay(dpy);
-				SyncHandle();
-				return 0;
-			}
-		}
-		nbytes = (n + 3) & ~3;
-		req->length += nbytes >> 2;
-		if ((p = Xmalloc (nbytes))) {
-			/*
+        for (int i = 0; i < ndirs; i++)
+        {
+            n = n + (safestrlen(directories[i]) + 1);
+            if (n >= USHRT_MAX)
+            {
+                UnlockDisplay(dpy);
+                SyncHandle();
+                return 0;
+            }
+        }
+        nbytes = (n + 3) & ~3;
+        req->length += nbytes >> 2;
+        if ((p = Xmalloc(nbytes)))
+        {
+            /*
 			 * pack into counted strings.
 			 */
-			char	*tmp = p;
+            char *tmp = p;
 
-			for (int i = 0; i < ndirs; i++) {
-				size_t length = safestrlen (directories[i]);
-				*p = length;
-				memcpy (p + 1, directories[i], length);
-				p += length + 1;
-			}
-			Data (dpy, tmp, nbytes);
-			Xfree (tmp);
-			retCode = 1;
-		}
-		else
-			retCode = 0;
-	}
-	else if (ndirs == 0)
-		retCode = 1;
-	else /* ndirs < 0 */
-		retCode = 0;
+            for (int i = 0; i < ndirs; i++)
+            {
+                size_t length = safestrlen(directories[i]);
+                *p            = length;
+                memcpy(p + 1, directories[i], length);
+                p += length + 1;
+            }
+            Data(dpy, tmp, nbytes);
+            Xfree(tmp);
+            retCode = 1;
+        }
+        else retCode = 0;
+    }
+    else if (ndirs == 0) retCode = 1;
+    else /* ndirs < 0 */ retCode = 0;
 
-        UnlockDisplay(dpy);
-	SyncHandle();
-	return (retCode);
+    UnlockDisplay(dpy);
+    SyncHandle();
+    return (retCode);
 }

@@ -33,45 +33,49 @@
 \*****************************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "XpmI.h"
 
 int
-XpmCreateDataFromPixmap(
-    Display		  *display,
-    char		***data_return,
-    Pixmap		   pixmap,
-    Pixmap		   shapemask,
-    XpmAttributes	  *attributes)
+XpmCreateDataFromPixmap(Display       *display,
+                        char        ***data_return,
+                        Pixmap         pixmap,
+                        Pixmap         shapemask,
+                        XpmAttributes *attributes)
 {
-    XImage *ximage = NULL;
-    XImage *shapeimage = NULL;
-    unsigned int width = 0;
-    unsigned int height = 0;
-    int ErrorStatus;
+    XImage      *ximage     = NULL;
+    XImage      *shapeimage = NULL;
+    unsigned int width      = 0;
+    unsigned int height     = 0;
+    int          ErrorStatus;
 
     /* get geometry */
-    if (attributes && attributes->valuemask & XpmSize) {
-	width = attributes->width;
-	height = attributes->height;
+    if (attributes && attributes->valuemask & XpmSize)
+    {
+        width  = attributes->width;
+        height = attributes->height;
     }
     /* get the ximages */
     if (pixmap)
-	xpmCreateImageFromPixmap(display, pixmap, &ximage, &width, &height);
+        xpmCreateImageFromPixmap(display, pixmap, &ximage, &width, &height);
     if (shapemask)
-	xpmCreateImageFromPixmap(display, shapemask, &shapeimage,
-				 &width, &height);
+        xpmCreateImageFromPixmap(display,
+                                 shapemask,
+                                 &shapeimage,
+                                 &width,
+                                 &height);
 
     /* create the data */
-    ErrorStatus = XpmCreateDataFromImage(display, data_return, ximage,
-					 shapeimage, attributes);
+    ErrorStatus = XpmCreateDataFromImage(display,
+                                         data_return,
+                                         ximage,
+                                         shapeimage,
+                                         attributes);
 
     /* destroy the ximages */
-    if (ximage)
-	XDestroyImage(ximage);
-    if (shapeimage)
-	XDestroyImage(shapeimage);
+    if (ximage) XDestroyImage(ximage);
+    if (shapeimage) XDestroyImage(shapeimage);
 
     return (ErrorStatus);
 }

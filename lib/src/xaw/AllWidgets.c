@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/IntrinsicP.h"
 #include "X11/Xaw/AllWidgets.h"
@@ -60,52 +60,52 @@ in this Software without prior written authorization from The Open Group.
 #include "X11/Xaw/Tree.h"
 #include "X11/Xaw/Viewport.h"
 
-#define DATA(name,class) { (char *)name, class, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+#define DATA(name, class) \
+    { (char *)name, class, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 XmuWidgetNode XawWidgetArray[] = {
-DATA( "applicationShell", &applicationShellWidgetClass ),
-DATA( "asciiSink", &asciiSinkObjectClass ),
-DATA( "asciiSrc", &asciiSrcObjectClass ),
-DATA( "asciiText", &asciiTextWidgetClass ),
-DATA( "box", &boxWidgetClass ),
-DATA( "command", &commandWidgetClass ),
-DATA( "composite", &compositeWidgetClass ),
-DATA( "constraint", &constraintWidgetClass ),
-DATA( "core", &coreWidgetClass ),
-DATA( "dialog", &dialogWidgetClass ),
-DATA( "form", &formWidgetClass ),
-DATA( "grip", &gripWidgetClass ),
-DATA( "label", &labelWidgetClass ),
-DATA( "list", &listWidgetClass ),
-DATA( "menuButton", &menuButtonWidgetClass ),
-DATA( "multiSink", &multiSinkObjectClass ),
-DATA( "multiSrc", &multiSrcObjectClass ),
-DATA( "object", &objectClass ),
-DATA( "overrideShell", &overrideShellWidgetClass ),
-DATA( "paned", &panedWidgetClass ),
-DATA( "panner", &pannerWidgetClass ),
-DATA( "porthole", &portholeWidgetClass ),
-DATA( "rect", &rectObjClass ),
-DATA( "repeater", &repeaterWidgetClass ),
-DATA( "scrollbar", &scrollbarWidgetClass ),
-DATA( "shell", &shellWidgetClass ),
-DATA( "simpleMenu", &simpleMenuWidgetClass ),
-DATA( "simple", &simpleWidgetClass ),
-DATA( "smeBSB", &smeBSBObjectClass ),
-DATA( "smeLine", &smeLineObjectClass ),
-DATA( "sme", &smeObjectClass ),
-DATA( "stripChart", &stripChartWidgetClass ),
-DATA( "textSink", &textSinkObjectClass ),
-DATA( "textSrc", &textSrcObjectClass ),
-DATA( "text", &textWidgetClass ),
-DATA( "toggle", &toggleWidgetClass ),
-DATA( "topLevelShell", &topLevelShellWidgetClass ),
-DATA( "transientShell", &transientShellWidgetClass ),
-DATA( "tree", &treeWidgetClass ),
-DATA( "vendorShell", &vendorShellWidgetClass ),
-DATA( "viewport", &viewportWidgetClass ),
-DATA( "wmShell", &wmShellWidgetClass ),
+    DATA("applicationShell", &applicationShellWidgetClass),
+    DATA("asciiSink", &asciiSinkObjectClass),
+    DATA("asciiSrc", &asciiSrcObjectClass),
+    DATA("asciiText", &asciiTextWidgetClass),
+    DATA("box", &boxWidgetClass),
+    DATA("command", &commandWidgetClass),
+    DATA("composite", &compositeWidgetClass),
+    DATA("constraint", &constraintWidgetClass),
+    DATA("core", &coreWidgetClass),
+    DATA("dialog", &dialogWidgetClass),
+    DATA("form", &formWidgetClass),
+    DATA("grip", &gripWidgetClass),
+    DATA("label", &labelWidgetClass),
+    DATA("list", &listWidgetClass),
+    DATA("menuButton", &menuButtonWidgetClass),
+    DATA("multiSink", &multiSinkObjectClass),
+    DATA("multiSrc", &multiSrcObjectClass),
+    DATA("object", &objectClass),
+    DATA("overrideShell", &overrideShellWidgetClass),
+    DATA("paned", &panedWidgetClass),
+    DATA("panner", &pannerWidgetClass),
+    DATA("porthole", &portholeWidgetClass),
+    DATA("rect", &rectObjClass),
+    DATA("repeater", &repeaterWidgetClass),
+    DATA("scrollbar", &scrollbarWidgetClass),
+    DATA("shell", &shellWidgetClass),
+    DATA("simpleMenu", &simpleMenuWidgetClass),
+    DATA("simple", &simpleWidgetClass),
+    DATA("smeBSB", &smeBSBObjectClass),
+    DATA("smeLine", &smeLineObjectClass),
+    DATA("sme", &smeObjectClass),
+    DATA("stripChart", &stripChartWidgetClass),
+    DATA("textSink", &textSinkObjectClass),
+    DATA("textSrc", &textSrcObjectClass),
+    DATA("text", &textWidgetClass),
+    DATA("toggle", &toggleWidgetClass),
+    DATA("topLevelShell", &topLevelShellWidgetClass),
+    DATA("transientShell", &transientShellWidgetClass),
+    DATA("tree", &treeWidgetClass),
+    DATA("vendorShell", &vendorShellWidgetClass),
+    DATA("viewport", &viewportWidgetClass),
+    DATA("wmShell", &wmShellWidgetClass),
 };
 #undef DATA
 
 int XawWidgetCount = XtNumber(XawWidgetArray);
-

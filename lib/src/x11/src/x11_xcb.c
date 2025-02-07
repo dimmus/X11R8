@@ -4,12 +4,14 @@
 #include "Xlibint.h"
 #include "Xxcbint.h"
 
-xcb_connection_t *XGetXCBConnection(Display *dpy)
+xcb_connection_t *
+XGetXCBConnection(Display *dpy)
 {
-	return dpy->xcb->connection;
+    return dpy->xcb->connection;
 }
 
-void XSetEventQueueOwner(Display *dpy, enum XEventQueueOwner owner)
+void
+XSetEventQueueOwner(Display *dpy, enum XEventQueueOwner owner)
 {
-	dpy->xcb->event_owner = owner;
+    dpy->xcb->event_owner = owner;
 }

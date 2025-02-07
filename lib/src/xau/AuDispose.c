@@ -25,29 +25,31 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xauth.h"
 #include <stdlib.h>
 
 void
-XauDisposeAuth (Xauth *auth)
+XauDisposeAuth(Xauth *auth)
 {
-    if (auth) {
-	free (auth->address);
-	free (auth->number);
-	free (auth->name);
-	if (auth->data) {
+    if (auth)
+    {
+        free(auth->address);
+        free(auth->number);
+        free(auth->name);
+        if (auth->data)
+        {
 #ifdef HAVE_EXPLICIT_BZERO
-	    explicit_bzero (auth->data, auth->data_length);
+            explicit_bzero(auth->data, auth->data_length);
 #elif HAVE_EXPLICIT_MEMSET
-	    explicit_memset (auth->data, 0, auth->data_length);
+            explicit_memset(auth->data, 0, auth->data_length);
 #else
-	    bzero (auth->data, auth->data_length);
+            bzero(auth->data, auth->data_length);
 #endif
-	    free (auth->data);
-	}
-	free (auth);
+            free(auth->data);
+        }
+        free(auth);
     }
     return;
 }

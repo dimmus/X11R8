@@ -25,28 +25,27 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XConvertSelection(
-    register Display *dpy,
-    Atom selection,
-    Atom target,
-    Atom property,
-    Window requestor,
-    Time time)
+XConvertSelection(register Display *dpy,
+                  Atom              selection,
+                  Atom              target,
+                  Atom              property,
+                  Window            requestor,
+                  Time              time)
 {
     register xConvertSelectionReq *req;
 
     LockDisplay(dpy);
     GetReq(ConvertSelection, req);
     req->selection = selection;
-    req->target = target;
-    req->property = property;
+    req->target    = target;
+    req->property  = property;
     req->requestor = requestor;
-    req->time = time;
+    req->time      = time;
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;

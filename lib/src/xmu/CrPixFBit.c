@@ -36,17 +36,21 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xos.h"
 #include "X11/Xlib.h"
 #include "X11/Xmu/Drawing.h"
 
 Pixmap
-XmuCreatePixmapFromBitmap(Display *dpy, Drawable d, Pixmap bitmap,
-			  unsigned int width, unsigned int height,
-			  unsigned int depth,
-			  unsigned long fore, unsigned long back)
+XmuCreatePixmapFromBitmap(Display      *dpy,
+                          Drawable      d,
+                          Pixmap        bitmap,
+                          unsigned int  width,
+                          unsigned int  height,
+                          unsigned int  depth,
+                          unsigned long fore,
+                          unsigned long back)
      /*
       * dpy		-	connection to X server
       * d		-	drawable indicating screen
@@ -58,25 +62,30 @@ XmuCreatePixmapFromBitmap(Display *dpy, Drawable d, Pixmap bitmap,
 {
     Pixmap pixmap;
 
-    pixmap = XCreatePixmap (dpy, d, width, height, depth);
-    if (pixmap != None) {
-	GC gc;
-	XGCValues xgcv;
+    pixmap = XCreatePixmap(dpy, d, width, height, depth);
+    if (pixmap != None)
+    {
+        GC        gc;
+        XGCValues xgcv;
 
-	xgcv.foreground = fore;
-	xgcv.background = back;
-	xgcv.graphics_exposures = False;
+        xgcv.foreground         = fore;
+        xgcv.background         = back;
+        xgcv.graphics_exposures = False;
 
-	gc = XCreateGC (dpy, d,
-			(GCForeground | GCBackground | GCGraphicsExposures),
-			&xgcv);
-	if (gc) {
-	    XCopyPlane (dpy, bitmap, pixmap, gc, 0, 0, width, height, 0, 0, 1);
-	    XFreeGC (dpy, gc);
-	} else {
-	    XFreePixmap (dpy, pixmap);
-	    pixmap = None;
-	}
+        gc = XCreateGC(dpy,
+                       d,
+                       (GCForeground | GCBackground | GCGraphicsExposures),
+                       &xgcv);
+        if (gc)
+        {
+            XCopyPlane(dpy, bitmap, pixmap, gc, 0, 0, width, height, 0, 0, 1);
+            XFreeGC(dpy, gc);
+        }
+        else
+        {
+            XFreePixmap(dpy, pixmap);
+            pixmap = None;
+        }
     }
     return pixmap;
 }

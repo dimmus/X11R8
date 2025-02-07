@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "X11/Xlib.h"
@@ -33,7 +33,7 @@ in this Software without prior written authorization from The Open Group.
 #include "X11/Xutil.h"
 #include "X11/Xmu/StdCmap.h"
 
-static XVisualInfo *getDeepestVisual(int, XVisualInfo*, int);
+static XVisualInfo *getDeepestVisual(int, XVisualInfo *, int);
 
 /*
  * To create all of the appropriate standard colormaps for every visual of
@@ -91,48 +91,66 @@ static XVisualInfo *getDeepestVisual(int, XVisualInfo*, int);
 Status
 XmuAllStandardColormaps(Display *dpy)
 {
-    int 	nvisuals, scr;
-    Status	status;
-    long	vinfo_mask;
-    XVisualInfo	template, *vinfo, *v1, *v2;
+    int    nvisuals, scr;
+    Status status;
+    long   vinfo_mask;
+    XVisualInfo template, *vinfo, *v1, *v2;
 
     status = 0;
     /* for each screen, determine all visuals of this server */
-    for (scr=0; scr < ScreenCount(dpy); scr++)
+    for (scr = 0; scr < ScreenCount(dpy); scr++)
     {
-	template.screen = scr;
-	vinfo_mask = VisualScreenMask;
-	vinfo = XGetVisualInfo(dpy, vinfo_mask, &template, &nvisuals);
-	if (vinfo == NULL) /* unexpected: a screen with no visuals */
-	    continue;
+        template.screen = scr;
+        vinfo_mask      = VisualScreenMask;
+        vinfo           = XGetVisualInfo(dpy, vinfo_mask, &template, &nvisuals);
+        if (vinfo == NULL) /* unexpected: a screen with no visuals */
+            continue;
 
-	v1 = getDeepestVisual(DirectColor, vinfo, nvisuals);
-	v2 = getDeepestVisual(PseudoColor, vinfo, nvisuals);
+        v1 = getDeepestVisual(DirectColor, vinfo, nvisuals);
+        v2 = getDeepestVisual(PseudoColor, vinfo, nvisuals);
 
-	if (v2 &&
-	    (!v1 || (v2->colormap_size >= (long)
-		     ((v1->red_mask | v1->green_mask | v1->blue_mask) + 1))))
-	    status = XmuVisualStandardColormaps(dpy, scr, v2->visualid,
-						(unsigned) v2->depth, 1, 1);
-	else if (v1)
-	    status = XmuVisualStandardColormaps(dpy, scr, v1->visualid,
-						(unsigned) v1->depth, 1, 1);
+        if (v2 &&
+            (!v1 ||
+             (v2->colormap_size >=
+              (long)((v1->red_mask | v1->green_mask | v1->blue_mask) + 1))))
+            status = XmuVisualStandardColormaps(dpy,
+                                                scr,
+                                                v2->visualid,
+                                                (unsigned)v2->depth,
+                                                1,
+                                                1);
+        else if (v1)
+            status = XmuVisualStandardColormaps(dpy,
+                                                scr,
+                                                v1->visualid,
+                                                (unsigned)v1->depth,
+                                                1,
+                                                1);
 
-	else {
-	    if (((v1 = getDeepestVisual(TrueColor, vinfo, nvisuals)) != NULL)
-		|| ((v1 = getDeepestVisual(StaticColor, vinfo, nvisuals)) !=
-		NULL))
-		status = XmuVisualStandardColormaps(dpy, scr, v1->visualid,
-						   (unsigned) v1->depth, 1, 1);
-	    if (status &&
-	       (((v1 = getDeepestVisual(GrayScale, vinfo, nvisuals)) != NULL)
-		|| ((v1 = getDeepestVisual(StaticGray, vinfo, nvisuals)) !=
-		    NULL)))
-		status = XmuVisualStandardColormaps(dpy, scr, v1->visualid,
-						   (unsigned) v1->depth, 1, 1);
-	}
-	XFree ((char *) vinfo);
-	if (!status) break;
+        else
+        {
+            if (((v1 = getDeepestVisual(TrueColor, vinfo, nvisuals)) != NULL) ||
+                ((v1 = getDeepestVisual(StaticColor, vinfo, nvisuals)) != NULL))
+                status = XmuVisualStandardColormaps(dpy,
+                                                    scr,
+                                                    v1->visualid,
+                                                    (unsigned)v1->depth,
+                                                    1,
+                                                    1);
+            if (status &&
+                (((v1 = getDeepestVisual(GrayScale, vinfo, nvisuals)) !=
+                  NULL) ||
+                 ((v1 = getDeepestVisual(StaticGray, vinfo, nvisuals)) !=
+                  NULL)))
+                status = XmuVisualStandardColormaps(dpy,
+                                                    scr,
+                                                    v1->visualid,
+                                                    (unsigned)v1->depth,
+                                                    1,
+                                                    1);
+        }
+        XFree((char *)vinfo);
+        if (!status) break;
     }
     return status;
 }
@@ -140,16 +158,15 @@ XmuAllStandardColormaps(Display *dpy)
 static XVisualInfo *
 getDeepestVisual(int visual_class, XVisualInfo *vinfo, int nvisuals)
 {
-    register int	i;
-    register int	maxdepth = 0;
-    XVisualInfo		*v = NULL;
+    register int i;
+    register int maxdepth = 0;
+    XVisualInfo *v        = NULL;
 
-    for (i=0; i < nvisuals; i++, vinfo++)
-	if (vinfo->class == visual_class && vinfo->depth > maxdepth)
-	{
-	    maxdepth = vinfo->depth;
-	    v = vinfo;
-	}
-    return(v);
+    for (i = 0; i < nvisuals; i++, vinfo++)
+        if (vinfo->class == visual_class && vinfo->depth > maxdepth)
+        {
+            maxdepth = vinfo->depth;
+            v        = vinfo;
+        }
+    return (v);
 }
-

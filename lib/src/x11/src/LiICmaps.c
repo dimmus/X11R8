@@ -25,47 +25,47 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "reallocarray.h"
 
-Colormap *XListInstalledColormaps(
-    register Display *dpy,
-    Window win,
-    int *n)  /* RETURN */
+Colormap *
+XListInstalledColormaps(register Display *dpy, Window win, int *n) /* RETURN */
 {
-    unsigned long nbytes;
-    Colormap *cmaps;
+    unsigned long                nbytes;
+    Colormap                    *cmaps;
     xListInstalledColormapsReply rep;
-    register xResourceReq *req;
+    register xResourceReq       *req;
 
     LockDisplay(dpy);
     GetResReq(ListInstalledColormaps, win, req);
 
-    if(_XReply(dpy, (xReply *) &rep, 0, xFalse) == 0) {
-	    UnlockDisplay(dpy);
-	    SyncHandle();
-	    *n = 0;
-	    return((Colormap *) NULL);
-	}
-
-    if (rep.nColormaps) {
-	cmaps = Xmallocarray(rep.nColormaps, sizeof(Colormap));
-	if (! cmaps) {
-	    _XEatDataWords(dpy, rep.length);
-	    UnlockDisplay(dpy);
-	    SyncHandle();
-	    return((Colormap *) NULL);
-	}
-	nbytes = rep.nColormaps << 2;
-	_XRead32 (dpy, (long *) cmaps, nbytes);
+    if (_XReply(dpy, (xReply *)&rep, 0, xFalse) == 0)
+    {
+        UnlockDisplay(dpy);
+        SyncHandle();
+        *n = 0;
+        return ((Colormap *)NULL);
     }
-    else cmaps = (Colormap *) NULL;
+
+    if (rep.nColormaps)
+    {
+        cmaps = Xmallocarray(rep.nColormaps, sizeof(Colormap));
+        if (!cmaps)
+        {
+            _XEatDataWords(dpy, rep.length);
+            UnlockDisplay(dpy);
+            SyncHandle();
+            return ((Colormap *)NULL);
+        }
+        nbytes = rep.nColormaps << 2;
+        _XRead32(dpy, (long *)cmaps, nbytes);
+    }
+    else cmaps = (Colormap *)NULL;
 
     *n = rep.nColormaps;
     UnlockDisplay(dpy);
     SyncHandle();
-    return(cmaps);
+    return (cmaps);
 }
-

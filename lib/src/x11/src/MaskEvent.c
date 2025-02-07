@@ -25,14 +25,16 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
-extern long const _Xevent_to_mask[];
-#define AllPointers (PointerMotionMask|PointerMotionHintMask|ButtonMotionMask)
-#define AllButtons (Button1MotionMask|Button2MotionMask|Button3MotionMask|\
-		    Button4MotionMask|Button5MotionMask)
+extern const long _Xevent_to_mask[];
+#define AllPointers \
+    (PointerMotionMask | PointerMotionHintMask | ButtonMotionMask)
+#define AllButtons                                               \
+    (Button1MotionMask | Button2MotionMask | Button3MotionMask | \
+     Button4MotionMask | Button5MotionMask)
 
 /*
  * return the next event in the queue matching one of the events in the mask.
@@ -41,40 +43,39 @@ extern long const _Xevent_to_mask[];
  */
 
 int
-XMaskEvent (
-	register Display *dpy,
-	long mask,		/* Selected event mask. */
-	register XEvent *event)	/* XEvent to be filled in. */
+XMaskEvent(register Display *dpy,
+           long              mask,  /* Selected event mask. */
+           register XEvent  *event) /* XEvent to be filled in. */
 {
-	register _XQEvent *prev, *qelt;
-	unsigned long qe_serial = 0;
+    register _XQEvent *prev, *qelt;
+    unsigned long      qe_serial = 0;
 
-        LockDisplay(dpy);
+    LockDisplay(dpy);
 
-	/* Delete unclaimed cookies */
-	_XFreeEventCookies(dpy);
+    /* Delete unclaimed cookies */
+    _XFreeEventCookies(dpy);
 
-	prev = NULL;
-	while (1) {
-	    for (qelt = prev ? prev->next : dpy->head;
-		 qelt;
-		 prev = qelt, qelt = qelt->next) {
-		if ((qelt->event.type < GenericEvent) &&
-		    (_Xevent_to_mask[qelt->event.type] & mask) &&
-		    ((qelt->event.type != MotionNotify) ||
-		     (mask & AllPointers) ||
-		     (mask & AllButtons & qelt->event.xmotion.state))) {
-		    *event = qelt->event;
-		    _XDeq(dpy, prev, qelt);
-		    UnlockDisplay(dpy);
-		    return 0;
-		}
-	    }
-	    if (prev)
-		qe_serial = prev->qserial_num;
-	    _XReadEvents(dpy);
-	    if (prev && prev->qserial_num != qe_serial)
-		/* another thread has snatched this event */
-		prev = NULL;
-	}
+    prev = NULL;
+    while (1)
+    {
+        for (qelt = prev ? prev->next : dpy->head; qelt;
+             prev = qelt, qelt = qelt->next)
+        {
+            if ((qelt->event.type < GenericEvent) &&
+                (_Xevent_to_mask[qelt->event.type] & mask) &&
+                ((qelt->event.type != MotionNotify) || (mask & AllPointers) ||
+                 (mask & AllButtons & qelt->event.xmotion.state)))
+            {
+                *event = qelt->event;
+                _XDeq(dpy, prev, qelt);
+                UnlockDisplay(dpy);
+                return 0;
+            }
+        }
+        if (prev) qe_serial = prev->qserial_num;
+        _XReadEvents(dpy);
+        if (prev && prev->qserial_num != qe_serial)
+        /* another thread has snatched this event */
+            prev = NULL;
+    }
 }

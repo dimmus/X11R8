@@ -25,75 +25,74 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "reallocarray.h"
 
 static void
-_XQueryColors(
-    register Display *dpy,
-    Colormap cmap,
-    XColor *defs, 		/* RETURN */
-    int ncolors)
+_XQueryColors(register Display *dpy,
+              Colormap          cmap,
+              XColor           *defs,   /* RETURN */
+              int               ncolors)
 {
-    register int i;
-    xQueryColorsReply rep;
+    register int              i;
+    xQueryColorsReply         rep;
     register xQueryColorsReq *req;
 
     GetReq(QueryColors, req);
 
-    req->cmap = (CARD32) cmap;
+    req->cmap = (CARD32)cmap;
     SetReqLen(req, ncolors, ncolors); /* each pixel is a CARD32 */
 
     for (i = 0; i < ncolors; i++)
-      Data32 (dpy, (long *)&defs[i].pixel, 4L);
+        Data32(dpy, (long *)&defs[i].pixel, 4L);
        /* XXX this isn't very efficient */
 
-    if (_XReply(dpy, (xReply *) &rep, 0, xFalse) != 0) {
-	xrgb *color = Xmallocarray((size_t) ncolors, sizeof(xrgb));
-	if (color != NULL) {
-            unsigned long nbytes = (size_t) ncolors * SIZEOF(xrgb);
+    if (_XReply(dpy, (xReply *)&rep, 0, xFalse) != 0)
+    {
+        xrgb *color = Xmallocarray((size_t)ncolors, sizeof(xrgb));
+        if (color != NULL)
+        {
+            unsigned long nbytes = (size_t)ncolors * SIZEOF(xrgb);
 
-	    _XRead(dpy, (char *) color, (long) nbytes);
+            _XRead(dpy, (char *)color, (long)nbytes);
 
-	    for (i = 0; i < ncolors; i++) {
-		register XColor *def = &defs[i];
-		register xrgb *rgb = &color[i];
-		def->red = rgb->red;
-		def->green = rgb->green;
-		def->blue = rgb->blue;
-		def->flags = DoRed | DoGreen | DoBlue;
-	    }
-	    Xfree(color);
-	}
-	else
-	    _XEatDataWords(dpy, rep.length);
+            for (i = 0; i < ncolors; i++)
+            {
+                register XColor *def = &defs[i];
+                register xrgb   *rgb = &color[i];
+                def->red             = rgb->red;
+                def->green           = rgb->green;
+                def->blue            = rgb->blue;
+                def->flags           = DoRed | DoGreen | DoBlue;
+            }
+            Xfree(color);
+        }
+        else _XEatDataWords(dpy, rep.length);
     }
 }
 
 int
-XQueryColors(
-    register Display * const dpy,
-    const Colormap cmap,
-    XColor *defs, 		/* RETURN */
-    int ncolors)
+XQueryColors(register Display *const dpy,
+             const Colormap          cmap,
+             XColor                 *defs,   /* RETURN */
+             int                     ncolors)
 {
     int n;
 
     if (dpy->bigreq_size > 0)
-	n = (int) (dpy->bigreq_size - (sizeof (xQueryColorsReq) >> 2) - 1);
-    else
-	n = (int) (dpy->max_request_size - (sizeof (xQueryColorsReq) >> 2));
+        n = (int)(dpy->bigreq_size - (sizeof(xQueryColorsReq) >> 2) - 1);
+    else n = (int)(dpy->max_request_size - (sizeof(xQueryColorsReq) >> 2));
 
     LockDisplay(dpy);
-    while (ncolors >= n) {
-	_XQueryColors(dpy, cmap, defs, n);
-	defs += n;
-	ncolors -= n;
+    while (ncolors >= n)
+    {
+        _XQueryColors(dpy, cmap, defs, n);
+        defs += n;
+        ncolors -= n;
     }
-    if (ncolors > 0)
-	_XQueryColors(dpy, cmap, defs, ncolors);
+    if (ncolors > 0) _XQueryColors(dpy, cmap, defs, ncolors);
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;

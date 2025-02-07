@@ -45,13 +45,12 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
 
-
 /************************************************************************
  *									*
  *			 PUBLIC ROUTINES				*
@@ -65,14 +64,13 @@
  *	SYNOPSIS
  */
 Status
-XcmsTekHVCWhiteShiftColors(
-    XcmsCCC ccc,
-    XcmsColor *pWhitePtFrom,
-    XcmsColor *pWhitePtTo,
-    XcmsColorFormat destSpecFmt,
-    XcmsColor *pColors_in_out,
-    unsigned int nColors,
-    Bool *pCompressed)
+XcmsTekHVCWhiteShiftColors(XcmsCCC         ccc,
+                           XcmsColor      *pWhitePtFrom,
+                           XcmsColor      *pWhitePtTo,
+                           XcmsColorFormat destSpecFmt,
+                           XcmsColor      *pColors_in_out,
+                           unsigned int    nColors,
+                           Bool           *pCompressed)
 /*
  *	DESCRIPTION
  *		Convert color specifications in an array of XcmsColor structures
@@ -85,15 +83,17 @@ XcmsTekHVCWhiteShiftColors(
  *			gamut compression.
  */
 {
-    if (pWhitePtFrom == NULL || pWhitePtTo == NULL || pColors_in_out == NULL) {
-	return(XcmsFailure);
+    if (pWhitePtFrom == NULL || pWhitePtTo == NULL || pColors_in_out == NULL)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Insure TekHVC installed
      */
-    if (XcmsAddColorSpace(&XcmsTekHVCColorSpace) == XcmsFailure) {
-	return(XcmsFailure);
+    if (XcmsAddColorSpace(&XcmsTekHVCColorSpace) == XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
     /*
@@ -101,14 +101,23 @@ XcmsTekHVCWhiteShiftColors(
      *    We can ignore return value for compression because we are converting
      *    to XcmsTekHVCFormat which is device-independent, not device-dependent.
      */
-    if (_XcmsConvertColorsWithWhitePt(ccc, pColors_in_out, pWhitePtFrom,
-	    nColors, XcmsTekHVCFormat, pCompressed) == XcmsFailure) {
-	return(XcmsFailure);
+    if (_XcmsConvertColorsWithWhitePt(ccc,
+                                      pColors_in_out,
+                                      pWhitePtFrom,
+                                      nColors,
+                                      XcmsTekHVCFormat,
+                                      pCompressed) == XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Convert from TekHVC to destSpecFmt using pWhitePtTo
      */
-    return(_XcmsConvertColorsWithWhitePt(ccc, pColors_in_out, pWhitePtTo,
-	    nColors, destSpecFmt, pCompressed));
+    return (_XcmsConvertColorsWithWhitePt(ccc,
+                                          pColors_in_out,
+                                          pWhitePtTo,
+                                          nColors,
+                                          destSpecFmt,
+                                          pCompressed));
 }

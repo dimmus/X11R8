@@ -33,18 +33,20 @@ in this Software without prior written authorization from the X Consortium.
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 #include "X11/Intrinsic.h"
 #include "X11/Vendor.h"
 #include "X11/Xaw3d/XawInit.h"
 
-void XawInitializeWidgetSet (void)
+void
+XawInitializeWidgetSet(void)
 {
     static int firsttime = 1;
 
-    if (firsttime) {
-	firsttime = 0;
-	XtInitializeWidgetClass (vendorShellWidgetClass);
+    if (firsttime)
+    {
+        firsttime = 0;
+        XtInitializeWidgetClass(vendorShellWidgetClass);
     }
 }

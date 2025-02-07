@@ -25,33 +25,31 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #else
-#define XCMS 1
+#  define XCMS 1
 #endif
 #include "Xlibint.h"
 
 #if XCMS
-#include "Xcmsint.h"
+#  include "Xcmsint.h"
 
 /* cmsCmap.c */
-extern XcmsCmapRec * _XcmsCopyCmapRecAndFree(Display *dpy,
-					     Colormap src_cmap,
-					     Colormap copy_cmap);
+extern XcmsCmapRec *
+_XcmsCopyCmapRecAndFree(Display *dpy, Colormap src_cmap, Colormap copy_cmap);
 #endif
 
-Colormap XCopyColormapAndFree(
-    register Display *dpy,
-    Colormap src_cmap)
+Colormap
+XCopyColormapAndFree(register Display *dpy, Colormap src_cmap)
 {
-    Colormap mid;
+    Colormap                          mid;
     register xCopyColormapAndFreeReq *req;
 
     LockDisplay(dpy);
     GetReq(CopyColormapAndFree, req);
 
     mid = req->mid = XAllocID(dpy);
-    req->srcCmap = src_cmap;
+    req->srcCmap   = src_cmap;
 
     UnlockDisplay(dpy);
     SyncHandle();
@@ -60,5 +58,5 @@ Colormap XCopyColormapAndFree(
     _XcmsCopyCmapRecAndFree(dpy, src_cmap, mid);
 #endif
 
-    return(mid);
+    return (mid);
 }

@@ -29,7 +29,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "XomGeneric.h"
@@ -37,52 +37,52 @@
 #include "X11/Xatom.h"
 #include <stdio.h>
 
-#define DefineLocalBuf		char local_buf[BUFSIZ]
-#define AllocLocalBuf(length)	(length > BUFSIZ ? (char *)Xmalloc(length) : local_buf)
-#define FreeLocalBuf(ptr)	if (ptr != local_buf) Xfree(ptr)
+#define DefineLocalBuf char local_buf[BUFSIZ]
+#define AllocLocalBuf(length) \
+    (length > BUFSIZ ? (char *)Xmalloc(length) : local_buf)
+#define FreeLocalBuf(ptr) \
+    if (ptr != local_buf) Xfree(ptr)
 
 static Bool
-wcs_to_mbs(
-    XOC oc,
-    char *to,
-    _Xconst wchar_t *from,
-    int length)
+wcs_to_mbs(XOC oc, char *to, _Xconst wchar_t *from, int length)
 {
     XlcConv conv;
-    int to_left, ret;
+    int     to_left, ret;
 
     conv = _XomInitConverter(oc, XOMWideChar);
-    if (conv == NULL)
-	return False;
+    if (conv == NULL) return False;
 
     to_left = length;
-    ret = _XlcConvert(conv, (XPointer *) &from, &length, (XPointer *) &to,
-		      &to_left, NULL, 0);
-    if (ret != 0 || length > 0)
-	return False;
+    ret     = _XlcConvert(conv,
+                      (XPointer *)&from,
+                      &length,
+                      (XPointer *)&to,
+                      &to_left,
+                      NULL,
+                      0);
+    if (ret != 0 || length > 0) return False;
 
     return True;
 }
 
 static Bool
-utf8_to_mbs(
-    XOC oc,
-    char *to,
-    _Xconst char *from,
-    int length)
+utf8_to_mbs(XOC oc, char *to, _Xconst char *from, int length)
 {
     XlcConv conv;
-    int to_left, ret;
+    int     to_left, ret;
 
     conv = _XomInitConverter(oc, XOMUtf8String);
-    if (conv == NULL)
-	return False;
+    if (conv == NULL) return False;
 
     to_left = length;
-    ret = _XlcConvert(conv, (XPointer *) &from, &length, (XPointer *) &to,
-		      &to_left, NULL, 0);
-    if (ret != 0 || length > 0)
-	return False;
+    ret     = _XlcConvert(conv,
+                      (XPointer *)&from,
+                      &length,
+                      (XPointer *)&to,
+                      &to_left,
+                      NULL,
+                      0);
+    if (ret != 0 || length > 0) return False;
 
     return True;
 }
@@ -98,14 +98,14 @@ _XwcDefaultTextEscapement(XOC oc, _Xconst wchar_t *text, int length)
 {
     DefineLocalBuf;
     char *buf = AllocLocalBuf(length);
-    int ret;
+    int   ret;
 
-    if (buf == NULL)
-	return 0;
+    if (buf == NULL) return 0;
 
-    if (wcs_to_mbs(oc, buf, text, length) == False) {
-	ret = 0;
-	goto err;
+    if (wcs_to_mbs(oc, buf, text, length) == False)
+    {
+        ret = 0;
+        goto err;
     }
 
     ret = _XmbDefaultTextEscapement(oc, buf, length);
@@ -121,14 +121,14 @@ _Xutf8DefaultTextEscapement(XOC oc, _Xconst char *text, int length)
 {
     DefineLocalBuf;
     char *buf = AllocLocalBuf(length);
-    int ret;
+    int   ret;
 
-    if (buf == NULL)
-	return 0;
+    if (buf == NULL) return 0;
 
-    if (utf8_to_mbs(oc, buf, text, length) == False) {
-	ret = 0;
-	goto err;
+    if (utf8_to_mbs(oc, buf, text, length) == False)
+    {
+        ret = 0;
+        goto err;
     }
 
     ret = _XmbDefaultTextEscapement(oc, buf, length);
@@ -140,26 +140,36 @@ err:
 }
 
 int
-_XmbDefaultTextExtents(XOC oc, _Xconst char *text, int length,
-		       XRectangle *overall_ink, XRectangle *overall_logical)
+_XmbDefaultTextExtents(XOC           oc,
+                       _Xconst char *text,
+                       int           length,
+                       XRectangle   *overall_ink,
+                       XRectangle   *overall_logical)
 {
-    int direction, logical_ascent, logical_descent;
+    int         direction, logical_ascent, logical_descent;
     XCharStruct overall;
 
-    XTextExtents(*oc->core.font_info.font_struct_list, text, length, &direction,
-		 &logical_ascent, &logical_descent, &overall);
+    XTextExtents(*oc->core.font_info.font_struct_list,
+                 text,
+                 length,
+                 &direction,
+                 &logical_ascent,
+                 &logical_descent,
+                 &overall);
 
-    if (overall_ink) {
-	overall_ink->x = overall.lbearing;
-	overall_ink->y = -(overall.ascent);
-	overall_ink->width = overall.rbearing - overall.lbearing;
-	overall_ink->height = overall.ascent + overall.descent;
+    if (overall_ink)
+    {
+        overall_ink->x      = overall.lbearing;
+        overall_ink->y      = -(overall.ascent);
+        overall_ink->width  = overall.rbearing - overall.lbearing;
+        overall_ink->height = overall.ascent + overall.descent;
     }
 
-    if (overall_logical) {
-	overall_logical->x = 0;
-        overall_logical->y = -(logical_ascent);
-	overall_logical->width = overall.width;
+    if (overall_logical)
+    {
+        overall_logical->x      = 0;
+        overall_logical->y      = -(logical_ascent);
+        overall_logical->width  = overall.width;
         overall_logical->height = logical_ascent + logical_descent;
     }
 
@@ -167,19 +177,22 @@ _XmbDefaultTextExtents(XOC oc, _Xconst char *text, int length,
 }
 
 int
-_XwcDefaultTextExtents(XOC oc, _Xconst wchar_t *text, int length,
-		       XRectangle *overall_ink, XRectangle *overall_logical)
+_XwcDefaultTextExtents(XOC              oc,
+                       _Xconst wchar_t *text,
+                       int              length,
+                       XRectangle      *overall_ink,
+                       XRectangle      *overall_logical)
 {
     DefineLocalBuf;
     char *buf = AllocLocalBuf(length);
-    int ret;
+    int   ret;
 
-    if (buf == NULL)
-	return 0;
+    if (buf == NULL) return 0;
 
-    if (wcs_to_mbs(oc, buf, text, length) == False) {
-	ret = 0;
-	goto err;
+    if (wcs_to_mbs(oc, buf, text, length) == False)
+    {
+        ret = 0;
+        goto err;
     }
 
     ret = _XmbDefaultTextExtents(oc, buf, length, overall_ink, overall_logical);
@@ -191,19 +204,22 @@ err:
 }
 
 int
-_Xutf8DefaultTextExtents(XOC oc, _Xconst char *text, int length,
-			 XRectangle *overall_ink, XRectangle *overall_logical)
+_Xutf8DefaultTextExtents(XOC           oc,
+                         _Xconst char *text,
+                         int           length,
+                         XRectangle   *overall_ink,
+                         XRectangle   *overall_logical)
 {
     DefineLocalBuf;
     char *buf = AllocLocalBuf(length);
-    int ret;
+    int   ret;
 
-    if (buf == NULL)
-	return 0;
+    if (buf == NULL) return 0;
 
-    if (utf8_to_mbs(oc, buf, text, length) == False) {
-	ret = 0;
-	goto err;
+    if (utf8_to_mbs(oc, buf, text, length) == False)
+    {
+        ret = 0;
+        goto err;
     }
 
     ret = _XmbDefaultTextExtents(oc, buf, length, overall_ink, overall_logical);
@@ -215,97 +231,115 @@ err:
 }
 
 Status
-_XmbDefaultTextPerCharExtents(XOC oc, _Xconst char *text, int length,
-			      XRectangle *ink_buf, XRectangle *logical_buf,
-			      int buf_size, int *num_chars,
-			      XRectangle *overall_ink,
-			      XRectangle *overall_logical)
+_XmbDefaultTextPerCharExtents(XOC           oc,
+                              _Xconst char *text,
+                              int           length,
+                              XRectangle   *ink_buf,
+                              XRectangle   *logical_buf,
+                              int           buf_size,
+                              int          *num_chars,
+                              XRectangle   *overall_ink,
+                              XRectangle   *overall_logical)
 {
     XFontStruct *font = *oc->core.font_info.font_struct_list;
     XCharStruct *def, *cs, overall;
-    Bool first = True;
+    Bool         first = True;
 
-    if (buf_size < length)
-	return 0;
+    if (buf_size < length) return 0;
 
-    bzero((char *) &overall, sizeof(XCharStruct));
+    bzero((char *)&overall, sizeof(XCharStruct));
     *num_chars = 0;
 
     CI_GET_DEFAULT_INFO_1D(font, def)
 
-    while (length-- > 0) {
-	CI_GET_CHAR_INFO_1D(font, *text, def, cs)
-	text++;
-	if (cs == NULL)
-	    continue;
+    while (length-- > 0)
+    {
+        CI_GET_CHAR_INFO_1D(font, *text, def, cs)
+        text++;
+        if (cs == NULL) continue;
 
-	ink_buf->x = overall.width + cs->lbearing;
-	ink_buf->y = -(cs->ascent);
-	ink_buf->width = cs->rbearing - cs->lbearing;
-	ink_buf->height = cs->ascent + cs->descent;
-	ink_buf++;
+        ink_buf->x      = overall.width + cs->lbearing;
+        ink_buf->y      = -(cs->ascent);
+        ink_buf->width  = cs->rbearing - cs->lbearing;
+        ink_buf->height = cs->ascent + cs->descent;
+        ink_buf++;
 
-	logical_buf->x = overall.width;
-	logical_buf->y = -(font->ascent);
-	logical_buf->width = cs->width;
-	logical_buf->height = font->ascent + font->descent;
-	logical_buf++;
+        logical_buf->x      = overall.width;
+        logical_buf->y      = -(font->ascent);
+        logical_buf->width  = cs->width;
+        logical_buf->height = font->ascent + font->descent;
+        logical_buf++;
 
-	if (first) {
-	    overall = *cs;
-	    first = False;
-	} else {
-	    overall.ascent = max(overall.ascent, cs->ascent);
-	    overall.descent = max(overall.descent, cs->descent);
-	    overall.lbearing = min(overall.lbearing, overall.width +
-				   cs->lbearing);
-	    overall.rbearing = max(overall.rbearing, overall.width +
-				   cs->rbearing);
-	    overall.width += cs->width;
-	}
+        if (first)
+        {
+            overall = *cs;
+            first   = False;
+        }
+        else
+        {
+            overall.ascent  = max(overall.ascent, cs->ascent);
+            overall.descent = max(overall.descent, cs->descent);
+            overall.lbearing =
+                min(overall.lbearing, overall.width + cs->lbearing);
+            overall.rbearing =
+                max(overall.rbearing, overall.width + cs->rbearing);
+            overall.width += cs->width;
+        }
 
-	(*num_chars)++;
+        (*num_chars)++;
     }
 
-    if (overall_ink) {
-	overall_ink->x = overall.lbearing;
-	overall_ink->y = -(overall.ascent);
-	overall_ink->width = overall.rbearing - overall.lbearing;
-	overall_ink->height = overall.ascent + overall.descent;
+    if (overall_ink)
+    {
+        overall_ink->x      = overall.lbearing;
+        overall_ink->y      = -(overall.ascent);
+        overall_ink->width  = overall.rbearing - overall.lbearing;
+        overall_ink->height = overall.ascent + overall.descent;
     }
 
-    if (overall_logical) {
-	overall_logical->x = 0;
-	overall_logical->y = -(font->ascent);
-	overall_logical->width = overall.width;
-	overall_logical->height = font->ascent + font->descent;
+    if (overall_logical)
+    {
+        overall_logical->x      = 0;
+        overall_logical->y      = -(font->ascent);
+        overall_logical->width  = overall.width;
+        overall_logical->height = font->ascent + font->descent;
     }
 
     return 1;
 }
 
 Status
-_XwcDefaultTextPerCharExtents(XOC oc, _Xconst wchar_t *text, int length,
-			      XRectangle *ink_buf, XRectangle *logical_buf,
-			      int buf_size, int *num_chars,
-			      XRectangle *overall_ink,
-			      XRectangle *overall_logical)
+_XwcDefaultTextPerCharExtents(XOC              oc,
+                              _Xconst wchar_t *text,
+                              int              length,
+                              XRectangle      *ink_buf,
+                              XRectangle      *logical_buf,
+                              int              buf_size,
+                              int             *num_chars,
+                              XRectangle      *overall_ink,
+                              XRectangle      *overall_logical)
 {
     DefineLocalBuf;
-    char *buf = AllocLocalBuf(length);
+    char  *buf = AllocLocalBuf(length);
     Status ret;
 
-    if (buf == NULL)
-	return 0;
+    if (buf == NULL) return 0;
 
-    if (wcs_to_mbs(oc, buf, text, length) == False) {
-	ret = 0;
-	goto err;
+    if (wcs_to_mbs(oc, buf, text, length) == False)
+    {
+        ret = 0;
+        goto err;
     }
 
-    ret = _XmbDefaultTextPerCharExtents(oc, buf, length, ink_buf, logical_buf,
-					buf_size, num_chars, overall_ink,
-					overall_logical);
+    ret = _XmbDefaultTextPerCharExtents(oc,
+                                        buf,
+                                        length,
+                                        ink_buf,
+                                        logical_buf,
+                                        buf_size,
+                                        num_chars,
+                                        overall_ink,
+                                        overall_logical);
 
 err:
     FreeLocalBuf(buf);
@@ -314,27 +348,37 @@ err:
 }
 
 Status
-_Xutf8DefaultTextPerCharExtents(XOC oc, _Xconst char *text, int length,
-				XRectangle *ink_buf, XRectangle *logical_buf,
-				int buf_size, int *num_chars,
-				XRectangle *overall_ink,
-				XRectangle *overall_logical)
+_Xutf8DefaultTextPerCharExtents(XOC           oc,
+                                _Xconst char *text,
+                                int           length,
+                                XRectangle   *ink_buf,
+                                XRectangle   *logical_buf,
+                                int           buf_size,
+                                int          *num_chars,
+                                XRectangle   *overall_ink,
+                                XRectangle   *overall_logical)
 {
     DefineLocalBuf;
-    char *buf = AllocLocalBuf(length);
+    char  *buf = AllocLocalBuf(length);
     Status ret;
 
-    if (buf == NULL)
-	return 0;
+    if (buf == NULL) return 0;
 
-    if (utf8_to_mbs(oc, buf, text, length) == False) {
-	ret = 0;
-	goto err;
+    if (utf8_to_mbs(oc, buf, text, length) == False)
+    {
+        ret = 0;
+        goto err;
     }
 
-    ret = _XmbDefaultTextPerCharExtents(oc, buf, length, ink_buf, logical_buf,
-					buf_size, num_chars, overall_ink,
-					overall_logical);
+    ret = _XmbDefaultTextPerCharExtents(oc,
+                                        buf,
+                                        length,
+                                        ink_buf,
+                                        logical_buf,
+                                        buf_size,
+                                        num_chars,
+                                        overall_ink,
+                                        overall_logical);
 
 err:
     FreeLocalBuf(buf);
@@ -343,8 +387,14 @@ err:
 }
 
 int
-_XmbDefaultDrawString(Display *dpy, Drawable d, XOC oc, GC gc, int x, int y,
-		      _Xconst char *text, int length)
+_XmbDefaultDrawString(Display      *dpy,
+                      Drawable      d,
+                      XOC           oc,
+                      GC            gc,
+                      int           x,
+                      int           y,
+                      _Xconst char *text,
+                      int           length)
 {
     XFontStruct *font = *oc->core.font_info.font_struct_list;
 
@@ -355,19 +405,25 @@ _XmbDefaultDrawString(Display *dpy, Drawable d, XOC oc, GC gc, int x, int y,
 }
 
 int
-_XwcDefaultDrawString(Display *dpy, Drawable d, XOC oc, GC gc, int x, int y,
-		      _Xconst wchar_t *text, int length)
+_XwcDefaultDrawString(Display         *dpy,
+                      Drawable         d,
+                      XOC              oc,
+                      GC               gc,
+                      int              x,
+                      int              y,
+                      _Xconst wchar_t *text,
+                      int              length)
 {
     DefineLocalBuf;
     char *buf = AllocLocalBuf(length);
-    int ret;
+    int   ret;
 
-    if (buf == NULL)
-	return 0;
+    if (buf == NULL) return 0;
 
-    if (wcs_to_mbs(oc, buf, text, length) == False) {
-	ret = 0;
-	goto err;
+    if (wcs_to_mbs(oc, buf, text, length) == False)
+    {
+        ret = 0;
+        goto err;
     }
 
     ret = _XmbDefaultDrawString(dpy, d, oc, gc, x, y, buf, length);
@@ -379,19 +435,25 @@ err:
 }
 
 int
-_Xutf8DefaultDrawString(Display *dpy, Drawable d, XOC oc, GC gc, int x, int y,
-			_Xconst char *text, int length)
+_Xutf8DefaultDrawString(Display      *dpy,
+                        Drawable      d,
+                        XOC           oc,
+                        GC            gc,
+                        int           x,
+                        int           y,
+                        _Xconst char *text,
+                        int           length)
 {
     DefineLocalBuf;
     char *buf = AllocLocalBuf(length);
-    int ret;
+    int   ret;
 
-    if (buf == NULL)
-	return 0;
+    if (buf == NULL) return 0;
 
-    if (utf8_to_mbs(oc, buf, text, length) == False) {
-	ret = 0;
-	goto err;
+    if (utf8_to_mbs(oc, buf, text, length) == False)
+    {
+        ret = 0;
+        goto err;
     }
 
     ret = _XmbDefaultDrawString(dpy, d, oc, gc, x, y, buf, length);
@@ -403,25 +465,35 @@ err:
 }
 
 void
-_XmbDefaultDrawImageString(Display *dpy, Drawable d, XOC oc, GC gc, int x,
-			   int y, _Xconst char *text, int length)
+_XmbDefaultDrawImageString(Display      *dpy,
+                           Drawable      d,
+                           XOC           oc,
+                           GC            gc,
+                           int           x,
+                           int           y,
+                           _Xconst char *text,
+                           int           length)
 {
     XSetFont(dpy, gc, (*oc->core.font_info.font_struct_list)->fid);
     XDrawImageString(dpy, d, gc, x, y, text, length);
 }
 
 void
-_XwcDefaultDrawImageString(Display *dpy, Drawable d, XOC oc, GC gc, int x,
-			   int y, _Xconst wchar_t *text, int length)
+_XwcDefaultDrawImageString(Display         *dpy,
+                           Drawable         d,
+                           XOC              oc,
+                           GC               gc,
+                           int              x,
+                           int              y,
+                           _Xconst wchar_t *text,
+                           int              length)
 {
     DefineLocalBuf;
     char *buf = AllocLocalBuf(length);
 
-    if (buf == NULL)
-	return;
+    if (buf == NULL) return;
 
-    if (wcs_to_mbs(oc, buf, text, length) == False)
-	goto err;
+    if (wcs_to_mbs(oc, buf, text, length) == False) goto err;
 
     _XmbDefaultDrawImageString(dpy, d, oc, gc, x, y, buf, length);
 
@@ -430,17 +502,21 @@ err:
 }
 
 void
-_Xutf8DefaultDrawImageString(Display *dpy, Drawable d, XOC oc, GC gc, int x,
-			     int y, _Xconst char *text, int length)
+_Xutf8DefaultDrawImageString(Display      *dpy,
+                             Drawable      d,
+                             XOC           oc,
+                             GC            gc,
+                             int           x,
+                             int           y,
+                             _Xconst char *text,
+                             int           length)
 {
     DefineLocalBuf;
     char *buf = AllocLocalBuf(length);
 
-    if (buf == NULL)
-	return;
+    if (buf == NULL) return;
 
-    if (utf8_to_mbs(oc, buf, text, length) == False)
-	goto err;
+    if (utf8_to_mbs(oc, buf, text, length) == False) goto err;
 
     _XmbDefaultDrawImageString(dpy, d, oc, gc, x, y, buf, length);
 

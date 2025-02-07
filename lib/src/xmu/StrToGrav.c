@@ -25,40 +25,44 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Intrinsic.h"
 #include "X11/Xmu/Converters.h"
 #include "X11/Xmu/CharSet.h"
 
-#define done(address, type) \
-{ (*toVal).size = sizeof(type); (*toVal).addr = (XPointer) address; }
+#define done(address, type)                \
+    {                                      \
+        (*toVal).size = sizeof(type);      \
+        (*toVal).addr = (XPointer)address; \
+    }
 
 /*
  * Initialization
  */
-static struct _namepair {
-    XrmQuark quark;
+static struct _namepair
+{
+    XrmQuark      quark;
     _Xconst char *name;
-    XtGravity gravity;
+    XtGravity     gravity;
 } names[] = {
-    { NULLQUARK, XtEForget, ForgetGravity },
+    { NULLQUARK, XtEForget,    ForgetGravity    },
     { NULLQUARK, XtENorthWest, NorthWestGravity },
-    { NULLQUARK, XtENorth, NorthGravity },
+    { NULLQUARK, XtENorth,     NorthGravity     },
     { NULLQUARK, XtENorthEast, NorthEastGravity },
-    { NULLQUARK, XtEWest, WestGravity },
-    { NULLQUARK, XtECenter, CenterGravity },
-    { NULLQUARK, XtEEast, EastGravity },
+    { NULLQUARK, XtEWest,      WestGravity      },
+    { NULLQUARK, XtECenter,    CenterGravity    },
+    { NULLQUARK, XtEEast,      EastGravity      },
     { NULLQUARK, XtESouthWest, SouthWestGravity },
-    { NULLQUARK, XtESouth, SouthGravity },
+    { NULLQUARK, XtESouth,     SouthGravity     },
     { NULLQUARK, XtESouthEast, SouthEastGravity },
-    { NULLQUARK, XtEStatic, StaticGravity },
-    { NULLQUARK, XtEUnmap, UnmapGravity },
-    { NULLQUARK, XtEleft, WestGravity },
-    { NULLQUARK, XtEtop, NorthGravity },
-    { NULLQUARK, XtEright, EastGravity },
-    { NULLQUARK, XtEbottom, SouthGravity },
-    { NULLQUARK, NULL, ForgetGravity }
+    { NULLQUARK, XtEStatic,    StaticGravity    },
+    { NULLQUARK, XtEUnmap,     UnmapGravity     },
+    { NULLQUARK, XtEleft,      WestGravity      },
+    { NULLQUARK, XtEtop,       NorthGravity     },
+    { NULLQUARK, XtEright,     EastGravity      },
+    { NULLQUARK, XtEbottom,    SouthGravity     },
+    { NULLQUARK, NULL,         ForgetGravity    }
 };
 
 /*
@@ -66,83 +70,91 @@ static struct _namepair {
  * XtCvtStringToGravity in R6
  */
 void
-XmuCvtStringToGravity(XrmValuePtr args, Cardinal *num_args,
-		      XrmValuePtr fromVal, XrmValuePtr toVal)
+XmuCvtStringToGravity(XrmValuePtr args,
+                      Cardinal   *num_args,
+                      XrmValuePtr fromVal,
+                      XrmValuePtr toVal)
 {
-  static Boolean haveQuarks = False;
-  char name[10];
-    XrmQuark q;
+    static Boolean    haveQuarks = False;
+    char              name[10];
+    XrmQuark          q;
     struct _namepair *np;
 
     if (*num_args != 0)
-        XtWarningMsg("wrongParameters","cvtStringToGravity","XtToolkitError",
-                  "String to Gravity conversion needs no extra arguments",
-		 (String *)NULL, (Cardinal *)NULL);
+        XtWarningMsg("wrongParameters",
+                     "cvtStringToGravity",
+                     "XtToolkitError",
+                     "String to Gravity conversion needs no extra arguments",
+                     (String *)NULL,
+                     (Cardinal *)NULL);
 
-  if (!haveQuarks)
+    if (!haveQuarks)
     {
-      for (np = names; np->name; np++)
-	np->quark = XrmPermStringToQuark(np->name);
-      haveQuarks = True;
+        for (np = names; np->name; np++)
+            np->quark = XrmPermStringToQuark(np->name);
+        haveQuarks = True;
     }
 
-  XmuNCopyISOLatin1Lowered(name, (char *)fromVal->addr, sizeof(name));
-  q = XrmStringToQuark(name);
+    XmuNCopyISOLatin1Lowered(name, (char *)fromVal->addr, sizeof(name));
+    q = XrmStringToQuark(name);
 
-  for (np = names; np->name; np++)
+    for (np = names; np->name; np++)
     {
-      if (np->quark == q)
-	{
-	  done(&np->gravity, XtGravity);
-		return;
-	    }
-	}
+        if (np->quark == q)
+        {
+            done(&np->gravity, XtGravity);
+            return;
+        }
+    }
 
-  XtStringConversionWarning((char *)fromVal->addr, XtRGravity);
+    XtStringConversionWarning((char *)fromVal->addr, XtRGravity);
 }
 
 /*ARGSUSED*/
 Boolean
-XmuCvtGravityToString(Display *dpy, XrmValue *args, Cardinal *num_args,
-		      XrmValue *fromVal, XrmValue *toVal, XtPointer *data)
+XmuCvtGravityToString(Display   *dpy,
+                      XrmValue  *args,
+                      Cardinal  *num_args,
+                      XrmValue  *fromVal,
+                      XrmValue  *toVal,
+                      XtPointer *data)
 {
-  static const char *buffer;
-  Cardinal size;
-  struct _namepair *np;
-  XtGravity gravity;
+    static const char *buffer;
+    Cardinal           size;
+    struct _namepair  *np;
+    XtGravity          gravity;
 
-  gravity = *(XtGravity *)fromVal->addr;
-  buffer = NULL;
-  for (np = names; np->name; np++)
-    if (np->gravity == gravity)
-      {
-	buffer = np->name;
-	break;
-      }
+    gravity = *(XtGravity *)fromVal->addr;
+    buffer  = NULL;
+    for (np = names; np->name; np++)
+        if (np->gravity == gravity)
+        {
+            buffer = np->name;
+            break;
+        }
 
-  if (!buffer)
+    if (!buffer)
     {
-      XtAppWarning(XtDisplayToApplicationContext(dpy),
-		   "Cannot convert Gravity to String");
-      toVal->addr = NULL;
-      toVal->size = 0;
+        XtAppWarning(XtDisplayToApplicationContext(dpy),
+                     "Cannot convert Gravity to String");
+        toVal->addr = NULL;
+        toVal->size = 0;
 
-      return (False);
+        return (False);
     }
 
-  size = strlen(buffer) + 1;
-  if (toVal->addr != NULL)
+    size = strlen(buffer) + 1;
+    if (toVal->addr != NULL)
     {
-      if (toVal->size <= size)
-	{
-	  toVal->size = size;
-	  return (False);
-	}
-      strcpy((char *)toVal->addr, buffer);
+        if (toVal->size <= size)
+        {
+            toVal->size = size;
+            return (False);
+        }
+        strcpy((char *)toVal->addr, buffer);
     }
-  else
-    toVal->addr = (XPointer)buffer;
-  toVal->size = size;
+    else toVal->addr = (XPointer)buffer;
+    toVal->size = size;
 
-  return (True);
+    return (True);
 }

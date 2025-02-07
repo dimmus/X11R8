@@ -29,11 +29,11 @@
 #include "xshmfence.h"
 
 #ifdef HAVE_LINUX_FUTEX_H
-#include "xshmfence_futex.h"
+#  include "xshmfence_futex.h"
 #endif
 
 #ifdef HAVE_PTHREAD_H
-#include "xshmfence_pthread.h"
+#  include "xshmfence_pthread.h"
 #endif
 
 #endif /* _XSHMFENCEINT_H_ */

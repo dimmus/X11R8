@@ -47,7 +47,7 @@ SOFTWARE.
 ******************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 /*
  * Command.c - Command button widget
@@ -64,7 +64,7 @@ SOFTWARE.
 #include "X11/extensions/shape.h"
 
 #define DEFAULT_HIGHLIGHT_THICKNESS 2
-#define DEFAULT_SHAPE_HIGHLIGHT 32767
+#define DEFAULT_SHAPE_HIGHLIGHT     32767
 
 /****************************************************************
  *
@@ -74,110 +74,124 @@ SOFTWARE.
 
 /* Private Data */
 
-static char defaultTranslations[] =
-    "<EnterWindow>:	highlight()		\n\
+static char defaultTranslations[] = "<EnterWindow>:	highlight()		\n\
      <LeaveWindow>:	reset()			\n\
      <Btn1Down>:	set()			\n\
      <Btn1Up>:		notify() unset()	";
 
 #define offset(field) XtOffsetOf(CommandRec, field)
 static XtResource resources[] = {
-   {XtNcallback, XtCCallback, XtRCallback, sizeof(XtPointer),
-      offset(command.callbacks), XtRCallback, (XtPointer)NULL},
-   {XtNhighlightThickness, XtCThickness, XtRDimension, sizeof(Dimension),
-      offset(command.highlight_thickness), XtRImmediate,
-      (XtPointer) DEFAULT_SHAPE_HIGHLIGHT},
-   {XtNshapeStyle, XtCShapeStyle, XtRShapeStyle, sizeof(int),
-      offset(command.shape_style), XtRImmediate, (XtPointer)XawShapeRectangle},
-   {XtNcornerRoundPercent, XtCCornerRoundPercent, XtRDimension,
-        sizeof(Dimension), offset(command.corner_round), XtRImmediate,
-	(XtPointer) 25},
-   {XtNshadowWidth, XtCShadowWidth, XtRDimension, sizeof(Dimension),
-	offset(threeD.shadow_width), XtRImmediate, (XtPointer) 2},
-   {XtNborderWidth, XtCBorderWidth, XtRDimension, sizeof(Dimension),
-      XtOffsetOf(RectObjRec,rectangle.border_width), XtRImmediate,
-      (XtPointer) 0}
+    { XtNcallback,
+     XtCCallback, XtRCallback,
+     sizeof(XtPointer),
+     offset(command.callbacks),
+     XtRCallback, (XtPointer)NULL },
+    { XtNhighlightThickness,
+     XtCThickness, XtRDimension,
+     sizeof(Dimension),
+     offset(command.highlight_thickness),
+     XtRImmediate, (XtPointer)DEFAULT_SHAPE_HIGHLIGHT },
+    { XtNshapeStyle,
+     XtCShapeStyle, XtRShapeStyle,
+     sizeof(int),
+     offset(command.shape_style),
+     XtRImmediate, (XtPointer)XawShapeRectangle },
+    { XtNcornerRoundPercent,
+     XtCCornerRoundPercent, XtRDimension,
+     sizeof(Dimension),
+     offset(command.corner_round),
+     XtRImmediate, (XtPointer)25 },
+    { XtNshadowWidth,
+     XtCShadowWidth, XtRDimension,
+     sizeof(Dimension),
+     offset(threeD.shadow_width),
+     XtRImmediate, (XtPointer)2 },
+    { XtNborderWidth,
+     XtCBorderWidth, XtRDimension,
+     sizeof(Dimension),
+     XtOffsetOf(RectObjRec, rectangle.border_width),
+     XtRImmediate, (XtPointer)0 }
 };
 #undef offset
 
 static Boolean SetValues(Widget, Widget, Widget, ArgList, Cardinal *);
-static void Initialize(Widget, Widget, ArgList, Cardinal *);
-static void Redisplay(Widget, XEvent *, Region);
-static void Set(Widget, XEvent *, String *, Cardinal *);
-static void Reset(Widget, XEvent *, String *, Cardinal *);
-static void Notify(Widget, XEvent *, String *, Cardinal *);
-static void Unset(Widget, XEvent *, String *, Cardinal *);
-static void Highlight(Widget, XEvent *, String *, Cardinal *);
-static void Unhighlight(Widget, XEvent *, String *, Cardinal *);
-static void Destroy(Widget);
-static void PaintCommandWidget(Widget, XEvent *, Region, Boolean);
-static void ClassInitialize(void);
+static void    Initialize(Widget, Widget, ArgList, Cardinal *);
+static void    Redisplay(Widget, XEvent *, Region);
+static void    Set(Widget, XEvent *, String *, Cardinal *);
+static void    Reset(Widget, XEvent *, String *, Cardinal *);
+static void    Notify(Widget, XEvent *, String *, Cardinal *);
+static void    Unset(Widget, XEvent *, String *, Cardinal *);
+static void    Highlight(Widget, XEvent *, String *, Cardinal *);
+static void    Unhighlight(Widget, XEvent *, String *, Cardinal *);
+static void    Destroy(Widget);
+static void    PaintCommandWidget(Widget, XEvent *, Region, Boolean);
+static void    ClassInitialize(void);
 static Boolean ShapeButton(CommandWidget, Boolean);
-static void Realize(Widget, Mask *, XSetWindowAttributes *);
-static void Resize(Widget);
+static void    Realize(Widget, Mask *, XSetWindowAttributes *);
+static void    Resize(Widget);
 
 static XtActionsRec actionsList[] = {
-  {"set",		Set},
-  {"notify",		Notify},
-  {"highlight",		Highlight},
-  {"reset",		Reset},
-  {"unset",		Unset},
-  {"unhighlight",	Unhighlight}
+    { "set",         Set         },
+    { "notify",      Notify      },
+    { "highlight",   Highlight   },
+    { "reset",       Reset       },
+    { "unset",       Unset       },
+    { "unhighlight", Unhighlight }
 };
 
-#define SuperClass ((LabelWidgetClass)&labelClassRec)
+#define SuperClass ((LabelWidgetClass) & labelClassRec)
 
 CommandClassRec commandClassRec = {
-  {
-    (WidgetClass) SuperClass,		/* superclass		  */
-    "Command",				/* class_name		  */
-    sizeof(CommandRec),			/* size			  */
-    ClassInitialize,			/* class_initialize	  */
-    NULL,				/* class_part_initialize  */
-    FALSE,				/* class_inited		  */
-    Initialize,				/* initialize		  */
-    NULL,				/* initialize_hook	  */
-    Realize,				/* realize		  */
-    actionsList,			/* actions		  */
-    XtNumber(actionsList),		/* num_actions		  */
-    resources,				/* resources		  */
-    XtNumber(resources),		/* resource_count	  */
-    NULLQUARK,				/* xrm_class		  */
-    FALSE,				/* compress_motion	  */
-    TRUE,				/* compress_exposure	  */
-    TRUE,				/* compress_enterleave    */
-    FALSE,				/* visible_interest	  */
-    Destroy,				/* destroy		  */
-    Resize,				/* resize		  */
-    Redisplay,				/* expose		  */
-    SetValues,				/* set_values		  */
-    NULL,				/* set_values_hook	  */
-    XtInheritSetValuesAlmost,		/* set_values_almost	  */
-    NULL,				/* get_values_hook	  */
-    NULL,				/* accept_focus		  */
-    XtVersion,				/* version		  */
-    NULL,				/* callback_private	  */
-    defaultTranslations,		/* tm_table		  */
-    XtInheritQueryGeometry,		/* query_geometry	  */
-    XtInheritDisplayAccelerator,	/* display_accelerator	  */
-    NULL				/* extension		  */
-  },  /* CoreClass fields initialization */
-  {
-    XtInheritChangeSensitive		/* change_sensitive	*/
-  },  /* SimpleClass fields initialization */
-  {
-    XtInheritXaw3dShadowDraw,           /* shadowdraw           */
-  },  /* ThreeD Class fields initialization */
-  {
-    0,                                     /* field not used    */
-  },  /* LabelClass fields initialization */
-  {
-    0,                                     /* field not used    */
-  },  /* CommandClass fields initialization */
+    {
+     (WidgetClass)SuperClass,  /* superclass		  */
+        "Command",    /* class_name		  */
+        sizeof(CommandRec),   /* size			  */
+        ClassInitialize,   /* class_initialize	  */
+        NULL,    /* class_part_initialize  */
+        FALSE,    /* class_inited		  */
+        Initialize,    /* initialize		  */
+        NULL,    /* initialize_hook	  */
+        Realize,    /* realize		  */
+        actionsList,   /* actions		  */
+        XtNumber(actionsList),  /* num_actions		  */
+        resources,    /* resources		  */
+        XtNumber(resources),  /* resource_count	  */
+        NULLQUARK,    /* xrm_class		  */
+        FALSE,    /* compress_motion	  */
+        TRUE,    /* compress_exposure	  */
+        TRUE,    /* compress_enterleave    */
+        FALSE,    /* visible_interest	  */
+        Destroy,    /* destroy		  */
+        Resize,    /* resize		  */
+        Redisplay,    /* expose		  */
+        SetValues,    /* set_values		  */
+        NULL,    /* set_values_hook	  */
+        XtInheritSetValuesAlmost,  /* set_values_almost	  */
+        NULL,    /* get_values_hook	  */
+        NULL,    /* accept_focus		  */
+        XtVersion,    /* version		  */
+        NULL,    /* callback_private	  */
+        defaultTranslations,  /* tm_table		  */
+        XtInheritQueryGeometry,  /* query_geometry	  */
+        XtInheritDisplayAccelerator, /* display_accelerator	  */
+        NULL    /* extension		  */
+    }, /* CoreClass fields initialization */
+    {
+     XtInheritChangeSensitive  /* change_sensitive	*/
+    }, /* SimpleClass fields initialization */
+    {
+     XtInheritXaw3dShadowDraw,           /* shadowdraw           */
+    }, /* ThreeD Class fields initialization */
+    {
+     0,                                     /* field not used    */
+    }, /* LabelClass fields initialization */
+    {
+     0,                                     /* field not used    */
+    }, /* CommandClass fields initialization */
 };
 
   /* for public consumption */
-WidgetClass commandWidgetClass = (WidgetClass) &commandClassRec;
+WidgetClass commandWidgetClass = (WidgetClass)&commandClassRec;
 
 /****************************************************************
  *
@@ -188,95 +202,101 @@ WidgetClass commandWidgetClass = (WidgetClass) &commandClassRec;
 static GC
 Get_GC(CommandWidget cbw, Pixel fg, Pixel bg)
 {
-  XGCValues	values;
+    XGCValues values;
 
-  values.foreground   = fg;
-  values.background	= bg;
-  values.font		= cbw->label.font->fid;
-  values.cap_style = CapProjecting;
+    values.foreground = fg;
+    values.background = bg;
+    values.font       = cbw->label.font->fid;
+    values.cap_style  = CapProjecting;
 
-  if (cbw->command.highlight_thickness > 1 )
-    values.line_width   = cbw->command.highlight_thickness;
-  else
-    values.line_width   = 0;
+    if (cbw->command.highlight_thickness > 1)
+        values.line_width = cbw->command.highlight_thickness;
+    else values.line_width = 0;
 
 #ifdef XAW_INTERNATIONALIZATION
-  if ( cbw->simple.international == True )
-      return XtAllocateGC((Widget)cbw, 0,
-		 (GCForeground|GCBackground|GCLineWidth|GCCapStyle),
-		 &values, GCFont, 0 );
-  else
+    if (cbw->simple.international == True)
+        return XtAllocateGC(
+            (Widget)cbw,
+            0,
+            (GCForeground | GCBackground | GCLineWidth | GCCapStyle),
+            &values,
+            GCFont,
+            0);
+    else
 #endif
-      return XtGetGC((Widget)cbw,
-		 (GCForeground|GCBackground|GCFont|GCLineWidth|GCCapStyle),
-		 &values);
+        return XtGetGC(
+            (Widget)cbw,
+            (GCForeground | GCBackground | GCFont | GCLineWidth | GCCapStyle),
+            &values);
 }
-
 
 /* ARGSUSED */
 static void
 Initialize(Widget request, Widget new, ArgList args, Cardinal *num_args)
 {
-  CommandWidget cbw = (CommandWidget) new;
-  int shape_event_base, shape_error_base;
+    CommandWidget cbw = (CommandWidget) new;
+    int           shape_event_base, shape_error_base;
 
-  if (cbw->command.shape_style != XawShapeRectangle
-      && !XShapeQueryExtension(XtDisplay(new), &shape_event_base,
-			       &shape_error_base))
-      cbw->command.shape_style = XawShapeRectangle;
-  if (cbw->command.highlight_thickness == DEFAULT_SHAPE_HIGHLIGHT) {
-      if (cbw->command.shape_style != XawShapeRectangle)
-	  cbw->command.highlight_thickness = 0;
-      else
-	  cbw->command.highlight_thickness = DEFAULT_HIGHLIGHT_THICKNESS;
-  }
+    if (cbw->command.shape_style != XawShapeRectangle &&
+        !XShapeQueryExtension(XtDisplay(new),
+                              &shape_event_base,
+                              &shape_error_base))
+        cbw->command.shape_style = XawShapeRectangle;
+    if (cbw->command.highlight_thickness == DEFAULT_SHAPE_HIGHLIGHT)
+    {
+        if (cbw->command.shape_style != XawShapeRectangle)
+            cbw->command.highlight_thickness = 0;
+        else cbw->command.highlight_thickness = DEFAULT_HIGHLIGHT_THICKNESS;
+    }
 
-  if (cbw->command.shape_style != XawShapeRectangle) {
-    cbw->threeD.shadow_width = 0;
-    cbw->core.border_width = 1;
-  }
-  cbw->command.shadow_width = cbw->threeD.shadow_width;
+    if (cbw->command.shape_style != XawShapeRectangle)
+    {
+        cbw->threeD.shadow_width = 0;
+        cbw->core.border_width   = 1;
+    }
+    cbw->command.shadow_width = cbw->threeD.shadow_width;
 
-  cbw->command.normal_GC = Get_GC(cbw, cbw->label.foreground,
-				  cbw->core.background_pixel);
-  cbw->command.inverse_GC = Get_GC(cbw, cbw->core.background_pixel,
-				   cbw->label.foreground);
-  XtReleaseGC(new, cbw->label.normal_GC);
-  cbw->label.normal_GC = cbw->command.normal_GC;
+    cbw->command.normal_GC =
+        Get_GC(cbw, cbw->label.foreground, cbw->core.background_pixel);
+    cbw->command.inverse_GC =
+        Get_GC(cbw, cbw->core.background_pixel, cbw->label.foreground);
+    XtReleaseGC(new, cbw->label.normal_GC);
+    cbw->label.normal_GC = cbw->command.normal_GC;
 
-  cbw->command.set = FALSE;
-  cbw->command.highlighted = HighlightNone;
+    cbw->command.set         = FALSE;
+    cbw->command.highlighted = HighlightNone;
 }
 
 static Region
 HighlightRegion(CommandWidget cbw)
 {
-  static Region outerRegion = NULL, innerRegion, emptyRegion;
-  Dimension s = cbw->threeD.shadow_width;
-  XRectangle rect;
+    static Region outerRegion = NULL, innerRegion, emptyRegion;
+    Dimension     s           = cbw->threeD.shadow_width;
+    XRectangle    rect;
 
-  if (cbw->command.highlight_thickness == 0 ||
-      cbw->command.highlight_thickness >
-      (Dimension) ((Dimension) Min(cbw->core.width, cbw->core.height)/2))
-    return(NULL);
+    if (cbw->command.highlight_thickness == 0 ||
+        cbw->command.highlight_thickness >
+            (Dimension)((Dimension)Min(cbw->core.width, cbw->core.height) / 2))
+        return (NULL);
 
-  if (outerRegion == NULL) {
+    if (outerRegion == NULL)
+    {
     /* save time by allocating scratch regions only once. */
-    outerRegion = XCreateRegion();
-    innerRegion = XCreateRegion();
-    emptyRegion = XCreateRegion();
-  }
+        outerRegion = XCreateRegion();
+        innerRegion = XCreateRegion();
+        emptyRegion = XCreateRegion();
+    }
 
-  rect.x = rect.y = s;
-  rect.width = cbw->core.width - 2 * s;
-  rect.height = cbw->core.height - 2 * s;
-  XUnionRectWithRegion( &rect, emptyRegion, outerRegion );
-  rect.x = rect.y += cbw->command.highlight_thickness;
-  rect.width -= cbw->command.highlight_thickness * 2;
-  rect.height -= cbw->command.highlight_thickness * 2;
-  XUnionRectWithRegion( &rect, emptyRegion, innerRegion );
-  XSubtractRegion( outerRegion, innerRegion, outerRegion );
-  return outerRegion;
+    rect.x = rect.y = s;
+    rect.width      = cbw->core.width - 2 * s;
+    rect.height     = cbw->core.height - 2 * s;
+    XUnionRectWithRegion(&rect, emptyRegion, outerRegion);
+    rect.x = rect.y += cbw->command.highlight_thickness;
+    rect.width -= cbw->command.highlight_thickness * 2;
+    rect.height -= cbw->command.highlight_thickness * 2;
+    XUnionRectWithRegion(&rect, emptyRegion, innerRegion);
+    XSubtractRegion(outerRegion, innerRegion, outerRegion);
+    return outerRegion;
 }
 
 /***************************
@@ -289,94 +309,95 @@ HighlightRegion(CommandWidget cbw)
 static void
 Set(Widget w, XEvent *event, String *params, Cardinal *num_params)
 {
-  CommandWidget cbw = (CommandWidget)w;
+    CommandWidget cbw = (CommandWidget)w;
 
-  if (cbw->command.set)
-    return;
+    if (cbw->command.set) return;
 
-  cbw->command.set= TRUE;
-  if (XtIsRealized(w))
-    PaintCommandWidget(w, event, (Region) NULL, TRUE);
+    cbw->command.set = TRUE;
+    if (XtIsRealized(w)) PaintCommandWidget(w, event, (Region)NULL, TRUE);
 }
 
 /* ARGSUSED */
 static void
 Unset(Widget w, XEvent *event, String *params, Cardinal *num_params)
 {
-  CommandWidget cbw = (CommandWidget)w;
+    CommandWidget cbw = (CommandWidget)w;
 
-  if (!cbw->command.set)
-    return;
+    if (!cbw->command.set) return;
 
-  cbw->command.set = FALSE;
-  if (XtIsRealized(w)) {
-    XClearWindow(XtDisplay(w), XtWindow(w));
-    PaintCommandWidget(w, event, (Region) NULL, TRUE);
-  }
+    cbw->command.set = FALSE;
+    if (XtIsRealized(w))
+    {
+        XClearWindow(XtDisplay(w), XtWindow(w));
+        PaintCommandWidget(w, event, (Region)NULL, TRUE);
+    }
 }
 
 /* ARGSUSED */
 static void
 Reset(Widget w, XEvent *event, String *params, Cardinal *num_params)
 {
-  CommandWidget cbw = (CommandWidget)w;
+    CommandWidget cbw = (CommandWidget)w;
 
-  if (cbw->command.set) {
-    cbw->command.highlighted = HighlightNone;
-    Unset(w, event, params, num_params);
-  } else
-    Unhighlight(w, event, params, num_params);
+    if (cbw->command.set)
+    {
+        cbw->command.highlighted = HighlightNone;
+        Unset(w, event, params, num_params);
+    }
+    else Unhighlight(w, event, params, num_params);
 }
 
 /* ARGSUSED */
 static void
 Highlight(Widget w, XEvent *event, String *params, Cardinal *num_params)
 {
-  CommandWidget cbw = (CommandWidget)w;
+    CommandWidget cbw = (CommandWidget)w;
 
-  if ( *num_params == (Cardinal) 0)
-    cbw->command.highlighted = HighlightWhenUnset;
-  else {
-    if ( *num_params != (Cardinal) 1)
-      XtWarning("Too many parameters passed to highlight action table.");
-    switch (params[0][0]) {
-    case 'A':
-    case 'a':
-      cbw->command.highlighted = HighlightAlways;
-      break;
-    default:
-      cbw->command.highlighted = HighlightWhenUnset;
-      break;
+    if (*num_params == (Cardinal)0)
+        cbw->command.highlighted = HighlightWhenUnset;
+    else
+    {
+        if (*num_params != (Cardinal)1)
+            XtWarning("Too many parameters passed to highlight action table.");
+        switch (params[0][0])
+        {
+            case 'A':
+            case 'a':
+                cbw->command.highlighted = HighlightAlways;
+                break;
+            default:
+                cbw->command.highlighted = HighlightWhenUnset;
+                break;
+        }
     }
-  }
 
-  if (XtIsRealized(w))
-    PaintCommandWidget(w, event, HighlightRegion(cbw), TRUE);
+    if (XtIsRealized(w))
+        PaintCommandWidget(w, event, HighlightRegion(cbw), TRUE);
 }
 
 /* ARGSUSED */
 static void
 Unhighlight(Widget w, XEvent *event, String *params, Cardinal *num_params)
 {
-  CommandWidget cbw = (CommandWidget)w;
+    CommandWidget cbw = (CommandWidget)w;
 
-  cbw->command.highlighted = HighlightNone;
-  if (XtIsRealized(w))
-    PaintCommandWidget(w, event, HighlightRegion(cbw), TRUE);
+    cbw->command.highlighted = HighlightNone;
+    if (XtIsRealized(w))
+        PaintCommandWidget(w, event, HighlightRegion(cbw), TRUE);
 }
 
 /* ARGSUSED */
 static void
 Notify(Widget w, XEvent *event, String *params, Cardinal *num_params)
 {
-  CommandWidget cbw = (CommandWidget)w;
+    CommandWidget cbw = (CommandWidget)w;
 
   /* check to be sure state is still Set so that user can cancel
      the action (e.g. by moving outside the window, in the default
      bindings.
   */
-  if (cbw->command.set)
-    XtCallCallbackList(w, cbw->command.callbacks, (XtPointer) NULL);
+    if (cbw->command.set)
+        XtCallCallbackList(w, cbw->command.callbacks, (XtPointer)NULL);
 }
 
 /*
@@ -393,7 +414,7 @@ Notify(Widget w, XEvent *event, String *params, Cardinal *num_params)
 static void
 Redisplay(Widget w, XEvent *event, Region region)
 {
-  PaintCommandWidget(w, event, region, FALSE);
+    PaintCommandWidget(w, event, region, FALSE);
 }
 
 /*	Function Name: PaintCommandWidget
@@ -407,74 +428,102 @@ Redisplay(Widget w, XEvent *event, Region region)
 static void
 PaintCommandWidget(Widget w, XEvent *event, Region region, Boolean change)
 {
-  CommandWidget cbw = (CommandWidget) w;
-  CommandWidgetClass cwclass = (CommandWidgetClass) XtClass (w);
-  Boolean very_thick;
-  GC norm_gc, rev_gc;
-  Dimension	s = cbw->threeD.shadow_width;
+    CommandWidget      cbw     = (CommandWidget)w;
+    CommandWidgetClass cwclass = (CommandWidgetClass)XtClass(w);
+    Boolean            very_thick;
+    GC                 norm_gc, rev_gc;
+    Dimension          s = cbw->threeD.shadow_width;
 
-  very_thick = cbw->command.highlight_thickness >
-               (Dimension)((Dimension) Min(cbw->core.width, cbw->core.height)/2);
+    very_thick =
+        cbw->command.highlight_thickness >
+        (Dimension)((Dimension)Min(cbw->core.width, cbw->core.height) / 2);
 
-  if (cbw->command.set) {
-    cbw->label.normal_GC = cbw->command.inverse_GC;
-    XFillRectangle(XtDisplay(w), XtWindow(w), cbw->command.normal_GC,
-		   s, s, cbw->core.width - 2 * s, cbw->core.height - 2 * s);
-    region = NULL;		/* Force label to repaint text. */
-  }
-  else
-    cbw->label.normal_GC = cbw->command.normal_GC;
+    if (cbw->command.set)
+    {
+        cbw->label.normal_GC = cbw->command.inverse_GC;
+        XFillRectangle(XtDisplay(w),
+                       XtWindow(w),
+                       cbw->command.normal_GC,
+                       s,
+                       s,
+                       cbw->core.width - 2 * s,
+                       cbw->core.height - 2 * s);
+        region = NULL;  /* Force label to repaint text. */
+    }
+    else cbw->label.normal_GC = cbw->command.normal_GC;
 
-  if (cbw->command.highlight_thickness <= 0)
-  {
-    (*SuperClass->core_class.expose) (w, event, region);
-    (*cwclass->threeD_class.shadowdraw) (w, event, region, cbw->threeD.relief, !cbw->command.set);
-    return;
-  }
+    if (cbw->command.highlight_thickness <= 0)
+    {
+        (*SuperClass->core_class.expose)(w, event, region);
+        (*cwclass->threeD_class.shadowdraw)(w,
+                                            event,
+                                            region,
+                                            cbw->threeD.relief,
+                                            !cbw->command.set);
+        return;
+    }
 
 /*
  * If we are set then use the same colors as if we are not highlighted.
  */
 
-  if (cbw->command.set == (cbw->command.highlighted == HighlightNone)) {
-    norm_gc = cbw->command.inverse_GC;
-    rev_gc = cbw->command.normal_GC;
-  }
-  else {
-    norm_gc = cbw->command.normal_GC;
-    rev_gc = cbw->command.inverse_GC;
-  }
+    if (cbw->command.set == (cbw->command.highlighted == HighlightNone))
+    {
+        norm_gc = cbw->command.inverse_GC;
+        rev_gc  = cbw->command.normal_GC;
+    }
+    else
+    {
+        norm_gc = cbw->command.normal_GC;
+        rev_gc  = cbw->command.inverse_GC;
+    }
 
-  if ( !( (!change && (cbw->command.highlighted == HighlightNone)) ||
-	  ((cbw->command.highlighted == HighlightWhenUnset) &&
-	   (cbw->command.set))) ) {
-    if (very_thick) {
-      cbw->label.normal_GC = norm_gc; /* Give the label the right GC. */
-      XFillRectangle(XtDisplay(w),XtWindow(w), rev_gc,
-		     s, s, cbw->core.width - 2 * s, cbw->core.height - 2 * s);
-    }
-    else {
+    if (!((!change && (cbw->command.highlighted == HighlightNone)) ||
+          ((cbw->command.highlighted == HighlightWhenUnset) &&
+           (cbw->command.set))))
+    {
+        if (very_thick)
+        {
+            cbw->label.normal_GC = norm_gc; /* Give the label the right GC. */
+            XFillRectangle(XtDisplay(w),
+                           XtWindow(w),
+                           rev_gc,
+                           s,
+                           s,
+                           cbw->core.width - 2 * s,
+                           cbw->core.height - 2 * s);
+        }
+        else
+        {
       /* wide lines are centered on the path, so indent it */
-      int offset = cbw->command.highlight_thickness/2;
-      XDrawRectangle(XtDisplay(w),XtWindow(w), rev_gc, s + offset, s + offset,
-		     cbw->core.width - cbw->command.highlight_thickness - 2 * s,
-		     cbw->core.height - cbw->command.highlight_thickness - 2 * s);
+            int offset = cbw->command.highlight_thickness / 2;
+            XDrawRectangle(
+                XtDisplay(w),
+                XtWindow(w),
+                rev_gc,
+                s + offset,
+                s + offset,
+                cbw->core.width - cbw->command.highlight_thickness - 2 * s,
+                cbw->core.height - cbw->command.highlight_thickness - 2 * s);
+        }
     }
-  }
-  (*SuperClass->core_class.expose) (w, event, region);
-  (*cwclass->threeD_class.shadowdraw) (w, event, region, cbw->threeD.relief, !cbw->command.set);
+    (*SuperClass->core_class.expose)(w, event, region);
+    (*cwclass->threeD_class.shadowdraw)(w,
+                                        event,
+                                        region,
+                                        cbw->threeD.relief,
+                                        !cbw->command.set);
 }
 
 static void
 Destroy(Widget w)
 {
-  CommandWidget cbw = (CommandWidget) w;
+    CommandWidget cbw = (CommandWidget)w;
 
   /* so Label can release it */
-  if (cbw->label.normal_GC == cbw->command.normal_GC)
-    XtReleaseGC( w, cbw->command.inverse_GC );
-  else
-    XtReleaseGC( w, cbw->command.normal_GC );
+    if (cbw->label.normal_GC == cbw->command.normal_GC)
+        XtReleaseGC(w, cbw->command.inverse_GC);
+    else XtReleaseGC(w, cbw->command.normal_GC);
 }
 
 /*
@@ -483,115 +532,130 @@ Destroy(Widget w)
 
 /* ARGSUSED */
 static Boolean
-SetValues (Widget current, Widget request, Widget new, ArgList args, Cardinal *num_args)
+SetValues(Widget current,
+          Widget request,
+          Widget new,
+          ArgList   args,
+          Cardinal *num_args)
 {
-  CommandWidget oldcbw = (CommandWidget) current;
-  CommandWidget cbw = (CommandWidget) new;
-  Boolean redisplay = False;
+    CommandWidget oldcbw    = (CommandWidget)current;
+    CommandWidget cbw       = (CommandWidget) new;
+    Boolean       redisplay = False;
 
-  if ( oldcbw->core.sensitive != cbw->core.sensitive && !cbw->core.sensitive) {
+    if (oldcbw->core.sensitive != cbw->core.sensitive && !cbw->core.sensitive)
+    {
     /* about to become insensitive */
-    cbw->command.set = FALSE;
-    cbw->command.highlighted = HighlightNone;
-    redisplay = TRUE;
-  }
+        cbw->command.set         = FALSE;
+        cbw->command.highlighted = HighlightNone;
+        redisplay                = TRUE;
+    }
 
-  if ( (oldcbw->label.foreground != cbw->label.foreground)           ||
-       (oldcbw->core.background_pixel != cbw->core.background_pixel) ||
-       (oldcbw->command.highlight_thickness !=
-                                   cbw->command.highlight_thickness) ||
-       (oldcbw->label.font != cbw->label.font) )
-  {
-    if (oldcbw->label.normal_GC == oldcbw->command.normal_GC)
-	/* Label has release one of these */
-      XtReleaseGC(new, cbw->command.inverse_GC);
-    else
-      XtReleaseGC(new, cbw->command.normal_GC);
+    if ((oldcbw->label.foreground != cbw->label.foreground) ||
+        (oldcbw->core.background_pixel != cbw->core.background_pixel) ||
+        (oldcbw->command.highlight_thickness !=
+         cbw->command.highlight_thickness) ||
+        (oldcbw->label.font != cbw->label.font))
+    {
+        if (oldcbw->label.normal_GC == oldcbw->command.normal_GC)
+    /* Label has release one of these */
+            XtReleaseGC(new, cbw->command.inverse_GC);
+        else XtReleaseGC(new, cbw->command.normal_GC);
 
-    cbw->command.normal_GC = Get_GC(cbw, cbw->label.foreground,
-				    cbw->core.background_pixel);
-    cbw->command.inverse_GC = Get_GC(cbw, cbw->core.background_pixel,
-				     cbw->label.foreground);
-    XtReleaseGC(new, cbw->label.normal_GC);
-    cbw->label.normal_GC = (cbw->command.set
-			    ? cbw->command.inverse_GC
-			    : cbw->command.normal_GC);
+        cbw->command.normal_GC =
+            Get_GC(cbw, cbw->label.foreground, cbw->core.background_pixel);
+        cbw->command.inverse_GC =
+            Get_GC(cbw, cbw->core.background_pixel, cbw->label.foreground);
+        XtReleaseGC(new, cbw->label.normal_GC);
+        cbw->label.normal_GC = (cbw->command.set ? cbw->command.inverse_GC
+                                                 : cbw->command.normal_GC);
 
-    redisplay = True;
-  }
+        redisplay = True;
+    }
 
-  if (cbw->threeD.shadow_width != oldcbw->threeD.shadow_width) {
-      cbw->command.shadow_width = cbw->threeD.shadow_width;
-      redisplay = True;
-  }
-  if (cbw->core.border_width != oldcbw->core.border_width)
-      redisplay = True;
+    if (cbw->threeD.shadow_width != oldcbw->threeD.shadow_width)
+    {
+        cbw->command.shadow_width = cbw->threeD.shadow_width;
+        redisplay                 = True;
+    }
+    if (cbw->core.border_width != oldcbw->core.border_width) redisplay = True;
 
-  if ( XtIsRealized(new)
-       && oldcbw->command.shape_style != cbw->command.shape_style
-       && !ShapeButton(cbw, TRUE))
-  {
-      cbw->command.shape_style = oldcbw->command.shape_style;
-  }
+    if (XtIsRealized(new) &&
+        oldcbw->command.shape_style != cbw->command.shape_style &&
+        !ShapeButton(cbw, TRUE))
+    {
+        cbw->command.shape_style = oldcbw->command.shape_style;
+    }
 
-  if (cbw->command.shape_style != XawShapeRectangle) {
-      cbw->threeD.shadow_width = 0;
-      ShapeButton(cbw, FALSE);
-      redisplay = True;
-  }
-  if (cbw->command.shape_style == XawShapeRectangle) {
-      cbw->threeD.shadow_width =
-		(cbw->command.shadow_width) ? cbw->command.shadow_width : 2;
-      redisplay = True;
-  }
+    if (cbw->command.shape_style != XawShapeRectangle)
+    {
+        cbw->threeD.shadow_width = 0;
+        ShapeButton(cbw, FALSE);
+        redisplay = True;
+    }
+    if (cbw->command.shape_style == XawShapeRectangle)
+    {
+        cbw->threeD.shadow_width =
+            (cbw->command.shadow_width) ? cbw->command.shadow_width : 2;
+        redisplay = True;
+    }
 
-  return (redisplay);
+    return (redisplay);
 }
 
 static void
 ClassInitialize(void)
 {
     XawInitializeWidgetSet();
-    XtSetTypeConverter( XtRString, XtRShapeStyle, XmuCvtStringToShapeStyle,
-		        (XtConvertArgList)NULL, 0, XtCacheNone, (XtDestructor)NULL );
+    XtSetTypeConverter(XtRString,
+                       XtRShapeStyle,
+                       XmuCvtStringToShapeStyle,
+                       (XtConvertArgList)NULL,
+                       0,
+                       XtCacheNone,
+                       (XtDestructor)NULL);
 }
-
 
 static Boolean
 ShapeButton(CommandWidget cbw, Boolean checkRectangular)
 {
     Dimension corner_size = 0;
 
-    if (cbw->command.shape_style == XawShapeRoundedRectangle) {
-	corner_size = (cbw->core.width < cbw->core.height) ? cbw->core.width
-	                                                   : cbw->core.height;
-	corner_size = (int) (corner_size * cbw->command.corner_round) / 100;
+    if (cbw->command.shape_style == XawShapeRoundedRectangle)
+    {
+        corner_size = (cbw->core.width < cbw->core.height) ? cbw->core.width
+                                                           : cbw->core.height;
+        corner_size = (int)(corner_size * cbw->command.corner_round) / 100;
     }
 
-    if (checkRectangular || cbw->command.shape_style != XawShapeRectangle) {
-	if (!XmuReshapeWidget((Widget) cbw, cbw->command.shape_style,
-			      corner_size, corner_size)) {
-	    cbw->command.shape_style = XawShapeRectangle;
-	    return(False);
-	}
+    if (checkRectangular || cbw->command.shape_style != XawShapeRectangle)
+    {
+        if (!XmuReshapeWidget((Widget)cbw,
+                              cbw->command.shape_style,
+                              corner_size,
+                              corner_size))
+        {
+            cbw->command.shape_style = XawShapeRectangle;
+            return (False);
+        }
     }
-    return(TRUE);
+    return (TRUE);
 }
 
 static void
 Realize(Widget w, Mask *valueMask, XSetWindowAttributes *attributes)
 {
-    (*commandWidgetClass->core_class.superclass->core_class.realize)
-	(w, valueMask, attributes);
+    (*commandWidgetClass->core_class.superclass->core_class.realize)(
+        w,
+        valueMask,
+        attributes);
 
-    ShapeButton( (CommandWidget) w, FALSE);
+    ShapeButton((CommandWidget)w, FALSE);
 }
 
 static void
 Resize(Widget w)
 {
-    if (XtIsRealized(w))
-	ShapeButton( (CommandWidget) w, FALSE);
+    if (XtIsRealized(w)) ShapeButton((CommandWidget)w, FALSE);
 
     (*commandWidgetClass->core_class.superclass->core_class.resize)(w);
 }

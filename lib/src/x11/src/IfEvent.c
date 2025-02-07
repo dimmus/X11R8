@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
@@ -35,44 +35,43 @@ in this Software without prior written authorization from The Open Group.
  */
 
 int
-XIfEvent (
-	register Display *dpy,
-	register XEvent *event,
-	Bool (*predicate)(
-			  Display*			/* display */,
-			  XEvent*			/* event */,
-			  char*				/* arg */
-			  ),		/* function to call */
-	char *arg)
+XIfEvent(register Display *dpy,
+         register XEvent  *event,
+         Bool (*predicate)(Display * /* display */,
+                           XEvent * /* event */,
+                           char *    /* arg */
+                           ),  /* function to call */
+         char *arg)
 {
-	register _XQEvent *qelt, *prev;
-	unsigned long qe_serial = 0;
+    register _XQEvent *qelt, *prev;
+    unsigned long      qe_serial = 0;
 
-	LockDisplay(dpy);
+    LockDisplay(dpy);
 #ifdef XTHREADS
-	dpy->ifevent_thread = xthread_self();
+    dpy->ifevent_thread = xthread_self();
 #endif
-	dpy->in_ifevent++;
-	prev = NULL;
-	while (1) {
-	    for (qelt = prev ? prev->next : dpy->head;
-		 qelt;
-		 prev = qelt, qelt = qelt->next) {
-		if(qelt->qserial_num > qe_serial
-		   && (*predicate)(dpy, &qelt->event, arg)) {
-		    *event = qelt->event;
-		    _XDeq(dpy, prev, qelt);
-		    _XStoreEventCookie(dpy, event);
-		    dpy->in_ifevent--;
-		    UnlockDisplay(dpy);
-		    return 0;
-		}
-	    }
-	    if (prev)
-		qe_serial = prev->qserial_num;
-	    _XReadEvents(dpy);
-	    if (prev && prev->qserial_num != qe_serial)
-		/* another thread has snatched this event */
-		prev = NULL;
-	}
+    dpy->in_ifevent++;
+    prev = NULL;
+    while (1)
+    {
+        for (qelt = prev ? prev->next : dpy->head; qelt;
+             prev = qelt, qelt = qelt->next)
+        {
+            if (qelt->qserial_num > qe_serial &&
+                (*predicate)(dpy, &qelt->event, arg))
+            {
+                *event = qelt->event;
+                _XDeq(dpy, prev, qelt);
+                _XStoreEventCookie(dpy, event);
+                dpy->in_ifevent--;
+                UnlockDisplay(dpy);
+                return 0;
+            }
+        }
+        if (prev) qe_serial = prev->qserial_num;
+        _XReadEvents(dpy);
+        if (prev && prev->qserial_num != qe_serial)
+        /* another thread has snatched this event */
+            prev = NULL;
+    }
 }

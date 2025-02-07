@@ -47,7 +47,7 @@ SOFTWARE.
 ******************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/Xlibint.h"
@@ -62,33 +62,34 @@ SOFTWARE.
  * in the XStandardColormap structure.
  */
 
-void XSetStandardColormap(
-    Display *dpy,
-    Window w,
-    XStandardColormap *cmap,
-    Atom property)		/* XA_RGB_BEST_MAP, etc. */
+void
+XSetStandardColormap(Display           *dpy,
+                     Window             w,
+                     XStandardColormap *cmap,
+                     Atom               property)  /* XA_RGB_BEST_MAP, etc. */
 {
-    Screen *sp;
+    Screen           *sp;
     XStandardColormap stdcmap;
 
-    sp = _XScreenOfWindow (dpy, w);
-    if (!sp) {
+    sp = _XScreenOfWindow(dpy, w);
+    if (!sp)
+    {
         /* already caught the XGetGeometry error in _XScreenOfWindow */
         return;
     }
 
-    stdcmap.colormap	= cmap->colormap;
-    stdcmap.red_max	    = cmap->red_max;
-    stdcmap.red_mult	= cmap->red_mult;
-    stdcmap.green_max	= cmap->green_max;
-    stdcmap.green_mult  = cmap->green_mult;
-    stdcmap.blue_max	= cmap->blue_max;
-    stdcmap.blue_mult	= cmap->blue_mult;
-    stdcmap.base_pixel	= cmap->base_pixel;
-    stdcmap.visualid	= sp->root_visual->visualid;
-    stdcmap.killid	    = None;		/* don't know how to kill this one */
+    stdcmap.colormap   = cmap->colormap;
+    stdcmap.red_max    = cmap->red_max;
+    stdcmap.red_mult   = cmap->red_mult;
+    stdcmap.green_max  = cmap->green_max;
+    stdcmap.green_mult = cmap->green_mult;
+    stdcmap.blue_max   = cmap->blue_max;
+    stdcmap.blue_mult  = cmap->blue_mult;
+    stdcmap.base_pixel = cmap->base_pixel;
+    stdcmap.visualid   = sp->root_visual->visualid;
+    stdcmap.killid     = None;  /* don't know how to kill this one */
 
-    XSetRGBColormaps (dpy, w, &stdcmap, 1, property);
+    XSetRGBColormaps(dpy, w, &stdcmap, 1, property);
 
     return;
 }

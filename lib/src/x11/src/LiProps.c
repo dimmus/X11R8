@@ -25,42 +25,43 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "reallocarray.h"
 
-Atom *XListProperties(
-    register Display *dpy,
-    Window window,
-    int *n_props)  /* RETURN */
+Atom *
+XListProperties(register Display *dpy, Window window, int *n_props) /* RETURN */
 {
-    unsigned long nbytes;
-    xListPropertiesReply rep;
-    Atom *properties;
+    unsigned long          nbytes;
+    xListPropertiesReply   rep;
+    Atom                  *properties;
     register xResourceReq *req;
 
     LockDisplay(dpy);
     GetResReq(ListProperties, window, req);
-    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse)) {
-	*n_props = 0;
-	UnlockDisplay(dpy);
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
+        *n_props = 0;
+        UnlockDisplay(dpy);
         SyncHandle();
-	return ((Atom *) NULL);
+        return ((Atom *)NULL);
     }
 
-    if (rep.nProperties) {
-	properties = Xmallocarray (rep.nProperties, sizeof(Atom));
-	if (! properties) {
-	    _XEatDataWords(dpy, rep.length);
-	    UnlockDisplay(dpy);
-	    SyncHandle();
-	    return (Atom *) NULL;
-	}
-	nbytes = rep.nProperties << 2;
-	_XRead32 (dpy, (long *) properties, nbytes);
+    if (rep.nProperties)
+    {
+        properties = Xmallocarray(rep.nProperties, sizeof(Atom));
+        if (!properties)
+        {
+            _XEatDataWords(dpy, rep.length);
+            UnlockDisplay(dpy);
+            SyncHandle();
+            return (Atom *)NULL;
+        }
+        nbytes = rep.nProperties << 2;
+        _XRead32(dpy, (long *)properties, nbytes);
     }
-    else properties = (Atom *) NULL;
+    else properties = (Atom *)NULL;
 
     *n_props = rep.nProperties;
     UnlockDisplay(dpy);

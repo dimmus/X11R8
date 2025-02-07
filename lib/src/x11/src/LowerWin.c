@@ -25,25 +25,22 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XLowerWindow(
-    Display *dpy,
-    Window w)
+XLowerWindow(Display *dpy, Window w)
 {
     register xConfigureWindowReq *req;
-    unsigned long val = Below;		/* needed for macro */
+    unsigned long                 val = Below;  /* needed for macro */
 
     LockDisplay(dpy);
     GetReqExtra(ConfigureWindow, 4, req);
     req->window = w;
-    req->mask = CWStackMode;
-    OneDataCard32 (dpy, NEXTPTR(req,xConfigureWindowReq), val);
+    req->mask   = CWStackMode;
+    OneDataCard32(dpy, NEXTPTR(req, xConfigureWindowReq), val);
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

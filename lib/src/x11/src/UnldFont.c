@@ -25,14 +25,12 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XUnloadFont(
-     register Display *dpy,
-     Font font)
+XUnloadFont(register Display *dpy, Font font)
 {
     register xResourceReq *req;
 
@@ -42,4 +40,3 @@ XUnloadFont(
     SyncHandle();
     return 1;
 }
-

@@ -25,15 +25,12 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 Bool
-XGetFontProperty(
-    XFontStruct *fs,
-    register Atom name,
-    unsigned long *valuePtr)
+XGetFontProperty(XFontStruct *fs, register Atom name, unsigned long *valuePtr)
 {
     /* XXX this is a simple linear search for now.  If the
        protocol is changed to sort the property list, this should
@@ -41,8 +38,10 @@ XGetFontProperty(
     register XFontProp *prop = fs->properties;
     register XFontProp *last = prop + fs->n_properties;
 
-    while (prop != last) {
-        if (prop->name == name) {
+    while (prop != last)
+    {
+        if (prop->name == name)
+        {
             *valuePtr = prop->card32;
             return (1);
         }

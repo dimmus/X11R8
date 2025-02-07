@@ -49,7 +49,7 @@ from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xlibint.h"
 #include "X11/Xatom.h"
@@ -57,57 +57,60 @@ from The Open Group.
 #include "X11/Xos.h"
 #include <stdio.h>
 
-Status XGetTextProperty (
-    Display *display,
-    Window window,
-    XTextProperty *tp,
-    Atom property)
+Status
+XGetTextProperty(Display       *display,
+                 Window         window,
+                 XTextProperty *tp,
+                 Atom           property)
 {
-    Atom actual_type;
-    int actual_format = 0;
-    unsigned long nitems = 0L, leftover = 0L;
+    Atom           actual_type;
+    int            actual_format = 0;
+    unsigned long  nitems = 0L, leftover = 0L;
     unsigned char *prop = NULL;
 
-    if (XGetWindowProperty (display, window, property, 0L, 1000000L, False,
-			    AnyPropertyType, &actual_type, &actual_format,
-			    &nitems, &leftover, &prop) == Success &&
-	actual_type != None) {
-	/* okay, fill it in */
-	tp->value = prop;
-	tp->encoding = actual_type;
-	tp->format = actual_format;
-	tp->nitems = nitems;
-	return True;
+    if (XGetWindowProperty(display,
+                           window,
+                           property,
+                           0L,
+                           1000000L,
+                           False,
+                           AnyPropertyType,
+                           &actual_type,
+                           &actual_format,
+                           &nitems,
+                           &leftover,
+                           &prop) == Success &&
+        actual_type != None)
+    {
+    /* okay, fill it in */
+        tp->value    = prop;
+        tp->encoding = actual_type;
+        tp->format   = actual_format;
+        tp->nitems   = nitems;
+        return True;
     }
 
-    tp->value = NULL;
+    tp->value    = NULL;
     tp->encoding = None;
-    tp->format = 0;
-    tp->nitems = 0;
+    tp->format   = 0;
+    tp->nitems   = 0;
     return False;
 }
 
-Status XGetWMName (
-    Display *dpy,
-    Window w,
-    XTextProperty *tp)
+Status
+XGetWMName(Display *dpy, Window w, XTextProperty *tp)
 {
-    return (XGetTextProperty (dpy, w, tp, XA_WM_NAME));
+    return (XGetTextProperty(dpy, w, tp, XA_WM_NAME));
 }
 
-Status XGetWMIconName (
-    Display *dpy,
-    Window w,
-    XTextProperty *tp)
+Status
+XGetWMIconName(Display *dpy, Window w, XTextProperty *tp)
 {
-    return (XGetTextProperty (dpy, w, tp, XA_WM_ICON_NAME));
+    return (XGetTextProperty(dpy, w, tp, XA_WM_ICON_NAME));
 }
 
-Status XGetWMClientMachine (
-    Display *dpy,
-    Window w,
-    XTextProperty *tp)
+Status
+XGetWMClientMachine(Display *dpy, Window w, XTextProperty *tp)
 {
-    return (XGetTextProperty (dpy, w, tp, XA_WM_CLIENT_MACHINE));
+    return (XGetTextProperty(dpy, w, tp, XA_WM_CLIENT_MACHINE));
 }
-

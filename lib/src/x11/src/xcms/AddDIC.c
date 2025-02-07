@@ -33,21 +33,19 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
 
-
 /*
  *      DEFINES
  */
 #define NextUnregDiCsID(lastid) \
-	    (XCMS_UNREG_ID(lastid) ? ++lastid : XCMS_FIRST_UNREG_DI_ID)
-#define MAX(x,y) ((x) < (y) ? (y) : (x))
+    (XCMS_UNREG_ID(lastid) ? ++lastid : XCMS_FIRST_UNREG_DI_ID)
+#define MAX(x, y) ((x) < (y) ? (y) : (x))
 
-
 /*
  *	NAME
  *		XcmsAddColorSpace - Add a Device-Independent Color Space
@@ -71,15 +69,17 @@ XcmsAddColorSpace(XcmsColorSpace *pCS)
  */
 {
     XcmsColorSpace **papColorSpaces;
-    XcmsColorSpace *ptmpCS;
-    XcmsColorFormat lastID = 0;
+    XcmsColorSpace  *ptmpCS;
+    XcmsColorFormat  lastID = 0;
 
-    if ((pCS->id = _XcmsRegFormatOfPrefix(pCS->prefix)) != 0) {
-	if (XCMS_DD_ID(pCS->id)) {
-	    /* This is a Device-Dependent Color Space */
-	    return(XcmsFailure);
-	}
-	/*
+    if ((pCS->id = _XcmsRegFormatOfPrefix(pCS->prefix)) != 0)
+    {
+        if (XCMS_DD_ID(pCS->id))
+        {
+        /* This is a Device-Dependent Color Space */
+            return (XcmsFailure);
+        }
+    /*
 	 * REGISTERED DI Color Space
 	 *    then see if the color space has already been added to the
 	 *    system:
@@ -91,21 +91,27 @@ XcmsAddColorSpace(XcmsColorSpace *pCS)
 	 *		an existing DI Color Space.
 	 *	    c. Otherwise none found so just add the color space.
 	 */
-	if ((papColorSpaces = _XcmsDIColorSpaces) != NULL) {
-	    while ((ptmpCS = *papColorSpaces++) != NULL) {
-		if (pCS->id == ptmpCS->id) {
-		    if (pCS == ptmpCS) {
-			/* a. duplicate*/
-			return(XcmsSuccess);
-		    }
-		    /* b. same ID/prefix but different XcmsColorSpace */
-		    break;
-		}
-	    }
-	}
-	/* c. None found */
-    } else {
-	/*
+        if ((papColorSpaces = _XcmsDIColorSpaces) != NULL)
+        {
+            while ((ptmpCS = *papColorSpaces++) != NULL)
+            {
+                if (pCS->id == ptmpCS->id)
+                {
+                    if (pCS == ptmpCS)
+                    {
+            /* a. duplicate*/
+                        return (XcmsSuccess);
+                    }
+            /* b. same ID/prefix but different XcmsColorSpace */
+                    break;
+                }
+            }
+        }
+    /* c. None found */
+    }
+    else
+    {
+    /*
 	 * UNREGISTERED DI Color Space
 	 *    then see if the color space has already been added to the
 	 *    system:
@@ -118,32 +124,36 @@ XcmsAddColorSpace(XcmsColorSpace *pCS)
 	 *	    c. Otherwise none found so, add the color space using the
 	 *		next unregistered ID for the connection.
 	 */
-	if ((papColorSpaces = _XcmsDIColorSpaces) != NULL) {
-	    while ((ptmpCS = *papColorSpaces++) != NULL) {
-		lastID = MAX(lastID, ptmpCS->id);
-		if (strcmp(pCS->prefix, ptmpCS->prefix) == 0) {
-		    if (pCS == ptmpCS) {
-			/* a. duplicate */
-			return(XcmsSuccess);
-		    }
-		    /* b. same prefix but different XcmsColorSpec */
-		    pCS->id = ptmpCS->id;
-		    goto AddColorSpace;
-		}
-	    }
-	}
-	/* c. None found */
-	pCS->id = NextUnregDiCsID(lastID);
+        if ((papColorSpaces = _XcmsDIColorSpaces) != NULL)
+        {
+            while ((ptmpCS = *papColorSpaces++) != NULL)
+            {
+                lastID = MAX(lastID, ptmpCS->id);
+                if (strcmp(pCS->prefix, ptmpCS->prefix) == 0)
+                {
+                    if (pCS == ptmpCS)
+                    {
+            /* a. duplicate */
+                        return (XcmsSuccess);
+                    }
+            /* b. same prefix but different XcmsColorSpec */
+                    pCS->id = ptmpCS->id;
+                    goto AddColorSpace;
+                }
+            }
+        }
+    /* c. None found */
+        pCS->id = NextUnregDiCsID(lastID);
     }
-
 
 AddColorSpace:
-    if ((papColorSpaces = (XcmsColorSpace **)
-	    _XcmsPushPointerArray((XPointer *)_XcmsDIColorSpaces,
-	    (XPointer)pCS,
-	    (XPointer *)_XcmsDIColorSpacesInit)) == NULL) {
-	return(XcmsFailure);
+    if ((papColorSpaces = (XcmsColorSpace **)_XcmsPushPointerArray(
+             (XPointer *)_XcmsDIColorSpaces,
+             (XPointer)pCS,
+             (XPointer *)_XcmsDIColorSpacesInit)) == NULL)
+    {
+        return (XcmsFailure);
     }
     _XcmsDIColorSpaces = papColorSpaces;
-    return(XcmsSuccess);
+    return (XcmsSuccess);
 }

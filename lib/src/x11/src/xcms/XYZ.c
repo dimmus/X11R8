@@ -34,7 +34,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xos.h"
 #include "Xlibint.h"
@@ -63,11 +63,7 @@ static int CIEXYZ_ParseString(register char *spec, XcmsColor *pColor);
  *      LOCALS VARIABLES
  */
 
-static XcmsConversionProc Fl_CIEXYZ_to_CIEXYZ[] = {
-    NULL
-};
-
-
+static XcmsConversionProc Fl_CIEXYZ_to_CIEXYZ[] = { NULL };
 
 /*
  *      GLOBALS
@@ -77,17 +73,13 @@ static XcmsConversionProc Fl_CIEXYZ_to_CIEXYZ[] = {
     /*
      * CIE XYZ Color Space
      */
-XcmsColorSpace	XcmsCIEXYZColorSpace =
-    {
-	_XcmsCIEXYZ_prefix,		/* prefix */
-	XcmsCIEXYZFormat,		/* id */
-	CIEXYZ_ParseString,	/* parseString */
-	Fl_CIEXYZ_to_CIEXYZ,	/* to_CIEXYZ */
-	Fl_CIEXYZ_to_CIEXYZ,	/* from_CIEXYZ */
-	1
-    };
+XcmsColorSpace XcmsCIEXYZColorSpace = { _XcmsCIEXYZ_prefix,  /* prefix */
+                                        XcmsCIEXYZFormat,  /* id */
+                                        CIEXYZ_ParseString, /* parseString */
+                                        Fl_CIEXYZ_to_CIEXYZ, /* to_CIEXYZ */
+                                        Fl_CIEXYZ_to_CIEXYZ, /* from_CIEXYZ */
+                                        1 };
 
-
 /************************************************************************
  *									*
  *			PRIVATE ROUTINES				*
@@ -101,9 +93,7 @@ XcmsColorSpace	XcmsCIEXYZColorSpace =
  *	SYNOPSIS
  */
 static int
-CIEXYZ_ParseString(
-    register char *spec,
-    XcmsColor *pColor)
+CIEXYZ_ParseString(register char *spec, XcmsColor *pColor)
 /*
  *	DESCRIPTION
  *		This routines takes a string and attempts to convert
@@ -121,52 +111,56 @@ CIEXYZ_ParseString(
  */
 {
     size_t n;
-    char *pchar;
+    char  *pchar;
 
-    if ((pchar = strchr(spec, ':')) == NULL) {
-	return(XcmsFailure);
+    if ((pchar = strchr(spec, ':')) == NULL)
+    {
+        return (XcmsFailure);
     }
     n = (size_t)(pchar - spec);
 
     /*
      * Check for proper prefix.
      */
-    if (strncmp(spec, _XcmsCIEXYZ_prefix, n) != 0) {
-	return(XcmsFailure);
+    if (strncmp(spec, _XcmsCIEXYZ_prefix, n) != 0)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Attempt to parse the value portion.
      */
-    if (sscanf(spec + n + 1, "%lf/%lf/%lf",
-	    &pColor->spec.CIEXYZ.X,
-	    &pColor->spec.CIEXYZ.Y,
-	    &pColor->spec.CIEXYZ.Z) != 3) {
-	char *s; /* Maybe failed due to locale */
-	int f;
-	if ((s = strdup(spec))) {
-	    for (f = 0; s[f]; ++f)
-		if (s[f] == '.')
-		    s[f] = ',';
-		else if (s[f] == ',')
-		    s[f] = '.';
-	    if (sscanf(s + n + 1, "%lf/%lf/%lf",
-		       &pColor->spec.CIEXYZ.X,
-		       &pColor->spec.CIEXYZ.Y,
-		       &pColor->spec.CIEXYZ.Z) != 3) {
-		free(s);
-		return(XcmsFailure);
-	    }
-	    free(s);
-	} else
-	    return(XcmsFailure);
+    if (sscanf(spec + n + 1,
+               "%lf/%lf/%lf",
+               &pColor->spec.CIEXYZ.X,
+               &pColor->spec.CIEXYZ.Y,
+               &pColor->spec.CIEXYZ.Z) != 3)
+    {
+        char *s; /* Maybe failed due to locale */
+        int   f;
+        if ((s = strdup(spec)))
+        {
+            for (f = 0; s[f]; ++f)
+                if (s[f] == '.') s[f] = ',';
+                else if (s[f] == ',') s[f] = '.';
+            if (sscanf(s + n + 1,
+                       "%lf/%lf/%lf",
+                       &pColor->spec.CIEXYZ.X,
+                       &pColor->spec.CIEXYZ.Y,
+                       &pColor->spec.CIEXYZ.Z) != 3)
+            {
+                free(s);
+                return (XcmsFailure);
+            }
+            free(s);
+        }
+        else return (XcmsFailure);
     }
     pColor->format = XcmsCIEXYZFormat;
-    pColor->pixel = 0;
-    return(_XcmsCIEXYZ_ValidSpec(pColor));
+    pColor->pixel  = 0;
+    return (_XcmsCIEXYZ_ValidSpec(pColor));
 }
 
-
 /************************************************************************
  *									*
  *			PUBLIC ROUTINES 				*
@@ -180,8 +174,7 @@ CIEXYZ_ParseString(
  *	SYNOPSIS
  */
 Status
-_XcmsCIEXYZ_ValidSpec(
-    XcmsColor *pColor)
+_XcmsCIEXYZ_ValidSpec(XcmsColor *pColor)
 /*
  *	DESCRIPTION
  *		Checks if color specification valid for CIE XYZ
@@ -192,12 +185,11 @@ _XcmsCIEXYZ_ValidSpec(
  *
  */
 {
-    if (pColor->format != XcmsCIEXYZFormat
-	    ||
-	    (pColor->spec.CIEXYZ.Y < 0.0 - XMY_DBL_EPSILON)
-	    ||
-	    (pColor->spec.CIEXYZ.Y > 1.0 + XMY_DBL_EPSILON)) {
-	return(XcmsFailure);
+    if (pColor->format != XcmsCIEXYZFormat ||
+        (pColor->spec.CIEXYZ.Y < 0.0 - XMY_DBL_EPSILON) ||
+        (pColor->spec.CIEXYZ.Y > 1.0 + XMY_DBL_EPSILON))
+    {
+        return (XcmsFailure);
     }
-    return(XcmsSuccess);
+    return (XcmsSuccess);
 }

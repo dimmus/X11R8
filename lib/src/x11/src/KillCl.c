@@ -25,20 +25,17 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XKillClient(
-	register Display *dpy,
-	XID resource)
+XKillClient(register Display *dpy, XID resource)
 {
-	register xResourceReq *req;
-	LockDisplay(dpy);
-        GetResReq(KillClient, resource, req);
-	UnlockDisplay(dpy);
-	SyncHandle();
-	return 1;
+    register xResourceReq *req;
+    LockDisplay(dpy);
+    GetResReq(KillClient, resource, req);
+    UnlockDisplay(dpy);
+    SyncHandle();
+    return 1;
 }
-

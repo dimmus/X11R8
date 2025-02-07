@@ -25,38 +25,41 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XSetState(
-    register Display *dpy,
-    GC gc,
-    unsigned long foreground,
-    unsigned long background,
-    int function,
-    unsigned long planemask)
+XSetState(register Display *dpy,
+          GC                gc,
+          unsigned long     foreground,
+          unsigned long     background,
+          int               function,
+          unsigned long     planemask)
 {
     XGCValues *gv = &gc->values;
 
     LockDisplay(dpy);
 
-    if (function != gv->function) {
-	gv->function = function;
-	gc->dirty |= GCFunction;
+    if (function != gv->function)
+    {
+        gv->function = function;
+        gc->dirty |= GCFunction;
     }
-    if (planemask != gv->plane_mask) {
-	gv->plane_mask = planemask;
-	gc->dirty |= GCPlaneMask;
+    if (planemask != gv->plane_mask)
+    {
+        gv->plane_mask = planemask;
+        gc->dirty |= GCPlaneMask;
     }
-    if (foreground != gv->foreground) {
-	gv->foreground = foreground;
-	gc->dirty |= GCForeground;
+    if (foreground != gv->foreground)
+    {
+        gv->foreground = foreground;
+        gc->dirty |= GCForeground;
     }
-    if (background != gv->background) {
-	gv->background = background;
-	gc->dirty |= GCBackground;
+    if (background != gv->background)
+    {
+        gv->background = background;
+        gc->dirty |= GCBackground;
     }
     UnlockDisplay(dpy);
     SyncHandle();

@@ -25,9 +25,8 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ********************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
-
 
 #include <stdio.h>
 #include "Xlibint.h"
@@ -38,93 +37,100 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 /***====================================================================***/
 
 static void
-_XkbFreeGeomLeafElems(Bool freeAll,
-                      int first,
-                      int count,
+_XkbFreeGeomLeafElems(Bool            freeAll,
+                      int             first,
+                      int             count,
                       unsigned short *num_inout,
                       unsigned short *sz_inout,
-                      char **elems,
-                      unsigned int elem_sz)
+                      char          **elems,
+                      unsigned int    elem_sz)
 {
-    if ((freeAll) || (*elems == NULL)) {
+    if ((freeAll) || (*elems == NULL))
+    {
         *num_inout = *sz_inout = 0;
-        if (*elems != NULL) {
+        if (*elems != NULL)
+        {
             _XkbFree(*elems);
             *elems = NULL;
         }
         return;
     }
 
-    if ((first >= (*num_inout)) || (first < 0) || (count < 1))
-        return;
+    if ((first >= (*num_inout)) || (first < 0) || (count < 1)) return;
 
-    if (first + count >= (*num_inout)) {
+    if (first + count >= (*num_inout))
+    {
         /* truncating the array is easy */
         (*num_inout) = first;
     }
-    else {
+    else
+    {
         char *ptr;
-        int extra;
+        int   extra;
 
-        ptr = *elems;
+        ptr   = *elems;
         extra = ((*num_inout) - (first + count)) * elem_sz;
         if (extra > 0)
-            memmove(&ptr[(unsigned) first * elem_sz], &ptr[(unsigned)(first + count) * elem_sz],
-                    (size_t) extra);
+            memmove(&ptr[(unsigned)first * elem_sz],
+                    &ptr[(unsigned)(first + count) * elem_sz],
+                    (size_t)extra);
         (*num_inout) -= count;
     }
     return;
 }
 
-typedef void (*ContentsClearFunc) (
-    char *       /* priv */
+typedef void (*ContentsClearFunc)(char *       /* priv */
 );
 
 static void
-_XkbFreeGeomNonLeafElems(Bool freeAll,
-                         int first,
-                         int count,
-                         unsigned short *num_inout,
-                         unsigned short *sz_inout,
-                         char **elems,
-                         unsigned int elem_sz,
+_XkbFreeGeomNonLeafElems(Bool              freeAll,
+                         int               first,
+                         int               count,
+                         unsigned short   *num_inout,
+                         unsigned short   *sz_inout,
+                         char            **elems,
+                         unsigned int      elem_sz,
                          ContentsClearFunc freeFunc)
 {
-    register int i;
+    register int   i;
     register char *ptr;
 
-    if (freeAll) {
+    if (freeAll)
+    {
         first = 0;
         count = (*num_inout);
     }
-    else if ((first >= (*num_inout)) || (first < 0) || (count < 1))
-        return;
-    else if (first + count > (*num_inout))
-        count = (*num_inout) - first;
-    if (*elems == NULL)
-        return;
+    else if ((first >= (*num_inout)) || (first < 0) || (count < 1)) return;
+    else if (first + count > (*num_inout)) count = (*num_inout) - first;
+    if (*elems == NULL) return;
 
-    if (freeFunc) {
+    if (freeFunc)
+    {
         ptr = *elems;
         ptr += first * elem_sz;
-        for (i = 0; i < count; i++) {
-            (*freeFunc) (ptr);
+        for (i = 0; i < count; i++)
+        {
+            (*freeFunc)(ptr);
             ptr += elem_sz;
         }
     }
-    if (freeAll) {
+    if (freeAll)
+    {
         (*num_inout) = (*sz_inout) = 0;
-        if (*elems) {
+        if (*elems)
+        {
             _XkbFree(*elems);
             *elems = NULL;
         }
     }
-    else if (first + count >= (*num_inout))
-        *num_inout = first;
-    else {
-        i = ((*num_inout) - (first + count)) * elem_sz;
+    else if (first + count >= (*num_inout)) *num_inout = first;
+    else
+    {
+        i   = ((*num_inout) - (first + count)) * elem_sz;
         ptr = *elems;
-        memmove(&ptr[(unsigned) first * elem_sz], &ptr[(unsigned)(first + count) * elem_sz], (size_t) i);
+        memmove(&ptr[(unsigned)first * elem_sz],
+                &ptr[(unsigned)(first + count) * elem_sz],
+                (size_t)i);
         (*num_inout) -= count;
     }
     return;
@@ -135,13 +141,15 @@ _XkbFreeGeomNonLeafElems(Bool freeAll,
 static void
 _XkbClearProperty(char *prop_in)
 {
-    XkbPropertyPtr prop = (XkbPropertyPtr) prop_in;
+    XkbPropertyPtr prop = (XkbPropertyPtr)prop_in;
 
-    if (prop->name) {
+    if (prop->name)
+    {
         _XkbFree(prop->name);
         prop->name = NULL;
     }
-    if (prop->value) {
+    if (prop->value)
+    {
         _XkbFree(prop->value);
         prop->value = NULL;
     }
@@ -151,10 +159,14 @@ _XkbClearProperty(char *prop_in)
 void
 XkbFreeGeomProperties(XkbGeometryPtr geom, int first, int count, Bool freeAll)
 {
-    _XkbFreeGeomNonLeafElems(freeAll, first, count,
-                             &geom->num_properties, &geom->sz_properties,
-                             (char **) &geom->properties,
-                             sizeof(XkbPropertyRec), _XkbClearProperty);
+    _XkbFreeGeomNonLeafElems(freeAll,
+                             first,
+                             count,
+                             &geom->num_properties,
+                             &geom->sz_properties,
+                             (char **)&geom->properties,
+                             sizeof(XkbPropertyRec),
+                             _XkbClearProperty);
     return;
 }
 
@@ -163,9 +175,12 @@ XkbFreeGeomProperties(XkbGeometryPtr geom, int first, int count, Bool freeAll)
 void
 XkbFreeGeomKeyAliases(XkbGeometryPtr geom, int first, int count, Bool freeAll)
 {
-    _XkbFreeGeomLeafElems(freeAll, first, count,
-                          &geom->num_key_aliases, &geom->sz_key_aliases,
-                          (char **) &geom->key_aliases,
+    _XkbFreeGeomLeafElems(freeAll,
+                          first,
+                          count,
+                          &geom->num_key_aliases,
+                          &geom->sz_key_aliases,
+                          (char **)&geom->key_aliases,
                           sizeof(XkbKeyAliasRec));
     return;
 }
@@ -175,7 +190,7 @@ XkbFreeGeomKeyAliases(XkbGeometryPtr geom, int first, int count, Bool freeAll)
 static void
 _XkbClearColor(char *color_in)
 {
-    XkbColorPtr color = (XkbColorPtr) color_in;
+    XkbColorPtr color = (XkbColorPtr)color_in;
 
     _XkbFree(color->spec);
     return;
@@ -184,10 +199,14 @@ _XkbClearColor(char *color_in)
 void
 XkbFreeGeomColors(XkbGeometryPtr geom, int first, int count, Bool freeAll)
 {
-    _XkbFreeGeomNonLeafElems(freeAll, first, count,
-                             &geom->num_colors, &geom->sz_colors,
-                             (char **) &geom->colors,
-                             sizeof(XkbColorRec), _XkbClearColor);
+    _XkbFreeGeomNonLeafElems(freeAll,
+                             first,
+                             count,
+                             &geom->num_colors,
+                             &geom->sz_colors,
+                             (char **)&geom->colors,
+                             sizeof(XkbColorRec),
+                             _XkbClearColor);
     return;
 }
 
@@ -196,9 +215,12 @@ XkbFreeGeomColors(XkbGeometryPtr geom, int first, int count, Bool freeAll)
 void
 XkbFreeGeomPoints(XkbOutlinePtr outline, int first, int count, Bool freeAll)
 {
-    _XkbFreeGeomLeafElems(freeAll, first, count,
-                          &outline->num_points, &outline->sz_points,
-                          (char **) &outline->points,
+    _XkbFreeGeomLeafElems(freeAll,
+                          first,
+                          count,
+                          &outline->num_points,
+                          &outline->sz_points,
+                          (char **)&outline->points,
                           sizeof(XkbPointRec));
     return;
 }
@@ -208,7 +230,7 @@ XkbFreeGeomPoints(XkbOutlinePtr outline, int first, int count, Bool freeAll)
 static void
 _XkbClearOutline(char *outline_in)
 {
-    XkbOutlinePtr outline = (XkbOutlinePtr) outline_in;
+    XkbOutlinePtr outline = (XkbOutlinePtr)outline_in;
 
     if (outline->points != NULL)
         XkbFreeGeomPoints(outline, 0, outline->num_points, True);
@@ -218,10 +240,14 @@ _XkbClearOutline(char *outline_in)
 void
 XkbFreeGeomOutlines(XkbShapePtr shape, int first, int count, Bool freeAll)
 {
-    _XkbFreeGeomNonLeafElems(freeAll, first, count,
-                             &shape->num_outlines, &shape->sz_outlines,
-                             (char **) &shape->outlines,
-                             sizeof(XkbOutlineRec), _XkbClearOutline);
+    _XkbFreeGeomNonLeafElems(freeAll,
+                             first,
+                             count,
+                             &shape->num_outlines,
+                             &shape->sz_outlines,
+                             (char **)&shape->outlines,
+                             sizeof(XkbOutlineRec),
+                             _XkbClearOutline);
 
     return;
 }
@@ -231,7 +257,7 @@ XkbFreeGeomOutlines(XkbShapePtr shape, int first, int count, Bool freeAll)
 static void
 _XkbClearShape(char *shape_in)
 {
-    XkbShapePtr shape = (XkbShapePtr) shape_in;
+    XkbShapePtr shape = (XkbShapePtr)shape_in;
 
     if (shape->outlines)
         XkbFreeGeomOutlines(shape, 0, shape->num_outlines, True);
@@ -241,10 +267,14 @@ _XkbClearShape(char *shape_in)
 void
 XkbFreeGeomShapes(XkbGeometryPtr geom, int first, int count, Bool freeAll)
 {
-    _XkbFreeGeomNonLeafElems(freeAll, first, count,
-                             &geom->num_shapes, &geom->sz_shapes,
-                             (char **) &geom->shapes,
-                             sizeof(XkbShapeRec), _XkbClearShape);
+    _XkbFreeGeomNonLeafElems(freeAll,
+                             first,
+                             count,
+                             &geom->num_shapes,
+                             &geom->sz_shapes,
+                             (char **)&geom->shapes,
+                             sizeof(XkbShapeRec),
+                             _XkbClearShape);
     return;
 }
 
@@ -253,9 +283,12 @@ XkbFreeGeomShapes(XkbGeometryPtr geom, int first, int count, Bool freeAll)
 void
 XkbFreeGeomOverlayKeys(XkbOverlayRowPtr row, int first, int count, Bool freeAll)
 {
-    _XkbFreeGeomLeafElems(freeAll, first, count,
-                          &row->num_keys, &row->sz_keys,
-                          (char **) &row->keys,
+    _XkbFreeGeomLeafElems(freeAll,
+                          first,
+                          count,
+                          &row->num_keys,
+                          &row->sz_keys,
+                          (char **)&row->keys,
                           sizeof(XkbOverlayKeyRec));
     return;
 }
@@ -265,21 +298,26 @@ XkbFreeGeomOverlayKeys(XkbOverlayRowPtr row, int first, int count, Bool freeAll)
 static void
 _XkbClearOverlayRow(char *row_in)
 {
-    XkbOverlayRowPtr row = (XkbOverlayRowPtr) row_in;
+    XkbOverlayRowPtr row = (XkbOverlayRowPtr)row_in;
 
-    if (row->keys != NULL)
-        XkbFreeGeomOverlayKeys(row, 0, row->num_keys, True);
+    if (row->keys != NULL) XkbFreeGeomOverlayKeys(row, 0, row->num_keys, True);
     return;
 }
 
 void
-XkbFreeGeomOverlayRows(XkbOverlayPtr overlay, int first, int count,
-                       Bool freeAll)
+XkbFreeGeomOverlayRows(XkbOverlayPtr overlay,
+                       int           first,
+                       int           count,
+                       Bool          freeAll)
 {
-    _XkbFreeGeomNonLeafElems(freeAll, first, count,
-                             &overlay->num_rows, &overlay->sz_rows,
-                             (char **) &overlay->rows,
-                             sizeof(XkbOverlayRowRec), _XkbClearOverlayRow);
+    _XkbFreeGeomNonLeafElems(freeAll,
+                             first,
+                             count,
+                             &overlay->num_rows,
+                             &overlay->sz_rows,
+                             (char **)&overlay->rows,
+                             sizeof(XkbOverlayRowRec),
+                             _XkbClearOverlayRow);
     return;
 }
 
@@ -288,7 +326,7 @@ XkbFreeGeomOverlayRows(XkbOverlayPtr overlay, int first, int count,
 static void
 _XkbClearOverlay(char *overlay_in)
 {
-    XkbOverlayPtr overlay = (XkbOverlayPtr) overlay_in;
+    XkbOverlayPtr overlay = (XkbOverlayPtr)overlay_in;
 
     if (overlay->rows != NULL)
         XkbFreeGeomOverlayRows(overlay, 0, overlay->num_rows, True);
@@ -298,10 +336,14 @@ _XkbClearOverlay(char *overlay_in)
 void
 XkbFreeGeomOverlays(XkbSectionPtr section, int first, int count, Bool freeAll)
 {
-    _XkbFreeGeomNonLeafElems(freeAll, first, count,
-                             &section->num_overlays, &section->sz_overlays,
-                             (char **) &section->overlays,
-                             sizeof(XkbOverlayRec), _XkbClearOverlay);
+    _XkbFreeGeomNonLeafElems(freeAll,
+                             first,
+                             count,
+                             &section->num_overlays,
+                             &section->sz_overlays,
+                             (char **)&section->overlays,
+                             sizeof(XkbOverlayRec),
+                             _XkbClearOverlay);
     return;
 }
 
@@ -310,9 +352,12 @@ XkbFreeGeomOverlays(XkbSectionPtr section, int first, int count, Bool freeAll)
 void
 XkbFreeGeomKeys(XkbRowPtr row, int first, int count, Bool freeAll)
 {
-    _XkbFreeGeomLeafElems(freeAll, first, count,
-                          &row->num_keys, &row->sz_keys,
-                          (char **) &row->keys,
+    _XkbFreeGeomLeafElems(freeAll,
+                          first,
+                          count,
+                          &row->num_keys,
+                          &row->sz_keys,
+                          (char **)&row->keys,
                           sizeof(XkbKeyRec));
     return;
 }
@@ -322,20 +367,23 @@ XkbFreeGeomKeys(XkbRowPtr row, int first, int count, Bool freeAll)
 static void
 _XkbClearRow(char *row_in)
 {
-    XkbRowPtr row = (XkbRowPtr) row_in;
+    XkbRowPtr row = (XkbRowPtr)row_in;
 
-    if (row->keys != NULL)
-        XkbFreeGeomKeys(row, 0, row->num_keys, True);
+    if (row->keys != NULL) XkbFreeGeomKeys(row, 0, row->num_keys, True);
     return;
 }
 
 void
 XkbFreeGeomRows(XkbSectionPtr section, int first, int count, Bool freeAll)
 {
-    _XkbFreeGeomNonLeafElems(freeAll, first, count,
-                             &section->num_rows, &section->sz_rows,
-                             (char **) &section->rows,
-                             sizeof(XkbRowRec), _XkbClearRow);
+    _XkbFreeGeomNonLeafElems(freeAll,
+                             first,
+                             count,
+                             &section->num_rows,
+                             &section->sz_rows,
+                             (char **)&section->rows,
+                             sizeof(XkbRowRec),
+                             _XkbClearRow);
 }
 
 /***====================================================================***/
@@ -343,11 +391,12 @@ XkbFreeGeomRows(XkbSectionPtr section, int first, int count, Bool freeAll)
 static void
 _XkbClearSection(char *section_in)
 {
-    XkbSectionPtr section = (XkbSectionPtr) section_in;
+    XkbSectionPtr section = (XkbSectionPtr)section_in;
 
     if (section->rows != NULL)
         XkbFreeGeomRows(section, 0, section->num_rows, True);
-    if (section->doodads != NULL) {
+    if (section->doodads != NULL)
+    {
         XkbFreeGeomDoodads(section->doodads, section->num_doodads, True);
         section->doodads = NULL;
     }
@@ -357,10 +406,14 @@ _XkbClearSection(char *section_in)
 void
 XkbFreeGeomSections(XkbGeometryPtr geom, int first, int count, Bool freeAll)
 {
-    _XkbFreeGeomNonLeafElems(freeAll, first, count,
-                             &geom->num_sections, &geom->sz_sections,
-                             (char **) &geom->sections,
-                             sizeof(XkbSectionRec), _XkbClearSection);
+    _XkbFreeGeomNonLeafElems(freeAll,
+                             first,
+                             count,
+                             &geom->num_sections,
+                             &geom->sz_sections,
+                             (char **)&geom->sections,
+                             sizeof(XkbSectionRec),
+                             _XkbClearSection);
     return;
 }
 
@@ -369,29 +422,33 @@ XkbFreeGeomSections(XkbGeometryPtr geom, int first, int count, Bool freeAll)
 static void
 _XkbClearDoodad(char *doodad_in)
 {
-    XkbDoodadPtr doodad = (XkbDoodadPtr) doodad_in;
+    XkbDoodadPtr doodad = (XkbDoodadPtr)doodad_in;
 
-    switch (doodad->any.type) {
-    case XkbTextDoodad:
+    switch (doodad->any.type)
     {
-        if (doodad->text.text != NULL) {
-            _XkbFree(doodad->text.text);
-            doodad->text.text = NULL;
-        }
-        if (doodad->text.font != NULL) {
-            _XkbFree(doodad->text.font);
-            doodad->text.font = NULL;
-        }
-    }
-        break;
-    case XkbLogoDoodad:
-    {
-        if (doodad->logo.logo_name != NULL) {
-            _XkbFree(doodad->logo.logo_name);
-            doodad->logo.logo_name = NULL;
-        }
-    }
-        break;
+        case XkbTextDoodad:
+            {
+                if (doodad->text.text != NULL)
+                {
+                    _XkbFree(doodad->text.text);
+                    doodad->text.text = NULL;
+                }
+                if (doodad->text.font != NULL)
+                {
+                    _XkbFree(doodad->text.font);
+                    doodad->text.font = NULL;
+                }
+            }
+            break;
+        case XkbLogoDoodad:
+            {
+                if (doodad->logo.logo_name != NULL)
+                {
+                    _XkbFree(doodad->logo.logo_name);
+                    doodad->logo.logo_name = NULL;
+                }
+            }
+            break;
     }
     return;
 }
@@ -399,15 +456,16 @@ _XkbClearDoodad(char *doodad_in)
 void
 XkbFreeGeomDoodads(XkbDoodadPtr doodads, int nDoodads, Bool freeAll)
 {
-    register int i;
+    register int          i;
     register XkbDoodadPtr doodad;
 
-    if (doodads) {
-        for (i = 0, doodad = doodads; i < nDoodads; i++, doodad++) {
-            _XkbClearDoodad((char *) doodad);
+    if (doodads)
+    {
+        for (i = 0, doodad = doodads; i < nDoodads; i++, doodad++)
+        {
+            _XkbClearDoodad((char *)doodad);
         }
-        if (freeAll)
-            _XkbFree(doodads);
+        if (freeAll) _XkbFree(doodads);
     }
     return;
 }
@@ -415,10 +473,8 @@ XkbFreeGeomDoodads(XkbDoodadPtr doodads, int nDoodads, Bool freeAll)
 void
 XkbFreeGeometry(XkbGeometryPtr geom, unsigned which, Bool freeMap)
 {
-    if (geom == NULL)
-        return;
-    if (freeMap)
-        which = XkbGeomAllMask;
+    if (geom == NULL) return;
+    if (freeMap) which = XkbGeomAllMask;
     if ((which & XkbGeomPropertiesMask) && (geom->properties != NULL))
         XkbFreeGeomProperties(geom, 0, geom->num_properties, True);
     if ((which & XkbGeomColorsMask) && (geom->colors != NULL))
@@ -427,15 +483,18 @@ XkbFreeGeometry(XkbGeometryPtr geom, unsigned which, Bool freeMap)
         XkbFreeGeomShapes(geom, 0, geom->num_shapes, True);
     if ((which & XkbGeomSectionsMask) && (geom->sections != NULL))
         XkbFreeGeomSections(geom, 0, geom->num_sections, True);
-    if ((which & XkbGeomDoodadsMask) && (geom->doodads != NULL)) {
+    if ((which & XkbGeomDoodadsMask) && (geom->doodads != NULL))
+    {
         XkbFreeGeomDoodads(geom->doodads, geom->num_doodads, True);
-        geom->doodads = NULL;
+        geom->doodads     = NULL;
         geom->num_doodads = geom->sz_doodads = 0;
     }
     if ((which & XkbGeomKeyAliasesMask) && (geom->key_aliases != NULL))
         XkbFreeGeomKeyAliases(geom, 0, geom->num_key_aliases, True);
-    if (freeMap) {
-        if (geom->label_font != NULL) {
+    if (freeMap)
+    {
+        if (geom->label_font != NULL)
+        {
             _XkbFree(geom->label_font);
             geom->label_font = NULL;
         }
@@ -447,77 +506,114 @@ XkbFreeGeometry(XkbGeometryPtr geom, unsigned which, Bool freeMap)
 /***====================================================================***/
 
 static Status
-_XkbGeomAlloc(XPointer *old,
+_XkbGeomAlloc(XPointer       *old,
               unsigned short *num,
               unsigned short *total,
-              int num_new,
-              size_t sz_elem)
+              int             num_new,
+              size_t          sz_elem)
 {
-    if (num_new < 1)
-        return Success;
-    if ((*old) == NULL)
-        *num = *total = 0;
+    if (num_new < 1) return Success;
+    if ((*old) == NULL) *num = *total = 0;
 
-    if ((*num) + num_new <= (*total))
-        return Success;
+    if ((*num) + num_new <= (*total)) return Success;
 
     *total = (*num) + num_new;
     if ((*old) != NULL)
-        (*old) = (XPointer) _XkbRealloc((*old), (*total) * sz_elem);
-    else
-        (*old) = (XPointer) _XkbCalloc((*total), sz_elem);
-    if ((*old) == NULL) {
+        (*old) = (XPointer)_XkbRealloc((*old), (*total) * sz_elem);
+    else (*old) = (XPointer)_XkbCalloc((*total), sz_elem);
+    if ((*old) == NULL)
+    {
         *total = *num = 0;
         return BadAlloc;
     }
 
-    if (*num > 0) {
-        char *tmp = (char *) (*old);
+    if (*num > 0)
+    {
+        char *tmp = (char *)(*old);
         bzero(&tmp[sz_elem * (*num)], (num_new * sz_elem));
     }
     return Success;
 }
 
-#define _XkbAllocProps(g, n) _XkbGeomAlloc((XPointer *)&(g)->properties, \
-                                &(g)->num_properties, &(g)->sz_properties, \
-                                (n), sizeof(XkbPropertyRec))
-#define _XkbAllocColors(g, n) _XkbGeomAlloc((XPointer *)&(g)->colors, \
-                                &(g)->num_colors, &(g)->sz_colors, \
-                                (n), sizeof(XkbColorRec))
-#define _XkbAllocShapes(g, n) _XkbGeomAlloc((XPointer *)&(g)->shapes, \
-                                &(g)->num_shapes, &(g)->sz_shapes, \
-                                (n), sizeof(XkbShapeRec))
-#define _XkbAllocSections(g, n) _XkbGeomAlloc((XPointer *)&(g)->sections, \
-                                &(g)->num_sections, &(g)->sz_sections, \
-                                (n), sizeof(XkbSectionRec))
-#define _XkbAllocDoodads(g, n) _XkbGeomAlloc((XPointer *)&(g)->doodads, \
-                                &(g)->num_doodads, &(g)->sz_doodads, \
-                                (n), sizeof(XkbDoodadRec))
-#define _XkbAllocKeyAliases(g, n) _XkbGeomAlloc((XPointer *)&(g)->key_aliases, \
-                                &(g)->num_key_aliases, &(g)->sz_key_aliases, \
-                                (n), sizeof(XkbKeyAliasRec))
+#define _XkbAllocProps(g, n)                    \
+    _XkbGeomAlloc((XPointer *)&(g)->properties, \
+                  &(g)->num_properties,         \
+                  &(g)->sz_properties,          \
+                  (n),                          \
+                  sizeof(XkbPropertyRec))
+#define _XkbAllocColors(g, n)               \
+    _XkbGeomAlloc((XPointer *)&(g)->colors, \
+                  &(g)->num_colors,         \
+                  &(g)->sz_colors,          \
+                  (n),                      \
+                  sizeof(XkbColorRec))
+#define _XkbAllocShapes(g, n)               \
+    _XkbGeomAlloc((XPointer *)&(g)->shapes, \
+                  &(g)->num_shapes,         \
+                  &(g)->sz_shapes,          \
+                  (n),                      \
+                  sizeof(XkbShapeRec))
+#define _XkbAllocSections(g, n)               \
+    _XkbGeomAlloc((XPointer *)&(g)->sections, \
+                  &(g)->num_sections,         \
+                  &(g)->sz_sections,          \
+                  (n),                        \
+                  sizeof(XkbSectionRec))
+#define _XkbAllocDoodads(g, n)               \
+    _XkbGeomAlloc((XPointer *)&(g)->doodads, \
+                  &(g)->num_doodads,         \
+                  &(g)->sz_doodads,          \
+                  (n),                       \
+                  sizeof(XkbDoodadRec))
+#define _XkbAllocKeyAliases(g, n)                \
+    _XkbGeomAlloc((XPointer *)&(g)->key_aliases, \
+                  &(g)->num_key_aliases,         \
+                  &(g)->sz_key_aliases,          \
+                  (n),                           \
+                  sizeof(XkbKeyAliasRec))
 
-#define _XkbAllocOutlines(s, n) _XkbGeomAlloc((XPointer *)&(s)->outlines, \
-                                &(s)->num_outlines, &(s)->sz_outlines, \
-                                (n), sizeof(XkbOutlineRec))
-#define _XkbAllocRows(s, n) _XkbGeomAlloc((XPointer *)&(s)->rows, \
-                                &(s)->num_rows, &(s)->sz_rows, \
-                                (n), sizeof(XkbRowRec))
-#define _XkbAllocPoints(o, n) _XkbGeomAlloc((XPointer *)&(o)->points, \
-                                &(o)->num_points, &(o)->sz_points, \
-                                (n), sizeof(XkbPointRec))
-#define _XkbAllocKeys(r, n) _XkbGeomAlloc((XPointer *)&(r)->keys, \
-                                &(r)->num_keys, &(r)->sz_keys, \
-                                (n), sizeof(XkbKeyRec))
-#define _XkbAllocOverlays(s, n) _XkbGeomAlloc((XPointer *)&(s)->overlays, \
-                                &(s)->num_overlays, &(s)->sz_overlays, \
-                                (n), sizeof(XkbOverlayRec))
-#define _XkbAllocOverlayRows(o, n) _XkbGeomAlloc((XPointer *)&(o)->rows, \
-                                &(o)->num_rows, &(o)->sz_rows, \
-                                (n), sizeof(XkbOverlayRowRec))
-#define _XkbAllocOverlayKeys(r, n) _XkbGeomAlloc((XPointer *)&(r)->keys, \
-                                &(r)->num_keys, &(r)->sz_keys, \
-                                (n), sizeof(XkbOverlayKeyRec))
+#define _XkbAllocOutlines(s, n)               \
+    _XkbGeomAlloc((XPointer *)&(s)->outlines, \
+                  &(s)->num_outlines,         \
+                  &(s)->sz_outlines,          \
+                  (n),                        \
+                  sizeof(XkbOutlineRec))
+#define _XkbAllocRows(s, n)               \
+    _XkbGeomAlloc((XPointer *)&(s)->rows, \
+                  &(s)->num_rows,         \
+                  &(s)->sz_rows,          \
+                  (n),                    \
+                  sizeof(XkbRowRec))
+#define _XkbAllocPoints(o, n)               \
+    _XkbGeomAlloc((XPointer *)&(o)->points, \
+                  &(o)->num_points,         \
+                  &(o)->sz_points,          \
+                  (n),                      \
+                  sizeof(XkbPointRec))
+#define _XkbAllocKeys(r, n)               \
+    _XkbGeomAlloc((XPointer *)&(r)->keys, \
+                  &(r)->num_keys,         \
+                  &(r)->sz_keys,          \
+                  (n),                    \
+                  sizeof(XkbKeyRec))
+#define _XkbAllocOverlays(s, n)               \
+    _XkbGeomAlloc((XPointer *)&(s)->overlays, \
+                  &(s)->num_overlays,         \
+                  &(s)->sz_overlays,          \
+                  (n),                        \
+                  sizeof(XkbOverlayRec))
+#define _XkbAllocOverlayRows(o, n)        \
+    _XkbGeomAlloc((XPointer *)&(o)->rows, \
+                  &(o)->num_rows,         \
+                  &(o)->sz_rows,          \
+                  (n),                    \
+                  sizeof(XkbOverlayRowRec))
+#define _XkbAllocOverlayKeys(r, n)        \
+    _XkbGeomAlloc((XPointer *)&(r)->keys, \
+                  &(r)->num_keys,         \
+                  &(r)->sz_keys,          \
+                  (n),                    \
+                  sizeof(XkbOverlayKeyRec))
 
 Status
 XkbAllocGeomProps(XkbGeometryPtr geom, int nProps)
@@ -607,41 +703,46 @@ Status
 XkbAllocGeometry(XkbDescPtr xkb, XkbGeometrySizesPtr sizes)
 {
     XkbGeometryPtr geom;
-    Status rtrn;
+    Status         rtrn;
 
-    if (xkb->geom == NULL) {
+    if (xkb->geom == NULL)
+    {
         xkb->geom = _XkbTypedCalloc(1, XkbGeometryRec);
-        if (!xkb->geom)
-            return BadAlloc;
+        if (!xkb->geom) return BadAlloc;
     }
     geom = xkb->geom;
     if ((sizes->which & XkbGeomPropertiesMask) &&
-        ((rtrn = _XkbAllocProps(geom, sizes->num_properties)) != Success)) {
+        ((rtrn = _XkbAllocProps(geom, sizes->num_properties)) != Success))
+    {
         goto BAIL;
     }
     if ((sizes->which & XkbGeomColorsMask) &&
-        ((rtrn = _XkbAllocColors(geom, sizes->num_colors)) != Success)) {
+        ((rtrn = _XkbAllocColors(geom, sizes->num_colors)) != Success))
+    {
         goto BAIL;
     }
     if ((sizes->which & XkbGeomShapesMask) &&
-        ((rtrn = _XkbAllocShapes(geom, sizes->num_shapes)) != Success)) {
+        ((rtrn = _XkbAllocShapes(geom, sizes->num_shapes)) != Success))
+    {
         goto BAIL;
     }
     if ((sizes->which & XkbGeomSectionsMask) &&
-        ((rtrn = _XkbAllocSections(geom, sizes->num_sections)) != Success)) {
+        ((rtrn = _XkbAllocSections(geom, sizes->num_sections)) != Success))
+    {
         goto BAIL;
     }
     if ((sizes->which & XkbGeomDoodadsMask) &&
-        ((rtrn = _XkbAllocDoodads(geom, sizes->num_doodads)) != Success)) {
+        ((rtrn = _XkbAllocDoodads(geom, sizes->num_doodads)) != Success))
+    {
         goto BAIL;
     }
     if ((sizes->which & XkbGeomKeyAliasesMask) &&
-        ((rtrn = _XkbAllocKeyAliases(geom, sizes->num_key_aliases))
-         != Success)) {
+        ((rtrn = _XkbAllocKeyAliases(geom, sizes->num_key_aliases)) != Success))
+    {
         goto BAIL;
     }
     return Success;
- BAIL:
+BAIL:
     XkbFreeGeometry(geom, XkbGeomAllMask, True);
     xkb->geom = NULL;
     return rtrn;
@@ -652,28 +753,30 @@ XkbAllocGeometry(XkbDescPtr xkb, XkbGeometrySizesPtr sizes)
 XkbPropertyPtr
 XkbAddGeomProperty(XkbGeometryPtr geom, _Xconst char *name, _Xconst char *value)
 {
-    register int i;
+    register int            i;
     register XkbPropertyPtr prop;
 
-    if ((!geom) || (!name) || (!value))
-        return NULL;
-    for (i = 0, prop = geom->properties; i < geom->num_properties; i++, prop++) {
-        if ((prop->name) && (strcmp(name, prop->name) == 0)) {
+    if ((!geom) || (!name) || (!value)) return NULL;
+    for (i = 0, prop = geom->properties; i < geom->num_properties; i++, prop++)
+    {
+        if ((prop->name) && (strcmp(name, prop->name) == 0))
+        {
             _XkbFree(prop->value);
             prop->value = strdup(value);
             return prop;
         }
     }
     if ((geom->num_properties >= geom->sz_properties) &&
-        (_XkbAllocProps(geom, 1) != Success)) {
+        (_XkbAllocProps(geom, 1) != Success))
+    {
         return NULL;
     }
-    prop = &geom->properties[geom->num_properties];
+    prop       = &geom->properties[geom->num_properties];
     prop->name = strdup(name);
-    if (!prop->name)
-        return NULL;
+    if (!prop->name) return NULL;
     prop->value = strdup(value);
-    if (!prop->value) {
+    if (!prop->value)
+    {
         _XkbFree(prop->name);
         prop->name = NULL;
         return NULL;
@@ -683,24 +786,28 @@ XkbAddGeomProperty(XkbGeometryPtr geom, _Xconst char *name, _Xconst char *value)
 }
 
 XkbKeyAliasPtr
-XkbAddGeomKeyAlias(XkbGeometryPtr geom, _Xconst char *aliasStr,
-                   _Xconst char *realStr)
+XkbAddGeomKeyAlias(XkbGeometryPtr geom,
+                   _Xconst char  *aliasStr,
+                   _Xconst char  *realStr)
 {
-    register int i;
+    register int            i;
     register XkbKeyAliasPtr alias;
 
     if ((!geom) || (!aliasStr) || (!realStr) || (!aliasStr[0]) || (!realStr[0]))
         return NULL;
     for (i = 0, alias = geom->key_aliases; i < geom->num_key_aliases;
-         i++, alias++) {
-        if (strncmp(alias->alias, aliasStr, XkbKeyNameLength) == 0) {
+         i++, alias++)
+    {
+        if (strncmp(alias->alias, aliasStr, XkbKeyNameLength) == 0)
+        {
             bzero(alias->real, XkbKeyNameLength);
             strncpy(alias->real, realStr, XkbKeyNameLength);
             return alias;
         }
     }
     if ((geom->num_key_aliases >= geom->sz_key_aliases) &&
-        (_XkbAllocKeyAliases(geom, 1) != Success)) {
+        (_XkbAllocKeyAliases(geom, 1) != Success))
+    {
         return NULL;
     }
     alias = &geom->key_aliases[geom->num_key_aliases];
@@ -714,26 +821,27 @@ XkbAddGeomKeyAlias(XkbGeometryPtr geom, _Xconst char *aliasStr,
 XkbColorPtr
 XkbAddGeomColor(XkbGeometryPtr geom, _Xconst char *spec, unsigned int pixel)
 {
-    register int i;
+    register int         i;
     register XkbColorPtr color;
 
-    if ((!geom) || (!spec))
-        return NULL;
-    for (i = 0, color = geom->colors; i < geom->num_colors; i++, color++) {
-        if ((color->spec) && (strcmp(color->spec, spec) == 0)) {
+    if ((!geom) || (!spec)) return NULL;
+    for (i = 0, color = geom->colors; i < geom->num_colors; i++, color++)
+    {
+        if ((color->spec) && (strcmp(color->spec, spec) == 0))
+        {
             color->pixel = pixel;
             return color;
         }
     }
     if ((geom->num_colors >= geom->sz_colors) &&
-        (_XkbAllocColors(geom, 1) != Success)) {
+        (_XkbAllocColors(geom, 1) != Success))
+    {
         return NULL;
     }
-    color = &geom->colors[geom->num_colors];
+    color        = &geom->colors[geom->num_colors];
     color->pixel = pixel;
-    color->spec = strdup(spec);
-    if (!color->spec)
-        return NULL;
+    color->spec  = strdup(spec);
+    if (!color->spec) return NULL;
     geom->num_colors++;
     return color;
 }
@@ -743,10 +851,10 @@ XkbAddGeomOutline(XkbShapePtr shape, int sz_points)
 {
     XkbOutlinePtr outline;
 
-    if ((!shape) || (sz_points < 0))
-        return NULL;
+    if ((!shape) || (sz_points < 0)) return NULL;
     if ((shape->num_outlines >= shape->sz_outlines) &&
-        (_XkbAllocOutlines(shape, 1) != Success)) {
+        (_XkbAllocOutlines(shape, 1) != Success))
+    {
         return NULL;
     }
     outline = &shape->outlines[shape->num_outlines];
@@ -760,15 +868,15 @@ XkbAddGeomOutline(XkbShapePtr shape, int sz_points)
 XkbShapePtr
 XkbAddGeomShape(XkbGeometryPtr geom, Atom name, int sz_outlines)
 {
-    XkbShapePtr shape;
+    XkbShapePtr  shape;
     register int i;
 
-    if ((!geom) || (!name) || (sz_outlines < 0))
-        return NULL;
-    if (geom->num_shapes > 0) {
-        for (shape = geom->shapes, i = 0; i < geom->num_shapes; i++, shape++) {
-            if (name == shape->name)
-                return shape;
+    if ((!geom) || (!name) || (sz_outlines < 0)) return NULL;
+    if (geom->num_shapes > 0)
+    {
+        for (shape = geom->shapes, i = 0; i < geom->num_shapes; i++, shape++)
+        {
+            if (name == shape->name) return shape;
         }
     }
     if ((geom->num_shapes >= geom->sz_shapes) &&
@@ -778,7 +886,7 @@ XkbAddGeomShape(XkbGeometryPtr geom, Atom name, int sz_outlines)
     bzero(shape, sizeof(XkbShapeRec));
     if ((sz_outlines > 0) && (_XkbAllocOutlines(shape, sz_outlines) != Success))
         return NULL;
-    shape->name = name;
+    shape->name    = name;
     shape->primary = shape->approx = NULL;
     geom->num_shapes++;
     return shape;
@@ -789,8 +897,7 @@ XkbAddGeomKey(XkbRowPtr row)
 {
     XkbKeyPtr key;
 
-    if (!row)
-        return NULL;
+    if (!row) return NULL;
     if ((row->num_keys >= row->sz_keys) && (_XkbAllocKeys(row, 1) != Success))
         return NULL;
     key = &row->keys[row->num_keys++];
@@ -803,35 +910,32 @@ XkbAddGeomRow(XkbSectionPtr section, int sz_keys)
 {
     XkbRowPtr row;
 
-    if ((!section) || (sz_keys < 0))
-        return NULL;
+    if ((!section) || (sz_keys < 0)) return NULL;
     if ((section->num_rows >= section->sz_rows) &&
         (_XkbAllocRows(section, 1) != Success))
         return NULL;
     row = &section->rows[section->num_rows];
     bzero(row, sizeof(XkbRowRec));
-    if ((sz_keys > 0) && (_XkbAllocKeys(row, sz_keys) != Success))
-        return NULL;
+    if ((sz_keys > 0) && (_XkbAllocKeys(row, sz_keys) != Success)) return NULL;
     section->num_rows++;
     return row;
 }
 
 XkbSectionPtr
 XkbAddGeomSection(XkbGeometryPtr geom,
-                  Atom name,
-                  int sz_rows,
-                  int sz_doodads,
-                  int sz_over)
+                  Atom           name,
+                  int            sz_rows,
+                  int            sz_doodads,
+                  int            sz_over)
 {
-    register int i;
+    register int  i;
     XkbSectionPtr section;
 
-    if ((!geom) || (name == None) || (sz_rows < 0))
-        return NULL;
+    if ((!geom) || (name == None) || (sz_rows < 0)) return NULL;
     for (i = 0, section = geom->sections; i < geom->num_sections;
-         i++, section++) {
-        if (section->name != name)
-            continue;
+         i++, section++)
+    {
+        if (section->name != name) continue;
         if (((sz_rows > 0) && (_XkbAllocRows(section, sz_rows) != Success)) ||
             ((sz_doodads > 0) &&
              (_XkbAllocDoodads(section, sz_doodads) != Success)) ||
@@ -845,10 +949,12 @@ XkbAddGeomSection(XkbGeometryPtr geom,
     section = &geom->sections[geom->num_sections];
     if ((sz_rows > 0) && (_XkbAllocRows(section, sz_rows) != Success))
         return NULL;
-    if ((sz_doodads > 0) && (_XkbAllocDoodads(section, sz_doodads) != Success)) {
-        if (section->rows) {
+    if ((sz_doodads > 0) && (_XkbAllocDoodads(section, sz_doodads) != Success))
+    {
+        if (section->rows)
+        {
             _XkbFree(section->rows);
-            section->rows = NULL;
+            section->rows    = NULL;
             section->sz_rows = section->num_rows = 0;
         }
         return NULL;
@@ -864,28 +970,32 @@ XkbAddGeomDoodad(XkbGeometryPtr geom, XkbSectionPtr section, Atom name)
     XkbDoodadPtr old, doodad;
     register int i, nDoodads;
 
-    if ((!geom) || (name == None))
-        return NULL;
-    if ((section != NULL) && (section->num_doodads > 0)) {
-        old = section->doodads;
+    if ((!geom) || (name == None)) return NULL;
+    if ((section != NULL) && (section->num_doodads > 0))
+    {
+        old      = section->doodads;
         nDoodads = section->num_doodads;
     }
-    else {
-        old = geom->doodads;
+    else
+    {
+        old      = geom->doodads;
         nDoodads = geom->num_doodads;
     }
-    for (i = 0, doodad = old; i < nDoodads; i++, doodad++) {
-        if (doodad->any.name == name)
-            return doodad;
+    for (i = 0, doodad = old; i < nDoodads; i++, doodad++)
+    {
+        if (doodad->any.name == name) return doodad;
     }
-    if (section) {
+    if (section)
+    {
         if ((section->num_doodads >= geom->sz_doodads) &&
-            (_XkbAllocDoodads(section, 1) != Success)) {
+            (_XkbAllocDoodads(section, 1) != Success))
+        {
             return NULL;
         }
         doodad = &section->doodads[section->num_doodads++];
     }
-    else {
+    else
+    {
         if ((geom->num_doodads >= geom->sz_doodads) &&
             (_XkbAllocDoodads(geom, 1) != Success))
             return NULL;
@@ -897,31 +1007,30 @@ XkbAddGeomDoodad(XkbGeometryPtr geom, XkbSectionPtr section, Atom name)
 }
 
 XkbOverlayKeyPtr
-XkbAddGeomOverlayKey(XkbOverlayPtr overlay,
+XkbAddGeomOverlayKey(XkbOverlayPtr    overlay,
                      XkbOverlayRowPtr row,
-                     _Xconst char *over,
-                     _Xconst char *under)
+                     _Xconst char    *over,
+                     _Xconst char    *under)
 {
-    register int i;
+    register int     i;
     XkbOverlayKeyPtr key;
-    XkbSectionPtr section;
-    XkbRowPtr row_under;
-    Bool found;
+    XkbSectionPtr    section;
+    XkbRowPtr        row_under;
+    Bool             found;
 
-    if ((!overlay) || (!row) || (!over) || (!under))
-        return NULL;
+    if ((!overlay) || (!row) || (!over) || (!under)) return NULL;
     section = overlay->section_under;
-    if (row->row_under >= section->num_rows)
-        return NULL;
+    if (row->row_under >= section->num_rows) return NULL;
     row_under = &section->rows[row->row_under];
-    for (i = 0, found = False; i < row_under->num_keys; i++) {
-        if (strncmp(under, row_under->keys[i].name.name, XkbKeyNameLength) == 0) {
+    for (i = 0, found = False; i < row_under->num_keys; i++)
+    {
+        if (strncmp(under, row_under->keys[i].name.name, XkbKeyNameLength) == 0)
+        {
             found = True;
             break;
         }
     }
-    if (!found)
-        return NULL;
+    if (!found) return NULL;
     if ((row->num_keys >= row->sz_keys) &&
         (_XkbAllocOverlayKeys(row, 1) != Success))
         return NULL;
@@ -935,18 +1044,19 @@ XkbAddGeomOverlayKey(XkbOverlayPtr overlay,
 XkbOverlayRowPtr
 XkbAddGeomOverlayRow(XkbOverlayPtr overlay, int row_under, int sz_keys)
 {
-    register int i;
+    register int     i;
     XkbOverlayRowPtr row;
 
-    if ((!overlay) || (sz_keys < 0))
-        return NULL;
-    if (row_under >= overlay->section_under->num_rows)
-        return NULL;
-    for (i = 0; i < overlay->num_rows; i++) {
-        if (overlay->rows[i].row_under == row_under) {
+    if ((!overlay) || (sz_keys < 0)) return NULL;
+    if (row_under >= overlay->section_under->num_rows) return NULL;
+    for (i = 0; i < overlay->num_rows; i++)
+    {
+        if (overlay->rows[i].row_under == row_under)
+        {
             row = &overlay->rows[i];
             if ((row->sz_keys < sz_keys) &&
-                (_XkbAllocOverlayKeys(row, sz_keys) != Success)) {
+                (_XkbAllocOverlayKeys(row, sz_keys) != Success))
+            {
                 return NULL;
             }
             return &overlay->rows[i];
@@ -967,15 +1077,16 @@ XkbAddGeomOverlayRow(XkbOverlayPtr overlay, int row_under, int sz_keys)
 XkbOverlayPtr
 XkbAddGeomOverlay(XkbSectionPtr section, Atom name, int sz_rows)
 {
-    register int i;
+    register int  i;
     XkbOverlayPtr overlay;
 
-    if ((!section) || (name == None) || (sz_rows == 0))
-        return NULL;
+    if ((!section) || (name == None) || (sz_rows == 0)) return NULL;
 
     for (i = 0, overlay = section->overlays; i < section->num_overlays;
-         i++, overlay++) {
-        if (overlay->name == name) {
+         i++, overlay++)
+    {
+        if (overlay->name == name)
+        {
             if ((sz_rows > 0) &&
                 (_XkbAllocOverlayRows(overlay, sz_rows) != Success))
                 return NULL;
@@ -988,7 +1099,7 @@ XkbAddGeomOverlay(XkbSectionPtr section, Atom name, int sz_rows)
     overlay = &section->overlays[section->num_overlays];
     if ((sz_rows > 0) && (_XkbAllocOverlayRows(overlay, sz_rows) != Success))
         return NULL;
-    overlay->name = name;
+    overlay->name          = name;
     overlay->section_under = section;
     section->num_overlays++;
     return overlay;

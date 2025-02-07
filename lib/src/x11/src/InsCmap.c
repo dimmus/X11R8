@@ -25,14 +25,12 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XInstallColormap(
-    register Display *dpy,
-    Colormap cmap)
+XInstallColormap(register Display *dpy, Colormap cmap)
 {
     register xResourceReq *req;
     LockDisplay(dpy);
@@ -41,4 +39,3 @@ XInstallColormap(
     SyncHandle();
     return 1;
 }
-

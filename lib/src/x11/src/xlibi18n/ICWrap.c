@@ -62,42 +62,43 @@ from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xlcint.h"
 #include "reallocarray.h"
 
 static int
-_XIMNestedListToNestedList(
-    XIMArg *nlist,   /* This is the new list */
-    XIMArg *list)    /* The original list */
+_XIMNestedListToNestedList(XIMArg *nlist,   /* This is the new list */
+                           XIMArg *list)    /* The original list */
 {
     register XIMArg *ptr = list;
 
-    while (ptr->name) {
-	if (!strcmp(ptr->name, XNVaNestedList)) {
-	    nlist += _XIMNestedListToNestedList(nlist, (XIMArg *)ptr->value);
-	} else {
-	    nlist->name = ptr->name;
-	    nlist->value = ptr->value;
-	    ptr++;
-	    nlist++;
-	}
+    while (ptr->name)
+    {
+        if (!strcmp(ptr->name, XNVaNestedList))
+        {
+            nlist += _XIMNestedListToNestedList(nlist, (XIMArg *)ptr->value);
+        }
+        else
+        {
+            nlist->name  = ptr->name;
+            nlist->value = ptr->value;
+            ptr++;
+            nlist++;
+        }
     }
-    return (int) (ptr - list);
+    return (int)(ptr - list);
 }
 
 static void
-_XIMCountNestedList(
-    XIMArg *args,
-    int *total_count)
+_XIMCountNestedList(XIMArg *args, int *total_count)
 {
-    for (; args->name; args++) {
-	if (!strcmp(args->name, XNVaNestedList))
-	    _XIMCountNestedList((XIMArg *)args->value, total_count);
-	else
-	    ++(*total_count);
+    for (; args->name; args++)
+    {
+        if (!strcmp(args->name, XNVaNestedList))
+            _XIMCountNestedList((XIMArg *)args->value, total_count);
+        else ++(*total_count);
     }
 }
 
@@ -108,13 +109,17 @@ _XIMCountVaList(va_list var, int *total_count)
 
     *total_count = 0;
 
-    for (attr = va_arg(var, char*); attr; attr = va_arg(var, char*)) {
-	if (!strcmp(attr, XNVaNestedList)) {
-	    _XIMCountNestedList(va_arg(var, XIMArg*), total_count);
-	} else {
-	    (void)va_arg(var, XIMArg*);
-	    ++(*total_count);
-	}
+    for (attr = va_arg(var, char *); attr; attr = va_arg(var, char *))
+    {
+        if (!strcmp(attr, XNVaNestedList))
+        {
+            _XIMCountNestedList(va_arg(var, XIMArg *), total_count);
+        }
+        else
+        {
+            (void)va_arg(var, XIMArg *);
+            ++(*total_count);
+        }
     }
 }
 
@@ -124,34 +129,39 @@ _XIMVaToNestedList(va_list var, int max_count, XIMArg **args_return)
     XIMArg *args;
     char   *attr;
 
-    if (max_count <= 0) {
-	*args_return = (XIMArg *)NULL;
-	return;
+    if (max_count <= 0)
+    {
+        *args_return = (XIMArg *)NULL;
+        return;
     }
 
-    args = Xmallocarray((unsigned)max_count + 1, sizeof(XIMArg));
+    args         = Xmallocarray((unsigned)max_count + 1, sizeof(XIMArg));
     *args_return = args;
     if (!args) return;
 
-    for (attr = va_arg(var, char*); attr; attr = va_arg(var, char*)) {
-	if (!strcmp(attr, XNVaNestedList)) {
-	    args += _XIMNestedListToNestedList(args, va_arg(var, XIMArg*));
-	} else {
-	    args->name = attr;
-	    args->value = va_arg(var, XPointer);
-	    args++;
-	}
+    for (attr = va_arg(var, char *); attr; attr = va_arg(var, char *))
+    {
+        if (!strcmp(attr, XNVaNestedList))
+        {
+            args += _XIMNestedListToNestedList(args, va_arg(var, XIMArg *));
+        }
+        else
+        {
+            args->name  = attr;
+            args->value = va_arg(var, XPointer);
+            args++;
+        }
     }
-    args->name = (char*)NULL;
+    args->name = (char *)NULL;
 }
 
 /*ARGSUSED*/
 XVaNestedList
 XVaCreateNestedList(int dummy, ...)
 {
-    va_list		var;
-    XIMArg		*args = NULL;
-    int			total_count;
+    va_list var;
+    XIMArg *args = NULL;
+    int     total_count;
 
     va_start(var, dummy);
     _XIMCountVaList(var, &total_count);
@@ -186,8 +196,7 @@ XSetIMValues(XIM im, ...)
     _XIMVaToNestedList(var, total_count, &args);
     va_end(var);
 
-    if (im && im->methods)
-	ret = (*im->methods->set_values) (im, args);
+    if (im && im->methods) ret = (*im->methods->set_values)(im, args);
     Xfree(args);
     return ret;
 }
@@ -214,8 +223,7 @@ XGetIMValues(XIM im, ...)
     _XIMVaToNestedList(var, total_count, &args);
     va_end(var);
 
-    if (im && im->methods)
-	ret = (*im->methods->get_values) (im, args);
+    if (im && im->methods) ret = (*im->methods->get_values)(im, args);
     Xfree(args);
     return ret;
 }
@@ -247,12 +255,12 @@ XCreateIC(XIM im, ...)
     _XIMVaToNestedList(var, total_count, &args);
     va_end(var);
 
-    if (im && im->methods)
-	ic = (XIC) (*im->methods->create_ic) (im, args);
+    if (im && im->methods) ic = (XIC)(*im->methods->create_ic)(im, args);
     Xfree(args);
-    if (ic) {
-	ic->core.next = im->core.ic_chain;
-	im->core.ic_chain = ic;
+    if (ic)
+    {
+        ic->core.next     = im->core.ic_chain;
+        im->core.ic_chain = ic;
     }
     return ic;
 }
@@ -263,19 +271,22 @@ XCreateIC(XIM im, ...)
 void
 XDestroyIC(XIC ic)
 {
-    XIM im = ic->core.im;
+    XIM  im = ic->core.im;
     XIC *prev;
 
-    (*ic->methods->destroy) (ic);
-    if (im) {
-	for (prev = &im->core.ic_chain; *prev; prev = &(*prev)->core.next) {
-	    if (*prev == ic) {
-		*prev = ic->core.next;
-		break;
-	    }
-	}
+    (*ic->methods->destroy)(ic);
+    if (im)
+    {
+        for (prev = &im->core.ic_chain; *prev; prev = &(*prev)->core.next)
+        {
+            if (*prev == ic)
+            {
+                *prev = ic->core.next;
+                break;
+            }
+        }
     }
-    Xfree (ic);
+    Xfree(ic);
 }
 
 char *
@@ -286,8 +297,7 @@ XGetICValues(XIC ic, ...)
     XIMArg *args;
     char   *ret;
 
-    if (!ic->core.im)
-	return (char *) NULL;
+    if (!ic->core.im) return (char *)NULL;
 
     /*
      * so count the stuff dangling here
@@ -303,7 +313,7 @@ XGetICValues(XIC ic, ...)
     _XIMVaToNestedList(var, total_count, &args);
     va_end(var);
 
-    ret = (*ic->methods->get_values) (ic, args);
+    ret = (*ic->methods->get_values)(ic, args);
     Xfree(args);
     return ret;
 }
@@ -316,8 +326,7 @@ XSetICValues(XIC ic, ...)
     XIMArg *args;
     char   *ret;
 
-    if (!ic->core.im)
-	return (char *) NULL;
+    if (!ic->core.im) return (char *)NULL;
 
     /*
      * so count the stuff dangling here
@@ -333,7 +342,7 @@ XSetICValues(XIC ic, ...)
     _XIMVaToNestedList(var, total_count, &args);
     va_end(var);
 
-    ret = (*ic->methods->set_values) (ic, args);
+    ret = (*ic->methods->set_values)(ic, args);
     Xfree(args);
     return ret;
 }
@@ -345,8 +354,7 @@ XSetICValues(XIC ic, ...)
 void
 XSetICFocus(XIC ic)
 {
-  if (ic && ic->core.im)
-      (*ic->methods->set_focus) (ic);
+    if (ic && ic->core.im) (*ic->methods->set_focus)(ic);
 }
 
 /*
@@ -356,8 +364,7 @@ XSetICFocus(XIC ic)
 void
 XUnsetICFocus(XIC ic)
 {
-  if (ic->core.im)
-      (*ic->methods->unset_focus) (ic);
+    if (ic->core.im) (*ic->methods->unset_focus)(ic);
 }
 
 /*
@@ -372,62 +379,88 @@ XIMOfIC(XIC ic)
 char *
 XmbResetIC(XIC ic)
 {
-    if (ic->core.im)
-	return (*ic->methods->mb_reset)(ic);
+    if (ic->core.im) return (*ic->methods->mb_reset)(ic);
     return (char *)NULL;
 }
 
 wchar_t *
 XwcResetIC(XIC ic)
 {
-    if (ic->core.im)
-	return (*ic->methods->wc_reset)(ic);
+    if (ic->core.im) return (*ic->methods->wc_reset)(ic);
     return (wchar_t *)NULL;
 }
 
 char *
 Xutf8ResetIC(XIC ic)
 {
-    if (ic->core.im) {
-	if (ic->methods->utf8_reset)
-	    return (*ic->methods->utf8_reset)(ic);
-	else if (ic->methods->mb_reset)
-	    return (*ic->methods->mb_reset)(ic);
+    if (ic->core.im)
+    {
+        if (ic->methods->utf8_reset) return (*ic->methods->utf8_reset)(ic);
+        else if (ic->methods->mb_reset) return (*ic->methods->mb_reset)(ic);
     }
     return (char *)NULL;
 }
 
 int
-XmbLookupString(XIC ic, XKeyEvent *ev, char *buffer, int nbytes,
-		KeySym *keysym, Status *status)
+XmbLookupString(XIC        ic,
+                XKeyEvent *ev,
+                char      *buffer,
+                int        nbytes,
+                KeySym    *keysym,
+                Status    *status)
 {
     if (ic->core.im)
-	return (*ic->methods->mb_lookup_string) (ic, ev, buffer, nbytes,
-						 keysym, status);
+        return (*ic->methods->mb_lookup_string)(ic,
+                                                ev,
+                                                buffer,
+                                                nbytes,
+                                                keysym,
+                                                status);
     return XLookupNone;
 }
 
 int
-XwcLookupString(XIC ic, XKeyEvent *ev, wchar_t *buffer, int nchars,
-		KeySym *keysym, Status *status)
+XwcLookupString(XIC        ic,
+                XKeyEvent *ev,
+                wchar_t   *buffer,
+                int        nchars,
+                KeySym    *keysym,
+                Status    *status)
 {
     if (ic->core.im)
-	return (*ic->methods->wc_lookup_string) (ic, ev, buffer, nchars,
-						 keysym, status);
+        return (*ic->methods->wc_lookup_string)(ic,
+                                                ev,
+                                                buffer,
+                                                nchars,
+                                                keysym,
+                                                status);
     return XLookupNone;
 }
 
 int
-Xutf8LookupString(XIC ic, XKeyEvent *ev, char *buffer, int nbytes,
-		  KeySym *keysym, Status *status)
+Xutf8LookupString(XIC        ic,
+                  XKeyEvent *ev,
+                  char      *buffer,
+                  int        nbytes,
+                  KeySym    *keysym,
+                  Status    *status)
 {
-    if (ic->core.im) {
-	if (ic->methods->utf8_lookup_string)
-	    return (*ic->methods->utf8_lookup_string) (ic, ev, buffer, nbytes,
-						   	keysym, status);
-	else if (ic->methods->mb_lookup_string)
-	    return (*ic->methods->mb_lookup_string) (ic, ev, buffer, nbytes,
-						   	keysym, status);
+    if (ic->core.im)
+    {
+        if (ic->methods->utf8_lookup_string)
+            return (*ic->methods->utf8_lookup_string)(ic,
+                                                      ev,
+                                                      buffer,
+                                                      nbytes,
+                                                      keysym,
+                                                      status);
+        else if (ic->methods->mb_lookup_string)
+            return (*ic->methods->mb_lookup_string)(ic,
+                                                    ev,
+                                                    buffer,
+                                                    nbytes,
+                                                    keysym,
+                                                    status);
     }
     return XLookupNone;
 }

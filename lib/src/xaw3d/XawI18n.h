@@ -26,35 +26,33 @@ in this Software without prior written authorization from the X Consortium.
 ********************************************************/
 
 #ifdef HAVE_WCTYPE_H
-#include <wctype.h>
-#ifdef HAVE_WIDEC_H
-#include <widec.h>
-#define wcslen(c) wslen(c)
-#define wcscpy(d,s) wscpy(d,s)
-#define wcsncpy(d,s,l) wsncpy(d,s,l)
-#endif
+#  include <wctype.h>
+#  ifdef HAVE_WIDEC_H
+#    include <widec.h>
+#    define wcslen(c)        wslen(c)
+#    define wcscpy(d, s)     wscpy(d, s)
+#    define wcsncpy(d, s, l) wsncpy(d, s, l)
+#  endif
 #endif
 
 #ifdef HAVE_WCHAR_H
-#include <wchar.h>
+#  include <wchar.h>
 #endif
 
 #ifdef USE_XWCHAR_STRING
-#define wcslen(c) _Xwcslen(c)
-#define wcscpy(d,s) _Xwcscpy(d,s)
-#define wcsncpy(d,s,l) _Xwcsncpy(d,s,l)
-#ifdef USE_XMBTOWC
-#define mbtowc(wc,s,l) _Xmbtowc(wc,s,l)
-#endif
+#  define wcslen(c)        _Xwcslen(c)
+#  define wcscpy(d, s)     _Xwcscpy(d, s)
+#  define wcsncpy(d, s, l) _Xwcsncpy(d, s, l)
+#  ifdef USE_XMBTOWC
+#    define mbtowc(wc, s, l) _Xmbtowc(wc, s, l)
+#  endif
 #endif
 
-extern wchar_t _Xaw_atowc (
-    unsigned char	c
-);
+extern wchar_t _Xaw_atowc(unsigned char c);
 
 #ifndef HAVE_ISWSPACE
-#include <ctype.h>
-#ifndef iswspace
-#define iswspace(c) (isascii(c) && isspace(toascii(c)))
-#endif
+#  include <ctype.h>
+#  ifndef iswspace
+#    define iswspace(c) (isascii(c) && isspace(toascii(c)))
+#  endif
 #endif

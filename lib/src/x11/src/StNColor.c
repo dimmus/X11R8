@@ -25,45 +25,46 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <limits.h>
 #include <stdio.h>
 #include "Xlibint.h"
 #include "Xcmsint.h"
 
-
 int
-XStoreNamedColor(
-register Display *dpy,
-Colormap cmap,
-_Xconst char *name, /* STRING8 */
-unsigned long pixel, /* CARD32 */
-int flags)  /* DoRed, DoGreen, DoBlue */
+XStoreNamedColor(register Display *dpy,
+                 Colormap          cmap,
+                 _Xconst char     *name, /* STRING8 */
+                 unsigned long     pixel, /* CARD32 */
+                 int               flags)  /* DoRed, DoGreen, DoBlue */
 {
-    unsigned int nbytes;
+    unsigned int                  nbytes;
     register xStoreNamedColorReq *req;
 #ifdef XCMS
-    XcmsCCC ccc;
+    XcmsCCC   ccc;
     XcmsColor cmsColor_exact;
-    XColor scr_def;
+    XColor    scr_def;
 #endif
 
-    if (name != NULL && strlen(name) >= USHRT_MAX)
-        return 0;
+    if (name != NULL && strlen(name) >= USHRT_MAX) return 0;
 #ifdef XCMS
     /*
      * Let's Attempt to use Xcms approach to Parse Color
      */
-    if ((ccc = XcmsCCCOfColormap(dpy, cmap)) != (XcmsCCC)NULL) {
-	if (_XcmsResolveColorString(ccc, &name, &cmsColor_exact,
-		XcmsRGBFormat) >= XcmsSuccess) {
-	    _XcmsRGB_to_XColor(&cmsColor_exact, &scr_def, 1);
-	    scr_def.pixel = pixel;
-	    scr_def.flags = flags;
-	    return XStoreColor(dpy, cmap, &scr_def);
-	}
-	/*
+    if ((ccc = XcmsCCCOfColormap(dpy, cmap)) != (XcmsCCC)NULL)
+    {
+        if (_XcmsResolveColorString(ccc,
+                                    &name,
+                                    &cmsColor_exact,
+                                    XcmsRGBFormat) >= XcmsSuccess)
+        {
+            _XcmsRGB_to_XColor(&cmsColor_exact, &scr_def, 1);
+            scr_def.pixel = pixel;
+            scr_def.flags = flags;
+            return XStoreColor(dpy, cmap, &scr_def);
+        }
+    /*
 	 * Otherwise we failed; or name was changed with yet another
 	 * name.  Thus pass name to the X Server.
 	 */
@@ -78,15 +79,13 @@ int flags)  /* DoRed, DoGreen, DoBlue */
     LockDisplay(dpy);
     GetReq(StoreNamedColor, req);
 
-    req->cmap = cmap;
-    req->flags = flags;
-    req->pixel = pixel;
-    req->nbytes = (CARD16) (nbytes = (unsigned) strlen(name));
+    req->cmap   = cmap;
+    req->flags  = flags;
+    req->pixel  = pixel;
+    req->nbytes = (CARD16)(nbytes = (unsigned)strlen(name));
     req->length += (nbytes + 3) >> 2; /* round up to multiple of 4 */
     Data(dpy, name, (long)nbytes);
     UnlockDisplay(dpy);
     SyncHandle();
     return 0;
 }
-
-

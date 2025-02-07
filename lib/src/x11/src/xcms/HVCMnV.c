@@ -44,7 +44,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
@@ -53,9 +53,8 @@
 /*
  *	DEFINES
  */
-#define EPS	    0.001
+#define EPS 0.001
 
-
 /************************************************************************
  *									*
  *			 PUBLIC ROUTINES				*
@@ -69,11 +68,10 @@
  *	SYNOPSIS
  */
 Status
-XcmsTekHVCQueryMinV (
-    XcmsCCC ccc,
-    XcmsFloat hue,
-    XcmsFloat chroma,
-    XcmsColor *pColor_return)
+XcmsTekHVCQueryMinV(XcmsCCC    ccc,
+                    XcmsFloat  hue,
+                    XcmsFloat  chroma,
+                    XcmsColor *pColor_return)
 
 /*
  *	DESCRIPTION
@@ -98,66 +96,81 @@ XcmsTekHVCQueryMinV (
  */
 {
     XcmsCCCRec myCCC;
-    XcmsColor tmp;
-    XcmsColor max_vc;
+    XcmsColor  tmp;
+    XcmsColor  max_vc;
 
     /*
      * Check Arguments
      */
-    if (ccc == NULL || pColor_return == NULL) {
-	return(XcmsFailure);
+    if (ccc == NULL || pColor_return == NULL)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Insure TekHVC installed
      */
-    if (XcmsAddColorSpace(&XcmsTekHVCColorSpace) == XcmsFailure) {
-	return(XcmsFailure);
+    if (XcmsAddColorSpace(&XcmsTekHVCColorSpace) == XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
     /* Use my own CCC */
-    memcpy ((char *)&myCCC, (char *)ccc, sizeof(XcmsCCCRec));
-    myCCC.clientWhitePt.format = XcmsUndefinedFormat;/* inherit screen white pt */
+    memcpy((char *)&myCCC, (char *)ccc, sizeof(XcmsCCCRec));
+    myCCC.clientWhitePt.format =
+        XcmsUndefinedFormat;/* inherit screen white pt */
     myCCC.gamutCompProc = (XcmsCompressionProc)NULL;/* no gamut comp func */
 
     tmp.spec.TekHVC.H = hue;
     tmp.spec.TekHVC.V = 100.0;
     tmp.spec.TekHVC.C = chroma;
-    tmp.pixel = pColor_return->pixel;
-    tmp.format = XcmsTekHVCFormat;
-
+    tmp.pixel         = pColor_return->pixel;
+    tmp.format        = XcmsTekHVCFormat;
 
     /* Check for a valid HVC */
-    if (!_XcmsTekHVC_CheckModify (&tmp)) {
-	return(XcmsFailure);
+    if (!_XcmsTekHVC_CheckModify(&tmp))
+    {
+        return (XcmsFailure);
     }
 
     /* Step 1: compute the maximum value and chroma for this hue. */
     /*         This copy may be overkill but it preserves the pixel etc. */
     memcpy((char *)&max_vc, (char *)&tmp, sizeof(XcmsColor));
-    if (_XcmsTekHVCQueryMaxVCRGB (&myCCC, max_vc.spec.TekHVC.H, &max_vc,
-	    (XcmsRGBi *)NULL) == XcmsFailure) {
-	return(XcmsFailure);
+    if (_XcmsTekHVCQueryMaxVCRGB(&myCCC,
+                                 max_vc.spec.TekHVC.H,
+                                 &max_vc,
+                                 (XcmsRGBi *)NULL) == XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
     /* Step 2: find the intersection with the maximum hvc and chroma line. */
-    if (tmp.spec.TekHVC.C > max_vc.spec.TekHVC.C + EPS) {
-	/* If the chroma is to large then return maximum hvc. */
-	tmp.spec.TekHVC.C = max_vc.spec.TekHVC.C;
-	tmp.spec.TekHVC.V = max_vc.spec.TekHVC.V;
-    } else {
-	tmp.spec.TekHVC.V = tmp.spec.TekHVC.C *
-		max_vc.spec.TekHVC.V / max_vc.spec.TekHVC.C;
-	if (tmp.spec.TekHVC.V > max_vc.spec.TekHVC.V) {
-	    tmp.spec.TekHVC.V = max_vc.spec.TekHVC.V;
-	} else if (tmp.spec.TekHVC.V < 0.0) {
-	    tmp.spec.TekHVC.V = tmp.spec.TekHVC.C = 0.0;
-	}
+    if (tmp.spec.TekHVC.C > max_vc.spec.TekHVC.C + EPS)
+    {
+        /* If the chroma is to large then return maximum hvc. */
+        tmp.spec.TekHVC.C = max_vc.spec.TekHVC.C;
+        tmp.spec.TekHVC.V = max_vc.spec.TekHVC.V;
     }
-    if (_XcmsTekHVC_CheckModify (&tmp)) {
-	memcpy ((char *) pColor_return, (char *) &tmp, sizeof (XcmsColor));
-	return(XcmsSuccess);
-    } else {
-	return(XcmsFailure);
+    else
+    {
+        tmp.spec.TekHVC.V =
+            tmp.spec.TekHVC.C * max_vc.spec.TekHVC.V / max_vc.spec.TekHVC.C;
+        if (tmp.spec.TekHVC.V > max_vc.spec.TekHVC.V)
+        {
+            tmp.spec.TekHVC.V = max_vc.spec.TekHVC.V;
+        }
+        else if (tmp.spec.TekHVC.V < 0.0)
+        {
+            tmp.spec.TekHVC.V = tmp.spec.TekHVC.C = 0.0;
+        }
+    }
+    if (_XcmsTekHVC_CheckModify(&tmp))
+    {
+        memcpy((char *)pColor_return, (char *)&tmp, sizeof(XcmsColor));
+        return (XcmsSuccess);
+    }
+    else
+    {
+        return (XcmsFailure);
     }
 }

@@ -55,7 +55,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "IntrinsicI.h"
 #include "X11/Xatom.h"
@@ -78,21 +78,22 @@ in this Software without prior written authorization from The Open Group.
 void
 XtSetWMColormapWindows(Widget widget, Widget *list, Cardinal count)
 {
-    Window *data;
-    Widget *checked, *top, *temp, hookobj;
+    Window  *data;
+    Widget  *checked, *top, *temp, hookobj;
     Cardinal i, j, checked_count;
-    Boolean match;
-    Atom xa_wm_colormap_windows;
+    Boolean  match;
+    Atom     xa_wm_colormap_windows;
 
     WIDGET_TO_APPCON(widget);
 
     LOCK_APP(app);
-    if (!XtIsRealized(widget) || (count == 0)) {
+    if (!XtIsRealized(widget) || (count == 0))
+    {
         UNLOCK_APP(app);
         return;
     }
 
-    top = checked = XtMallocArray(count, (Cardinal) sizeof(Widget));
+    top = checked = XtMallocArray(count, (Cardinal)sizeof(Widget));
 
 /*
  * The specification calls for only adding the windows that have unique
@@ -102,12 +103,12 @@ XtSetWMColormapWindows(Widget widget, Widget *list, Cardinal count)
  * We will also remove any unrealized widgets from the list at this time.
  */
 
-    for (checked_count = 0, i = 0; i < count; i++) {
-        if (!XtIsRealized(list[i]))
-            continue;
+    for (checked_count = 0, i = 0; i < count; i++)
+    {
+        if (!XtIsRealized(list[i])) continue;
 
         *checked = list[i];
-        match = FALSE;
+        match    = FALSE;
 
 /*
  * Don't check first element for matching colormap since there is nothing
@@ -116,7 +117,8 @@ XtSetWMColormapWindows(Widget widget, Widget *list, Cardinal count)
 
         if (checked != top)
             for (j = 0, temp = top; j < checked_count; j++, temp++)
-                if ((*temp)->core.colormap == (*checked)->core.colormap) {
+                if ((*temp)->core.colormap == (*checked)->core.colormap)
+                {
                     match = TRUE;
                     break;
                 }
@@ -125,7 +127,8 @@ XtSetWMColormapWindows(Widget widget, Widget *list, Cardinal count)
  * If no colormap was found to match then add this widget to the linked list.
  */
 
-        if (!match) {
+        if (!match)
+        {
             checked++;
             checked_count++;
         }
@@ -136,32 +139,38 @@ XtSetWMColormapWindows(Widget widget, Widget *list, Cardinal count)
  * windows and set the property.
  */
 
-    data = XtMallocArray(checked_count, (Cardinal) sizeof(Window));
+    data = XtMallocArray(checked_count, (Cardinal)sizeof(Window));
 
     for (i = 0; i < checked_count; i++)
         data[i] = XtWindow(top[i]);
 
-    xa_wm_colormap_windows = XInternAtom(XtDisplay(widget),
-                                         "WM_COLORMAP_WINDOWS", FALSE);
+    xa_wm_colormap_windows =
+        XInternAtom(XtDisplay(widget), "WM_COLORMAP_WINDOWS", FALSE);
 
-    XChangeProperty(XtDisplay(widget), XtWindow(widget),
-                    xa_wm_colormap_windows, XA_WINDOW, 32,
-                    PropModeReplace, (unsigned char *) data, (int) i);
+    XChangeProperty(XtDisplay(widget),
+                    XtWindow(widget),
+                    xa_wm_colormap_windows,
+                    XA_WINDOW,
+                    32,
+                    PropModeReplace,
+                    (unsigned char *)data,
+                    (int)i);
 
     hookobj = XtHooksOfDisplay(XtDisplay(widget));
-    if (XtHasCallbacks(hookobj, XtNchangeHook) == XtCallbackHasSome) {
+    if (XtHasCallbacks(hookobj, XtNchangeHook) == XtCallbackHasSome)
+    {
         XtChangeHookDataRec call_data;
 
-        call_data.type = XtHsetWMColormapWindows;
-        call_data.widget = widget;
-        call_data.event_data = (XtPointer) list;
+        call_data.type           = XtHsetWMColormapWindows;
+        call_data.widget         = widget;
+        call_data.event_data     = (XtPointer)list;
         call_data.num_event_data = count;
         XtCallCallbackList(hookobj,
-                           ((HookObject) hookobj)->hooks.changehook_callbacks,
-                           (XtPointer) &call_data);
+                           ((HookObject)hookobj)->hooks.changehook_callbacks,
+                           (XtPointer)&call_data);
     }
 
-    XtFree((char *) data);
-    XtFree((char *) top);
+    XtFree((char *)data);
+    XtFree((char *)top);
     UNLOCK_APP(app);
 }

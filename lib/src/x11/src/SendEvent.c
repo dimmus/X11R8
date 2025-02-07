@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
@@ -34,27 +34,24 @@ in this Software without prior written authorization from The Open Group.
  * event converter here if it has never been installed.
  */
 Status
-XSendEvent(
-    register Display *dpy,
-    Window w,
-    Bool propagate,
-    long event_mask,
-    XEvent *event)
+XSendEvent(register Display *dpy,
+           Window            w,
+           Bool              propagate,
+           long              event_mask,
+           XEvent           *event)
 {
     register xSendEventReq *req;
-    xEvent ev;
-    register Status (**fp)(
-                Display *       /* dpy */,
-                XEvent *        /* re */,
-                xEvent *        /* event */);
+    xEvent                  ev;
+    register Status (
+        **fp)(Display * /* dpy */, XEvent * /* re */, xEvent * /* event */);
     Status status;
 
     /* initialize all of the event's fields first, before setting
      * the meaningful ones later.
      */
-    memset (&ev, 0, sizeof (ev));
+    memset(&ev, 0, sizeof(ev));
 
-    LockDisplay (dpy);
+    LockDisplay(dpy);
 
     /* call through display to find proper conversion routine */
 
@@ -62,15 +59,16 @@ XSendEvent(
     if (*fp == NULL) *fp = _XEventToWire;
     status = (**fp)(dpy, event, &ev);
 
-    if (status) {
-	GetReq(SendEvent, req);
-	req->destination = w;
-	req->propagate = propagate;
-	req->eventMask = event_mask;
-	req->event = ev;
+    if (status)
+    {
+        GetReq(SendEvent, req);
+        req->destination = w;
+        req->propagate   = propagate;
+        req->eventMask   = event_mask;
+        req->event       = ev;
     }
 
     UnlockDisplay(dpy);
     SyncHandle();
-    return(status);
+    return (status);
 }

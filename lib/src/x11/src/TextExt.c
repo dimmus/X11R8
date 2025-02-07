@@ -31,15 +31,13 @@ from The Open Group.
  * Development Agreement for the CDE/Motif PST.
  */
 
-
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 #define min_byte2 min_char_or_byte2
 #define max_byte2 max_char_or_byte2
-
 
 /*
  * CI_GET_ROWZERO_CHAR_INFO_2D - do the same thing as CI_GET_CHAR_INFO_1D,
@@ -49,20 +47,23 @@ from The Open Group.
  * min_byte1 being zero ahead of time.
  */
 
-#define CI_GET_ROWZERO_CHAR_INFO_2D(fs,col,def,cs) \
-{ \
-    cs = def; \
-    if (fs->min_byte1 == 0 && \
-	col >= fs->min_byte2 && col <= fs->max_byte2) { \
-	if (fs->per_char == NULL) { \
-	    cs = &fs->min_bounds; \
-	} else { \
-	    cs = &fs->per_char[(col - fs->min_byte2)]; \
-	    if (CI_NONEXISTCHAR(cs)) cs = def; \
-	} \
-    } \
-}
-
+#define CI_GET_ROWZERO_CHAR_INFO_2D(fs, col, def, cs)      \
+    {                                                      \
+        cs = def;                                          \
+        if (fs->min_byte1 == 0 && col >= fs->min_byte2 &&  \
+            col <= fs->max_byte2)                          \
+        {                                                  \
+            if (fs->per_char == NULL)                      \
+            {                                              \
+                cs = &fs->min_bounds;                      \
+            }                                              \
+            else                                           \
+            {                                              \
+                cs = &fs->per_char[(col - fs->min_byte2)]; \
+                if (CI_NONEXISTCHAR(cs)) cs = def;         \
+            }                                              \
+        }                                                  \
+    }
 
 /*
  * XTextExtents - compute the extents of string given as a sequences of eight
@@ -71,29 +72,31 @@ from The Open Group.
  * what is done in XTextExtents16.
  */
 int
-XTextExtents (
-    XFontStruct *fs,
-    _Xconst char *string,
-    int nchars,
-    int *dir,           /* RETURN font information */
-    int *font_ascent,   /* RETURN font information */
-    int *font_descent,  /* RETURN font information */
-    register XCharStruct *overall)	/* RETURN character information */
+XTextExtents(XFontStruct          *fs,
+             _Xconst char         *string,
+             int                   nchars,
+             int                  *dir, /* RETURN font information */
+             int                  *font_ascent, /* RETURN font information */
+             int                  *font_descent, /* RETURN font information */
+             register XCharStruct *overall) /* RETURN character information */
 {
-    int i;				/* iterator */
-    Bool singlerow = (fs->max_byte1 == 0);  /* optimization */
-    int nfound = 0;			/* number of characters found */
-    XCharStruct *def;			/* info about default char */
-    unsigned char *us;  		/* be 8bit clean */
+    int            i; /* iterator */
+    Bool           singlerow = (fs->max_byte1 == 0); /* optimization */
+    int            nfound    = 0; /* number of characters found */
+    XCharStruct   *def; /* info about default char */
+    unsigned char *us; /* be 8bit clean */
 
-    if (singlerow) {			/* optimization */
-	CI_GET_DEFAULT_INFO_1D (fs, def);
-    } else {
-	CI_GET_DEFAULT_INFO_2D (fs, def);
+    if (singlerow)
+    { /* optimization */
+        CI_GET_DEFAULT_INFO_1D(fs, def);
+    }
+    else
+    {
+        CI_GET_DEFAULT_INFO_2D(fs, def);
     }
 
-    *dir = fs->direction;
-    *font_ascent = fs->ascent;
+    *dir          = fs->direction;
+    *font_ascent  = fs->ascent;
     *font_descent = fs->descent;
 
     /*
@@ -103,132 +106,145 @@ XTextExtents (
      * assign the values to overall; otherwise, compute * the new values.
      */
 
-    for (i = 0, us = (unsigned char *) string; i < nchars; i++, us++) {
-	register unsigned uc = (unsigned) *us;	/* since about to do macro */
-	register XCharStruct *cs;
+    for (i = 0, us = (unsigned char *)string; i < nchars; i++, us++)
+    {
+        register unsigned     uc = (unsigned)*us; /* since about to do macro */
+        register XCharStruct *cs;
 
-	if (singlerow) {		/* optimization */
-	    CI_GET_CHAR_INFO_1D (fs, uc, def, cs);
-	} else {
-	    CI_GET_ROWZERO_CHAR_INFO_2D (fs, uc, def, cs);
-	}
+        if (singlerow)
+        { /* optimization */
+            CI_GET_CHAR_INFO_1D(fs, uc, def, cs);
+        }
+        else
+        {
+            CI_GET_ROWZERO_CHAR_INFO_2D(fs, uc, def, cs);
+        }
 
-	if (cs) {
-	    if (nfound++ == 0) {
-		*overall = *cs;
-	    } else {
-		overall->ascent = max (overall->ascent, cs->ascent);
-		overall->descent = max (overall->descent, cs->descent);
-		overall->lbearing = min (overall->lbearing,
-					 overall->width + cs->lbearing);
-		overall->rbearing = max (overall->rbearing,
-					 overall->width + cs->rbearing);
-		overall->width += cs->width;
-	    }
-	}
+        if (cs)
+        {
+            if (nfound++ == 0)
+            {
+                *overall = *cs;
+            }
+            else
+            {
+                overall->ascent  = max(overall->ascent, cs->ascent);
+                overall->descent = max(overall->descent, cs->descent);
+                overall->lbearing =
+                    min(overall->lbearing, overall->width + cs->lbearing);
+                overall->rbearing =
+                    max(overall->rbearing, overall->width + cs->rbearing);
+                overall->width += cs->width;
+            }
+        }
     }
 
     /*
      * if there were no characters, then set everything to 0
      */
-    if (nfound == 0) {
-	overall->width = overall->ascent = overall->descent =
-	  overall->lbearing = overall->rbearing = 0;
+    if (nfound == 0)
+    {
+        overall->width = overall->ascent = overall->descent =
+            overall->lbearing = overall->rbearing = 0;
     }
 
     return 0;
 }
-
 
 /*
  * XTextWidth - compute the width of a string of eightbit bytes.  This is a
  * subset of XTextExtents.
  */
 int
-XTextWidth (
-    XFontStruct *fs,
-    _Xconst char *string,
-    int count)
+XTextWidth(XFontStruct *fs, _Xconst char *string, int count)
 {
-    int i;				/* iterator */
-    Bool singlerow = (fs->max_byte1 == 0);  /* optimization */
-    XCharStruct *def;			/* info about default char */
-    unsigned char *us;  		/* be 8bit clean */
-    int width = 0;			/* RETURN value */
+    int            i; /* iterator */
+    Bool           singlerow = (fs->max_byte1 == 0); /* optimization */
+    XCharStruct   *def; /* info about default char */
+    unsigned char *us; /* be 8bit clean */
+    int            width = 0; /* RETURN value */
 
-    if (singlerow) {			/* optimization */
-	CI_GET_DEFAULT_INFO_1D (fs, def);
-    } else {
-	CI_GET_DEFAULT_INFO_2D (fs, def);
+    if (singlerow)
+    { /* optimization */
+        CI_GET_DEFAULT_INFO_1D(fs, def);
+    }
+    else
+    {
+        CI_GET_DEFAULT_INFO_2D(fs, def);
     }
 
     if (def && fs->min_bounds.width == fs->max_bounds.width)
-	return (fs->min_bounds.width * count);
+        return (fs->min_bounds.width * count);
 
     /*
      * Iterate over all character in the input string; only consider characters
      * that exist.
      */
-    for (i = 0, us = (unsigned char *) string; i < count; i++, us++) {
-	register unsigned uc = (unsigned) *us;	/* since about to do macro */
-	register XCharStruct *cs;
+    for (i = 0, us = (unsigned char *)string; i < count; i++, us++)
+    {
+        register unsigned     uc = (unsigned)*us; /* since about to do macro */
+        register XCharStruct *cs;
 
-	if (singlerow) {		/* optimization */
-	    CI_GET_CHAR_INFO_1D (fs, uc, def, cs);
-	} else {
-	    CI_GET_ROWZERO_CHAR_INFO_2D (fs, uc, def, cs);
-	}
+        if (singlerow)
+        { /* optimization */
+            CI_GET_CHAR_INFO_1D(fs, uc, def, cs);
+        }
+        else
+        {
+            CI_GET_ROWZERO_CHAR_INFO_2D(fs, uc, def, cs);
+        }
 
-	if (cs) width += cs->width;
+        if (cs) width += cs->width;
     }
 
     return width;
 }
 
-
-
 /*
  * _XTextHeight - compute the height of a string of eightbit bytes.
  */
 int
-_XTextHeight (
-    XFontStruct *fs,
-    _Xconst char *string,
-    int count)
+_XTextHeight(XFontStruct *fs, _Xconst char *string, int count)
 {
-    int i;				/* iterator */
-    Bool singlerow = (fs->max_byte1 == 0);  /* optimization */
-    XCharStruct *def;			/* info about default char */
-    unsigned char *us;  		/* be 8bit clean */
-    int height = 0;			/* RETURN value */
+    int            i; /* iterator */
+    Bool           singlerow = (fs->max_byte1 == 0); /* optimization */
+    XCharStruct   *def; /* info about default char */
+    unsigned char *us; /* be 8bit clean */
+    int            height = 0; /* RETURN value */
 
-    if (singlerow) {			/* optimization */
-	CI_GET_DEFAULT_INFO_1D (fs, def);
-    } else {
-	CI_GET_DEFAULT_INFO_2D (fs, def);
+    if (singlerow)
+    { /* optimization */
+        CI_GET_DEFAULT_INFO_1D(fs, def);
+    }
+    else
+    {
+        CI_GET_DEFAULT_INFO_2D(fs, def);
     }
 
-    if (def && (fs->min_bounds.ascent == fs->max_bounds.ascent)
-	    && (fs->min_bounds.descent == fs->max_bounds.descent))
-	return ((fs->min_bounds.ascent + fs->min_bounds.descent) * count);
+    if (def && (fs->min_bounds.ascent == fs->max_bounds.ascent) &&
+        (fs->min_bounds.descent == fs->max_bounds.descent))
+        return ((fs->min_bounds.ascent + fs->min_bounds.descent) * count);
 
     /*
      * Iterate over all character in the input string; only consider characters
      * that exist.
      */
-    for (i = 0, us = (unsigned char *) string; i < count; i++, us++) {
-	register unsigned uc = (unsigned) *us;	/* since about to do macro */
-	register XCharStruct *cs;
+    for (i = 0, us = (unsigned char *)string; i < count; i++, us++)
+    {
+        register unsigned     uc = (unsigned)*us; /* since about to do macro */
+        register XCharStruct *cs;
 
-	if (singlerow) {		/* optimization */
-	    CI_GET_CHAR_INFO_1D (fs, uc, def, cs);
-	} else {
-	    CI_GET_ROWZERO_CHAR_INFO_2D (fs, uc, def, cs);
-	}
+        if (singlerow)
+        { /* optimization */
+            CI_GET_CHAR_INFO_1D(fs, uc, def, cs);
+        }
+        else
+        {
+            CI_GET_ROWZERO_CHAR_INFO_2D(fs, uc, def, cs);
+        }
 
-	if (cs) height += (cs->ascent + cs->descent);
+        if (cs) height += (cs->ascent + cs->descent);
     }
 
     return height;
 }
-

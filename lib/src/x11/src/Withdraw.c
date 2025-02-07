@@ -50,7 +50,7 @@ from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xlibint.h"
 #include "X11/Xatom.h"
@@ -62,23 +62,21 @@ from The Open Group.
  * This function instructs the window manager to change this window from
  * NormalState or IconicState to Withdrawn.
  */
-Status XWithdrawWindow (
-    Display *dpy,
-    Window w,
-    int screen)
+Status
+XWithdrawWindow(Display *dpy, Window w, int screen)
 {
-    XUnmapWindow (dpy, w);
+    XUnmapWindow(dpy, w);
 
     {
-        Window root = RootWindow (dpy, screen);
-        XUnmapEvent ev = {
-            .type = UnmapNotify,
-            .event = root,
-            .window = w,
-            .from_configure = False
-        };
-        return (XSendEvent (dpy, root, False,
-                            SubstructureRedirectMask|SubstructureNotifyMask,
-                            (XEvent *)&ev));
+        Window      root = RootWindow(dpy, screen);
+        XUnmapEvent ev   = { .type           = UnmapNotify,
+                             .event          = root,
+                             .window         = w,
+                             .from_configure = False };
+        return (XSendEvent(dpy,
+                           root,
+                           False,
+                           SubstructureRedirectMask | SubstructureNotifyMask,
+                           (XEvent *)&ev));
     }
 }

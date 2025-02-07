@@ -25,14 +25,12 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XFreeCursor(
-    register Display *dpy,
-    Cursor cursor)
+XFreeCursor(register Display *dpy, Cursor cursor)
 {
     register xResourceReq *req;
     LockDisplay(dpy);
@@ -41,4 +39,3 @@ XFreeCursor(
     SyncHandle();
     return 1;
 }
-

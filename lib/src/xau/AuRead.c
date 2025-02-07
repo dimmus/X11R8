@@ -25,96 +25,104 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xauth.h"
 #include <stdlib.h>
 
 static int
-read_short (unsigned short *shortp, FILE *file)
+read_short(unsigned short *shortp, FILE *file)
 {
-    unsigned char   file_short[2];
+    unsigned char file_short[2];
 
-    if (fread ((char *) file_short, sizeof (file_short), 1, file) != 1)
-	return 0;
+    if (fread((char *)file_short, sizeof(file_short), 1, file) != 1) return 0;
     *shortp = file_short[0] * 256 + file_short[1];
     return 1;
 }
 
 static int
-read_counted_string (unsigned short *countp, char **stringp, FILE *file)
+read_counted_string(unsigned short *countp, char **stringp, FILE *file)
 {
-    unsigned short  len;
-    char	    *data;
+    unsigned short len;
+    char          *data;
 
-    if (read_short (&len, file) == 0)
-	return 0;
-    if (len == 0) {
-	data = NULL;
-    } else {
-    	data = malloc ((unsigned) len);
-    	if (!data)
-	    return 0;
-	if (fread (data, sizeof (char), len, file) != len) {
+    if (read_short(&len, file) == 0) return 0;
+    if (len == 0)
+    {
+        data = NULL;
+    }
+    else
+    {
+        data = malloc((unsigned)len);
+        if (!data) return 0;
+        if (fread(data, sizeof(char), len, file) != len)
+        {
 #ifdef HAVE_EXPLICIT_BZERO
-	    explicit_bzero (data, len);
+            explicit_bzero(data, len);
 #elif HAVE_EXPLICIT_MEMSET
-	    explicit_memset (data, 0, len);
+            explicit_memset(data, 0, len);
 #else
-	    bzero (data, len);
+            bzero(data, len);
 #endif
-	    free (data);
-	    return 0;
-    	}
+            free(data);
+            return 0;
+        }
     }
     *stringp = data;
-    *countp = len;
+    *countp  = len;
     return 1;
 }
 
 Xauth *
-XauReadAuth (FILE *auth_file)
+XauReadAuth(FILE *auth_file)
 {
-    Xauth   local = { 0, 0, NULL, 0, NULL, 0, NULL, 0, NULL };
-    Xauth   *ret;
+    Xauth  local = { 0, 0, NULL, 0, NULL, 0, NULL, 0, NULL };
+    Xauth *ret;
 
-    if (read_short (&local.family, auth_file) == 0) {
-	goto fail;
+    if (read_short(&local.family, auth_file) == 0)
+    {
+        goto fail;
     }
-    if (read_counted_string (&local.address_length, &local.address, auth_file)
-        == 0) {
-	goto fail;
+    if (read_counted_string(&local.address_length, &local.address, auth_file) ==
+        0)
+    {
+        goto fail;
     }
-    if (read_counted_string (&local.number_length, &local.number, auth_file)
-        == 0) {
-	goto fail;
+    if (read_counted_string(&local.number_length, &local.number, auth_file) ==
+        0)
+    {
+        goto fail;
     }
-    if (read_counted_string (&local.name_length, &local.name, auth_file) == 0) {
-	goto fail;
+    if (read_counted_string(&local.name_length, &local.name, auth_file) == 0)
+    {
+        goto fail;
     }
-    if (read_counted_string (&local.data_length, &local.data, auth_file) == 0) {
-	goto fail;
+    if (read_counted_string(&local.data_length, &local.data, auth_file) == 0)
+    {
+        goto fail;
     }
-    ret = malloc (sizeof (Xauth));
-    if (ret == NULL) {
-	goto fail;
+    ret = malloc(sizeof(Xauth));
+    if (ret == NULL)
+    {
+        goto fail;
     }
     *ret = local;
     return ret;
 
-  fail:
-    free (local.address);
-    free (local.number);
-    free (local.name);
-    if (local.data) {
+fail:
+    free(local.address);
+    free(local.number);
+    free(local.name);
+    if (local.data)
+    {
 #ifdef HAVE_EXPLICIT_BZERO
-	explicit_bzero (local.data, local.data_length);
+        explicit_bzero(local.data, local.data_length);
 #elif HAVE_EXPLICIT_MEMSET
-	explicit_memset (local.data, 0, local.data_length);
+        explicit_memset(local.data, 0, local.data_length);
 #else
-	bzero (local.data, local.data_length);
+        bzero(local.data, local.data_length);
 #endif
-	free (local.data);
+        free(local.data);
     }
     return NULL;
 }

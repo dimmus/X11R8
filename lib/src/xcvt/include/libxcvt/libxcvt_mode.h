@@ -30,15 +30,17 @@
 #include <stdint.h>
 
 /* Conveniently chosen to match the RandR definitions */
-enum  libxcvt_mode_flags {
-    LIBXCVT_MODE_FLAG_HSYNC_POSITIVE    = (1 << 0),
-    LIBXCVT_MODE_FLAG_HSYNC_NEGATIVE    = (1 << 1),
-    LIBXCVT_MODE_FLAG_VSYNC_POSITIVE    = (1 << 2),
-    LIBXCVT_MODE_FLAG_VSYNC_NEGATIVE    = (1 << 3),
-    LIBXCVT_MODE_FLAG_INTERLACE         = (1 << 4),
+enum libxcvt_mode_flags
+{
+    LIBXCVT_MODE_FLAG_HSYNC_POSITIVE = (1 << 0),
+    LIBXCVT_MODE_FLAG_HSYNC_NEGATIVE = (1 << 1),
+    LIBXCVT_MODE_FLAG_VSYNC_POSITIVE = (1 << 2),
+    LIBXCVT_MODE_FLAG_VSYNC_NEGATIVE = (1 << 3),
+    LIBXCVT_MODE_FLAG_INTERLACE      = (1 << 4),
 };
 
-struct libxcvt_mode_info {
+struct libxcvt_mode_info
+{
     uint32_t                hdisplay;
     uint32_t                vdisplay;
     float                   vrefresh;

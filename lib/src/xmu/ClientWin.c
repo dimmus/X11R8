@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xlib.h"
 #include "X11/Xatom.h"
@@ -35,63 +35,75 @@ in this Software without prior written authorization from The Open Group.
 /*
  * Prototypes
  */
-static Window TryChildren(Display*, Window, Atom);
+static Window TryChildren(Display *, Window, Atom);
 
 /* Find a window with WM_STATE, else return win itself, as per ICCCM */
 
 Window
 XmuClientWindow(Display *dpy, Window win)
 {
-    Atom WM_STATE;
-    Atom type = None;
-    int format;
-    unsigned long nitems, after;
+    Atom           WM_STATE;
+    Atom           type = None;
+    int            format;
+    unsigned long  nitems, after;
     unsigned char *data = NULL;
-    Window inf;
+    Window         inf;
 
     WM_STATE = XInternAtom(dpy, "WM_STATE", True);
-    if (!WM_STATE)
-	return win;
-    XGetWindowProperty(dpy, win, WM_STATE, 0, 0, False, AnyPropertyType,
-		       &type, &format, &nitems, &after, &data);
-    if (data)
-	XFree(data);
-    if (type)
-	return win;
+    if (!WM_STATE) return win;
+    XGetWindowProperty(dpy,
+                       win,
+                       WM_STATE,
+                       0,
+                       0,
+                       False,
+                       AnyPropertyType,
+                       &type,
+                       &format,
+                       &nitems,
+                       &after,
+                       &data);
+    if (data) XFree(data);
+    if (type) return win;
     inf = TryChildren(dpy, win, WM_STATE);
-    if (!inf)
-	inf = win;
+    if (!inf) inf = win;
     return inf;
 }
 
 static Window
 TryChildren(Display *dpy, Window win, Atom WM_STATE)
 {
-    Window root, parent;
-    Window *children;
-    unsigned int nchildren;
-    unsigned int i;
-    Atom type = None;
-    int format;
-    unsigned long nitems, after;
+    Window         root, parent;
+    Window        *children;
+    unsigned int   nchildren;
+    unsigned int   i;
+    Atom           type = None;
+    int            format;
+    unsigned long  nitems, after;
     unsigned char *data;
-    Window inf = 0;
+    Window         inf = 0;
 
-    if (!XQueryTree(dpy, win, &root, &parent, &children, &nchildren))
-	return 0;
-    for (i = 0; !inf && (i < nchildren); i++) {
-	data = NULL;
-	XGetWindowProperty(dpy, children[i], WM_STATE, 0, 0, False,
-			   AnyPropertyType, &type, &format, &nitems,
-			   &after, &data);
-	if (data)
-	    XFree(data);
-	if (type)
-	    inf = children[i];
+    if (!XQueryTree(dpy, win, &root, &parent, &children, &nchildren)) return 0;
+    for (i = 0; !inf && (i < nchildren); i++)
+    {
+        data = NULL;
+        XGetWindowProperty(dpy,
+                           children[i],
+                           WM_STATE,
+                           0,
+                           0,
+                           False,
+                           AnyPropertyType,
+                           &type,
+                           &format,
+                           &nitems,
+                           &after,
+                           &data);
+        if (data) XFree(data);
+        if (type) inf = children[i];
     }
     for (i = 0; !inf && (i < nchildren); i++)
-	inf = TryChildren(dpy, children[i], WM_STATE);
-    if (children)
-	XFree(children);
+        inf = TryChildren(dpy, children[i], WM_STATE);
+    if (children) XFree(children);
     return inf;
 }

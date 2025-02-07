@@ -21,7 +21,7 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include "xshmfenceint.h"
@@ -38,12 +38,12 @@
 int
 xshmfence_trigger(struct xshmfence *f)
 {
-	if (__sync_val_compare_and_swap(&f->v, 0, 1) == -1) {
-		atomic_store(&f->v, 1);
-		if (futex_wake(&f->v) < 0)
-			return -1;
-	}
-	return 0;
+    if (__sync_val_compare_and_swap(&f->v, 0, 1) == -1)
+    {
+        atomic_store(&f->v, 1);
+        if (futex_wake(&f->v) < 0) return -1;
+    }
+    return 0;
 }
 
 /**
@@ -59,13 +59,14 @@ xshmfence_trigger(struct xshmfence *f)
 int
 xshmfence_await(struct xshmfence *f)
 {
-	while (__sync_val_compare_and_swap(&f->v, 0, -1) != 1) {
-		if (futex_wait(&f->v, -1)) {
-			if (errno != EWOULDBLOCK)
-				return -1;
-		}
-	}
-	return 0;
+    while (__sync_val_compare_and_swap(&f->v, 0, -1) != 1)
+    {
+        if (futex_wait(&f->v, -1))
+        {
+            if (errno != EWOULDBLOCK) return -1;
+        }
+    }
+    return 0;
 }
 
 /**
@@ -77,7 +78,7 @@ xshmfence_await(struct xshmfence *f)
 int
 xshmfence_query(struct xshmfence *f)
 {
-	return atomic_fetch(&f->v) == 1;
+    return atomic_fetch(&f->v) == 1;
 }
 
 /**
@@ -90,5 +91,5 @@ xshmfence_query(struct xshmfence *f)
 void
 xshmfence_reset(struct xshmfence *f)
 {
-	__sync_bool_compare_and_swap(&f->v, 1, 0);
+    __sync_bool_compare_and_swap(&f->v, 1, 0);
 }

@@ -52,30 +52,30 @@ SOFTWARE.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xos.h"
 
 #ifndef X_NOT_POSIX
-#ifdef _POSIX_SOURCE
-#include <limits.h>
-#else
-#define _POSIX_SOURCE
-#include <limits.h>
-#undef _POSIX_SOURCE
-#endif
-#endif
-#ifndef PATH_MAX
-#ifdef WIN32
-#define PATH_MAX 512
-#else
-#include <sys/param.h>
+#  ifdef _POSIX_SOURCE
+#    include <limits.h>
+#  else
+#    define _POSIX_SOURCE
+#    include <limits.h>
+#    undef _POSIX_SOURCE
+#  endif
 #endif
 #ifndef PATH_MAX
-#ifdef MAXPATHLEN
-#define PATH_MAX MAXPATHLEN
-#else
-#define PATH_MAX 1024
-#endif
-#endif
+#  ifdef WIN32
+#    define PATH_MAX 512
+#  else
+#    include <sys/param.h>
+#  endif
+#  ifndef PATH_MAX
+#    ifdef MAXPATHLEN
+#      define PATH_MAX MAXPATHLEN
+#    else
+#      define PATH_MAX 1024
+#    endif
+#  endif
 #endif

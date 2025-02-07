@@ -29,16 +29,16 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
-#include "X11/IntrinsicP.h"	/* To get into the composite and core widget
+#include "X11/IntrinsicP.h" /* To get into the composite and core widget
 				   structures. */
-#include "X11/ObjectP.h"	/* For XtIs<Classname> macros. */
-#include "X11/StringDefs.h"	/* for XtRString. */
-#include "X11/ShellP.h"		/* for Application Shell Widget class. */
+#include "X11/ObjectP.h" /* For XtIs<Classname> macros. */
+#include "X11/StringDefs.h" /* for XtRString. */
+#include "X11/ShellP.h"  /* for Application Shell Widget class. */
 
 #include "X11/Xatom.h"
-#include "X11/Xos.h"		/* for strcpy declaration */
+#include "X11/Xos.h"  /* for strcpy declaration */
 #include "X11/Xfuncs.h"
 #include "X11/Xmu/EditresP.h"
 #include "X11/Xmd.h"
@@ -48,78 +48,86 @@ in this Software without prior written authorization from The Open Group.
 #include <stdlib.h>
 #include <string.h>
 
-#define _XEditResPutBool _XEditResPut8
+#define _XEditResPutBool         _XEditResPut8
 #define _XEditResPutResourceType _XEditResPut8
 
 /*
  * Types
  */
-typedef enum {
+typedef enum
+{
     BlockNone,
     BlockSetValues,
     BlockAll
 } EditresBlock;
 
-typedef struct _SetValuesEvent {
-    EditresCommand type;		/* first field must be type */
-    WidgetInfo *widgets;
-    unsigned short num_entries;		/* number of set values requests */
-    char *name;
-    char *res_type;
-    XtPointer value;
+typedef struct _SetValuesEvent
+{
+    EditresCommand type;  /* first field must be type */
+    WidgetInfo    *widgets;
+    unsigned short num_entries;  /* number of set values requests */
+    char          *name;
+    char          *res_type;
+    XtPointer      value;
     unsigned short value_len;
 } SetValuesEvent;
 
-typedef struct _SVErrorInfo {
+typedef struct _SVErrorInfo
+{
     SetValuesEvent *event;
     ProtocolStream *stream;
     unsigned short *count;
-    WidgetInfo *entry;
+    WidgetInfo     *entry;
 } SVErrorInfo;
 
-typedef struct _GetValuesEvent {
-    EditresCommand type;		/* first field must be type */
-    WidgetInfo *widgets;
-    unsigned short num_entries;		/* number of get values requests */
-    char *name;
+typedef struct _GetValuesEvent
+{
+    EditresCommand type;  /* first field must be type */
+    WidgetInfo    *widgets;
+    unsigned short num_entries;  /* number of get values requests */
+    char          *name;
 } GetValuesEvent;
 
-typedef struct _FindChildEvent {
-    EditresCommand type;		/* first field must be type */
-    WidgetInfo *widgets;
-    short x, y;
+typedef struct _FindChildEvent
+{
+    EditresCommand type;  /* first field must be type */
+    WidgetInfo    *widgets;
+    short          x, y;
 } FindChildEvent;
 
-typedef struct _GenericGetEvent {
-    EditresCommand type;		/* first field must be type */
-    WidgetInfo *widgets;
-    unsigned short num_entries;		/* number of set values requests */
+typedef struct _GenericGetEvent
+{
+    EditresCommand type;  /* first field must be type */
+    WidgetInfo    *widgets;
+    unsigned short num_entries;  /* number of set values requests */
 } GenericGetEvent, GetResEvent, GetGeomEvent;
 
 /*
  * Common to all events
  */
-typedef struct _AnyEvent {
-    EditresCommand type;		/* first field must be type */
-    WidgetInfo *widgets;
+typedef struct _AnyEvent
+{
+    EditresCommand type;  /* first field must be type */
+    WidgetInfo    *widgets;
 } AnyEvent;
 
 /*
  * The event union
  */
 typedef union _EditresEvent {
-    AnyEvent any_event;
+    AnyEvent       any_event;
     SetValuesEvent set_values_event;
-    GetResEvent get_resources_event;
-    GetGeomEvent get_geometry_event;
+    GetResEvent    get_resources_event;
+    GetGeomEvent   get_geometry_event;
     FindChildEvent find_child_event;
 } EditresEvent;
 
-typedef struct _Globals {
-    EditresBlock block;
-    SVErrorInfo error_info;
-    ProtocolStream stream;
-    ProtocolStream *command_stream;	/* command stream */
+typedef struct _Globals
+{
+    EditresBlock    block;
+    SVErrorInfo     error_info;
+    ProtocolStream  stream;
+    ProtocolStream *command_stream; /* command stream */
 #if defined(LONG64) || defined(WORD64)
     unsigned long base_address;
 #endif
@@ -127,58 +135,74 @@ typedef struct _Globals {
 
 #define CURRENT_PROTOCOL_VERSION 5L
 
-#define streq(a,b) (strcmp((a), (b)) == 0)
+#define streq(a, b) (strcmp((a), (b)) == 0)
 
 /*
  * Prototypes
  */
-static Widget _FindChild(Widget, int, int);
-static void _XEditresGetStringValues(Widget, Arg*, int);
-static XtPointer BuildReturnPacket(ResIdent, EditResError, ProtocolStream*);
-static void CommandDone(Widget, Atom*, Atom*);
-static Boolean ConvertReturnCommand(Widget, Atom*, Atom*, Atom*, XtPointer*,
-				    unsigned long*, int*);
-static Boolean CvtStringToBlock(Display*, XrmValue*, Cardinal*,
-				XrmValue*, XrmValue*, XtPointer*);
-static EditresEvent *BuildEvent(Widget, Atom, XtPointer, ResIdent,
-				unsigned long);
-static _Xconst char *DoFindChild(Widget, EditresEvent*, ProtocolStream*);
-static _Xconst char *DoGetGeometry(Widget, EditresEvent*, ProtocolStream*);
-static _Xconst char *DoGetResources(Widget, EditresEvent*, ProtocolStream*);
-static _Xconst char *DoSetValues(Widget, EditresEvent*, ProtocolStream*);
-static void DumpChildren(Widget, ProtocolStream*, unsigned short*);
-static _Xconst char *DumpValues(Widget, EditresEvent*, ProtocolStream*);
-static _Xconst char *DumpWidgets(Widget, EditresEvent*, ProtocolStream*);
-static void ExecuteCommand(Widget, Atom, ResIdent, EditresEvent*);
-static void ExecuteGetGeometry(Widget, ProtocolStream*);
-static void ExecuteGetResources(Widget w, ProtocolStream *stream);
-static void ExecuteSetValues(Widget, SetValuesEvent*, WidgetInfo*,
-			     ProtocolStream*, unsigned short*);
-static void FreeEvent(EditresEvent*);
-static void GetCommand(Widget w, XtPointer, Atom*, Atom*, XtPointer,
-		       unsigned long*, int*);
-static void HandleToolkitErrors(String, String, String, String,
-				String*, Cardinal*);
-static void InsertWidget(ProtocolStream*, Widget);
+static Widget    _FindChild(Widget, int, int);
+static void      _XEditresGetStringValues(Widget, Arg *, int);
+static XtPointer BuildReturnPacket(ResIdent, EditResError, ProtocolStream *);
+static void      CommandDone(Widget, Atom *, Atom *);
+static Boolean   ConvertReturnCommand(Widget,
+                                      Atom *,
+                                      Atom *,
+                                      Atom *,
+                                      XtPointer *,
+                                      unsigned long *,
+                                      int *);
+static Boolean   CvtStringToBlock(Display *,
+                                  XrmValue *,
+                                  Cardinal *,
+                                  XrmValue *,
+                                  XrmValue *,
+                                  XtPointer *);
+static EditresEvent *
+BuildEvent(Widget, Atom, XtPointer, ResIdent, unsigned long);
+static _Xconst char *DoFindChild(Widget, EditresEvent *, ProtocolStream *);
+static _Xconst char *DoGetGeometry(Widget, EditresEvent *, ProtocolStream *);
+static _Xconst char *DoGetResources(Widget, EditresEvent *, ProtocolStream *);
+static _Xconst char *DoSetValues(Widget, EditresEvent *, ProtocolStream *);
+static void          DumpChildren(Widget, ProtocolStream *, unsigned short *);
+static _Xconst char *DumpValues(Widget, EditresEvent *, ProtocolStream *);
+static _Xconst char *DumpWidgets(Widget, EditresEvent *, ProtocolStream *);
+static void          ExecuteCommand(Widget, Atom, ResIdent, EditresEvent *);
+static void          ExecuteGetGeometry(Widget, ProtocolStream *);
+static void          ExecuteGetResources(Widget w, ProtocolStream *stream);
+static void          ExecuteSetValues(Widget,
+                                      SetValuesEvent *,
+                                      WidgetInfo *,
+                                      ProtocolStream *,
+                                      unsigned short *);
+static void          FreeEvent(EditresEvent *);
+static void          GetCommand(Widget w,
+                                XtPointer,
+                                Atom *,
+                                Atom *,
+                                XtPointer,
+                                unsigned long *,
+                                int *);
+static void
+HandleToolkitErrors(String, String, String, String, String *, Cardinal *);
+static void InsertWidget(ProtocolStream *, Widget);
 static Bool IsChild(Widget, Widget, Widget);
 static Bool isApplicationShell(Widget);
 static void LoadResources(Widget);
 static Bool PositionInChild(Widget, int, int);
-static int qcmp_widget_list(register _Xconst void*, register _Xconst void*);
-static void SendCommand(Widget, Atom, ResIdent, EditResError,
-			ProtocolStream*);
-static void SendFailure(Widget, Atom, ResIdent, _Xconst char*);
-static _Xconst char *VerifyWidget(Widget, WidgetInfo*);
+static int  qcmp_widget_list(register _Xconst void *, register _Xconst void *);
+static void SendCommand(Widget, Atom, ResIdent, EditResError, ProtocolStream *);
+static void SendFailure(Widget, Atom, ResIdent, _Xconst char *);
+static _Xconst char *VerifyWidget(Widget, WidgetInfo *);
 
 /*
  * External
  */
-void _XEditResCheckMessages(Widget, XtPointer, XEvent*, Boolean*);
+void _XEditResCheckMessages(Widget, XtPointer, XEvent *, Boolean *);
 
 /*
  * Initialization
  */
-static Atom res_editor_command, res_editor_protocol, client_value;
+static Atom    res_editor_command, res_editor_protocol, client_value;
 static Globals globals;
 
 /************************************************************
@@ -201,53 +225,57 @@ static Globals globals;
 void
 _XEditResCheckMessages(Widget w, XtPointer data, XEvent *event, Boolean *cont)
 {
-    Time time;
-    ResIdent ident;
+    Time           time;
+    ResIdent       ident;
     static Boolean first_time = False;
-    static Atom res_editor, res_comm;
-    Display *dpy;
+    static Atom    res_editor, res_comm;
+    Display       *dpy;
 
     if (event->type == ClientMessage)
     {
-	XClientMessageEvent * c_event = (XClientMessageEvent *)event;
-	dpy = XtDisplay(w);
+        XClientMessageEvent *c_event = (XClientMessageEvent *)event;
+        dpy                          = XtDisplay(w);
 
-	if (!first_time)
-	{
-	    Atom atoms[4];
-	    static _Xconst char *names[] = {
-		EDITRES_NAME, EDITRES_COMMAND_ATOM,
-		EDITRES_PROTOCOL_ATOM, EDITRES_CLIENT_VALUE
-	    };
+        if (!first_time)
+        {
+            Atom                 atoms[4];
+            static _Xconst char *names[] = { EDITRES_NAME,
+                                             EDITRES_COMMAND_ATOM,
+                                             EDITRES_PROTOCOL_ATOM,
+                                             EDITRES_CLIENT_VALUE };
 
-	    first_time = True;
-	    XInternAtoms(dpy, (char **) names, 4, False, atoms);
-	    res_editor = atoms[0];
-	    res_editor_command = atoms[1];
-	    res_editor_protocol = atoms[2];
-	  /* Used in later procedures */
-	    client_value = atoms[3];
-	    LoadResources(w);
-	}
+            first_time = True;
+            XInternAtoms(dpy, (char **)names, 4, False, atoms);
+            res_editor          = atoms[0];
+            res_editor_command  = atoms[1];
+            res_editor_protocol = atoms[2];
+      /* Used in later procedures */
+            client_value        = atoms[3];
+            LoadResources(w);
+        }
 
-	if ((c_event->message_type != res_editor)
-	    || (c_event->format != EDITRES_SEND_EVENT_FORMAT))
-	    return;
+        if ((c_event->message_type != res_editor) ||
+            (c_event->format != EDITRES_SEND_EVENT_FORMAT))
+            return;
 
-	time = c_event->data.l[0];
-	res_comm = c_event->data.l[1];
-	ident = (ResIdent) c_event->data.l[2];
-	if (c_event->data.l[3] != CURRENT_PROTOCOL_VERSION)
-	{
-	    _XEditResResetStream(&globals.stream);
-	    _XEditResPut8(&globals.stream,
-			  (unsigned int) CURRENT_PROTOCOL_VERSION);
-	    SendCommand(w, res_comm, ident, ProtocolMismatch, &globals.stream);
-	    return;
-	}
+        time     = c_event->data.l[0];
+        res_comm = c_event->data.l[1];
+        ident    = (ResIdent)c_event->data.l[2];
+        if (c_event->data.l[3] != CURRENT_PROTOCOL_VERSION)
+        {
+            _XEditResResetStream(&globals.stream);
+            _XEditResPut8(&globals.stream,
+                          (unsigned int)CURRENT_PROTOCOL_VERSION);
+            SendCommand(w, res_comm, ident, ProtocolMismatch, &globals.stream);
+            return;
+        }
 
-	XtGetSelectionValue(w, res_comm, res_editor_command,
-			    GetCommand, (XtPointer)(long)ident, time);
+        XtGetSelectionValue(w,
+                            res_comm,
+                            res_editor_command,
+                            GetCommand,
+                            (XtPointer)(long)ident,
+                            time);
     }
 }
 
@@ -270,137 +298,146 @@ _XEditResCheckMessages(Widget w, XtPointer data, XEvent *event, Boolean *cont)
  *	the event, or NULL
  */
 #if defined(ERROR_MESSAGE)
-#undef ERROR_MESSAGE
+#  undef ERROR_MESSAGE
 #endif
 #define ERROR_MESSAGE "Client: Improperly formatted protocol request"
+
 static EditresEvent *
-BuildEvent(Widget w, Atom sel, XtPointer data, ResIdent ident,
-	   unsigned long length)
+BuildEvent(Widget        w,
+           Atom          sel,
+           XtPointer     data,
+           ResIdent      ident,
+           unsigned long length)
 {
-    EditresEvent *event;
-    ProtocolStream alloc_stream, *stream;
-    unsigned char temp;
+    EditresEvent         *event;
+    ProtocolStream        alloc_stream, *stream;
+    unsigned char         temp;
     register unsigned int i;
 
-    stream = &alloc_stream;
+    stream          = &alloc_stream;
     stream->current = stream->top = (unsigned char *)data;
-    stream->size = HEADER_SIZE;		/* size of header */
+    stream->size                  = HEADER_SIZE;  /* size of header */
 
     /*
      * Retrieve the Header
      */
     if (length < HEADER_SIZE)
     {
-	SendFailure(w, sel, ident, ERROR_MESSAGE);
-	return (NULL);
+        SendFailure(w, sel, ident, ERROR_MESSAGE);
+        return (NULL);
     }
 
     (void)_XEditResGet8(stream, &temp);
-    if (temp != ident)			/* Id's don't match, ignore request */
-	return (NULL);
+    if (temp != ident)   /* Id's don't match, ignore request */
+        return (NULL);
 
     event = (EditresEvent *)XtCalloc(sizeof(EditresEvent), 1);
 
     (void)_XEditResGet8(stream, &temp);
     event->any_event.type = (EditresCommand)temp;
     (void)_XEditResGet32(stream, &stream->size);
-    stream->top = stream->current;	/* reset stream to top of value */
+    stream->top = stream->current; /* reset stream to top of value */
 
     /*
      * Now retrieve the data segment
      */
-    switch(event->any_event.type)
+    switch (event->any_event.type)
     {
-    case SendWidgetTree:
-	break;			/* no additional info */
-    case SetValues:
-        {
-	    SetValuesEvent *sv_event = (SetValuesEvent *)event;
+        case SendWidgetTree:
+            break;   /* no additional info */
+        case SetValues:
+            {
+                SetValuesEvent *sv_event = (SetValuesEvent *)event;
 
-	    if (!(_XEditResGetString8(stream, &sv_event->name)
-		  && _XEditResGetString8(stream, &sv_event->res_type)))
-		goto done;
+                if (!(_XEditResGetString8(stream, &sv_event->name) &&
+                      _XEditResGetString8(stream, &sv_event->res_type)))
+                    goto done;
 
-	    /*
+        /*
 	     * Since we need the value length, we have to pull the
 	     * value out by hand
 	     */
-	    if (!_XEditResGet16(stream, &sv_event->value_len))
-		goto done;
+                if (!_XEditResGet16(stream, &sv_event->value_len)) goto done;
 
-	    sv_event->value = XtMalloc(sizeof(char) * (sv_event->value_len + 1));
+                sv_event->value =
+                    XtMalloc(sizeof(char) * (sv_event->value_len + 1));
 
-	    for (i = 0; i < sv_event->value_len; i++)
-		if (!_XEditResGet8(stream, (unsigned char *)sv_event->value + i))
-		    goto done;
+                for (i = 0; i < sv_event->value_len; i++)
+                    if (!_XEditResGet8(stream,
+                                       (unsigned char *)sv_event->value + i))
+                        goto done;
 
-	    ((char*)sv_event->value)[i] = '\0';
+                ((char *)sv_event->value)[i] = '\0';
 
-	    if (!_XEditResGet16(stream, &sv_event->num_entries))
-		goto done;
+                if (!_XEditResGet16(stream, &sv_event->num_entries)) goto done;
 
-	    sv_event->widgets = (WidgetInfo *)
-		XtCalloc(sizeof(WidgetInfo), sv_event->num_entries);
+                sv_event->widgets =
+                    (WidgetInfo *)XtCalloc(sizeof(WidgetInfo),
+                                           sv_event->num_entries);
 
-	    for (i = 0; i < sv_event->num_entries; i++)
-		if (!_XEditResGetWidgetInfo(stream, sv_event->widgets + i))
-		    goto done;
-	}
-	break;
-    case FindChild:
-	{
-	    FindChildEvent *find_event = (FindChildEvent *)event;
+                for (i = 0; i < sv_event->num_entries; i++)
+                    if (!_XEditResGetWidgetInfo(stream, sv_event->widgets + i))
+                        goto done;
+            }
+            break;
+        case FindChild:
+            {
+                FindChildEvent *find_event = (FindChildEvent *)event;
 
-	    find_event->widgets = (WidgetInfo *)XtCalloc(sizeof(WidgetInfo), 1);
+                find_event->widgets =
+                    (WidgetInfo *)XtCalloc(sizeof(WidgetInfo), 1);
 
-	    if (!(_XEditResGetWidgetInfo(stream, find_event->widgets)
-		  && _XEditResGetSigned16(stream, &find_event->x)
-		  && _XEditResGetSigned16(stream, &find_event->y)))
-		goto done;
-	}
-	break;
-    case GetGeometry:
-    case GetResources:
-	{
-	    GenericGetEvent *get_event = (GenericGetEvent *)event;
+                if (!(_XEditResGetWidgetInfo(stream, find_event->widgets) &&
+                      _XEditResGetSigned16(stream, &find_event->x) &&
+                      _XEditResGetSigned16(stream, &find_event->y)))
+                    goto done;
+            }
+            break;
+        case GetGeometry:
+        case GetResources:
+            {
+                GenericGetEvent *get_event = (GenericGetEvent *)event;
 
-	    if (!_XEditResGet16(stream, &get_event->num_entries))
-		goto done;
+                if (!_XEditResGet16(stream, &get_event->num_entries)) goto done;
 
-	    get_event->widgets = (WidgetInfo *)
-		XtCalloc(sizeof(WidgetInfo), get_event->num_entries);
+                get_event->widgets =
+                    (WidgetInfo *)XtCalloc(sizeof(WidgetInfo),
+                                           get_event->num_entries);
 
-	    for (i = 0; i < get_event->num_entries; i++)
-		if (!_XEditResGetWidgetInfo(stream, get_event->widgets + i))
-		    goto done;
-	}
-	break;
-    case GetValues:
-	{
-	    GetValuesEvent *gv_event = (GetValuesEvent *)event;
+                for (i = 0; i < get_event->num_entries; i++)
+                    if (!_XEditResGetWidgetInfo(stream, get_event->widgets + i))
+                        goto done;
+            }
+            break;
+        case GetValues:
+            {
+                GetValuesEvent *gv_event = (GetValuesEvent *)event;
 
-	    _XEditResGetString8(stream, &gv_event->name);
-	    _XEditResGet16(stream, &gv_event->num_entries);
-	    gv_event->widgets = (WidgetInfo *)
-		XtCalloc(sizeof(WidgetInfo), gv_event->num_entries);
-	    _XEditResGetWidgetInfo(stream, gv_event->widgets);
-	}
-        break;
-    default:
-	{
-	    char buf[BUFSIZ];
+                _XEditResGetString8(stream, &gv_event->name);
+                _XEditResGet16(stream, &gv_event->num_entries);
+                gv_event->widgets =
+                    (WidgetInfo *)XtCalloc(sizeof(WidgetInfo),
+                                           gv_event->num_entries);
+                _XEditResGetWidgetInfo(stream, gv_event->widgets);
+            }
+            break;
+        default:
+            {
+                char buf[BUFSIZ];
 
-	    XmuSnprintf(buf, sizeof(buf),
-			"Unknown Protocol request %d.", event->any_event.type);
-	    SendFailure(w, sel, ident, buf);
-	    FreeEvent(event);
-	    return (NULL);
-	}
+                XmuSnprintf(buf,
+                            sizeof(buf),
+                            "Unknown Protocol request %d.",
+                            event->any_event.type);
+                SendFailure(w, sel, ident, buf);
+                FreeEvent(event);
+                return (NULL);
+            }
     }
 
     return (event);
 
-  done:
+done:
     SendFailure(w, sel, ident, ERROR_MESSAGE);
     FreeEvent(event);
     return (NULL);
@@ -421,14 +458,14 @@ FreeEvent(EditresEvent *event)
 {
     if (event->any_event.widgets != NULL)
     {
-	XtFree((char *)event->any_event.widgets->ids);
-	XtFree((char *)event->any_event.widgets);
+        XtFree((char *)event->any_event.widgets->ids);
+        XtFree((char *)event->any_event.widgets);
     }
 
     if (event->any_event.type == SetValues)
     {
-	XtFree(event->set_values_event.name);
-	XtFree(event->set_values_event.res_type);
+        XtFree(event->set_values_event.name);
+        XtFree(event->set_values_event.res_type);
     }
 
     XtFree((char *)event);
@@ -447,19 +484,23 @@ FreeEvent(EditresEvent *event)
  */
 /*ARGSUSED*/
 static void
-GetCommand(Widget w, XtPointer data, Atom *selection, Atom *type,
-	   XtPointer value, unsigned long *length, int *format)
+GetCommand(Widget         w,
+           XtPointer      data,
+           Atom          *selection,
+           Atom          *type,
+           XtPointer      value,
+           unsigned long *length,
+           int           *format)
 {
-    ResIdent ident = (ResIdent)(long)data;
+    ResIdent      ident = (ResIdent)(long)data;
     EditresEvent *event;
 
-    if (*type != res_editor_protocol || *format != EDITRES_FORMAT)
-	return;
+    if (*type != res_editor_protocol || *format != EDITRES_FORMAT) return;
 
     if ((event = BuildEvent(w, *selection, value, ident, *length)) != NULL)
     {
-	ExecuteCommand(w, *selection, ident, event);
-	FreeEvent(event);
+        ExecuteCommand(w, *selection, ident, event);
+        FreeEvent(event);
     }
 }
 
@@ -479,62 +520,67 @@ GetCommand(Widget w, XtPointer data, Atom *selection, Atom *type,
 static void
 ExecuteCommand(Widget w, Atom sel, ResIdent ident, EditresEvent *event)
 {
-    _Xconst char *(*func)(Widget, EditresEvent*, ProtocolStream*);
+    _Xconst char *(*func)(Widget, EditresEvent *, ProtocolStream *);
     _Xconst char *str;
 
     if (globals.block == BlockAll)
     {
-	SendFailure(w, sel, ident,
-		    "This client has blocked all Editres commands.");
-	return;
+        SendFailure(w,
+                    sel,
+                    ident,
+                    "This client has blocked all Editres commands.");
+        return;
     }
-    else if (globals.block == BlockSetValues
-	     && event->any_event.type == SetValues)
+    else if (globals.block == BlockSetValues &&
+             event->any_event.type == SetValues)
     {
-	SendFailure(w, sel, ident,
-		    "This client has blocked all SetValues requests.");
-	return;
+        SendFailure(w,
+                    sel,
+                    ident,
+                    "This client has blocked all SetValues requests.");
+        return;
     }
 
-    switch(event->any_event.type)
+    switch (event->any_event.type)
     {
-    case SendWidgetTree:
+        case SendWidgetTree:
 #if defined(LONG64) || defined(WORD64)
-	globals.base_address = (unsigned long)w & 0xFFFFFFFF00000000;
+            globals.base_address = (unsigned long)w & 0xFFFFFFFF00000000;
 #endif
-	func = DumpWidgets;
-	break;
-    case SetValues:
-	func = DoSetValues;
-	break;
-    case FindChild:
-	func = DoFindChild;
-	break;
-    case GetGeometry:
-	func = DoGetGeometry;
-	break;
-    case GetResources:
-	func = DoGetResources;
-	break;
-    case GetValues:
-        func = DumpValues;
-    break;
-    default:
-        {
-	    char buf[BUFSIZ];
+            func = DumpWidgets;
+            break;
+        case SetValues:
+            func = DoSetValues;
+            break;
+        case FindChild:
+            func = DoFindChild;
+            break;
+        case GetGeometry:
+            func = DoGetGeometry;
+            break;
+        case GetResources:
+            func = DoGetResources;
+            break;
+        case GetValues:
+            func = DumpValues;
+            break;
+        default:
+            {
+                char buf[BUFSIZ];
 
-	    XmuSnprintf(buf, sizeof(buf),
-			"Unknown Protocol request %d.",event->any_event.type);
-	    SendFailure(w, sel, ident, buf);
-	    return;
-	}
+                XmuSnprintf(buf,
+                            sizeof(buf),
+                            "Unknown Protocol request %d.",
+                            event->any_event.type);
+                SendFailure(w, sel, ident, buf);
+                return;
+            }
     }
 
     _XEditResResetStream(&globals.stream);
     if ((str = (*func)(w, event, &globals.stream)) == NULL)
-	SendCommand(w, sel, ident, PartialSuccess, &globals.stream);
-    else
-	SendFailure(w, sel, ident, str);
+        SendCommand(w, sel, ident, PartialSuccess, &globals.stream);
+    else SendFailure(w, sel, ident, str);
 }
 
 /*
@@ -558,22 +604,25 @@ ExecuteCommand(Widget w, Atom sel, ResIdent ident, EditresEvent *event)
  */
 /*ARGSUSED*/
 static Boolean
-ConvertReturnCommand(Widget w, Atom *selection, Atom *target, Atom *type_ret,
-		     XtPointer *value_ret, unsigned long *length_ret,
-		     int *format_ret)
+ConvertReturnCommand(Widget         w,
+                     Atom          *selection,
+                     Atom          *target,
+                     Atom          *type_ret,
+                     XtPointer     *value_ret,
+                     unsigned long *length_ret,
+                     int           *format_ret)
 {
     /*
      * I assume the intrinsics give me the correct selection back
      */
-    if ((*target != client_value))
-	return (False);
+    if ((*target != client_value)) return (False);
 
-    *type_ret = res_editor_protocol;
-    *value_ret = (XtPointer)globals.command_stream->real_top;
+    *type_ret   = res_editor_protocol;
+    *value_ret  = (XtPointer)globals.command_stream->real_top;
     *length_ret = globals.command_stream->size + HEADER_SIZE;
     *format_ret = EDITRES_FORMAT;
 
-  return (True);
+    return (True);
 }
 
 /*
@@ -633,7 +682,7 @@ SendFailure(Widget w, Atom sel, ResIdent ident, _Xconst char *str)
 static XtPointer
 BuildReturnPacket(ResIdent ident, EditResError error, ProtocolStream *stream)
 {
-    long old_alloc, old_size;
+    long           old_alloc, old_size;
     unsigned char *old_current;
 
     /*
@@ -646,19 +695,19 @@ BuildReturnPacket(ResIdent ident, EditResError error, ProtocolStream *stream)
      * place while being damn sure not to realloc (that would be very bad.)
      */
     old_current = stream->current;
-    old_alloc = stream->alloc;
-    old_size = stream->size;
+    old_alloc   = stream->alloc;
+    old_size    = stream->size;
 
     stream->current = stream->real_top;
-    stream->alloc = stream->size + (2 * HEADER_SIZE);
+    stream->alloc   = stream->size + (2 * HEADER_SIZE);
 
     _XEditResPut8(stream, ident);
     _XEditResPut8(stream, (unsigned char)error);
     _XEditResPut32(stream, old_size);
 
-    stream->alloc = old_alloc;
+    stream->alloc   = old_alloc;
     stream->current = old_current;
-    stream->size = old_size;
+    stream->size    = old_size;
 
     return ((XtPointer)stream->real_top);
 }
@@ -677,8 +726,11 @@ BuildReturnPacket(ResIdent ident, EditResError error, ProtocolStream *stream)
  *	Builds a return command line
  */
 static void
-SendCommand(Widget w, Atom sel, ResIdent ident, EditResError error,
-	    ProtocolStream *stream)
+SendCommand(Widget          w,
+            Atom            sel,
+            ResIdent        ident,
+            EditResError    error,
+            ProtocolStream *stream)
 {
     BuildReturnPacket(ident, error, stream);
     globals.command_stream = stream;
@@ -688,7 +740,12 @@ SendCommand(Widget w, Atom sel, ResIdent ident, EditResError error,
      * by a user action, and I am the only one using this atom it is safe to
      * use CurrentTime
      */
-    XtOwnSelection(w, sel, CurrentTime, ConvertReturnCommand, NULL, CommandDone);
+    XtOwnSelection(w,
+                   sel,
+                   CurrentTime,
+                   ConvertReturnCommand,
+                   NULL,
+                   CommandDone);
 }
 
 /************************************************************
@@ -718,127 +775,131 @@ qcmp_widget_list(register _Xconst void *left, register _Xconst void *right)
  *	number of children
  */
 static int
-FindChildren(Widget parent, Widget **children, Bool normal, Bool popup,
-	     Bool extra)
+FindChildren(Widget   parent,
+             Widget **children,
+             Bool     normal,
+             Bool     popup,
+             Bool     extra)
 {
     CompositeWidget cw = (CompositeWidget)parent;
-    Cardinal i, num_children, current = 0;
-    Widget *extra_widgets = NULL;
-    Cardinal num_extra = 0;
+    Cardinal        i, num_children, current = 0;
+    Widget         *extra_widgets = NULL;
+    Cardinal        num_extra     = 0;
 
     num_children = 0;
 
-    if (XtIsWidget(parent) && popup)
-	num_children += parent->core.num_popups;
+    if (XtIsWidget(parent) && popup) num_children += parent->core.num_popups;
 
     if (XtIsComposite(parent) && normal)
-	num_children += cw->composite.num_children;
+        num_children += cw->composite.num_children;
 
     if (XtIsWidget(parent) && extra)
     {
-	XtResourceList norm_list, cons_list;
-	Cardinal num_norm, num_cons;
-	Arg args[1];
-	Widget widget;
+        XtResourceList norm_list, cons_list;
+        Cardinal       num_norm, num_cons;
+        Arg            args[1];
+        Widget         widget;
 
-	XtGetResourceList(XtClass(parent), &norm_list, &num_norm);
+        XtGetResourceList(XtClass(parent), &norm_list, &num_norm);
 
-	if (XtParent(parent) != NULL)
-	    XtGetConstraintResourceList(XtClass(XtParent(parent)),
-					&cons_list, &num_cons);
-	else
-	    num_cons = 0;
+        if (XtParent(parent) != NULL)
+            XtGetConstraintResourceList(XtClass(XtParent(parent)),
+                                        &cons_list,
+                                        &num_cons);
+        else num_cons = 0;
 
-	extra_widgets = (Widget *)XtMalloc(sizeof(Widget));
-	for (i = 0; i < num_norm; i++)
-	    if (strcmp(norm_list[i].resource_type, XtRWidget) == 0)
-	    {
-		widget = NULL;
-		XtSetArg(args[0], norm_list[i].resource_name, &widget);
-		XtGetValues(parent, args, 1);
-		if (widget && XtParent(widget) == parent)
-		{
-		    ++num_extra;
-		    extra_widgets = (Widget *) XtRealloc(
-			(char *)extra_widgets, num_extra * sizeof(Widget));
-		    extra_widgets[num_extra - 1] = widget;
-		}
-	    }
-	for (i = 0; i < num_cons; i++)
-	    if (strcmp(cons_list[i].resource_type, XtRWidget) == 0)
-	    {
-		widget = NULL;
-		XtSetArg(args[0], cons_list[i].resource_name, &widget);
-		XtGetValues(parent, args, 1);
-		if (widget && XtParent(widget) == parent)
-		{
-		    ++num_extra;
-		    extra_widgets = (Widget *) XtRealloc(
-			(char *)extra_widgets, num_extra * sizeof(Widget));
-		    extra_widgets[num_extra - 1] = widget;
-		}
-	    }
-	if (num_norm)
-	    XtFree((char *)norm_list);
-	if (num_cons)
-	    XtFree((char *)cons_list);
+        extra_widgets = (Widget *)XtMalloc(sizeof(Widget));
+        for (i = 0; i < num_norm; i++)
+            if (strcmp(norm_list[i].resource_type, XtRWidget) == 0)
+            {
+                widget = NULL;
+                XtSetArg(args[0], norm_list[i].resource_name, &widget);
+                XtGetValues(parent, args, 1);
+                if (widget && XtParent(widget) == parent)
+                {
+                    ++num_extra;
+                    extra_widgets =
+                        (Widget *)XtRealloc((char *)extra_widgets,
+                                            num_extra * sizeof(Widget));
+                    extra_widgets[num_extra - 1] = widget;
+                }
+            }
+        for (i = 0; i < num_cons; i++)
+            if (strcmp(cons_list[i].resource_type, XtRWidget) == 0)
+            {
+                widget = NULL;
+                XtSetArg(args[0], cons_list[i].resource_name, &widget);
+                XtGetValues(parent, args, 1);
+                if (widget && XtParent(widget) == parent)
+                {
+                    ++num_extra;
+                    extra_widgets =
+                        (Widget *)XtRealloc((char *)extra_widgets,
+                                            num_extra * sizeof(Widget));
+                    extra_widgets[num_extra - 1] = widget;
+                }
+            }
+        if (num_norm) XtFree((char *)norm_list);
+        if (num_cons) XtFree((char *)cons_list);
     }
 
     if ((num_children + num_extra) == 0)
     {
-	*children = NULL;
-	return (0);
+        *children = NULL;
+        return (0);
     }
 
     *children = (Widget *)XtMalloc(sizeof(Widget) * (num_children + num_extra));
 
     if (XtIsComposite(parent) && normal)
-	for (i = 0; i < cw->composite.num_children; i++, current++)
-	    (*children)[current] = cw->composite.children[i];
+        for (i = 0; i < cw->composite.num_children; i++, current++)
+            (*children)[current] = cw->composite.children[i];
 
     if (XtIsWidget(parent) && popup)
-	for (i = 0; i < parent->core.num_popups; i++, current++)
-	    (*children)[current] = parent->core.popup_list[i];
+        for (i = 0; i < parent->core.num_popups; i++, current++)
+            (*children)[current] = parent->core.popup_list[i];
 
-    if (num_extra)
-    /* Check for dups */
+    if (num_extra)    /* Check for dups */
     {
-	Cardinal j, old_num_extra = num_extra;
+        Cardinal j, old_num_extra = num_extra;
 
-	qsort(extra_widgets, num_extra, sizeof(Widget), qcmp_widget_list);
-	for (i = 0; i < num_extra - 1; i++)
-	    while (i < num_extra - 1 &&
-		   extra_widgets[i] == extra_widgets[i + 1])
-	    {
-		memmove(&extra_widgets[i], &extra_widgets[i + 1],
-			(num_extra - i) * sizeof(Widget));
-		--num_extra;
-	    }
+        qsort(extra_widgets, num_extra, sizeof(Widget), qcmp_widget_list);
+        for (i = 0; i < num_extra - 1; i++)
+            while (i < num_extra - 1 &&
+                   extra_widgets[i] == extra_widgets[i + 1])
+            {
+                memmove(&extra_widgets[i],
+                        &extra_widgets[i + 1],
+                        (num_extra - i) * sizeof(Widget));
+                --num_extra;
+            }
 
-	for (i = 0; i < num_children; i++)
-	    for (j = 0; j < num_extra; j++)
-		if ((*children)[i] == extra_widgets[j])
-		{
-		    if ((j + 1) < num_extra)
-			memmove(&extra_widgets[j], &extra_widgets[j + 1],
-				(num_extra - j) * sizeof(Widget));
-		    --num_extra;
-		}
+        for (i = 0; i < num_children; i++)
+            for (j = 0; j < num_extra; j++)
+                if ((*children)[i] == extra_widgets[j])
+                {
+                    if ((j + 1) < num_extra)
+                        memmove(&extra_widgets[j],
+                                &extra_widgets[j + 1],
+                                (num_extra - j) * sizeof(Widget));
+                    --num_extra;
+                }
 
-	if (old_num_extra != num_extra)
-	    *children = (Widget *)XtRealloc((char *)*children, sizeof(Widget)
-					    * (num_children + num_extra));
+        if (old_num_extra != num_extra)
+            *children = (Widget *)XtRealloc((char *)*children,
+                                            sizeof(Widget) *
+                                                (num_children + num_extra));
 
-	if (num_extra)
-	    memcpy(&(*children)[num_children], extra_widgets,
-		   sizeof(Widget) * num_extra);
+        if (num_extra)
+            memcpy(&(*children)[num_children],
+                   extra_widgets,
+                   sizeof(Widget) * num_extra);
     }
-    if (extra_widgets)
-	XtFree((char *)extra_widgets);
+    if (extra_widgets) XtFree((char *)extra_widgets);
     if (num_children + num_extra == 0)
     {
-	XtFree((char *)*children);
-	*children = NULL;
+        XtFree((char *)*children);
+        *children = NULL;
     }
 
     return (num_children + num_extra);
@@ -859,20 +920,19 @@ FindChildren(Widget parent, Widget **children, Bool normal, Bool popup,
 static Bool
 IsChild(Widget top, Widget parent, Widget child)
 {
-    int i, num_children;
+    int     i, num_children;
     Widget *children;
 
-    if (parent == NULL)
-	return (top == child);
+    if (parent == NULL) return (top == child);
 
     num_children = FindChildren(parent, &children, True, True, True);
 
     for (i = 0; i < num_children; i++)
-	if (children[i] == child)
-	{
-	    XtFree((char *)children);
-	    return (True);
-	}
+        if (children[i] == child)
+        {
+            XtFree((char *)children);
+            return (True);
+        }
 
     XtFree((char *)children);
     return (False);
@@ -892,27 +952,26 @@ IsChild(Widget top, Widget parent, Widget child)
 static _Xconst char *
 VerifyWidget(Widget w, WidgetInfo *info)
 {
-    Widget top;
-    register int count;
-    register Widget parent;
+    Widget                  top;
+    register int            count;
+    register Widget         parent;
     register unsigned long *child;
 
     for (top = w; XtParent(top) != NULL; top = XtParent(top))
-	;
+        ;
 
     parent = NULL;
-    child = info->ids;
-    count = 0;
+    child  = info->ids;
+    count  = 0;
 
     while (True)
     {
-	if (!IsChild(top, parent, (Widget) *child))
-	    return ("This widget no longer exists in the client.");
+        if (!IsChild(top, parent, (Widget)*child))
+            return ("This widget no longer exists in the client.");
 
-	if (++count == info->num_widgets)
-	    break;
+        if (++count == info->num_widgets) break;
 
-	parent = (Widget)*child++;
+        parent = (Widget)*child++;
     }
 
     info->real_widget = (Widget)*child;
@@ -941,30 +1000,33 @@ VerifyWidget(Widget w, WidgetInfo *info)
 static _Xconst char *
 DoSetValues(Widget w, EditresEvent *event, ProtocolStream *stream)
 {
-    _Xconst char *str;
+    _Xconst char     *str;
     register unsigned i;
-    unsigned short count = 0;
-    SetValuesEvent *sv_event = (SetValuesEvent *)event;
+    unsigned short    count    = 0;
+    SetValuesEvent   *sv_event = (SetValuesEvent *)event;
 
     _XEditResPut16(stream, count);  /* insert 0, will be overwritten later */
 
     for (i = 0; i < sv_event->num_entries; i++)
     {
-	if ((str = VerifyWidget(w, &sv_event->widgets[i])) != NULL)
-	{
-	    _XEditResPutWidgetInfo(stream, &sv_event->widgets[i]);
-	    _XEditResPutString8(stream, str);
-	    count++;
-	}
-	else
-	    ExecuteSetValues(sv_event->widgets[i].real_widget,
-			     sv_event, sv_event->widgets + i, stream, &count);
+        if ((str = VerifyWidget(w, &sv_event->widgets[i])) != NULL)
+        {
+            _XEditResPutWidgetInfo(stream, &sv_event->widgets[i]);
+            _XEditResPutString8(stream, str);
+            count++;
+        }
+        else
+            ExecuteSetValues(sv_event->widgets[i].real_widget,
+                             sv_event,
+                             sv_event->widgets + i,
+                             stream,
+                             &count);
     }
 
     /*
      * Overwrite the first 2 bytes with the real count.
      */
-    *(stream->top) = count >> XER_NBBY;
+    *(stream->top)     = count >> XER_NBBY;
     *(stream->top + 1) = count;
 
     return (NULL);
@@ -986,34 +1048,46 @@ DoSetValues(Widget w, EditresEvent *event, ProtocolStream *stream)
  */
 /* ARGSUSED */
 static void
-HandleToolkitErrors(String name, String type, String class, String msg,
-		    String *params, Cardinal *num_params)
+HandleToolkitErrors(String name,
+                    String type,
+                    String class,
+                    String    msg,
+                    String   *params,
+                    Cardinal *num_params)
 {
     SVErrorInfo *info = &globals.error_info;
-    char buf[BUFSIZ];
+    char         buf[BUFSIZ];
 
     if (streq(name, "unknownType"))
-	XmuSnprintf(buf, sizeof(buf),
-		    "The `%s' resource is not used by this widget.",
-		    info->event->name);
+        XmuSnprintf(buf,
+                    sizeof(buf),
+                    "The `%s' resource is not used by this widget.",
+                    info->event->name);
     else if (streq(name, "noColormap"))
-	XmuSnprintf(buf, sizeof(buf), msg, params[0]);
+        XmuSnprintf(buf, sizeof(buf), msg, params[0]);
     else if (streq(name, "conversionFailed") || streq(name, "conversionError"))
     {
-	if (streq((String)info->event->value, XtRString))
-	    XmuSnprintf(buf, sizeof(buf),
-			"Could not convert the string '%s' for the `%s' "
-			"resource.", (String)info->event->value,
-			info->event->name);
-	else
-	    XmuSnprintf(buf, sizeof(buf),
-			"Could not convert the `%s' resource.",
-			info->event->name);
+        if (streq((String)info->event->value, XtRString))
+            XmuSnprintf(buf,
+                        sizeof(buf),
+                        "Could not convert the string '%s' for the `%s' "
+                        "resource.",
+                        (String)info->event->value,
+                        info->event->name);
+        else
+            XmuSnprintf(buf,
+                        sizeof(buf),
+                        "Could not convert the `%s' resource.",
+                        info->event->name);
     }
     else
-	XmuSnprintf(buf, sizeof(buf),
-		    "Name: %s, Type: %s, Class: %s, Msg: %s",
-		    name, type, class, msg);
+        XmuSnprintf(buf,
+                    sizeof(buf),
+                    "Name: %s, Type: %s, Class: %s, Msg: %s",
+                    name,
+                    type,
+                    class,
+                    msg);
 
     /*
      * Insert this info into the protocol stream, and update the count
@@ -1036,24 +1110,30 @@ HandleToolkitErrors(String name, String type, String class, String msg,
  *	Performs a setvalues for a given command
  */
 static void
-ExecuteSetValues(Widget w, SetValuesEvent *sv_event, WidgetInfo *entry,
-		 ProtocolStream *stream, unsigned short *count)
+ExecuteSetValues(Widget          w,
+                 SetValuesEvent *sv_event,
+                 WidgetInfo     *entry,
+                 ProtocolStream *stream,
+                 unsigned short *count)
 {
     XtErrorMsgHandler old;
-    SVErrorInfo *info = &globals.error_info;
+    SVErrorInfo      *info = &globals.error_info;
 
-    info->event = sv_event;	/* No data can be passed to */
-    info->stream = stream;	/* an error handler, so we */
-    info->count = count;	/* have to use a global */
-    info->entry = entry;
+    info->event  = sv_event; /* No data can be passed to */
+    info->stream = stream; /* an error handler, so we */
+    info->count  = count; /* have to use a global */
+    info->entry  = entry;
 
     old = XtAppSetWarningMsgHandler(XtWidgetToApplicationContext(w),
-				    HandleToolkitErrors);
+                                    HandleToolkitErrors);
 
-    XtVaSetValues(w, XtVaTypedArg,
-		  sv_event->name, sv_event->res_type,
-		  sv_event->value, sv_event->value_len,
-		  NULL);
+    XtVaSetValues(w,
+                  XtVaTypedArg,
+                  sv_event->name,
+                  sv_event->res_type,
+                  sv_event->value,
+                  sv_event->value_len,
+                  NULL);
 
     (void)XtAppSetWarningMsgHandler(XtWidgetToApplicationContext(w), old);
 }
@@ -1077,6 +1157,7 @@ ExecuteSetValues(Widget w, SetValuesEvent *sv_event, WidgetInfo *entry,
  *	NULL
  */
 #define TOOLKIT_TYPE ("Xt")
+
 /*ARGSUSED*/
 static _Xconst char *
 DumpWidgets(Widget w, EditresEvent *event, ProtocolStream *stream)
@@ -1085,7 +1166,7 @@ DumpWidgets(Widget w, EditresEvent *event, ProtocolStream *stream)
 
     /* Find Tree's root */
     for (; XtParent(w) != NULL; w = XtParent(w))
-	;
+        ;
 
     /*
      * hold space for count, overwritten later
@@ -1102,7 +1183,7 @@ DumpWidgets(Widget w, EditresEvent *event, ProtocolStream *stream)
     /*
      * Overwrite the first 2 bytes with the real count
      */
-    *(stream->top) = count >> XER_NBBY;
+    *(stream->top)     = count >> XER_NBBY;
     *(stream->top + 1) = count;
 
     return (NULL);
@@ -1133,11 +1214,10 @@ isApplicationShell(Widget w)
 {
     register WidgetClass c;
 
-    if (!XtIsTopLevelShell(w))
-	return (False);
+    if (!XtIsTopLevelShell(w)) return (False);
     for (c = XtClass(w); c; c = c->core_class.superclass)
-      if (strcmp(c->core_class.class_name, "ApplicationShell") == 0)
-	  return (True);
+        if (strcmp(c->core_class.class_name, "ApplicationShell") == 0)
+            return (True);
 
     return (False);
 }
@@ -1145,40 +1225,36 @@ isApplicationShell(Widget w)
 static void
 DumpChildren(Widget w, ProtocolStream *stream, unsigned short *count)
 {
-    int i, num_children;
-    Widget *children;
+    int           i, num_children;
+    Widget       *children;
     unsigned long window;
-    String c_class;
+    String        c_class;
 
     (*count)++;
 
-    InsertWidget(stream, w);		/* Insert the widget into the stream */
+    InsertWidget(stream, w);  /* Insert the widget into the stream */
 
     _XEditResPutString8(stream, XtName(w)); /* Insert name */
 
     if (isApplicationShell(w))
-	c_class = ((ApplicationShellWidget)w)->application.class;
-    else
-	c_class = XtClass(w)->core_class.class_name;
+        c_class = ((ApplicationShellWidget)w)->application.class;
+    else c_class = XtClass(w)->core_class.class_name;
 
-    _XEditResPutString8(stream, c_class);	/* Insert class */
+    _XEditResPutString8(stream, c_class); /* Insert class */
 
     if (XtIsWidget(w))
-	if (XtIsRealized(w))
-	    window = XtWindow(w);
-	else
-	    window = EDITRES_IS_UNREALIZED;
-    else
-	window = EDITRES_IS_OBJECT;
+        if (XtIsRealized(w)) window = XtWindow(w);
+        else window = EDITRES_IS_UNREALIZED;
+    else window = EDITRES_IS_OBJECT;
 
-    _XEditResPut32(stream, window);		/* Insert window id */
+    _XEditResPut32(stream, window);  /* Insert window id */
 
     /*
      * Find children and recurse
      */
     num_children = FindChildren(w, &children, True, True, True);
     for (i = 0; i < num_children; i++)
-	DumpChildren(children[i], stream, count);
+        DumpChildren(children[i], stream, count);
 
     XtFree((char *)children);
 }
@@ -1204,7 +1280,7 @@ DumpChildren(Widget w, ProtocolStream *stream, unsigned short *count)
 static _Xconst char *
 DoGetGeometry(Widget w, EditresEvent *event, ProtocolStream *stream)
 {
-    unsigned i;
+    unsigned      i;
     _Xconst char *str;
     GetGeomEvent *geom_event = (GetGeomEvent *)event;
 
@@ -1212,18 +1288,17 @@ DoGetGeometry(Widget w, EditresEvent *event, ProtocolStream *stream)
 
     for (i = 0; i < geom_event->num_entries; i++)
     {
-	/*
+    /*
 	 * Send out the widget id
 	 */
-	_XEditResPutWidgetInfo(stream, &geom_event->widgets[i]);
+        _XEditResPutWidgetInfo(stream, &geom_event->widgets[i]);
 
-	if ((str = VerifyWidget(w, &geom_event->widgets[i])) != NULL)
-	{
-	    _XEditResPutBool(stream, True);	/* an error occurred */
-	    _XEditResPutString8(stream, str);	/* set message */
-	}
-	else
-	    ExecuteGetGeometry(geom_event->widgets[i].real_widget, stream);
+        if ((str = VerifyWidget(w, &geom_event->widgets[i])) != NULL)
+        {
+            _XEditResPutBool(stream, True); /* an error occurred */
+            _XEditResPutString8(stream, str); /* set message */
+        }
+        else ExecuteGetGeometry(geom_event->widgets[i].real_widget, stream);
     }
 
     return (NULL);
@@ -1246,60 +1321,63 @@ DoGetGeometry(Widget w, EditresEvent *event, ProtocolStream *stream)
 static void
 ExecuteGetGeometry(Widget w, ProtocolStream *stream)
 {
-    int i;
-    Boolean mapped_when_man;
+    int       i;
+    Boolean   mapped_when_man;
     Dimension width, height, border_width;
-    Arg args[8];
-    Cardinal num_args = 0;
-    Position x, y;
+    Arg       args[8];
+    Cardinal  num_args = 0;
+    Position  x, y;
 
     if (!XtIsRectObj(w) || (XtIsWidget(w) && !XtIsRealized(w)))
     {
-	_XEditResPutBool(stream, False);	/* no error */
-	_XEditResPutBool(stream, False);	/* not visible */
-	for (i = 0; i < 5; i++)		/* fill in extra space with 0's */
-	    _XEditResPut16(stream, 0);
-	return;
+        _XEditResPutBool(stream, False); /* no error */
+        _XEditResPutBool(stream, False); /* not visible */
+        for (i = 0; i < 5; i++)  /* fill in extra space with 0's */
+            _XEditResPut16(stream, 0);
+        return;
     }
 
-    XtSetArg(args[num_args], XtNwidth, &width); num_args++;
-    XtSetArg(args[num_args], XtNheight, &height); num_args++;
-    XtSetArg(args[num_args], XtNborderWidth, &border_width); num_args++;
+    XtSetArg(args[num_args], XtNwidth, &width);
+    num_args++;
+    XtSetArg(args[num_args], XtNheight, &height);
+    num_args++;
+    XtSetArg(args[num_args], XtNborderWidth, &border_width);
+    num_args++;
     XtSetArg(args[num_args], XtNmappedWhenManaged, &mapped_when_man);
     num_args++;
     XtGetValues(w, args, num_args);
 
     if (!(XtIsManaged(w) && mapped_when_man) && XtIsWidget(w))
     {
-	XWindowAttributes attrs;
+        XWindowAttributes attrs;
 
-	/*
+    /*
 	 * The toolkit does not maintain mapping state, we have
 	 * to go to the server
 	 */
-	if (XGetWindowAttributes(XtDisplay(w), XtWindow(w), &attrs) != 0)
-	{
-	    if (attrs.map_state != IsViewable)
-	    {
-		_XEditResPutBool(stream, False);	/* no error */
-		_XEditResPutBool(stream, False);	/* not visible */
-		for (i = 0; i < 5; i++)	/* fill in extra space with 0's */
-		    _XEditResPut16(stream, 0);
-		return;
-	    }
-	}
-	else
-	{
-	    _XEditResPut8(stream, True); /* Error occurred. */
-	    _XEditResPutString8(stream, "XGetWindowAttributes failed.");
-	    return;
-	}
+        if (XGetWindowAttributes(XtDisplay(w), XtWindow(w), &attrs) != 0)
+        {
+            if (attrs.map_state != IsViewable)
+            {
+                _XEditResPutBool(stream, False); /* no error */
+                _XEditResPutBool(stream, False); /* not visible */
+                for (i = 0; i < 5; i++) /* fill in extra space with 0's */
+                    _XEditResPut16(stream, 0);
+                return;
+            }
+        }
+        else
+        {
+            _XEditResPut8(stream, True); /* Error occurred. */
+            _XEditResPutString8(stream, "XGetWindowAttributes failed.");
+            return;
+        }
     }
 
-    XtTranslateCoords(w, -((int) border_width), -((int) border_width), &x, &y);
+    XtTranslateCoords(w, -((int)border_width), -((int)border_width), &x, &y);
 
-    _XEditResPutBool(stream, False);	/* no error */
-    _XEditResPutBool(stream, True);	/* Visible */
+    _XEditResPutBool(stream, False); /* no error */
+    _XEditResPutBool(stream, True); /* Visible */
     _XEditResPut16(stream, x);
     _XEditResPut16(stream, y);
     _XEditResPut16(stream, width);
@@ -1325,22 +1403,28 @@ ExecuteGetGeometry(Widget w, ProtocolStream *stream)
 static Bool
 PositionInChild(Widget child, int x, int y)
 {
-    Arg args[6];
-    Cardinal num;
+    Arg       args[6];
+    Cardinal  num;
     Dimension width, height, border_width;
-    Position child_x, child_y;
-    Boolean mapped_when_managed;
+    Position  child_x, child_y;
+    Boolean   mapped_when_managed;
 
-    if (!XtIsRectObj(child))	/* we must at least be a rect obj */
-	return (False);
+    if (!XtIsRectObj(child)) /* we must at least be a rect obj */
+        return (False);
 
     num = 0;
-    XtSetArg(args[num], XtNmappedWhenManaged, &mapped_when_managed); num++;
-    XtSetArg(args[num], XtNwidth, &width); num++;
-    XtSetArg(args[num], XtNheight, &height); num++;
-    XtSetArg(args[num], XtNx, &child_x); num++;
-    XtSetArg(args[num], XtNy, &child_y); num++;
-    XtSetArg(args[num], XtNborderWidth, &border_width); num++;
+    XtSetArg(args[num], XtNmappedWhenManaged, &mapped_when_managed);
+    num++;
+    XtSetArg(args[num], XtNwidth, &width);
+    num++;
+    XtSetArg(args[num], XtNheight, &height);
+    num++;
+    XtSetArg(args[num], XtNx, &child_x);
+    num++;
+    XtSetArg(args[num], XtNy, &child_y);
+    num++;
+    XtSetArg(args[num], XtNborderWidth, &border_width);
+    num++;
     XtGetValues(child, args, num);
 
     /*
@@ -1350,17 +1434,17 @@ PositionInChild(Widget child, int x, int y)
      */
     if (XtIsWidget(child) && !(mapped_when_managed && XtIsManaged(child)))
     {
-	XWindowAttributes attrs;
+        XWindowAttributes attrs;
 
-	if (XGetWindowAttributes(XtDisplay(child), XtWindow(child), &attrs)
-	    &&  attrs.map_state != IsViewable)
-	return (False);
+        if (XGetWindowAttributes(XtDisplay(child), XtWindow(child), &attrs) &&
+            attrs.map_state != IsViewable)
+            return (False);
     }
 
-    return ((x >= child_x)
-	    && (x <= (child_x + (Position)width + 2 * (Position)border_width))
-	    && (y >= child_y)
-	    && (y <= (child_y + (Position)height + 2 * (Position)border_width)));
+    return ((x >= child_x) &&
+            (x <= (child_x + (Position)width + 2 * (Position)border_width)) &&
+            (y >= child_y) &&
+            (y <= (child_y + (Position)height + 2 * (Position)border_width)));
 }
 
 /*
@@ -1379,19 +1463,19 @@ static Widget
 _FindChild(Widget parent, int x, int y)
 {
     Widget *children;
-    int i = FindChildren(parent, &children, True, False, True);
+    int     i = FindChildren(parent, &children, True, False, True);
 
     while (i > 0)
     {
-	i--;
+        i--;
 
-	if (PositionInChild(children[i], x, y))
-	{
-	    Widget child = children[i];
+        if (PositionInChild(children[i], x, y))
+        {
+            Widget child = children[i];
 
-	    XtFree((char *)children);
-	    return (_FindChild(child, x - child->core.x, y - child->core.y));
-	}
+            XtFree((char *)children);
+            return (_FindChild(child, x - child->core.x, y - child->core.y));
+        }
     }
 
     XtFree((char *)children);
@@ -1417,21 +1501,20 @@ _FindChild(Widget parent, int x, int y)
 static _Xconst char *
 DoFindChild(Widget w, EditresEvent *event, ProtocolStream *stream)
 {
-    _Xconst char *str;
-    Widget parent, child;
-    Position parent_x, parent_y;
+    _Xconst char   *str;
+    Widget          parent, child;
+    Position        parent_x, parent_y;
     FindChildEvent *find_event = (FindChildEvent *)event;
 
-    if ((str = VerifyWidget(w, find_event->widgets)) != NULL)
-	return (str);
+    if ((str = VerifyWidget(w, find_event->widgets)) != NULL) return (str);
 
     parent = find_event->widgets->real_widget;
 
-    XtTranslateCoords(parent, (Position) 0, (Position) 0,
-		      &parent_x, &parent_y);
+    XtTranslateCoords(parent, (Position)0, (Position)0, &parent_x, &parent_y);
 
-    child = _FindChild(parent, find_event->x - (int) parent_x,
-		       find_event->y - (int) parent_y);
+    child = _FindChild(parent,
+                       find_event->x - (int)parent_x,
+                       find_event->y - (int)parent_y);
 
     InsertWidget(stream, child);
 
@@ -1459,28 +1542,28 @@ DoFindChild(Widget w, EditresEvent *event, ProtocolStream *stream)
 static _Xconst char *
 DoGetResources(Widget w, EditresEvent *event, ProtocolStream *stream)
 {
-    unsigned int i;
+    unsigned int  i;
     _Xconst char *str;
-    GetResEvent *res_event = (GetResEvent *)event;
+    GetResEvent  *res_event = (GetResEvent *)event;
 
     _XEditResPut16(stream, res_event->num_entries); /* number of replies */
 
     for (i = 0; i < res_event->num_entries; i++)
     {
-	/*
+    /*
 	 * Send out the widget id
 	 */
-	_XEditResPutWidgetInfo(stream, &res_event->widgets[i]);
-	if ((str = VerifyWidget(w, &res_event->widgets[i])) != NULL)
-	{
-	    _XEditResPutBool(stream, True);	/* an error occurred */
-	    _XEditResPutString8(stream, str);	/* set message */
-	}
-	else
-	{
-	    _XEditResPutBool(stream, False);	/* no error occurred */
-	    ExecuteGetResources(res_event->widgets[i].real_widget, stream);
-	}
+        _XEditResPutWidgetInfo(stream, &res_event->widgets[i]);
+        if ((str = VerifyWidget(w, &res_event->widgets[i])) != NULL)
+        {
+            _XEditResPutBool(stream, True); /* an error occurred */
+            _XEditResPutString8(stream, str); /* set message */
+        }
+        else
+        {
+            _XEditResPutBool(stream, False); /* no error occurred */
+            ExecuteGetResources(res_event->widgets[i].real_widget, stream);
+        }
     }
 
     return (NULL);
@@ -1499,8 +1582,8 @@ DoGetResources(Widget w, EditresEvent *event, ProtocolStream *stream)
 static void
 ExecuteGetResources(Widget w, ProtocolStream *stream)
 {
-    XtResourceList norm_list, cons_list;
-    Cardinal num_norm, num_cons;
+    XtResourceList    norm_list, cons_list;
+    Cardinal          num_norm, num_cons;
     register Cardinal i;
 
     /*
@@ -1509,21 +1592,22 @@ ExecuteGetResources(Widget w, ProtocolStream *stream)
     XtGetResourceList(XtClass(w), &norm_list, &num_norm);
 
     if (XtParent(w) != NULL)
-	XtGetConstraintResourceList(XtClass(XtParent(w)), &cons_list,&num_cons);
-    else
-	num_cons = 0;
+        XtGetConstraintResourceList(XtClass(XtParent(w)),
+                                    &cons_list,
+                                    &num_cons);
+    else num_cons = 0;
 
-    _XEditResPut16(stream, num_norm + num_cons);	/* how many resources */
+    _XEditResPut16(stream, num_norm + num_cons); /* how many resources */
 
     /*
      * Insert all the normal resources
      */
     for (i = 0; i < num_norm; i++)
     {
-	_XEditResPutResourceType(stream, NormalResource);
-	_XEditResPutString8(stream, norm_list[i].resource_name);
-	_XEditResPutString8(stream, norm_list[i].resource_class);
-	_XEditResPutString8(stream, norm_list[i].resource_type);
+        _XEditResPutResourceType(stream, NormalResource);
+        _XEditResPutString8(stream, norm_list[i].resource_name);
+        _XEditResPutString8(stream, norm_list[i].resource_class);
+        _XEditResPutString8(stream, norm_list[i].resource_type);
     }
     XtFree((char *)norm_list);
 
@@ -1532,14 +1616,14 @@ ExecuteGetResources(Widget w, ProtocolStream *stream)
      */
     if (num_cons > 0)
     {
-	for (i = 0; i < num_cons; i++)
-	{
-	    _XEditResPutResourceType(stream, ConstraintResource);
-	    _XEditResPutString8(stream, cons_list[i].resource_name);
-	    _XEditResPutString8(stream, cons_list[i].resource_class);
-	    _XEditResPutString8(stream, cons_list[i].resource_type);
-	}
-	XtFree((char *)cons_list);
+        for (i = 0; i < num_cons; i++)
+        {
+            _XEditResPutResourceType(stream, ConstraintResource);
+            _XEditResPutString8(stream, cons_list[i].resource_name);
+            _XEditResPutString8(stream, cons_list[i].resource_class);
+            _XEditResPutString8(stream, cons_list[i].resource_type);
+        }
+        XtFree((char *)cons_list);
     }
 }
 
@@ -1559,12 +1643,12 @@ ExecuteGetResources(Widget w, ProtocolStream *stream)
  */
 /*ARGSUSED*/
 static _Xconst char *
-DumpValues(Widget w, EditresEvent* event, ProtocolStream* stream)
+DumpValues(Widget w, EditresEvent *event, ProtocolStream *stream)
 {
-    _Xconst char *str;
-    Arg warg[1];
+    _Xconst char     *str;
+    Arg               warg[1];
     _Xconst _XtString res_value = NULL;
-    GetValuesEvent *gv_event = (GetValuesEvent *)event;
+    GetValuesEvent   *gv_event  = (GetValuesEvent *)event;
 
     /* put the count in the stream */
     _XEditResPut16(stream, (unsigned int)1);
@@ -1576,13 +1660,12 @@ DumpValues(Widget w, EditresEvent* event, ProtocolStream* stream)
     XtSetArg(warg[0], gv_event->name, &res_value);
 
     if ((str = VerifyWidget(w, &gv_event->widgets[0])) != NULL)
-	_XEditResPutString8(stream, str);
+        _XEditResPutString8(stream, str);
     else
     {
-	_XEditresGetStringValues(gv_event->widgets[0].real_widget, warg, 1);
-	if (!res_value)
-	    res_value = "NoValue";
-	_XEditResPutString8(stream, res_value);
+        _XEditresGetStringValues(gv_event->widgets[0].real_widget, warg, 1);
+        if (!res_value) res_value = "NoValue";
+        _XEditResPutString8(stream, res_value);
     }
 
     return (NULL);
@@ -1606,26 +1689,27 @@ DumpValues(Widget w, EditresEvent* event, ProtocolStream* stream)
 static void
 InsertWidget(ProtocolStream *stream, Widget w)
 {
-    Widget temp;
+    Widget         temp;
     unsigned long *widget_list;
-    register int i, num_widgets;
+    register int   i, num_widgets;
 
     for (temp = w, i = 0; temp != NULL; temp = XtParent(temp), i++)
-	;
+        ;
 
     num_widgets = i;
-    widget_list = (unsigned long *)XtMalloc(sizeof(unsigned long) * num_widgets);
+    widget_list =
+        (unsigned long *)XtMalloc(sizeof(unsigned long) * num_widgets);
 
     /*
      * Put the widgets into the list
      * make sure that they are inserted in the list from parent -> child
      */
     for (i--, temp = w; temp != NULL; temp = XtParent(temp), i--)
-    widget_list[i] = (unsigned long)temp;
+        widget_list[i] = (unsigned long)temp;
 
-    _XEditResPut16(stream, num_widgets);	/* insert number of widgets */
-    for (i = 0; i < num_widgets; i++)		/* insert Widgets themselves */
-	_XEditResPut32(stream, widget_list[i]);
+    _XEditResPut16(stream, num_widgets); /* insert number of widgets */
+    for (i = 0; i < num_widgets; i++)  /* insert Widgets themselves */
+        _XEditResPut32(stream, widget_list[i]);
 
     XtFree((char *)widget_list);
 }
@@ -1651,7 +1735,7 @@ _XEditResPutString8(ProtocolStream *stream, _Xconst char *str)
 
     _XEditResPut16(stream, len);
     for (i = 0; i < len; i++, str++)
-	_XEditResPut8(stream, *str);
+        _XEditResPut8(stream, *str);
 }
 
 /*
@@ -1672,14 +1756,15 @@ _XEditResPut8(ProtocolStream *stream, unsigned int value)
 
     if (stream->size >= stream->alloc)
     {
-	stream->alloc += 100;
-	stream->real_top = (unsigned char *)
-	    XtRealloc((char *)stream->real_top, stream->alloc + HEADER_SIZE);
-	stream->top = stream->real_top + HEADER_SIZE;
-	stream->current = stream->top + stream->size;
+        stream->alloc += 100;
+        stream->real_top =
+            (unsigned char *)XtRealloc((char *)stream->real_top,
+                                       stream->alloc + HEADER_SIZE);
+        stream->top     = stream->real_top + HEADER_SIZE;
+        stream->current = stream->top + stream->size;
     }
 
-    temp = (unsigned char) (value & BYTE_MASK);
+    temp                   = (unsigned char)(value & BYTE_MASK);
     *((stream->current)++) = temp;
     (stream->size)++;
 }
@@ -1719,7 +1804,7 @@ _XEditResPut32(ProtocolStream *stream, unsigned long value)
     int i;
 
     for (i = 3; i >= 0; i--)
-	_XEditResPut8(stream, (value >> (XER_NBBY * i)) & BYTE_MASK);
+        _XEditResPut8(stream, (value >> (XER_NBBY * i)) & BYTE_MASK);
 }
 
 /*
@@ -1740,7 +1825,7 @@ _XEditResPutWidgetInfo(ProtocolStream *stream, WidgetInfo *info)
 
     _XEditResPut16(stream, info->num_widgets);
     for (i = 0; i < info->num_widgets; i++)
-	_XEditResPut32(stream, info->ids[i]);
+        _XEditResPut32(stream, info->ids[i]);
 }
 
 /************************************************************
@@ -1760,13 +1845,14 @@ void
 _XEditResResetStream(ProtocolStream *stream)
 {
     stream->current = stream->top;
-    stream->size = 0;
+    stream->size    = 0;
     if (stream->real_top == NULL)
     {
-	stream->real_top = (unsigned char *)
-	    XtRealloc((char *)stream->real_top, stream->alloc + HEADER_SIZE);
-	stream->top = stream->real_top + HEADER_SIZE;
-	stream->current = stream->top + stream->size;
+        stream->real_top =
+            (unsigned char *)XtRealloc((char *)stream->real_top,
+                                       stream->alloc + HEADER_SIZE);
+        stream->top     = stream->real_top + HEADER_SIZE;
+        stream->current = stream->top + stream->size;
     }
 }
 
@@ -1796,7 +1882,7 @@ Bool
 _XEditResGet8(ProtocolStream *stream, unsigned char *value)
 {
     if (stream->size < (unsigned long)(stream->current - stream->top))
-	return (False);
+        return (False);
 
     *value = *((stream->current)++);
     return (True);
@@ -1822,7 +1908,7 @@ _XEditResGet16(ProtocolStream *stream, unsigned short *value)
     unsigned char temp1, temp2;
 
     if (!(_XEditResGet8(stream, &temp1) && _XEditResGet8(stream, &temp2)))
-	return (False);
+        return (False);
 
     *value = ((unsigned short)temp1 << XER_NBBY) + (unsigned short)temp2;
     return (True);
@@ -1848,16 +1934,15 @@ _XEditResGetSigned16(ProtocolStream *stream, short *value)
     unsigned char temp1, temp2;
 
     if (!(_XEditResGet8(stream, &temp1) && _XEditResGet8(stream, &temp2)))
-	return (False);
+        return (False);
 
-    if (temp1 & (1 << (XER_NBBY - 1)))	/* If the sign bit is active */
+    if (temp1 & (1 << (XER_NBBY - 1))) /* If the sign bit is active */
     {
-      *value = -1;			/* store all 1's */
-      *value &= (temp1 << XER_NBBY);	/* Now and in the MSB */
-      *value &= temp2;			/* and LSB */
+        *value = -1;   /* store all 1's */
+        *value &= (temp1 << XER_NBBY); /* Now and in the MSB */
+        *value &= temp2;   /* and LSB */
     }
-    else
-	*value = ((unsigned short)temp1 << XER_NBBY) + (unsigned short)temp2;
+    else *value = ((unsigned short)temp1 << XER_NBBY) + (unsigned short)temp2;
 
     return (True);
 }
@@ -1882,7 +1967,7 @@ _XEditResGet32(ProtocolStream *stream, unsigned long *value)
     unsigned short temp1, temp2;
 
     if (!(_XEditResGet16(stream, &temp1) && _XEditResGet16(stream, &temp2)))
-	return (False);
+        return (False);
 
     *value = ((unsigned long)temp1 << (XER_NBBY * 2)) + (unsigned long)temp2;
     return (True);
@@ -1904,22 +1989,21 @@ _XEditResGet32(ProtocolStream *stream, unsigned long *value)
 Bool
 _XEditResGetString8(ProtocolStream *stream, char **str)
 {
-    unsigned short len;
+    unsigned short    len;
     register unsigned i;
 
-    if (!_XEditResGet16(stream, &len))
-	return (False);
+    if (!_XEditResGet16(stream, &len)) return (False);
 
     *str = XtMalloc(sizeof(char) * (len + 1));
 
     for (i = 0; i < len; i++)
     {
-	if (!_XEditResGet8(stream, (unsigned char *)*str + i))
-	{
-	    XtFree(*str);
-	    *str = NULL;
-	    return (False);
-	}
+        if (!_XEditResGet8(stream, (unsigned char *)*str + i))
+        {
+            XtFree(*str);
+            *str = NULL;
+            return (False);
+        }
     }
     (*str)[i] = '\0';
 
@@ -1946,21 +2030,20 @@ _XEditResGetWidgetInfo(ProtocolStream *stream, WidgetInfo *info)
 {
     unsigned int i;
 
-    if (!_XEditResGet16(stream, &info->num_widgets))
-	return (False);
+    if (!_XEditResGet16(stream, &info->num_widgets)) return (False);
 
     info->ids = (unsigned long *)XtMalloc(sizeof(long) * info->num_widgets);
 
     for (i = 0; i < info->num_widgets; i++)
     {
-	if (!_XEditResGet32(stream, info->ids + i))
-	{
-	    XtFree((char *)info->ids);
-	    info->ids = NULL;
-	    return (False);
-	}
+        if (!_XEditResGet32(stream, info->ids + i))
+        {
+            XtFree((char *)info->ids);
+            info->ids = NULL;
+            return (False);
+        }
 #if defined(LONG64) || defined(WORD64)
-	info->ids[i] |= globals.base_address;
+        info->ids[i] |= globals.base_address;
 #endif
     }
     return (True);
@@ -1989,51 +2072,54 @@ _XEditResGetWidgetInfo(ProtocolStream *stream, WidgetInfo *info)
  */
 /*ARGSUSED*/
 static Boolean
-CvtStringToBlock(Display *dpy, XrmValue *args, Cardinal *num_args,
-		 XrmValue *from_val, XrmValue *to_val,
-		 XtPointer *converter_data)
+CvtStringToBlock(Display   *dpy,
+                 XrmValue  *args,
+                 Cardinal  *num_args,
+                 XrmValue  *from_val,
+                 XrmValue  *to_val,
+                 XtPointer *converter_data)
 {
-    char ptr[16];
+    char                ptr[16];
     static EditresBlock block;
 
     XmuNCopyISOLatin1Lowered(ptr, from_val->addr, sizeof(ptr));
 
-    if (streq(ptr, "none"))
-	block = BlockNone;
-    else if (streq(ptr, "setvalues"))
-	block = BlockSetValues;
-    else if (streq(ptr, "all"))
-	block = BlockAll;
+    if (streq(ptr, "none")) block = BlockNone;
+    else if (streq(ptr, "setvalues")) block = BlockSetValues;
+    else if (streq(ptr, "all")) block = BlockAll;
     else
     {
-	Cardinal num_params = 1;
-	String params[1];
+        Cardinal num_params = 1;
+        String   params[1];
 
-	params[0] = from_val->addr;
-	XtAppWarningMsg(XtDisplayToApplicationContext(dpy),
-			"CvtStringToBlock", "unknownValue", "EditresError",
-			"Could not convert string \"%s\" to EditresBlock.",
-			params, &num_params);
-	return FALSE;
+        params[0] = from_val->addr;
+        XtAppWarningMsg(XtDisplayToApplicationContext(dpy),
+                        "CvtStringToBlock",
+                        "unknownValue",
+                        "EditresError",
+                        "Could not convert string \"%s\" to EditresBlock.",
+                        params,
+                        &num_params);
+        return FALSE;
     }
 
     if (to_val->addr != NULL)
     {
-	if (to_val->size < sizeof(EditresBlock))
-	{
-	    to_val->size = sizeof(EditresBlock);
-	    return FALSE;
-	}
-	*(EditresBlock *)(to_val->addr) = block;
+        if (to_val->size < sizeof(EditresBlock))
+        {
+            to_val->size = sizeof(EditresBlock);
+            return FALSE;
+        }
+        *(EditresBlock *)(to_val->addr) = block;
     }
-    else
-	to_val->addr = (XtPointer)block;
+    else to_val->addr = (XtPointer)block;
 
     to_val->size = sizeof(EditresBlock);
     return TRUE;
 }
 
-#define XtREditresBlock		"EditresBlock"
+#define XtREditresBlock "EditresBlock"
+
 /*
  * Function:
  *	LoadResources
@@ -2049,19 +2135,31 @@ static void
 LoadResources(Widget w)
 {
     static XtResource resources[] = {
-        {"editresBlock", "EditresBlock", XtREditresBlock, sizeof(EditresBlock),
-	 XtOffsetOf(Globals, block), XtRImmediate, (XtPointer)BlockNone}
+        { "editresBlock",
+         "EditresBlock", XtREditresBlock,
+         sizeof(EditresBlock),
+         XtOffsetOf(Globals, block),
+         XtRImmediate, (XtPointer)BlockNone }
     };
 
     for (; XtParent(w) != NULL; w = XtParent(w))
-	;
+        ;
 
     XtAppSetTypeConverter(XtWidgetToApplicationContext(w),
-			  XtRString, XtREditresBlock, CvtStringToBlock,
-			  NULL, 0, XtCacheAll, NULL);
+                          XtRString,
+                          XtREditresBlock,
+                          CvtStringToBlock,
+                          NULL,
+                          0,
+                          XtCacheAll,
+                          NULL);
 
-    XtGetApplicationResources(w, (XtPointer)&globals, resources,
-			      XtNumber(resources), NULL, 0);
+    XtGetApplicationResources(w,
+                              (XtPointer)&globals,
+                              resources,
+                              XtNumber(resources),
+                              NULL,
+                              0);
 }
 
 /*
@@ -2077,87 +2175,88 @@ LoadResources(Widget w)
 static void
 _XEditresGetStringValues(Widget w, Arg *warg, int numargs)
 {
-    static char buffer[32];
+    static char    buffer[32];
     XtResourceList res_list;
-    Cardinal num_res;
-    XtResource *res = NULL;
-    long value;
-    Cardinal i;
-    const char *string = "";
-    Arg args[1];
-    XrmValue to, from;
+    Cardinal       num_res;
+    XtResource    *res = NULL;
+    long           value;
+    Cardinal       i;
+    const char    *string = "";
+    Arg            args[1];
+    XrmValue       to, from;
 
     /*
      * Look for the resource
      */
     XtGetResourceList(XtClass(w), &res_list, &num_res);
     for (i = 0; i < num_res; i++)
-	if (strcmp(res_list[i].resource_name, warg->name) == 0)
-	{
-	    res = &res_list[i];
-	    break;
-	}
+        if (strcmp(res_list[i].resource_name, warg->name) == 0)
+        {
+            res = &res_list[i];
+            break;
+        }
 
     if (res == NULL && XtParent(w) != NULL)
     {
-	XtFree((char *)res_list);
-	XtGetConstraintResourceList(XtClass(XtParent(w)), &res_list, &num_res);
-	for (i = 0; i < num_res; i++)
-	    if (strcmp(res_list[i].resource_name, warg->name) == 0)
-	    {
-		res = &res_list[i];
-		break;
-	    }
+        XtFree((char *)res_list);
+        XtGetConstraintResourceList(XtClass(XtParent(w)), &res_list, &num_res);
+        for (i = 0; i < num_res; i++)
+            if (strcmp(res_list[i].resource_name, warg->name) == 0)
+            {
+                res = &res_list[i];
+                break;
+            }
     }
 
     if (res == NULL)
     {
-	/* Couldn't find resource */
+    /* Couldn't find resource */
 
-	XtFree((char *)res_list);
-	*(XtPointer *)warg->value = NULL;
-	return;
+        XtFree((char *)res_list);
+        *(XtPointer *)warg->value = NULL;
+        return;
     }
 
     /* try to get the value in the proper size */
     switch (res->resource_size)
     {
 #ifdef LONG64
-	long v8;
+        long v8;
 #endif
-	int v4;
-	short v2;
-	char v1;
+        int   v4;
+        short v2;
+        char  v1;
 
-    case 1:
-	XtSetArg(args[0], res->resource_name, &v1);
-	XtGetValues(w, args, 1);
-	value = (int)v1;
-	break;
-    case 2:
-	XtSetArg(args[0], res->resource_name, &v2);
-	XtGetValues(w, args, 1);
-	value = (int)v2;
-	break;
-    case 4:
-	XtSetArg(args[0], res->resource_name, &v4);
-	XtGetValues(w, args, 1);
-	value = (int)v4;
-	break;
+        case 1:
+            XtSetArg(args[0], res->resource_name, &v1);
+            XtGetValues(w, args, 1);
+            value = (int)v1;
+            break;
+        case 2:
+            XtSetArg(args[0], res->resource_name, &v2);
+            XtGetValues(w, args, 1);
+            value = (int)v2;
+            break;
+        case 4:
+            XtSetArg(args[0], res->resource_name, &v4);
+            XtGetValues(w, args, 1);
+            value = (int)v4;
+            break;
 #ifdef LONG64
-    case 8:
-	XtSetArg(args[0], res->resource_name, &v8);
-	XtGetValues(w, args, 1);
-	value = (long)v8;
-	break;
+        case 8:
+            XtSetArg(args[0], res->resource_name, &v8);
+            XtGetValues(w, args, 1);
+            value = (long)v8;
+            break;
 #endif
-    default:
-	fprintf(stderr, "_XEditresGetStringValues: bad size %d\n",
-		res->resource_size);
-	string = "bad size";
-	*(char **)(warg->value) = (char *) string;
-	XtFree((char *)res_list);
-	return;
+        default:
+            fprintf(stderr,
+                    "_XEditresGetStringValues: bad size %d\n",
+                    res->resource_size);
+            string                  = "bad size";
+            *(char **)(warg->value) = (char *)string;
+            XtFree((char *)res_list);
+            return;
     }
 
     /*
@@ -2165,49 +2264,52 @@ _XEditresGetStringValues(Widget w, Arg *warg, int numargs)
      */
     if (strcmp(XtRString, res->resource_type) == 0)
     {
-	if (value == 0)
-	    string = "(null)";
-	else
-	    string = (char *)value;
+        if (value == 0) string = "(null)";
+        else string = (char *)value;
     }
     else
     {
-	from.size = res->resource_size;
-	from.addr = (XPointer)&value;
-	to.addr = NULL;
-	to.size = 0;
+        from.size = res->resource_size;
+        from.addr = (XPointer)&value;
+        to.addr   = NULL;
+        to.size   = 0;
 
-	if (XtConvertAndStore(w,res->resource_type, &from, XtRString, &to))
-	    string = to.addr;
-	else
-	{
-	    string = buffer;
-	    /*
+        if (XtConvertAndStore(w, res->resource_type, &from, XtRString, &to))
+            string = to.addr;
+        else
+        {
+            string = buffer;
+        /*
 	     * Conversion failed, fall back to representing it as integer
 	     */
-	    switch (res->resource_size)
-	    {
-	    case sizeof(char):
-		XmuSnprintf(buffer, sizeof(buffer), "%d", (int)(value & 0xff));
-		break;
-	    case sizeof(short):
-		XmuSnprintf(buffer, sizeof(buffer), "%d", (int)(value & 0xffff));
-		break;
-	    case sizeof(int):
-		XmuSnprintf(buffer, sizeof(buffer), "0x%08x", (int)value);
-		break;
+            switch (res->resource_size)
+            {
+                case sizeof(char):
+                    XmuSnprintf(buffer,
+                                sizeof(buffer),
+                                "%d",
+                                (int)(value & 0xff));
+                    break;
+                case sizeof(short):
+                    XmuSnprintf(buffer,
+                                sizeof(buffer),
+                                "%d",
+                                (int)(value & 0xffff));
+                    break;
+                case sizeof(int):
+                    XmuSnprintf(buffer, sizeof(buffer), "0x%08x", (int)value);
+                    break;
 #ifdef LONG64
-	    case sizeof(long):
-		XmuSnprintf(buffer, sizeof(buffer), "0x%016lx", value);
-		break;
+                case sizeof(long):
+                    XmuSnprintf(buffer, sizeof(buffer), "0x%016lx", value);
+                    break;
 #endif
-	    }
-	}
+            }
+        }
     }
 
-    if (string == NULL)
-	string = "";
+    if (string == NULL) string = "";
 
-    *(char **)(warg->value) = (char *) string;
+    *(char **)(warg->value) = (char *)string;
     XtFree((char *)res_list);
 }

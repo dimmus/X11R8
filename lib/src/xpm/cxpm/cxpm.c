@@ -34,21 +34,20 @@
 #define CXPMPROG
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "XpmI.h"
 #ifdef USE_GETTEXT
-#include <locale.h>
-#include <libintl.h>
+#  include <locale.h>
+#  include <libintl.h>
 #else
-#define gettext(a) (a)
+#  define gettext(a) (a)
 #endif
 
 #undef xpmGetC
 #define xpmGetC(data) sGetc(data, data->stream.file)
-#define Getc sGetc
-#define Ungetc sUngetc
-
+#define Getc          sGetc
+#define Ungetc        sUngetc
 
 /*
  * special getc and ungetc counting read lines and characters
@@ -58,10 +57,13 @@ static int
 sGetc(xpmData *data, FILE *file)
 {
     int c = getc(data->stream.file);
-    if (c == '\n') {
+    if (c == '\n')
+    {
         data->lineNum++;
         data->charNum = 0;
-    } else if (c != EOF) {
+    }
+    else if (c != EOF)
+    {
         data->charNum++;
     }
     return c;
@@ -71,10 +73,13 @@ static void
 sUngetc(xpmData *data, int c, FILE *file)
 {
     ungetc(c, data->stream.file);
-    if (c == '\n') {
+    if (c == '\n')
+    {
         data->lineNum--;
         data->charNum = 0;
-    } else if (c != EOF) {
+    }
+    else if (c != EOF)
+    {
         data->charNum--;
     }
 }
@@ -82,57 +87,58 @@ sUngetc(xpmData *data, int c, FILE *file)
 /* include all the code we need (yeah, I know, quite ugly...) */
 #include "data.c"
 #include "parse.c"
-#include "RdFToI.c"	/* only for OpenReadFile and xpmDataClose */
+#include "RdFToI.c" /* only for OpenReadFile and xpmDataClose */
 #include "hashtab.c"
 #include "misc.c"
 #include "Attrib.c"
 #include "Image.c"
 
 static void
-ErrorMessage(
-    int ErrorStatus,
-    xpmData *data)
+ErrorMessage(int ErrorStatus, xpmData *data)
 
 {
     char *error = NULL;
 
-    switch (ErrorStatus) {
-    case XpmSuccess:
-	return;
-    case XpmOpenFailed:
-	/* L10N_Comments : Error produced when filename does not exist
+    switch (ErrorStatus)
+    {
+        case XpmSuccess:
+            return;
+        case XpmOpenFailed:
+    /* L10N_Comments : Error produced when filename does not exist
 	   or insufficient permissions to open (i.e. cxpm /no/such/file ) */
-	error = gettext("Cannot open file");
-	break;
-    case XpmFileInvalid:
-	/* L10N_Comments : Error produced when filename can be read, but
+            error = gettext("Cannot open file");
+            break;
+        case XpmFileInvalid:
+    /* L10N_Comments : Error produced when filename can be read, but
 	   is not an XPM file (i.e. cxpm /dev/null ) */
-	error = gettext("Invalid XPM file");
-	break;
-    case XpmNoMemory:
-	/* L10N_Comments : Error produced when filename can be read, but
+            error = gettext("Invalid XPM file");
+            break;
+        case XpmNoMemory:
+    /* L10N_Comments : Error produced when filename can be read, but
 	   is too big for memory
 	   (i.e. limit datasize 32 ; cxpm /usr/dt/backdrops/Crochet.pm ) */
-	error = gettext("Not enough memory");
-	break;
-    case XpmColorFailed:
-	/* L10N_Comments : Error produced when filename can be read, but
+            error = gettext("Not enough memory");
+            break;
+        case XpmColorFailed:
+    /* L10N_Comments : Error produced when filename can be read, but
 	   contains an invalid color specification (need to create test case)*/
-	error = gettext("Failed to parse color");
-	break;
+            error = gettext("Failed to parse color");
+            break;
     }
 
-    if (error) {
-	/* L10N_Comments : Wrapper around above Xpm errors - %s is
+    if (error)
+    {
+    /* L10N_Comments : Wrapper around above Xpm errors - %s is
 	   replaced with the contents of the error message retrieved above */
-	fprintf(stderr, gettext("Xpm Error: %s.\n"), error);
-	if (ErrorStatus == XpmFileInvalid && data)
-	/* L10N_Comments : Error produced when filename can be read, but
+        fprintf(stderr, gettext("Xpm Error: %s.\n"), error);
+        if (ErrorStatus == XpmFileInvalid && data)
+    /* L10N_Comments : Error produced when filename can be read, but
 	   is not an XPM file (i.e. cxpm /dev/null ) */
-	  fprintf(stderr, gettext("Error found line %d near character %d\n"),
-		  data->lineNum + 1,
-		  data->charNum + 1);
-	exit(1);
+            fprintf(stderr,
+                    gettext("Error found line %d near character %d\n"),
+                    data->lineNum + 1,
+                    data->charNum + 1);
+        exit(1);
     }
 }
 
@@ -140,32 +146,36 @@ int
 main(int argc, char **argv)
 {
     XpmImage image;
-    char *filename;
-    int ErrorStatus;
-    xpmData data;
+    char    *filename;
+    int      ErrorStatus;
+    xpmData  data;
 
 #ifdef USE_GETTEXT
-    setlocale(LC_ALL,"");
-    bindtextdomain("cxpm",LOCALEDIR);
+    setlocale(LC_ALL, "");
+    bindtextdomain("cxpm", LOCALEDIR);
     textdomain("cxpm");
 #endif
 
-    if (argc > 1) {
-        if (!strcmp(argv[1], "-?") || !strncmp(argv[1], "-h", 2)) {
-	    /* L10N_Comments : Usage message produced by running cxpm -h
+    if (argc > 1)
+    {
+        if (!strcmp(argv[1], "-?") || !strncmp(argv[1], "-h", 2))
+        {
+        /* L10N_Comments : Usage message produced by running cxpm -h
 		%s will be replaced by argv[0] (program name) */
-	    fprintf(stderr, gettext("Usage: %s [filename]\n"), argv[0]);
-	    exit(1);
-	}
+            fprintf(stderr, gettext("Usage: %s [filename]\n"), argv[0]);
+            exit(1);
+        }
         filename = argv[1];
-    } else {
+    }
+    else
+    {
         filename = NULL;
     }
 
     xpmInitXpmImage(&image);
 
     if ((ErrorStatus = OpenReadFile(filename, &data)) != XpmSuccess)
-	ErrorMessage(ErrorStatus, NULL);
+        ErrorMessage(ErrorStatus, NULL);
 
     ErrorStatus = xpmParseData(&data, &image, NULL);
     ErrorMessage(ErrorStatus, &data);

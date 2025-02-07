@@ -55,8 +55,8 @@
 #include "X11/Xmd.h"
 
 #ifdef VMS
-#include <unixio.h>
-#include <file.h>
+#  include <unixio.h>
+#  include <file.h>
 #endif
 
 /* The following should help people wanting to use their own memory allocation
@@ -68,67 +68,72 @@
  */
 #define XpmFree(ptr) free(ptr)
 
-#define XpmMalloc(size) malloc((size))
-#define XpmRealloc(ptr, size) realloc((ptr), (size))
+#define XpmMalloc(size)          malloc((size))
+#define XpmRealloc(ptr, size)    realloc((ptr), (size))
 #define XpmCalloc(nelem, elsize) calloc((nelem), (elsize))
 
-#include <stdint.h>	/* For SIZE_MAX */
+#include <stdint.h> /* For SIZE_MAX */
 #include <limits.h>
 #ifndef SIZE_MAX
-# ifdef ULONG_MAX
-#  define SIZE_MAX ULONG_MAX
-# else
-#  define SIZE_MAX UINT_MAX
-# endif
+#  ifdef ULONG_MAX
+#    define SIZE_MAX ULONG_MAX
+#  else
+#    define SIZE_MAX UINT_MAX
+#  endif
 #endif
 
 #ifdef O_CLOEXEC
-# define FOPEN_CLOEXEC "e"
+#  define FOPEN_CLOEXEC "e"
 #else
-# define FOPEN_CLOEXEC ""
-# define O_CLOEXEC 0
+#  define FOPEN_CLOEXEC ""
+#  define O_CLOEXEC     0
 #endif
 
 #define XPMMAXCMTLEN BUFSIZ
-typedef struct {
+
+typedef struct
+{
     unsigned int type;
+
     union {
-	FILE *file;
-	char **data;
-    }     stream;
-    char *cptr;
+        FILE  *file;
+        char **data;
+    } stream;
+
+    char        *cptr;
     unsigned int line;
-    int CommentLength;
-    char Comment[XPMMAXCMTLEN];
-    const char *Bcmt, *Ecmt;
-    char Bos, Eos;
-    int format;			/* 1 if XPM1, 0 otherwise */
+    int          CommentLength;
+    char         Comment[XPMMAXCMTLEN];
+    const char  *Bcmt, *Ecmt;
+    char         Bos, Eos;
+    int          format;   /* 1 if XPM1, 0 otherwise */
 #ifdef CXPMPROG
     int lineNum;
     int charNum;
 #endif
-}      xpmData;
+} xpmData;
 
-#define XPMARRAY 0
-#define XPMFILE  1
-#define XPMPIPE  2
+#define XPMARRAY  0
+#define XPMFILE   1
+#define XPMPIPE   2
 #define XPMBUFFER 3
 
 #define EOL '\n'
 #define TAB '\t'
 #define SPC ' '
 
-typedef struct {
-    const char *type;		/* key word */
-    const char *Bcmt;		/* string beginning comments */
-    const char *Ecmt;		/* string ending comments */
-    char Bos;			/* character beginning strings */
-    char Eos;			/* character ending strings */
-    const char *Strs;		/* strings separator */
-    const char *Dec;		/* data declaration string */
-    const char *Boa;		/* string beginning assignment */
-    const char *Eoa;		/* string ending assignment */
-}      xpmDataType;
+typedef struct
+{
+    const char *type;  /* key word */
+    const char *Bcmt;  /* string beginning comments */
+    const char *Ecmt;  /* string ending comments */
+    char        Bos;   /* character beginning strings */
+    char        Eos;   /* character ending strings */
+    const char *Strs;  /* strings separator */
+    const char *Dec;  /* data declaration string */
+    const char *Boa;  /* string beginning assignment */
+    const char *Eoa;  /* string ending assignment */
+} xpmDataType;
 
 extern _X_HIDDEN xpmDataType xpmDataTypes[];
 
@@ -136,117 +141,144 @@ extern _X_HIDDEN xpmDataType xpmDataTypes[];
  * rgb values and ascii names (from rgb text file) rgb values,
  * range of 0 -> 65535 color mnemonic of rgb value
  */
-typedef struct {
-    int r, g, b;
+typedef struct
+{
+    int   r, g, b;
     char *name;
-}      xpmRgbName;
+} xpmRgbName;
 
 /* Maximum number of rgb mnemonics allowed in rgb text file. */
 #define MAX_RGBNAMES 1024
 
 extern _X_HIDDEN const char *xpmColorKeys[];
 
-#define TRANSPARENT_COLOR "None"	/* this must be a string! */
+#define TRANSPARENT_COLOR "None" /* this must be a string! */
 
 /* number of xpmColorKeys */
 #define NKEYS 5
 
 /* XPM internal routines */
 
-HFUNC(xpmParseData, int, (xpmData *data, XpmImage *image, XpmInfo *info));
-HFUNC(xpmParseDataAndCreate, int, (Display *display, xpmData *data,
-				  XImage **image_return,
-				  XImage **shapeimage_return,
-				  XpmImage *image, XpmInfo *info,
-				  XpmAttributes *attributes));
+HFUNC(xpmParseData, int, (xpmData * data, XpmImage *image, XpmInfo *info));
+HFUNC(xpmParseDataAndCreate,
+      int,
+      (Display * display,
+       xpmData       *data,
+       XImage       **image_return,
+       XImage       **shapeimage_return,
+       XpmImage      *image,
+       XpmInfo       *info,
+       XpmAttributes *attributes));
 
-HFUNC(xpmFreeColorTable, void, (XpmColor *colorTable, int ncolors));
+HFUNC(xpmFreeColorTable, void, (XpmColor * colorTable, int ncolors));
 
-HFUNC(xpmInitAttributes, void, (XpmAttributes *attributes));
+HFUNC(xpmInitAttributes, void, (XpmAttributes * attributes));
 
-HFUNC(xpmInitXpmImage, void, (XpmImage *image));
+HFUNC(xpmInitXpmImage, void, (XpmImage * image));
 
-HFUNC(xpmInitXpmInfo, void, (XpmInfo *info));
+HFUNC(xpmInitXpmInfo, void, (XpmInfo * info));
 
-HFUNC(xpmSetInfoMask, void, (XpmInfo *info, XpmAttributes *attributes));
-HFUNC(xpmSetInfo, void, (XpmInfo *info, XpmAttributes *attributes));
-HFUNC(xpmSetAttributes, void, (XpmAttributes *attributes, XpmImage *image,
-			      XpmInfo *info));
+HFUNC(xpmSetInfoMask, void, (XpmInfo * info, XpmAttributes *attributes));
+HFUNC(xpmSetInfo, void, (XpmInfo * info, XpmAttributes *attributes));
+HFUNC(xpmSetAttributes,
+      void,
+      (XpmAttributes * attributes, XpmImage *image, XpmInfo *info));
 
-HFUNC(xpmCreatePixmapFromImage, int, (Display *display, Drawable d,
-				      XImage *ximage, Pixmap *pixmap_return));
+HFUNC(xpmCreatePixmapFromImage,
+      int,
+      (Display * display, Drawable d, XImage *ximage, Pixmap *pixmap_return));
 
-HFUNC(xpmCreateImageFromPixmap, void, (Display *display, Pixmap pixmap,
-				      XImage **ximage_return,
-				      unsigned int *width,
-				      unsigned int *height));
+HFUNC(xpmCreateImageFromPixmap,
+      void,
+      (Display * display,
+       Pixmap        pixmap,
+       XImage      **ximage_return,
+       unsigned int *width,
+       unsigned int *height));
 
 /* structures and functions related to hastable code */
 
-typedef struct _xpmHashAtom {
+typedef struct _xpmHashAtom
+{
     char *name;
     void *data;
-}      *xpmHashAtom;
+} *xpmHashAtom;
 
-typedef struct {
+typedef struct
+{
     unsigned int size;
     unsigned int limit;
     unsigned int used;
     xpmHashAtom *atomTable;
-}      xpmHashTable;
+} xpmHashTable;
 
-HFUNC(xpmHashTableInit, int, (xpmHashTable *table));
-HFUNC(xpmHashTableFree, void, (xpmHashTable *table));
-HFUNC(xpmHashSlot, xpmHashAtom *, (xpmHashTable *table, char *s));
-HFUNC(xpmHashIntern, int, (xpmHashTable *table, char *tag, void *data));
+HFUNC(xpmHashTableInit, int, (xpmHashTable * table));
+HFUNC(xpmHashTableFree, void, (xpmHashTable * table));
+HFUNC(xpmHashSlot, xpmHashAtom *, (xpmHashTable * table, char *s));
+HFUNC(xpmHashIntern, int, (xpmHashTable * table, char *tag, void *data));
 
 #if defined(_MSC_VER) && defined(_M_X64)
-#define HashAtomData(i) ((void *)(long long)i)
-#define HashColorIndex(slot) ((unsigned long long)((*slot)->data))
+#  define HashAtomData(i)      ((void *)(long long)i)
+#  define HashColorIndex(slot) ((unsigned long long)((*slot)->data))
 #else
-#define HashAtomData(i) ((void *)(long)i)
-#define HashColorIndex(slot) ((unsigned long)((*slot)->data))
+#  define HashAtomData(i)      ((void *)(long)i)
+#  define HashColorIndex(slot) ((unsigned long)((*slot)->data))
 #endif
 #define USE_HASHTABLE (cpp > 2 && ncolors > 4)
 
 /* I/O utility */
 
-HFUNC(xpmNextString, int, (xpmData *mdata));
-HFUNC(xpmNextUI, int, (xpmData *mdata, unsigned int *ui_return));
-HFUNC(xpmGetString, int, (xpmData *mdata, char **sptr, unsigned int *l));
+HFUNC(xpmNextString, int, (xpmData * mdata));
+HFUNC(xpmNextUI, int, (xpmData * mdata, unsigned int *ui_return));
+HFUNC(xpmGetString, int, (xpmData * mdata, char **sptr, unsigned int *l));
 
-#define xpmGetC(mdata) \
-	((!mdata->type || mdata->type == XPMBUFFER) ? \
-	 (*mdata->cptr++) : (getc(mdata->stream.file)))
+#define xpmGetC(mdata)                                             \
+    ((!mdata->type || mdata->type == XPMBUFFER) ? (*mdata->cptr++) \
+                                                : (getc(mdata->stream.file)))
 
-HFUNC(xpmNextWord, unsigned int,
-     (xpmData *mdata, char *buf, unsigned int buflen));
-HFUNC(xpmGetCmt, int, (xpmData *mdata, char **cmt));
-HFUNC(xpmParseHeader, int, (xpmData *mdata));
-HFUNC(xpmParseValues, int, (xpmData *data, unsigned int *width,
-			   unsigned int *height, unsigned int *ncolors,
-			   unsigned int *cpp, unsigned int *x_hotspot,
-			   unsigned int *y_hotspot, unsigned int *hotspot,
-			   unsigned int *extensions));
+HFUNC(xpmNextWord,
+      unsigned int,
+      (xpmData * mdata, char *buf, unsigned int buflen));
+HFUNC(xpmGetCmt, int, (xpmData * mdata, char **cmt));
+HFUNC(xpmParseHeader, int, (xpmData * mdata));
+HFUNC(xpmParseValues,
+      int,
+      (xpmData * data,
+       unsigned int *width,
+       unsigned int *height,
+       unsigned int *ncolors,
+       unsigned int *cpp,
+       unsigned int *x_hotspot,
+       unsigned int *y_hotspot,
+       unsigned int *hotspot,
+       unsigned int *extensions));
 
-HFUNC(xpmParseColors, int, (xpmData *data, unsigned int ncolors,
-			   unsigned int cpp, XpmColor **colorTablePtr,
-			   xpmHashTable *hashtable));
+HFUNC(xpmParseColors,
+      int,
+      (xpmData * data,
+       unsigned int  ncolors,
+       unsigned int  cpp,
+       XpmColor    **colorTablePtr,
+       xpmHashTable *hashtable));
 
-HFUNC(xpmParseExtensions, int, (xpmData *data, XpmExtension **extensions,
-			       unsigned int *nextensions));
+HFUNC(xpmParseExtensions,
+      int,
+      (xpmData * data, XpmExtension **extensions, unsigned int *nextensions));
 
 /* RGB utility */
 
 HFUNC(xpmReadRgbNames, int, (const char *rgb_fname, xpmRgbName *rgbn));
-HFUNC(xpmGetRgbName, char *, (xpmRgbName *rgbn, int rgbn_max,
-			     int red, int green, int blue));
-HFUNC(xpmFreeRgbNames, void, (xpmRgbName *rgbn, int rgbn_max));
+HFUNC(xpmGetRgbName,
+      char *,
+      (xpmRgbName * rgbn, int rgbn_max, int red, int green, int blue));
+HFUNC(xpmFreeRgbNames, void, (xpmRgbName * rgbn, int rgbn_max));
 
-HFUNC(xpm_xynormalizeimagebits, void, (register unsigned char *bp,
-				      register XImage *img));
-HFUNC(xpm_znormalizeimagebits, void, (register unsigned char *bp,
-				     register XImage *img));
+HFUNC(xpm_xynormalizeimagebits,
+      void,
+      (register unsigned char *bp, register XImage *img));
+HFUNC(xpm_znormalizeimagebits,
+      void,
+      (register unsigned char *bp, register XImage *img));
 
 /*
  * Macros
@@ -268,20 +300,20 @@ HFUNC(xpm_znormalizeimagebits, void, (register unsigned char *bp,
  *
  */
 
-#define XYNORMALIZE(bp, img) \
+#define XYNORMALIZE(bp, img)                                                  \
     if ((img->byte_order == MSBFirst) || (img->bitmap_bit_order == MSBFirst)) \
-	xpm_xynormalizeimagebits((unsigned char *)(bp), img)
+    xpm_xynormalizeimagebits((unsigned char *)(bp), img)
 
-#define ZNORMALIZE(bp, img) \
+#define ZNORMALIZE(bp, img)          \
     if (img->byte_order == MSBFirst) \
-	xpm_znormalizeimagebits((unsigned char *)(bp), img)
+    xpm_znormalizeimagebits((unsigned char *)(bp), img)
 
-#define XYINDEX(x, y, img) \
+#define XYINDEX(x, y, img)        \
     ((y) * img->bytes_per_line) + \
-    (((x) + img->xoffset) / img->bitmap_unit) * (img->bitmap_unit >> 3)
+        (((x) + img->xoffset) / img->bitmap_unit) * (img->bitmap_unit >> 3)
 
-#define ZINDEX(x, y, img) ((y) * img->bytes_per_line) + \
-    (((x) * img->bits_per_pixel) >> 3)
+#define ZINDEX(x, y, img) \
+    ((y) * img->bytes_per_line) + (((x) * img->bits_per_pixel) >> 3)
 
 #define ZINDEX32(x, y, img) ((y) * img->bytes_per_line) + ((x) << 2)
 
@@ -291,7 +323,8 @@ HFUNC(xpm_znormalizeimagebits, void, (register unsigned char *bp,
 
 #define ZINDEX1(x, y, img) ((y) * img->bytes_per_line) + ((x) >> 3)
 
-HFUNC(xpmatoui, unsigned int,
-     (char *p, unsigned int l, unsigned int *ui_return));
+HFUNC(xpmatoui,
+      unsigned int,
+      (char *p, unsigned int l, unsigned int *ui_return));
 
 #endif

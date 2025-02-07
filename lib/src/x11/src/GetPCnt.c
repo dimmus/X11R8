@@ -25,28 +25,26 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XGetPointerControl(
-     register Display *dpy,
+XGetPointerControl(register Display *dpy,
      /* the following are return only vars */
-     int *accel_numer,
-     int *accel_denom,
-     int *threshold)
+                   int *accel_numer,
+                   int *accel_denom,
+                   int *threshold)
 {
     xGetPointerControlReply rep;
-    _X_UNUSED xReq *req;
+    _X_UNUSED xReq         *req;
     LockDisplay(dpy);
     GetEmptyReq(GetPointerControl, req);
-    (void) _XReply (dpy, (xReply *)&rep, 0, xTrue);
+    (void)_XReply(dpy, (xReply *)&rep, 0, xTrue);
     *accel_numer = rep.accelNumerator;
     *accel_denom = rep.accelDenominator;
-    *threshold = rep.threshold;
+    *threshold   = rep.threshold;
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

@@ -25,27 +25,26 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include <limits.h>
 
 #ifdef USE_DYNAMIC_XCURSOR
-void
-_XNoticeCreateBitmap (Display	    *dpy,
-		      Pixmap	    pid,
-		      unsigned int  width,
-		      unsigned int  height);
+void _XNoticeCreateBitmap(Display     *dpy,
+                          Pixmap       pid,
+                          unsigned int width,
+                          unsigned int height);
 #endif
 
-Pixmap XCreatePixmap (
-    register Display *dpy,
-    Drawable d,
-    unsigned int width,
-    unsigned int height,
-    unsigned int depth)
+Pixmap
+XCreatePixmap(register Display *dpy,
+              Drawable          d,
+              unsigned int      width,
+              unsigned int      height,
+              unsigned int      depth)
 {
-    Pixmap pid;
+    Pixmap                     pid;
     register xCreatePixmapReq *req;
 
     /*
@@ -53,24 +52,20 @@ Pixmap XCreatePixmap (
      * than the X11 protocol has room for, since that's how callers expect
      * to get notified of errors.
      */
-    if (width > USHRT_MAX)
-        width = 0;
-    if (height > USHRT_MAX)
-        height = 0;
+    if (width > USHRT_MAX) width = 0;
+    if (height > USHRT_MAX) height = 0;
 
     LockDisplay(dpy);
     GetReq(CreatePixmap, req);
     req->drawable = d;
-    req->width = width;
-    req->height = height;
-    req->depth = depth;
+    req->width    = width;
+    req->height   = height;
+    req->depth    = depth;
     pid = req->pid = XAllocID(dpy);
     UnlockDisplay(dpy);
     SyncHandle();
 #ifdef USE_DYNAMIC_XCURSOR
-    if (depth == 1)
-	_XNoticeCreateBitmap (dpy, pid, width, height);
+    if (depth == 1) _XNoticeCreateBitmap(dpy, pid, width, height);
 #endif
     return (pid);
 }
-

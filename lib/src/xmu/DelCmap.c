@@ -29,7 +29,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xlib.h"
 #include "X11/Xutil.h"
@@ -48,23 +48,25 @@ XmuDeleteStandardColormap(Display *dpy, int screen, Atom property)
       * property	- specifies the standard colormap property
       */
 {
-    XStandardColormap	*stdcmaps, *s;
-    int			count = 0;
+    XStandardColormap *stdcmaps, *s;
+    int                count = 0;
 
-    if (XGetRGBColormaps(dpy, RootWindow(dpy, screen), &stdcmaps, &count,
-			 property))
+    if (XGetRGBColormaps(dpy,
+                         RootWindow(dpy, screen),
+                         &stdcmaps,
+                         &count,
+                         property))
     {
-	for (s=stdcmaps; count > 0; count--, s++) {
-	    if ((s->killid == ReleaseByFreeingColormap) &&
-		(s->colormap != None) &&
-		(s->colormap != DefaultColormap(dpy, screen)))
-		XFreeColormap(dpy, s->colormap);
-	    else if (s->killid != None)
-		XKillClient(dpy, s->killid);
-	}
-	XDeleteProperty(dpy, RootWindow(dpy, screen), property);
-	XFree((char *) stdcmaps);
-	XSync(dpy, False);
+        for (s = stdcmaps; count > 0; count--, s++)
+        {
+            if ((s->killid == ReleaseByFreeingColormap) &&
+                (s->colormap != None) &&
+                (s->colormap != DefaultColormap(dpy, screen)))
+                XFreeColormap(dpy, s->colormap);
+            else if (s->killid != None) XKillClient(dpy, s->killid);
+        }
+        XDeleteProperty(dpy, RootWindow(dpy, screen), property);
+        XFree((char *)stdcmaps);
+        XSync(dpy, False);
     }
 }
-

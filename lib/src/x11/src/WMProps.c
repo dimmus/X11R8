@@ -51,14 +51,13 @@ SOFTWARE.
 ******************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xlibint.h"
 #include "X11/Xatom.h"
 #include "X11/Xutil.h"
 #include "X11/Xos.h"
 #include "X11/Xlocale.h"
-
 
 /*
  * XSetWMProperties sets the following properties:
@@ -72,68 +71,77 @@ SOFTWARE.
   *	WM_LOCALE_NAME	  type: STRING		format: 8
  */
 
-void XSetWMProperties (
-     Display *dpy,
-     Window w,			/* window to decorate */
-     XTextProperty *windowName,	/* name of application */
-     XTextProperty *iconName,	/* name string for icon */
-     char **argv,		/* command line */
-     int argc,			/* size of command line */
-     XSizeHints *sizeHints,	/* size hints for window in its normal state */
-     XWMHints *wmHints,		/* miscellaneous window manager hints */
-     XClassHint *classHints)	/* resource name and class */
+void
+XSetWMProperties(
+    Display       *dpy,
+    Window         w,   /* window to decorate */
+    XTextProperty *windowName, /* name of application */
+    XTextProperty *iconName, /* name string for icon */
+    char         **argv,  /* command line */
+    int            argc,   /* size of command line */
+    XSizeHints    *sizeHints, /* size hints for window in its normal state */
+    XWMHints      *wmHints,  /* miscellaneous window manager hints */
+    XClassHint    *classHints) /* resource name and class */
 {
     XTextProperty textprop;
-    char hostName[256];
-    int len = _XGetHostname (hostName, sizeof hostName);
-    char *locale;
+    char          hostName[256];
+    int           len = _XGetHostname(hostName, sizeof hostName);
+    char         *locale;
 
     /* set names of window and icon */
-    if (windowName) XSetWMName (dpy, w, windowName);
-    if (iconName) XSetWMIconName (dpy, w, iconName);
+    if (windowName) XSetWMName(dpy, w, windowName);
+    if (iconName) XSetWMIconName(dpy, w, iconName);
 
     /* set the command if given */
-    if (argv) {
-	/*
+    if (argv)
+    {
+    /*
 	 * for UNIX and other operating systems which use nul-terminated
 	 * arrays of STRINGs.
 	 */
-	XSetCommand (dpy, w, argv, argc);
+        XSetCommand(dpy, w, argv, argc);
     }
 
     /* set the name of the machine on which this application is running */
-    textprop.value = (unsigned char *) hostName;
+    textprop.value    = (unsigned char *)hostName;
     textprop.encoding = XA_STRING;
-    textprop.format = 8;
-    textprop.nitems = (unsigned long) len;
-    XSetWMClientMachine (dpy, w, &textprop);
+    textprop.format   = 8;
+    textprop.nitems   = (unsigned long)len;
+    XSetWMClientMachine(dpy, w, &textprop);
 
     /* set hints about how geometry and window manager interaction */
-    if (sizeHints) XSetWMNormalHints (dpy, w, sizeHints);
-    if (wmHints) XSetWMHints (dpy, w, wmHints);
-    if (classHints) {
-	XClassHint tmp;
+    if (sizeHints) XSetWMNormalHints(dpy, w, sizeHints);
+    if (wmHints) XSetWMHints(dpy, w, wmHints);
+    if (classHints)
+    {
+        XClassHint tmp;
 
-	if (!classHints->res_name) {
-	    tmp.res_name = getenv ("RESOURCE_NAME");
-	    if (!tmp.res_name && argv && argv[0]) {
-		/*
+        if (!classHints->res_name)
+        {
+            tmp.res_name = getenv("RESOURCE_NAME");
+            if (!tmp.res_name && argv && argv[0])
+            {
+        /*
 		 * UNIX uses /dir/subdir/.../basename; other operating
 		 * systems will have to change this.
 		 */
-		char *cp = strrchr (argv[0], '/');
-		tmp.res_name = (cp ? cp + 1 : argv[0]);
-	    }
-	    tmp.res_class = classHints->res_class;
-	    classHints = &tmp;
-	}
-	XSetClassHint (dpy, w, classHints);
+                char *cp     = strrchr(argv[0], '/');
+                tmp.res_name = (cp ? cp + 1 : argv[0]);
+            }
+            tmp.res_class = classHints->res_class;
+            classHints    = &tmp;
+        }
+        XSetClassHint(dpy, w, classHints);
     }
 
     locale = setlocale(LC_CTYPE, (char *)NULL);
     if (locale)
-        XChangeProperty (dpy, w, XInternAtom(dpy, "WM_LOCALE_NAME", False),
-        XA_STRING, 8, PropModeReplace,
-        (unsigned char *)locale, (int) strlen(locale));
+        XChangeProperty(dpy,
+                        w,
+                        XInternAtom(dpy, "WM_LOCALE_NAME", False),
+                        XA_STRING,
+                        8,
+                        PropModeReplace,
+                        (unsigned char *)locale,
+                        (int)strlen(locale));
 }
-

@@ -24,37 +24,39 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xlcint.h"
 
 XOM
-XOpenOM(Display *dpy, XrmDatabase rdb, _Xconst char *res_name,
-	_Xconst char *res_class)
+XOpenOM(Display      *dpy,
+        XrmDatabase   rdb,
+        _Xconst char *res_name,
+        _Xconst char *res_class)
 {
-    XLCd lcd = _XOpenLC((char *) NULL);
+    XLCd lcd = _XOpenLC((char *)NULL);
 
-    if (lcd == NULL)
-	return (XOM) NULL;
+    if (lcd == NULL) return (XOM)NULL;
 
     if (lcd->methods->open_om)
-	return (*lcd->methods->open_om)(lcd, dpy, rdb, res_name, res_class);
+        return (*lcd->methods->open_om)(lcd, dpy, rdb, res_name, res_class);
 
-    return (XOM) NULL;
+    return (XOM)NULL;
 }
 
 Status
 XCloseOM(XOM om)
 {
-    XOC oc, next;
+    XOC  oc, next;
     XLCd lcd = om->core.lcd;
 
     next = om->core.oc_list;
 
-    while ((oc = next)) {
-	next = oc->core.next;
-	(*oc->methods->destroy)(oc);
+    while ((oc = next))
+    {
+        next = oc->core.next;
+        (*oc->methods->destroy)(oc);
     }
 
     om->core.oc_list = NULL;
@@ -67,10 +69,10 @@ XCloseOM(XOM om)
 char *
 XSetOMValues(XOM om, ...)
 {
-    va_list var;
+    va_list    var;
     XlcArgList args;
-    char *ret;
-    int num_args;
+    char      *ret;
+    int        num_args;
 
     va_start(var, om);
     _XlcCountVaList(var, &num_args);
@@ -80,8 +82,7 @@ XSetOMValues(XOM om, ...)
     _XlcVaToArgList(var, num_args, &args);
     va_end(var);
 
-    if (args == (XlcArgList) NULL)
-	return (char *) NULL;
+    if (args == (XlcArgList)NULL) return (char *)NULL;
 
     ret = (*om->methods->set_values)(om, args, num_args);
 
@@ -93,10 +94,10 @@ XSetOMValues(XOM om, ...)
 char *
 XGetOMValues(XOM om, ...)
 {
-    va_list var;
+    va_list    var;
     XlcArgList args;
-    char *ret;
-    int num_args;
+    char      *ret;
+    int        num_args;
 
     va_start(var, om);
     _XlcCountVaList(var, &num_args);
@@ -106,8 +107,7 @@ XGetOMValues(XOM om, ...)
     _XlcVaToArgList(var, num_args, &args);
     va_end(var);
 
-    if (args == (XlcArgList) NULL)
-	return (char *) NULL;
+    if (args == (XlcArgList)NULL) return (char *)NULL;
 
     ret = (*om->methods->get_values)(om, args, num_args);
 

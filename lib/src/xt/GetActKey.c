@@ -69,7 +69,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "IntrinsicI.h"
 
@@ -77,29 +77,31 @@ KeySym
 XtGetActionKeysym(XEvent *event, Modifiers *modifiers_return)
 {
     TMKeyContext tm_context;
-    Modifiers modifiers;
-    KeySym keysym, retval;
+    Modifiers    modifiers;
+    KeySym       keysym, retval;
 
     LOCK_PROCESS;
     tm_context = _XtGetPerDisplay(event->xany.display)->tm_context;
 
-    if (event->xany.type != KeyPress && event->xany.type != KeyRelease) {
+    if (event->xany.type != KeyPress && event->xany.type != KeyRelease)
+    {
         UNLOCK_PROCESS;
         return NoSymbol;
     }
-    if (tm_context != NULL
-        && event == tm_context->event
-        && event->xany.serial == tm_context->serial) {
-
-        if (modifiers_return != NULL)
-            *modifiers_return = tm_context->modifiers;
+    if (tm_context != NULL && event == tm_context->event &&
+        event->xany.serial == tm_context->serial)
+    {
+        if (modifiers_return != NULL) *modifiers_return = tm_context->modifiers;
         retval = tm_context->keysym;
         UNLOCK_PROCESS;
         return retval;
     }
 
-    XtTranslateKeycode(event->xany.display, (KeyCode)event->xkey.keycode,
-                       event->xkey.state, &modifiers, &keysym);
+    XtTranslateKeycode(event->xany.display,
+                       (KeyCode)event->xkey.keycode,
+                       event->xkey.state,
+                       &modifiers,
+                       &keysym);
 
     if (modifiers_return != NULL)
         *modifiers_return = event->xkey.state & modifiers;

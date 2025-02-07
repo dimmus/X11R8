@@ -25,7 +25,7 @@
 #define _XCURSORINT_H_
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include "X11/Xlib.h"
@@ -33,22 +33,23 @@
 #include "X11/extensions/Xrender.h"
 
 #ifdef HAVE_XFIXES
-#include "X11/extensions/Xfixes.h"
+#  include "X11/extensions/Xfixes.h"
 #endif
 
 #include "Xcursor.h"
 
 #include <fcntl.h>
 #ifdef O_CLOEXEC
-#define FOPEN_CLOEXEC "e"
+#  define FOPEN_CLOEXEC "e"
 #else
-#define FOPEN_CLOEXEC ""
+#  define FOPEN_CLOEXEC ""
 #endif
 
-typedef struct _XcursorFontInfo {
-    struct _XcursorFontInfo	*next;
-    Font			font;
-    XcursorBool			is_cursor_font;
+typedef struct _XcursorFontInfo
+{
+    struct _XcursorFontInfo *next;
+    Font                     font;
+    XcursorBool              is_cursor_font;
 } XcursorFontInfo;
 
 /*
@@ -62,97 +63,100 @@ typedef struct _XcursorFontInfo {
  */
 
 /* large bitmaps are unlikely to be cursors */
-#define MAX_BITMAP_CURSOR_SIZE	64
+#define MAX_BITMAP_CURSOR_SIZE 64
 /* don't need to remember very many; in fact, 2 is likely sufficient */
-#define NUM_BITMAPS	    8
+#define NUM_BITMAPS 8
 
-typedef struct _XcursorBitmapInfo {
-    Pixmap	    bitmap;
-    unsigned long   sequence;
-    unsigned int    width, height;
-    Bool	    has_image;
-    unsigned char   hash[XCURSOR_BITMAP_HASH_SIZE];
+typedef struct _XcursorBitmapInfo
+{
+    Pixmap        bitmap;
+    unsigned long sequence;
+    unsigned int  width, height;
+    Bool          has_image;
+    unsigned char hash[XCURSOR_BITMAP_HASH_SIZE];
 } XcursorBitmapInfo;
 
-typedef enum _XcursorDither {
+typedef enum _XcursorDither
+{
     XcursorDitherThreshold,
     XcursorDitherMedian,
     XcursorDitherOrdered,
     XcursorDitherDiffuse
 } XcursorDither;
 
-typedef struct _XcursorDisplayInfo {
-    struct _XcursorDisplayInfo	*next;
-    Display			*display;
-    XExtCodes			*codes;
-    XcursorBool			has_render_cursor;
-    XcursorBool			has_anim_cursor;
-    XcursorBool			resized_cursors;
-    XcursorBool			theme_core;
-    int				size;
-    XcursorFontInfo		*fonts;
-    char			*theme;
-    char                        *theme_from_config;
-    XcursorDither		dither;
-    XcursorBitmapInfo		bitmaps[NUM_BITMAPS];
+typedef struct _XcursorDisplayInfo
+{
+    struct _XcursorDisplayInfo *next;
+    Display                    *display;
+    XExtCodes                  *codes;
+    XcursorBool                 has_render_cursor;
+    XcursorBool                 has_anim_cursor;
+    XcursorBool                 resized_cursors;
+    XcursorBool                 theme_core;
+    int                         size;
+    XcursorFontInfo            *fonts;
+    char                       *theme;
+    char                       *theme_from_config;
+    XcursorDither               dither;
+    XcursorBitmapInfo           bitmaps[NUM_BITMAPS];
 } XcursorDisplayInfo;
 
-XcursorDisplayInfo *
-_XcursorGetDisplayInfo (Display *dpy);
+XcursorDisplayInfo *_XcursorGetDisplayInfo(Display *dpy);
 
-Cursor
-_XcursorCreateGlyphCursor(Display	    *dpy,
-			  Font		    source_font,
-			  Font		    mask_font,
-			  unsigned int	    source_char,
-			  unsigned int	    mask_char,
-			  XColor _Xconst    *foreground,
-			  XColor _Xconst    *background);
+Cursor _XcursorCreateGlyphCursor(Display        *dpy,
+                                 Font            source_font,
+                                 Font            mask_font,
+                                 unsigned int    source_char,
+                                 unsigned int    mask_char,
+                                 XColor _Xconst *foreground,
+                                 XColor _Xconst *background);
 
-Cursor
-_XcursorCreateFontCursor (Display *dpy, unsigned int shape);
+Cursor _XcursorCreateFontCursor(Display *dpy, unsigned int shape);
 
 /* provide for XCURSOR_RESIZED */
-XcursorImage *
-_XcursorFileLoadImage (FILE *file, int size, XcursorBool resize);
+XcursorImage *_XcursorFileLoadImage(FILE *file, int size, XcursorBool resize);
 
 XcursorImages *
-_XcursorXcFileLoadImages (XcursorFile *file, int size, XcursorBool resize);
+_XcursorXcFileLoadImages(XcursorFile *file, int size, XcursorBool resize);
+
+XcursorImages *_XcursorFileLoadImages(FILE *file, int size, XcursorBool resize);
 
 XcursorImages *
-_XcursorFileLoadImages (FILE *file, int size, XcursorBool resize);
+_XcursorFilenameLoadImages(const char *file, int size, XcursorBool resize);
 
-XcursorImages *
-_XcursorFilenameLoadImages (const char *file, int size, XcursorBool resize);
-
-XcursorImages *
-_XcursorShapeLoadImages (Display *dpy, unsigned int shape);
+XcursorImages *_XcursorShapeLoadImages(Display *dpy, unsigned int shape);
 
 #ifdef DEBUG_XCURSOR
-void     _XcursorTrace(const char *fmt, ...) __attribute__((format(printf,1,2)));
-void    *_XcursorReturnAddr(void *addr);
-int      _XcursorReturnCode(int code);
+void  _XcursorTrace(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
+void *_XcursorReturnAddr(void *addr);
+int   _XcursorReturnCode(int code);
 unsigned long _XcursorReturnLong(unsigned long code);
-unsigned _XcursorReturnUint(unsigned code);
-void     _XcursorReturnVoid(void);
-#define T_CALLED(func) "called: { " #func
-#define T_OPTION(opts) "option: : " #opts
-#define T_RETURN(form) "return: } %" #form "\n"
-#define enterFunc(params) _XcursorTrace params
-#define traceOpts(params) _XcursorTrace params
-#define returnAddr(addr) return _XcursorReturnAddr(addr)
-#define returnCode(code) return _XcursorReturnCode(code)
-#define returnLong(code) return _XcursorReturnLong(code)
-#define returnUint(code) return _XcursorReturnUint(code)
-#define returnVoid()     do { _XcursorReturnVoid(); return; } while (0)
+unsigned      _XcursorReturnUint(unsigned code);
+void          _XcursorReturnVoid(void);
+#  define T_CALLED(func)    "called: { " #func
+#  define T_OPTION(opts)    "option: : " #opts
+#  define T_RETURN(form)    "return: } %" #form "\n"
+#  define enterFunc(params) _XcursorTrace params
+#  define traceOpts(params) _XcursorTrace params
+#  define returnAddr(addr)  return _XcursorReturnAddr(addr)
+#  define returnCode(code)  return _XcursorReturnCode(code)
+#  define returnLong(code)  return _XcursorReturnLong(code)
+#  define returnUint(code)  return _XcursorReturnUint(code)
+#  define returnVoid()          \
+      do                        \
+      {                         \
+          _XcursorReturnVoid(); \
+          return;               \
+      }                         \
+      while (0)
 #else
-#define enterFunc(params) /* nothing */
-#define traceOpts(params) /* nothing */
-#define returnAddr(addr) return (addr)
-#define returnCode(code) return (code)
-#define returnLong(code) return (code)
-#define returnUint(code) return (code)
-#define returnVoid()     return
+#  define enterFunc(params) /* nothing */
+#  define traceOpts(params) /* nothing */
+#  define returnAddr(addr)  return (addr)
+#  define returnCode(code)  return (code)
+#  define returnLong(code)  return (code)
+#  define returnUint(code)  return (code)
+#  define returnVoid()      return
 #endif
 
 #define NonNull(p) ((p) != NULL ? (p) : "<null>")

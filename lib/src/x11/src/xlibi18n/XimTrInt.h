@@ -54,12 +54,10 @@ PERFORMANCE OF THIS SOFTWARE.
 
 #include "Ximint.h"
 
-typedef struct {
-    const char	*transportname;
-    Bool	 (*config)(
-			Xim,
-			char *
-    );
+typedef struct
+{
+    const char *transportname;
+    Bool (*config)(Xim, char *);
 } TransportSW;
 
 extern TransportSW _XimTransportRec[];
@@ -68,17 +66,11 @@ extern TransportSW _XimTransportRec[];
  * Global symbols
  */
 
-extern Bool	_XimXConf(
-    Xim		 im,
-    char	*address
-);
+extern Bool _XimXConf(Xim im, char *address);
 
 #if defined(TCPCONN) || defined(UNIXCONN)
 
-extern Bool	_XimTransConf(
-    Xim		 im,
-    char	*address
-);
+extern Bool _XimTransConf(Xim im, char *address);
 
 #endif
 

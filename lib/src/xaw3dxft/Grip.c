@@ -47,7 +47,7 @@ SOFTWARE.
 ******************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 /*
  * Grip.c - Grip Widget (Used by Paned Widget)
@@ -59,90 +59,95 @@ SOFTWARE.
 #include <X11/Xaw3dxft/GripP.h>
 
 static XtResource resources[] = {
-   {XtNwidth, XtCWidth, XtRDimension, sizeof(Dimension),
-      XtOffsetOf(GripRec, core.width), XtRImmediate,
-      (XtPointer) DEFAULT_GRIP_SIZE},
-   {XtNheight, XtCHeight, XtRDimension, sizeof(Dimension),
-      XtOffsetOf(GripRec, core.height), XtRImmediate,
-      (XtPointer) DEFAULT_GRIP_SIZE},
-   {XtNforeground, XtCForeground, XtRPixel, sizeof(Pixel),
-      XtOffsetOf(GripRec, core.background_pixel), XtRString,
-      XtDefaultForeground},
-   {XtNborderWidth, XtCBorderWidth, XtRDimension, sizeof(Dimension),
-      XtOffsetOf(GripRec, core.border_width), XtRImmediate, (XtPointer)0},
-   {XtNcallback, XtCCallback, XtRCallback, sizeof(XtPointer),
-      XtOffsetOf(GripRec, grip.grip_action), XtRCallback, NULL},
+    { XtNwidth,
+     XtCWidth,       XtRDimension,
+     sizeof(Dimension),
+     XtOffsetOf(GripRec, core.width),
+     XtRImmediate, (XtPointer)DEFAULT_GRIP_SIZE },
+    { XtNheight,
+     XtCHeight,      XtRDimension,
+     sizeof(Dimension),
+     XtOffsetOf(GripRec, core.height),
+     XtRImmediate, (XtPointer)DEFAULT_GRIP_SIZE },
+    { XtNforeground,
+     XtCForeground,  XtRPixel,
+     sizeof(Pixel),
+     XtOffsetOf(GripRec, core.background_pixel),
+     XtRString,    XtDefaultForeground          },
+    { XtNborderWidth,
+     XtCBorderWidth, XtRDimension,
+     sizeof(Dimension),
+     XtOffsetOf(GripRec, core.border_width),
+     XtRImmediate, (XtPointer)0                 },
+    { XtNcallback,
+     XtCCallback,    XtRCallback,
+     sizeof(XtPointer),
+     XtOffsetOf(GripRec, grip.grip_action),
+     XtRCallback,  NULL                         },
 };
 
 static void GripAction(Widget, XEvent *, String *, Cardinal *);
 
-static XtActionsRec actionsList[] =
-{
-  {"GripAction",      GripAction},
+static XtActionsRec actionsList[] = {
+    { "GripAction", GripAction },
 };
 
 #define SuperClass (&threeDClassRec)
 
 GripClassRec gripClassRec = {
-   {
-/* core class fields */
-    /* superclass         */   (WidgetClass) SuperClass,
-    /* class name         */   "Grip",
-    /* size               */   sizeof(GripRec),
-    /* class initialize   */   XawInitializeWidgetSet,
-    /* class_part_init    */   NULL,
-    /* class_inited       */   FALSE,
-    /* initialize         */   NULL,
-    /* initialize_hook    */   NULL,
-    /* realize            */   XtInheritRealize,
-    /* actions            */   actionsList,
-    /* num_actions        */   XtNumber(actionsList),
-    /* resources          */   resources,
-    /* resource_count     */   XtNumber(resources),
-    /* xrm_class          */   NULLQUARK,
-    /* compress_motion    */   TRUE,
-    /* compress_exposure  */   TRUE,
-    /* compress_enterleave*/   TRUE,
-    /* visible_interest   */   FALSE,
-    /* destroy            */   NULL,
-    /* resize             */   NULL,
-    /* expose             */   XtInheritExpose,
-    /* set_values         */   NULL,
-    /* set_values_hook    */   NULL,
-    /* set_values_almost  */   XtInheritSetValuesAlmost,
-    /* get_values_hook    */   NULL,
-    /* accept_focus       */   NULL,
-    /* version            */   XtVersion,
-    /* callback_private   */   NULL,
-    /* tm_table           */   NULL,
-    /* query_geometry     */   XtInheritQueryGeometry,
-    /* display_accelerator*/   XtInheritDisplayAccelerator,
-    /* extension          */   NULL
-   },
+    {/* core class fields */
+      /* superclass         */ (WidgetClass)SuperClass,
+     /* class name         */ "Grip",
+     /* size               */ sizeof(GripRec),
+     /* class initialize   */ XawInitializeWidgetSet,
+     /* class_part_init    */ NULL,
+     /* class_inited       */ FALSE,
+     /* initialize         */ NULL,
+     /* initialize_hook    */ NULL,
+     /* realize            */ XtInheritRealize,
+     /* actions            */ actionsList,
+     /* num_actions        */ XtNumber(actionsList),
+     /* resources          */ resources,
+     /* resource_count     */ XtNumber(resources),
+     /* xrm_class          */ NULLQUARK,
+     /* compress_motion    */ TRUE,
+     /* compress_exposure  */ TRUE,
+     /* compress_enterleave*/ TRUE,
+     /* visible_interest   */ FALSE,
+     /* destroy            */ NULL,
+     /* resize             */ NULL,
+     /* expose             */ XtInheritExpose,
+     /* set_values         */ NULL,
+     /* set_values_hook    */ NULL,
+     /* set_values_almost  */ XtInheritSetValuesAlmost,
+     /* get_values_hook    */ NULL,
+     /* accept_focus       */ NULL,
+     /* version            */ XtVersion,
+     /* callback_private   */ NULL,
+     /* tm_table           */ NULL,
+     /* query_geometry     */ XtInheritQueryGeometry,
+     /* display_accelerator*/ XtInheritDisplayAccelerator,
+     /* extension          */ NULL },
 /* Simple class fields initialization */
-   {
-    /* change_sensitive   */   XtInheritChangeSensitive
-   },
+    { /* change_sensitive   */ XtInheritChangeSensitive },
 /* ThreeD class fields initialization */
-   {
-    /* shadowdraw	  */   0    /* inherited expose method knows how */
-   },
+    {
+     /* shadowdraw	  */ 0    /* inherited expose method knows how */
+    },
 /* Grip class fields initialization */
-   {
-    /* not used		  */   0
-   }
+    { /* not used		  */ 0 }
 };
 
-WidgetClass gripWidgetClass = (WidgetClass) &gripClassRec;
+WidgetClass gripWidgetClass = (WidgetClass)&gripClassRec;
 
 static void
 GripAction(Widget widget, XEvent *event, String *params, Cardinal *num_params)
 {
     XawGripCallDataRec call_data;
 
-    call_data.event = event;
-    call_data.params = params;
+    call_data.event      = event;
+    call_data.params     = params;
     call_data.num_params = *num_params;
 
-    XtCallCallbacks( widget, XtNcallback, (XtPointer)&call_data );
+    XtCallCallbacks(widget, XtNcallback, (XtPointer)&call_data);
 }

@@ -33,33 +33,28 @@
 \*****************************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "XpmI.h"
 
 int
-XpmReadFileToData(
-    const char	  *filename,
-    char	***data_return)
+XpmReadFileToData(const char *filename, char ***data_return)
 {
     XpmImage image;
-    XpmInfo info;
-    int ErrorStatus;
+    XpmInfo  info;
+    int      ErrorStatus;
 
     info.valuemask = XpmReturnComments | XpmReturnExtensions;
 
     /*
      * initialize return value
      */
-    if (data_return)
-	*data_return = NULL;
+    if (data_return) *data_return = NULL;
 
     ErrorStatus = XpmReadFileToXpmImage(filename, &image, &info);
-    if (ErrorStatus != XpmSuccess)
-	return (ErrorStatus);
+    if (ErrorStatus != XpmSuccess) return (ErrorStatus);
 
-    ErrorStatus =
-	XpmCreateDataFromXpmImage(data_return, &image, &info);
+    ErrorStatus = XpmCreateDataFromXpmImage(data_return, &image, &info);
 
     XpmFreeXpmImage(&image);
     XpmFreeXpmInfo(&info);

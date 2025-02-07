@@ -25,23 +25,22 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
-#define AllMaskBits (CWX|CWY|CWWidth|CWHeight|\
-		     CWBorderWidth|CWSibling|CWStackMode)
+#define AllMaskBits \
+    (CWX | CWY | CWWidth | CWHeight | CWBorderWidth | CWSibling | CWStackMode)
 
 int
-XConfigureWindow(
-    register Display *dpy,
-    Window w,
-    unsigned int mask,
-    XWindowChanges *changes)
+XConfigureWindow(register Display *dpy,
+                 Window            w,
+                 unsigned int      mask,
+                 XWindowChanges   *changes)
 {
-    unsigned long values[7];
-    register unsigned long *value = values;
-    long nvalues;
+    unsigned long                 values[7];
+    register unsigned long       *value = values;
+    long                          nvalues;
     register xConfigureWindowReq *req;
 
     LockDisplay(dpy);
@@ -50,32 +49,25 @@ XConfigureWindow(
     mask &= AllMaskBits;
     req->mask = mask;
 
-    if (mask & CWX)
-	*value++ = changes->x;
+    if (mask & CWX) *value++ = changes->x;
 
-    if (mask & CWY)
-    	*value++ = changes->y;
+    if (mask & CWY) *value++ = changes->y;
 
-    if (mask & CWWidth)
-    	*value++ = changes->width;
+    if (mask & CWWidth) *value++ = changes->width;
 
-    if (mask & CWHeight)
-    	*value++ = changes->height;
+    if (mask & CWHeight) *value++ = changes->height;
 
-    if (mask & CWBorderWidth)
-    	*value++ = changes->border_width;
+    if (mask & CWBorderWidth) *value++ = changes->border_width;
 
-    if (mask & CWSibling)
-	*value++ = changes->sibling;
+    if (mask & CWSibling) *value++ = changes->sibling;
 
-    if (mask & CWStackMode)
-        *value++ = changes->stack_mode;
+    if (mask & CWStackMode) *value++ = changes->stack_mode;
 
     req->length += (nvalues = value - values);
 
-    nvalues <<= 2;			/* watch out for macros... */
-    Data32 (dpy, (long *) values, nvalues);
+    nvalues <<= 2;   /* watch out for macros... */
+    Data32(dpy, (long *)values, nvalues);
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
-    }
+}

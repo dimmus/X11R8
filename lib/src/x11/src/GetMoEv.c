@@ -25,58 +25,60 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "reallocarray.h"
 #include <limits.h>
 
-XTimeCoord *XGetMotionEvents(
-    register Display *dpy,
-    Window w,
-    Time start,
-    Time stop,
-    int *nEvents)  /* RETURN */
+XTimeCoord *
+XGetMotionEvents(register Display *dpy,
+                 Window            w,
+                 Time              start,
+                 Time              stop,
+                 int              *nEvents)  /* RETURN */
 {
-    xGetMotionEventsReply rep;
+    xGetMotionEventsReply         rep;
     register xGetMotionEventsReq *req;
-    XTimeCoord *tc = NULL;
+    XTimeCoord                   *tc = NULL;
     LockDisplay(dpy);
     GetReq(GetMotionEvents, req);
     req->window = w;
 /* XXX is this right for all machines? */
-    req->start = start;
-    req->stop  = stop;
-    if (!_XReply (dpy, (xReply *)&rep, 0, xFalse)) {
-	UnlockDisplay(dpy);
+    req->start  = start;
+    req->stop   = stop;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
+        UnlockDisplay(dpy);
         SyncHandle();
-	return (NULL);
-	}
+        return (NULL);
+    }
 
     if (rep.nEvents && (rep.nEvents < (INT_MAX / sizeof(XTimeCoord))))
-	tc = Xmallocarray(rep.nEvents, sizeof(XTimeCoord));
-    if (tc == NULL) {
-	/* server returned either no events or a bad event count */
-	*nEvents = 0;
-	_XEatDataWords (dpy, rep.length);
+        tc = Xmallocarray(rep.nEvents, sizeof(XTimeCoord));
+    if (tc == NULL)
+    {
+    /* server returned either no events or a bad event count */
+        *nEvents = 0;
+        _XEatDataWords(dpy, rep.length);
     }
     else
     {
-	register XTimeCoord *tcptr;
-	unsigned int i;
-	xTimecoord xtc;
+        register XTimeCoord *tcptr;
+        unsigned int         i;
+        xTimecoord           xtc;
 
-	*nEvents = (int) rep.nEvents;
-	for (i = rep.nEvents, tcptr = tc; i > 0; i--, tcptr++) {
-	    _XRead (dpy, (char *) &xtc, SIZEOF (xTimecoord));
-	    tcptr->time = xtc.time;
-	    tcptr->x    = cvtINT16toShort (xtc.x);
-	    tcptr->y    = cvtINT16toShort (xtc.y);
-	}
+        *nEvents = (int)rep.nEvents;
+        for (i = rep.nEvents, tcptr = tc; i > 0; i--, tcptr++)
+        {
+            _XRead(dpy, (char *)&xtc, SIZEOF(xTimecoord));
+            tcptr->time = xtc.time;
+            tcptr->x    = cvtINT16toShort(xtc.x);
+            tcptr->y    = cvtINT16toShort(xtc.y);
+        }
     }
 
     UnlockDisplay(dpy);
     SyncHandle();
     return (tc);
 }
-

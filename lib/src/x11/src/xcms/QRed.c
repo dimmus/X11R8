@@ -34,12 +34,10 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcms.h"
-
-
 
 /************************************************************************
  *									*
@@ -55,10 +53,7 @@
  */
 
 Status
-XcmsQueryRed(
-    XcmsCCC ccc,
-    XcmsColorFormat target_format,
-    XcmsColor *pColor_ret)
+XcmsQueryRed(XcmsCCC ccc, XcmsColorFormat target_format, XcmsColor *pColor_ret)
 /*
  *	DESCRIPTION
  *		Returns the color specification in the target format for
@@ -71,14 +66,15 @@ XcmsQueryRed(
 {
     XcmsColor tmp;
 
-    tmp.format = XcmsRGBiFormat;
-    tmp.pixel = 0;
-    tmp.spec.RGBi.red = 1.0;
+    tmp.format          = XcmsRGBiFormat;
+    tmp.pixel           = 0;
+    tmp.spec.RGBi.red   = 1.0;
     tmp.spec.RGBi.green = 0.0;
-    tmp.spec.RGBi.blue = 0.0;
-    if (XcmsConvertColors(ccc, &tmp, 1, target_format, NULL) != XcmsSuccess) {
-	return(XcmsFailure);
+    tmp.spec.RGBi.blue  = 0.0;
+    if (XcmsConvertColors(ccc, &tmp, 1, target_format, NULL) != XcmsSuccess)
+    {
+        return (XcmsFailure);
     }
     memcpy((char *)pColor_ret, (char *)&tmp, sizeof(XcmsColor));
-    return(XcmsSuccess);
+    return (XcmsSuccess);
 }

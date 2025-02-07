@@ -25,25 +25,21 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XSelectInput (
-    register Display *dpy,
-    Window w,
-    long mask)
+XSelectInput(register Display *dpy, Window w, long mask)
 {
     register xChangeWindowAttributesReq *req;
 
     LockDisplay(dpy);
-    GetReqExtra (ChangeWindowAttributes, 4, req);
-    req->window = w;
+    GetReqExtra(ChangeWindowAttributes, 4, req);
+    req->window    = w;
     req->valueMask = CWEventMask;
-    OneDataCard32 (dpy, NEXTPTR(req,xChangeWindowAttributesReq), mask);
+    OneDataCard32(dpy, NEXTPTR(req, xChangeWindowAttributesReq), mask);
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

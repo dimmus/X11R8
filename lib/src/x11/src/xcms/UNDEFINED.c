@@ -34,7 +34,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
@@ -42,32 +42,24 @@
 /*
  *      FORWARD DECLARATIONS
  */
-static int DummyParseStringProc(
-    char*               /* color_string */,
-    XcmsColor*          /* color_return */
-    );
-static Status ReturnZero(
-    XcmsCCC             /* ccc */,
-    XcmsColor*          /* white_point */,
-    XcmsColor*          /* colors */,
-    unsigned int        /* ncolors */
-    );
-
+static int    DummyParseStringProc(char    */* color_string */,
+                                   XcmsColor    *          /* color_return */
+   );
+static Status ReturnZero(XcmsCCC /* ccc */,
+                         XcmsColor * /* white_point */,
+                         XcmsColor * /* colors */,
+                         unsigned int        /* ncolors */
+);
 
 /*
  *      LOCALS VARIABLES
  */
 
-static Status (*(Fl_ReturnZero[]))(
-    XcmsCCC             /* ccc */,
-    XcmsColor*          /* white_point */,
-    XcmsColor*          /* colors */,
-    unsigned int        /* ncolors */
-    ) = {
-    ReturnZero,
-    NULL
-};
-
+static Status (*(Fl_ReturnZero[]))(XcmsCCC /* ccc */,
+                                   XcmsColor * /* white_point */,
+                                   XcmsColor * /* colors */,
+                                   unsigned int        /* ncolors */
+                                   ) = { ReturnZero, NULL };
 
 /*
  *      GLOBALS
@@ -77,17 +69,14 @@ static Status (*(Fl_ReturnZero[]))(
     /*
      * UNDEFINED Color Space
      */
-XcmsColorSpace	XcmsUNDEFINEDColorSpace =
-    {
-	"undefined",		/* prefix */
-	XcmsUndefinedFormat,	/* id */
-	&DummyParseStringProc,	/* parseString */
-	Fl_ReturnZero,		/* to_CIEXYZ */
-	Fl_ReturnZero		/* from_CIEXYZ */
-    };
+XcmsColorSpace XcmsUNDEFINEDColorSpace = {
+    "undefined",  /* prefix */
+    XcmsUndefinedFormat, /* id */
+    &DummyParseStringProc, /* parseString */
+    Fl_ReturnZero,  /* to_CIEXYZ */
+    Fl_ReturnZero  /* from_CIEXYZ */
+};
 
-
-
 /************************************************************************
  *									*
  *			PRIVATE ROUTINES				*
@@ -102,12 +91,11 @@ XcmsColorSpace	XcmsUNDEFINEDColorSpace =
  */
 /* ARGSUSED */
 static Status
-ReturnZero(
-    XcmsCCC             ccc /* ccc */,
-    XcmsColor*          white /* white_point */,
-    XcmsColor*          colors /* colors */,
-    unsigned int        ncolors /* ncolors */
-    )
+ReturnZero(XcmsCCC      ccc /* ccc */,
+           XcmsColor   *white /* white_point */,
+           XcmsColor   *colors /* colors */,
+           unsigned int ncolors /* ncolors */
+)
 /*
  *	DESCRIPTION
  *		Does nothing.
@@ -117,15 +105,15 @@ ReturnZero(
  *
  */
 {
-    return(0);
+    return (0);
 }
 
-static int DummyParseStringProc(
-    char*               color_string /* color_string */,
-    XcmsColor*          color_return /* color_return */
-    )
+static int
+DummyParseStringProc(char      *color_string /* color_string */,
+                     XcmsColor *color_return /* color_return */
+)
 {
-    return(0);
+    return (0);
 }
 
 /* ### EOF ### */

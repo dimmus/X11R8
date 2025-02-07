@@ -33,13 +33,12 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
 
-
 /*
  *	NAME
  *		XcmsPrefixOfId
@@ -47,8 +46,7 @@
  *	SYNOPSIS
  */
 char *
-XcmsPrefixOfFormat(
-    XcmsColorFormat	id)
+XcmsPrefixOfFormat(XcmsColorFormat id)
 /*
  *	DESCRIPTION
  *		Returns the color space prefix for the specified color
@@ -65,33 +63,39 @@ XcmsPrefixOfFormat(
  *
  */
 {
-    XcmsColorSpace	**papColorSpaces;
+    XcmsColorSpace **papColorSpaces;
 
     /*
      * First try Device-Independent color spaces
      */
     papColorSpaces = _XcmsDIColorSpaces;
-    if (papColorSpaces != NULL) {
-	while (*papColorSpaces != NULL) {
-	    if ((*papColorSpaces)->id == id) {
-		return strdup((*papColorSpaces)->prefix);
-	    }
-	    papColorSpaces++;
-	}
+    if (papColorSpaces != NULL)
+    {
+        while (*papColorSpaces != NULL)
+        {
+            if ((*papColorSpaces)->id == id)
+            {
+                return strdup((*papColorSpaces)->prefix);
+            }
+            papColorSpaces++;
+        }
     }
 
     /*
      * Next try Device-Dependent color spaces
      */
     papColorSpaces = _XcmsDDColorSpaces;
-    if (papColorSpaces != NULL) {
-	while (*papColorSpaces != NULL) {
-	    if ((*papColorSpaces)->id == id) {
-		return strdup((*papColorSpaces)->prefix);
-	    }
-	    papColorSpaces++;
-	}
+    if (papColorSpaces != NULL)
+    {
+        while (*papColorSpaces != NULL)
+        {
+            if ((*papColorSpaces)->id == id)
+            {
+                return strdup((*papColorSpaces)->prefix);
+            }
+            papColorSpaces++;
+        }
     }
 
-    return(NULL);
+    return (NULL);
 }

@@ -33,7 +33,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
@@ -49,14 +49,10 @@
      * Initial array of Device Independent Color Spaces
      */
 XcmsColorSpace *_XcmsDIColorSpacesInit[] = {
-    &XcmsCIEXYZColorSpace,
-    &XcmsCIEuvYColorSpace,
-    &XcmsCIExyYColorSpace,
-    &XcmsCIELabColorSpace,
-    &XcmsCIELuvColorSpace,
-    &XcmsTekHVCColorSpace,
-    &XcmsUNDEFINEDColorSpace,
-    NULL
+    &XcmsCIEXYZColorSpace,    &XcmsCIEuvYColorSpace,
+    &XcmsCIExyYColorSpace,    &XcmsCIELabColorSpace,
+    &XcmsCIELuvColorSpace,    &XcmsTekHVCColorSpace,
+    &XcmsUNDEFINEDColorSpace, NULL
 };
     /*
      * Pointer to the array of pointers to XcmsColorSpace structures for
@@ -68,27 +64,24 @@ XcmsColorSpace **_XcmsDIColorSpaces = _XcmsDIColorSpacesInit;
     /*
      * Initial array of Device Dependent Color Spaces
      */
-XcmsColorSpace *_XcmsDDColorSpacesInit[] = {
-    &XcmsRGBColorSpace,
-    &XcmsRGBiColorSpace,
-    NULL
-};
+XcmsColorSpace *_XcmsDDColorSpacesInit[] = { &XcmsRGBColorSpace,
+                                             &XcmsRGBiColorSpace,
+                                             NULL };
     /*
      * Pointer to the array of pointers to XcmsColorSpace structures for
      * Device-Dependent Color Spaces that are currently accessible by
      * the color management system.  End of list is indicated by a NULL pointer.
      */
-XcmsColorSpace **_XcmsDDColorSpaces = &_XcmsDDColorSpacesInit[0];
+XcmsColorSpace **_XcmsDDColorSpaces      = &_XcmsDDColorSpacesInit[0];
 
     /*
      * Initial array of Screen Color Characterization Function Sets
      */
-XcmsFunctionSet	*_XcmsSCCFuncSetsInit[] = {
-	&XcmsLinearRGBFunctionSet,
+XcmsFunctionSet *_XcmsSCCFuncSetsInit[] = { &XcmsLinearRGBFunctionSet,
 #ifdef GRAY
-	&XcmsGrayFunctionSet,
+                                            &XcmsGrayFunctionSet,
 #endif /* GRAY */
-	NULL};
+                                            NULL };
     /*
      * Pointer to the array of pointers to XcmsSCCFuncSet structures
      * (Screen Color Characterization Function Sets) that are currently
@@ -101,17 +94,17 @@ XcmsFunctionSet **_XcmsSCCFuncSets = _XcmsSCCFuncSetsInit;
      * X Consortium Registered Device-Independent Color Spaces
      *	Note that prefix must be in lowercase.
      */
-const char	_XcmsCIEXYZ_prefix[] = "ciexyz";
-const char	_XcmsCIEuvY_prefix[] = "cieuvy";
-const char	_XcmsCIExyY_prefix[] = "ciexyy";
-const char	_XcmsCIELab_prefix[] = "cielab";
-const char 	_XcmsCIELuv_prefix[] = "cieluv";
-const char	_XcmsTekHVC_prefix[] = "tekhvc";
+const char _XcmsCIEXYZ_prefix[] = "ciexyz";
+const char _XcmsCIEuvY_prefix[] = "cieuvy";
+const char _XcmsCIExyY_prefix[] = "ciexyy";
+const char _XcmsCIELab_prefix[] = "cielab";
+const char _XcmsCIELuv_prefix[] = "cieluv";
+const char _XcmsTekHVC_prefix[] = "tekhvc";
     /*
      * Registered Device-Dependent Color Spaces
      */
-const char	_XcmsRGBi_prefix[] = "rgbi";
-const char	_XcmsRGB_prefix[] = "rgb";
+const char _XcmsRGBi_prefix[]   = "rgbi";
+const char _XcmsRGB_prefix[]    = "rgb";
 
 XcmsRegColorSpaceEntry _XcmsRegColorSpaces[] = {
     { _XcmsCIEXYZ_prefix, XcmsCIEXYZFormat },
@@ -120,7 +113,7 @@ XcmsRegColorSpaceEntry _XcmsRegColorSpaces[] = {
     { _XcmsCIELab_prefix, XcmsCIELabFormat },
     { _XcmsCIELuv_prefix, XcmsCIELuvFormat },
     { _XcmsTekHVC_prefix, XcmsTekHVCFormat },
-    { _XcmsRGB_prefix, XcmsRGBFormat },
-    { _XcmsRGBi_prefix,	XcmsRGBiFormat },
-    { NULL, 0 }
+    { _XcmsRGB_prefix,    XcmsRGBFormat    },
+    { _XcmsRGBi_prefix,   XcmsRGBiFormat   },
+    { NULL,               0                }
 };

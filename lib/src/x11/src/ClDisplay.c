@@ -28,7 +28,7 @@ from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xxcbint.h"
 #include "Xlib.h"
@@ -42,35 +42,36 @@ from The Open Group.
  */
 
 int
-XCloseDisplay (
-	register Display *dpy)
+XCloseDisplay(register Display *dpy)
 {
-	register _XExtension *ext;
-	register int i;
-	xcb_connection_t *connection;
+    register _XExtension *ext;
+    register int          i;
+    xcb_connection_t     *connection;
 
-	if (!(dpy->flags & XlibDisplayClosing))
-	{
-	    dpy->flags |= XlibDisplayClosing;
-	    for (i = 0; i < dpy->nscreens; i++) {
-		    register Screen *sp = &dpy->screens[i];
-		    XFreeGC (dpy, sp->default_gc);
-	    }
-	    if (dpy->cursor_font != None) {
-		XUnloadFont (dpy, dpy->cursor_font);
-	    }
-	    XSync(dpy, 1);  /* throw away pending events, catch errors */
-	    /* call out to any extensions interested */
-	    for (ext = dpy->ext_procs; ext; ext = ext->next) {
-		if (ext->close_display)
-		    (*ext->close_display)(dpy, &ext->codes);
-	    }
-	    /* if the closes generated more protocol, sync them up */
-	    if (X_DPY_GET_REQUEST(dpy) != X_DPY_GET_LAST_REQUEST_READ(dpy))
-		XSync(dpy, 1);
-	}
-	connection = dpy->xcb->connection;
-	_XFreeDisplayStructure (dpy);
-	xcb_disconnect(connection);
-	return 0;
+    if (!(dpy->flags & XlibDisplayClosing))
+    {
+        dpy->flags |= XlibDisplayClosing;
+        for (i = 0; i < dpy->nscreens; i++)
+        {
+            register Screen *sp = &dpy->screens[i];
+            XFreeGC(dpy, sp->default_gc);
+        }
+        if (dpy->cursor_font != None)
+        {
+            XUnloadFont(dpy, dpy->cursor_font);
+        }
+        XSync(dpy, 1);  /* throw away pending events, catch errors */
+        /* call out to any extensions interested */
+        for (ext = dpy->ext_procs; ext; ext = ext->next)
+        {
+            if (ext->close_display) (*ext->close_display)(dpy, &ext->codes);
+        }
+        /* if the closes generated more protocol, sync them up */
+        if (X_DPY_GET_REQUEST(dpy) != X_DPY_GET_LAST_REQUEST_READ(dpy))
+            XSync(dpy, 1);
+    }
+    connection = dpy->xcb->connection;
+    _XFreeDisplayStructure(dpy);
+    xcb_disconnect(connection);
+    return 0;
 }

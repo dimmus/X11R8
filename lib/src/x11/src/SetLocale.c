@@ -56,7 +56,7 @@ from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xlcint.h"
@@ -64,15 +64,11 @@ from The Open Group.
 #include "X11/Xos.h"
 #include "XlcPubI.h"
 
-#define MAXLOCALE	64	/* buffer size of locale name */
-
+#define MAXLOCALE 64 /* buffer size of locale name */
 
 #if defined(__APPLE__) || defined(__CYGWIN__)
 char *
-_Xsetlocale(
-    int           category,
-    _Xconst char  *name
-)
+_Xsetlocale(int category, _Xconst char *name)
 {
     return setlocale(category, name);
 }
@@ -95,85 +91,82 @@ _Xsetlocale(
  */
 
 char *
-_XlcMapOSLocaleName(
-    char *osname,
-    char *siname)
+_XlcMapOSLocaleName(char *osname, char *siname)
 {
-#if defined(CSRG_BASED) || defined(sun) || defined(SVR4) || defined(WIN32) || defined(linux)
-# if defined(WIN32)
-#  define SKIPCOUNT 1
-#  define STARTCHAR '='
-#  define ENDCHAR ';'
-#  define WHITEFILL
-# else
-#  if defined(linux)
-#   define STARTSTR "LC_CTYPE="
-#   define ENDCHAR ';'
+#if defined(CSRG_BASED) || defined(sun) || defined(SVR4) || defined(WIN32) || \
+    defined(linux)
+#  if defined(WIN32)
+#    define SKIPCOUNT 1
+#    define STARTCHAR '='
+#    define ENDCHAR   ';'
+#    define WHITEFILL
 #  else
-#   if !defined(sun) || defined(SVR4)
-#    define STARTCHAR '/'
-#    define ENDCHAR '/'
-#   endif
+#    if defined(linux)
+#      define STARTSTR "LC_CTYPE="
+#      define ENDCHAR  ';'
+#    else
+#      if !defined(sun) || defined(SVR4)
+#        define STARTCHAR '/'
+#        define ENDCHAR   '/'
+#      endif
+#    endif
 #  endif
-# endif
 
-    char           *start;
-    char           *end;
-    int             len;
-# ifdef SKIPCOUNT
-    int		    n;
-# endif
+    char *start;
+    char *end;
+    int   len;
+#  ifdef SKIPCOUNT
+    int n;
+#  endif
 
     start = osname;
-# ifdef SKIPCOUNT
-    for (n = SKIPCOUNT;
-	 --n >= 0 && start && (start = strchr (start, STARTCHAR));
-	 start++)
-	;
-    if (!start)
-	start = osname;
-# endif
-# ifdef STARTCHAR
-    if (start && (start = strchr (start, STARTCHAR)))
-# elif  defined (STARTSTR)
-    if (start && (start = strstr (start,STARTSTR)))
-# endif
+#  ifdef SKIPCOUNT
+    for (n = SKIPCOUNT; --n >= 0 && start && (start = strchr(start, STARTCHAR));
+         start++)
+        ;
+    if (!start) start = osname;
+#  endif
+#  ifdef STARTCHAR
+    if (start && (start = strchr(start, STARTCHAR)))
+#  elif defined(STARTSTR)
+    if (start && (start = strstr(start, STARTSTR)))
+#  endif
     {
-# ifdef STARTCHAR
-	start++;
-# elif defined (STARTSTR)
-	start += strlen(STARTSTR);
-# endif
-	if ((end = strchr (start, ENDCHAR))) {
-	    len = end - start;
-	    if (len >= MAXLOCALE)
-		len = MAXLOCALE - 1;
-	    strncpy(siname, start, (size_t) len);
-	    *(siname + len) = '\0';
-# ifdef WHITEFILL
-	    for (start = siname; start = strchr(start, ' '); )
-		*start++ = '-';
-# endif
-	    return siname;
-	} else  /* if no ENDCHAR is found we are at the end of the line */
-	    return start;
+#  ifdef STARTCHAR
+        start++;
+#  elif defined(STARTSTR)
+        start += strlen(STARTSTR);
+#  endif
+        if ((end = strchr(start, ENDCHAR)))
+        {
+            len = end - start;
+            if (len >= MAXLOCALE) len = MAXLOCALE - 1;
+            strncpy(siname, start, (size_t)len);
+            *(siname + len) = '\0';
+#  ifdef WHITEFILL
+            for (start = siname; start = strchr(start, ' ');)
+                *start++ = '-';
+#  endif
+            return siname;
+        }
+        else  /* if no ENDCHAR is found we are at the end of the line */
+            return start;
     }
-# ifdef WHITEFILL
-    if (strchr(osname, ' ')) {
-	len = strlen(osname);
-	if (len >= MAXLOCALE - 1)
-	    len = MAXLOCALE - 1;
-	strncpy(siname, osname, len);
-	*(siname + len) = '\0';
-	for (start = siname; start = strchr(start, ' '); )
-	    *start++ = '-';
-	return siname;
+#  ifdef WHITEFILL
+    if (strchr(osname, ' '))
+    {
+        len = strlen(osname);
+        if (len >= MAXLOCALE - 1) len = MAXLOCALE - 1;
+        strncpy(siname, osname, len);
+        *(siname + len) = '\0';
+        for (start = siname; start = strchr(start, ' ');)
+            *start++ = '-';
+        return siname;
     }
-# endif
-# undef STARTCHAR
-# undef ENDCHAR
-# undef WHITEFILL
+#  endif
+#  undef STARTCHAR
+#  undef ENDCHAR
+#  undef WHITEFILL
 #endif
     return osname;
 }
-

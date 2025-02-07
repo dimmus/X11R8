@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xos.h"
 #include "X11/X.h"
@@ -34,118 +34,91 @@ in this Software without prior written authorization from The Open Group.
 #include <stdlib.h>
 
 int
-XdmcpWriteHeader (
-    XdmcpBufferPtr  buffer,
-    const XdmcpHeaderPtr  header)
+XdmcpWriteHeader(XdmcpBufferPtr buffer, const XdmcpHeaderPtr header)
 {
-    BYTE    *newData;
+    BYTE *newData;
 
     if (buffer->size < 6 + (int)header->length)
     {
-	newData = calloc(XDM_MAX_MSGLEN, sizeof (BYTE));
-	if (!newData)
-	    return FALSE;
-	free(buffer->data);
-	buffer->data = newData;
-	buffer->size = XDM_MAX_MSGLEN;
+        newData = calloc(XDM_MAX_MSGLEN, sizeof(BYTE));
+        if (!newData) return FALSE;
+        free(buffer->data);
+        buffer->data = newData;
+        buffer->size = XDM_MAX_MSGLEN;
     }
     buffer->pointer = 0;
-    if (!XdmcpWriteCARD16 (buffer, header->version))
-	return FALSE;
-    if (!XdmcpWriteCARD16 (buffer, header->opcode))
-	return FALSE;
-    if (!XdmcpWriteCARD16 (buffer, header->length))
-	return FALSE;
+    if (!XdmcpWriteCARD16(buffer, header->version)) return FALSE;
+    if (!XdmcpWriteCARD16(buffer, header->opcode)) return FALSE;
+    if (!XdmcpWriteCARD16(buffer, header->length)) return FALSE;
     return TRUE;
 }
 
 int
-XdmcpWriteARRAY8 (XdmcpBufferPtr buffer, const ARRAY8Ptr array)
+XdmcpWriteARRAY8(XdmcpBufferPtr buffer, const ARRAY8Ptr array)
 {
-    int	i;
+    int i;
 
-    if (!XdmcpWriteCARD16 (buffer, array->length))
-	return FALSE;
+    if (!XdmcpWriteCARD16(buffer, array->length)) return FALSE;
     for (i = 0; i < (int)array->length; i++)
-	if (!XdmcpWriteCARD8 (buffer, array->data[i]))
-	    return FALSE;
+        if (!XdmcpWriteCARD8(buffer, array->data[i])) return FALSE;
     return TRUE;
 }
 
 int
-XdmcpWriteARRAY16 (XdmcpBufferPtr buffer, const ARRAY16Ptr array)
+XdmcpWriteARRAY16(XdmcpBufferPtr buffer, const ARRAY16Ptr array)
 {
-    int	i;
+    int i;
 
-    if (!XdmcpWriteCARD8 (buffer, array->length))
-	return FALSE;
+    if (!XdmcpWriteCARD8(buffer, array->length)) return FALSE;
     for (i = 0; i < (int)array->length; i++)
-	if (!XdmcpWriteCARD16 (buffer, array->data[i]))
-	    return FALSE;
+        if (!XdmcpWriteCARD16(buffer, array->data[i])) return FALSE;
     return TRUE;
 }
 
 int
-XdmcpWriteARRAY32 (XdmcpBufferPtr buffer, const ARRAY32Ptr array)
+XdmcpWriteARRAY32(XdmcpBufferPtr buffer, const ARRAY32Ptr array)
 {
-    int	i;
+    int i;
 
-    if (!XdmcpWriteCARD8 (buffer, array->length))
-	return FALSE;
+    if (!XdmcpWriteCARD8(buffer, array->length)) return FALSE;
     for (i = 0; i < (int)array->length; i++)
-	if (!XdmcpWriteCARD32 (buffer, array->data[i]))
-	    return FALSE;
+        if (!XdmcpWriteCARD32(buffer, array->data[i])) return FALSE;
     return TRUE;
 }
 
 int
-XdmcpWriteARRAYofARRAY8 (XdmcpBufferPtr buffer, ARRAYofARRAY8Ptr array)
+XdmcpWriteARRAYofARRAY8(XdmcpBufferPtr buffer, ARRAYofARRAY8Ptr array)
 {
-    int	i;
+    int i;
 
-    if (!XdmcpWriteCARD8 (buffer, array->length))
-	return FALSE;
+    if (!XdmcpWriteCARD8(buffer, array->length)) return FALSE;
     for (i = 0; i < (int)array->length; i++)
-	if (!XdmcpWriteARRAY8 (buffer, &array->data[i]))
-	    return FALSE;
+        if (!XdmcpWriteARRAY8(buffer, &array->data[i])) return FALSE;
     return TRUE;
 }
 
 int
-XdmcpWriteCARD8 (
-    XdmcpBufferPtr  buffer,
-    unsigned	    value)
+XdmcpWriteCARD8(XdmcpBufferPtr buffer, unsigned value)
 {
-    if (buffer->pointer >= buffer->size)
-	return FALSE;
-    buffer->data[buffer->pointer++] = (BYTE) value;
+    if (buffer->pointer >= buffer->size) return FALSE;
+    buffer->data[buffer->pointer++] = (BYTE)value;
     return TRUE;
 }
 
 int
-XdmcpWriteCARD16 (
-    XdmcpBufferPtr  buffer,
-    unsigned	    value)
+XdmcpWriteCARD16(XdmcpBufferPtr buffer, unsigned value)
 {
-    if (!XdmcpWriteCARD8 (buffer, value >> 8))
-	return FALSE;
-    if (!XdmcpWriteCARD8 (buffer, value & 0xff))
-	return FALSE;
+    if (!XdmcpWriteCARD8(buffer, value >> 8)) return FALSE;
+    if (!XdmcpWriteCARD8(buffer, value & 0xff)) return FALSE;
     return TRUE;
 }
 
 int
-XdmcpWriteCARD32 (
-    XdmcpBufferPtr  buffer,
-    unsigned	    value)
+XdmcpWriteCARD32(XdmcpBufferPtr buffer, unsigned value)
 {
-    if (!XdmcpWriteCARD8 (buffer, value >> 24))
-	return FALSE;
-    if (!XdmcpWriteCARD8 (buffer, (value >> 16) & 0xff))
-	return FALSE;
-    if (!XdmcpWriteCARD8 (buffer, (value >> 8) & 0xff))
-	return FALSE;
-    if (!XdmcpWriteCARD8 (buffer, value & 0xff))
-	return FALSE;
+    if (!XdmcpWriteCARD8(buffer, value >> 24)) return FALSE;
+    if (!XdmcpWriteCARD8(buffer, (value >> 16) & 0xff)) return FALSE;
+    if (!XdmcpWriteCARD8(buffer, (value >> 8) & 0xff)) return FALSE;
+    if (!XdmcpWriteCARD8(buffer, value & 0xff)) return FALSE;
     return TRUE;
 }

@@ -31,7 +31,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "X11/IntrinsicP.h"
@@ -48,80 +48,72 @@ static void Highlight(Widget);
 static void Notify(Widget);
 static void Unhighlight(Widget);
 static void XawSmeClassPartInitialize(WidgetClass);
-static void XawSmeInitialize(Widget, Widget, ArgList, Cardinal*);
-static XtGeometryResult XawSmeQueryGeometry(Widget, XtWidgetGeometry*,
-					    XtWidgetGeometry*);
+static void XawSmeInitialize(Widget, Widget, ArgList, Cardinal *);
+static XtGeometryResult
+XawSmeQueryGeometry(Widget, XtWidgetGeometry *, XtWidgetGeometry *);
 
 /*
  * Initialization
  */
 #define offset(field) XtOffsetOf(SmeRec, sme.field)
 static XtResource resources[] = {
-  {
-    XtNcallback,
-    XtCCallback,
-    XtRCallback,
-    sizeof(XtPointer),
-    offset(callbacks),
-    XtRCallback,
-    NULL
-  },
-  {
-    XtNinternational,
-    XtCInternational,
-    XtRBoolean,
-    sizeof(Boolean),
-    offset(international),
-    XtRImmediate,
-    (XtPointer)False
-  },
+    { XtNcallback,
+     XtCCallback,      XtRCallback,
+     sizeof(XtPointer),
+     offset(callbacks),
+     XtRCallback,  NULL             },
+    { XtNinternational,
+     XtCInternational, XtRBoolean,
+     sizeof(Boolean),
+     offset(international),
+     XtRImmediate, (XtPointer)False },
 };
 #undef offset
 
-#define Superclass	(&rectObjClassRec)
+#define Superclass (&rectObjClassRec)
 SmeClassRec smeClassRec = {
   /* rectangle */
-  {
-    (WidgetClass)Superclass,		/* superclass */
-    "Sme",				/* class_name */
-    sizeof(SmeRec),			/* widget_size */
-    XawInitializeWidgetSet,		/* class_initialize */
-    XawSmeClassPartInitialize,		/* class_part_initialize */
-    False,				/* class_initialized */
-    XawSmeInitialize,			/* initialize */
-    NULL,				/* initialize_hook */
-    NULL,				/* realize */
-    NULL,				/* actions */
-    0,					/* num_actions */
-    resources,				/* resources */
-    XtNumber(resources),		/* num_resources */
-    NULLQUARK,				/* xrm_class */
-    False,				/* compress_motion */
-    False,				/* compress_exposure */
-    False,				/* compress_enterleave */
-    False,				/* visible_interest */
-    NULL,				/* destroy */
-    NULL,				/* resize */
-    NULL,				/* expose */
-    NULL,				/* set_values */
-    NULL,				/* set_values_hook */
-    XtInheritSetValuesAlmost,		/* set_values_almost */
-    NULL,				/* get_values_hook */
-    NULL,				/* accept_focus */
-    XtVersion,				/* intrinsics_version */
-    NULL,				/* callback offsets */
-    NULL,				/* tm_table */
-    XawSmeQueryGeometry,		/* query_geometry */
-    NULL,				/* display_accelerator */
-    NULL,				/* extension */
-  },
+    {
+     (WidgetClass)Superclass,  /* superclass */
+        "Sme",    /* class_name */
+        sizeof(SmeRec),   /* widget_size */
+        XawInitializeWidgetSet,  /* class_initialize */
+        XawSmeClassPartInitialize,  /* class_part_initialize */
+        False,    /* class_initialized */
+        XawSmeInitialize,   /* initialize */
+        NULL,    /* initialize_hook */
+        NULL,    /* realize */
+        NULL,    /* actions */
+        0,     /* num_actions */
+        resources,    /* resources */
+        XtNumber(resources),  /* num_resources */
+        NULLQUARK,    /* xrm_class */
+        False,    /* compress_motion */
+        False,    /* compress_exposure */
+        False,    /* compress_enterleave */
+        False,    /* visible_interest */
+        NULL,    /* destroy */
+        NULL,    /* resize */
+        NULL,    /* expose */
+        NULL,    /* set_values */
+        NULL,    /* set_values_hook */
+        XtInheritSetValuesAlmost,  /* set_values_almost */
+        NULL,    /* get_values_hook */
+        NULL,    /* accept_focus */
+        XtVersion,    /* intrinsics_version */
+        NULL,    /* callback offsets */
+        NULL,    /* tm_table */
+        XawSmeQueryGeometry,  /* query_geometry */
+        NULL,    /* display_accelerator */
+        NULL,    /* extension */
+    },
   /* sme */
-  {
-    Highlight,				/* highlight */
-    Unhighlight,			/* unhighlight */
-    Notify,				/* notify */
-    NULL,				/* extension */
-  }
+    {
+     Highlight,    /* highlight */
+        Unhighlight,   /* unhighlight */
+        Notify,    /* notify */
+        NULL,    /* extension */
+    }
 };
 
 WidgetClass smeObjectClass = (WidgetClass)&smeClassRec;
@@ -144,17 +136,17 @@ XawSmeClassPartInitialize(WidgetClass cclass)
 {
     SmeObjectClass m_ent, superC;
 
-    m_ent = (SmeObjectClass)cclass;
+    m_ent  = (SmeObjectClass)cclass;
     superC = (SmeObjectClass)m_ent->rect_class.superclass;
 
     if (m_ent->sme_class.highlight == XtInheritHighlight)
-	m_ent->sme_class.highlight = superC->sme_class.highlight;
+        m_ent->sme_class.highlight = superC->sme_class.highlight;
 
     if (m_ent->sme_class.unhighlight == XtInheritUnhighlight)
-	m_ent->sme_class.unhighlight = superC->sme_class.unhighlight;
+        m_ent->sme_class.unhighlight = superC->sme_class.unhighlight;
 
     if (m_ent->sme_class.notify == XtInheritNotify)
-	m_ent->sme_class.notify = superC->sme_class.notify;
+        m_ent->sme_class.notify = superC->sme_class.notify;
 }
 
 /*
@@ -170,8 +162,10 @@ XawSmeClassPartInitialize(WidgetClass cclass)
  */
 /*ARGSUSED*/
 static void
-XawSmeInitialize(Widget request _X_UNUSED, Widget cnew,
-		 ArgList args _X_UNUSED, Cardinal *num_args _X_UNUSED)
+XawSmeInitialize(Widget request     _X_UNUSED,
+                 Widget             cnew,
+                 ArgList args       _X_UNUSED,
+                 Cardinal *num_args _X_UNUSED)
 {
     SmeObject entry = (SmeObject)cnew;
 
@@ -191,8 +185,7 @@ XawSmeInitialize(Widget request _X_UNUSED, Widget cnew,
 /*ARGSUSED*/
 static void
 Highlight(Widget w _X_UNUSED)
-{
-}
+{}
 
 /*
  * Function:
@@ -207,8 +200,7 @@ Highlight(Widget w _X_UNUSED)
 /*ARGSUSED*/
 static void
 Unhighlight(Widget w _X_UNUSED)
-{
-}
+{}
 
 /*
  * Function:
@@ -245,24 +237,25 @@ Notify(Widget w)
  *	See the Intrinsics manual for details on what this function is for.
  */
 static XtGeometryResult
-XawSmeQueryGeometry(Widget w, XtWidgetGeometry *intended,
-		    XtWidgetGeometry *return_val)
+XawSmeQueryGeometry(Widget            w,
+                    XtWidgetGeometry *intended,
+                    XtWidgetGeometry *return_val)
 {
-    SmeObject entry = (SmeObject)w;
-    Dimension width;
+    SmeObject        entry = (SmeObject)w;
+    Dimension        width;
     XtGeometryResult ret_val = XtGeometryYes;
-    XtGeometryMask mode = intended->request_mode;
+    XtGeometryMask   mode    = intended->request_mode;
 
     width = 1;
 
-    if (((mode & CWWidth) && intended->width != width) || !(mode & CWWidth)) {
-	return_val->request_mode |= CWWidth;
-	return_val->width = width;
-	mode = return_val->request_mode;
+    if (((mode & CWWidth) && intended->width != width) || !(mode & CWWidth))
+    {
+        return_val->request_mode |= CWWidth;
+        return_val->width = width;
+        mode              = return_val->request_mode;
 
-	if ((mode & CWWidth) && width == XtWidth(entry))
-	    return (XtGeometryNo);
-	return (XtGeometryAlmost);
+        if ((mode & CWWidth) && width == XtWidth(entry)) return (XtGeometryNo);
+        return (XtGeometryAlmost);
     }
 
     return (ret_val);

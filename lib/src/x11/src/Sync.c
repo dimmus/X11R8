@@ -25,36 +25,34 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 /* Synchronize with errors and events, optionally discarding pending events */
 
 int
-XSync (
-    register Display *dpy,
-    Bool discard)
+XSync(register Display *dpy, Bool discard)
 {
-    xGetInputFocusReply rep;
+    xGetInputFocusReply      rep;
     _X_UNUSED register xReq *req;
 
     LockDisplay(dpy);
     GetEmptyReq(GetInputFocus, req);
-    (void) _XReply (dpy, (xReply *)&rep, 0, xTrue);
+    (void)_XReply(dpy, (xReply *)&rep, 0, xTrue);
 
-    if (discard && dpy->head) {
-       _XQEvent *qelt;
+    if (discard && dpy->head)
+    {
+        _XQEvent *qelt;
 
-       for (qelt=dpy->head; qelt; qelt=qelt->next)
-	   qelt->qserial_num = 0;
+        for (qelt = dpy->head; qelt; qelt = qelt->next)
+            qelt->qserial_num = 0;
 
-       ((_XQEvent *)dpy->tail)->next = dpy->qfree;
-       dpy->qfree = (_XQEvent *)dpy->head;
-       dpy->head = dpy->tail = NULL;
-       dpy->qlen = 0;
+        ((_XQEvent *)dpy->tail)->next = dpy->qfree;
+        dpy->qfree                    = (_XQEvent *)dpy->head;
+        dpy->head = dpy->tail = NULL;
+        dpy->qlen             = 0;
     }
     UnlockDisplay(dpy);
     return 1;
 }
-

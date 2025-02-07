@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
@@ -36,20 +36,17 @@ in this Software without prior written authorization from The Open Group.
  */
 
 int
-XPeekEvent (
-	register Display *dpy,
-	register XEvent *event)
+XPeekEvent(register Display *dpy, register XEvent *event)
 {
-	XEvent copy;
-	LockDisplay(dpy);
-	if (dpy->head == NULL)
-	    _XReadEvents(dpy);
-	*event = (dpy->head)->event;
-	if (_XCopyEventCookie(dpy, &event->xcookie, &copy.xcookie)) {
-	    _XStoreEventCookie(dpy, &copy);
-	    *event = copy;
-	}
-	UnlockDisplay(dpy);
-	return 1;
+    XEvent copy;
+    LockDisplay(dpy);
+    if (dpy->head == NULL) _XReadEvents(dpy);
+    *event = (dpy->head)->event;
+    if (_XCopyEventCookie(dpy, &event->xcookie, &copy.xcookie))
+    {
+        _XStoreEventCookie(dpy, &copy);
+        *event = copy;
+    }
+    UnlockDisplay(dpy);
+    return 1;
 }
-

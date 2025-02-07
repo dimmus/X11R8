@@ -36,9 +36,8 @@
  *		Note that the range for L* is 0 to 1.
  */
 
-
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xos.h"
 #include <stdio.h> /* sscanf */
@@ -56,37 +55,28 @@
 #else
 #  define XMY_DBL_EPSILON 0.00001
 #endif
-#define DIV16BY116	0.137931
+#define DIV16BY116 0.137931
 
 /*
  *	FORWARD DECLARATIONS
  */
 
-static int CIELab_ParseString(register char *spec, XcmsColor *pColor);
+static int    CIELab_ParseString(register char *spec, XcmsColor *pColor);
 static Status XcmsCIELab_ValidSpec(XcmsColor *pColor);
-
 
 /*
  *	LOCAL VARIABLES
  */
 
-
     /*
      * NULL terminated list of functions applied to get from CIELab to CIEXYZ
      */
-static XcmsConversionProc Fl_CIELab_to_CIEXYZ[] = {
-    XcmsCIELabToCIEXYZ,
-    NULL
-};
+static XcmsConversionProc Fl_CIELab_to_CIEXYZ[] = { XcmsCIELabToCIEXYZ, NULL };
 
     /*
      * NULL terminated list of functions applied to get from CIEXYZ to CIELab
      */
-static XcmsConversionProc Fl_CIEXYZ_to_CIELab[] = {
-    XcmsCIEXYZToCIELab,
-    NULL
-};
-
+static XcmsConversionProc Fl_CIEXYZ_to_CIELab[] = { XcmsCIEXYZToCIELab, NULL };
 
 /*
  *	GLOBALS
@@ -94,17 +84,13 @@ static XcmsConversionProc Fl_CIEXYZ_to_CIELab[] = {
     /*
      * CIE Lab Color Space
      */
-XcmsColorSpace	XcmsCIELabColorSpace =
-    {
-	_XcmsCIELab_prefix,	/* prefix */
-	XcmsCIELabFormat,		/* id */
-	CIELab_ParseString,	/* parseString */
-	Fl_CIELab_to_CIEXYZ,	/* to_CIEXYZ */
-	Fl_CIEXYZ_to_CIELab,	/* from_CIEXYZ */
-	1
-    };
+XcmsColorSpace XcmsCIELabColorSpace = { _XcmsCIELab_prefix, /* prefix */
+                                        XcmsCIELabFormat,  /* id */
+                                        CIELab_ParseString, /* parseString */
+                                        Fl_CIELab_to_CIEXYZ, /* to_CIEXYZ */
+                                        Fl_CIEXYZ_to_CIELab, /* from_CIEXYZ */
+                                        1 };
 
-
 /************************************************************************
  *									*
  *			 PRIVATE ROUTINES				*
@@ -118,9 +104,7 @@ XcmsColorSpace	XcmsCIELabColorSpace =
  *	SYNOPSIS
  */
 static int
-CIELab_ParseString(
-    register char *spec,
-    XcmsColor *pColor)
+CIELab_ParseString(register char *spec, XcmsColor *pColor)
 /*
  *	DESCRIPTION
  *		This routines takes a string and attempts to convert
@@ -138,55 +122,58 @@ CIELab_ParseString(
  *		0 if failed, non-zero otherwise.
  */
 {
-    int n;
+    int   n;
     char *pchar;
 
-    if ((pchar = strchr(spec, ':')) == NULL) {
-	return(XcmsFailure);
+    if ((pchar = strchr(spec, ':')) == NULL)
+    {
+        return (XcmsFailure);
     }
     n = (int)(pchar - spec);
 
     /*
      * Check for proper prefix.
      */
-    if (strncmp(spec, _XcmsCIELab_prefix, (size_t)n) != 0) {
-	return(XcmsFailure);
+    if (strncmp(spec, _XcmsCIELab_prefix, (size_t)n) != 0)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Attempt to parse the value portion.
      */
-    if (sscanf(spec + n + 1, "%lf/%lf/%lf",
-	    &pColor->spec.CIELab.L_star,
-	    &pColor->spec.CIELab.a_star,
-	    &pColor->spec.CIELab.b_star) != 3) {
+    if (sscanf(spec + n + 1,
+               "%lf/%lf/%lf",
+               &pColor->spec.CIELab.L_star,
+               &pColor->spec.CIELab.a_star,
+               &pColor->spec.CIELab.b_star) != 3)
+    {
         char *s; /* Maybe failed due to locale */
-        int f;
-        if ((s = strdup(spec))) {
+        int   f;
+        if ((s = strdup(spec)))
+        {
             for (f = 0; s[f]; ++f)
-                if (s[f] == '.')
-                    s[f] = ',';
-                else if (s[f] == ',')
-                    s[f] = '.';
-	    if (sscanf(s + n + 1, "%lf/%lf/%lf",
-		       &pColor->spec.CIELab.L_star,
-		       &pColor->spec.CIELab.a_star,
-		       &pColor->spec.CIELab.b_star) != 3) {
+                if (s[f] == '.') s[f] = ',';
+                else if (s[f] == ',') s[f] = '.';
+            if (sscanf(s + n + 1,
+                       "%lf/%lf/%lf",
+                       &pColor->spec.CIELab.L_star,
+                       &pColor->spec.CIELab.a_star,
+                       &pColor->spec.CIELab.b_star) != 3)
+            {
                 free(s);
-                return(XcmsFailure);
+                return (XcmsFailure);
             }
             free(s);
-        } else
-	    return(XcmsFailure);
+        }
+        else return (XcmsFailure);
     }
     pColor->format = XcmsCIELabFormat;
-    pColor->pixel = 0;
+    pColor->pixel  = 0;
 
-    return(XcmsCIELab_ValidSpec(pColor));
+    return (XcmsCIELab_ValidSpec(pColor));
 }
 
-
-
 /************************************************************************
  *									*
  *			 PUBLIC ROUTINES				*
@@ -200,8 +187,7 @@ CIELab_ParseString(
  *	SYNOPSIS
  */
 static Status
-XcmsCIELab_ValidSpec(
-    XcmsColor *pColor)
+XcmsCIELab_ValidSpec(XcmsColor *pColor)
 /*
  *	DESCRIPTION
  *		Checks if color specification valid for CIE L*a*b*.
@@ -212,17 +198,15 @@ XcmsCIELab_ValidSpec(
  *
  */
 {
-    if (pColor->format != XcmsCIELabFormat
-	    ||
-	    (pColor->spec.CIELab.L_star < 0.0 - XMY_DBL_EPSILON)
-	    ||
-	    (pColor->spec.CIELab.L_star > 100.0 + XMY_DBL_EPSILON)) {
-	return(XcmsFailure);
+    if (pColor->format != XcmsCIELabFormat ||
+        (pColor->spec.CIELab.L_star < 0.0 - XMY_DBL_EPSILON) ||
+        (pColor->spec.CIELab.L_star > 100.0 + XMY_DBL_EPSILON))
+    {
+        return (XcmsFailure);
     }
-    return(XcmsSuccess);
+    return (XcmsSuccess);
 }
 
-
 /*
  *	NAME
  *		XcmsCIELabToCIEXYZ - convert CIELab to CIEXYZ
@@ -230,11 +214,10 @@ XcmsCIELab_ValidSpec(
  *	SYNOPSIS
  */
 Status
-XcmsCIELabToCIEXYZ(
-    XcmsCCC ccc,
-    XcmsColor *pLab_WhitePt,
-    XcmsColor *pColors_in_out,
-    unsigned int nColors)
+XcmsCIELabToCIEXYZ(XcmsCCC      ccc,
+                   XcmsColor   *pLab_WhitePt,
+                   XcmsColor   *pColors_in_out,
+                   unsigned int nColors)
 /*
  *	DESCRIPTION
  *		Converts color specifications in an array of XcmsColor
@@ -248,84 +231,97 @@ XcmsCIELabToCIEXYZ(
  *
  */
 {
-    XcmsCIEXYZ XYZ_return;
-    XcmsFloat tmpFloat, tmpL;
-    XcmsColor whitePt;
+    XcmsCIEXYZ   XYZ_return;
+    XcmsFloat    tmpFloat, tmpL;
+    XcmsColor    whitePt;
     unsigned int i;
-    XcmsColor *pColor = pColors_in_out;
+    XcmsColor   *pColor = pColors_in_out;
 
     /*
      * Check arguments
      */
-    if (pLab_WhitePt == NULL || pColors_in_out == NULL) {
-	return(XcmsFailure);
+    if (pLab_WhitePt == NULL || pColors_in_out == NULL)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Make sure white point is in CIEXYZ form, if not, convert it.
      */
-    if (pLab_WhitePt->format != XcmsCIEXYZFormat) {
-	/* Make a copy of the white point because we're going to modify it */
-	memcpy((char *)&whitePt, (char *)pLab_WhitePt, sizeof(XcmsColor));
-	if (!_XcmsDIConvertColors(ccc, &whitePt,
-		(XcmsColor *)NULL, 1, XcmsCIEXYZFormat)) {
-	    return(XcmsFailure);
-	}
-	pLab_WhitePt = &whitePt;
+    if (pLab_WhitePt->format != XcmsCIEXYZFormat)
+    {
+    /* Make a copy of the white point because we're going to modify it */
+        memcpy((char *)&whitePt, (char *)pLab_WhitePt, sizeof(XcmsColor));
+        if (!_XcmsDIConvertColors(ccc,
+                                  &whitePt,
+                                  (XcmsColor *)NULL,
+                                  1,
+                                  XcmsCIEXYZFormat))
+        {
+            return (XcmsFailure);
+        }
+        pLab_WhitePt = &whitePt;
     }
 
     /*
      * Make sure it is a white point, i.e., Y == 1.0
      */
-    if (pLab_WhitePt->spec.CIEXYZ.Y != 1.0) {
-	return (0);
+    if (pLab_WhitePt->spec.CIEXYZ.Y != 1.0)
+    {
+        return (0);
     }
 
     /*
      * Now convert each XcmsColor structure to CIEXYZ form
      */
-    for (i = 0; i < nColors; i++, pColor++) {
+    for (i = 0; i < nColors; i++, pColor++)
+    {
+    /* Make sure original format is CIELab */
+        if (!XcmsCIELab_ValidSpec(pColor))
+        {
+            return (XcmsFailure);
+        }
 
-	/* Make sure original format is CIELab */
-	if (!XcmsCIELab_ValidSpec(pColor)) {
-	    return(XcmsFailure);
-	}
+    /* Calculate Y: assume that Yn = 1.0 */
+        tmpL         = (pColor->spec.CIELab.L_star + 16.0) / 116.0;
+        XYZ_return.Y = tmpL * tmpL * tmpL;
 
-	/* Calculate Y: assume that Yn = 1.0 */
-	tmpL = (pColor->spec.CIELab.L_star + 16.0) / 116.0;
-	XYZ_return.Y = tmpL * tmpL * tmpL;
+        if (XYZ_return.Y < 0.008856)
+        {
+        /* Calculate Y: assume that Yn = 1.0 */
+            tmpL = pColor->spec.CIELab.L_star / 9.03292;
 
-	if (XYZ_return.Y < 0.008856) {
-	    /* Calculate Y: assume that Yn = 1.0 */
-	    tmpL = pColor->spec.CIELab.L_star / 9.03292;
+        /* Calculate X */
+            XYZ_return.X = pLab_WhitePt->spec.CIEXYZ.X *
+                           ((pColor->spec.CIELab.a_star / 3893.5) + tmpL);
+        /* Calculate Y */
+            XYZ_return.Y = tmpL;
+        /* Calculate Z */
+            XYZ_return.Z = pLab_WhitePt->spec.CIEXYZ.Z *
+                           (tmpL - (pColor->spec.CIELab.b_star / 1557.4));
+        }
+        else
+        {
+        /* Calculate X */
+            tmpFloat = tmpL + (pColor->spec.CIELab.a_star / 5.0);
+            XYZ_return.X =
+                pLab_WhitePt->spec.CIEXYZ.X * tmpFloat * tmpFloat * tmpFloat;
 
-	    /* Calculate X */
-	    XYZ_return.X = pLab_WhitePt->spec.CIEXYZ.X *
-		    ((pColor->spec.CIELab.a_star / 3893.5) + tmpL);
-	    /* Calculate Y */
-	    XYZ_return.Y = tmpL;
-	    /* Calculate Z */
-	    XYZ_return.Z = pLab_WhitePt->spec.CIEXYZ.Z *
-		    (tmpL - (pColor->spec.CIELab.b_star / 1557.4));
-	} else {
-	    /* Calculate X */
-	    tmpFloat = tmpL + (pColor->spec.CIELab.a_star / 5.0);
-	    XYZ_return.X = pLab_WhitePt->spec.CIEXYZ.X * tmpFloat * tmpFloat * tmpFloat;
+        /* Calculate Z */
+            tmpFloat = tmpL - (pColor->spec.CIELab.b_star / 2.0);
+            XYZ_return.Z =
+                pLab_WhitePt->spec.CIEXYZ.Z * tmpFloat * tmpFloat * tmpFloat;
+        }
 
-	    /* Calculate Z */
-	    tmpFloat = tmpL - (pColor->spec.CIELab.b_star / 2.0);
-	    XYZ_return.Z = pLab_WhitePt->spec.CIEXYZ.Z * tmpFloat * tmpFloat * tmpFloat;
-	}
-
-	memcpy((char *)&pColor->spec.CIEXYZ, (char *)&XYZ_return,
-	       sizeof(XcmsCIEXYZ));
-	pColor->format = XcmsCIEXYZFormat;
+        memcpy((char *)&pColor->spec.CIEXYZ,
+               (char *)&XYZ_return,
+               sizeof(XcmsCIEXYZ));
+        pColor->format = XcmsCIEXYZFormat;
     }
 
     return (1);
 }
 
-
 /*
  *	NAME
  *		XcmsCIEXYZToCIELab - convert CIEXYZ to CIELab
@@ -333,11 +329,10 @@ XcmsCIELabToCIEXYZ(
  *	SYNOPSIS
  */
 Status
-XcmsCIEXYZToCIELab(
-    XcmsCCC ccc,
-    XcmsColor *pLab_WhitePt,
-    XcmsColor *pColors_in_out,
-    unsigned int nColors)
+XcmsCIEXYZToCIELab(XcmsCCC      ccc,
+                   XcmsColor   *pLab_WhitePt,
+                   XcmsColor   *pColors_in_out,
+                   unsigned int nColors)
 /*
  *	DESCRIPTION
  *		Converts color specifications in an array of XcmsColor
@@ -351,81 +346,101 @@ XcmsCIEXYZToCIELab(
  *
  */
 {
-    XcmsCIELab Lab_return;
-    XcmsFloat fX_Xn, fY_Yn, fZ_Zn;
-    XcmsColor whitePt;
+    XcmsCIELab   Lab_return;
+    XcmsFloat    fX_Xn, fY_Yn, fZ_Zn;
+    XcmsColor    whitePt;
     unsigned int i;
-    XcmsColor *pColor = pColors_in_out;
+    XcmsColor   *pColor = pColors_in_out;
 
     /*
      * Check arguments
      */
-    if (pLab_WhitePt == NULL || pColors_in_out == NULL) {
-	return(XcmsFailure);
+    if (pLab_WhitePt == NULL || pColors_in_out == NULL)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Make sure white point is in CIEXYZ form, if not, convert it.
      */
-    if (pLab_WhitePt->format != XcmsCIEXYZFormat) {
-	/* Make a copy of the white point because we're going to modify it */
-	memcpy((char *)&whitePt, (char *)pLab_WhitePt, sizeof(XcmsColor));
-	if (!_XcmsDIConvertColors(ccc, &whitePt, (XcmsColor *)NULL,
-		1, XcmsCIEXYZFormat)) {
-	    return(XcmsFailure);
-	}
-	pLab_WhitePt = &whitePt;
+    if (pLab_WhitePt->format != XcmsCIEXYZFormat)
+    {
+    /* Make a copy of the white point because we're going to modify it */
+        memcpy((char *)&whitePt, (char *)pLab_WhitePt, sizeof(XcmsColor));
+        if (!_XcmsDIConvertColors(ccc,
+                                  &whitePt,
+                                  (XcmsColor *)NULL,
+                                  1,
+                                  XcmsCIEXYZFormat))
+        {
+            return (XcmsFailure);
+        }
+        pLab_WhitePt = &whitePt;
     }
 
     /*
      * Make sure it is a white point, i.e., Y == 1.0
      */
-    if (pLab_WhitePt->spec.CIEXYZ.Y != 1.0) {
-	return(XcmsFailure);
+    if (pLab_WhitePt->spec.CIEXYZ.Y != 1.0)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Now convert each XcmsColor structure to CIEXYZ form
      */
-    for (i = 0; i < nColors; i++, pColor++) {
+    for (i = 0; i < nColors; i++, pColor++)
+    {
+    /* Make sure original format is CIELab */
+        if (!_XcmsCIEXYZ_ValidSpec(pColor))
+        {
+            return (XcmsFailure);
+        }
 
-	/* Make sure original format is CIELab */
-	if (!_XcmsCIEXYZ_ValidSpec(pColor)) {
-	    return(XcmsFailure);
-	}
+    /* Calculate L*:  assume Yn = 1.0 */
+        if (pColor->spec.CIEXYZ.Y < 0.008856)
+        {
+            fY_Yn             = (0.07787 * pColor->spec.CIEXYZ.Y) + DIV16BY116;
+        /* note fY_Yn used to compute Lab_return.a below */
+            Lab_return.L_star = 116.0 * (fY_Yn - DIV16BY116);
+        }
+        else
+        {
+            fY_Yn             = (XcmsFloat)XCMS_CUBEROOT(pColor->spec.CIEXYZ.Y);
+        /* note fY_Yn used to compute Lab_return.a_star below */
+            Lab_return.L_star = (116.0 * fY_Yn) - 16.0;
+        }
 
-	/* Calculate L*:  assume Yn = 1.0 */
-	if (pColor->spec.CIEXYZ.Y < 0.008856) {
-	    fY_Yn = (0.07787 * pColor->spec.CIEXYZ.Y) + DIV16BY116;
-	    /* note fY_Yn used to compute Lab_return.a below */
-	    Lab_return.L_star = 116.0 * (fY_Yn - DIV16BY116);
-	} else {
-	    fY_Yn = (XcmsFloat)XCMS_CUBEROOT(pColor->spec.CIEXYZ.Y);
-	    /* note fY_Yn used to compute Lab_return.a_star below */
-	    Lab_return.L_star = (116.0 * fY_Yn) - 16.0;
-	}
+    /* Calculate f(X/Xn) */
+        if ((fX_Xn = pColor->spec.CIEXYZ.X / pLab_WhitePt->spec.CIEXYZ.X) <
+            0.008856)
+        {
+            fX_Xn = (0.07787 * fX_Xn) + DIV16BY116;
+        }
+        else
+        {
+            fX_Xn = (XcmsFloat)XCMS_CUBEROOT(fX_Xn);
+        }
 
-	/* Calculate f(X/Xn) */
-	if ((fX_Xn = pColor->spec.CIEXYZ.X / pLab_WhitePt->spec.CIEXYZ.X) < 0.008856) {
-	    fX_Xn = (0.07787 * fX_Xn) + DIV16BY116;
-	} else {
-	    fX_Xn = (XcmsFloat) XCMS_CUBEROOT(fX_Xn);
-	}
+    /* Calculate f(Z/Zn) */
+        if ((fZ_Zn = pColor->spec.CIEXYZ.Z / pLab_WhitePt->spec.CIEXYZ.Z) <
+            0.008856)
+        {
+            fZ_Zn = (0.07787 * fZ_Zn) + DIV16BY116;
+        }
+        else
+        {
+            fZ_Zn = (XcmsFloat)XCMS_CUBEROOT(fZ_Zn);
+        }
 
-	/* Calculate f(Z/Zn) */
-	if ((fZ_Zn = pColor->spec.CIEXYZ.Z / pLab_WhitePt->spec.CIEXYZ.Z) < 0.008856) {
-	    fZ_Zn = (0.07787 * fZ_Zn) + DIV16BY116;
-	} else {
-	    fZ_Zn = (XcmsFloat) XCMS_CUBEROOT(fZ_Zn);
-	}
+        Lab_return.a_star = 5.0 * (fX_Xn - fY_Yn);
+        Lab_return.b_star = 2.0 * (fY_Yn - fZ_Zn);
 
-	Lab_return.a_star = 5.0 * (fX_Xn - fY_Yn);
-	Lab_return.b_star = 2.0 * (fY_Yn - fZ_Zn);
-
-	memcpy((char *)&pColor->spec.CIELab, (char *)&Lab_return,
-	       sizeof(XcmsCIELab));
-	pColor->format = XcmsCIELabFormat;
+        memcpy((char *)&pColor->spec.CIELab,
+               (char *)&Lab_return,
+               sizeof(XcmsCIELab));
+        pColor->format = XcmsCIELabFormat;
     }
 
-    return(XcmsSuccess);
+    return (XcmsSuccess);
 }

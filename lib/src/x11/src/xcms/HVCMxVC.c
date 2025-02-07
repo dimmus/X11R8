@@ -45,7 +45,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
@@ -54,14 +54,13 @@
 /*
  *	DEFINES
  */
-#define MIN(x,y) ((x) > (y) ? (y) : (x))
-#define MIN3(x,y,z) ((x) > (MIN((y), (z))) ? (MIN((y), (z))) : (x))
-#define MAX(x,y) ((x) > (y) ? (x) : (y))
-#define MAX3(x,y,z) ((x) > (MAX((y), (z))) ? (x) : (MAX((y), (z))))
-#define START_V	    40.0
-#define START_C	    120.0
+#define MIN(x, y)     ((x) > (y) ? (y) : (x))
+#define MIN3(x, y, z) ((x) > (MIN((y), (z))) ? (MIN((y), (z))) : (x))
+#define MAX(x, y)     ((x) > (y) ? (x) : (y))
+#define MAX3(x, y, z) ((x) > (MAX((y), (z))) ? (x) : (MAX((y), (z))))
+#define START_V       40.0
+#define START_C       120.0
 
-
 /************************************************************************
  *									*
  *			 API PRIVATE ROUTINES				*
@@ -75,11 +74,10 @@
  *	SYNOPSIS
  */
 Status
-_XcmsTekHVCQueryMaxVCRGB(
-    XcmsCCC	ccc,
-    XcmsFloat	hue,
-    XcmsColor   *pColor_return,
-    XcmsRGBi    *pRGB_return)
+_XcmsTekHVCQueryMaxVCRGB(XcmsCCC    ccc,
+                         XcmsFloat  hue,
+                         XcmsColor *pColor_return,
+                         XcmsRGBi  *pRGB_return)
 
 /*
  *	DESCRIPTION
@@ -107,12 +105,11 @@ _XcmsTekHVCQueryMaxVCRGB(
     XcmsFloat nSmall, nLarge;
     XcmsColor tmp;
 
-    tmp.format = XcmsTekHVCFormat;
+    tmp.format        = XcmsTekHVCFormat;
     tmp.spec.TekHVC.H = hue;
     /*  Use some unreachable color on the given hue */
     tmp.spec.TekHVC.V = START_V;
     tmp.spec.TekHVC.C = START_C;
-
 
     /*
      * Convert from HVC to RGB
@@ -121,43 +118,49 @@ _XcmsTekHVCQueryMaxVCRGB(
      * out of bounds RGBi values in tmp when the ccc->gamutCompProc
      * is NULL.
      */
-    if ((_XcmsConvertColorsWithWhitePt(ccc, &tmp,
-	    &ccc->pPerScrnInfo->screenWhitePt, 1, XcmsRGBiFormat, (Bool *) NULL)
-	    == XcmsFailure) && tmp.format != XcmsRGBiFormat) {
-	return (XcmsFailure);
+    if ((_XcmsConvertColorsWithWhitePt(ccc,
+                                       &tmp,
+                                       &ccc->pPerScrnInfo->screenWhitePt,
+                                       1,
+                                       XcmsRGBiFormat,
+                                       (Bool *)NULL) == XcmsFailure) &&
+        tmp.format != XcmsRGBiFormat)
+    {
+        return (XcmsFailure);
     }
 
     /* Now pick the smallest RGB */
-    nSmall = MIN3(tmp.spec.RGBi.red,
-		  tmp.spec.RGBi.green,
-		  tmp.spec.RGBi.blue);
+    nSmall = MIN3(tmp.spec.RGBi.red, tmp.spec.RGBi.green, tmp.spec.RGBi.blue);
     /* Make the smallest RGB equal to zero */
-    tmp.spec.RGBi.red   -= nSmall;
+    tmp.spec.RGBi.red -= nSmall;
     tmp.spec.RGBi.green -= nSmall;
-    tmp.spec.RGBi.blue  -= nSmall;
+    tmp.spec.RGBi.blue -= nSmall;
 
     /* Now pick the largest RGB */
-    nLarge = MAX3(tmp.spec.RGBi.red,
-		  tmp.spec.RGBi.green,
-		  tmp.spec.RGBi.blue);
+    nLarge = MAX3(tmp.spec.RGBi.red, tmp.spec.RGBi.green, tmp.spec.RGBi.blue);
     /* Scale the RGB values based on the largest one */
-    tmp.spec.RGBi.red   /= nLarge;
+    tmp.spec.RGBi.red /= nLarge;
     tmp.spec.RGBi.green /= nLarge;
-    tmp.spec.RGBi.blue  /= nLarge;
+    tmp.spec.RGBi.blue /= nLarge;
     tmp.format = XcmsRGBiFormat;
 
     /* If the calling routine wants RGB value give them the ones used. */
-    if (pRGB_return) {
-	pRGB_return->red   = tmp.spec.RGBi.red;
-	pRGB_return->green = tmp.spec.RGBi.green;
-	pRGB_return->blue  = tmp.spec.RGBi.blue;
+    if (pRGB_return)
+    {
+        pRGB_return->red   = tmp.spec.RGBi.red;
+        pRGB_return->green = tmp.spec.RGBi.green;
+        pRGB_return->blue  = tmp.spec.RGBi.blue;
     }
 
     /* Convert from RGBi to HVC */
-    if (_XcmsConvertColorsWithWhitePt(ccc, &tmp,
-	    &ccc->pPerScrnInfo->screenWhitePt, 1, XcmsTekHVCFormat, (Bool *) NULL)
-	    == XcmsFailure) {
-	return (XcmsFailure);
+    if (_XcmsConvertColorsWithWhitePt(ccc,
+                                      &tmp,
+                                      &ccc->pPerScrnInfo->screenWhitePt,
+                                      1,
+                                      XcmsTekHVCFormat,
+                                      (Bool *)NULL) == XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
     /* make sure to return the input hue */
@@ -166,7 +169,6 @@ _XcmsTekHVCQueryMaxVCRGB(
     return (XcmsSuccess);
 }
 
-
 /************************************************************************
  *									*
  *			 PUBLIC ROUTINES				*
@@ -180,10 +182,7 @@ _XcmsTekHVCQueryMaxVCRGB(
  *	SYNOPSIS
  */
 Status
-XcmsTekHVCQueryMaxVC (
-    XcmsCCC ccc,
-    XcmsFloat hue,
-    XcmsColor *pColor_return)
+XcmsTekHVCQueryMaxVC(XcmsCCC ccc, XcmsFloat hue, XcmsColor *pColor_return)
 
 /*
  *	DESCRIPTION
@@ -207,29 +206,33 @@ XcmsTekHVCQueryMaxVC (
     /*
      * Check Arguments
      */
-    if (ccc == NULL || pColor_return == NULL) {
-	return(XcmsFailure);
+    if (ccc == NULL || pColor_return == NULL)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Insure TekHVC installed
      */
-    if (XcmsAddColorSpace(&XcmsTekHVCColorSpace) == XcmsFailure) {
-	return(XcmsFailure);
+    if (XcmsAddColorSpace(&XcmsTekHVCColorSpace) == XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
     /* Use my own CCC */
-    memcpy ((char *)&myCCC, (char *)ccc, sizeof(XcmsCCCRec));
+    memcpy((char *)&myCCC, (char *)ccc, sizeof(XcmsCCCRec));
     myCCC.clientWhitePt.format = XcmsUndefinedFormat;
-    myCCC.gamutCompProc = (XcmsCompressionProc)NULL;
+    myCCC.gamutCompProc        = (XcmsCompressionProc)NULL;
 
-    while (hue < 0.0) {
-	hue += 360.0;
+    while (hue < 0.0)
+    {
+        hue += 360.0;
     }
-    while (hue >= 360.0) {
-	hue -= 360.0;
+    while (hue >= 360.0)
+    {
+        hue -= 360.0;
     }
 
-    return(_XcmsTekHVCQueryMaxVCRGB (&myCCC, hue, pColor_return,
-	    (XcmsRGBi *)NULL));
+    return (
+        _XcmsTekHVCQueryMaxVCRGB(&myCCC, hue, pColor_return, (XcmsRGBi *)NULL));
 }

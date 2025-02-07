@@ -29,7 +29,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/SM/SMlib.h"
 #include "SMlibint.h"
@@ -44,24 +44,20 @@ SmFreeProperty(SmProp *prop)
 {
     if (prop)
     {
-	int i;
+        int i;
 
-	if (prop->name)
-	    free (prop->name);
-	if (prop->type)
-	    free (prop->type);
-	if (prop->vals)
-	{
-	    for (i = 0; i < prop->num_vals; i++)
-		if (prop->vals[i].value)
-		    free (prop->vals[i].value);
-	    free (prop->vals);
-	}
+        if (prop->name) free(prop->name);
+        if (prop->type) free(prop->type);
+        if (prop->vals)
+        {
+            for (i = 0; i < prop->num_vals; i++)
+                if (prop->vals[i].value) free(prop->vals[i].value);
+            free(prop->vals);
+        }
 
-	free (prop);
+        free(prop);
     }
 }
-
 
 /*
  * Free reason messages
@@ -72,17 +68,15 @@ SmFreeReasons(int count, char **reasonMsgs)
 {
     if (reasonMsgs)
     {
-	int i;
+        int i;
 
-	for (i = 0; i < count; i++)
-	    free (reasonMsgs[i]);
+        for (i = 0; i < count; i++)
+            free(reasonMsgs[i]);
 
-	free (reasonMsgs);
+        free(reasonMsgs);
     }
 }
 
-
-
 /*
  * Smc informational functions
  */
@@ -93,13 +87,11 @@ SmcProtocolVersion(SmcConn smcConn)
     return (smcConn->proto_major_version);
 }
 
-
 int
 SmcProtocolRevision(SmcConn smcConn)
 {
     return (smcConn->proto_minor_version);
 }
-
 
 char *
 SmcVendor(SmcConn smcConn)
@@ -107,13 +99,11 @@ SmcVendor(SmcConn smcConn)
     return strdup(smcConn->vendor);
 }
 
-
 char *
 SmcRelease(SmcConn smcConn)
 {
     return strdup(smcConn->release);
 }
-
 
 char *
 SmcClientID(SmcConn smcConn)
@@ -121,15 +111,12 @@ SmcClientID(SmcConn smcConn)
     return strdup(smcConn->client_id);
 }
 
-
 IceConn
 SmcGetIceConnection(SmcConn smcConn)
 {
     return (smcConn->iceConn);
 }
 
-
-
 /*
  * Sms informational functions
  */
@@ -140,20 +127,17 @@ SmsProtocolVersion(SmsConn smsConn)
     return (smsConn->proto_major_version);
 }
 
-
 int
 SmsProtocolRevision(SmsConn smsConn)
 {
     return (smsConn->proto_minor_version);
 }
 
-
 char *
 SmsClientID(SmsConn smsConn)
 {
     return strdup(smsConn->client_id);
 }
-
 
 IceConn
 SmsGetIceConnection(SmsConn smsConn)

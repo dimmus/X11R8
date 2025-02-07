@@ -25,19 +25,15 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XStoreColors(
-    register Display *dpy,
-    Colormap cmap,
-    XColor *defs,
-    int ncolors)
+XStoreColors(register Display *dpy, Colormap cmap, XColor *defs, int ncolors)
 {
-    register int i;
-    xColorItem citem;
+    register int              i;
+    xColorItem                citem;
     register xStoreColorsReq *req;
 
     LockDisplay(dpy);
@@ -47,18 +43,19 @@ XStoreColors(
 
     req->length += (ncolors * SIZEOF(xColorItem)) >> 2; /* assume size is 4*n */
 
-    for (i = 0; i < ncolors; i++) {
-	citem.pixel = defs[i].pixel;
-	citem.red = defs[i].red;
-	citem.green = defs[i].green;
-	citem.blue = defs[i].blue;
-	citem.flags = defs[i].flags;
-	citem.pad = 0;
+    for (i = 0; i < ncolors; i++)
+    {
+        citem.pixel = defs[i].pixel;
+        citem.red   = defs[i].red;
+        citem.green = defs[i].green;
+        citem.blue  = defs[i].blue;
+        citem.flags = defs[i].flags;
+        citem.pad   = 0;
 
-	/* note that xColorItem doesn't contain all 16-bit quantities, so
+        /* note that xColorItem doesn't contain all 16-bit quantities, so
 	   we can't use Data16 */
-	Data(dpy, (char *)&citem, (long) SIZEOF(xColorItem));
-			/* assume size is 4*n */
+        Data(dpy, (char *)&citem, (long)SIZEOF(xColorItem));
+        /* assume size is 4*n */
     }
     UnlockDisplay(dpy);
     SyncHandle();

@@ -62,14 +62,12 @@ from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
-
-
 
 /************************************************************************
  *									*
@@ -85,15 +83,14 @@ from The Open Group.
  */
 
 XcmsCCC
-XcmsCreateCCC(
-    Display *dpy,
-    int screenNumber,
-    Visual *visual,
-    XcmsColor *clientWhitePt,
-    XcmsCompressionProc gamutCompProc,
-    XPointer gamutCompClientData,
-    XcmsWhiteAdjustProc whitePtAdjProc,
-    XPointer whitePtAdjClientData)
+XcmsCreateCCC(Display            *dpy,
+              int                 screenNumber,
+              Visual             *visual,
+              XcmsColor          *clientWhitePt,
+              XcmsCompressionProc gamutCompProc,
+              XPointer            gamutCompClientData,
+              XcmsWhiteAdjustProc whitePtAdjProc,
+              XPointer            whitePtAdjClientData)
 /*
  *	DESCRIPTION
  *		Given a Display, Screen, Visual, etc., this routine creates
@@ -105,14 +102,14 @@ XcmsCreateCCC(
  *
  */
 {
-    XcmsCCC pDefaultCCC = XcmsDefaultCCC(dpy, screenNumber);
-    XcmsCCC newccc;
+    XcmsCCC           pDefaultCCC = XcmsDefaultCCC(dpy, screenNumber);
+    XcmsCCC           newccc;
     XcmsIntensityMap *pIMap;
-    XcmsPerScrnInfo *pNewScrnInfo;
+    XcmsPerScrnInfo  *pNewScrnInfo;
 
-    if (pDefaultCCC == NULL ||
-	    !(newccc = Xcalloc(1, sizeof(XcmsCCCRec)))) {
-	return(NULL);
+    if (pDefaultCCC == NULL || !(newccc = Xcalloc(1, sizeof(XcmsCCCRec))))
+    {
+        return (NULL);
     }
 
     /*
@@ -122,36 +119,45 @@ XcmsCreateCCC(
      *		pPerScrnInfo
      */
     memcpy((char *)newccc, (char *)pDefaultCCC, sizeof(XcmsCCCRec));
-    if (clientWhitePt) {
-	memcpy((char *)&newccc->clientWhitePt, (char *)clientWhitePt,
-		sizeof(XcmsColor));
+    if (clientWhitePt)
+    {
+        memcpy((char *)&newccc->clientWhitePt,
+               (char *)clientWhitePt,
+               sizeof(XcmsColor));
     }
-    if (gamutCompProc) {
-	newccc->gamutCompProc = gamutCompProc;
+    if (gamutCompProc)
+    {
+        newccc->gamutCompProc = gamutCompProc;
     }
-    if (gamutCompClientData) {
-	newccc->gamutCompClientData = gamutCompClientData;
+    if (gamutCompClientData)
+    {
+        newccc->gamutCompClientData = gamutCompClientData;
     }
-    if (whitePtAdjProc) {
-	newccc->whitePtAdjProc = whitePtAdjProc;
+    if (whitePtAdjProc)
+    {
+        newccc->whitePtAdjProc = whitePtAdjProc;
     }
-    if (whitePtAdjClientData) {
-	newccc->whitePtAdjClientData = whitePtAdjClientData;
+    if (whitePtAdjClientData)
+    {
+        newccc->whitePtAdjClientData = whitePtAdjClientData;
     }
 
     /*
      * Now check our list of per-Visual Intensity tables.
      * If one exists replace the pPerScrnInfo.
      */
-    if ((pIMap = _XcmsGetIntensityMap(dpy, visual)) != NULL) {
-	if (!(pNewScrnInfo = Xcalloc(1, sizeof(XcmsPerScrnInfo)))) {
-	    Xfree(newccc);
-	    return(NULL);
-	}
-	memcpy((char *)pNewScrnInfo, (char *)newccc->pPerScrnInfo,
-		sizeof(XcmsPerScrnInfo));
-	pNewScrnInfo->screenData = pIMap->screenData;
-	newccc->pPerScrnInfo = pNewScrnInfo;
+    if ((pIMap = _XcmsGetIntensityMap(dpy, visual)) != NULL)
+    {
+        if (!(pNewScrnInfo = Xcalloc(1, sizeof(XcmsPerScrnInfo))))
+        {
+            Xfree(newccc);
+            return (NULL);
+        }
+        memcpy((char *)pNewScrnInfo,
+               (char *)newccc->pPerScrnInfo,
+               sizeof(XcmsPerScrnInfo));
+        pNewScrnInfo->screenData = pIMap->screenData;
+        newccc->pPerScrnInfo     = pNewScrnInfo;
     }
 
     /*
@@ -159,10 +165,9 @@ XcmsCreateCCC(
      */
     newccc->visual = visual;
 
-    return(newccc);
+    return (newccc);
 }
 
-
 /*
  *	NAME
  *		XcmsDefaultCCC
@@ -170,9 +175,7 @@ XcmsCreateCCC(
  *	SYNOPSIS
  */
 XcmsCCC
-XcmsDefaultCCC(
-    Display *dpy,
-    int screenNumber)
+XcmsDefaultCCC(Display *dpy, int screenNumber)
 /*
  *	DESCRIPTION
  *		Given a Display and Screen, this routine creates
@@ -188,35 +191,41 @@ XcmsDefaultCCC(
 {
     XcmsCCC ccc;
 
-
-    if ((screenNumber < 0) || (screenNumber >= ScreenCount(dpy))) {
-	return((XcmsCCC)NULL);
+    if ((screenNumber < 0) || (screenNumber >= ScreenCount(dpy)))
+    {
+        return ((XcmsCCC)NULL);
     }
 
     /*
      * Check if the XcmsCCC's for each screen has been created
      */
-    if ((XcmsCCC)dpy->cms.defaultCCCs == NULL) {
-	if (!_XcmsInitDefaultCCCs(dpy)) {
-	    return((XcmsCCC)NULL);
-	}
+    if ((XcmsCCC)dpy->cms.defaultCCCs == NULL)
+    {
+        if (!_XcmsInitDefaultCCCs(dpy))
+        {
+            return ((XcmsCCC)NULL);
+        }
     }
 
     ccc = (XcmsCCC)dpy->cms.defaultCCCs + screenNumber;
 
-    if (!ccc->pPerScrnInfo) {
-	/*
+    if (!ccc->pPerScrnInfo)
+    {
+    /*
 	 * Need to create the XcmsPerScrnInfo structure.  The
 	 * _XcmsInitScrnInfo routine will create the XcmsPerScrnInfo
 	 * structure as well as initialize its functionSet and pScreenData
 	 * components.
 	 */
-	if (!_XcmsInitScrnInfo(dpy, screenNumber)) {
-	    return((XcmsCCC)NULL);
-	}
-	return(ccc);
-    } else {
-	/*
+        if (!_XcmsInitScrnInfo(dpy, screenNumber))
+        {
+            return ((XcmsCCC)NULL);
+        }
+        return (ccc);
+    }
+    else
+    {
+    /*
 	 * If ccc->pPerScrnInfo->state == XcmsInitSuccess,
 	 *    then the pPerScrnInfo component has already been initialized
 	 *    therefore, just return ccc.
@@ -227,24 +236,25 @@ XcmsDefaultCCC(
 	 * If ccc->pPerScrnInfo->state == XcmsInitNone,
 	 *    then attempt to initialize the pPerScrnInfo component.
 	 */
-	switch (ccc->pPerScrnInfo->state) {
-	   case XcmsInitFailure :
-	    /* fall through */
-	   case XcmsInitSuccess :
-	    return(ccc);
-	   case XcmsInitNone :
-	    /* XcmsPerScreenInfo has not been initialized */
-	    if (!_XcmsInitScrnInfo(dpy, screenNumber)) {
-		return((XcmsCCC)NULL);
-	    }
-	    return(ccc);
-	   default :
-	    return((XcmsCCC)NULL);
-	}
+        switch (ccc->pPerScrnInfo->state)
+        {
+            case XcmsInitFailure:
+        /* fall through */
+            case XcmsInitSuccess:
+                return (ccc);
+            case XcmsInitNone:
+        /* XcmsPerScreenInfo has not been initialized */
+                if (!_XcmsInitScrnInfo(dpy, screenNumber))
+                {
+                    return ((XcmsCCC)NULL);
+                }
+                return (ccc);
+            default:
+                return ((XcmsCCC)NULL);
+        }
     }
 }
 
-
 /*
  *	NAME
  *		XcmsFreeCCC
@@ -264,9 +274,10 @@ XcmsFreeCCC(XcmsCCC ccc)
  */
 {
     if (ccc->dpy->cms.defaultCCCs &&
-	ccc == ((XcmsCCC)ccc->dpy->cms.defaultCCCs) + ccc->screenNumber) {
-	/* do not allow clients to free DefaultCCC's */
-	return;
+        ccc == ((XcmsCCC)ccc->dpy->cms.defaultCCCs) + ccc->screenNumber)
+    {
+    /* do not allow clients to free DefaultCCC's */
+        return;
     }
 
     /*
@@ -277,8 +288,9 @@ XcmsFreeCCC(XcmsCCC ccc)
      * so happens * that we place its initial reference is placed in the
      * 	default CCC.  The routine _XcmsFreeDefaultCCCs frees them.
      */
-    if (_XcmsGetIntensityMap(ccc->dpy, ccc->visual) != NULL) {
-	Xfree(ccc->pPerScrnInfo);
+    if (_XcmsGetIntensityMap(ccc->dpy, ccc->visual) != NULL)
+    {
+        Xfree(ccc->pPerScrnInfo);
     }
 
     Xfree(ccc);

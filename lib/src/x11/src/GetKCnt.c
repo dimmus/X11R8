@@ -25,31 +25,30 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XGetKeyboardControl (
-    register Display *dpy,
-    register XKeyboardState *state)
+XGetKeyboardControl(register Display *dpy, register XKeyboardState *state)
 {
     xGetKeyboardControlReply rep;
     _X_UNUSED register xReq *req;
     LockDisplay(dpy);
-    GetEmptyReq (GetKeyboardControl, req);
-    (void) _XReply (dpy, (xReply *) &rep,
-	(SIZEOF(xGetKeyboardControlReply) - SIZEOF(xReply)) >> 2, xTrue);
+    GetEmptyReq(GetKeyboardControl, req);
+    (void)_XReply(dpy,
+                  (xReply *)&rep,
+                  (SIZEOF(xGetKeyboardControlReply) - SIZEOF(xReply)) >> 2,
+                  xTrue);
 
-    state->key_click_percent = rep.keyClickPercent;
-    state->bell_percent = rep.bellPercent;
-    state->bell_pitch = rep.bellPitch;
-    state->bell_duration = rep.bellDuration;
-    state->led_mask = rep.ledMask;
+    state->key_click_percent  = rep.keyClickPercent;
+    state->bell_percent       = rep.bellPercent;
+    state->bell_pitch         = rep.bellPitch;
+    state->bell_duration      = rep.bellDuration;
+    state->led_mask           = rep.ledMask;
     state->global_auto_repeat = rep.globalAutoRepeat;
-    memcpy (state->auto_repeats, rep.map, sizeof state->auto_repeats);
+    memcpy(state->auto_repeats, rep.map, sizeof state->auto_repeats);
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
-    }
-
+}

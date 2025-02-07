@@ -44,13 +44,12 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
 
-
 /************************************************************************
  *									*
  *			 PUBLIC ROUTINES				*
@@ -65,12 +64,11 @@
  */
 /* ARGSUSED */
 Status
-XcmsTekHVCClipC (
-    XcmsCCC ccc,
-    XcmsColor *pColors_in_out,
-    unsigned int nColors,
-    unsigned int i,
-    Bool *pCompressed)
+XcmsTekHVCClipC(XcmsCCC      ccc,
+                XcmsColor   *pColors_in_out,
+                unsigned int nColors,
+                unsigned int i,
+                Bool        *pCompressed)
 /*
  *	DESCRIPTION
  *		Reduce the Chroma for a specific hue and value to
@@ -89,7 +87,7 @@ XcmsTekHVCClipC (
  *
  */
 {
-    Status retval;
+    Status     retval;
     XcmsColor *pColor;
 
     /*
@@ -104,46 +102,65 @@ XcmsTekHVCClipC (
     /*
      * Insure TekHVC installed
      */
-    if (XcmsAddColorSpace(&XcmsTekHVCColorSpace) == XcmsFailure) {
-	return(XcmsFailure);
+    if (XcmsAddColorSpace(&XcmsTekHVCColorSpace) == XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
     pColor = pColors_in_out + i;
 
     if (ccc->visual->class < StaticColor &&
-	    FunctionSetOfCCC(ccc) != (XPointer) &XcmsLinearRGBFunctionSet) {
-	/*
+        FunctionSetOfCCC(ccc) != (XPointer)&XcmsLinearRGBFunctionSet)
+    {
+    /*
 	 * GRAY !
 	 */
-	_XcmsDIConvertColors(ccc, pColor, &ccc->pPerScrnInfo->screenWhitePt,
-		1, XcmsTekHVCFormat);
-	pColor->spec.TekHVC.H = pColor->spec.TekHVC.C = 0.0;
-	_XcmsDIConvertColors(ccc, pColor, &ccc->pPerScrnInfo->screenWhitePt,
-		1, XcmsCIEXYZFormat);
-	if (pCompressed) {
-	    *(pCompressed + i) = True;
-	}
-	return(XcmsSuccess);
-    } else {
-	if (pColor->format != XcmsTekHVCFormat) {
-	    if (_XcmsDIConvertColors(ccc, pColor,
-		    &ccc->pPerScrnInfo->screenWhitePt, 1, XcmsTekHVCFormat)
-		    == XcmsFailure) {
-		return(XcmsFailure);
-	    }
-	}
-	if (XcmsTekHVCQueryMaxC(ccc,
-		pColor->spec.TekHVC.H,
-		pColor->spec.TekHVC.V,
-		pColor)
-		== XcmsFailure) {
-	    return(XcmsFailure);
-	}
-	retval = _XcmsDIConvertColors(ccc, pColor,
-		&ccc->pPerScrnInfo->screenWhitePt, 1, XcmsCIEXYZFormat);
-	if (retval != XcmsFailure && pCompressed != NULL) {
-	    *(pCompressed + i) = True;
-	}
-	return(retval);
+        _XcmsDIConvertColors(ccc,
+                             pColor,
+                             &ccc->pPerScrnInfo->screenWhitePt,
+                             1,
+                             XcmsTekHVCFormat);
+        pColor->spec.TekHVC.H = pColor->spec.TekHVC.C = 0.0;
+        _XcmsDIConvertColors(ccc,
+                             pColor,
+                             &ccc->pPerScrnInfo->screenWhitePt,
+                             1,
+                             XcmsCIEXYZFormat);
+        if (pCompressed)
+        {
+            *(pCompressed + i) = True;
+        }
+        return (XcmsSuccess);
+    }
+    else
+    {
+        if (pColor->format != XcmsTekHVCFormat)
+        {
+            if (_XcmsDIConvertColors(ccc,
+                                     pColor,
+                                     &ccc->pPerScrnInfo->screenWhitePt,
+                                     1,
+                                     XcmsTekHVCFormat) == XcmsFailure)
+            {
+                return (XcmsFailure);
+            }
+        }
+        if (XcmsTekHVCQueryMaxC(ccc,
+                                pColor->spec.TekHVC.H,
+                                pColor->spec.TekHVC.V,
+                                pColor) == XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
+        retval = _XcmsDIConvertColors(ccc,
+                                      pColor,
+                                      &ccc->pPerScrnInfo->screenWhitePt,
+                                      1,
+                                      XcmsCIEXYZFormat);
+        if (retval != XcmsFailure && pCompressed != NULL)
+        {
+            *(pCompressed + i) = True;
+        }
+        return (retval);
     }
 }

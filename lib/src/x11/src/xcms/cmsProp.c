@@ -32,21 +32,19 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xatom.h"
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
 
-
 /************************************************************************
  *									*
  *			API PRIVATE ROUTINES				*
  *									*
  ************************************************************************/
 
-
 /*
  *	NAME
  *		_XcmsGetElement -- get an element value from the property passed
@@ -54,10 +52,7 @@
  *	SYNOPSIS
  */
 unsigned long
-_XcmsGetElement(
-    int             format,
-    char            **pValue,
-    unsigned long   *pCount)
+_XcmsGetElement(int format, char **pValue, unsigned long *pCount)
 /*
  *	DESCRIPTION
  *	    Get the next element from the property and return it.
@@ -69,30 +64,30 @@ _XcmsGetElement(
 {
     unsigned long value;
 
-    switch (format) {
-      case 32:
-	value = *((unsigned long *)(*pValue)) & 0xFFFFFFFF;
-	*pValue += sizeof(unsigned long);
-	*pCount -= 1;
-	break;
-      case 16:
-	value = *((unsigned short *)(*pValue));
-	*pValue += sizeof(unsigned short);
-	*pCount -= 1;
-	break;
-      case 8:
-	value = *((unsigned char *) (*pValue));
-	*pValue += 1;
-	*pCount -= 1;
-	break;
-      default:
-	value = 0;
-	break;
+    switch (format)
+    {
+        case 32:
+            value = *((unsigned long *)(*pValue)) & 0xFFFFFFFF;
+            *pValue += sizeof(unsigned long);
+            *pCount -= 1;
+            break;
+        case 16:
+            value = *((unsigned short *)(*pValue));
+            *pValue += sizeof(unsigned short);
+            *pCount -= 1;
+            break;
+        case 8:
+            value = *((unsigned char *)(*pValue));
+            *pValue += 1;
+            *pCount -= 1;
+            break;
+        default:
+            value = 0;
+            break;
     }
-    return(value);
+    return (value);
 }
 
-
 /*
  *	NAME
  *		_XcmsGetProperty -- Determine the existence of a property
@@ -100,14 +95,13 @@ _XcmsGetElement(
  *	SYNOPSIS
  */
 int
-_XcmsGetProperty(
-    Display *pDpy,
-    Window  w,
-    Atom property,
-    int             *pFormat,
-    unsigned long   *pNItems,
-    unsigned long   *pNBytes,
-    char            **pValue)
+_XcmsGetProperty(Display       *pDpy,
+                 Window         w,
+                 Atom           property,
+                 int           *pFormat,
+                 unsigned long *pNItems,
+                 unsigned long *pNBytes,
+                 char         **pValue)
 /*
  *	DESCRIPTION
  *
@@ -116,35 +110,48 @@ _XcmsGetProperty(
  *	    1 if property exists.
  */
 {
-    char *prop_ret;
-    int format_ret;
-    long len = 6516;
+    char         *prop_ret;
+    int           format_ret;
+    long          len = 6516;
     unsigned long nitems_ret, after_ret;
-    Atom atom_ret;
-    int xgwp_ret;
+    Atom          atom_ret;
+    int           xgwp_ret;
 
-    while (True) {
-	xgwp_ret = XGetWindowProperty (pDpy, w, property, 0, len, False,
-				       XA_INTEGER, &atom_ret, &format_ret,
-				       &nitems_ret, &after_ret,
-				       (unsigned char **)&prop_ret);
-	if (xgwp_ret == Success && after_ret > 0) {
-	    len += nitems_ret * (format_ret >> 3);
-	    XFree (prop_ret);
-	} else {
-	    break;
-	}
+    while (True)
+    {
+        xgwp_ret = XGetWindowProperty(pDpy,
+                                      w,
+                                      property,
+                                      0,
+                                      len,
+                                      False,
+                                      XA_INTEGER,
+                                      &atom_ret,
+                                      &format_ret,
+                                      &nitems_ret,
+                                      &after_ret,
+                                      (unsigned char **)&prop_ret);
+        if (xgwp_ret == Success && after_ret > 0)
+        {
+            len += nitems_ret * (format_ret >> 3);
+            XFree(prop_ret);
+        }
+        else
+        {
+            break;
+        }
     }
-    if (xgwp_ret != Success || format_ret == 0 || nitems_ret == 0) {
-	/* the property does not exist or is of an unexpected type or
+    if (xgwp_ret != Success || format_ret == 0 || nitems_ret == 0)
+    {
+    /* the property does not exist or is of an unexpected type or
            getting window property failed */
-	XFree (prop_ret);
-	return(XcmsFailure);
+        XFree(prop_ret);
+        return (XcmsFailure);
     }
 
     *pFormat = format_ret;
     *pNItems = nitems_ret;
     *pNBytes = nitems_ret * (format_ret >> 3);
-    *pValue = prop_ret;
-    return(XcmsSuccess);
+    *pValue  = prop_ret;
+    return (XcmsSuccess);
 }

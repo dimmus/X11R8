@@ -59,7 +59,7 @@ X Window System is a trademark of The Open Group.
 /* This can really be considered an os dependent routine */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include <limits.h>
@@ -68,97 +68,109 @@ X Window System is a trademark of The Open Group.
  * can be freed using XFree.
  */
 
-XHostAddress *XListHosts (
-    register Display *dpy,
-    int *nhosts,	/* RETURN */
-    Bool *enabled)	/* RETURN */
+XHostAddress *
+XListHosts(register Display *dpy,
+           int              *nhosts, /* RETURN */
+           Bool             *enabled) /* RETURN */
 {
-    register XHostAddress *outbuf = NULL, *op;
-    xListHostsReply reply;
-    unsigned char *buf, *bp;
-    register unsigned i;
+    register XHostAddress            *outbuf = NULL, *op;
+    xListHostsReply                   reply;
+    unsigned char                    *buf, *bp;
+    register unsigned                 i;
     _X_UNUSED register xListHostsReq *req;
-    XServerInterpretedAddress *sip;
+    XServerInterpretedAddress        *sip;
 
     *nhosts = 0;
     LockDisplay(dpy);
-    GetReq (ListHosts, req);
+    GetReq(ListHosts, req);
 
-    if (!_XReply (dpy, (xReply *) &reply, 0, xFalse)) {
-       UnlockDisplay(dpy);
-       SyncHandle();
-       return (XHostAddress *) NULL;
+    if (!_XReply(dpy, (xReply *)&reply, 0, xFalse))
+    {
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return (XHostAddress *)NULL;
     }
 
-    if (reply.nHosts) {
-	unsigned long nbytes = reply.length << 2; /* number of bytes in reply */
-	const unsigned long max_hosts = INT_MAX /
-	    (sizeof(XHostAddress) + sizeof(XServerInterpretedAddress));
+    if (reply.nHosts)
+    {
+        unsigned long nbytes = reply.length << 2; /* number of bytes in reply */
+        const unsigned long max_hosts =
+            INT_MAX /
+            (sizeof(XHostAddress) + sizeof(XServerInterpretedAddress));
 
-	if (reply.nHosts < max_hosts) {
-	    unsigned long hostbytes = reply.nHosts *
-		(sizeof(XHostAddress) + sizeof(XServerInterpretedAddress));
+        if (reply.nHosts < max_hosts)
+        {
+            unsigned long hostbytes =
+                reply.nHosts *
+                (sizeof(XHostAddress) + sizeof(XServerInterpretedAddress));
 
-	    if (reply.length < (INT_MAX >> 2) &&
-		(hostbytes >> 2) < ((INT_MAX >> 2) - reply.length))
-		outbuf = Xmalloc(nbytes + hostbytes);
-	}
+            if (reply.length < (INT_MAX >> 2) &&
+                (hostbytes >> 2) < ((INT_MAX >> 2) - reply.length))
+                outbuf = Xmalloc(nbytes + hostbytes);
+        }
 
-	if (! outbuf) {
-	    _XEatDataWords(dpy, reply.length);
-	    UnlockDisplay(dpy);
-	    SyncHandle();
-	    return (XHostAddress *) NULL;
-	}
-	op = outbuf;
-	sip = (XServerInterpretedAddress *)
-	 (((unsigned char  *) outbuf) + (reply.nHosts * sizeof(XHostAddress)));
-	bp = buf = ((unsigned char  *) sip)
-	  + (reply.nHosts * sizeof(XServerInterpretedAddress));
+        if (!outbuf)
+        {
+            _XEatDataWords(dpy, reply.length);
+            UnlockDisplay(dpy);
+            SyncHandle();
+            return (XHostAddress *)NULL;
+        }
+        op  = outbuf;
+        sip = (XServerInterpretedAddress *)(((unsigned char *)outbuf) +
+                                            (reply.nHosts *
+                                             sizeof(XHostAddress)));
+        bp = buf = ((unsigned char *)sip) +
+                   (reply.nHosts * sizeof(XServerInterpretedAddress));
 
-	_XRead (dpy, (char *) buf, nbytes);
+        _XRead(dpy, (char *)buf, nbytes);
 
-	for (i = 0; i < reply.nHosts; i++) {
-	    if (bp > buf + nbytes - SIZEOF(xHostEntry))
-		goto fail;
-	    op->family = ((xHostEntry *) bp)->family;
-	    op->length =((xHostEntry *) bp)->length;
-	    if (op->family == FamilyServerInterpreted) {
-		char *tp = (char *) (bp + SIZEOF(xHostEntry));
-		char *vp;
-		if (tp > (char *) (buf + nbytes - op->length))
-		    goto fail;
-		vp = memchr(tp, 0, op->length);
+        for (i = 0; i < reply.nHosts; i++)
+        {
+            if (bp > buf + nbytes - SIZEOF(xHostEntry)) goto fail;
+            op->family = ((xHostEntry *)bp)->family;
+            op->length = ((xHostEntry *)bp)->length;
+            if (op->family == FamilyServerInterpreted)
+            {
+                char *tp = (char *)(bp + SIZEOF(xHostEntry));
+                char *vp;
+                if (tp > (char *)(buf + nbytes - op->length)) goto fail;
+                vp = memchr(tp, 0, op->length);
 
-		if (vp != NULL) {
-		    sip->type = tp;
-		    sip->typelength = vp - tp;
-		    sip->value = vp + 1;
-		    sip->valuelength = op->length - (sip->typelength + 1);
-		} else {
-		    sip->type = sip->value = NULL;
-		    sip->typelength = sip->valuelength = 0;
-		}
-		op->address = (char *) sip;
-		sip++;
-	    } else {
-		op->address = (char *) (bp + SIZEOF(xHostEntry));
-		if (op->address > (char *) (buf + nbytes - op->length))
-		    goto fail;
-	    }
-	    bp += SIZEOF(xHostEntry) + (((op->length + 3) >> 2) << 2);
-	    op++;
-	}
+                if (vp != NULL)
+                {
+                    sip->type        = tp;
+                    sip->typelength  = vp - tp;
+                    sip->value       = vp + 1;
+                    sip->valuelength = op->length - (sip->typelength + 1);
+                }
+                else
+                {
+                    sip->type = sip->value = NULL;
+                    sip->typelength = sip->valuelength = 0;
+                }
+                op->address = (char *)sip;
+                sip++;
+            }
+            else
+            {
+                op->address = (char *)(bp + SIZEOF(xHostEntry));
+                if (op->address > (char *)(buf + nbytes - op->length))
+                    goto fail;
+            }
+            bp += SIZEOF(xHostEntry) + (((op->length + 3) >> 2) << 2);
+            op++;
+        }
     }
 
     *enabled = reply.enabled;
-    *nhosts = reply.nHosts;
+    *nhosts  = reply.nHosts;
     UnlockDisplay(dpy);
     SyncHandle();
     return (outbuf);
 fail:
     *enabled = reply.enabled;
-    *nhosts = 0;
+    *nhosts  = 0;
     Xfree(outbuf);
     return (NULL);
 }

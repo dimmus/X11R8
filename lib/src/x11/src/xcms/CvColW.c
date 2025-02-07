@@ -34,20 +34,18 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
 
-
 /************************************************************************
  *									*
  *			 API PRIVATE ROUTINES				*
  *									*
  ************************************************************************/
 
-
 /*
  *	NAME
  *		_XcmsConvertColorsWithWhitePt - Convert XcmsColor structures
@@ -55,13 +53,12 @@
  *	SYNOPSIS
  */
 Status
-_XcmsConvertColorsWithWhitePt(
-    XcmsCCC ccc,
-    XcmsColor *pColors_in_out,
-    XcmsColor *pWhitePt,
-    unsigned int nColors,
-    XcmsColorFormat newFormat,
-    Bool *pCompressed)
+_XcmsConvertColorsWithWhitePt(XcmsCCC         ccc,
+                              XcmsColor      *pColors_in_out,
+                              XcmsColor      *pWhitePt,
+                              unsigned int    nColors,
+                              XcmsColorFormat newFormat,
+                              Bool           *pCompressed)
 /*
  *	DESCRIPTION
  *		Convert XcmsColor structures between device-independent
@@ -82,28 +79,38 @@ _XcmsConvertColorsWithWhitePt(
  */
 {
     if (ccc == NULL || pColors_in_out == NULL ||
-	    pColors_in_out->format == XcmsUndefinedFormat) {
-	return(XcmsFailure);
+        pColors_in_out->format == XcmsUndefinedFormat)
+    {
+        return (XcmsFailure);
     }
 
-    if (nColors == 0 || pColors_in_out->format == newFormat) {
-	/* do nothing */
-	return(XcmsSuccess);
+    if (nColors == 0 || pColors_in_out->format == newFormat)
+    {
+    /* do nothing */
+        return (XcmsSuccess);
     }
 
-    if (XCMS_DI_ID(pColors_in_out->format) && XCMS_DI_ID(newFormat)) {
-	/*
+    if (XCMS_DI_ID(pColors_in_out->format) && XCMS_DI_ID(newFormat))
+    {
+    /*
 	 * Device-Independent to Device-Independent Conversion
 	 */
-	return(_XcmsDIConvertColors(ccc, pColors_in_out, pWhitePt, nColors,
-		newFormat));
+        return (_XcmsDIConvertColors(ccc,
+                                     pColors_in_out,
+                                     pWhitePt,
+                                     nColors,
+                                     newFormat));
     }
-    if (XCMS_DD_ID(pColors_in_out->format) && XCMS_DD_ID(newFormat)) {
-	/*
+    if (XCMS_DD_ID(pColors_in_out->format) && XCMS_DD_ID(newFormat))
+    {
+    /*
 	 * Device-Dependent to Device-Dependent Conversion
 	 */
-	return(_XcmsDDConvertColors(ccc, pColors_in_out, nColors, newFormat,
-		pCompressed));
+        return (_XcmsDDConvertColors(ccc,
+                                     pColors_in_out,
+                                     nColors,
+                                     newFormat,
+                                     pCompressed));
     }
 
     /*
@@ -113,29 +120,46 @@ _XcmsConvertColorsWithWhitePt(
      *    2. Device-Dependent to Device-Independent Conversion
      */
 
-    if (XCMS_DI_ID(pColors_in_out->format)) {
-	/*
+    if (XCMS_DI_ID(pColors_in_out->format))
+    {
+    /*
 	 *    1. Device-Independent to Device-Dependent Conversion
 	 */
-	/* First convert to CIEXYZ */
-	if (_XcmsDIConvertColors(ccc, pColors_in_out, pWhitePt, nColors,
-		XcmsCIEXYZFormat) == XcmsFailure) {
-	    return(XcmsFailure);
-	}
-	/* Then convert to DD Format */
-	return(_XcmsDDConvertColors(ccc, pColors_in_out, nColors, newFormat,
-		pCompressed));
-    } else {
-	/*
+    /* First convert to CIEXYZ */
+        if (_XcmsDIConvertColors(ccc,
+                                 pColors_in_out,
+                                 pWhitePt,
+                                 nColors,
+                                 XcmsCIEXYZFormat) == XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
+    /* Then convert to DD Format */
+        return (_XcmsDDConvertColors(ccc,
+                                     pColors_in_out,
+                                     nColors,
+                                     newFormat,
+                                     pCompressed));
+    }
+    else
+    {
+    /*
 	 *    2. Device-Dependent to Device-Independent Conversion
 	 */
-	/* First convert to CIEXYZ */
-	if (_XcmsDDConvertColors(ccc, pColors_in_out, nColors,
-		XcmsCIEXYZFormat, pCompressed) == XcmsFailure) {
-	    return(XcmsFailure);
-	}
-	/* Then convert to DI Format */
-	return(_XcmsDIConvertColors(ccc, pColors_in_out, pWhitePt, nColors,
-		newFormat));
+    /* First convert to CIEXYZ */
+        if (_XcmsDDConvertColors(ccc,
+                                 pColors_in_out,
+                                 nColors,
+                                 XcmsCIEXYZFormat,
+                                 pCompressed) == XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
+    /* Then convert to DI Format */
+        return (_XcmsDIConvertColors(ccc,
+                                     pColors_in_out,
+                                     pWhitePt,
+                                     nColors,
+                                     newFormat));
     }
 }

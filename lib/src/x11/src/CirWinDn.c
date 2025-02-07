@@ -25,23 +25,20 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XCirculateSubwindowsDown(
-    register Display *dpy,
-    Window w)
+XCirculateSubwindowsDown(register Display *dpy, Window w)
 {
     register xCirculateWindowReq *req;
 
     LockDisplay(dpy);
     GetReq(CirculateWindow, req);
-    req->window = w;
+    req->window    = w;
     req->direction = LowerHighest;
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

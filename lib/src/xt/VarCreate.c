@@ -50,7 +50,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "IntrinsicI.h"
 #include "StringDefs.h"
@@ -59,35 +59,40 @@ in this Software without prior written authorization from The Open Group.
 #include "CreateI.h"
 
 static Widget
-_XtVaCreateWidget(String name,
+_XtVaCreateWidget(String      name,
                   WidgetClass widget_class,
-                  Widget parent,
-                  va_list var,
-                  int count)
+                  Widget      parent,
+                  va_list     var,
+                  int         count)
 {
     register Widget widget;
-    XtTypedArgList typed_args = NULL;
-    Cardinal num_args;
+    XtTypedArgList  typed_args = NULL;
+    Cardinal        num_args;
 
     _XtVaToTypedArgList(var, count, &typed_args, &num_args);
 
-    widget = _XtCreateWidget(name, widget_class, parent, (ArgList) NULL,
-                             (Cardinal) 0, typed_args, num_args);
+    widget = _XtCreateWidget(name,
+                             widget_class,
+                             parent,
+                             (ArgList)NULL,
+                             (Cardinal)0,
+                             typed_args,
+                             num_args);
 
-    XtFree((XtPointer) typed_args);
+    XtFree((XtPointer)typed_args);
 
     return widget;
 }
 
 Widget
 XtVaCreateWidget(_Xconst char *name,
-                 WidgetClass widget_class,
-                 Widget parent,
+                 WidgetClass   widget_class,
+                 Widget        parent,
                  ...)
 {
-    va_list var;
+    va_list         var;
     register Widget widget;
-    int total_count, typed_count;
+    int             total_count, typed_count;
 
     WIDGET_TO_APPCON(parent);
 
@@ -97,8 +102,8 @@ XtVaCreateWidget(_Xconst char *name,
     va_end(var);
 
     va_start(var, parent);
-    widget = _XtVaCreateWidget((String) name, widget_class, parent, var,
-                               total_count);
+    widget =
+        _XtVaCreateWidget((String)name, widget_class, parent, var, total_count);
     va_end(var);
     UNLOCK_APP(app);
     return widget;
@@ -106,13 +111,13 @@ XtVaCreateWidget(_Xconst char *name,
 
 Widget
 XtVaCreateManagedWidget(_Xconst char *name,
-                        WidgetClass widget_class,
-                        Widget parent,
+                        WidgetClass   widget_class,
+                        Widget        parent,
                         ...)
 {
-    va_list var;
+    va_list         var;
     register Widget widget;
-    int total_count, typed_count;
+    int             total_count, typed_count;
 
     WIDGET_TO_APPCON(parent);
 
@@ -122,8 +127,8 @@ XtVaCreateManagedWidget(_Xconst char *name,
     va_end(var);
 
     va_start(var, parent);
-    widget = _XtVaCreateWidget((String) name, widget_class, parent, var,
-                               total_count);
+    widget =
+        _XtVaCreateWidget((String)name, widget_class, parent, var, total_count);
     XtManageChild(widget);
     va_end(var);
     UNLOCK_APP(app);
@@ -134,14 +139,14 @@ Widget
 XtVaAppCreateShell(_Xconst char *name,
                    _Xconst char *class,
                    WidgetClass widget_class,
-                   Display *display,
+                   Display    *display,
                    ...)
 {
-    va_list var;
+    va_list         var;
     register Widget widget;
-    XtTypedArgList typed_args = NULL;
-    Cardinal num_args;
-    int total_count, typed_count;
+    XtTypedArgList  typed_args = NULL;
+    Cardinal        num_args;
+    int             total_count, typed_count;
     DPY_TO_APPCON(display);
 
     LOCK_APP(app);
@@ -153,11 +158,16 @@ XtVaAppCreateShell(_Xconst char *name,
     va_start(var, display);
 
     _XtVaToTypedArgList(var, total_count, &typed_args, &num_args);
-    widget = _XtAppCreateShell((String) name, (String) class, widget_class,
-                               display, (ArgList) NULL, (Cardinal) 0,
-                               typed_args, num_args);
+    widget = _XtAppCreateShell((String)name,
+                               (String) class,
+                               widget_class,
+                               display,
+                               (ArgList)NULL,
+                               (Cardinal)0,
+                               typed_args,
+                               num_args);
 
-    XtFree((XtPointer) typed_args);
+    XtFree((XtPointer)typed_args);
 
     va_end(var);
     UNLOCK_APP(app);
@@ -166,15 +176,15 @@ XtVaAppCreateShell(_Xconst char *name,
 
 Widget
 XtVaCreatePopupShell(_Xconst char *name,
-                     WidgetClass widget_class,
-                     Widget parent,
+                     WidgetClass   widget_class,
+                     Widget        parent,
                      ...)
 {
-    va_list var;
+    va_list         var;
     register Widget widget;
-    XtTypedArgList typed_args = NULL;
-    Cardinal num_args;
-    int total_count, typed_count;
+    XtTypedArgList  typed_args = NULL;
+    Cardinal        num_args;
+    int             total_count, typed_count;
 
     WIDGET_TO_APPCON(parent);
 
@@ -186,11 +196,15 @@ XtVaCreatePopupShell(_Xconst char *name,
     va_start(var, parent);
 
     _XtVaToTypedArgList(var, total_count, &typed_args, &num_args);
-    widget = _XtCreatePopupShell((String) name, widget_class, parent,
-                                 (ArgList) NULL, (Cardinal) 0, typed_args,
+    widget = _XtCreatePopupShell((String)name,
+                                 widget_class,
+                                 parent,
+                                 (ArgList)NULL,
+                                 (Cardinal)0,
+                                 typed_args,
                                  num_args);
 
-    XtFree((XtPointer) typed_args);
+    XtFree((XtPointer)typed_args);
 
     va_end(var);
     UNLOCK_APP(app);
@@ -200,10 +214,10 @@ XtVaCreatePopupShell(_Xconst char *name,
 void
 XtVaSetValues(Widget widget, ...)
 {
-    va_list var;
-    ArgList args = NULL;
+    va_list  var;
+    ArgList  args = NULL;
     Cardinal num_args;
-    int total_count, typed_count;
+    int      total_count, typed_count;
 
     WIDGET_TO_APPCON(widget);
 
@@ -223,111 +237,131 @@ XtVaSetValues(Widget widget, ...)
 }
 
 void
-XtVaSetSubvalues(XtPointer base,
+XtVaSetSubvalues(XtPointer      base,
                  XtResourceList resources,
-                 Cardinal num_resources,
+                 Cardinal       num_resources,
                  ...)
 {
-    va_list var;
-    ArgList args;
+    va_list  var;
+    ArgList  args;
     Cardinal num_args;
-    int total_count, typed_count;
+    int      total_count, typed_count;
 
     va_start(var, num_resources);
     _XtCountVaList(var, &total_count, &typed_count);
     va_end(var);
 
-    if (typed_count != 0) {
+    if (typed_count != 0)
+    {
         XtWarning("XtVaTypedArg is not valid in XtVaSetSubvalues()\n");
     }
 
     va_start(var, num_resources);
-    _XtVaToArgList((Widget) NULL, var, total_count, &args, &num_args);
+    _XtVaToArgList((Widget)NULL, var, total_count, &args, &num_args);
 
     XtSetSubvalues(base, resources, num_resources, args, num_args);
 
-    XtFree((XtPointer) args);
+    XtFree((XtPointer)args);
 
     va_end(var);
 }
 
 Widget
-_XtVaOpenApplication(XtAppContext *app_context_return,
-                     _Xconst char *application_class,
+_XtVaOpenApplication(XtAppContext     *app_context_return,
+                     _Xconst char     *application_class,
                      XrmOptionDescList options,
-                     Cardinal num_options,
-                     int *argc_in_out,
-                     _XtString *argv_in_out,
-                     String *fallback_resources,
-                     WidgetClass widget_class,
-                     va_list var_args)
+                     Cardinal          num_options,
+                     int              *argc_in_out,
+                     _XtString        *argv_in_out,
+                     String           *fallback_resources,
+                     WidgetClass       widget_class,
+                     va_list           var_args)
 {
-    XtAppContext app_con;
-    Display *dpy;
-    register int saved_argc = *argc_in_out;
-    Widget root;
-    String attr;
-    int count = 0;
+    XtAppContext   app_con;
+    Display       *dpy;
+    register int   saved_argc = *argc_in_out;
+    Widget         root;
+    String         attr;
+    int            count = 0;
     XtTypedArgList typed_args;
 
     XtToolkitInitialize();      /* cannot be moved into _XtAppInit */
 
-    dpy = _XtAppInit(&app_con, (String) application_class, options, num_options,
-                     argc_in_out, &argv_in_out, fallback_resources);
+    dpy = _XtAppInit(&app_con,
+                     (String)application_class,
+                     options,
+                     num_options,
+                     argc_in_out,
+                     &argv_in_out,
+                     fallback_resources);
 
-    typed_args = (XtTypedArgList) __XtMalloc((unsigned) sizeof(XtTypedArg));
-    attr = va_arg(var_args, String);
-    for (; attr != NULL; attr = va_arg(var_args, String)) {
-        if (strcmp(attr, XtVaTypedArg) == 0) {
-            typed_args[count].name = va_arg(var_args, String);
-            typed_args[count].type = va_arg(var_args, String);
+    typed_args = (XtTypedArgList)__XtMalloc((unsigned)sizeof(XtTypedArg));
+    attr       = va_arg(var_args, String);
+    for (; attr != NULL; attr = va_arg(var_args, String))
+    {
+        if (strcmp(attr, XtVaTypedArg) == 0)
+        {
+            typed_args[count].name  = va_arg(var_args, String);
+            typed_args[count].type  = va_arg(var_args, String);
             typed_args[count].value = va_arg(var_args, XtArgVal);
-            typed_args[count].size = va_arg(var_args, int);
+            typed_args[count].size  = va_arg(var_args, int);
         }
-        else {
-            typed_args[count].name = attr;
-            typed_args[count].type = NULL;
+        else
+        {
+            typed_args[count].name  = attr;
+            typed_args[count].type  = NULL;
             typed_args[count].value = va_arg(var_args, XtArgVal);
-            typed_args[count].size = 0;
+            typed_args[count].size  = 0;
         }
         count++;
-        typed_args = XtReallocArray(typed_args, (Cardinal) count + 1,
-                                    (Cardinal) sizeof(XtTypedArg));
+        typed_args = XtReallocArray(typed_args,
+                                    (Cardinal)count + 1,
+                                    (Cardinal)sizeof(XtTypedArg));
     }
     typed_args[count].name = NULL;
 
     va_end(var_args);
 
-    root =
-        XtVaAppCreateShell(NULL, application_class,
-                           widget_class, dpy,
-                           XtNscreen, (XtArgVal) DefaultScreenOfDisplay(dpy),
-                           XtNargc, (XtArgVal) saved_argc,
-                           XtNargv, (XtArgVal) argv_in_out,
-                           XtVaNestedList, (XtVarArgsList) typed_args, NULL);
+    root = XtVaAppCreateShell(NULL,
+                              application_class,
+                              widget_class,
+                              dpy,
+                              XtNscreen,
+                              (XtArgVal)DefaultScreenOfDisplay(dpy),
+                              XtNargc,
+                              (XtArgVal)saved_argc,
+                              XtNargv,
+                              (XtArgVal)argv_in_out,
+                              XtVaNestedList,
+                              (XtVarArgsList)typed_args,
+                              NULL);
 
-    if (app_context_return != NULL)
-        *app_context_return = app_con;
+    if (app_context_return != NULL) *app_context_return = app_con;
 
-    XtFree((XtPointer) typed_args);
-    XtFree((XtPointer) argv_in_out);
+    XtFree((XtPointer)typed_args);
+    XtFree((XtPointer)argv_in_out);
     return (root);
 }
 
 Widget
-_XtVaAppInitialize(XtAppContext *app_context_return,
-                   _Xconst char *application_class,
+_XtVaAppInitialize(XtAppContext     *app_context_return,
+                   _Xconst char     *application_class,
                    XrmOptionDescList options,
-                   Cardinal num_options,
-                   int *argc_in_out,
-                   _XtString *argv_in_out,
-                   String *fallback_resources,
-                   va_list var_args)
+                   Cardinal          num_options,
+                   int              *argc_in_out,
+                   _XtString        *argv_in_out,
+                   String           *fallback_resources,
+                   va_list           var_args)
 {
-    return _XtVaOpenApplication(app_context_return, application_class,
-                                options, num_options,
-                                argc_in_out, argv_in_out, fallback_resources,
-                                applicationShellWidgetClass, var_args);
+    return _XtVaOpenApplication(app_context_return,
+                                application_class,
+                                options,
+                                num_options,
+                                argc_in_out,
+                                argv_in_out,
+                                fallback_resources,
+                                applicationShellWidgetClass,
+                                var_args);
 }
 
 /*
@@ -336,45 +370,56 @@ _XtVaAppInitialize(XtAppContext *app_context_return,
  */
 
 Widget
-XtVaOpenApplication(XtAppContext *app_context_return,
-                    _Xconst char *application_class,
+XtVaOpenApplication(XtAppContext     *app_context_return,
+                    _Xconst char     *application_class,
                     XrmOptionDescList options,
-                    Cardinal num_options,
-                    int *argc_in_out,
-                    _XtString *argv_in_out,
-                    String *fallback_resources,
-                    WidgetClass widget_class,
+                    Cardinal          num_options,
+                    int              *argc_in_out,
+                    _XtString        *argv_in_out,
+                    String           *fallback_resources,
+                    WidgetClass       widget_class,
                     ...)
 {
-    Widget code;
+    Widget  code;
     va_list var;
 
     va_start(var, widget_class);
-    code = _XtVaOpenApplication(app_context_return, (String) application_class,
-                                options, num_options, argc_in_out, argv_in_out,
-                                fallback_resources, widget_class, var);
+    code = _XtVaOpenApplication(app_context_return,
+                                (String)application_class,
+                                options,
+                                num_options,
+                                argc_in_out,
+                                argv_in_out,
+                                fallback_resources,
+                                widget_class,
+                                var);
     va_end(var);
     return code;
 }
 
 Widget
-XtVaAppInitialize(XtAppContext *app_context_return,
-                  _Xconst char *application_class,
+XtVaAppInitialize(XtAppContext     *app_context_return,
+                  _Xconst char     *application_class,
                   XrmOptionDescList options,
-                  Cardinal num_options,
-                  int *argc_in_out,
-                  _XtString *argv_in_out,
-                  String *fallback_resources,
+                  Cardinal          num_options,
+                  int              *argc_in_out,
+                  _XtString        *argv_in_out,
+                  String           *fallback_resources,
                   ...)
 {
-    Widget code;
+    Widget  code;
     va_list var;
 
     va_start(var, fallback_resources);
-    code = _XtVaOpenApplication(app_context_return, (String) application_class,
-                                options, num_options, argc_in_out, argv_in_out,
+    code = _XtVaOpenApplication(app_context_return,
+                                (String)application_class,
+                                options,
+                                num_options,
+                                argc_in_out,
+                                argv_in_out,
                                 fallback_resources,
-                                applicationShellWidgetClass, var);
+                                applicationShellWidgetClass,
+                                var);
     va_end(var);
     return code;
 }

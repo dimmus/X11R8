@@ -33,7 +33,7 @@ from The Open Group.
  * This file should contain only those objects which must be predefined.
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xlibint.h"
 
@@ -42,17 +42,15 @@ from The Open Group.
  */
 XErrorHandler   _XErrorFunction;
 XIOErrorHandler _XIOErrorFunction;
-_XQEvent *      _qfree;
-
+_XQEvent       *_qfree;
 
 /*
  * Debugging information and display list; used to be in XOpenDis.c
  */
 #ifndef WIN32
-int      _Xdebug;
+int _Xdebug;
 #endif
 Display *_XHeadOfDisplayList;
-
 
 #ifdef XTEST1
 /*
@@ -66,8 +64,8 @@ Display *_XHeadOfDisplayList;
  *
  * These two variables must be available to programs that use this extension.
  */
-int			XTestInputActionType = 0;
-int			XTestFakeAckType   = 1;
+int XTestInputActionType = 0;
+int XTestFakeAckType     = 1;
 #endif
 
 #ifdef USE_THREAD_SAFETY_CONSTRUCTOR

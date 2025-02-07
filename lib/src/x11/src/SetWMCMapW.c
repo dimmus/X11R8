@@ -47,7 +47,7 @@ SOFTWARE.
 ******************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "X11/Xatom.h"
@@ -57,18 +57,21 @@ SOFTWARE.
  *	WM_COLORMAP_WINDOWS 	type: WINDOW	format:32
  */
 
-Status XSetWMColormapWindows (
-    Display *dpy,
-    Window w,
-    Window *windows,
-    int count)
+Status
+XSetWMColormapWindows(Display *dpy, Window w, Window *windows, int count)
 {
     Atom prop;
 
-    prop = XInternAtom (dpy, "WM_COLORMAP_WINDOWS", False);
+    prop = XInternAtom(dpy, "WM_COLORMAP_WINDOWS", False);
     if (prop == None) return False;
 
-    XChangeProperty (dpy, w, prop, XA_WINDOW, 32,
-		     PropModeReplace, (unsigned char *) windows, count);
+    XChangeProperty(dpy,
+                    w,
+                    prop,
+                    XA_WINDOW,
+                    32,
+                    PropModeReplace,
+                    (unsigned char *)windows,
+                    count);
     return True;
 }

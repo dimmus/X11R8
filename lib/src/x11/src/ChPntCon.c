@@ -25,31 +25,29 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XChangePointerControl(
-     register Display *dpy,
-     Bool do_acc,
-     Bool do_thresh,
-     int acc_numerator,
-     int acc_denominator,
-     int threshold)
+XChangePointerControl(register Display *dpy,
+                      Bool              do_acc,
+                      Bool              do_thresh,
+                      int               acc_numerator,
+                      int               acc_denominator,
+                      int               threshold)
 
 {
     register xChangePointerControlReq *req;
 
     LockDisplay(dpy);
     GetReq(ChangePointerControl, req);
-    req->doAccel = do_acc;
-    req->doThresh = do_thresh;
-    req->accelNum = acc_numerator;
+    req->doAccel    = do_acc;
+    req->doThresh   = do_thresh;
+    req->accelNum   = acc_numerator;
     req->accelDenum = acc_denominator;
-    req->threshold = threshold;
+    req->threshold  = threshold;
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

@@ -31,13 +31,12 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
 #include "Cv.h"
 
-
 /************************************************************************
  *									*
  *			 PUBLIC ROUTINES				*
@@ -52,12 +51,11 @@
  */
 /* ARGSUSED */
 Status
-XcmsCIELabClipab (
-    XcmsCCC ccc,
-    XcmsColor *pColors_in_out,
-    unsigned int nColors,
-    unsigned int i,
-    Bool *pCompressed)
+XcmsCIELabClipab(XcmsCCC      ccc,
+                 XcmsColor   *pColors_in_out,
+                 unsigned int nColors,
+                 unsigned int i,
+                 Bool        *pCompressed)
 /*
  *	DESCRIPTION
  *		Reduce the Chroma for a specific hue and chroma to
@@ -76,7 +74,7 @@ XcmsCIELabClipab (
  *
  */
 {
-    Status retval;
+    Status     retval;
     XcmsColor *pColor;
 
     /*
@@ -90,38 +88,58 @@ XcmsCIELabClipab (
 
     pColor = pColors_in_out + i;
 
-    if (ccc->visual->class < PseudoColor) {
-	/*
+    if (ccc->visual->class < PseudoColor)
+    {
+    /*
 	 * GRAY !
 	 */
-	_XcmsDIConvertColors(ccc, pColor, ScreenWhitePointOfCCC(ccc),
-		1, XcmsCIELabFormat);
-	_XcmsDIConvertColors(ccc, pColor, ScreenWhitePointOfCCC(ccc),
-		1, XcmsCIEXYZFormat);
-	if (pCompressed) {
-	    *(pCompressed + i) = True;
-	}
-	return(XcmsSuccess);
-    } else {
-	if (pColor->format != XcmsCIELabFormat) {
-	    if (_XcmsDIConvertColors(ccc, pColor,
-		    &ccc->pPerScrnInfo->screenWhitePt, 1, XcmsCIELabFormat)
-		    == XcmsFailure) {
-		return(XcmsFailure);
-	    }
-	}
-	if (XcmsCIELabQueryMaxC(ccc,
-		degrees(XCMS_CIELAB_PMETRIC_HUE(pColor->spec.CIELab.a_star,
-						pColor->spec.CIELab.b_star)),
-		pColor->spec.CIELab.L_star,
-		pColor) == XcmsFailure) {
-	    return(XcmsFailure);
-	}
-	retval = _XcmsDIConvertColors(ccc, pColor,
-		&ccc->pPerScrnInfo->screenWhitePt, 1, XcmsCIEXYZFormat);
-	if (retval != XcmsFailure && pCompressed != NULL) {
-	    *(pCompressed + i) = True;
-	}
-	return(retval);
+        _XcmsDIConvertColors(ccc,
+                             pColor,
+                             ScreenWhitePointOfCCC(ccc),
+                             1,
+                             XcmsCIELabFormat);
+        _XcmsDIConvertColors(ccc,
+                             pColor,
+                             ScreenWhitePointOfCCC(ccc),
+                             1,
+                             XcmsCIEXYZFormat);
+        if (pCompressed)
+        {
+            *(pCompressed + i) = True;
+        }
+        return (XcmsSuccess);
+    }
+    else
+    {
+        if (pColor->format != XcmsCIELabFormat)
+        {
+            if (_XcmsDIConvertColors(ccc,
+                                     pColor,
+                                     &ccc->pPerScrnInfo->screenWhitePt,
+                                     1,
+                                     XcmsCIELabFormat) == XcmsFailure)
+            {
+                return (XcmsFailure);
+            }
+        }
+        if (XcmsCIELabQueryMaxC(
+                ccc,
+                degrees(XCMS_CIELAB_PMETRIC_HUE(pColor->spec.CIELab.a_star,
+                                                pColor->spec.CIELab.b_star)),
+                pColor->spec.CIELab.L_star,
+                pColor) == XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
+        retval = _XcmsDIConvertColors(ccc,
+                                      pColor,
+                                      &ccc->pPerScrnInfo->screenWhitePt,
+                                      1,
+                                      XcmsCIEXYZFormat);
+        if (retval != XcmsFailure && pCompressed != NULL)
+        {
+            *(pCompressed + i) = True;
+        }
+        return (retval);
     }
 }

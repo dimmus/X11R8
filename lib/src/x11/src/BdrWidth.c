@@ -28,26 +28,22 @@ from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XSetWindowBorderWidth(
-    Display *dpy,
-    Window w,
-    unsigned int width)
+XSetWindowBorderWidth(Display *dpy, Window w, unsigned int width)
 {
-    unsigned long lwidth = width;	/* must be CARD32 */
+    unsigned long lwidth = width; /* must be CARD32 */
 
     register xConfigureWindowReq *req;
     LockDisplay(dpy);
     GetReqExtra(ConfigureWindow, 4, req);
     req->window = w;
-    req->mask = CWBorderWidth;
-    OneDataCard32 (dpy, NEXTPTR(req,xConfigureWindowReq), lwidth);
+    req->mask   = CWBorderWidth;
+    OneDataCard32(dpy, NEXTPTR(req, xConfigureWindowReq), lwidth);
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

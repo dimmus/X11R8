@@ -23,97 +23,103 @@
 #include "xftint.h"
 
 _X_HIDDEN int
-XftNativeByteOrder (void)
+XftNativeByteOrder(void)
 {
-    int	    whichbyte = 1;
+    int whichbyte = 1;
 
-    if (*((char *) &whichbyte))
-	return LSBFirst;
+    if (*((char *)&whichbyte)) return LSBFirst;
     return MSBFirst;
 }
 
 /* byte swap a 32-bit value */
-#define swapl(x, n) { \
-		 n = ((char *) (x))[0];\
-		 ((char *) (x))[0] = ((char *) (x))[3];\
-		 ((char *) (x))[3] = n;\
-		 n = ((char *) (x))[1];\
-		 ((char *) (x))[1] = ((char *) (x))[2];\
-		 ((char *) (x))[2] = n; }
+#define swapl(x, n)                          \
+    {                                        \
+        n                = ((char *)(x))[0]; \
+        ((char *)(x))[0] = ((char *)(x))[3]; \
+        ((char *)(x))[3] = n;                \
+        n                = ((char *)(x))[1]; \
+        ((char *)(x))[1] = ((char *)(x))[2]; \
+        ((char *)(x))[2] = n;                \
+    }
 
 /* byte swap a short */
-#define swaps(x, n) { \
-		 n = ((char *) (x))[0];\
-		 ((char *) (x))[0] = ((char *) (x))[1];\
-		 ((char *) (x))[1] = n; }
+#define swaps(x, n)                          \
+    {                                        \
+        n                = ((char *)(x))[0]; \
+        ((char *)(x))[0] = ((char *)(x))[1]; \
+        ((char *)(x))[1] = n;                \
+    }
 
 /* byte swap a three-byte unit */
-#define swapt(x, n) { \
-		 n = ((char *) (x))[0];\
-		 ((char *) (x))[0] = ((char *) (x))[2];\
-		 ((char *) (x))[2] = n; }
+#define swapt(x, n)                          \
+    {                                        \
+        n                = ((char *)(x))[0]; \
+        ((char *)(x))[0] = ((char *)(x))[2]; \
+        ((char *)(x))[2] = n;                \
+    }
 
 _X_HIDDEN void
-XftSwapCARD32 (CARD32 *data, int u)
+XftSwapCARD32(CARD32 *data, int u)
 {
-    char    n;
+    char n;
     while (u--)
     {
-	swapl (data, n);
-	data++;
+        swapl(data, n);
+        data++;
     }
 }
 
 _X_HIDDEN void
-XftSwapCARD24 (CARD8 *data, int width, int height)
+XftSwapCARD24(CARD8 *data, int width, int height)
 {
-    int	    units, u;
-    char    n;
-    CARD8   *d;
+    int    units, u;
+    char   n;
+    CARD8 *d;
 
     units = width / 3;
     while (height--)
     {
-	d = data;
-	data += width;
-	u = units;
-	while (u--)
-	{
-	    swapt (d, n);
-	    d += 3;
-	}
+        d = data;
+        data += width;
+        u = units;
+        while (u--)
+        {
+            swapt(d, n);
+            d += 3;
+        }
     }
 }
 
 _X_HIDDEN void
-XftSwapCARD16 (CARD16 *data, int u)
+XftSwapCARD16(CARD16 *data, int u)
 {
-    char    n;
+    char n;
     while (u--)
     {
-	swaps (data, n);
-	data++;
+        swaps(data, n);
+        data++;
     }
 }
 
 _X_HIDDEN void
-XftSwapImage (XImage *image)
+XftSwapImage(XImage *image)
 {
-    switch (image->bits_per_pixel) {
-    case 32:
-	XftSwapCARD32 ((CARD32 *) image->data,
-		       image->height * image->bytes_per_line >> 2);
-	break;
-    case 24:
-	XftSwapCARD24 ((CARD8 *) image->data,
-		       image->bytes_per_line,
-		       image->height);
-	break;
-    case 16:
-	XftSwapCARD16 ((CARD16 *) image->data,
-		       image->height * image->bytes_per_line >> 1);
-	break;
-    default:
-	break;
+    switch (image->bits_per_pixel)
+    {
+        case 32:
+            XftSwapCARD32((CARD32 *)image->data,
+                          image->height * image->bytes_per_line >> 2);
+            break;
+        case 24:
+            XftSwapCARD24((CARD8 *)image->data,
+                          image->bytes_per_line,
+                          image->height);
+            break;
+        case 16:
+            XftSwapCARD16((CARD16 *)image->data,
+                          image->height * image->bytes_per_line >> 1);
+            break;
+        default:
+            break;
     }
 }

@@ -25,71 +25,85 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xlibint.h"
 #include "X11/Xatom.h"
 #include "X11/Xos.h"
 #include <stdio.h>
 
-
-Status XFetchName (
-    register Display *dpy,
-    Window w,
-    char **name)
+Status
+XFetchName(register Display *dpy, Window w, char **name)
 {
-    Atom actual_type;
-    int actual_format;
-    unsigned long nitems;
-    unsigned long leftover;
+    Atom           actual_type;
+    int            actual_format;
+    unsigned long  nitems;
+    unsigned long  leftover;
     unsigned char *data = NULL;
-    if (XGetWindowProperty(dpy, w, XA_WM_NAME, 0L, (long)BUFSIZ, False, XA_STRING,
-	&actual_type,
-	&actual_format, &nitems, &leftover, &data) != Success) {
+    if (XGetWindowProperty(dpy,
+                           w,
+                           XA_WM_NAME,
+                           0L,
+                           (long)BUFSIZ,
+                           False,
+                           XA_STRING,
+                           &actual_type,
+                           &actual_format,
+                           &nitems,
+                           &leftover,
+                           &data) != Success)
+    {
         *name = NULL;
-	return (0);
-	}
-    if ( (actual_type == XA_STRING) &&  (actual_format == 8) ) {
-
-	/* The data returned by XGetWindowProperty is guaranteed to
+        return (0);
+    }
+    if ((actual_type == XA_STRING) && (actual_format == 8))
+    {
+    /* The data returned by XGetWindowProperty is guaranteed to
 	contain one extra byte that is null terminated to make retrieveing
 	string properties easy. */
 
-	*name = (char *)data;
-	return(1);
-	}
-    Xfree (data);
+        *name = (char *)data;
+        return (1);
+    }
+    Xfree(data);
     *name = NULL;
-    return(0);
+    return (0);
 }
 
-Status XGetIconName (
-    register Display *dpy,
-    Window w,
-    char **icon_name)
+Status
+XGetIconName(register Display *dpy, Window w, char **icon_name)
 {
-    Atom actual_type;
-    int actual_format;
-    unsigned long nitems;
-    unsigned long leftover;
+    Atom           actual_type;
+    int            actual_format;
+    unsigned long  nitems;
+    unsigned long  leftover;
     unsigned char *data = NULL;
-    if (XGetWindowProperty(dpy, w, XA_WM_ICON_NAME, 0L, (long)BUFSIZ, False,
-        XA_STRING,
-	&actual_type,
-	&actual_format, &nitems, &leftover, &data) != Success) {
+    if (XGetWindowProperty(dpy,
+                           w,
+                           XA_WM_ICON_NAME,
+                           0L,
+                           (long)BUFSIZ,
+                           False,
+                           XA_STRING,
+                           &actual_type,
+                           &actual_format,
+                           &nitems,
+                           &leftover,
+                           &data) != Success)
+    {
         *icon_name = NULL;
-	return (0);
-	}
-    if ( (actual_type == XA_STRING) &&  (actual_format == 8) ) {
-
-	/* The data returned by XGetWindowProperty is guaranteed to
+        return (0);
+    }
+    if ((actual_type == XA_STRING) && (actual_format == 8))
+    {
+    /* The data returned by XGetWindowProperty is guaranteed to
 	contain one extra byte that is null terminated to make retrieveing
 	string properties easy. */
 
-	*icon_name = (char*)data;
-	return(1);
-	}
-    Xfree (data);
+        *icon_name = (char *)data;
+        return (1);
+    }
+    Xfree(data);
     *icon_name = NULL;
-    return(0);
+    return (0);
 }

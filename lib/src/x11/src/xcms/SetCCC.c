@@ -34,12 +34,10 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcms.h"
-
-
 
 /************************************************************************
  *									*
@@ -55,9 +53,7 @@
  */
 
 Status
-XcmsSetWhitePoint(
-    XcmsCCC ccc,
-    XcmsColor *pColor)
+XcmsSetWhitePoint(XcmsCCC ccc, XcmsColor *pColor)
 /*
  *	DESCRIPTION
  *		Sets the Client White Point in the specified CCC.
@@ -67,19 +63,23 @@ XcmsSetWhitePoint(
  *
  */
 {
-    if (pColor == NULL || pColor->format == XcmsUndefinedFormat) {
-	ccc->clientWhitePt.format = XcmsUndefinedFormat;
-    } else if (pColor->format != XcmsCIEXYZFormat &&
-	    pColor->format != XcmsCIEuvYFormat &&
-	    pColor->format != XcmsCIExyYFormat) {
-	return(XcmsFailure);
-    } else {
-	memcpy((char *)&ccc->clientWhitePt, (char *)pColor, sizeof(XcmsColor));
+    if (pColor == NULL || pColor->format == XcmsUndefinedFormat)
+    {
+        ccc->clientWhitePt.format = XcmsUndefinedFormat;
     }
-    return(XcmsSuccess);
+    else if (pColor->format != XcmsCIEXYZFormat &&
+             pColor->format != XcmsCIEuvYFormat &&
+             pColor->format != XcmsCIExyYFormat)
+    {
+        return (XcmsFailure);
+    }
+    else
+    {
+        memcpy((char *)&ccc->clientWhitePt, (char *)pColor, sizeof(XcmsColor));
+    }
+    return (XcmsSuccess);
 }
 
-
 /*
  *	NAME
  *		XcmsSetCompressionProc
@@ -88,10 +88,9 @@ XcmsSetWhitePoint(
  */
 
 XcmsCompressionProc
-XcmsSetCompressionProc(
-    XcmsCCC ccc,
-    XcmsCompressionProc compression_proc,
-    XPointer client_data)
+XcmsSetCompressionProc(XcmsCCC             ccc,
+                       XcmsCompressionProc compression_proc,
+                       XPointer            client_data)
 /*
  *	DESCRIPTION
  *		Set the specified CCC's compression function and client data.
@@ -103,12 +102,11 @@ XcmsSetCompressionProc(
 {
     XcmsCompressionProc old = ccc->gamutCompProc;
 
-    ccc->gamutCompProc = compression_proc;
+    ccc->gamutCompProc       = compression_proc;
     ccc->gamutCompClientData = client_data;
-    return(old);
+    return (old);
 }
 
-
 /*
  *	NAME
  *		XcmsSetWhiteAdjustProc
@@ -117,10 +115,9 @@ XcmsSetCompressionProc(
  */
 
 XcmsWhiteAdjustProc
-XcmsSetWhiteAdjustProc(
-    XcmsCCC ccc,
-    XcmsWhiteAdjustProc white_adjust_proc,
-    XPointer client_data )
+XcmsSetWhiteAdjustProc(XcmsCCC             ccc,
+                       XcmsWhiteAdjustProc white_adjust_proc,
+                       XPointer            client_data)
 /*
  *	DESCRIPTION
  *		Set the specified CCC's white_adjust function and client data.
@@ -132,7 +129,7 @@ XcmsSetWhiteAdjustProc(
 {
     XcmsWhiteAdjustProc old = ccc->whitePtAdjProc;
 
-    ccc->whitePtAdjProc = white_adjust_proc;
+    ccc->whitePtAdjProc       = white_adjust_proc;
     ccc->whitePtAdjClientData = client_data;
-    return(old);
+    return (old);
 }

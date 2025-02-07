@@ -93,19 +93,19 @@ Sun Microsystems, Inc. or its licensors is granted.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xlcint.h"
 
 #ifdef USE_DYNAMIC_LC
-#undef USE_DEFAULT_LOADER
-#undef USE_GENERIC_LOADER
-#undef USE_UTF8_LOADER
+#  undef USE_DEFAULT_LOADER
+#  undef USE_GENERIC_LOADER
+#  undef USE_UTF8_LOADER
 #else
-#define USE_GENERIC_LOADER
-#define USE_DEFAULT_LOADER
-#define USE_UTF8_LOADER
+#  define USE_GENERIC_LOADER
+#  define USE_DEFAULT_LOADER
+#  define USE_UTF8_LOADER
 #endif
 
 /*
@@ -116,26 +116,25 @@ Sun Microsystems, Inc. or its licensors is granted.
 void
 _XlcInitLoader(void)
 {
-
 #ifdef USE_DYNAMIC_LC
     _XlcAddLoader(_XlcDynamicLoad, XlcHead);
 #else /* USE_DYNAMIC_LC */
 
-#ifdef USE_GENERIC_LOADER
+#  ifdef USE_GENERIC_LOADER
     _XlcAddLoader(_XlcGenericLoader, XlcHead);
-#endif
+#  endif
 
-#ifdef USE_DEFAULT_LOADER
+#  ifdef USE_DEFAULT_LOADER
     _XlcAddLoader(_XlcDefaultLoader, XlcHead);
-#endif
+#  endif
 
-#ifdef USE_UTF8_LOADER
+#  ifdef USE_UTF8_LOADER
     _XlcAddLoader(_XlcUtf8Loader, XlcHead);
-#endif
+#  endif
 
-#ifdef USE_DYNAMIC_LOADER
+#  ifdef USE_DYNAMIC_LOADER
     _XlcAddLoader(_XlcDynamicLoader, XlcHead);
-#endif
+#  endif
 
 #endif /* USE_DYNAMIC_LC */
 }
@@ -143,26 +142,25 @@ _XlcInitLoader(void)
 void
 _XlcDeInitLoader(void)
 {
-
 #ifdef USE_DYNAMIC_LC
     _XlcRemoveLoader(_XlcDynamicLoad);
 #else /* USE_DYNAMIC_LC */
 
-#ifdef USE_GENERIC_LOADER
+#  ifdef USE_GENERIC_LOADER
     _XlcRemoveLoader(_XlcGenericLoader);
-#endif
+#  endif
 
-#ifdef USE_DEFAULT_LOADER
+#  ifdef USE_DEFAULT_LOADER
     _XlcRemoveLoader(_XlcDefaultLoader);
-#endif
+#  endif
 
-#ifdef USE_UTF8_LOADER
+#  ifdef USE_UTF8_LOADER
     _XlcRemoveLoader(_XlcUtf8Loader);
-#endif
+#  endif
 
-#ifdef USE_DYNAMIC_LOADER
+#  ifdef USE_DYNAMIC_LOADER
     _XlcRemoveLoader(_XlcDynamicLoader);
-#endif
+#  endif
 
 #endif /* USE_DYNAMIC_LC */
 }

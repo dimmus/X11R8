@@ -29,7 +29,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "X11/Xlib.h"
@@ -39,19 +39,20 @@ Screen *
 XmuScreenOfWindow(Display *dpy, Window w)
 {
     register int i;
-    Window root;
-    int x, y;					/* dummy variables */
-    unsigned int width, height, bw, depth;	/* dummy variables */
+    Window       root;
+    int          x, y;     /* dummy variables */
+    unsigned int width, height, bw, depth; /* dummy variables */
 
-    if (!XGetGeometry (dpy, w, &root, &x, &y, &width, &height,
-		       &bw, &depth)) {
-	return NULL;
+    if (!XGetGeometry(dpy, w, &root, &x, &y, &width, &height, &bw, &depth))
+    {
+        return NULL;
     }
-    for (i = 0; i < ScreenCount (dpy); i++) {	/* find root from list */
-	if (root == RootWindow (dpy, i)) {
-	    return ScreenOfDisplay (dpy, i);
-	}
+    for (i = 0; i < ScreenCount(dpy); i++)
+    { /* find root from list */
+        if (root == RootWindow(dpy, i))
+        {
+            return ScreenOfDisplay(dpy, i);
+        }
     }
     return NULL;
 }
-

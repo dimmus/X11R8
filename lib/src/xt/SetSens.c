@@ -69,7 +69,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "IntrinsicI.h"
 #include "StringDefs.h"
@@ -83,8 +83,7 @@ SetAncestorSensitive(register Widget widget, Boolean ancestor_sensitive)
 {
     Arg args[1];
 
-    if (widget->core.ancestor_sensitive == ancestor_sensitive)
-        return;
+    if (widget->core.ancestor_sensitive == ancestor_sensitive) return;
 
     XtSetArg(args[0], XtNancestorSensitive, ancestor_sensitive);
     XtSetValues(widget, args, XtNumber(args));
@@ -93,12 +92,14 @@ SetAncestorSensitive(register Widget widget, Boolean ancestor_sensitive)
        children's ancestor_sensitive; else do nothing as children's
        ancestor_sensitive is already FALSE */
 
-    if (widget->core.sensitive && XtIsComposite(widget)) {
-        Cardinal i;
+    if (widget->core.sensitive && XtIsComposite(widget))
+    {
+        Cardinal   i;
         WidgetList children;
 
-        children = ((CompositeWidget) widget)->composite.children;
-        for (i = 0; i < ((CompositeWidget) widget)->composite.num_children; i++) {
+        children = ((CompositeWidget)widget)->composite.children;
+        for (i = 0; i < ((CompositeWidget)widget)->composite.num_children; i++)
+        {
             SetAncestorSensitive(children[i], ancestor_sensitive);
         }
     }
@@ -112,7 +113,8 @@ XtSetSensitive(register Widget widget, _XtBoolean sensitive)
     WIDGET_TO_APPCON(widget);
 
     LOCK_APP(app);
-    if (widget->core.sensitive == sensitive) {
+    if (widget->core.sensitive == sensitive)
+    {
         UNLOCK_APP(app);
         return;
     }
@@ -124,13 +126,15 @@ XtSetSensitive(register Widget widget, _XtBoolean sensitive)
        children's ancestor_sensitive; else do nothing as children's
        ancestor_sensitive is already FALSE */
 
-    if (widget->core.ancestor_sensitive && XtIsComposite(widget)) {
-        Cardinal i;
+    if (widget->core.ancestor_sensitive && XtIsComposite(widget))
+    {
+        Cardinal   i;
         WidgetList children;
 
-        children = ((CompositeWidget) widget)->composite.children;
-        for (i = 0; i < ((CompositeWidget) widget)->composite.num_children; i++) {
-            SetAncestorSensitive(children[i], (Boolean) sensitive);
+        children = ((CompositeWidget)widget)->composite.children;
+        for (i = 0; i < ((CompositeWidget)widget)->composite.num_children; i++)
+        {
+            SetAncestorSensitive(children[i], (Boolean)sensitive);
         }
     }
     UNLOCK_APP(app);

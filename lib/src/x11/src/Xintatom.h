@@ -9,23 +9,29 @@
 
 #define TABLESIZE 64
 
-typedef struct _Entry {
+typedef struct _Entry
+{
     unsigned long sig;
-    Atom atom;
+    Atom          atom;
 } EntryRec, *Entry;
 
-#define RESERVED ((Entry) 1)
+#define RESERVED ((Entry)1)
 
-#define EntryName(e) ((char *)(e+1))
+#define EntryName(e) ((char *)(e + 1))
 
-typedef struct _XDisplayAtoms {
+typedef struct _XDisplayAtoms
+{
     Entry table[TABLESIZE];
 } AtomTable;
 
 _XFUNCPROTOBEGIN
 
-extern void _XUpdateAtomCache(Display *dpy, const char *name, Atom atom,
-				unsigned long sig, int idx, int n);
+extern void _XUpdateAtomCache(Display      *dpy,
+                              const char   *name,
+                              Atom          atom,
+                              unsigned long sig,
+                              int           idx,
+                              int           n);
 extern void _XFreeAtomTable(Display *dpy);
 
 _XFUNCPROTOEND

@@ -56,45 +56,53 @@ X Window System is a trademark of The Open Group.
  * DEALINGS IN THE SOFTWARE.
  */
 
-
 /* this might be rightly regarded an os dependent file */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 static inline int
-changehost (Display *dpy, XHostAddress *host, BYTE mode)
+changehost(Display *dpy, XHostAddress *host, BYTE mode)
 {
-    xChangeHostsReq *req;
-    int length;
+    xChangeHostsReq           *req;
+    int                        length;
     XServerInterpretedAddress *siAddr;
-    int addrlen;
+    int                        addrlen;
 
-    siAddr = host->family == FamilyServerInterpreted ?
-	(XServerInterpretedAddress *)host->address : NULL;
-    addrlen = siAddr ?
-	siAddr->typelength + siAddr->valuelength + 1 : host->length;
+    siAddr = host->family == FamilyServerInterpreted
+                 ? (XServerInterpretedAddress *)host->address
+                 : NULL;
+    addrlen =
+        siAddr ? siAddr->typelength + siAddr->valuelength + 1 : host->length;
 
-    length = (addrlen + 3) & ~0x3;	/* round up */
+    length = (addrlen + 3) & ~0x3; /* round up */
 
     LockDisplay(dpy);
-    GetReqExtra (ChangeHosts, length, req);
-    if (!req) {
-	UnlockDisplay(dpy);
-	return 0;
+    GetReqExtra(ChangeHosts, length, req);
+    if (!req)
+    {
+        UnlockDisplay(dpy);
+        return 0;
     }
-    req->mode = mode;
+    req->mode       = mode;
     req->hostFamily = host->family;
     req->hostLength = addrlen;
-    if (siAddr) {
-	char *dest = (char *) NEXTPTR(req,xChangeHostsReq);
-	memcpy(dest, siAddr->type, (size_t) siAddr->typelength);
-	dest[siAddr->typelength] = '\0';
-	memcpy(dest + siAddr->typelength + 1,siAddr->value,(size_t) siAddr->valuelength);
-    } else {
-	memcpy((char *) NEXTPTR(req,xChangeHostsReq), host->address, (size_t) addrlen);
+    if (siAddr)
+    {
+        char *dest = (char *)NEXTPTR(req, xChangeHostsReq);
+        memcpy(dest, siAddr->type, (size_t)siAddr->typelength);
+        dest[siAddr->typelength] = '\0';
+        memcpy(dest + siAddr->typelength + 1,
+               siAddr->value,
+               (size_t)siAddr->valuelength);
+    }
+    else
+    {
+        memcpy((char *)NEXTPTR(req, xChangeHostsReq),
+               host->address,
+               (size_t)addrlen);
     }
     UnlockDisplay(dpy);
     SyncHandle();
@@ -102,43 +110,35 @@ changehost (Display *dpy, XHostAddress *host, BYTE mode)
 }
 
 int
-XAddHost (
-    register Display *dpy,
-    XHostAddress *host)
+XAddHost(register Display *dpy, XHostAddress *host)
 {
     return changehost(dpy, host, HostInsert);
 }
 
 int
-XRemoveHost (
-    register Display *dpy,
-    XHostAddress *host)
+XRemoveHost(register Display *dpy, XHostAddress *host)
 {
     return changehost(dpy, host, HostDelete);
 }
 
 int
-XAddHosts (
-    register Display *dpy,
-    XHostAddress *hosts,
-    int n)
+XAddHosts(register Display *dpy, XHostAddress *hosts, int n)
 {
     register int i;
-    for (i = 0; i < n; i++) {
-	(void) XAddHost(dpy, &hosts[i]);
-      }
+    for (i = 0; i < n; i++)
+    {
+        (void)XAddHost(dpy, &hosts[i]);
+    }
     return 1;
 }
 
 int
-XRemoveHosts (
-    register Display *dpy,
-    XHostAddress *hosts,
-    int n)
+XRemoveHosts(register Display *dpy, XHostAddress *hosts, int n)
 {
     register int i;
-    for (i = 0; i < n; i++) {
-	(void) XRemoveHost(dpy, &hosts[i]);
-      }
+    for (i = 0; i < n; i++)
+    {
+        (void)XRemoveHost(dpy, &hosts[i]);
+    }
     return 1;
 }

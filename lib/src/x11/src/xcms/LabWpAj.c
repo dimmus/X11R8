@@ -33,7 +33,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
@@ -43,7 +43,6 @@
  *	EXTERNS
  */
 
-
 /************************************************************************
  *									*
  *			 PUBLIC ROUTINES				*
@@ -57,14 +56,13 @@
  *	SYNOPSIS
  */
 Status
-XcmsCIELabWhiteShiftColors(
-    XcmsCCC ccc,
-    XcmsColor *pWhitePtFrom,
-    XcmsColor *pWhitePtTo,
-    XcmsColorFormat destSpecFmt,
-    XcmsColor *pColors_in_out,
-    unsigned int nColors,
-    Bool *pCompressed)
+XcmsCIELabWhiteShiftColors(XcmsCCC         ccc,
+                           XcmsColor      *pWhitePtFrom,
+                           XcmsColor      *pWhitePtTo,
+                           XcmsColorFormat destSpecFmt,
+                           XcmsColor      *pColors_in_out,
+                           unsigned int    nColors,
+                           Bool           *pCompressed)
 /*
  *	DESCRIPTION
  *		Adjust color specifications in XcmsColor structures for
@@ -77,21 +75,31 @@ XcmsCIELabWhiteShiftColors(
  *			compression.
  */
 {
-    if (pWhitePtFrom == NULL || pWhitePtTo == NULL || pColors_in_out == NULL) {
-	return(0);
+    if (pWhitePtFrom == NULL || pWhitePtTo == NULL || pColors_in_out == NULL)
+    {
+        return (0);
     }
 
     /*
      * Convert to CIELab using pWhitePtFrom
      */
-    if (_XcmsConvertColorsWithWhitePt(ccc, pColors_in_out, pWhitePtFrom,
-	    nColors, XcmsCIELabFormat, pCompressed) == XcmsFailure) {
-	return(XcmsFailure);
+    if (_XcmsConvertColorsWithWhitePt(ccc,
+                                      pColors_in_out,
+                                      pWhitePtFrom,
+                                      nColors,
+                                      XcmsCIELabFormat,
+                                      pCompressed) == XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
     /*
      * Convert from CIELab to destSpecFmt using pWhitePtTo
      */
-    return(_XcmsConvertColorsWithWhitePt(ccc, pColors_in_out,
-	pWhitePtTo, nColors, destSpecFmt, pCompressed));
+    return (_XcmsConvertColorsWithWhitePt(ccc,
+                                          pColors_in_out,
+                                          pWhitePtTo,
+                                          nColors,
+                                          destSpecFmt,
+                                          pCompressed));
 }

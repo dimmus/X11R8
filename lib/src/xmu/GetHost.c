@@ -31,18 +31,16 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xosdefs.h"
 #include <string.h>
 #include <unistd.h>
 
 #ifdef WIN32
-#include "X11/Xlibint.h"
-#include "X11/Xwinsock.h"
+#  include "X11/Xlibint.h"
+#  include "X11/Xwinsock.h"
 #endif
-
-
 
 #include "X11/Xmu/SysUtil.h"
 
@@ -53,13 +51,12 @@ XmuGetHostname(char *buf, int maxlen)
 #ifdef WIN32
     static WSADATA wsadata;
 
-    if (!wsadata.wVersion && WSAStartup(MAKEWORD(2,2), &wsadata))
-	return -1;
+    if (!wsadata.wVersion && WSAStartup(MAKEWORD(2, 2), &wsadata)) return -1;
 #endif
 
     buf[0] = '\0';
-    (void) gethostname (buf, maxlen);
-    buf [maxlen - 1] = '\0';
-    len = strlen(buf);
+    (void)gethostname(buf, maxlen);
+    buf[maxlen - 1] = '\0';
+    len             = strlen(buf);
     return len;
 }

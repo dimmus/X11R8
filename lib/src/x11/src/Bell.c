@@ -25,22 +25,19 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XBell(
-    register Display *dpy,
-    int percent)
+XBell(register Display *dpy, int percent)
 {
     register xBellReq *req;
 
     LockDisplay(dpy);
-    GetReq(Bell,req);
+    GetReq(Bell, req);
     req->percent = percent;
     UnlockDisplay(dpy);
     SyncHandle();
     return 1;
 }
-

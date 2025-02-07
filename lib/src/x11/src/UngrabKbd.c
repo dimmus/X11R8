@@ -25,21 +25,18 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XUngrabKeyboard (
-        register Display *dpy,
-	Time time)
+XUngrabKeyboard(register Display *dpy, Time time)
 {
-        register xResourceReq *req;
+    register xResourceReq *req;
 
-	LockDisplay(dpy);
-        GetResReq(UngrabKeyboard, time, req);
-	UnlockDisplay(dpy);
-	SyncHandle();
-	return 1;
+    LockDisplay(dpy);
+    GetResReq(UngrabKeyboard, time, req);
+    UnlockDisplay(dpy);
+    SyncHandle();
+    return 1;
 }
-

@@ -44,7 +44,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "Xcmsint.h"
@@ -56,9 +56,8 @@
  *		Internal defines that need NOT be exported to any package or
  *		program using this package.
  */
-#define MAXBISECTCOUNT	100
+#define MAXBISECTCOUNT 100
 
-
 /************************************************************************
  *									*
  *			 PUBLIC ROUTINES				*
@@ -73,12 +72,11 @@
  */
 /* ARGSUSED */
 Status
-XcmsTekHVCClipVC (
-    XcmsCCC ccc,
-    XcmsColor *pColors_in_out,
-    unsigned int nColors,
-    unsigned int i,
-    Bool *pCompressed)
+XcmsTekHVCClipVC(XcmsCCC      ccc,
+                 XcmsColor   *pColors_in_out,
+                 unsigned int nColors,
+                 unsigned int i,
+                 Bool        *pCompressed)
 /*
  *	DESCRIPTION
  *		This routine will find the closest value and chroma
@@ -95,25 +93,28 @@ XcmsTekHVCClipVC (
  *
  */
 {
-    Status retval;
-    XcmsCCCRec	myCCC;
-    XcmsColor  *pColor;
+    Status     retval;
+    XcmsCCCRec myCCC;
+    XcmsColor *pColor;
     XcmsColor  hvc_max;
     XcmsRGBi   rgb_max;
-    int	      nCount, nMaxCount, nI, nILast;
+    int        nCount, nMaxCount, nI, nILast;
     XcmsFloat  Chroma, Value, bestChroma, bestValue, nT, saveDist, tmpDist;
 
     /*
      * Insure TekHVC installed
      */
-    if (XcmsAddColorSpace(&XcmsTekHVCColorSpace) == XcmsFailure) {
-	return(XcmsFailure);
+    if (XcmsAddColorSpace(&XcmsTekHVCColorSpace) == XcmsFailure)
+    {
+        return (XcmsFailure);
     }
 
     /* Use my own CCC */
-    memcpy ((char *)&myCCC, (char *)ccc, sizeof(XcmsCCCRec));
-    myCCC.clientWhitePt.format = XcmsUndefinedFormat;/* inherit screen white pt */
-    myCCC.gamutCompProc = (XcmsCompressionProc)NULL;/* no gamut compression func */
+    memcpy((char *)&myCCC, (char *)ccc, sizeof(XcmsCCCRec));
+    myCCC.clientWhitePt.format =
+        XcmsUndefinedFormat;/* inherit screen white pt */
+    myCCC.gamutCompProc =
+        (XcmsCompressionProc)NULL;/* no gamut compression func */
 
     /*
      * Color specification passed as input can be assumed to:
@@ -127,136 +128,185 @@ XcmsTekHVCClipVC (
     pColor = pColors_in_out + i;
 
     if (ccc->visual->class < StaticColor &&
-	    FunctionSetOfCCC(ccc) != (XPointer) &XcmsLinearRGBFunctionSet) {
-	/*
+        FunctionSetOfCCC(ccc) != (XPointer)&XcmsLinearRGBFunctionSet)
+    {
+    /*
 	 * GRAY !
 	 */
-	_XcmsDIConvertColors(ccc, pColor, &ccc->pPerScrnInfo->screenWhitePt,
-		1, XcmsTekHVCFormat);
-	pColor->spec.TekHVC.H = pColor->spec.TekHVC.C = 0.0;
-	_XcmsDIConvertColors(ccc, pColor, &ccc->pPerScrnInfo->screenWhitePt,
-		1, XcmsCIEXYZFormat);
-	if (pCompressed) {
-	    *(pCompressed + i) = True;
-	}
-	return(XcmsSuccess);
-    } else {
-	/* Convert from CIEXYZ to TekHVC format */
-	if (_XcmsDIConvertColors(&myCCC, pColor,
-		&myCCC.pPerScrnInfo->screenWhitePt, 1, XcmsTekHVCFormat)
-		== XcmsFailure) {
-	    return(XcmsFailure);
-	}
+        _XcmsDIConvertColors(ccc,
+                             pColor,
+                             &ccc->pPerScrnInfo->screenWhitePt,
+                             1,
+                             XcmsTekHVCFormat);
+        pColor->spec.TekHVC.H = pColor->spec.TekHVC.C = 0.0;
+        _XcmsDIConvertColors(ccc,
+                             pColor,
+                             &ccc->pPerScrnInfo->screenWhitePt,
+                             1,
+                             XcmsCIEXYZFormat);
+        if (pCompressed)
+        {
+            *(pCompressed + i) = True;
+        }
+        return (XcmsSuccess);
+    }
+    else
+    {
+    /* Convert from CIEXYZ to TekHVC format */
+        if (_XcmsDIConvertColors(&myCCC,
+                                 pColor,
+                                 &myCCC.pPerScrnInfo->screenWhitePt,
+                                 1,
+                                 XcmsTekHVCFormat) == XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
 
-	if (!_XcmsTekHVC_CheckModify(pColor)) {
-	    return (XcmsFailure);
-	}
+        if (!_XcmsTekHVC_CheckModify(pColor))
+        {
+            return (XcmsFailure);
+        }
 
-	/* Step 1: compute the maximum value and chroma for this hue. */
-	/*         This copy may be overkill but it preserves the pixel etc. */
-	memcpy((char *)&hvc_max, (char *)pColor, sizeof(XcmsColor));
-	if (_XcmsTekHVCQueryMaxVCRGB (&myCCC, hvc_max.spec.TekHVC.H, &hvc_max,
-		&rgb_max) == XcmsFailure) {
-	    return (XcmsFailure);
-	}
+    /* Step 1: compute the maximum value and chroma for this hue. */
+        /*         This copy may be overkill but it preserves the pixel etc. */
+        memcpy((char *)&hvc_max, (char *)pColor, sizeof(XcmsColor));
+        if (_XcmsTekHVCQueryMaxVCRGB(&myCCC,
+                                     hvc_max.spec.TekHVC.H,
+                                     &hvc_max,
+                                     &rgb_max) == XcmsFailure)
+        {
+            return (XcmsFailure);
+        }
 
-	/* Now check and return the appropriate value */
-	if (pColor->spec.TekHVC.V == hvc_max.spec.TekHVC.V) {
-	    /* When the value input is equal to the maximum value */
-	    /* merely return the chroma for that value. */
-	    pColor->spec.TekHVC.C = hvc_max.spec.TekHVC.C;
-	    retval = _XcmsDIConvertColors(&myCCC, pColor,
-		    &myCCC.pPerScrnInfo->screenWhitePt, 1, XcmsCIEXYZFormat);
-	}
+        /* Now check and return the appropriate value */
+        if (pColor->spec.TekHVC.V == hvc_max.spec.TekHVC.V)
+        {
+            /* When the value input is equal to the maximum value */
+            /* merely return the chroma for that value. */
+            pColor->spec.TekHVC.C = hvc_max.spec.TekHVC.C;
+            retval                = _XcmsDIConvertColors(&myCCC,
+                                          pColor,
+                                          &myCCC.pPerScrnInfo->screenWhitePt,
+                                          1,
+                                          XcmsCIEXYZFormat);
+        }
 
-	if (pColor->spec.TekHVC.V < hvc_max.spec.TekHVC.V) {
-	    /* return the intersection of the perpendicular line through     */
-	    /* the value and chroma given and the line from 0,0 and hvc_max. */
-	    Chroma = pColor->spec.TekHVC.C;
-	    Value = pColor->spec.TekHVC.V;
-	    pColor->spec.TekHVC.C =
-	       (Value + (hvc_max.spec.TekHVC.C / hvc_max.spec.TekHVC.V * Chroma)) /
-	       ((hvc_max.spec.TekHVC.V / hvc_max.spec.TekHVC.C) +
-		(hvc_max.spec.TekHVC.C / hvc_max.spec.TekHVC.V));
-	    if (pColor->spec.TekHVC.C >= hvc_max.spec.TekHVC.C) {
-		pColor->spec.TekHVC.C = hvc_max.spec.TekHVC.C;
-		pColor->spec.TekHVC.V = hvc_max.spec.TekHVC.V;
-	    } else {
-		pColor->spec.TekHVC.V = pColor->spec.TekHVC.C *
-				    hvc_max.spec.TekHVC.V / hvc_max.spec.TekHVC.C;
-	    }
-	    retval = _XcmsDIConvertColors(&myCCC, pColor,
-		    &myCCC.pPerScrnInfo->screenWhitePt, 1, XcmsCIEXYZFormat);
+        if (pColor->spec.TekHVC.V < hvc_max.spec.TekHVC.V)
+        {
+            /* return the intersection of the perpendicular line through     */
+            /* the value and chroma given and the line from 0,0 and hvc_max. */
+            Chroma = pColor->spec.TekHVC.C;
+            Value  = pColor->spec.TekHVC.V;
+            pColor->spec.TekHVC.C =
+                (Value +
+                 (hvc_max.spec.TekHVC.C / hvc_max.spec.TekHVC.V * Chroma)) /
+                ((hvc_max.spec.TekHVC.V / hvc_max.spec.TekHVC.C) +
+                 (hvc_max.spec.TekHVC.C / hvc_max.spec.TekHVC.V));
+            if (pColor->spec.TekHVC.C >= hvc_max.spec.TekHVC.C)
+            {
+                pColor->spec.TekHVC.C = hvc_max.spec.TekHVC.C;
+                pColor->spec.TekHVC.V = hvc_max.spec.TekHVC.V;
+            }
+            else
+            {
+                pColor->spec.TekHVC.V = pColor->spec.TekHVC.C *
+                                        hvc_max.spec.TekHVC.V /
+                                        hvc_max.spec.TekHVC.C;
+            }
+            retval = _XcmsDIConvertColors(&myCCC,
+                                          pColor,
+                                          &myCCC.pPerScrnInfo->screenWhitePt,
+                                          1,
+                                          XcmsCIEXYZFormat);
 
-	    if (retval != XcmsFailure && pCompressed != NULL) {
-		*(pCompressed + i) = True;
-	    }
-	    return (retval);
-	}
+            if (retval != XcmsFailure && pCompressed != NULL)
+            {
+                *(pCompressed + i) = True;
+            }
+            return (retval);
+        }
 
-	/* return the closest point on the upper part of the hue leaf. */
-	/* must do a bisection here to compute the delta e. */
-	nMaxCount = MAXBISECTCOUNT;
-	nI =     nMaxCount / 2;
-	bestValue = Value =  pColor->spec.TekHVC.V;
-	bestChroma = Chroma = pColor->spec.TekHVC.C;
-	saveDist = (XcmsFloat) XCMS_SQRT ((double) (((Chroma - hvc_max.spec.TekHVC.C) *
-					       (Chroma - hvc_max.spec.TekHVC.C)) +
-					      ((Value - hvc_max.spec.TekHVC.V) *
-					       (Value - hvc_max.spec.TekHVC.V))));
-	for (nCount = 0; nCount < nMaxCount; nCount++) {
-	    nT = (XcmsFloat) nI / (XcmsFloat) nMaxCount;
-	    pColor->spec.RGBi.red   = rgb_max.red * (1.0 - nT) + nT;
-	    pColor->spec.RGBi.green = rgb_max.green * (1.0 - nT) + nT;
-	    pColor->spec.RGBi.blue  = rgb_max.blue * (1.0 - nT) + nT;
-	    pColor->format = XcmsRGBiFormat;
+        /* return the closest point on the upper part of the hue leaf. */
+        /* must do a bisection here to compute the delta e. */
+        nMaxCount = MAXBISECTCOUNT;
+        nI        = nMaxCount / 2;
+        bestValue = Value = pColor->spec.TekHVC.V;
+        bestChroma = Chroma = pColor->spec.TekHVC.C;
+        saveDist =
+            (XcmsFloat)XCMS_SQRT((double)(((Chroma - hvc_max.spec.TekHVC.C) *
+                                           (Chroma - hvc_max.spec.TekHVC.C)) +
+                                          ((Value - hvc_max.spec.TekHVC.V) *
+                                           (Value - hvc_max.spec.TekHVC.V))));
+        for (nCount = 0; nCount < nMaxCount; nCount++)
+        {
+            nT                      = (XcmsFloat)nI / (XcmsFloat)nMaxCount;
+            pColor->spec.RGBi.red   = rgb_max.red * (1.0 - nT) + nT;
+            pColor->spec.RGBi.green = rgb_max.green * (1.0 - nT) + nT;
+            pColor->spec.RGBi.blue  = rgb_max.blue * (1.0 - nT) + nT;
+            pColor->format          = XcmsRGBiFormat;
 
-	    /* Convert from RGBi to HVC */
-	    if (_XcmsConvertColorsWithWhitePt(&myCCC, pColor,
-		    &myCCC.pPerScrnInfo->screenWhitePt, 1, XcmsTekHVCFormat,
-		    (Bool *) NULL)
-		    == XcmsFailure) {
-		return (XcmsFailure);
-	    }
-	    if (!_XcmsTekHVC_CheckModify(pColor)) {
-		return (XcmsFailure);
-	    }
-	    tmpDist = (XcmsFloat) XCMS_SQRT ((double)
-			(((Chroma - pColor->spec.TekHVC.C) *
-			  (Chroma - pColor->spec.TekHVC.C)) +
-			 ((Value - pColor->spec.TekHVC.V) *
-			  (Value - pColor->spec.TekHVC.V))));
-	    nILast = nI;
-	    if (tmpDist > saveDist) {
-		nI /= 2;
-	    } else {
-		nI = (nMaxCount + nI) / 2;
-		saveDist = tmpDist;
-		bestValue = pColor->spec.TekHVC.V;
-		bestChroma = pColor->spec.TekHVC.C;
-	    }
-	    if (nI == nILast || nI == 0) {
-		break;
-	    }
+            /* Convert from RGBi to HVC */
+            if (_XcmsConvertColorsWithWhitePt(
+                    &myCCC,
+                    pColor,
+                    &myCCC.pPerScrnInfo->screenWhitePt,
+                    1,
+                    XcmsTekHVCFormat,
+                    (Bool *)NULL) == XcmsFailure)
+            {
+                return (XcmsFailure);
+            }
+            if (!_XcmsTekHVC_CheckModify(pColor))
+            {
+                return (XcmsFailure);
+            }
+            tmpDist = (XcmsFloat)XCMS_SQRT(
+                (double)(((Chroma - pColor->spec.TekHVC.C) *
+                          (Chroma - pColor->spec.TekHVC.C)) +
+                         ((Value - pColor->spec.TekHVC.V) *
+                          (Value - pColor->spec.TekHVC.V))));
+            nILast = nI;
+            if (tmpDist > saveDist)
+            {
+                nI /= 2;
+            }
+            else
+            {
+                nI         = (nMaxCount + nI) / 2;
+                saveDist   = tmpDist;
+                bestValue  = pColor->spec.TekHVC.V;
+                bestChroma = pColor->spec.TekHVC.C;
+            }
+            if (nI == nILast || nI == 0)
+            {
+                break;
+            }
+        }
 
-	}
+        if (bestChroma >= hvc_max.spec.TekHVC.C)
+        {
+            pColor->spec.TekHVC.C = hvc_max.spec.TekHVC.C;
+            pColor->spec.TekHVC.V = hvc_max.spec.TekHVC.V;
+        }
+        else
+        {
+            pColor->spec.TekHVC.C = bestChroma;
+            pColor->spec.TekHVC.V = bestValue;
+        }
+        if (!_XcmsTekHVC_CheckModify(pColor))
+        {
+            return (XcmsFailure);
+        }
+        retval = _XcmsDIConvertColors(&myCCC,
+                                      pColor,
+                                      &myCCC.pPerScrnInfo->screenWhitePt,
+                                      1,
+                                      XcmsCIEXYZFormat);
 
-	if (bestChroma >= hvc_max.spec.TekHVC.C) {
-	    pColor->spec.TekHVC.C = hvc_max.spec.TekHVC.C;
-	    pColor->spec.TekHVC.V = hvc_max.spec.TekHVC.V;
-	} else {
-	    pColor->spec.TekHVC.C = bestChroma;
-	    pColor->spec.TekHVC.V = bestValue;
-	}
-	if (!_XcmsTekHVC_CheckModify(pColor)) {
-	    return (XcmsFailure);
-	}
-	retval = _XcmsDIConvertColors(&myCCC, pColor,
-		&myCCC.pPerScrnInfo->screenWhitePt, 1, XcmsCIEXYZFormat);
-
-	if (retval != XcmsFailure && pCompressed != NULL) {
-	    *(pCompressed + i) = True;
-	}
-	return(retval);
+        if (retval != XcmsFailure && pCompressed != NULL)
+        {
+            *(pCompressed + i) = True;
+        }
+        return (retval);
     }
 }

@@ -47,7 +47,7 @@ SOFTWARE.
 ******************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #include "X11/Xos.h"
@@ -55,78 +55,78 @@ SOFTWARE.
 #include "pathmax.h"
 
 #ifdef XTHREADS
-#include "X11/Xthreads.h"
+#  include "X11/Xthreads.h"
 #endif
 #ifndef WIN32
-#define X_INCLUDE_PWD_H
-#define XOS_USE_XLIB_LOCKING
-#include "X11/Xos_r.h"
+#  define X_INCLUDE_PWD_H
+#  define XOS_USE_XLIB_LOCKING
+#  include "X11/Xos_r.h"
 #endif
 #include <stdio.h>
 #include <ctype.h>
 
-
 /*ARGSUSED*/
 static char *
-GetHomeDir(
-    char *dest,
-    int len)
+GetHomeDir(char *dest, int len)
 {
 #ifdef WIN32
     register char *ptr1 = NULL;
     register char *ptr2 = NULL;
-    int len1 = 0, len2 = 0;
+    int            len1 = 0, len2 = 0;
 
-    if ((ptr1 = getenv("HOME"))) {	/* old, deprecated */
-	len1 = strlen (ptr1);
-    } else if ((ptr1 = getenv("HOMEDRIVE")) && (ptr2 = getenv("HOMEDIR"))) {
-	len1 = strlen (ptr1);
-	len2 = strlen (ptr2);
-    } else if ((ptr2 = getenv("USERNAME"))) {
-	len1 = strlen (ptr1 = "/users/");
-	len2 = strlen (ptr2);
+    if ((ptr1 = getenv("HOME")))
+    { /* old, deprecated */
+        len1 = strlen(ptr1);
+    }
+    else if ((ptr1 = getenv("HOMEDRIVE")) && (ptr2 = getenv("HOMEDIR")))
+    {
+        len1 = strlen(ptr1);
+        len2 = strlen(ptr2);
+    }
+    else if ((ptr2 = getenv("USERNAME")))
+    {
+        len1 = strlen(ptr1 = "/users/");
+        len2 = strlen(ptr2);
     }
     if ((len1 + len2 + 1) < len)
-	snprintf (dest, len, "%s%s", ptr1, (ptr2) ? ptr2 : "");
-    else
-	*dest = '\0';
+        snprintf(dest, len, "%s%s", ptr1, (ptr2) ? ptr2 : "");
+    else *dest = '\0';
 #else
-#ifdef X_NEEDS_PWPARAMS
+#  ifdef X_NEEDS_PWPARAMS
     _Xgetpwparams pwparams;
-#endif
+#  endif
     struct passwd *pw;
     register char *ptr;
 
-    if (len <= 0 || dest == NULL)
-	return NULL;
+    if (len <= 0 || dest == NULL) return NULL;
 
-    if ((ptr = getenv("HOME"))) {
-	(void) strncpy(dest, ptr, len-1);
-	dest[len-1] = '\0';
-    } else {
-	if ((ptr = getenv("USER")))
-	    pw = _XGetpwnam(ptr,pwparams);
-	else
-	    pw = _XGetpwuid(getuid(),pwparams);
-	if (pw != NULL) {
-	    (void) strncpy(dest, pw->pw_dir, len-1);
-	    dest[len-1] = '\0';
-	} else
-	    *dest = '\0';
+    if ((ptr = getenv("HOME")))
+    {
+        (void)strncpy(dest, ptr, len - 1);
+        dest[len - 1] = '\0';
+    }
+    else
+    {
+        if ((ptr = getenv("USER"))) pw = _XGetpwnam(ptr, pwparams);
+        else pw = _XGetpwuid(getuid(), pwparams);
+        if (pw != NULL)
+        {
+            (void)strncpy(dest, pw->pw_dir, len - 1);
+            dest[len - 1] = '\0';
+        }
+        else *dest = '\0';
     }
 #endif
     return dest;
 }
 
-
 static XrmDatabase
-InitDefaults(
-    Display *dpy)			/* display for defaults.... */
+InitDefaults(Display *dpy)   /* display for defaults.... */
 {
     XrmDatabase userdb;
     XrmDatabase xdb;
-    char fname[PATH_MAX];               /* longer than any conceivable size */
-    char *xenv;
+    char        fname[PATH_MAX]; /* longer than any conceivable size */
+    char       *xenv;
 
     XrmInitialize();
 
@@ -138,32 +138,38 @@ InitDefaults(
      * then load that file.
      */
 
-    if (dpy->xdefaults == NULL) {
-	const char *slashDotXdefaults = "/.Xdefaults";
+    if (dpy->xdefaults == NULL)
+    {
+        const char *slashDotXdefaults = "/.Xdefaults";
 
-	(void) GetHomeDir (fname, (int) (PATH_MAX - strlen (slashDotXdefaults) - 1));
-	(void) strcat (fname, slashDotXdefaults);
-	xdb = XrmGetFileDatabase (fname);
-    } else {
-	xdb = XrmGetStringDatabase(dpy->xdefaults);
+        (void)GetHomeDir(fname,
+                         (int)(PATH_MAX - strlen(slashDotXdefaults) - 1));
+        (void)strcat(fname, slashDotXdefaults);
+        xdb = XrmGetFileDatabase(fname);
+    }
+    else
+    {
+        xdb = XrmGetStringDatabase(dpy->xdefaults);
     }
 
-    if (!(xenv = getenv ("XENVIRONMENT"))) {
-	const char *slashDotXdefaultsDash = "/.Xdefaults-";
-	int len;
+    if (!(xenv = getenv("XENVIRONMENT")))
+    {
+        const char *slashDotXdefaultsDash = "/.Xdefaults-";
+        int         len;
 
-	(void) GetHomeDir (fname, (int) (PATH_MAX - strlen (slashDotXdefaultsDash) - 1));
-	(void) strcat (fname, slashDotXdefaultsDash);
-	len = (int) strlen (fname);
-	(void) _XGetHostname (fname+len, PATH_MAX-len);
-	xenv = fname;
+        (void)GetHomeDir(fname,
+                         (int)(PATH_MAX - strlen(slashDotXdefaultsDash) - 1));
+        (void)strcat(fname, slashDotXdefaultsDash);
+        len = (int)strlen(fname);
+        (void)_XGetHostname(fname + len, PATH_MAX - len);
+        xenv = fname;
     }
-    userdb = XrmGetFileDatabase (xenv);
-    XrmMergeDatabases (userdb, &xdb);
+    userdb = XrmGetFileDatabase(xenv);
+    XrmMergeDatabases(userdb, &xdb);
     return (xdb);
 
 #ifdef old
-    if (fname[0] != '\0') userdb =  XrmGetFileDatabase(fname);
+    if (fname[0] != '\0') userdb = XrmGetFileDatabase(fname);
     xdb = XrmGetStringDatabase(dpy->xdefaults);
     XrmMergeDatabases(userdb, &xdb);
     return xdb;
@@ -171,53 +177,49 @@ InitDefaults(
 }
 
 char *
-XGetDefault(
-	Display *dpy,			/* display for defaults.... */
-	char _Xconst *prog,		/* name of program for option	*/
-	register _Xconst char *name)	/* name of option program wants */
-{					/* to get, for example, "font"  */
-	XrmName names[3];
-	XrmClass classes[3];
-	XrmRepresentation fromType;
-	XrmValue result;
-	char *progname;
+XGetDefault(Display               *dpy, /* display for defaults.... */
+            char _Xconst          *prog, /* name of program for option	*/
+            register _Xconst char *name) /* name of option program wants */
+{ /* to get, for example, "font"  */
+    XrmName           names[3];
+    XrmClass          classes[3];
+    XrmRepresentation fromType;
+    XrmValue          result;
+    char             *progname;
 #ifdef WIN32
-	char *progname2;
+    char *progname2;
 #endif
 
-	/*
+    /*
 	 * strip path off of program name (XXX - this is OS specific)
 	 */
-	progname = strrchr (prog, '/');
+    progname = strrchr(prog, '/');
 #ifdef WIN32
-	progname2 = strrchr (prog, '\\');
-	if (progname2 && (!progname || progname < progname2))
-	    progname = progname2;
+    progname2 = strrchr(prog, '\\');
+    if (progname2 && (!progname || progname < progname2)) progname = progname2;
 #endif
 
-	if (progname)
-	    progname++;
-	else
-	    progname = (char *)prog;
+    if (progname) progname++;
+    else progname = (char *)prog;
 
-	/*
+    /*
 	 * see if database has ever been initialized.  Lookups can be done
 	 * without locks held.
 	 */
-	LockDisplay(dpy);
-	if (dpy->db == NULL) {
-	    dpy->db = InitDefaults(dpy);
-	    dpy->flags |= XlibDisplayDfltRMDB;
-	}
-	UnlockDisplay(dpy);
+    LockDisplay(dpy);
+    if (dpy->db == NULL)
+    {
+        dpy->db = InitDefaults(dpy);
+        dpy->flags |= XlibDisplayDfltRMDB;
+    }
+    UnlockDisplay(dpy);
 
-	names[0] = XrmStringToName(progname);
-	names[1] = XrmStringToName(name);
-	names[2] = NULLQUARK;
-	classes[0] = XrmStringToClass("Program");
-	classes[1] = XrmStringToClass("Name");
-	classes[2] = NULLQUARK;
-	(void)XrmQGetResource(dpy->db, names, classes, &fromType, &result);
-	return (result.addr);
+    names[0]   = XrmStringToName(progname);
+    names[1]   = XrmStringToName(name);
+    names[2]   = NULLQUARK;
+    classes[0] = XrmStringToClass("Program");
+    classes[1] = XrmStringToClass("Name");
+    classes[2] = NULLQUARK;
+    (void)XrmQGetResource(dpy->db, names, classes, &fromType, &result);
+    return (result.addr);
 }
-

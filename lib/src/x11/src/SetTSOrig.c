@@ -25,27 +25,25 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 
 int
-XSetTSOrigin (
-    register Display *dpy,
-    GC gc,
-    int x,
-    int y)
+XSetTSOrigin(register Display *dpy, GC gc, int x, int y)
 {
     XGCValues *gv = &gc->values;
 
     LockDisplay(dpy);
-    if (x != gv->ts_x_origin) {
-	gv->ts_x_origin = x;
-	gc->dirty |= GCTileStipXOrigin;
+    if (x != gv->ts_x_origin)
+    {
+        gv->ts_x_origin = x;
+        gc->dirty |= GCTileStipXOrigin;
     }
-    if (y != gv->ts_y_origin) {
-	gv->ts_y_origin = y;
-	gc->dirty |= GCTileStipYOrigin;
+    if (y != gv->ts_y_origin)
+    {
+        gv->ts_y_origin = y;
+        gc->dirty |= GCTileStipYOrigin;
     }
     UnlockDisplay(dpy);
     SyncHandle();

@@ -32,21 +32,19 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xlibint.h"
 #ifdef XTHREADS
-#include "locking.h"
+#  include "locking.h"
 #endif
 
 void
-XLockDisplay(
-    register Display* dpy)
+XLockDisplay(register Display *dpy)
 {
 #ifdef XTHREADS
     LockDisplay(dpy);
-    if (dpy->lock)
-	(*dpy->lock->user_lock_display)(dpy);
+    if (dpy->lock) (*dpy->lock->user_lock_display)(dpy);
     /*
      * We want the threads in the reply queue to all get out before
      * XLockDisplay returns, in case they have any side effects the
@@ -54,31 +52,30 @@ XLockDisplay(
      * XLockDisplay puts itself at the head of the event waiters queue
      * to wait for all the replies to come in.
      */
-    if (dpy->lock && dpy->lock->reply_awaiters) {
-	struct _XCVList *cvl;
+    if (dpy->lock && dpy->lock->reply_awaiters)
+    {
+        struct _XCVList *cvl;
 
-	cvl = (*dpy->lock->create_cvl)(dpy);
+        cvl = (*dpy->lock->create_cvl)(dpy);
 
-	/* stuff ourselves on the head of the queue */
-	cvl->next = dpy->lock->event_awaiters;
-	dpy->lock->event_awaiters = cvl;
+    /* stuff ourselves on the head of the queue */
+        cvl->next                 = dpy->lock->event_awaiters;
+        dpy->lock->event_awaiters = cvl;
 
-	while (dpy->lock->reply_awaiters)
-	    ConditionWait(dpy, cvl->cv);
-	UnlockNextEventReader(dpy); /* pass the signal on */
+        while (dpy->lock->reply_awaiters)
+            ConditionWait(dpy, cvl->cv);
+        UnlockNextEventReader(dpy); /* pass the signal on */
     }
     UnlockDisplay(dpy);
 #endif
 }
 
 void
-XUnlockDisplay(
-    register Display* dpy)
+XUnlockDisplay(register Display *dpy)
 {
 #ifdef XTHREADS
     LockDisplay(dpy);
-    if (dpy->lock)
-	(*dpy->lock->user_unlock_display)(dpy);
+    if (dpy->lock) (*dpy->lock->user_unlock_display)(dpy);
     UnlockDisplay(dpy);
 #endif
 }

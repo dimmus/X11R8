@@ -27,12 +27,11 @@ Author: Ralph Mor, X Consortium
 ******************************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/ICE/ICElib.h"
 #include "ICElibint.h"
 #include "X11/ICE/ICEutil.h"
-
 
 /*
  * IceSetPaAuthData is not a standard part of ICElib, it is specific
@@ -49,15 +48,11 @@ Author: Ralph Mor, X Consortium
  * .ICEauthority file behind our back.
  */
 
-int		 _IcePaAuthDataEntryCount = 0;
+int              _IcePaAuthDataEntryCount = 0;
 IceAuthDataEntry _IcePaAuthDataEntries[ICE_MAX_AUTH_DATA_ENTRIES];
 
-
 void
-IceSetPaAuthData (
-	int			numEntries,
-	IceAuthDataEntry	*entries
-)
+IceSetPaAuthData(int numEntries, IceAuthDataEntry *entries)
 {
     /*
      * _IcePaAuthDataEntries should really be a linked list.
@@ -68,41 +63,39 @@ IceSetPaAuthData (
 
     for (i = 0; i < numEntries; i++)
     {
-	for (j = 0; j < _IcePaAuthDataEntryCount; j++)
-	    if (strcmp (entries[i].protocol_name,
-		_IcePaAuthDataEntries[j].protocol_name) == 0 &&
-                strcmp (entries[i].network_id,
-		_IcePaAuthDataEntries[j].network_id) == 0 &&
-                strcmp (entries[i].auth_name,
-		_IcePaAuthDataEntries[j].auth_name) == 0)
-		break;
+        for (j = 0; j < _IcePaAuthDataEntryCount; j++)
+            if (strcmp(entries[i].protocol_name,
+                       _IcePaAuthDataEntries[j].protocol_name) == 0 &&
+                strcmp(entries[i].network_id,
+                       _IcePaAuthDataEntries[j].network_id) == 0 &&
+                strcmp(entries[i].auth_name,
+                       _IcePaAuthDataEntries[j].auth_name) == 0)
+                break;
 
-	if (j < _IcePaAuthDataEntryCount)
-	{
-	    free (_IcePaAuthDataEntries[j].protocol_name);
-	    free (_IcePaAuthDataEntries[j].network_id);
-	    free (_IcePaAuthDataEntries[j].auth_name);
-	    free (_IcePaAuthDataEntries[j].auth_data);
-	}
-	else
-	{
-	    _IcePaAuthDataEntryCount++;
-	}
+        if (j < _IcePaAuthDataEntryCount)
+        {
+            free(_IcePaAuthDataEntries[j].protocol_name);
+            free(_IcePaAuthDataEntries[j].network_id);
+            free(_IcePaAuthDataEntries[j].auth_name);
+            free(_IcePaAuthDataEntries[j].auth_data);
+        }
+        else
+        {
+            _IcePaAuthDataEntryCount++;
+        }
 
-	_IcePaAuthDataEntries[j].protocol_name
-	    = strdup(entries[i].protocol_name);
+        _IcePaAuthDataEntries[j].protocol_name =
+            strdup(entries[i].protocol_name);
 
-	_IcePaAuthDataEntries[j].network_id
-	    = strdup(entries[i].network_id);
+        _IcePaAuthDataEntries[j].network_id = strdup(entries[i].network_id);
 
-	_IcePaAuthDataEntries[j].auth_name
-            = strdup(entries[i].auth_name);
+        _IcePaAuthDataEntries[j].auth_name = strdup(entries[i].auth_name);
 
-	_IcePaAuthDataEntries[j].auth_data_length =
-            entries[i].auth_data_length;
-	_IcePaAuthDataEntries[j].auth_data = malloc (
-            entries[i].auth_data_length);
-	memcpy (_IcePaAuthDataEntries[j].auth_data,
-            entries[i].auth_data, entries[i].auth_data_length);
+        _IcePaAuthDataEntries[j].auth_data_length = entries[i].auth_data_length;
+        _IcePaAuthDataEntries[j].auth_data =
+            malloc(entries[i].auth_data_length);
+        memcpy(_IcePaAuthDataEntries[j].auth_data,
+               entries[i].auth_data,
+               entries[i].auth_data_length);
     }
 }

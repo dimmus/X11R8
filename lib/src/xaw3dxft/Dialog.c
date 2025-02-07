@@ -50,7 +50,6 @@ SOFTWARE.
    It implements policy, and gives a (hopefully) easier-to-use interface
    than just directly making your own form. */
 
-
 #include <X11/IntrinsicP.h>
 #include <X11/Xos.h>
 #include <X11/StringDefs.h>
@@ -69,82 +68,86 @@ SOFTWARE.
  * on the dialog value we will notice it, and reset the string.
  */
 
-#define MAGIC_VALUE ((char *) 3)
+#define MAGIC_VALUE ((char *)3)
 
-#define streq(a,b) (strcmp( (a), (b) ) == 0)
+#define streq(a, b) (strcmp((a), (b)) == 0)
 
 static XtResource resources[] = {
-  {XtNlabel, XtCLabel, XtRString, sizeof(String),
-     XtOffsetOf(DialogRec, dialog.label), XtRString, NULL},
-  {XtNvalue, XtCValue, XtRString, sizeof(String),
-     XtOffsetOf(DialogRec, dialog.value), XtRString, NULL},
-  {XtNicon, XtCIcon, XtRBitmap, sizeof(Pixmap),
-     XtOffsetOf(DialogRec, dialog.icon), XtRImmediate, 0},
+    { XtNlabel,
+     XtCLabel, XtRString,
+     sizeof(String),
+     XtOffsetOf(DialogRec, dialog.label),
+     XtRString,    NULL },
+    { XtNvalue,
+     XtCValue, XtRString,
+     sizeof(String),
+     XtOffsetOf(DialogRec, dialog.value),
+     XtRString,    NULL },
+    { XtNicon,
+     XtCIcon,  XtRBitmap,
+     sizeof(Pixmap),
+     XtOffsetOf(DialogRec, dialog.icon),
+     XtRImmediate, 0    },
 };
 
-static void Initialize(Widget, Widget, ArgList, Cardinal *);
-static void ConstraintInitialize(Widget, Widget, ArgList, Cardinal *);
-static void CreateDialogValueWidget(Widget);
-static void GetValuesHook(Widget, ArgList, Cardinal *);
+static void    Initialize(Widget, Widget, ArgList, Cardinal *);
+static void    ConstraintInitialize(Widget, Widget, ArgList, Cardinal *);
+static void    CreateDialogValueWidget(Widget);
+static void    GetValuesHook(Widget, ArgList, Cardinal *);
 static Boolean SetValues(Widget, Widget, Widget, ArgList, Cardinal *);
 
 DialogClassRec dialogClassRec = {
-  { /* core_class fields */
-    /* superclass         */    (WidgetClass) &formClassRec,
-    /* class_name         */    "Dialog",
-    /* widget_size        */    sizeof(DialogRec),
-    /* class_initialize   */    XawInitializeWidgetSet,
-    /* class_part init    */    NULL,
-    /* class_inited       */    FALSE,
-    /* initialize         */    Initialize,
-    /* initialize_hook    */    NULL,
-    /* realize            */    XtInheritRealize,
-    /* actions            */    NULL,
-    /* num_actions        */    0,
-    /* resources          */    resources,
-    /* num_resources      */    XtNumber(resources),
-    /* xrm_class          */    NULLQUARK,
-    /* compress_motion    */    TRUE,
-    /* compress_exposure  */    TRUE,
-    /* compress_enterleave*/    TRUE,
-    /* visible_interest   */    FALSE,
-    /* destroy            */    NULL,
-    /* resize             */    XtInheritResize,
-    /* expose             */    XtInheritExpose,
-    /* set_values         */    SetValues,
-    /* set_values_hook    */    NULL,
-    /* set_values_almost  */    XtInheritSetValuesAlmost,
-    /* get_values_hook    */    GetValuesHook,
-    /* accept_focus       */    NULL,
-    /* version            */    XtVersion,
-    /* callback_private   */    NULL,
-    /* tm_table           */    NULL,
-    /* query_geometry     */	XtInheritQueryGeometry,
-    /* display_accelerator*/	XtInheritDisplayAccelerator,
-    /* extension          */	NULL
-  },
-  { /* composite_class fields */
-    /* geometry_manager   */   XtInheritGeometryManager,
-    /* change_managed     */   XtInheritChangeManaged,
-    /* insert_child       */   XtInheritInsertChild,
-    /* delete_child       */   XtInheritDeleteChild,
-    /* extension          */   NULL
-  },
-  { /* constraint_class fields */
-    /* subresourses       */   NULL,
-    /* subresource_count  */   0,
-    /* constraint_size    */   sizeof(DialogConstraintsRec),
-    /* initialize         */   ConstraintInitialize,
-    /* destroy            */   NULL,
-    /* set_values         */   NULL,
-    /* extension          */   NULL
-  },
-  { /* form_class fields */
-    /* layout             */   XtInheritLayout
-  },
-  { /* dialog_class fields */
-    /* empty              */   0
-  }
+    { /* core_class fields */
+      /* superclass         */ (WidgetClass)&formClassRec,
+     /* class_name         */ "Dialog",
+     /* widget_size        */ sizeof(DialogRec),
+     /* class_initialize   */ XawInitializeWidgetSet,
+     /* class_part init    */ NULL,
+     /* class_inited       */ FALSE,
+     /* initialize         */ Initialize,
+     /* initialize_hook    */ NULL,
+     /* realize            */ XtInheritRealize,
+     /* actions            */ NULL,
+     /* num_actions        */ 0,
+     /* resources          */ resources,
+     /* num_resources      */ XtNumber(resources),
+     /* xrm_class          */ NULLQUARK,
+     /* compress_motion    */ TRUE,
+     /* compress_exposure  */ TRUE,
+     /* compress_enterleave*/ TRUE,
+     /* visible_interest   */ FALSE,
+     /* destroy            */ NULL,
+     /* resize             */ XtInheritResize,
+     /* expose             */ XtInheritExpose,
+     /* set_values         */ SetValues,
+     /* set_values_hook    */ NULL,
+     /* set_values_almost  */ XtInheritSetValuesAlmost,
+     /* get_values_hook    */ GetValuesHook,
+     /* accept_focus       */ NULL,
+     /* version            */ XtVersion,
+     /* callback_private   */ NULL,
+     /* tm_table           */ NULL,
+     /* query_geometry     */ XtInheritQueryGeometry,
+     /* display_accelerator*/ XtInheritDisplayAccelerator,
+     /* extension          */ NULL },
+    { /* composite_class fields */
+      /* geometry_manager   */ XtInheritGeometryManager,
+     /* change_managed     */ XtInheritChangeManaged,
+     /* insert_child       */ XtInheritInsertChild,
+     /* delete_child       */ XtInheritDeleteChild,
+     /* extension          */ NULL },
+    { /* constraint_class fields */
+      /* subresourses       */ NULL,
+     /* subresource_count  */ 0,
+     /* constraint_size    */ sizeof(DialogConstraintsRec),
+     /* initialize         */ ConstraintInitialize,
+     /* destroy            */ NULL,
+     /* set_values         */ NULL,
+     /* extension          */ NULL },
+    { /* form_class fields */
+      /* layout             */ XtInheritLayout },
+    { /* dialog_class fields */
+      /* empty              */ 0 }
 };
 
 WidgetClass dialogWidgetClass = (WidgetClass)&dialogClassRec;
@@ -153,160 +156,191 @@ WidgetClass dialogWidgetClass = (WidgetClass)&dialogClassRec;
 static void
 Initialize(Widget request, Widget new, ArgList args, Cardinal *num_args)
 {
-    DialogWidget dw = (DialogWidget)new;
-    Arg arglist[9];
-    Cardinal arg_cnt = 0;
+    DialogWidget dw = (DialogWidget) new;
+    Arg          arglist[9];
+    Cardinal     arg_cnt = 0;
 
-    XtSetArg(arglist[arg_cnt], XtNborderWidth, 0); arg_cnt++;
-    XtSetArg(arglist[arg_cnt], XtNleft, XtChainLeft); arg_cnt++;
+    XtSetArg(arglist[arg_cnt], XtNborderWidth, 0);
+    arg_cnt++;
+    XtSetArg(arglist[arg_cnt], XtNleft, XtChainLeft);
+    arg_cnt++;
 
-    if (dw->dialog.icon != (Pixmap)0) {
-	XtSetArg(arglist[arg_cnt], XtNbitmap, dw->dialog.icon); arg_cnt++;
-	XtSetArg(arglist[arg_cnt], XtNright, XtChainLeft); arg_cnt++;
-	dw->dialog.iconW =
-	    XtCreateManagedWidget( "icon", labelWidgetClass,
-				   new, arglist, arg_cnt );
-	arg_cnt = 2;
-	XtSetArg(arglist[arg_cnt], XtNfromHoriz, dw->dialog.iconW);arg_cnt++;
-    } else dw->dialog.iconW = (Widget)NULL;
+    if (dw->dialog.icon != (Pixmap)0)
+    {
+        XtSetArg(arglist[arg_cnt], XtNbitmap, dw->dialog.icon);
+        arg_cnt++;
+        XtSetArg(arglist[arg_cnt], XtNright, XtChainLeft);
+        arg_cnt++;
+        dw->dialog.iconW = XtCreateManagedWidget("icon",
+                                                 labelWidgetClass,
+                                                 new,
+                                                 arglist,
+                                                 arg_cnt);
+        arg_cnt          = 2;
+        XtSetArg(arglist[arg_cnt], XtNfromHoriz, dw->dialog.iconW);
+        arg_cnt++;
+    }
+    else dw->dialog.iconW = (Widget)NULL;
 
-    XtSetArg(arglist[arg_cnt], XtNlabel, dw->dialog.label); arg_cnt++;
-    XtSetArg(arglist[arg_cnt], XtNright, XtChainRight); arg_cnt++;
+    XtSetArg(arglist[arg_cnt], XtNlabel, dw->dialog.label);
+    arg_cnt++;
+    XtSetArg(arglist[arg_cnt], XtNright, XtChainRight);
+    arg_cnt++;
 
-    dw->dialog.labelW = XtCreateManagedWidget( "label", labelWidgetClass,
-					      new, arglist, arg_cnt);
+    dw->dialog.labelW =
+        XtCreateManagedWidget("label", labelWidgetClass, new, arglist, arg_cnt);
 
     if (dw->dialog.iconW != (Widget)NULL &&
-	(dw->dialog.labelW->core.height < dw->dialog.iconW->core.height)) {
-	XtSetArg( arglist[0], XtNheight, dw->dialog.iconW->core.height );
-	XtSetValues( dw->dialog.labelW, arglist, ONE );
+        (dw->dialog.labelW->core.height < dw->dialog.iconW->core.height))
+    {
+        XtSetArg(arglist[0], XtNheight, dw->dialog.iconW->core.height);
+        XtSetValues(dw->dialog.labelW, arglist, ONE);
     }
-    if (dw->dialog.value != NULL)
-        CreateDialogValueWidget( (Widget) dw);
-    else
-        dw->dialog.valueW = NULL;
+    if (dw->dialog.value != NULL) CreateDialogValueWidget((Widget)dw);
+    else dw->dialog.valueW = NULL;
 }
 
 /* ARGSUSED */
 static void
-ConstraintInitialize(Widget request, Widget new, ArgList args, Cardinal *num_args)
+ConstraintInitialize(Widget request,
+                     Widget new,
+                     ArgList   args,
+                     Cardinal *num_args)
 {
-    DialogWidget dw = (DialogWidget)new->core.parent;
-    DialogConstraints constraint = (DialogConstraints)new->core.constraints;
+    DialogWidget      dw         = (DialogWidget) new->core.parent;
+    DialogConstraints constraint = (DialogConstraints) new->core.constraints;
 
-    if (!XtIsSubclass(new, commandWidgetClass))	/* if not a button */
-	return;					/* then just use defaults */
+    if (!XtIsSubclass(new, commandWidgetClass)) /* if not a button */
+        return;     /* then just use defaults */
 
     constraint->form.left = constraint->form.right = XtChainLeft;
     if (dw->dialog.valueW == NULL)
-      constraint->form.vert_base = dw->dialog.labelW;
-    else
-      constraint->form.vert_base = dw->dialog.valueW;
+        constraint->form.vert_base = dw->dialog.labelW;
+    else constraint->form.vert_base = dw->dialog.valueW;
 
-    if (dw->composite.num_children > 1) {
-	WidgetList children = dw->composite.children;
-	Widget *childP;
+    if (dw->composite.num_children > 1)
+    {
+        WidgetList children = dw->composite.children;
+        Widget    *childP;
         for (childP = children + dw->composite.num_children - 1;
-	     childP >= children; childP-- ) {
-	    if (*childP == dw->dialog.labelW || *childP == dw->dialog.valueW)
-	        break;
-	    if (XtIsManaged(*childP) &&
-		XtIsSubclass(*childP, commandWidgetClass)) {
-	        constraint->form.horiz_base = *childP;
-		break;
-	    }
-	}
+             childP >= children;
+             childP--)
+        {
+            if (*childP == dw->dialog.labelW || *childP == dw->dialog.valueW)
+                break;
+            if (XtIsManaged(*childP) &&
+                XtIsSubclass(*childP, commandWidgetClass))
+            {
+                constraint->form.horiz_base = *childP;
+                break;
+            }
+        }
     }
 }
 
-#define ICON 0
-#define LABEL 1
+#define ICON       0
+#define LABEL      1
 #define NUM_CHECKS 2
 
 /* ARGSUSED */
 static Boolean
-SetValues(Widget current, Widget request, Widget new, ArgList in_args, Cardinal *in_num_args)
+SetValues(Widget current,
+          Widget request,
+          Widget new,
+          ArgList   in_args,
+          Cardinal *in_num_args)
 {
-    DialogWidget w = (DialogWidget)new;
+    DialogWidget w   = (DialogWidget) new;
     DialogWidget old = (DialogWidget)current;
-    Arg args[5];
-    Cardinal num_args;
-    int i;
-    Boolean checks[NUM_CHECKS];
+    Arg          args[5];
+    Cardinal     num_args;
+    int          i;
+    Boolean      checks[NUM_CHECKS];
 
     for (i = 0; i < NUM_CHECKS; i++)
-	checks[i] = FALSE;
+        checks[i] = FALSE;
 
-    for (i = 0; i < *in_num_args; i++) {
-	if (streq(XtNicon, in_args[i].name))
-	    checks[ICON] = TRUE;
-	if (streq(XtNlabel, in_args[i].name))
-	    checks[LABEL] = TRUE;
+    for (i = 0; i < *in_num_args; i++)
+    {
+        if (streq(XtNicon, in_args[i].name)) checks[ICON] = TRUE;
+        if (streq(XtNlabel, in_args[i].name)) checks[LABEL] = TRUE;
     }
 
-    if (checks[ICON]) {
-	if (w->dialog.icon != (Pixmap)0) {
-	    XtSetArg( args[0], XtNbitmap, w->dialog.icon );
-	    if (old->dialog.iconW != (Widget)NULL) {
-		XtSetValues( old->dialog.iconW, args, ONE );
-	    } else {
-		XtSetArg( args[1], XtNborderWidth, 0);
-		XtSetArg( args[2], XtNleft, XtChainLeft);
-		XtSetArg( args[3], XtNright, XtChainLeft);
-		w->dialog.iconW =
-		    XtCreateWidget( "icon", labelWidgetClass,
-				    new, args, FOUR );
-		((DialogConstraints)w->dialog.labelW->core.constraints)->
-		    form.horiz_base = w->dialog.iconW;
-		XtManageChild(w->dialog.iconW);
-	    }
-	} else if (old->dialog.icon != (Pixmap)0) {
-	    ((DialogConstraints)w->dialog.labelW->core.constraints)->
-		    form.horiz_base = (Widget)NULL;
-	    XtDestroyWidget(old->dialog.iconW);
-	    w->dialog.iconW = (Widget)NULL;
-	}
+    if (checks[ICON])
+    {
+        if (w->dialog.icon != (Pixmap)0)
+        {
+            XtSetArg(args[0], XtNbitmap, w->dialog.icon);
+            if (old->dialog.iconW != (Widget)NULL)
+            {
+                XtSetValues(old->dialog.iconW, args, ONE);
+            }
+            else
+            {
+                XtSetArg(args[1], XtNborderWidth, 0);
+                XtSetArg(args[2], XtNleft, XtChainLeft);
+                XtSetArg(args[3], XtNright, XtChainLeft);
+                w->dialog.iconW =
+                    XtCreateWidget("icon", labelWidgetClass, new, args, FOUR);
+                ((DialogConstraints)w->dialog.labelW->core.constraints)
+                    ->form.horiz_base = w->dialog.iconW;
+                XtManageChild(w->dialog.iconW);
+            }
+        }
+        else if (old->dialog.icon != (Pixmap)0)
+        {
+            ((DialogConstraints)w->dialog.labelW->core.constraints)
+                ->form.horiz_base = (Widget)NULL;
+            XtDestroyWidget(old->dialog.iconW);
+            w->dialog.iconW = (Widget)NULL;
+        }
     }
 
-    if ( checks[LABEL] ) {
+    if (checks[LABEL])
+    {
         num_args = 0;
-        XtSetArg( args[num_args], XtNlabel, w->dialog.label ); num_args++;
-	if (w->dialog.iconW != (Widget)NULL &&
-	    (w->dialog.labelW->core.height <= w->dialog.iconW->core.height)) {
-	    XtSetArg(args[num_args], XtNheight, w->dialog.iconW->core.height);
-	    num_args++;
-	}
-	XtSetValues( w->dialog.labelW, args, num_args );
+        XtSetArg(args[num_args], XtNlabel, w->dialog.label);
+        num_args++;
+        if (w->dialog.iconW != (Widget)NULL &&
+            (w->dialog.labelW->core.height <= w->dialog.iconW->core.height))
+        {
+            XtSetArg(args[num_args], XtNheight, w->dialog.iconW->core.height);
+            num_args++;
+        }
+        XtSetValues(w->dialog.labelW, args, num_args);
     }
 
-    if ( w->dialog.value != old->dialog.value ) {
+    if (w->dialog.value != old->dialog.value)
+    {
         if (w->dialog.value == NULL)  /* only get here if it
 					  wasn't NULL before. */
-	    XtDestroyWidget(old->dialog.valueW);
-	else if (old->dialog.value == NULL) { /* create a new value widget. */
-	    w->core.width = old->core.width;
-	    w->core.height = old->core.height;
+            XtDestroyWidget(old->dialog.valueW);
+        else if (old->dialog.value == NULL)
+        { /* create a new value widget. */
+            w->core.width  = old->core.width;
+            w->core.height = old->core.height;
 #ifdef notdef
 /* this would be correct if Form had the same semantics on Resize
  * as on MakeGeometryRequest.  Unfortunately, Form botched it, so
  * any subclasses will currently have to deal with the fact that
  * we're about to change our real size.
  */
-	    w->form.resize_in_layout = False;
-	    CreateDialogValueWidget( (Widget) w);
-	    w->core.width = w->form.preferred_width;
-	    w->core.height = w->form.preferred_height;
-	    w->form.resize_in_layout = True;
+            w->form.resize_in_layout = False;
+            CreateDialogValueWidget((Widget)w);
+            w->core.width            = w->form.preferred_width;
+            w->core.height           = w->form.preferred_height;
+            w->form.resize_in_layout = True;
 #else /*notdef*/
-	    CreateDialogValueWidget( (Widget) w);
+            CreateDialogValueWidget((Widget)w);
 #endif /*notdef*/
-	}
-	else {			/* Widget ok, just change string. */
-	    Arg args[1];
-	    XtSetArg(args[0], XtNstring, w->dialog.value);
-	    XtSetValues(w->dialog.valueW, args, ONE);
-	    w->dialog.value = MAGIC_VALUE;
-	}
+        }
+        else
+        {   /* Widget ok, just change string. */
+            Arg args[1];
+            XtSetArg(args[0], XtNstring, w->dialog.value);
+            XtSetValues(w->dialog.valueW, args, ONE);
+            w->dialog.value = MAGIC_VALUE;
+        }
     }
     return False;
 }
@@ -323,19 +357,19 @@ SetValues(Widget current, Widget request, Widget new, ArgList in_args, Cardinal 
 static void
 GetValuesHook(Widget w, ArgList args, Cardinal *num_args)
 {
-  Arg a[1];
-  String s;
-  DialogWidget src = (DialogWidget) w;
-  int i;
+    Arg          a[1];
+    String       s;
+    DialogWidget src = (DialogWidget)w;
+    int          i;
 
-  for (i=0; i < *num_args; i++)
-    if (streq(args[i].name, XtNvalue)) {
-      XtSetArg(a[0], XtNstring, &s);
-      XtGetValues(src->dialog.valueW, a, 1);
-      *((char **) args[i].value) = (char *)s;
-    }
+    for (i = 0; i < *num_args; i++)
+        if (streq(args[i].name, XtNvalue))
+        {
+            XtSetArg(a[0], XtNstring, &s);
+            XtGetValues(src->dialog.valueW, a, 1);
+            *((char **)args[i].value) = (char *)s;
+        }
 }
-
 
 /*	Function Name: CreateDialogValueWidget
  *	Description: Creates the dialog widgets value widget.
@@ -348,41 +382,52 @@ GetValuesHook(Widget w, ArgList args, Cardinal *num_args)
 static void
 CreateDialogValueWidget(Widget w)
 {
-    DialogWidget dw = (DialogWidget) w;
-    Arg arglist[10];
-    Cardinal num_args = 0;
+    DialogWidget dw = (DialogWidget)w;
+    Arg          arglist[10];
+    Cardinal     num_args = 0;
 
 #ifdef notdef
-    XtSetArg(arglist[num_args], XtNwidth,
-	     dw->dialog.labelW->core.width); num_args++; /* ||| hack */
+    XtSetArg(arglist[num_args], XtNwidth, dw->dialog.labelW->core.width);
+    num_args++; /* ||| hack */
 #endif /*notdef*/
-    XtSetArg(arglist[num_args], XtNstring, dw->dialog.value);     num_args++;
-    XtSetArg(arglist[num_args], XtNresizable, True);              num_args++;
-    XtSetArg(arglist[num_args], XtNresize, XawtextResizeBoth);    num_args++;
-    XtSetArg(arglist[num_args], XtNeditType, XawtextEdit);        num_args++;
-    XtSetArg(arglist[num_args], XtNfromVert, dw->dialog.labelW);  num_args++;
-    XtSetArg(arglist[num_args], XtNleft, XtChainLeft);            num_args++;
-    XtSetArg(arglist[num_args], XtNright, XtChainRight);          num_args++;
+    XtSetArg(arglist[num_args], XtNstring, dw->dialog.value);
+    num_args++;
+    XtSetArg(arglist[num_args], XtNresizable, True);
+    num_args++;
+    XtSetArg(arglist[num_args], XtNresize, XawtextResizeBoth);
+    num_args++;
+    XtSetArg(arglist[num_args], XtNeditType, XawtextEdit);
+    num_args++;
+    XtSetArg(arglist[num_args], XtNfromVert, dw->dialog.labelW);
+    num_args++;
+    XtSetArg(arglist[num_args], XtNleft, XtChainLeft);
+    num_args++;
+    XtSetArg(arglist[num_args], XtNright, XtChainRight);
+    num_args++;
 
-    dw->dialog.valueW = XtCreateWidget("value", asciiTextWidgetClass,
-				     w, arglist, num_args);
+    dw->dialog.valueW =
+        XtCreateWidget("value", asciiTextWidgetClass, w, arglist, num_args);
 
     /* if the value widget is being added after buttons,
      * then the buttons need new layout constraints.
      */
-    if (dw->composite.num_children > 1) {
-	WidgetList children = dw->composite.children;
-	Widget *childP;
+    if (dw->composite.num_children > 1)
+    {
+        WidgetList children = dw->composite.children;
+        Widget    *childP;
         for (childP = children + dw->composite.num_children - 1;
-	     childP >= children; childP-- ) {
-	    if (*childP == dw->dialog.labelW || *childP == dw->dialog.valueW)
-		continue;
-	    if (XtIsManaged(*childP) &&
-		XtIsSubclass(*childP, commandWidgetClass)) {
-	        ((DialogConstraints)(*childP)->core.constraints)->
-		    form.vert_base = dw->dialog.valueW;
-	    }
-	}
+             childP >= children;
+             childP--)
+        {
+            if (*childP == dw->dialog.labelW || *childP == dw->dialog.valueW)
+                continue;
+            if (XtIsManaged(*childP) &&
+                XtIsSubclass(*childP, commandWidgetClass))
+            {
+                ((DialogConstraints)(*childP)->core.constraints)
+                    ->form.vert_base = dw->dialog.valueW;
+            }
+        }
     }
     XtManageChild(dw->dialog.valueW);
 
@@ -394,31 +439,34 @@ CreateDialogValueWidget(Widget w)
     dw->dialog.value = MAGIC_VALUE;
 }
 
-
 void
-XawDialogAddButton(Widget dialog, _Xconst char* name, XtCallbackProc function,
-		   XtPointer param)
+XawDialogAddButton(Widget         dialog,
+                   _Xconst char  *name,
+                   XtCallbackProc function,
+                   XtPointer      param)
 {
 /*
  * Correct Constraints are all set in ConstraintInitialize().
  */
     Widget button;
 
-    button = XtCreateManagedWidget( name, commandWidgetClass, dialog,
-				    (ArgList)NULL, (Cardinal)0 );
+    button = XtCreateManagedWidget(name,
+                                   commandWidgetClass,
+                                   dialog,
+                                   (ArgList)NULL,
+                                   (Cardinal)0);
 
-    if (function != NULL)	/* don't add NULL callback func. */
+    if (function != NULL) /* don't add NULL callback func. */
         XtAddCallback(button, XtNcallback, function, param);
 }
-
 
 char *
 XawDialogGetValueString(Widget w)
 {
-    Arg args[1];
-    char * value;
+    Arg   args[1];
+    char *value;
 
     XtSetArg(args[0], XtNstring, &value);
-    XtGetValues( ((DialogWidget)w)->dialog.valueW, args, ONE);
-    return(value);
+    XtGetValues(((DialogWidget)w)->dialog.valueW, args, ONE);
+    return (value);
 }
