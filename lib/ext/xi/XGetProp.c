@@ -51,7 +51,7 @@ SOFTWARE.
  *
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/extensions/XI.h"
@@ -63,50 +63,52 @@ SOFTWARE.
 #include <limits.h>
 
 XEventClass *
-XGetDeviceDontPropagateList(
-    register Display	*dpy,
-    Window		 window,
-    int			*count)
+XGetDeviceDontPropagateList(register Display *dpy, Window window, int *count)
 {
-    XEventClass *list = NULL;
-    xGetDeviceDontPropagateListReq *req;
+    XEventClass                     *list = NULL;
+    xGetDeviceDontPropagateListReq  *req;
     xGetDeviceDontPropagateListReply rep;
-    XExtDisplayInfo *info = XInput_find_display(dpy);
+    XExtDisplayInfo                 *info = XInput_find_display(dpy);
 
     LockDisplay(dpy);
-    if (_XiCheckExtInit(dpy, XInput_Initial_Release, info) == -1)
-        return NULL;
+    if (_XiCheckExtInit(dpy, XInput_Initial_Release, info) == -1) return NULL;
 
     GetReq(GetDeviceDontPropagateList, req);
     req->reqType = info->codes->major_opcode;
     req->ReqType = X_GetDeviceDontPropagateList;
-    req->window = window;
+    req->window  = window;
 
-    if (!_XReply(dpy, (xReply *) & rep, 0, xFalse)) {
-	UnlockDisplay(dpy);
-	SyncHandle();
-	return (XEventClass *) NULL;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return (XEventClass *)NULL;
     }
     *count = rep.count;
 
-    if (rep.length != 0) {
-	if ((rep.count != 0) && (rep.length < (INT_MAX / sizeof(XEventClass))))
-	    list = Xmalloc(rep.length * sizeof(XEventClass));
-	if (list) {
-	    unsigned int i;
-	    CARD32 ec;
+    if (rep.length != 0)
+    {
+        if ((rep.count != 0) && (rep.length < (INT_MAX / sizeof(XEventClass))))
+            list = Xmalloc(rep.length * sizeof(XEventClass));
+        if (list)
+        {
+            unsigned int i;
+            CARD32       ec;
 
-	    /* read and assign each XEventClass separately because
+        /* read and assign each XEventClass separately because
 	     * the library representation may not be the same size
 	     * as the wire representation (64 bit machines)
 	     */
-	    for (i = 0; i < rep.length; i++) {
-		_XRead(dpy, (char *)(&ec), sizeof(CARD32));
-		list[i] = (XEventClass) ec;
-	    }
-	} else {
+            for (i = 0; i < rep.length; i++)
+            {
+                _XRead(dpy, (char *)(&ec), sizeof(CARD32));
+                list[i] = (XEventClass)ec;
+            }
+        }
+        else
+        {
             *count = 0;
-	    _XEatDataWords(dpy, rep.length);
+            _XEatDataWords(dpy, rep.length);
         }
     }
 

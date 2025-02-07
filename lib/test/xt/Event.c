@@ -31,32 +31,34 @@
 
 /* Test XtAppMainLoop without a display doesn't wait for an XEvent.
    Based on https://bugs.freedesktop.org/show_bug.cgi?id=34715 */
-static void _Tick(XtPointer baton, XtIntervalId* id)
+static void
+_Tick(XtPointer baton, XtIntervalId *id)
 {
-    static int count = 0;
-    XtAppContext app = (XtAppContext)baton;
+    static int   count = 0;
+    XtAppContext app   = (XtAppContext)baton;
 
-    count ++;
+    count++;
 #ifdef DEBUG
     printf("%d beep!\n", count);
 #endif
 
     if (count == 1) /* 1 sec */
         XtAppSetExitFlag(app);
-    else
-        XtAppAddTimeOut(app, 1000, _Tick, app);
+    else XtAppAddTimeOut(app, 1000, _Tick, app);
 }
 
 static sigjmp_buf jump_env;
 
-static void sigalrm (int sig)
+static void
+sigalrm(int sig)
 {
     siglongjmp(jump_env, 1);
 }
 
-static void test_XtAppMainLoop_34715(void)
+static void
+test_XtAppMainLoop_34715(void)
 {
-    XtAppContext app;
+    XtAppContext     app;
     struct sigaction sa;
 
     XtToolkitInitialize();
@@ -66,23 +68,27 @@ static void test_XtAppMainLoop_34715(void)
     /* AppTimeouts should finish and exit in 3 seconds.
        Give them 10 seconds just in case system is busy, then fail. */
     sa.sa_handler = sigalrm;
-    sa.sa_flags = SA_RESTART;
-    sigemptyset (&sa.sa_mask);
+    sa.sa_flags   = SA_RESTART;
+    sigemptyset(&sa.sa_mask);
 
-    if (sigsetjmp(jump_env, 1) == 0) {
+    if (sigsetjmp(jump_env, 1) == 0)
+    {
         sigaction(SIGALRM, &sa, NULL);
         alarm(10);
 
         XtAppMainLoop(app);
         alarm(0); /* cancel alarm */
-    } else {
+    }
+    else
+    {
         printf("test timed out: %s at %d", __FILE__, __LINE__);
     }
     assert(XtAppGetExitFlag(app) == TRUE);
     XtDestroyApplicationContext(app);
 }
 
-int main(int argc, char** argv)
+int
+main(int argc, char **argv)
 {
     test_XtAppMainLoop_34715();
 }

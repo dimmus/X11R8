@@ -33,14 +33,16 @@
 
 #include "xcb_cursor.h"
 
-enum {
+enum
+{
     RM_XCURSOR_THEME = 0,
     RM_XCURSOR_SIZE,
     RM_XFT_DPI,
     RM_MAX,
 };
 
-enum render_version {
+enum render_version
+{
     RV_NONE = 0,
     /* RENDER's CreateCursor was added in RENDER 0.5 */
     RV_CURSOR,
@@ -48,9 +50,10 @@ enum render_version {
     RV_ANIM_CURSOR
 };
 
-struct xcb_cursor_context_t {
+struct xcb_cursor_context_t
+{
     xcb_connection_t *conn;
-    xcb_window_t root;
+    xcb_window_t      root;
 
     xcb_font_t cursor_font;
 
@@ -106,22 +109,25 @@ struct xcb_cursor_context_t {
 /* little-endian */
 #define XCURSOR_MAGIC 0x72756358
 
-typedef struct xcint_file_header_t {
+typedef struct xcint_file_header_t
+{
     uint32_t magic;
     uint32_t header;
     uint32_t version;
     uint32_t ntoc;
 } __attribute__((packed)) xcint_file_header_t;
 
-typedef struct xcint_file_toc_t {
+typedef struct xcint_file_toc_t
+{
     uint32_t type;
     uint32_t subtype;
     uint32_t position;
 } __attribute__((packed)) xcint_file_toc_t;
 
-typedef struct xcint_cursor_file_t {
+typedef struct xcint_cursor_file_t
+{
     xcint_file_header_t header;
-    xcint_file_toc_t *tocs;
+    xcint_file_toc_t   *tocs;
 } xcint_cursor_file_t;
 
 /*
@@ -140,23 +146,25 @@ typedef struct xcint_cursor_file_t {
  *      CARD32      version     chunk type version
  */
 
-typedef struct xcint_chunk_header_t {
+typedef struct xcint_chunk_header_t
+{
     uint32_t header;
     uint32_t type;
     uint32_t subtype;
     uint32_t version;
 } __attribute__((packed)) xcint_chunk_header_t;
 
-#define XCURSOR_IMAGE_TYPE          0xfffd0002
-#define XCURSOR_IMAGE_VERSION       1
-#define XCURSOR_IMAGE_MAX_SIZE      0x7fff      /* 32767x32767 max cursor size */
+#define XCURSOR_IMAGE_TYPE     0xfffd0002
+#define XCURSOR_IMAGE_VERSION  1
+#define XCURSOR_IMAGE_MAX_SIZE 0x7fff /* 32767x32767 max cursor size */
 
-typedef struct xcint_image_t {
-    uint32_t width;
-    uint32_t height;
-    uint32_t xhot;
-    uint32_t yhot;
-    uint32_t delay;
+typedef struct xcint_image_t
+{
+    uint32_t  width;
+    uint32_t  height;
+    uint32_t  xhot;
+    uint32_t  yhot;
+    uint32_t  delay;
     uint32_t *pixels;
 } __attribute__((packed)) xcint_image_t;
 
@@ -164,6 +172,9 @@ typedef struct xcint_image_t {
 const int cursor_shape_to_id(const char *name);
 
 /* parse_cursor_file.c */
-int parse_cursor_file(xcb_cursor_context_t *c, const int fd, xcint_image_t **images, int *nimg);
+int parse_cursor_file(xcb_cursor_context_t *c,
+                      const int             fd,
+                      xcint_image_t       **images,
+                      int                  *nimg);
 
 #endif

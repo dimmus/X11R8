@@ -23,7 +23,7 @@
 
 /* #include <cstddef> */ /* XXX: who use this!? */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/Xfuncproto.h"
@@ -40,13 +40,13 @@
 #include <setjmp.h>
 #include <sys/resource.h>
 #ifdef HAVE_MALLOC_H
-# include <malloc.h>
+#  include <malloc.h>
 #endif
 
 static const char *program_name;
 
 #ifndef assert_no_errno /* defined in glib 2.66 & later*/
-#define assert_no_errno(expr) assert((expr) >= 0)
+#  define assert_no_errno(expr) assert((expr) >= 0)
 #endif
 
 /*
@@ -55,24 +55,26 @@ static const char *program_name;
  */
 #define EXPECTED_ALIGNMENT 8
 
-#define CHECK_ALIGNMENT(ptr) \
-    assert(((uintptr_t)ptr) % EXPECTED_ALIGNMENT == 0)
+#define CHECK_ALIGNMENT(ptr) assert(((uintptr_t)ptr) % EXPECTED_ALIGNMENT == 0)
 
 /* Check that allocations point to expected amounts of memory, as best we can. */
 #ifdef HAVE_MALLOC_USABLE_SIZE
-# define CHECK_SIZE(ptr, size) do {		\
-    size_t ps = malloc_usable_size(ptr);	\
-    assert(ps >= (size));		\
-} while (0)
+#  define CHECK_SIZE(ptr, size)                \
+      do                                       \
+      {                                        \
+          size_t ps = malloc_usable_size(ptr); \
+          assert(ps >= (size));                \
+      }                                        \
+      while (0)
 #else
-# define CHECK_SIZE(ptr, size) *(((char *)ptr) + ((size) - 1)) = 0
+#  define CHECK_SIZE(ptr, size) *(((char *)ptr) + ((size) - 1)) = 0
 #endif
 
 /* Limit we set for memory allocation to be able to test failure cases */
 #define ALLOC_LIMIT (INT_MAX / 4)
 
 /* Square root of SIZE_MAX+1 */
-#define SQRT_SIZE_MAX ((size_t)1 << (sizeof (size_t) * 4))
+#define SQRT_SIZE_MAX ((size_t)1 << (sizeof(size_t) * 4))
 
 /* Just a long string of characters to pull from */
 const char test_chars[] =
@@ -109,34 +111,33 @@ const char test_chars[] =
     "| 70  p | 71  q | 72  r | 73  s | 74  t | 75  u | 76  v | 77  w |"
     "| 78  x | 79  y | 7a  z | 7b  { | 7c  | | 7d  } | 7e  ~ | 7f del|";
 
-
 /* Environment saved by setjmp() */
 static jmp_buf jmp_env;
 
 static void _X_NORETURN
 xt_error_handler(String message)
 {
-    if (message && *message)
-        fprintf(stderr, "Caught Error: %s\n", message);
-    else
-        fputs("Caught Error.\n", stderr);
+    if (message && *message) fprintf(stderr, "Caught Error: %s\n", message);
+    else fputs("Caught Error.\n", stderr);
 
     /* Avoid exit() in XtErrorMsg() */
     longjmp(jmp_env, 1);
 }
 
-static int rand_range(int from, int to)
+static int
+rand_range(int from, int to)
 {
     return (rand() % (from - to + 1)) + from;
 }
 
 /* Test a simple short string & int */
-static void test_XtAsprintf_short(void)
+static void
+test_XtAsprintf_short(void)
 {
-    char snbuf[1024];
+    char  snbuf[1024];
     char *asbuf;
-    int r = rand();
-    int snlen, aslen;
+    int   r = rand();
+    int   snlen, aslen;
 
     snlen = snprintf(snbuf, sizeof(snbuf), "%s: %d\n", program_name, r);
     aslen = XtAsprintf(&asbuf, "%s: %d\n", program_name, r);
@@ -149,12 +150,13 @@ static void test_XtAsprintf_short(void)
 
 /* Test a string long enough to be past the 256 character limit that
    makes XtAsprintf re-run snprintf after allocating memory */
-static void test_XtAsprintf_long(void)
+static void
+test_XtAsprintf_long(void)
 {
     char *asbuf;
-    int aslen;
-    int r1 = rand_range(0, 256);
-    int r2 = rand_range(1024, sizeof(test_chars) - r1);
+    int   aslen;
+    int   r1 = rand_range(0, 256);
+    int   r2 = rand_range(1024, sizeof(test_chars) - r1);
 
     aslen = XtAsprintf(&asbuf, "%.*s", r2, test_chars + r1);
 
@@ -165,7 +167,8 @@ static void test_XtAsprintf_long(void)
 }
 
 /* Make sure XtMalloc() works for a non-zero amount of memory */
-static void test_XtMalloc_normal(void)
+static void
+test_XtMalloc_normal(void)
 {
     void *p;
     /* Pick a size between 1 & 256K */
@@ -186,7 +189,8 @@ static void test_XtMalloc_normal(void)
 }
 
 /* Make sure XtMalloc(0) returns expected results */
-static void test_XtMalloc_zero(void)
+static void
+test_XtMalloc_zero(void)
 {
     void *p;
 
@@ -209,14 +213,18 @@ static void test_XtMalloc_zero(void)
 }
 
 /* Make sure sizes larger than the limit we set in main() fail */
-static void test_XtMalloc_oversize(void)
+static void
+test_XtMalloc_oversize(void)
 {
     void *p;
 
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         p = XtMalloc(UINT_MAX - 1);
         assert(p == NULL);
-    } else {
+    }
+    else
+    {
         /*
          * We jumped here from error handler as expected.
          * We cannot verify errno here, as the Xt error handler makes
@@ -235,7 +243,8 @@ static void test_XtMalloc_oversize(void)
  * the underlying libc malloc to catch overflow, which can't occur if
  * 32-bit arguments are passed to a function taking 64-bit args.
  */
-static void test_XtMalloc_overflow(void)
+static void
+test_XtMalloc_overflow(void)
 {
 #if UINT_MAX < SIZE_MAX
     /* test_skip("overflow not possible in this config"); */
@@ -243,10 +252,13 @@ static void test_XtMalloc_overflow(void)
 #else
     void *p;
 
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         p = XtMalloc(SIZE_MAX);
         assert(p == NULL);
-    } else {
+    }
+    else
+    {
         /*
          * We jumped here from error handler as expected.
          * We cannot verify errno here, as the Xt error handler makes
@@ -255,10 +267,13 @@ static void test_XtMalloc_overflow(void)
          */
     }
 
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         p = XtMalloc(SIZE_MAX - 1);
         assert(p == NULL);
-    } else {
+    }
+    else
+    {
         /*
          * We jumped here from error handler as expected.
          * We cannot verify errno here, as the Xt error handler makes
@@ -267,10 +282,13 @@ static void test_XtMalloc_overflow(void)
          */
     }
 
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         p = XtMalloc(SIZE_MAX - 8);
         assert(p == NULL);
-    } else {
+    }
+    else
+    {
         /*
          * We jumped here from error handler as expected.
          * We cannot verify errno here, as the Xt error handler makes
@@ -281,14 +299,13 @@ static void test_XtMalloc_overflow(void)
 #endif
 }
 
-
-
 /* Make sure XtCalloc() works for a non-zero amount of memory */
-static void test_XtCalloc_normal(void)
+static void
+test_XtCalloc_normal(void)
 {
     char *p;
     /* Pick a number of elements between 1 & 16K */
-    int num = rand_range(1, (16 * 1024));
+    int num  = rand_range(1, (16 * 1024));
     /* Pick a size between 1 & 16K */
     int size = rand_range(1, (16 * 1024));
 
@@ -300,7 +317,8 @@ static void test_XtCalloc_normal(void)
     CHECK_SIZE(p, num * size);
 
     /* make sure all the memory was zeroed */
-    for (int i = 0; i < (num * size); i++) {
+    for (int i = 0; i < (num * size); i++)
+    {
         assert(p[i] == 0);
     }
 
@@ -312,7 +330,8 @@ static void test_XtCalloc_normal(void)
 }
 
 /* Make sure XtCalloc() returns the expected results for args of 0 */
-static void test_XtCalloc_zero(void)
+static void
+test_XtCalloc_zero(void)
 {
     void *p;
 
@@ -353,14 +372,18 @@ static void test_XtCalloc_zero(void)
 }
 
 /* Make sure sizes larger than the limit we set in main() fail. */
-static void test_XtCalloc_oversize(void)
+static void
+test_XtCalloc_oversize(void)
 {
     void *p;
 
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         p = XtCalloc(2, ALLOC_LIMIT);
         assert(p == NULL);
-    } else {
+    }
+    else
+    {
         /*
          * We jumped here from error handler as expected.
          * We cannot verify errno here, as the Xt error handler makes
@@ -377,7 +400,8 @@ static void test_XtCalloc_oversize(void)
  * the underlying libc calloc to catch overflow, which can't occur
  * if 32-bit arguments are passed to a function taking 64-bit args.
  */
-static void test_XtCalloc_overflow(void)
+static void
+test_XtCalloc_overflow(void)
 {
 #if UINT_MAX < SIZE_MAX
     /* g_test_skip("overflow not possible in this config"); */
@@ -385,10 +409,13 @@ static void test_XtCalloc_overflow(void)
 #else
     void *p;
 
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         p = XtCalloc(2, SIZE_MAX);
         assert(p == NULL);
-    } else {
+    }
+    else
+    {
         /*
          * We jumped here from error handler as expected.
          * We cannot verify errno here, as the Xt error handler makes
@@ -397,11 +424,14 @@ static void test_XtCalloc_overflow(void)
          */
     }
 
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         /* SQRT_SIZE_MAX * SQRT_SIZE_MAX == 0 due to overflow */
         p = XtCalloc(SQRT_SIZE_MAX, SQRT_SIZE_MAX);
         assert(p == NULL);
-    } else {
+    }
+    else
+    {
         /*
          * We jumped here from error handler as expected.
          * We cannot verify errno here, as the Xt error handler makes
@@ -410,11 +440,14 @@ static void test_XtCalloc_overflow(void)
          */
     }
 
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         /* Overflows to a small positive number */
         p = XtCalloc(SQRT_SIZE_MAX + 1, SQRT_SIZE_MAX);
         assert(p == NULL);
-    } else {
+    }
+    else
+    {
         /*
          * We jumped here from error handler as expected.
          * We cannot verify errno here, as the Xt error handler makes
@@ -426,7 +459,8 @@ static void test_XtCalloc_overflow(void)
 }
 
 /* Make sure XtRealloc() works for a non-zero amount of memory */
-static void test_XtRealloc_normal(void)
+static void
+test_XtRealloc_normal(void)
 {
     void *p, *p2;
     char *p3;
@@ -453,7 +487,8 @@ static void test_XtRealloc_normal(void)
     CHECK_SIZE(p3, 7314);
 
     /* verify previous values are still present */
-    for (int i = 0; i < 814; i++) {
+    for (int i = 0; i < 814; i++)
+    {
         assert(p3[i] == 'A');
     }
 
@@ -463,7 +498,8 @@ static void test_XtRealloc_normal(void)
 }
 
 /* Make sure XtRealloc(0) returns a valid pointer as expected */
-static void test_XtRealloc_zero(void)
+static void
+test_XtRealloc_zero(void)
 {
     void *p, *p2;
 
@@ -484,7 +520,8 @@ static void test_XtRealloc_zero(void)
 }
 
 /* Make sure sizes larger than the limit we set in main() fail */
-static void test_XtRealloc_oversize(void)
+static void
+test_XtRealloc_oversize(void)
 {
     void *p, *p2;
 
@@ -495,10 +532,13 @@ static void test_XtRealloc_oversize(void)
     assert(p != NULL);
     CHECK_ALIGNMENT(p);
 
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         p2 = XtRealloc(p, ALLOC_LIMIT + 1);
         assert(p2 == NULL);
-    } else {
+    }
+    else
+    {
         /*
          * We jumped here from error handler as expected.
          * We cannot verify errno here, as the Xt error handler makes
@@ -521,7 +561,8 @@ static void test_XtRealloc_oversize(void)
  * the underlying libc realloc to catch overflow, which can't occur if
  * 32-bit arguments are passed to a function taking 64-bit args.
  */
-static void test_XtRealloc_overflow(void)
+static void
+test_XtRealloc_overflow(void)
 {
 #if UINT_MAX < SIZE_MAX
     /* g_test_skip("overflow not possible in this config"); */
@@ -536,10 +577,13 @@ static void test_XtRealloc_overflow(void)
     assert(p != NULL);
     CHECK_ALIGNMENT(p);
 
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         p2 = XtRealloc(p, SIZE_MAX);
         g_assert_null(p2);
-    } else {
+    }
+    else
+    {
         /*
          * We jumped here from error handler as expected.
          * We cannot verify errno here, as the Xt error handler makes
@@ -548,10 +592,13 @@ static void test_XtRealloc_overflow(void)
          */
     }
 
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         p2 = XtRealloc(p, SIZE_MAX - 1);
         g_assert_null(p2);
-    } else {
+    }
+    else
+    {
         /*
          * We jumped here from error handler as expected.
          * We cannot verify errno here, as the Xt error handler makes
@@ -560,10 +607,13 @@ static void test_XtRealloc_overflow(void)
          */
     }
 
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         p2 = XtRealloc(p, SIZE_MAX - 8);
         g_assert_null(p2);
-    } else {
+    }
+    else
+    {
         /*
          * We jumped here from error handler as expected.
          * We cannot verify errno here, as the Xt error handler makes
@@ -578,9 +628,9 @@ static void test_XtRealloc_overflow(void)
 #endif
 }
 
-
 /* Make sure XtReallocArray() works for a non-zero amount of memory */
-static void test_XtReallocArray_normal(void)
+static void
+test_XtReallocArray_normal(void)
 {
     void *p, *p2;
     char *p3;
@@ -606,7 +656,8 @@ static void test_XtReallocArray_normal(void)
     CHECK_ALIGNMENT(p3);
     CHECK_SIZE(p3, 73 * 14);
     /* verify previous values are still present */
-    for (int i = 0; i < (8 * 14); i++) {
+    for (int i = 0; i < (8 * 14); i++)
+    {
         assert(p3[i] == 'A');
     }
 
@@ -616,7 +667,8 @@ static void test_XtReallocArray_normal(void)
 }
 
 /* Make sure XtReallocArray(0) returns a valid pointer as expected */
-static void test_XtReallocArray_zero(void)
+static void
+test_XtReallocArray_zero(void)
 {
     void *p, *p2;
 
@@ -637,12 +689,13 @@ static void test_XtReallocArray_zero(void)
 }
 
 /* Make sure sizes larger than the limit we set in main() fail */
-static void test_XtReallocArray_oversize(void)
+static void
+test_XtReallocArray_oversize(void)
 {
     void *p, *p2;
 
     /* Pick a number of elements between 1 & 16K */
-    int num = rand_range(1, (16 * 1024));
+    int num  = rand_range(1, (16 * 1024));
     /* Pick a size between 1 & 16K */
     int size = rand_range(1, (16 * 1024));
 
@@ -651,10 +704,13 @@ static void test_XtReallocArray_oversize(void)
     CHECK_ALIGNMENT(p);
     CHECK_SIZE(p, num * size);
 
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         p2 = XtReallocArray(p, 2, ALLOC_LIMIT);
         assert(p2 == NULL);
-    } else {
+    }
+    else
+    {
         /*
          * We jumped here from error handler as expected.
          * We cannot verify errno here, as the Xt error handler makes
@@ -677,7 +733,8 @@ static void test_XtReallocArray_oversize(void)
  * the underlying libc reallocarray to catch overflow, which can't occur if
  * 32-bit arguments are passed to a function taking 64-bit args.
  */
-static void test_XtReallocArray_overflow(void)
+static void
+test_XtReallocArray_overflow(void)
 {
 #if UINT_MAX < SIZE_MAX
     /* g_test_skip("overflow not possible in this config"); */
@@ -686,7 +743,7 @@ static void test_XtReallocArray_overflow(void)
     void *p, *p2;
 
     /* Pick a number of elements between 1 & 16K */
-    guint32 num = g_test_rand_int_range(1, (16 * 1024));
+    guint32 num  = g_test_rand_int_range(1, (16 * 1024));
     /* Pick a size between 1 & 16K */
     guint32 size = g_test_rand_int_range(1, (16 * 1024));
 
@@ -695,10 +752,13 @@ static void test_XtReallocArray_overflow(void)
     CHECK_ALIGNMENT(p);
     CHECK_SIZE(p, num * size);
 
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         p2 = XtReallocArray(p, 1, SIZE_MAX);
         g_assert_null(p2);
-    } else {
+    }
+    else
+    {
         /*
          * We jumped here from error handler as expected.
          * We cannot verify errno here, as the Xt error handler makes
@@ -707,11 +767,14 @@ static void test_XtReallocArray_overflow(void)
          */
     }
 
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         /* SQRT_SIZE_MAX * SQRT_SIZE_MAX == 0 due to overflow */
         p2 = XtReallocArray(p, SQRT_SIZE_MAX, SQRT_SIZE_MAX);
         g_assert_null(p2);
-    } else {
+    }
+    else
+    {
         /*
          * We jumped here from error handler as expected.
          * We cannot verify errno here, as the Xt error handler makes
@@ -720,11 +783,14 @@ static void test_XtReallocArray_overflow(void)
          */
     }
 
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         /* Overflows to a small positive number */
         p2 = XtReallocArray(p, SQRT_SIZE_MAX + 1, SQRT_SIZE_MAX);
         g_assert_null(p2);
-    } else {
+    }
+    else
+    {
         /*
          * We jumped here from error handler as expected.
          * We cannot verify errno here, as the Xt error handler makes
@@ -739,8 +805,8 @@ static void test_XtReallocArray_overflow(void)
 #endif
 }
 
-
-int main(int argc, char** argv)
+int
+main(int argc, char **argv)
 {
     struct rlimit lim;
 
@@ -748,7 +814,8 @@ int main(int argc, char** argv)
 
     /* Set a memory limit so we can test allocations over that size fail */
     assert_no_errno(getrlimit(RLIMIT_AS, &lim));
-    if (lim.rlim_cur > ALLOC_LIMIT) {
+    if (lim.rlim_cur > ALLOC_LIMIT)
+    {
         lim.rlim_cur = ALLOC_LIMIT;
         assert_no_errno(setrlimit(RLIMIT_AS, &lim));
     }

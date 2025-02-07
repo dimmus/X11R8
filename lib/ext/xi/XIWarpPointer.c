@@ -30,7 +30,7 @@ in this Software without prior written authorization from The Open Group.
  *
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include <stdint.h>
@@ -41,7 +41,7 @@ in this Software without prior written authorization from The Open Group.
 #include "XIint.h"
 
 int
-XIWarpPointer(Display      *dpy,
+XIWarpPointer(Display     *dpy,
               int          deviceid,
               Window       src_win,
               Window       dst_win,
@@ -57,22 +57,20 @@ XIWarpPointer(Display      *dpy,
     XExtDisplayInfo *info = XInput_find_display(dpy);
 
     LockDisplay(dpy);
-    if (_XiCheckExtInit(dpy, XInput_2_0, info) == -1)
-	return (NoSuchExtension);
+    if (_XiCheckExtInit(dpy, XInput_2_0, info) == -1) return (NoSuchExtension);
 
     GetReq(XIWarpPointer, req);
-    req->reqType = info->codes->major_opcode;
-    req->ReqType = X_XIWarpPointer;
-    req->deviceid = deviceid;
-    req->src_win = src_win;
-    req->dst_win = dst_win;
-    req->src_x = (int)(src_x * 65536.0);
-    req->src_y = (int)(src_y * 65536.0);
-    req->src_width = src_width;
+    req->reqType    = info->codes->major_opcode;
+    req->ReqType    = X_XIWarpPointer;
+    req->deviceid   = deviceid;
+    req->src_win    = src_win;
+    req->dst_win    = dst_win;
+    req->src_x      = (int)(src_x * 65536.0);
+    req->src_y      = (int)(src_y * 65536.0);
+    req->src_width  = src_width;
     req->src_height = src_height;
-    req->dst_x = (int)(dst_x * 65536.0);
-    req->dst_y = (int)(dst_y * 65536.0);
-
+    req->dst_x      = (int)(dst_x * 65536.0);
+    req->dst_y      = (int)(dst_y * 65536.0);
 
     UnlockDisplay(dpy);
     SyncHandle();

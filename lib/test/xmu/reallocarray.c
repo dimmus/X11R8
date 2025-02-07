@@ -22,7 +22,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/Xfuncproto.h"
@@ -35,7 +35,7 @@
 #include <sys/resource.h>
 #include <assert.h>
 #ifdef HAVE_MALLOC_H
-# include <malloc.h>
+#  include <malloc.h>
 #endif
 
 /* Tell gcc not to warn that we're asking for impossible sizes in some tests */
@@ -52,9 +52,8 @@ void *Xmureallocarray(void *optr, size_t nmemb, size_t size);
  */
 #include "../../src/xmu/reallocarray.c"
 
-
 #ifndef assert_no_errno
-#define assert_no_errno(expr) assert((expr) >= 0)
+#  define assert_no_errno(expr) assert((expr) >= 0)
 #endif
 
 /*
@@ -63,32 +62,36 @@ void *Xmureallocarray(void *optr, size_t nmemb, size_t size);
  */
 #define EXPECTED_ALIGNMENT 8
 
-#define CHECK_ALIGNMENT(ptr) \
-    assert(((uintptr_t)ptr) % EXPECTED_ALIGNMENT == 0)
+#define CHECK_ALIGNMENT(ptr) assert(((uintptr_t)ptr) % EXPECTED_ALIGNMENT == 0)
 
 /* Check that allocations point to expected amounts of memory, as best we can. */
 #ifdef HAVE_MALLOC_USABLE_SIZE
-# define CHECK_SIZE(ptr, size) do {		\
-    size_t ps = malloc_usable_size(ptr);	\
-    assert(ps, >=, (size));		\
-} while (0)
+#  define CHECK_SIZE(ptr, size)                \
+      do                                       \
+      {                                        \
+          size_t ps = malloc_usable_size(ptr); \
+          assert(ps, >=, (size));              \
+      }                                        \
+      while (0)
 #else
-# define CHECK_SIZE(ptr, size) *(((char *)ptr) + ((size) - 1)) = 0
+#  define CHECK_SIZE(ptr, size) *(((char *)ptr) + ((size) - 1)) = 0
 #endif
 
 /* Limit we set for memory allocation to be able to test failure cases */
 #define ALLOC_LIMIT (INT_MAX / 4)
 
 /* Square root of SIZE_MAX+1 */
-#define SQRT_SIZE_MAX ((size_t)1 << (sizeof (size_t) * 4))
+#define SQRT_SIZE_MAX ((size_t)1 << (sizeof(size_t) * 4))
 
-static int rand_range(int from, int to)
+static int
+rand_range(int from, int to)
 {
     return (rand() % (from - to + 1)) + from;
 }
 
 /* Make sure Xmureallocarray() works for a non-zero amount of memory */
-static void test_Xmureallocarray_normal(void)
+static void
+test_Xmureallocarray_normal(void)
 {
     void *p, *p2;
     char *p3;
@@ -116,7 +119,8 @@ static void test_Xmureallocarray_normal(void)
     CHECK_ALIGNMENT(p3);
     CHECK_SIZE(p3, 73 * 14);
     /* verify previous values are still present */
-    for (int i = 0; i < (8 * 14); i++) {
+    for (int i = 0; i < (8 * 14); i++)
+    {
         assert(p3[i] == 'A');
     }
 
@@ -126,7 +130,8 @@ static void test_Xmureallocarray_normal(void)
 }
 
 /* Make sure Xmureallocarray(0) returns a valid pointer as expected */
-static void test_Xmureallocarray_zero(void)
+static void
+test_Xmureallocarray_zero(void)
 {
     void *p, *p2;
 
@@ -147,12 +152,13 @@ static void test_Xmureallocarray_zero(void)
 }
 
 /* Make sure sizes larger than the limit we set in main() fail */
-static void test_Xmureallocarray_oversize(void)
+static void
+test_Xmureallocarray_oversize(void)
 {
     void *p, *p2;
 
     /* Pick a number of elements between 1 & 16K */
-    int num = rand_range(1, (16 * 1024));
+    int num  = rand_range(1, (16 * 1024));
     /* Pick a size between 1 & 16K */
     int size = rand_range(1, (16 * 1024));
 
@@ -181,12 +187,13 @@ static void test_Xmureallocarray_oversize(void)
  * sizes that are so large that they cause overflows when either adding the
  * reallocarray data block overhead or aligning.
  */
-static void test_Xmureallocarray_overflow(void)
+static void
+test_Xmureallocarray_overflow(void)
 {
     void *p, *p2;
 
     /* Pick a number of elements between 1 & 16K */
-    int num = rand_range(1, (16 * 1024));
+    int num  = rand_range(1, (16 * 1024));
     /* Pick a size between 1 & 16K */
     int size = rand_range(1, (16 * 1024));
 
@@ -207,7 +214,6 @@ static void test_Xmureallocarray_overflow(void)
     assert(p2 == NULL);
     assert(errno == ENOMEM);
 
-
     /* Overflows to a small positive number */
     p2 = Xmureallocarray(p, SQRT_SIZE_MAX + 1, SQRT_SIZE_MAX);
     assert(p2 == NULL);
@@ -219,15 +225,18 @@ static void test_Xmureallocarray_overflow(void)
     free(p);
     assert(errno == 0);
 }
+
 #pragma GCC diagnostic pop
 
-int main(int argc, char** argv)
+int
+main(int argc, char **argv)
 {
     struct rlimit lim;
 
     /* Set a memory limit so we can test allocations over that size fail */
     assert_no_errno(getrlimit(RLIMIT_AS, &lim));
-    if (lim.rlim_cur > ALLOC_LIMIT) {
+    if (lim.rlim_cur > ALLOC_LIMIT)
+    {
         lim.rlim_cur = ALLOC_LIMIT;
         assert_no_errno(setrlimit(RLIMIT_AS, &lim));
     }

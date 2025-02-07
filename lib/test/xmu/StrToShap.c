@@ -23,7 +23,7 @@
 
 /* Test code for functions in src/StrToShap.c */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/Xmu/Converters.h"
@@ -33,16 +33,17 @@
 #include <setjmp.h>
 #include <stdio.h>
 
-struct TestData {
+struct TestData
+{
     const char *name;
-    int value;
+    int         value;
 };
 
 static const struct TestData data[] = {
-        { XtERectangle,         XmuShapeRectangle },
-        { XtEOval,              XmuShapeOval },
-        { XtEEllipse,           XmuShapeEllipse },
-        { XtERoundedRectangle,  XmuShapeRoundedRectangle },
+    { XtERectangle,        XmuShapeRectangle        },
+    { XtEOval,             XmuShapeOval             },
+    { XtEEllipse,          XmuShapeEllipse          },
+    { XtERoundedRectangle, XmuShapeRoundedRectangle },
 };
 #define DATA_ENTRIES (sizeof(data) / sizeof(data[0]))
 
@@ -75,30 +76,30 @@ test_XmuCvtStringToShapeStyle(void)
 {
     XrmValue from, to;
     Cardinal nargs = 0;
-    Boolean ret;
-    char namebuf[32];
+    Boolean  ret;
+    char     namebuf[32];
 
     printf("test_XmuCvtStringToShapeStyle starting");
-    for (unsigned int i = 0; i < DATA_ENTRIES; i++) {
+    for (unsigned int i = 0; i < DATA_ENTRIES; i++)
+    {
         printf("StringToShapeStyle(%s)", data[i].name);
 
         strncpy(namebuf, data[i].name, sizeof(namebuf) - 1);
         namebuf[sizeof(namebuf) - 1] = 0;
-        from.addr = namebuf;
-        from.size = sizeof(char *);
-        to.addr = NULL;
-        to.size = 0;
+        from.addr                    = namebuf;
+        from.size                    = sizeof(char *);
+        to.addr                      = NULL;
+        to.size                      = 0;
         ret = XmuCvtStringToShapeStyle(NULL, NULL, &nargs, &from, &to, NULL);
         assert(ret == True);
         assert(*(int *)to.addr == data[i].value);
         assert(to.size == sizeof(int));
 
-
         XmuNCopyISOLatin1Uppered(namebuf, data[i].name, sizeof(namebuf));
         from.addr = namebuf;
         from.size = sizeof(char *);
-        to.addr = NULL;
-        to.size = 0;
+        to.addr   = NULL;
+        to.size   = 0;
         ret = XmuCvtStringToShapeStyle(NULL, NULL, &nargs, &from, &to, NULL);
         assert(ret == True);
         assert(*(int *)to.addr == data[i].value);
@@ -116,13 +117,16 @@ test_XmuCvtStringToShapeStyle(void)
 
     /* Verify warning issued for unknown string */
     warning_count = 0;
-    from.addr = (char *) "DoesNotExist";
-    nargs = 0;
+    from.addr     = (char *)"DoesNotExist";
+    nargs         = 0;
     printf("StringToShapeStyle(%s)", from.addr);
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         ret = XmuCvtStringToShapeStyle(NULL, NULL, &nargs, &from, &to, NULL);
         assert(ret == False);
-    } else {
+    }
+    else
+    {
         /* We jumped here from error handler as expected. */
     }
     assert(warning_count > 0);
@@ -133,17 +137,18 @@ static void
 test_XmuCvtShapeStyleToString(void)
 {
     XrmValue from, to;
-    int value;
+    int      value;
     Cardinal nargs = 0;
-    Boolean ret;
-    char namebuf[32];
+    Boolean  ret;
+    char     namebuf[32];
 
     printf("test_XmuCvtShapeStyleToString starting");
-    for (unsigned int i = 0; i < DATA_ENTRIES; i++) {
+    for (unsigned int i = 0; i < DATA_ENTRIES; i++)
+    {
         printf("ShapeStyleToString(%d)", data[i].value);
 
-        value = data[i].value;
-        from.addr = (XPointer) &value;
+        value     = data[i].value;
+        from.addr = (XPointer)&value;
         from.size = sizeof(int *);
 
         /* First test without providing a buffer to copy the string into */
@@ -172,13 +177,16 @@ test_XmuCvtShapeStyleToString(void)
 
     /* Verify warning and return of False for invalid value */
     warning_count = 0;
-    value = 1984;
-    from.addr = (XPointer) &value;
+    value         = 1984;
+    from.addr     = (XPointer)&value;
     printf("ShapeStyleToString(%d)", value);
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         ret = XmuCvtShapeStyleToString(NULL, NULL, &nargs, &from, &to, NULL);
         assert(ret == False);
-    } else {
+    }
+    else
+    {
         /* We jumped here from error handler as expected. */
     }
     assert(warning_count > 0);
@@ -186,7 +194,7 @@ test_XmuCvtShapeStyleToString(void)
 }
 
 int
-main(int argc, char** argv)
+main(int argc, char **argv)
 {
     XtSetWarningHandler(xt_warning_handler);
     XtSetErrorHandler(xt_error_handler);

@@ -51,7 +51,7 @@ SOFTWARE.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/extensions/XI.h"
@@ -62,28 +62,27 @@ SOFTWARE.
 #include "XIint.h"
 
 int
-XChangeDeviceKeyMapping(
-    register Display	*dpy,
-    XDevice		*dev,
-    int			 first,
-    int			 syms_per_code,
-    KeySym		*keysyms,
-    int			 count)
+XChangeDeviceKeyMapping(register Display *dpy,
+                        XDevice          *dev,
+                        int               first,
+                        int               syms_per_code,
+                        KeySym           *keysyms,
+                        int               count)
 {
-    register long nbytes;
+    register long               nbytes;
     xChangeDeviceKeyMappingReq *req;
-    XExtDisplayInfo *info = XInput_find_display(dpy);
+    XExtDisplayInfo            *info = XInput_find_display(dpy);
 
     LockDisplay(dpy);
     if (_XiCheckExtInit(dpy, XInput_Initial_Release, info) == -1)
-	return (NoSuchExtension);
+        return (NoSuchExtension);
 
     GetReq(ChangeDeviceKeyMapping, req);
-    req->reqType = info->codes->major_opcode;
-    req->ReqType = X_ChangeDeviceKeyMapping;
-    req->deviceid = dev->device_id;
-    req->firstKeyCode = first;
-    req->keyCodes = count;
+    req->reqType           = info->codes->major_opcode;
+    req->ReqType           = X_ChangeDeviceKeyMapping;
+    req->deviceid          = dev->device_id;
+    req->firstKeyCode      = first;
+    req->keyCodes          = count;
     req->keySymsPerKeyCode = syms_per_code;
     req->length += count * syms_per_code;
     nbytes = syms_per_code * count * sizeof(CARD32);

@@ -21,7 +21,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include <limits.h>
@@ -36,115 +36,120 @@
 XRRMonitorInfo *
 XRRGetMonitors(Display *dpy, Window window, Bool get_active, int *nmonitors)
 {
-    XExtDisplayInfo	    *info = XRRFindDisplay(dpy);
-    xRRGetMonitorsReply	    rep;
-    xRRGetMonitorsReq	    *req;
-    int			    nbytes, nbytesRead;
-    int			    nmon, noutput;
-    xRRMonitorInfo	    *xmon;
-    CARD32		    *xoutput;
-    XRRMonitorInfo	    *mon = NULL;
-    RROutput		    *output;
+    XExtDisplayInfo    *info = XRRFindDisplay(dpy);
+    xRRGetMonitorsReply rep;
+    xRRGetMonitorsReq  *req;
+    int                 nbytes, nbytesRead;
+    int                 nmon, noutput;
+    xRRMonitorInfo     *xmon;
+    CARD32             *xoutput;
+    XRRMonitorInfo     *mon = NULL;
+    RROutput           *output;
 
-    RRCheckExtension (dpy, info, NULL);
+    RRCheckExtension(dpy, info, NULL);
 
     *nmonitors = -1;
 
-    LockDisplay (dpy);
-    GetReq (RRGetMonitors, req);
-    req->reqType = info->codes->major_opcode;
+    LockDisplay(dpy);
+    GetReq(RRGetMonitors, req);
+    req->reqType      = info->codes->major_opcode;
     req->randrReqType = X_RRGetMonitors;
-    req->window = window;
-    req->get_active = get_active;
+    req->window       = window;
+    req->get_active   = get_active;
 
-    if (!_XReply (dpy, (xReply *) &rep, 0, xFalse))
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
     {
-	UnlockDisplay (dpy);
-	SyncHandle ();
-	return NULL;
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return NULL;
     }
 
     if (rep.length > INT_MAX >> 2 ||
-	rep.nmonitors > INT_MAX / SIZEOF(xRRMonitorInfo) ||
-	rep.noutputs > INT_MAX / 4 ||
-	rep.nmonitors * SIZEOF(xRRMonitorInfo) > INT_MAX - rep.noutputs * 4) {
-	_XEatData (dpy, rep.length);
-	UnlockDisplay (dpy);
-	SyncHandle ();
-	return NULL;
+        rep.nmonitors > INT_MAX / SIZEOF(xRRMonitorInfo) ||
+        rep.noutputs > INT_MAX / 4 ||
+        rep.nmonitors * SIZEOF(xRRMonitorInfo) > INT_MAX - rep.noutputs * 4)
+    {
+        _XEatData(dpy, rep.length);
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return NULL;
     }
-    nbytes = (long) rep.length << 2;
-    nmon = rep.nmonitors;
-    noutput = rep.noutputs;
+    nbytes     = (long)rep.length << 2;
+    nmon       = rep.nmonitors;
+    noutput    = rep.noutputs;
     nbytesRead = nmon * SIZEOF(xRRMonitorInfo) + noutput * 4;
 
-    if (nmon > 0) {
-	char	*buf, *buf_head;
+    if (nmon > 0)
+    {
+        char *buf, *buf_head;
 
-	/*
+    /*
 	 * first we must compute how much space to allocate for
 	 * randr library's use; we'll allocate the structures in a single
 	 * allocation, on cleanlyness grounds.
 	 */
 
-	size_t rbytes = (nmon * sizeof (XRRMonitorInfo))
-            + (noutput * sizeof(RROutput));
+        size_t rbytes =
+            (nmon * sizeof(XRRMonitorInfo)) + (noutput * sizeof(RROutput));
 
-	buf = buf_head = Xmalloc (nbytesRead);
-	mon = Xmalloc (rbytes);
+        buf = buf_head = Xmalloc(nbytesRead);
+        mon            = Xmalloc(rbytes);
 
-	if (buf == NULL || mon == NULL) {
-	    Xfree(buf);
-	    Xfree(mon);
-	    _XEatDataWords (dpy, rep.length);
-	    UnlockDisplay (dpy);
-	    SyncHandle ();
-	    return NULL;
-	}
+        if (buf == NULL || mon == NULL)
+        {
+            Xfree(buf);
+            Xfree(mon);
+            _XEatDataWords(dpy, rep.length);
+            UnlockDisplay(dpy);
+            SyncHandle();
+            return NULL;
+        }
 
-	_XReadPad(dpy, buf, nbytesRead);
+        _XReadPad(dpy, buf, nbytesRead);
 
-	output = (RROutput *) (mon + nmon);
+        output = (RROutput *)(mon + nmon);
 
-	for (int m = 0; m < nmon; m++) {
-	    xmon = (xRRMonitorInfo *) buf;
-	    mon[m].name = xmon->name;
-	    mon[m].primary = xmon->primary;
-	    mon[m].automatic = xmon->automatic;
-	    mon[m].noutput = xmon->noutput;
-	    mon[m].x = xmon->x;
-	    mon[m].y = xmon->y;
-	    mon[m].width = xmon->width;
-	    mon[m].height = xmon->height;
-	    mon[m].mwidth = xmon->widthInMillimeters;
-	    mon[m].mheight = xmon->heightInMillimeters;
-	    mon[m].outputs = output;
-	    buf += SIZEOF (xRRMonitorInfo);
-	    xoutput = (CARD32 *) buf;
-	    if (xmon->noutput > rep.noutputs) {
-	        Xfree(buf_head);
-	        Xfree(mon);
-	        UnlockDisplay (dpy);
-	        SyncHandle ();
-	        return NULL;
-	    }
-	    rep.noutputs -= xmon->noutput;
-	    for (int o = 0; o < xmon->noutput; o++)
-		output[o] = xoutput[o];
-	    output += xmon->noutput;
-	    buf += xmon->noutput * 4;
-	}
-	Xfree(buf_head);
+        for (int m = 0; m < nmon; m++)
+        {
+            xmon             = (xRRMonitorInfo *)buf;
+            mon[m].name      = xmon->name;
+            mon[m].primary   = xmon->primary;
+            mon[m].automatic = xmon->automatic;
+            mon[m].noutput   = xmon->noutput;
+            mon[m].x         = xmon->x;
+            mon[m].y         = xmon->y;
+            mon[m].width     = xmon->width;
+            mon[m].height    = xmon->height;
+            mon[m].mwidth    = xmon->widthInMillimeters;
+            mon[m].mheight   = xmon->heightInMillimeters;
+            mon[m].outputs   = output;
+            buf += SIZEOF(xRRMonitorInfo);
+            xoutput = (CARD32 *)buf;
+            if (xmon->noutput > rep.noutputs)
+            {
+                Xfree(buf_head);
+                Xfree(mon);
+                UnlockDisplay(dpy);
+                SyncHandle();
+                return NULL;
+            }
+            rep.noutputs -= xmon->noutput;
+            for (int o = 0; o < xmon->noutput; o++)
+                output[o] = xoutput[o];
+            output += xmon->noutput;
+            buf += xmon->noutput * 4;
+        }
+        Xfree(buf_head);
     }
 
     /*
      * Skip any extra data
      */
     if (nbytes > nbytesRead)
-	_XEatData (dpy, (unsigned long) (nbytes - nbytesRead));
+        _XEatData(dpy, (unsigned long)(nbytes - nbytesRead));
 
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    UnlockDisplay(dpy);
+    SyncHandle();
 
     *nmonitors = nmon;
     return mon;
@@ -153,58 +158,58 @@ XRRGetMonitors(Display *dpy, Window window, Bool get_active, int *nmonitors)
 void
 XRRSetMonitor(Display *dpy, Window window, XRRMonitorInfo *monitor)
 {
-    XExtDisplayInfo	    *info = XRRFindDisplay(dpy);
-    xRRSetMonitorReq	    *req;
+    XExtDisplayInfo  *info = XRRFindDisplay(dpy);
+    xRRSetMonitorReq *req;
 
-    RRSimpleCheckExtension (dpy, info);
+    RRSimpleCheckExtension(dpy, info);
 
     LockDisplay(dpy);
-    GetReq (RRSetMonitor, req);
-    req->reqType = info->codes->major_opcode;
+    GetReq(RRSetMonitor, req);
+    req->reqType      = info->codes->major_opcode;
     req->randrReqType = X_RRSetMonitor;
     req->length += monitor->noutput;
-    req->window = window;
-    req->monitor.name = monitor->name;
-    req->monitor.primary = monitor->primary;
-    req->monitor.automatic = False;
-    req->monitor.noutput = monitor->noutput;
-    req->monitor.x = monitor->x;
-    req->monitor.y = monitor->y;
-    req->monitor.width = monitor->width;
-    req->monitor.height = monitor->height;
-    req->monitor.widthInMillimeters = monitor->mwidth;
+    req->window                      = window;
+    req->monitor.name                = monitor->name;
+    req->monitor.primary             = monitor->primary;
+    req->monitor.automatic           = False;
+    req->monitor.noutput             = monitor->noutput;
+    req->monitor.x                   = monitor->x;
+    req->monitor.y                   = monitor->y;
+    req->monitor.width               = monitor->width;
+    req->monitor.height              = monitor->height;
+    req->monitor.widthInMillimeters  = monitor->mwidth;
     req->monitor.heightInMillimeters = monitor->mheight;
-    Data32 (dpy, monitor->outputs, monitor->noutput * 4);
+    Data32(dpy, monitor->outputs, monitor->noutput * 4);
 
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    UnlockDisplay(dpy);
+    SyncHandle();
 }
 
 void
 XRRDeleteMonitor(Display *dpy, Window window, Atom name)
 {
-    XExtDisplayInfo	    *info = XRRFindDisplay(dpy);
-    xRRDeleteMonitorReq	    *req;
+    XExtDisplayInfo     *info = XRRFindDisplay(dpy);
+    xRRDeleteMonitorReq *req;
 
-    RRSimpleCheckExtension (dpy, info);
+    RRSimpleCheckExtension(dpy, info);
 
     LockDisplay(dpy);
-    GetReq (RRDeleteMonitor, req);
-    req->reqType = info->codes->major_opcode;
+    GetReq(RRDeleteMonitor, req);
+    req->reqType      = info->codes->major_opcode;
     req->randrReqType = X_RRDeleteMonitor;
-    req->window = window;
-    req->name = name;
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    req->window       = window;
+    req->name         = name;
+    UnlockDisplay(dpy);
+    SyncHandle();
 }
 
 XRRMonitorInfo *
 XRRAllocateMonitor(Display *dpy, int noutput)
 {
-    XRRMonitorInfo *monitor = calloc(1, sizeof (XRRMonitorInfo) + noutput * sizeof (RROutput));
-    if (!monitor)
-	return NULL;
-    monitor->outputs = (RROutput *) (monitor + 1);
+    XRRMonitorInfo *monitor =
+        calloc(1, sizeof(XRRMonitorInfo) + noutput * sizeof(RROutput));
+    if (!monitor) return NULL;
+    monitor->outputs = (RROutput *)(monitor + 1);
     monitor->noutput = noutput;
     return monitor;
 }
@@ -214,4 +219,3 @@ XRRFreeMonitors(XRRMonitorInfo *monitors)
 {
     Xfree(monitors);
 }
-

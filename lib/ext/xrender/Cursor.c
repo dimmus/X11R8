@@ -22,29 +22,29 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xrenderint.h"
 
 Cursor
-XRenderCreateCursor (Display	    *dpy,
-		     Picture	    source,
-		     unsigned int   x,
-		     unsigned int   y)
+XRenderCreateCursor(Display     *dpy,
+                    Picture      source,
+                    unsigned int x,
+                    unsigned int y)
 {
-    XRenderExtDisplayInfo	*info = XRenderFindDisplay (dpy);
-    Cursor			cid;
-    xRenderCreateCursorReq	*req;
+    XRenderExtDisplayInfo  *info = XRenderFindDisplay(dpy);
+    Cursor                  cid;
+    xRenderCreateCursorReq *req;
 
-    RenderCheckExtension (dpy, info, 0);
+    RenderCheckExtension(dpy, info, 0);
     LockDisplay(dpy);
     GetReq(RenderCreateCursor, req);
-    req->reqType = (CARD8) info->codes->major_opcode;
+    req->reqType       = (CARD8)info->codes->major_opcode;
     req->renderReqType = X_RenderCreateCursor;
-    req->cid = (CARD32) (cid = XAllocID (dpy));
-    req->src = (CARD32) source;
-    req->x = (CARD16) x;
-    req->y = (CARD16) y;
+    req->cid           = (CARD32)(cid = XAllocID(dpy));
+    req->src           = (CARD32)source;
+    req->x             = (CARD16)x;
+    req->y             = (CARD16)y;
 
     UnlockDisplay(dpy);
     SyncHandle();
@@ -52,26 +52,24 @@ XRenderCreateCursor (Display	    *dpy,
 }
 
 Cursor
-XRenderCreateAnimCursor (Display	*dpy,
-			 int		ncursor,
-			 XAnimCursor	*cursors)
+XRenderCreateAnimCursor(Display *dpy, int ncursor, XAnimCursor *cursors)
 {
-    XRenderExtDisplayInfo	*info = XRenderFindDisplay (dpy);
-    Cursor			cid;
-    xRenderCreateAnimCursorReq	*req;
-    long			len;
+    XRenderExtDisplayInfo      *info = XRenderFindDisplay(dpy);
+    Cursor                      cid;
+    xRenderCreateAnimCursorReq *req;
+    long                        len;
 
-    RenderCheckExtension (dpy, info, 0);
+    RenderCheckExtension(dpy, info, 0);
     LockDisplay(dpy);
     GetReq(RenderCreateAnimCursor, req);
-    req->reqType = (CARD8) info->codes->major_opcode;
+    req->reqType       = (CARD8)info->codes->major_opcode;
     req->renderReqType = X_RenderCreateAnimCursor;
-    req->cid = (CARD32) (cid = XAllocID (dpy));
+    req->cid           = (CARD32)(cid = XAllocID(dpy));
 
-    len = (long) ncursor * SIZEOF (xAnimCursorElt) >> 2;
-    SetReqLen (req, len, len);
+    len = (long)ncursor * SIZEOF(xAnimCursorElt) >> 2;
+    SetReqLen(req, len, len);
     len <<= 2;
-    Data32 (dpy, (long *) cursors, len);
+    Data32(dpy, (long *)cursors, len);
 
     UnlockDisplay(dpy);
     SyncHandle();

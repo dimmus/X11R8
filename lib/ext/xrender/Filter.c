@@ -22,44 +22,41 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xrenderint.h"
 #include <limits.h>
 
 XFilters *
-XRenderQueryFilters (Display *dpy, Drawable drawable)
+XRenderQueryFilters(Display *dpy, Drawable drawable)
 {
-    XRenderExtDisplayInfo	*info = XRenderFindDisplay (dpy);
-    XRenderInfo			*xri;
-    xRenderQueryFiltersReq	*req;
-    xRenderQueryFiltersReply	rep;
-    XFilters			*filters;
-    char			*name;
-    char			len;
-    unsigned int		i;
-    unsigned long		nbytesName, reply_left;
+    XRenderExtDisplayInfo   *info = XRenderFindDisplay(dpy);
+    XRenderInfo             *xri;
+    xRenderQueryFiltersReq  *req;
+    xRenderQueryFiltersReply rep;
+    XFilters                *filters;
+    char                    *name;
+    char                     len;
+    unsigned int             i;
+    unsigned long            nbytesName, reply_left;
 
-    if (!RenderHasExtension (info))
-	return NULL;
+    if (!RenderHasExtension(info)) return NULL;
 
-    if (!XRenderQueryFormats (dpy))
-	return NULL;
+    if (!XRenderQueryFormats(dpy)) return NULL;
 
     xri = info->info;
-    if (xri->minor_version < 6)
-	return NULL;
+    if (xri->minor_version < 6) return NULL;
 
-    LockDisplay (dpy);
-    GetReq (RenderQueryFilters, req);
-    req->reqType = (CARD8) info->codes->major_opcode;
+    LockDisplay(dpy);
+    GetReq(RenderQueryFilters, req);
+    req->reqType       = (CARD8)info->codes->major_opcode;
     req->renderReqType = X_RenderQueryFilters;
-    req->drawable = (CARD32) drawable;
-    if (!_XReply (dpy, (xReply *) &rep, 0, xFalse))
+    req->drawable      = (CARD32)drawable;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
     {
-	UnlockDisplay (dpy);
-	SyncHandle ();
-	return NULL;
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return NULL;
     }
 
     /*
@@ -67,35 +64,33 @@ XRenderQueryFilters (Display *dpy, Drawable drawable)
      * more than they should ever possibly need.
      */
     if ((rep.length < (INT_MAX >> 2)) &&
-	(rep.numFilters < ((INT_MAX / 4) / sizeof (char *))) &&
-	(rep.numAliases < ((INT_MAX / 4) / sizeof (short)))) {
-	unsigned long		nbytes, nbytesAlias;
+        (rep.numFilters < ((INT_MAX / 4) / sizeof(char *))) &&
+        (rep.numAliases < ((INT_MAX / 4) / sizeof(short))))
+    {
+        unsigned long nbytes, nbytesAlias;
 
-	/*
+    /*
 	 * Compute total number of bytes for filter names
 	 */
-	nbytes = (unsigned long)rep.length << 2;
-	nbytesAlias = rep.numAliases * 2;
-	if (rep.numAliases & 1)
-	    nbytesAlias += 2;
-	nbytesName = nbytes - nbytesAlias;
+        nbytes      = (unsigned long)rep.length << 2;
+        nbytesAlias = rep.numAliases * 2;
+        if (rep.numAliases & 1) nbytesAlias += 2;
+        nbytesName = nbytes - nbytesAlias;
 
-	/*
+    /*
 	 * Allocate one giant block for the whole data structure
 	 */
-	filters = Xmalloc (sizeof (XFilters) +
-			   (rep.numFilters * sizeof (char *)) +
-			   (rep.numAliases * sizeof (short)) +
-			   nbytesName);
-    } else
-	filters = NULL;
+        filters = Xmalloc(sizeof(XFilters) + (rep.numFilters * sizeof(char *)) +
+                          (rep.numAliases * sizeof(short)) + nbytesName);
+    }
+    else filters = NULL;
 
     if (!filters)
     {
-	_XEatDataWords(dpy, rep.length);
-	UnlockDisplay (dpy);
-	SyncHandle ();
-	return NULL;
+        _XEatDataWords(dpy, rep.length);
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return NULL;
     }
 
     /*
@@ -106,72 +101,73 @@ XRenderQueryFilters (Display *dpy, Drawable drawable)
      *	nbytesName  char strings
      */
 
-    filters->nfilter = (int) rep.numFilters;
-    filters->nalias = (int) rep.numAliases;
-    filters->filter = (char **) (filters + 1);
-    filters->alias = (short *) (filters->filter + rep.numFilters);
-    name = (char *) (filters->alias + rep.numAliases);
+    filters->nfilter = (int)rep.numFilters;
+    filters->nalias  = (int)rep.numAliases;
+    filters->filter  = (char **)(filters + 1);
+    filters->alias   = (short *)(filters->filter + rep.numFilters);
+    name             = (char *)(filters->alias + rep.numAliases);
 
     /*
      * Read the filter aliases
      */
-    _XRead16Pad (dpy, filters->alias, 2 * rep.numAliases);
-    reply_left = 8 + rep.length - 2 * rep.numAliases;;
+    _XRead16Pad(dpy, filters->alias, 2 * rep.numAliases);
+    reply_left = 8 + rep.length - 2 * rep.numAliases;
+    ;
 
     /*
      * Read the filter names
      */
     for (i = 0; i < rep.numFilters; i++)
     {
-	int	l;
-	_XRead (dpy, &len, 1);
-	reply_left--;
-	l = len & 0xff;
-	if ((unsigned long)l + 1 > nbytesName) {
+        int l;
+        _XRead(dpy, &len, 1);
+        reply_left--;
+        l = len & 0xff;
+        if ((unsigned long)l + 1 > nbytesName)
+        {
             _XEatDataWords(dpy, reply_left);
-	    Xfree(filters);
-	    UnlockDisplay (dpy);
-	    SyncHandle ();
-	    return NULL;
-	}
-	nbytesName -= (unsigned long) (l + 1);
-	filters->filter[i] = name;
-	_XRead (dpy, name, l);
-        reply_left -= (unsigned long) l;
-	name[l] = '\0';
-	name += l + 1;
+            Xfree(filters);
+            UnlockDisplay(dpy);
+            SyncHandle();
+            return NULL;
+        }
+        nbytesName -= (unsigned long)(l + 1);
+        filters->filter[i] = name;
+        _XRead(dpy, name, l);
+        reply_left -= (unsigned long)l;
+        name[l] = '\0';
+        name += l + 1;
     }
-    i = (unsigned) (name - (char *) (filters->alias + rep.numAliases));
+    i = (unsigned)(name - (char *)(filters->alias + rep.numAliases));
 
-    if (i & 3)
-	_XEatData (dpy, 4 - (i & 3));
+    if (i & 3) _XEatData(dpy, 4 - (i & 3));
 
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    UnlockDisplay(dpy);
+    SyncHandle();
     return filters;
 }
 
 void
-XRenderSetPictureFilter  (Display   *dpy,
-			  Picture   picture,
-			  const char *filter,
-			  XFixed    *params,
-			  int	    nparams)
+XRenderSetPictureFilter(Display    *dpy,
+                        Picture     picture,
+                        const char *filter,
+                        XFixed     *params,
+                        int         nparams)
 {
-    XRenderExtDisplayInfo	*info = XRenderFindDisplay (dpy);
-    xRenderSetPictureFilterReq	*req;
-    int				nbytes = (int) strlen (filter);
+    XRenderExtDisplayInfo      *info = XRenderFindDisplay(dpy);
+    xRenderSetPictureFilterReq *req;
+    int                         nbytes = (int)strlen(filter);
 
-    RenderSimpleCheckExtension (dpy, info);
+    RenderSimpleCheckExtension(dpy, info);
     LockDisplay(dpy);
     GetReq(RenderSetPictureFilter, req);
-    req->reqType = (CARD8) info->codes->major_opcode;
+    req->reqType       = (CARD8)info->codes->major_opcode;
     req->renderReqType = X_RenderSetPictureFilter;
-    req->picture = (CARD32) picture;
-    req->nbytes = (CARD16) nbytes;
-    req->length = (CARD16) (req->length + (((nbytes + 3) >> 2) + nparams));
-    Data (dpy, filter, nbytes);
-    Data (dpy, (_Xconst char *)params, (nparams << 2));
+    req->picture       = (CARD32)picture;
+    req->nbytes        = (CARD16)nbytes;
+    req->length = (CARD16)(req->length + (((nbytes + 3) >> 2) + nparams));
+    Data(dpy, filter, nbytes);
+    Data(dpy, (_Xconst char *)params, (nparams << 2));
     UnlockDisplay(dpy);
     SyncHandle();
 }

@@ -177,7 +177,7 @@ main(int argc, char **argv)
 
     if (!topw)
     {
-    /* L10N_Comments : Error if no $DISPLAY or $DISPLAY can't be opened.
+        /* L10N_Comments : Error if no $DISPLAY or $DISPLAY can't be opened.
 	   Not normally reached as Xt exits before we get here. */
         fprintf(stderr, gettext("Sxpm Error... [ Undefined DISPLAY ]\n"));
         exit(1);
@@ -227,7 +227,7 @@ main(int argc, char **argv)
          XrmGetResource(xrdb, "Sxpm.hints", "", &stype, &val)) &&
         !strcmp((char *)val.addr, "True"))
     {
-    /* gotcha */
+        /* gotcha */
         incResize = 1;
         resize    = 1;
     }
@@ -298,7 +298,7 @@ main(int argc, char **argv)
             input  = argv[n];
             continue;
         }
-        if ((strlen(argv[n]) == 1) && (argv[n][0] == '-'))     /* stdin */
+        if ((strlen(argv[n]) == 1) && (argv[n][0] == '-')) /* stdin */
             continue;
         if (strcmp(argv[n], "-o") == 0)
         {
@@ -483,7 +483,7 @@ main(int argc, char **argv)
 #ifdef Debug
         XpmFree(data);
 
-    /*
+        /*
 	 * this is just to test the XpmCreatePixmapFromBuffer and
 	 * XpmCreateBufferFromPixmap functions
 	 */
@@ -547,7 +547,7 @@ main(int argc, char **argv)
 
             for (i = 0; i < view.attributes.nextensions; i++)
             {
-        /* L10N_Comments : Output when -v & file has extensions
+                /* L10N_Comments : Output when -v & file has extensions
 		   %s is replaced by extension name */
                 fprintf(stderr,
                         gettext("Xpm extension : %s\n"),
@@ -590,7 +590,7 @@ main(int argc, char **argv)
     }
     if (!nod)
     {
-    /*
+        /*
 	 * manage display if requested
 	 */
 
@@ -713,7 +713,7 @@ ErrorMessage(int ErrorStatus, const char *tag)
         case XpmSuccess:
             return;
         case XpmColorError:
-/* L10N_Comments : The following set of messages are classified as
+            /* L10N_Comments : The following set of messages are classified as
    either errors or warnings.  Based on the class of message, different
    wrappers are selected at the end to state the message source & class.
 
@@ -722,37 +722,37 @@ ErrorMessage(int ErrorStatus, const char *tag)
             warning = gettext("Could not parse or alloc requested color");
             break;
         case XpmOpenFailed:
-    /* L10N_Comments : ERROR produced when filename does not exist
+            /* L10N_Comments : ERROR produced when filename does not exist
 	   or insufficient permissions to open (i.e. sxpm /no/such/file ) */
             error = gettext("Cannot open file");
             break;
         case XpmFileInvalid:
-    /* L10N_Comments : ERROR produced when filename can be read, but
+            /* L10N_Comments : ERROR produced when filename can be read, but
 	   is not an XPM file (i.e. sxpm /dev/null ) */
             error = gettext("Invalid XPM file");
             break;
         case XpmNoMemory:
-    /* L10N_Comments : ERROR produced when filename can be read, but
+            /* L10N_Comments : ERROR produced when filename can be read, but
 	   is too big for memory
 	   (i.e. limit datasize 32 ; sxpm /usr/dt/backdrops/Crochet.pm ) */
             error = gettext("Not enough memory");
             break;
         case XpmColorFailed:
-    /* L10N_Comments : ERROR produced when filename can be read, but
+            /* L10N_Comments : ERROR produced when filename can be read, but
 	   contains an invalid color specification (need to create test case)*/
             error = gettext("Failed to parse or alloc some color");
             break;
     }
 
     if (warning)
-    /* L10N_Comments : Wrapper around above WARNING messages.
+        /* L10N_Comments : Wrapper around above WARNING messages.
 	   First %s is the tag for the operation that produced the warning.
 	   Second %s is the message selected from the above set. */
         fprintf(stderr, gettext("%s Xpm Warning: %s.\n"), tag, warning);
 
     if (error)
     {
-    /* L10N_Comments : Wrapper around above ERROR messages.
+        /* L10N_Comments : Wrapper around above ERROR messages.
 	   First %s is the tag for the operation that produced the error.
 	   Second %s is the message selected from the above set */
         fprintf(stderr, gettext("%s Xpm Error: %s.\n"), tag, error);

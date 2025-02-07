@@ -30,7 +30,7 @@ in this Software without prior written authorization from the author.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/Xlibint.h"
@@ -41,24 +41,22 @@ in this Software without prior written authorization from the author.
 #include "XIint.h"
 
 void
-XDeleteDeviceProperty(Display* dpy, XDevice* dev, Atom property)
+XDeleteDeviceProperty(Display *dpy, XDevice *dev, Atom property)
 {
-    xDeleteDevicePropertyReq   *req;
+    xDeleteDevicePropertyReq *req;
 
     XExtDisplayInfo *info = XInput_find_display(dpy);
 
     LockDisplay(dpy);
-    if (_XiCheckExtInit(dpy, XInput_Initial_Release, info) == -1)
-	return;
+    if (_XiCheckExtInit(dpy, XInput_Initial_Release, info) == -1) return;
 
     GetReq(DeleteDeviceProperty, req);
-    req->reqType    = info->codes->major_opcode;
-    req->ReqType    = X_DeleteDeviceProperty;
-    req->deviceid   = dev->device_id;
-    req->property   = property;
+    req->reqType  = info->codes->major_opcode;
+    req->ReqType  = X_DeleteDeviceProperty;
+    req->deviceid = dev->device_id;
+    req->property = property;
 
     UnlockDisplay(dpy);
     SyncHandle();
     return;
 }
-

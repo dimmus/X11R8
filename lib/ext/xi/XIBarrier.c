@@ -23,7 +23,7 @@
  */
 
 #if HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include <stdint.h>
@@ -34,48 +34,48 @@
 #include "XIint.h"
 
 void
-XIBarrierReleasePointers(Display *dpy,
+XIBarrierReleasePointers(Display                     *dpy,
                          XIBarrierReleasePointerInfo *barriers,
-                         int num_barriers)
+                         int                          num_barriers)
 {
-    XExtDisplayInfo	        *info = XInput_find_display(dpy);
-    xXIBarrierReleasePointerReq *req;
-    int extra = 0;
-    int i;
+    XExtDisplayInfo              *info = XInput_find_display(dpy);
+    xXIBarrierReleasePointerReq  *req;
+    int                           extra = 0;
+    int                           i;
     xXIBarrierReleasePointerInfo *b;
 
-    if (!num_barriers)
-        return;
+    if (!num_barriers) return;
 
     extra = (num_barriers * sizeof(xXIBarrierReleasePointerInfo));
 
-    LockDisplay (dpy);
-    GetReqExtra (XIBarrierReleasePointer, extra, req);
-    req->reqType = info->codes->major_opcode;
-    req->ReqType = X_XIBarrierReleasePointer;
+    LockDisplay(dpy);
+    GetReqExtra(XIBarrierReleasePointer, extra, req);
+    req->reqType      = info->codes->major_opcode;
+    req->ReqType      = X_XIBarrierReleasePointer;
     req->num_barriers = num_barriers;
 
-    b = (xXIBarrierReleasePointerInfo *) &req[1];
-    for (i = 0; i < num_barriers; i++, b++) {
+    b = (xXIBarrierReleasePointerInfo *)&req[1];
+    for (i = 0; i < num_barriers; i++, b++)
+    {
         b->deviceid = barriers[i].deviceid;
-        b->eventid = barriers[i].eventid;
-        b->barrier = barriers[i].barrier;
+        b->eventid  = barriers[i].eventid;
+        b->barrier  = barriers[i].barrier;
     }
 
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    UnlockDisplay(dpy);
+    SyncHandle();
 }
 
 void
-XIBarrierReleasePointer(Display *dpy,
+XIBarrierReleasePointer(Display       *dpy,
                         int            deviceid,
                         PointerBarrier barrier,
                         BarrierEventID eventid)
 {
     XIBarrierReleasePointerInfo info;
     info.deviceid = deviceid;
-    info.barrier = barrier;
-    info.eventid = eventid;
+    info.barrier  = barrier;
+    info.eventid  = eventid;
 
     XIBarrierReleasePointers(dpy, &info, 1);
 }

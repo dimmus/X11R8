@@ -30,7 +30,7 @@ in this Software without prior written authorization from The Open Group.
  *
  */
 #if HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include <stdint.h>
@@ -41,22 +41,22 @@ in this Software without prior written authorization from The Open Group.
 #include "XIint.h"
 
 Bool
-XIGetClientPointer(Display* dpy, Window win, int *deviceid)
+XIGetClientPointer(Display *dpy, Window win, int *deviceid)
 {
-    xXIGetClientPointerReq *req;
+    xXIGetClientPointerReq  *req;
     xXIGetClientPointerReply rep;
-    XExtDisplayInfo *info = XInput_find_display(dpy);
+    XExtDisplayInfo         *info = XInput_find_display(dpy);
 
     LockDisplay(dpy);
-    if (_XiCheckExtInit(dpy, Dont_Check, info) == -1)
-        return False;
+    if (_XiCheckExtInit(dpy, Dont_Check, info) == -1) return False;
 
     GetReq(XIGetClientPointer, req);
     req->reqType = info->codes->major_opcode;
     req->ReqType = X_XIGetClientPointer;
-    req->win = win;
+    req->win     = win;
 
-    if (!_XReply(dpy, (xReply*) &rep, 0, xFalse)) {
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return False;

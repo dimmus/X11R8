@@ -30,7 +30,7 @@ from The Open Group.
  * This file should contain only those objects which must be predefined.
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xlib.h"
 #include "X11/extensions/Xext.h"
@@ -49,4 +49,3 @@ XextErrorHandler _XExtensionErrorFunction;
  * NOTE: any additional external definition NEED
  * to be inserted ABOVE this point!!!
  */
-

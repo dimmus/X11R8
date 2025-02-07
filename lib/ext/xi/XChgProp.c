@@ -52,7 +52,7 @@ SOFTWARE.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/extensions/XI.h"
@@ -63,26 +63,25 @@ SOFTWARE.
 #include "XIint.h"
 
 int
-XChangeDeviceDontPropagateList(
-    register Display	*dpy,
-    Window		 window,
-    int			 count,
-    XEventClass		*events,
-    int			 mode)
+XChangeDeviceDontPropagateList(register Display *dpy,
+                               Window            window,
+                               int               count,
+                               XEventClass      *events,
+                               int               mode)
 {
     xChangeDeviceDontPropagateListReq *req;
-    XExtDisplayInfo *info = XInput_find_display(dpy);
+    XExtDisplayInfo                   *info = XInput_find_display(dpy);
 
     LockDisplay(dpy);
     if (_XiCheckExtInit(dpy, XInput_Initial_Release, info) == -1)
-	return (NoSuchExtension);
+        return (NoSuchExtension);
 
     GetReq(ChangeDeviceDontPropagateList, req);
     req->reqType = info->codes->major_opcode;
     req->ReqType = X_ChangeDeviceDontPropagateList;
-    req->window = window;
-    req->count = count;
-    req->mode = mode;
+    req->window  = window;
+    req->count   = count;
+    req->mode    = mode;
     req->length += count;
 
     /* note: Data is a macro that uses its arguments multiple

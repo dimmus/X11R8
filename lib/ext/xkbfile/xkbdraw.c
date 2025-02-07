@@ -25,7 +25,7 @@
  ********************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include <ctype.h>
@@ -41,25 +41,31 @@
 #include "XKBfileInt.h"
 
 static void
-_XkbAddDrawable(XkbDrawablePtr *pfirst, XkbDrawablePtr *plast,
-                XkbDrawablePtr tmp)
+_XkbAddDrawable(XkbDrawablePtr *pfirst,
+                XkbDrawablePtr *plast,
+                XkbDrawablePtr  tmp)
 {
     XkbDrawablePtr old;
 
-    if (*pfirst == NULL) {
+    if (*pfirst == NULL)
+    {
         *pfirst = *plast = tmp;
     }
-    else if (tmp->priority >= (*plast)->priority) {
+    else if (tmp->priority >= (*plast)->priority)
+    {
         (*plast)->next = tmp;
-        *plast = tmp;
+        *plast         = tmp;
     }
-    else if (tmp->priority < (*pfirst)->priority) {
+    else if (tmp->priority < (*pfirst)->priority)
+    {
         tmp->next = (*pfirst);
         (*pfirst) = tmp;
     }
-    else {
+    else
+    {
         old = *pfirst;
-        while ((old->next) && (old->next->priority <= tmp->priority)) {
+        while ((old->next) && (old->next->priority <= tmp->priority))
+        {
             old = old->next;
         }
         tmp->next = old->next;
@@ -72,54 +78,62 @@ XkbDrawablePtr
 XkbGetOrderedDrawables(XkbGeometryPtr geom, XkbSectionPtr section)
 {
     XkbDrawablePtr first, last, tmp;
-    int i;
+    int            i;
 
     first = last = NULL;
-    if (geom != NULL) {
+    if (geom != NULL)
+    {
         XkbSectionPtr section;
-        XkbDoodadPtr doodad;
+        XkbDoodadPtr  doodad;
 
         for (i = 0, section = geom->sections; i < geom->num_sections;
-             i++, section++) {
+             i++, section++)
+        {
             tmp = _XkbTypedCalloc(1, XkbDrawableRec);
-            if (!tmp) {
+            if (!tmp)
+            {
                 XkbFreeOrderedDrawables(first);
                 return NULL;
             }
-            tmp->type = XkbDW_Section;
-            tmp->priority = section->priority;
+            tmp->type      = XkbDW_Section;
+            tmp->priority  = section->priority;
             tmp->u.section = section;
-            tmp->next = NULL;
+            tmp->next      = NULL;
             _XkbAddDrawable(&first, &last, tmp);
         }
         for (i = 0, doodad = geom->doodads; i < geom->num_doodads;
-             i++, doodad++) {
+             i++, doodad++)
+        {
             tmp = _XkbTypedCalloc(1, XkbDrawableRec);
-            if (!tmp) {
+            if (!tmp)
+            {
                 XkbFreeOrderedDrawables(first);
                 return NULL;
             }
-            tmp->type = XkbDW_Doodad;
+            tmp->type     = XkbDW_Doodad;
             tmp->priority = doodad->any.priority;
             tmp->u.doodad = doodad;
-            tmp->next = NULL;
+            tmp->next     = NULL;
             _XkbAddDrawable(&first, &last, tmp);
         }
     }
-    if (section != NULL) {
+    if (section != NULL)
+    {
         XkbDoodadPtr doodad;
 
         for (i = 0, doodad = section->doodads; i < section->num_doodads;
-             i++, doodad++) {
+             i++, doodad++)
+        {
             tmp = _XkbTypedCalloc(1, XkbDrawableRec);
-            if (!tmp) {
+            if (!tmp)
+            {
                 XkbFreeOrderedDrawables(first);
                 return NULL;
             }
-            tmp->type = XkbDW_Doodad;
+            tmp->type     = XkbDW_Doodad;
             tmp->priority = doodad->any.priority;
             tmp->u.doodad = doodad;
-            tmp->next = NULL;
+            tmp->next     = NULL;
             _XkbAddDrawable(&first, &last, tmp);
         }
     }
@@ -131,7 +145,8 @@ XkbFreeOrderedDrawables(XkbDrawablePtr draw)
 {
     XkbDrawablePtr tmp;
 
-    for (; draw != NULL; draw = tmp) {
+    for (; draw != NULL; draw = tmp)
+    {
         tmp = draw->next;
         _XkbFree(draw);
     }

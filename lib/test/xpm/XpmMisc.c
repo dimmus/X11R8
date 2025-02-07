@@ -23,7 +23,7 @@
 
 #include <time.h>
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/xpm.h"
@@ -51,8 +51,8 @@ test_XpmGetErrorString(void)
     const char *es;
 
 #define TestErrorString(num, str) \
-    es = XpmGetErrorString(num); \
-    assert(es != NULL); \
+    es = XpmGetErrorString(num);  \
+    assert(es != NULL);           \
     assert(strcmp(es, str) == 0)
 
     TestErrorString(XpmColorError, "XpmColorError");
@@ -79,7 +79,7 @@ test_XpmLibraryVersion(void)
 }
 
 int
-main(int argc, char** argv)
+main(int argc, char **argv)
 {
     test_XpmAttributesSize();
     test_XpmGetErrorString();

@@ -47,9 +47,10 @@ SOFTWARE.
 /* names in Xvproto.h don't match the expectation of Xlib's GetReq* macros,
    so we have to provide our own implementation */
 
-#define XvGetReq(name, req) \
-    req = (xv##name##Req *) _XGetRequest(                               \
-        dpy, (CARD8) info->codes->major_opcode, SIZEOF(xv##name##Req)); \
+#define XvGetReq(name, req)                                                          \
+    req            = (xv##name##Req *)_XGetRequest(dpy,                              \
+                                        (CARD8)info->codes->major_opcode, \
+                                        SIZEOF(xv##name##Req));           \
     req->xvReqType = xv_##name
 
 #endif /* XVLIBINT_H */

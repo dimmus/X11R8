@@ -23,7 +23,7 @@
 
 /* Test code for ProtocolStream Get/Put functions in src/EditResCom.c */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/Xmu/EditresP.h"
@@ -38,18 +38,16 @@ static void
 test_EditResStream(void)
 {
     ProtocolStream ps = { 0, 0, NULL, NULL, NULL };
-    unsigned char c;
+    unsigned char  c;
     unsigned short s;
-    unsigned long l;
-    Bool res;
-    char *str;
-    unsigned long ids[] = { 1, 10, 0xbabe, 0xbabeface, 0xffffffff };
-    WidgetInfo i = {
-        .num_widgets = sizeof(ids) / sizeof(ids[0]),
-        .ids = ids,
-        .real_widget = 0
-    };
-    WidgetInfo out = { 0, NULL, 0 };
+    unsigned long  l;
+    Bool           res;
+    char          *str;
+    unsigned long  ids[] = { 1, 10, 0xbabe, 0xbabeface, 0xffffffff };
+    WidgetInfo     i     = { .num_widgets = sizeof(ids) / sizeof(ids[0]),
+                             .ids         = ids,
+                             .real_widget = 0 };
+    WidgetInfo     out   = { 0, NULL, 0 };
 
     _XEditResResetStream(&ps);
 
@@ -100,12 +98,12 @@ test_EditResStream(void)
     assert(sizeof(ids) == out.num_widgets * sizeof(long));
     assert(memcmp(ids, out.ids, sizeof(ids)) == 0);
 
-    XtFree((char *) out.ids);
+    XtFree((char *)out.ids);
     out.ids = NULL;
 }
 
 int
-main(int argc, char** argv)
+main(int argc, char **argv)
 {
     /* "/EditResCom/ProtocolStream" */
     test_EditResStream();

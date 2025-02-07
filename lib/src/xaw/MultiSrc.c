@@ -493,7 +493,7 @@ ReplaceText(Widget          w,
     }
 
     if (local_artificial_block == True)
-    /* In other words, text is not the u_text that the user handed me but
+        /* In other words, text is not the u_text that the user handed me but
 	   one I made myself.  I only care, because I need to free the string */
         XtFree(text.ptr);
 
@@ -584,7 +584,7 @@ Scan(Widget                   w,
             {
                 Bool non_space = False, first_eol = True;
 
-        /*CONSTCOND*/
+                /*CONSTCOND*/
                 while (True)
                 {
                     register wchar_t c;

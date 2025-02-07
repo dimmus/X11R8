@@ -450,7 +450,7 @@ _SelectionReceived(Widget          w,
         {
             if (list->asked == 0)
             {
-        /* If we just asked for XA_UTF8_STRING and got no response,
+                /* If we just asked for XA_UTF8_STRING and got no response,
 		   we'll ask again, this time for XA_COMPOUND_TEXT. */
                 list->asked++;
                 XtGetSelectionValue(w,
@@ -462,7 +462,7 @@ _SelectionReceived(Widget          w,
             }
             else if (list->asked == 1)
             {
-        /* If we just asked for XA_COMPOUND_TEXT and got no response,
+                /* If we just asked for XA_COMPOUND_TEXT and got no response,
 		   we'll ask again, this time for XA_STRING. */
                 list->asked++;
                 XtGetSelectionValue(w,
@@ -474,7 +474,7 @@ _SelectionReceived(Widget          w,
             }
             else
             {
-        /* We tried all possible text targets in this param.
+                /* We tried all possible text targets in this param.
 		   Recurse on the tail of the params list. */
                 GetSelection(w, list->time, list->params, list->count);
                 XtFree(client_data);
@@ -499,7 +499,7 @@ _SelectionReceived(Widget          w,
         {
             XwcFreeStringList(wlist);
 
-        /* Notify the user on strerr and in the insertion :) */
+            /* Notify the user on strerr and in the insertion :) */
             fprintf(stderr,
                     "Xaw Text Widget: An attempt was made to insert "
                     "an illegal selection.\n");
@@ -1221,7 +1221,7 @@ ConvertSelection(Widget         w,
         }
         else *type = *target;
 
-    /*
+        /*
 	 * If salt is True, the salt->contents stores CT string,
 	 * its length is measured in bytes.
 	 * Refer to _XawTextSaltAwaySelection()
@@ -1256,7 +1256,7 @@ ConvertSelection(Widget         w,
             strcpy(*value, salt->contents);
             *length = (unsigned long)salt->length;
         }
-    /* Got *value,*length, now in COMPOUND_TEXT format. */
+        /* Got *value,*length, now in COMPOUND_TEXT format. */
         if (XawTextFormat(ctx, XawFmtWide))
         {
             if (*type == XA_STRING)
@@ -1396,7 +1396,7 @@ _LoseSelection(Widget          w,
                salt->s.selections[salt->s.atom_count - 1] == 0)
             salt->s.atom_count--;
 
-    /*
+        /*
 	 * Must walk the selection list in opposite order from UnsetSelection.
 	 */
         atomP = salt->s.selections;
@@ -2626,7 +2626,7 @@ DoFormatText(TextWidget       ctx,
             case XawjustifyFull:
                 i   = 0;
                 tmp = left;
-        /*CONSTCOND*/
+                /*CONSTCOND*/
                 while (True)
                 {
                     tmp = SrcScan(ctx->text.source,
@@ -2795,7 +2795,7 @@ Indent(Widget               w,
         text.length = 0;
         tmp         = from;
 
-    /* find the amount of spaces to cut */
+        /* find the amount of spaces to cut */
         while (tmp < to)
         {
             (void)BlankLine(w, tmp, &i);
@@ -2804,7 +2804,7 @@ Indent(Widget               w,
         }
         spaces = XawMin(-spaces, min);
 
-    /* cut the spaces */
+        /* cut the spaces */
         tmp = from;
         while (tmp < to)
         {
@@ -3388,7 +3388,7 @@ TextFocusIn(Widget w, XEvent *event, String *p, Cardinal *n)
         if (old != NULL)
         {
             TextFocusOut(old, event, p, n);
-        /* TextFocusOut may set it to NULL */
+            /* TextFocusOut may set it to NULL */
             focus[i].widget = w;
         }
         XtAddCallback(w,
@@ -3491,7 +3491,7 @@ AutoFill(TextWidget ctx)
 
     for (line_num = 0; line_num < ctx->text.lt.lines; line_num++)
         if (ctx->text.lt.info[line_num].position >= ctx->text.insertPos) break;
-    if (line_num) line_num--;  /* backup a line. */
+    if (line_num) line_num--; /* backup a line. */
 
     XawTextSinkGetCursorBounds(ctx->text.sink, &cursor);
     max_width = Max(0, (int)XtWidth(ctx) - RHMargins(ctx) - cursor.width);
@@ -3516,7 +3516,7 @@ AutoFill(TextWidget ctx)
     {
         wc_buf[0] = *(wchar_t *)text.ptr;
         if (wc_buf[0] != _Xaw_atowc(XawSP) && wc_buf[0] != _Xaw_atowc(XawTAB))
-        /* Only eats white spaces */
+            /* Only eats white spaces */
             return;
 
         text.format = XawFmtWide;
@@ -3527,7 +3527,7 @@ AutoFill(TextWidget ctx)
     else
     {
         if (text.ptr[0] != XawSP && text.ptr[0] != XawTAB)
-        /* Only eats white spaces */
+            /* Only eats white spaces */
             return;
 
         text.format = XawFmt8Bit;
@@ -3750,9 +3750,9 @@ InsertChar(Widget w, XEvent *event, String *p _X_UNUSED, Cardinal *n _X_UNUSED)
 static char *
 IfHexConvertHexElseReturnParam(char *param, int *len_return)
 {
-    char       *p;  /* steps through param char by char */
-    char        c;  /* holds the character pointed to by p */
-    int         ind;  /* steps through hexval buffer char by char */
+    char       *p; /* steps through param char by char */
+    char        c; /* holds the character pointed to by p */
+    int         ind; /* steps through hexval buffer char by char */
     static char hexval[XawTextActionMaxHexChars];
     Boolean     first_digit;
 

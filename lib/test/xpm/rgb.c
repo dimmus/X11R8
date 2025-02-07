@@ -22,7 +22,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "../../lib/src/xpm/rgb.c"
@@ -33,44 +33,45 @@
  * xpmReadRgbNames - reads a rgb text file
  */
 
-struct rgbData {
-    int r, g, b;
+struct rgbData
+{
+    int         r, g, b;
     const char *name;
 };
 
 /* Changes here must match those in rgb.txt file */
 static const struct rgbData testdata[] = {
-    { 255, 255, 255, "white" },
-    {   0,   0,   0, "black" },
-    { 255,   0,   0, "red" },
-    {   0, 255,   0, "green" },
-    {   0,   0, 255, "blue" },
-    {   0,  50,  98, "berkeleyblue" }, /* names get lowercased */
-    { 253, 181,  21, "californiagold" }
+    { 255, 255, 255, "white"          },
+    { 0,   0,   0,   "black"          },
+    { 255, 0,   0,   "red"            },
+    { 0,   255, 0,   "green"          },
+    { 0,   0,   255, "blue"           },
+    { 0,   50,  98,  "berkeleyblue"   }, /* names get lowercased */
+    { 253, 181, 21,  "californiagold" }
 };
 #define NUM_RGB (sizeof(testdata) / sizeof(testdata[0]))
 
 static void
 test_xpmReadRgbNames(void)
 {
-    char filename[1024];
+    char       filename[1024];
     xpmRgbName rgbn[MAX_RGBNAMES];
-    int rgbn_max;
+    int        rgbn_max;
 
     /* Verify NULL is returned if file can't be reads */
     rgbn_max = xpmReadRgbNames("non-existent-file.txt", rgbn);
     assert(rgbn_max == 0);
 
     /* Verify our test file is read properly & contains expected data */
-    snprintf(filename, sizeof(filename), 
-            "%s/xpm/%s", TESTS_PATH, "rgb.txt");
+    snprintf(filename, sizeof(filename), "%s/xpm/%s", TESTS_PATH, "rgb.txt");
     rgbn_max = xpmReadRgbNames(filename, rgbn);
     assert(rgbn_max == NUM_RGB);
 
-    for (unsigned int i = 0; i < NUM_RGB; i++) {
-        int r = testdata[i].r * 257;
-        int g = testdata[i].g * 257;
-        int b = testdata[i].b * 257;
+    for (unsigned int i = 0; i < NUM_RGB; i++)
+    {
+        int   r    = testdata[i].r * 257;
+        int   g    = testdata[i].g * 257;
+        int   b    = testdata[i].b * 257;
         char *name = xpmGetRgbName(rgbn, rgbn_max, r, g, b);
 
         assert(strcmp(name, testdata[i].name) == 0);
@@ -81,9 +82,8 @@ test_xpmReadRgbNames(void)
     xpmFreeRgbNames(rgbn, rgbn_max);
 }
 
-
 int
-main(int argc, char** argv)
+main(int argc, char **argv)
 {
     test_xpmReadRgbNames();
 }

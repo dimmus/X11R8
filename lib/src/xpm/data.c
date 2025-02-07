@@ -502,8 +502,7 @@ xpmParseHeader(xpmData *data)
                 }
                 data->format = 0;
             }
-            else  /* nope this is not an XPM file */
-                return XpmFileInvalid;
+            else /* nope this is not an XPM file */ return XpmFileInvalid;
         }
         if (xpmDataTypes[n].type)
         {

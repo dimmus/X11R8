@@ -1310,7 +1310,7 @@ XftGlyphFontSpecCore(XftDraw                  *draw,
             {
                 if (g_x1 < 0)
                 {
-            /* do nothing if the given glyphs are out of range */
+                    /* do nothing if the given glyphs are out of range */
                     short t = (short)(glyphs[i - 1].font->max_advance_width +
                                       glyphs[i - 1].x);
                     if (t < 0 && glyphs[i - 1].x > 0) goto bail1;
@@ -1342,7 +1342,7 @@ XftGlyphFontSpecCore(XftDraw                  *draw,
         unsigned int depth;
         int          width = x2 - x1, height = y2 - y1;
 
-    /*
+        /*
 	 * Try to get bits directly from the drawable; if that fails,
 	 * use a temporary pixmap.  When it does fail, assume it
 	 * will probably fail for a while and keep using temporary

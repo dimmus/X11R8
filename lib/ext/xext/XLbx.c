@@ -22,7 +22,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "X11/Xlibint.h"
@@ -31,88 +31,101 @@
 #include "X11/extensions/Xext.h"
 #include "X11/extensions/extutil.h"
 
-static XExtensionInfo _lbx_info_data;
-static XExtensionInfo *lbx_info = &_lbx_info_data;
-static const char *lbx_extension_name = LBXNAME;
+static XExtensionInfo  _lbx_info_data;
+static XExtensionInfo *lbx_info           = &_lbx_info_data;
+static const char     *lbx_extension_name = LBXNAME;
 
-#define LbxCheckExtension(dpy,i,val) \
-  XextCheckExtension (dpy, i, lbx_extension_name, val)
+#define LbxCheckExtension(dpy, i, val) \
+    XextCheckExtension(dpy, i, lbx_extension_name, val)
 
 static int close_display(Display *dpy, XExtCodes *codes);
-static char *error_string(Display *dpy, int code, XExtCodes *codes,
-			  char *buf, int n);
+static char *
+error_string(Display *dpy, int code, XExtCodes *codes, char *buf, int n);
 static /* const */ XExtensionHooks lbx_extension_hooks = {
-    NULL,				/* create_gc */
-    NULL,				/* copy_gc */
-    NULL,				/* flush_gc */
-    NULL,				/* free_gc */
-    NULL,				/* create_font */
-    NULL,				/* free_font */
-    close_display,			/* close_display */
-    NULL,				/* wire_to_event */
-    NULL,				/* event_to_wire */
-    NULL,				/* error */
-    error_string,			/* error_string */
+    NULL,    /* create_gc */
+    NULL,    /* copy_gc */
+    NULL,    /* flush_gc */
+    NULL,    /* free_gc */
+    NULL,    /* create_font */
+    NULL,    /* free_font */
+    close_display,   /* close_display */
+    NULL,    /* wire_to_event */
+    NULL,    /* event_to_wire */
+    NULL,    /* error */
+    error_string,   /* error_string */
 };
 
 static const char *lbx_error_list[] = {
-    "BadLbxClient",			/* BadLbxClient */
+    "BadLbxClient",   /* BadLbxClient */
 };
 
-static XEXT_GENERATE_FIND_DISPLAY (find_display, lbx_info, lbx_extension_name,
-				   &lbx_extension_hooks, LbxNumberEvents, NULL)
+static XEXT_GENERATE_FIND_DISPLAY(find_display,
+                                  lbx_info,
+                                  lbx_extension_name,
+                                  &lbx_extension_hooks,
+                                  LbxNumberEvents,
+                                  NULL)
 
-static XEXT_GENERATE_CLOSE_DISPLAY (close_display, lbx_info)
+    static XEXT_GENERATE_CLOSE_DISPLAY(close_display, lbx_info)
 
-static XEXT_GENERATE_ERROR_STRING (error_string, lbx_extension_name,
-				   LbxNumberErrors, lbx_error_list)
+        static XEXT_GENERATE_ERROR_STRING(error_string,
+                                          lbx_extension_name,
+                                          LbxNumberErrors,
+                                          lbx_error_list)
 
-
-Bool XLbxQueryExtension (
-    Display *dpy,
-    int *requestp, int *event_basep, int *error_basep)
+            Bool XLbxQueryExtension(Display *dpy,
+                                    int     *requestp,
+                                    int     *event_basep,
+                                    int     *error_basep)
 {
-    XExtDisplayInfo *info = find_display (dpy);
+    XExtDisplayInfo *info = find_display(dpy);
 
-    if (XextHasExtension(info)) {
-	*requestp = info->codes->major_opcode;
-	*event_basep = info->codes->first_event;
-	*error_basep = info->codes->first_error;
-	return True;
-    } else {
-	return False;
+    if (XextHasExtension(info))
+    {
+        *requestp    = info->codes->major_opcode;
+        *event_basep = info->codes->first_event;
+        *error_basep = info->codes->first_error;
+        return True;
+    }
+    else
+    {
+        return False;
     }
 }
 
-
-int XLbxGetEventBase(Display *dpy)
+int
+XLbxGetEventBase(Display *dpy)
 {
-    XExtDisplayInfo *info = find_display (dpy);
+    XExtDisplayInfo *info = find_display(dpy);
 
-    if (XextHasExtension(info)) {
-	return info->codes->first_event;
-    } else {
-	return -1;
+    if (XextHasExtension(info))
+    {
+        return info->codes->first_event;
+    }
+    else
+    {
+        return -1;
     }
 }
 
-
-Bool XLbxQueryVersion(Display *dpy, int *majorVersion, int *minorVersion)
+Bool
+XLbxQueryVersion(Display *dpy, int *majorVersion, int *minorVersion)
 {
-    XExtDisplayInfo *info = find_display (dpy);
-    xLbxQueryVersionReply rep;
+    XExtDisplayInfo              *info = find_display(dpy);
+    xLbxQueryVersionReply         rep;
     register xLbxQueryVersionReq *req;
 
-    LbxCheckExtension (dpy, info, False);
+    LbxCheckExtension(dpy, info, False);
 
     LockDisplay(dpy);
     GetReq(LbxQueryVersion, req);
-    req->reqType = info->codes->major_opcode;
+    req->reqType    = info->codes->major_opcode;
     req->lbxReqType = X_LbxQueryVersion;
-    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse)) {
-	UnlockDisplay(dpy);
-	SyncHandle();
-	return False;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return False;
     }
     *majorVersion = rep.majorVersion;
     *minorVersion = rep.minorVersion;

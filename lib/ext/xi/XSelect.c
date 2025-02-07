@@ -50,7 +50,7 @@ SOFTWARE.
  *
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/extensions/XI.h"
@@ -61,24 +61,23 @@ SOFTWARE.
 #include "XIint.h"
 
 int
-XSelectExtensionEvent(
-    register Display	*dpy,
-    Window		 w,
-    XEventClass		*event_list,
-    int			 count)
+XSelectExtensionEvent(register Display *dpy,
+                      Window            w,
+                      XEventClass      *event_list,
+                      int               count)
 {
     register xSelectExtensionEventReq *req;
-    XExtDisplayInfo *info = XInput_find_display(dpy);
+    XExtDisplayInfo                   *info = XInput_find_display(dpy);
 
     LockDisplay(dpy);
     if (_XiCheckExtInit(dpy, XInput_Initial_Release, info) == -1)
-	return (NoSuchExtension);
+        return (NoSuchExtension);
     GetReq(SelectExtensionEvent, req);
 
     req->reqType = info->codes->major_opcode;
     req->ReqType = X_SelectExtensionEvent;
-    req->window = w;
-    req->count = count;
+    req->window  = w;
+    req->count   = count;
     req->length += count;
 
     /* note: Data is a macro that uses its arguments multiple

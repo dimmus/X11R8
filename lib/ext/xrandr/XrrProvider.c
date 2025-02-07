@@ -20,9 +20,8 @@
  * OF THIS SOFTWARE.
  */
 
-
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include <limits.h>
@@ -37,65 +36,68 @@
 XRRProviderResources *
 XRRGetProviderResources(Display *dpy, Window window)
 {
-    XExtDisplayInfo		*info = XRRFindDisplay(dpy);
-    xRRGetProvidersReply rep;
-    xRRGetProvidersReq *req;
+    XExtDisplayInfo      *info = XRRFindDisplay(dpy);
+    xRRGetProvidersReply  rep;
+    xRRGetProvidersReq   *req;
     XRRProviderResources *xrpr;
-    long nbytes, nbytesRead;
-    int rbytes;
+    long                  nbytes, nbytesRead;
+    int                   rbytes;
 
-    RRCheckExtension (dpy, info, NULL);
+    RRCheckExtension(dpy, info, NULL);
 
-    LockDisplay (dpy);
+    LockDisplay(dpy);
 
     GetReq(RRGetProviders, req);
-    req->reqType = info->codes->major_opcode;
+    req->reqType      = info->codes->major_opcode;
     req->randrReqType = X_RRGetProviders;
-    req->window = window;
-    
-    if (!_XReply (dpy, (xReply *) &rep, 0, xFalse))
+    req->window       = window;
+
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
     {
-      UnlockDisplay (dpy);
-      SyncHandle ();
-      return NULL;
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return NULL;
     }
 
-    if (rep.length < INT_MAX >> 2) {
-	nbytes = (long) rep.length << 2;
+    if (rep.length < INT_MAX >> 2)
+    {
+        nbytes = (long)rep.length << 2;
 
-	nbytesRead = (long) (rep.nProviders * 4);
+        nbytesRead = (long)(rep.nProviders * 4);
 
-	rbytes = (sizeof(XRRProviderResources) + rep.nProviders *
-		  sizeof(RRProvider));
-	xrpr = Xmalloc(rbytes);
-    } else {
-	nbytes = 0;
-	nbytesRead = 0;
-	rbytes = 0;
-	xrpr = NULL;
+        rbytes = (sizeof(XRRProviderResources) +
+                  rep.nProviders * sizeof(RRProvider));
+        xrpr   = Xmalloc(rbytes);
+    }
+    else
+    {
+        nbytes     = 0;
+        nbytesRead = 0;
+        rbytes     = 0;
+        xrpr       = NULL;
     }
 
-    if (xrpr == NULL) {
-       _XEatDataWords (dpy, rep.length);
-       UnlockDisplay (dpy);
-       SyncHandle ();
-       return NULL;
+    if (xrpr == NULL)
+    {
+        _XEatDataWords(dpy, rep.length);
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return NULL;
     }
 
-    xrpr->timestamp = rep.timestamp;
+    xrpr->timestamp  = rep.timestamp;
     xrpr->nproviders = rep.nProviders;
-    xrpr->providers = (RRProvider *)(xrpr + 1);
+    xrpr->providers  = (RRProvider *)(xrpr + 1);
 
-    _XRead32(dpy, (long *) xrpr->providers, rep.nProviders << 2);
+    _XRead32(dpy, (long *)xrpr->providers, rep.nProviders << 2);
 
     if (nbytes > nbytesRead)
-      _XEatData (dpy, (unsigned long) (nbytes - nbytesRead));
+        _XEatData(dpy, (unsigned long)(nbytes - nbytesRead));
 
-
-    UnlockDisplay (dpy);
+    UnlockDisplay(dpy);
     SyncHandle();
 
-    return (XRRProviderResources *) xrpr;
+    return (XRRProviderResources *)xrpr;
 }
 
 void
@@ -105,73 +107,78 @@ XRRFreeProviderResources(XRRProviderResources *provider_resources)
 }
 
 XRRProviderInfo *
-XRRGetProviderInfo(Display *dpy, XRRScreenResources *resources, RRProvider provider)
+XRRGetProviderInfo(Display            *dpy,
+                   XRRScreenResources *resources,
+                   RRProvider          provider)
 {
-    XExtDisplayInfo	    *info = XRRFindDisplay(dpy);
+    XExtDisplayInfo        *info = XRRFindDisplay(dpy);
     xRRGetProviderInfoReply rep;
-    xRRGetProviderInfoReq *req;
-    int nbytes, nbytesRead, rbytes;
-    XRRProviderInfo *xpi;
+    xRRGetProviderInfoReq  *req;
+    int                     nbytes, nbytesRead, rbytes;
+    XRRProviderInfo        *xpi;
 
-    RRCheckExtension (dpy, info, NULL);
+    RRCheckExtension(dpy, info, NULL);
 
-    LockDisplay (dpy);
-    GetReq (RRGetProviderInfo, req);
-    req->reqType = info->codes->major_opcode;
-    req->randrReqType = X_RRGetProviderInfo;
-    req->provider = provider;
+    LockDisplay(dpy);
+    GetReq(RRGetProviderInfo, req);
+    req->reqType         = info->codes->major_opcode;
+    req->randrReqType    = X_RRGetProviderInfo;
+    req->provider        = provider;
     req->configTimestamp = resources->configTimestamp;
 
-    if (!_XReply (dpy, (xReply *) &rep, 0, xFalse))
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
     {
-	UnlockDisplay (dpy);
-	SyncHandle ();
-	return NULL;
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return NULL;
     }
 
     if (rep.length > INT_MAX >> 2)
     {
-	_XEatDataWords (dpy, rep.length);
-	UnlockDisplay (dpy);
-	SyncHandle ();
-	return NULL;
+        _XEatDataWords(dpy, rep.length);
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return NULL;
     }
 
-    nbytes = ((long) rep.length << 2);
+    nbytes = ((long)rep.length << 2);
 
-    nbytesRead = (long)(rep.nCrtcs * 4 +
-			rep.nOutputs * 4 +
-			rep.nAssociatedProviders * 8 +
-			((rep.nameLength + 3) & ~3));
+    nbytesRead =
+        (long)(rep.nCrtcs * 4 + rep.nOutputs * 4 +
+               rep.nAssociatedProviders * 8 + ((rep.nameLength + 3) & ~3));
 
-    rbytes = (sizeof(XRRProviderInfo) +
-	      rep.nCrtcs * sizeof(RRCrtc) +
-	      rep.nOutputs * sizeof(RROutput) +
-	      rep.nAssociatedProviders * (sizeof(RRProvider) + sizeof(unsigned int))+
-	      rep.nameLength + 1);
+    rbytes = (sizeof(XRRProviderInfo) + rep.nCrtcs * sizeof(RRCrtc) +
+              rep.nOutputs * sizeof(RROutput) +
+              rep.nAssociatedProviders *
+                  (sizeof(RRProvider) + sizeof(unsigned int)) +
+              rep.nameLength + 1);
 
     xpi = Xmalloc(rbytes);
-    if (xpi == NULL) {
-	_XEatDataWords (dpy, rep.length);
-	UnlockDisplay (dpy);
-	SyncHandle ();
-	return NULL;
+    if (xpi == NULL)
+    {
+        _XEatDataWords(dpy, rep.length);
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return NULL;
     }
 
-    xpi->capabilities = rep.capabilities;
-    xpi->ncrtcs = rep.nCrtcs;
-    xpi->noutputs = rep.nOutputs;
+    xpi->capabilities         = rep.capabilities;
+    xpi->ncrtcs               = rep.nCrtcs;
+    xpi->noutputs             = rep.nOutputs;
     xpi->nassociatedproviders = rep.nAssociatedProviders;
-    xpi->crtcs = (RRCrtc *)(xpi + 1);
-    xpi->outputs = (RROutput *)(xpi->crtcs + rep.nCrtcs);
+    xpi->crtcs                = (RRCrtc *)(xpi + 1);
+    xpi->outputs              = (RROutput *)(xpi->crtcs + rep.nCrtcs);
     xpi->associated_providers = (RRProvider *)(xpi->outputs + rep.nOutputs);
-    xpi->associated_capability = (unsigned int *)(xpi->associated_providers + rep.nAssociatedProviders);
+    xpi->associated_capability =
+        (unsigned int *)(xpi->associated_providers + rep.nAssociatedProviders);
     xpi->name = (char *)(xpi->associated_capability + rep.nAssociatedProviders);
 
-    _XRead32(dpy, (long *) xpi->crtcs, rep.nCrtcs << 2);
-    _XRead32(dpy, (long *) xpi->outputs, rep.nOutputs << 2);
+    _XRead32(dpy, (long *)xpi->crtcs, rep.nCrtcs << 2);
+    _XRead32(dpy, (long *)xpi->outputs, rep.nOutputs << 2);
 
-    _XRead32(dpy, (long *) xpi->associated_providers, rep.nAssociatedProviders << 2);
+    _XRead32(dpy,
+             (long *)xpi->associated_providers,
+             rep.nAssociatedProviders << 2);
 
     /*
      * _XRead32 reads a series of 32-bit values from the protocol and writes
@@ -180,7 +187,8 @@ XRRGetProviderInfo(Display *dpy, XRRScreenResources *resources, RRProvider provi
      * Instead we assume for now that "unsigned int" is also 32-bits, so
      * the values can be read without any conversion.
      */
-    _XRead(dpy, (char *) xpi->associated_capability,
+    _XRead(dpy,
+           (char *)xpi->associated_capability,
            rep.nAssociatedProviders << 2);
 
     _XReadPad(dpy, xpi->name, rep.nameLength);
@@ -190,11 +198,11 @@ XRRGetProviderInfo(Display *dpy, XRRScreenResources *resources, RRProvider provi
      * Skip any extra data
      */
     if (nbytes > nbytesRead)
-	_XEatData (dpy, (unsigned long) (nbytes - nbytesRead));
+        _XEatData(dpy, (unsigned long)(nbytes - nbytesRead));
 
-    UnlockDisplay (dpy);
-    SyncHandle ();
-    return (XRRProviderInfo *) xpi;
+    UnlockDisplay(dpy);
+    SyncHandle();
+    return (XRRProviderInfo *)xpi;
 }
 
 void
@@ -204,39 +212,37 @@ XRRFreeProviderInfo(XRRProviderInfo *provider)
 }
 
 int
-XRRSetProviderOutputSource(Display *dpy, XID provider,
-			   XID source_provider)
+XRRSetProviderOutputSource(Display *dpy, XID provider, XID source_provider)
 {
-    XExtDisplayInfo	    *info = XRRFindDisplay(dpy);
+    XExtDisplayInfo               *info = XRRFindDisplay(dpy);
     xRRSetProviderOutputSourceReq *req;
 
-    RRCheckExtension (dpy, info, 0);
-    LockDisplay (dpy);
-    GetReq (RRSetProviderOutputSource, req);
-    req->reqType = info->codes->major_opcode;
-    req->randrReqType = X_RRSetProviderOutputSource;
-    req->provider = provider;
+    RRCheckExtension(dpy, info, 0);
+    LockDisplay(dpy);
+    GetReq(RRSetProviderOutputSource, req);
+    req->reqType         = info->codes->major_opcode;
+    req->randrReqType    = X_RRSetProviderOutputSource;
+    req->provider        = provider;
     req->source_provider = source_provider;
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    UnlockDisplay(dpy);
+    SyncHandle();
     return 0;
 }
 
 int
-XRRSetProviderOffloadSink(Display *dpy, XID provider,
-			  XID sink_provider)
+XRRSetProviderOffloadSink(Display *dpy, XID provider, XID sink_provider)
 {
-    XExtDisplayInfo	    *info = XRRFindDisplay(dpy);
+    XExtDisplayInfo              *info = XRRFindDisplay(dpy);
     xRRSetProviderOffloadSinkReq *req;
 
-    RRCheckExtension (dpy, info, 0);
-    LockDisplay (dpy);
-    GetReq (RRSetProviderOffloadSink, req);
-    req->reqType = info->codes->major_opcode;
-    req->randrReqType = X_RRSetProviderOffloadSink;
-    req->provider = provider;
+    RRCheckExtension(dpy, info, 0);
+    LockDisplay(dpy);
+    GetReq(RRSetProviderOffloadSink, req);
+    req->reqType       = info->codes->major_opcode;
+    req->randrReqType  = X_RRSetProviderOffloadSink;
+    req->provider      = provider;
     req->sink_provider = sink_provider;
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    UnlockDisplay(dpy);
+    SyncHandle();
     return 0;
 }

@@ -40,12 +40,12 @@ CompareXpmImage(const XpmImage *a, const XpmImage *b)
     CompareUintFields(cpp);
     CompareUintFields(ncolors);
 
-/* this assumes the same character encoding and color ordering, which is only
+    /* this assumes the same character encoding and color ordering, which is only
    true in our crafted test cases, not for matching images in the real world */
     for (unsigned int i = 0; i < a->ncolors; i++)
     {
 #define CompareStringFields(f) \
-        assert(strcmp(a->colorTable[i].f, b->colorTable[i].f) == 0)
+    assert(strcmp(a->colorTable[i].f, b->colorTable[i].f) == 0)
 
         CompareStringFields(string);
         CompareStringFields(symbolic);

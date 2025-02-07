@@ -26,15 +26,15 @@
 /* Stuff that sends stuff to the server. */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include <assert.h>
 #include <stdlib.h>
 #ifdef _WIN32
-#include <io.h>
+#  include <io.h>
 #else
-#include <unistd.h>
+#  include <unistd.h>
 #endif
 #include <string.h>
 
@@ -43,57 +43,73 @@
 #include "xcb/bigreq.h"
 #include "xcbint.h"
 
-static inline void send_request(xcb_connection_t *c, int isvoid, enum workarounds workaround, int flags, struct iovec *vector, int count)
+static inline void
+send_request(xcb_connection_t *c,
+             int               isvoid,
+             enum workarounds  workaround,
+             int               flags,
+             struct iovec     *vector,
+             int               count)
 {
-    if(c->has_error)
-        return;
+    if (c->has_error) return;
 
     ++c->out.request;
-    if(!isvoid)
-        c->in.request_expected = c->out.request;
-    if(workaround != WORKAROUND_NONE || flags != 0)
+    if (!isvoid) c->in.request_expected = c->out.request;
+    if (workaround != WORKAROUND_NONE || flags != 0)
         _xcb_in_expect_reply(c, c->out.request, workaround, flags);
 
-    while(count && c->out.queue_len + vector[0].iov_len <= sizeof(c->out.queue))
+    while (count &&
+           c->out.queue_len + vector[0].iov_len <= sizeof(c->out.queue))
     {
-        memcpy(c->out.queue + c->out.queue_len, vector[0].iov_base, vector[0].iov_len);
+        memcpy(c->out.queue + c->out.queue_len,
+               vector[0].iov_base,
+               vector[0].iov_len);
         c->out.queue_len += vector[0].iov_len;
-        vector[0].iov_base = (char *) vector[0].iov_base + vector[0].iov_len;
-        vector[0].iov_len = 0;
+        vector[0].iov_base = (char *)vector[0].iov_base + vector[0].iov_len;
+        vector[0].iov_len  = 0;
         ++vector, --count;
     }
-    if(!count)
-        return;
+    if (!count) return;
 
     --vector, ++count;
     vector[0].iov_base = c->out.queue;
-    vector[0].iov_len = c->out.queue_len;
-    c->out.queue_len = 0;
+    vector[0].iov_len  = c->out.queue_len;
+    c->out.queue_len   = 0;
     _xcb_out_send(c, vector, count);
 }
 
-static void send_sync(xcb_connection_t *c)
+static void
+send_sync(xcb_connection_t *c)
 {
     static const union {
-        struct {
-            uint8_t major;
-            uint8_t pad;
+        struct
+        {
+            uint8_t  major;
+            uint8_t  pad;
             uint16_t len;
         } fields;
+
         uint32_t packet;
-    } sync_req = { { /* GetInputFocus */ 43, 0, 1 } };
+    } sync_req = {
+        { /* GetInputFocus */ 43, 0, 1 }
+    };
     struct iovec vector[2];
-    vector[1].iov_base = (char *) &sync_req;
-    vector[1].iov_len = sizeof(sync_req);
-    send_request(c, 0, WORKAROUND_NONE, XCB_REQUEST_DISCARD_REPLY, vector + 1, 1);
+    vector[1].iov_base = (char *)&sync_req;
+    vector[1].iov_len  = sizeof(sync_req);
+    send_request(c,
+                 0,
+                 WORKAROUND_NONE,
+                 XCB_REQUEST_DISCARD_REPLY,
+                 vector + 1,
+                 1);
 }
 
-static void get_socket_back(xcb_connection_t *c)
+static void
+get_socket_back(xcb_connection_t *c)
 {
-    while(c->out.return_socket && c->out.socket_moving)
+    while (c->out.return_socket && c->out.socket_moving)
         pthread_cond_wait(&c->out.socket_cond, &c->iolock);
-    if(!c->out.return_socket)
-        return;
+    if (!c->out.return_socket) return;
 
     c->out.socket_moving = 1;
     pthread_mutex_unlock(&c->iolock);
@@ -102,12 +118,13 @@ static void get_socket_back(xcb_connection_t *c)
     c->out.socket_moving = 0;
 
     pthread_cond_broadcast(&c->out.socket_cond);
-    c->out.return_socket = 0;
+    c->out.return_socket  = 0;
     c->out.socket_closure = 0;
     _xcb_in_replies_done(c);
 }
 
-static void prepare_socket_request(xcb_connection_t *c)
+static void
+prepare_socket_request(xcb_connection_t *c)
 {
     /* We're about to append data to out.queue, so we need to
      * atomically test for an external socket owner *and* some other
@@ -124,70 +141,76 @@ static void prepare_socket_request(xcb_connection_t *c)
      * socket again) and then checking for another writing thread and
      * escaping the loop if we're ready to go.
      */
-    for (;;) {
-        if(c->has_error)
-            return;
+    for (;;)
+    {
+        if (c->has_error) return;
         get_socket_back(c);
-        if (!c->out.writing)
-            break;
+        if (!c->out.writing) break;
         pthread_cond_wait(&c->out.cond, &c->iolock);
     }
 }
 
 /* Public interface */
 
-void xcb_prefetch_maximum_request_length(xcb_connection_t *c)
+void
+xcb_prefetch_maximum_request_length(xcb_connection_t *c)
 {
-    if(c->has_error)
-        return;
+    if (c->has_error) return;
     pthread_mutex_lock(&c->out.reqlenlock);
-    if(c->out.maximum_request_length_tag == LAZY_NONE)
+    if (c->out.maximum_request_length_tag == LAZY_NONE)
     {
         const xcb_query_extension_reply_t *ext;
         ext = xcb_get_extension_data(c, &xcb_big_requests_id);
-        if(ext && ext->present)
+        if (ext && ext->present)
         {
-            c->out.maximum_request_length_tag = LAZY_COOKIE;
+            c->out.maximum_request_length_tag    = LAZY_COOKIE;
             c->out.maximum_request_length.cookie = xcb_big_requests_enable(c);
         }
         else
         {
             c->out.maximum_request_length_tag = LAZY_FORCED;
-            c->out.maximum_request_length.value = c->setup->maximum_request_length;
+            c->out.maximum_request_length.value =
+                c->setup->maximum_request_length;
         }
     }
     pthread_mutex_unlock(&c->out.reqlenlock);
 }
 
-uint32_t xcb_get_maximum_request_length(xcb_connection_t *c)
+uint32_t
+xcb_get_maximum_request_length(xcb_connection_t *c)
 {
-    if(c->has_error)
-        return 0;
+    if (c->has_error) return 0;
     xcb_prefetch_maximum_request_length(c);
     pthread_mutex_lock(&c->out.reqlenlock);
-    if(c->out.maximum_request_length_tag == LAZY_COOKIE)
+    if (c->out.maximum_request_length_tag == LAZY_COOKIE)
     {
-        xcb_big_requests_enable_reply_t *r = xcb_big_requests_enable_reply(c, c->out.maximum_request_length.cookie, 0);
+        xcb_big_requests_enable_reply_t *r =
+            xcb_big_requests_enable_reply(c,
+                                          c->out.maximum_request_length.cookie,
+                                          0);
         c->out.maximum_request_length_tag = LAZY_FORCED;
-        if(r)
+        if (r)
         {
             c->out.maximum_request_length.value = r->maximum_request_length;
             free(r);
         }
         else
-            c->out.maximum_request_length.value = c->setup->maximum_request_length;
+            c->out.maximum_request_length.value =
+                c->setup->maximum_request_length;
     }
     pthread_mutex_unlock(&c->out.reqlenlock);
     return c->out.maximum_request_length.value;
 }
 
-static void close_fds(int *fds, unsigned int num_fds)
+static void
+close_fds(int *fds, unsigned int num_fds)
 {
     for (unsigned int index = 0; index < num_fds; index++)
         close(fds[index]);
 }
 
-static void send_fds(xcb_connection_t *c, int *fds, unsigned int num_fds)
+static void
+send_fds(xcb_connection_t *c, int *fds, unsigned int num_fds)
 {
 #if HAVE_SENDMSG
     /* Calling _xcb_out_flush_to() can drop the iolock and wait on a condition
@@ -199,20 +222,22 @@ static void send_fds(xcb_connection_t *c, int *fds, unsigned int num_fds)
      */
     prepare_socket_request(c);
 
-    while (num_fds > 0) {
-        while (c->out.out_fd.nfd == XCB_MAX_PASS_FD && !c->has_error) {
+    while (num_fds > 0)
+    {
+        while (c->out.out_fd.nfd == XCB_MAX_PASS_FD && !c->has_error)
+        {
             /* XXX: if c->out.writing > 0, this releases the iolock and
              * potentially allows other threads to interfere with their own fds.
              */
             _xcb_out_flush_to(c, c->out.request);
 
-            if (c->out.out_fd.nfd == XCB_MAX_PASS_FD) {
+            if (c->out.out_fd.nfd == XCB_MAX_PASS_FD)
+            {
                 /* We need some request to send FDs with */
                 _xcb_out_send_sync(c);
             }
         }
-        if (c->has_error)
-            break;
+        if (c->has_error) break;
 
         c->out.out_fd.fd[c->out.out_fd.nfd++] = fds[0];
         fds++;
@@ -222,15 +247,21 @@ static void send_fds(xcb_connection_t *c, int *fds, unsigned int num_fds)
     close_fds(fds, num_fds);
 }
 
-uint64_t xcb_send_request_with_fds64(xcb_connection_t *c, int flags, struct iovec *vector,
-                const xcb_protocol_request_t *req, unsigned int num_fds, int *fds)
+uint64_t
+xcb_send_request_with_fds64(xcb_connection_t             *c,
+                            int                           flags,
+                            struct iovec                 *vector,
+                            const xcb_protocol_request_t *req,
+                            unsigned int                  num_fds,
+                            int                          *fds)
 {
-    uint64_t request;
-    uint32_t prefix[2];
-    int veclen = req->count;
+    uint64_t         request;
+    uint32_t         prefix[2];
+    int              veclen     = req->count;
     enum workarounds workaround = WORKAROUND_NONE;
 
-    if(c->has_error) {
+    if (c->has_error)
+    {
         close_fds(fds, num_fds);
         return 0;
     }
@@ -239,49 +270,49 @@ uint64_t xcb_send_request_with_fds64(xcb_connection_t *c, int flags, struct iove
     assert(vector != 0);
     assert(req->count > 0);
 
-    if(!(flags & XCB_REQUEST_RAW))
+    if (!(flags & XCB_REQUEST_RAW))
     {
         static const char pad[3];
-        unsigned int i;
-        uint16_t shortlen = 0;
-        size_t longlen = 0;
+        unsigned int      i;
+        uint16_t          shortlen = 0;
+        size_t            longlen  = 0;
         assert(vector[0].iov_len >= 4);
         /* set the major opcode, and the minor opcode for extensions */
-        if(req->ext)
+        if (req->ext)
         {
-            const xcb_query_extension_reply_t *extension = xcb_get_extension_data(c, req->ext);
-            if(!(extension && extension->present))
+            const xcb_query_extension_reply_t *extension =
+                xcb_get_extension_data(c, req->ext);
+            if (!(extension && extension->present))
             {
                 close_fds(fds, num_fds);
                 _xcb_conn_shutdown(c, XCB_CONN_CLOSED_EXT_NOTSUPPORTED);
                 return 0;
             }
-            ((uint8_t *) vector[0].iov_base)[0] = extension->major_opcode;
-            ((uint8_t *) vector[0].iov_base)[1] = req->opcode;
+            ((uint8_t *)vector[0].iov_base)[0] = extension->major_opcode;
+            ((uint8_t *)vector[0].iov_base)[1] = req->opcode;
         }
-        else
-            ((uint8_t *) vector[0].iov_base)[0] = req->opcode;
+        else ((uint8_t *)vector[0].iov_base)[0] = req->opcode;
 
         /* put together the length field, possibly using BIGREQUESTS */
-        for(i = 0; i < req->count; ++i)
+        for (i = 0; i < req->count; ++i)
         {
             longlen += vector[i].iov_len;
-            if(!vector[i].iov_base)
+            if (!vector[i].iov_base)
             {
-                vector[i].iov_base = (char *) pad;
+                vector[i].iov_base = (char *)pad;
                 assert(vector[i].iov_len <= sizeof(pad));
             }
         }
         assert((longlen & 3) == 0);
         longlen >>= 2;
 
-        if(longlen <= c->setup->maximum_request_length)
+        if (longlen <= c->setup->maximum_request_length)
         {
             /* we don't need BIGREQUESTS. */
             shortlen = longlen;
-            longlen = 0;
+            longlen  = 0;
         }
-        else if(longlen > xcb_get_maximum_request_length(c))
+        else if (longlen > xcb_get_maximum_request_length(c))
         {
             close_fds(fds, num_fds);
             _xcb_conn_shutdown(c, XCB_CONN_CLOSED_REQ_LEN_EXCEED);
@@ -289,16 +320,16 @@ uint64_t xcb_send_request_with_fds64(xcb_connection_t *c, int flags, struct iove
         }
 
         /* set the length field. */
-        ((uint16_t *) vector[0].iov_base)[1] = shortlen;
-        if(!shortlen)
+        ((uint16_t *)vector[0].iov_base)[1] = shortlen;
+        if (!shortlen)
         {
-            prefix[0] = ((uint32_t *) vector[0].iov_base)[0];
-            prefix[1] = ++longlen;
-            vector[0].iov_base = (uint32_t *) vector[0].iov_base + 1;
+            prefix[0]          = ((uint32_t *)vector[0].iov_base)[0];
+            prefix[1]          = ++longlen;
+            vector[0].iov_base = (uint32_t *)vector[0].iov_base + 1;
             vector[0].iov_len -= sizeof(uint32_t);
             --vector, ++veclen;
             vector[0].iov_base = prefix;
-            vector[0].iov_len = sizeof(prefix);
+            vector[0].iov_len  = sizeof(prefix);
         }
     }
     flags &= ~XCB_REQUEST_RAW;
@@ -306,9 +337,10 @@ uint64_t xcb_send_request_with_fds64(xcb_connection_t *c, int flags, struct iove
     /* do we need to work around the X server bug described in glx.xml? */
     /* XXX: GetFBConfigs won't use BIG-REQUESTS in any sane
      * configuration, but that should be handled here anyway. */
-    if(req->ext && !req->isvoid && !strcmp(req->ext->name, "GLX") &&
-            ((req->opcode == 17 && ((uint32_t *) vector[0].iov_base)[1] == 0x10004) ||
-             req->opcode == 21))
+    if (req->ext && !req->isvoid && !strcmp(req->ext->name, "GLX") &&
+        ((req->opcode == 17 &&
+          ((uint32_t *)vector[0].iov_base)[1] == 0x10004) ||
+         req->opcode == 21))
         workaround = WORKAROUND_GLX_GET_FB_CONFIGS_BUG;
 
     /* get a sequence number and arrange for delivery. */
@@ -328,8 +360,9 @@ uint64_t xcb_send_request_with_fds64(xcb_connection_t *c, int flags, struct iove
      * an error in sending the request
      */
 
-    while ((req->isvoid && c->out.request == c->in.request_expected + (1 << 16) - 2) ||
-           (unsigned int) (c->out.request + 1) == 0)
+    while ((req->isvoid &&
+            c->out.request == c->in.request_expected + (1 << 16) - 2) ||
+           (unsigned int)(c->out.request + 1) == 0)
     {
         send_sync(c);
         prepare_socket_request(c);
@@ -342,19 +375,32 @@ uint64_t xcb_send_request_with_fds64(xcb_connection_t *c, int flags, struct iove
 }
 
 /* request number are actually uint64_t internally but keep API compat with unsigned int */
-unsigned int xcb_send_request_with_fds(xcb_connection_t *c, int flags, struct iovec *vector,
-        const xcb_protocol_request_t *req, unsigned int num_fds, int *fds)
+unsigned int
+xcb_send_request_with_fds(xcb_connection_t             *c,
+                          int                           flags,
+                          struct iovec                 *vector,
+                          const xcb_protocol_request_t *req,
+                          unsigned int                  num_fds,
+                          int                          *fds)
 {
     return xcb_send_request_with_fds64(c, flags, vector, req, num_fds, fds);
 }
 
-uint64_t xcb_send_request64(xcb_connection_t *c, int flags, struct iovec *vector, const xcb_protocol_request_t *req)
+uint64_t
+xcb_send_request64(xcb_connection_t             *c,
+                   int                           flags,
+                   struct iovec                 *vector,
+                   const xcb_protocol_request_t *req)
 {
     return xcb_send_request_with_fds64(c, flags, vector, req, 0, NULL);
 }
 
 /* request number are actually uint64_t internally but keep API compat with unsigned int */
-unsigned int xcb_send_request(xcb_connection_t *c, int flags, struct iovec *vector, const xcb_protocol_request_t *req)
+unsigned int
+xcb_send_request(xcb_connection_t             *c,
+                 int                           flags,
+                 struct iovec                 *vector,
+                 const xcb_protocol_request_t *req)
 {
     return xcb_send_request64(c, flags, vector, req);
 }
@@ -364,7 +410,8 @@ xcb_send_fd(xcb_connection_t *c, int fd)
 {
     int fds[1] = { fd };
 
-    if (c->has_error) {
+    if (c->has_error)
+    {
         close(fd);
         return;
     }
@@ -373,11 +420,15 @@ xcb_send_fd(xcb_connection_t *c, int fd)
     pthread_mutex_unlock(&c->iolock);
 }
 
-int xcb_take_socket(xcb_connection_t *c, void (*return_socket)(void *closure), void *closure, int flags, uint64_t *sent)
+int
+xcb_take_socket(xcb_connection_t *c,
+                void (*return_socket)(void *closure),
+                void     *closure,
+                int       flags,
+                uint64_t *sent)
 {
     int ret;
-    if(c->has_error)
-        return 0;
+    if (c->has_error) return 0;
     pthread_mutex_lock(&c->iolock);
     get_socket_back(c);
 
@@ -387,17 +438,21 @@ int xcb_take_socket(xcb_connection_t *c, void (*return_socket)(void *closure), v
     do
         ret = _xcb_out_flush_to(c, c->out.request);
     while (ret && c->out.request != c->out.request_written);
-    if(ret)
+    if (ret)
     {
-        c->out.return_socket = return_socket;
+        c->out.return_socket  = return_socket;
         c->out.socket_closure = closure;
-        if(flags) {
+        if (flags)
+        {
             /* c->out.request + 1 will be the first request sent by the external
              * socket owner. If the socket is returned before this request is sent
              * it will be detected in _xcb_in_replies_done and this pending_reply
              * will be discarded.
              */
-            _xcb_in_expect_reply(c, c->out.request + 1, WORKAROUND_EXTERNAL_SOCKET_OWNER, flags);
+            _xcb_in_expect_reply(c,
+                                 c->out.request + 1,
+                                 WORKAROUND_EXTERNAL_SOCKET_OWNER,
+                                 flags);
         }
         assert(c->out.request == c->out.request_written);
         *sent = c->out.request;
@@ -406,11 +461,14 @@ int xcb_take_socket(xcb_connection_t *c, void (*return_socket)(void *closure), v
     return ret;
 }
 
-int xcb_writev(xcb_connection_t *c, struct iovec *vector, int count, uint64_t requests)
+int
+xcb_writev(xcb_connection_t *c,
+           struct iovec     *vector,
+           int               count,
+           uint64_t          requests)
 {
     int ret;
-    if(c->has_error)
-        return 0;
+    if (c->has_error) return 0;
     pthread_mutex_lock(&c->iolock);
     c->out.request += requests;
     ret = _xcb_out_send(c, vector, count);
@@ -418,11 +476,11 @@ int xcb_writev(xcb_connection_t *c, struct iovec *vector, int count, uint64_t re
     return ret;
 }
 
-int xcb_flush(xcb_connection_t *c)
+int
+xcb_flush(xcb_connection_t *c)
 {
     int ret;
-    if(c->has_error)
-        return 0;
+    if (c->has_error) return 0;
     pthread_mutex_lock(&c->iolock);
     ret = _xcb_out_flush_to(c, c->out.request);
     pthread_mutex_unlock(&c->iolock);
@@ -431,70 +489,71 @@ int xcb_flush(xcb_connection_t *c)
 
 /* Private interface */
 
-int _xcb_out_init(_xcb_out *out)
+int
+_xcb_out_init(_xcb_out *out)
 {
-    if(pthread_cond_init(&out->socket_cond, 0))
-        return 0;
-    out->return_socket = 0;
+    if (pthread_cond_init(&out->socket_cond, 0)) return 0;
+    out->return_socket  = 0;
     out->socket_closure = 0;
-    out->socket_moving = 0;
+    out->socket_moving  = 0;
 
-    if(pthread_cond_init(&out->cond, 0))
-        return 0;
+    if (pthread_cond_init(&out->cond, 0)) return 0;
     out->writing = 0;
 
     out->queue_len = 0;
 
-    out->request = 0;
-    out->request_written = 0;
+    out->request                  = 0;
+    out->request_written          = 0;
     out->request_expected_written = 0;
 
-    if(pthread_mutex_init(&out->reqlenlock, 0))
-        return 0;
+    if (pthread_mutex_init(&out->reqlenlock, 0)) return 0;
     out->maximum_request_length_tag = LAZY_NONE;
 
     return 1;
 }
 
-void _xcb_out_destroy(_xcb_out *out)
+void
+_xcb_out_destroy(_xcb_out *out)
 {
     pthread_mutex_destroy(&out->reqlenlock);
     pthread_cond_destroy(&out->cond);
     pthread_cond_destroy(&out->socket_cond);
 }
 
-int _xcb_out_send(xcb_connection_t *c, struct iovec *vector, int count)
+int
+_xcb_out_send(xcb_connection_t *c, struct iovec *vector, int count)
 {
     int ret = 1;
-    while(ret && count)
+    while (ret && count)
         ret = _xcb_conn_wait(c, &c->out.cond, &vector, &count);
-    c->out.request_written = c->out.request;
+    c->out.request_written          = c->out.request;
     c->out.request_expected_written = c->in.request_expected;
     pthread_cond_broadcast(&c->out.cond);
     _xcb_in_wake_up_next_reader(c);
     return ret;
 }
 
-void _xcb_out_send_sync(xcb_connection_t *c)
+void
+_xcb_out_send_sync(xcb_connection_t *c)
 {
     prepare_socket_request(c);
     send_sync(c);
 }
 
-int _xcb_out_flush_to(xcb_connection_t *c, uint64_t request)
+int
+_xcb_out_flush_to(xcb_connection_t *c, uint64_t request)
 {
     assert(XCB_SEQUENCE_COMPARE(request, <=, c->out.request));
-    if(XCB_SEQUENCE_COMPARE(c->out.request_written, >=, request))
-        return 1;
-    if(c->out.queue_len)
+    if (XCB_SEQUENCE_COMPARE(c->out.request_written, >=, request)) return 1;
+    if (c->out.queue_len)
     {
         struct iovec vec;
-        vec.iov_base = c->out.queue;
-        vec.iov_len = c->out.queue_len;
+        vec.iov_base     = c->out.queue;
+        vec.iov_len      = c->out.queue_len;
         c->out.queue_len = 0;
         return _xcb_out_send(c, &vec, 1);
     }
-    while(c->out.writing)
+    while (c->out.writing)
         pthread_cond_wait(&c->out.cond, &c->iolock);
     assert(XCB_SEQUENCE_COMPARE(c->out.request_written, >=, request));
     return 1;

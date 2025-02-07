@@ -501,8 +501,7 @@ ScanOtherColors(Display       *display,
 
 /* 3.2 backward compatibility code */
                 if (oldColorTable) adefaults = (char **)oldColorTable[j];
-                else/* end 3.2 bc */
-                    adefaults = (char **)(colorTable + j);
+                else /* end 3.2 bc */ adefaults = (char **)(colorTable + j);
 
                 found = True;
                 for (key = 1; key <= NKEYS; key++)

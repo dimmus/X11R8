@@ -23,7 +23,7 @@
 
 /* Test code for XmuCursorNameToIndex() in src/CursorName.c */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/Xmu/CurUtil.h"
@@ -35,61 +35,63 @@
 #include <string.h>
 #include <assert.h>
 
-#define SKIP_WHITESPACE(p)  while (isspace(*p)) p++
+#define SKIP_WHITESPACE(p) \
+    while (isspace(*p))    \
+    p++
 
 /* Looks up each entry from "X11/cursorfont.h" to verify value returned */
 static void
 test_CursorNameToIndex_goodnames(void)
 {
     FILE *cursorfont;
-    char line[256];
-    int cursorschecked = 0;
-    int cursorsexpected = 0;
+    char  line[256];
+    int   cursorschecked  = 0;
+    int   cursorsexpected = 0;
 
     cursorfont = fopen("/usr/include/X11/cursorfont.h", "r");
-    if (cursorfont == NULL) {
+    if (cursorfont == NULL)
+    {
         /* Could not open /usr/include/X11/cursorfont.h */
         return;
     }
 
-    while (fgets(line, sizeof(line), cursorfont) != NULL) {
+    while (fgets(line, sizeof(line), cursorfont) != NULL)
+    {
         char *p = line;
 
         /* skip lines that don't start with "#define" */
-        if (strncmp(p, "#define", 7) != 0)
-            continue;
-        else
-            p += 7;
+        if (strncmp(p, "#define", 7) != 0) continue;
+        else p += 7;
 
         /* skip over whitespace after #define */
         SKIP_WHITESPACE(p);
 
         /* skip #define _X11_CURSORFONT_H_ */
-        if (strncmp(p, "XC_", 3) != 0)
-            continue;
-        else
-            p += 3;
+        if (strncmp(p, "XC_", 3) != 0) continue;
+        else p += 3;
 
-        if (strncmp(p, "num_glyphs", 10) == 0) {
+        if (strncmp(p, "num_glyphs", 10) == 0)
+        {
             /* Use #define XC_num_glyphs to record the number we expect */
             assert(cursorsexpected == 0);
             p += strlen("num_glyphs");
             SKIP_WHITESPACE(p);
-            cursorsexpected = (int) strtol(p, NULL, 0) / 2;
+            cursorsexpected = (int)strtol(p, NULL, 0) / 2;
             printf("cursors expected = %d", cursorsexpected);
             continue;
         }
-        else {
+        else
+        {
             /* Should be a cursor name then */
             char *name = p;
-            int expected_id, returned_id;
-            char upper_name[32];
+            int   expected_id, returned_id;
+            char  upper_name[32];
 
             while (!isspace(*p))
                 p++;
             *p++ = '\0';
             SKIP_WHITESPACE(p);
-            expected_id = (int) strtol(p, NULL, 0);
+            expected_id = (int)strtol(p, NULL, 0);
 
             printf("%s = %d", name, expected_id);
 
@@ -120,7 +122,8 @@ test_CursorNameToIndex_badnames(void)
     };
 #define NUM_BAD_NAMES (sizeof(badnames) / sizeof(badnames[0]))
 
-    for (unsigned int i = 0; i < NUM_BAD_NAMES; i++) {
+    for (unsigned int i = 0; i < NUM_BAD_NAMES; i++)
+    {
         int returned_id = XmuCursorNameToIndex(badnames[i]);
         printf("%s", badnames[i]);
         assert(returned_id == -1);
@@ -128,7 +131,7 @@ test_CursorNameToIndex_badnames(void)
 }
 
 int
-main(int argc, char** argv)
+main(int argc, char **argv)
 {
     /* /CursorName/XmuCursorNameToIndex/good-names */
     test_CursorNameToIndex_goodnames();

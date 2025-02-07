@@ -31,7 +31,7 @@
  *****************************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "X11/Xlibint.h"
@@ -42,19 +42,19 @@
 #include <limits.h>
 #include "reallocarray.h"
 
-static XExtensionInfo _dbe_info_data;
-static XExtensionInfo *dbe_info = &_dbe_info_data;
-static const char *dbe_extension_name = DBE_PROTOCOL_NAME;
+static XExtensionInfo  _dbe_info_data;
+static XExtensionInfo *dbe_info           = &_dbe_info_data;
+static const char     *dbe_extension_name = DBE_PROTOCOL_NAME;
 
-#define DbeCheckExtension(dpy,i,val) \
-  XextCheckExtension (dpy, i, dbe_extension_name, val)
-#define DbeSimpleCheckExtension(dpy,i) \
-  XextSimpleCheckExtension (dpy, i, dbe_extension_name)
+#define DbeCheckExtension(dpy, i, val) \
+    XextCheckExtension(dpy, i, dbe_extension_name, val)
+#define DbeSimpleCheckExtension(dpy, i) \
+    XextSimpleCheckExtension(dpy, i, dbe_extension_name)
 
-#define DbeGetReq(name,req,info) GetReq (name, req); \
-        req->reqType = info->codes->major_opcode; \
-        req->dbeReqType = X_##name;
-
+#define DbeGetReq(name, req, info)               \
+    GetReq(name, req);                           \
+    req->reqType    = info->codes->major_opcode; \
+    req->dbeReqType = X_##name;
 
 /*****************************************************************************
  *                                                                           *
@@ -66,8 +66,8 @@ static const char *dbe_extension_name = DBE_PROTOCOL_NAME;
  * find_display - locate the display info block
  */
 static int close_display(Display *dpy, XExtCodes *codes);
-static char *error_string(Display *dpy, int code, XExtCodes *codes,
-			  char *buf, int n);
+static char *
+error_string(Display *dpy, int code, XExtCodes *codes, char *buf, int n);
 static XExtensionHooks dbe_extension_hooks = {
     NULL,                               /* create_gc */
     NULL,                               /* copy_gc */
@@ -83,28 +83,30 @@ static XExtensionHooks dbe_extension_hooks = {
 };
 
 static const char *dbe_error_list[] = {
-    "BadBuffer",			/* DbeBadBuffer */
+    "BadBuffer",   /* DbeBadBuffer */
 };
 
-static XEXT_GENERATE_FIND_DISPLAY (find_display, dbe_info,
-				   dbe_extension_name,
-				   &dbe_extension_hooks,
-				   DbeNumberEvents, NULL)
+static XEXT_GENERATE_FIND_DISPLAY(find_display,
+                                  dbe_info,
+                                  dbe_extension_name,
+                                  &dbe_extension_hooks,
+                                  DbeNumberEvents,
+                                  NULL)
 
-static XEXT_GENERATE_CLOSE_DISPLAY (close_display, dbe_info)
+    static XEXT_GENERATE_CLOSE_DISPLAY(close_display, dbe_info)
 
-static XEXT_GENERATE_ERROR_STRING (error_string, dbe_extension_name,
-				   DbeNumberErrors,
-				   dbe_error_list)
+        static XEXT_GENERATE_ERROR_STRING(error_string,
+                                          dbe_extension_name,
+                                          DbeNumberErrors,
+                                          dbe_error_list)
 
-
-/*****************************************************************************
+    /*****************************************************************************
  *                                                                           *
  *		       Double-Buffering public interfaces                    *
  *                                                                           *
  *****************************************************************************/
 
-/*
+    /*
  * XdbeQueryExtension -
  *	Sets major_version_return and minor_verion_return to the major and
  *	minor DBE protocol version supported by the server.  If the DBE
@@ -116,40 +118,37 @@ static XEXT_GENERATE_ERROR_STRING (error_string, dbe_extension_name,
  *	may be called before this function.   If a client violates this rule,
  *	the effects of all subsequent Xdbe calls are undefined.
  */
-Status XdbeQueryExtension (
-    Display *dpy,
-    int *major_version_return,
-    int *minor_version_return)
+    Status XdbeQueryExtension(Display *dpy,
+                              int     *major_version_return,
+                              int     *minor_version_return)
 {
-    XExtDisplayInfo *info = find_display (dpy);
-    xDbeGetVersionReply rep;
+    XExtDisplayInfo            *info = find_display(dpy);
+    xDbeGetVersionReply         rep;
     register xDbeGetVersionReq *req;
 
-    if (!XextHasExtension (info))
-        return (Status)0; /* failure */
+    if (!XextHasExtension(info)) return (Status)0; /* failure */
 
-    LockDisplay (dpy);
-    DbeGetReq (DbeGetVersion, req, info);
+    LockDisplay(dpy);
+    DbeGetReq(DbeGetVersion, req, info);
     req->majorVersion = DBE_MAJOR_VERSION;
     req->minorVersion = DBE_MINOR_VERSION;
 
-    if (!_XReply (dpy, (xReply *) &rep, 0, xTrue)) {
-	UnlockDisplay (dpy);
-	SyncHandle ();
-	return (Status)0; /* failure */
+    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue))
+    {
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return (Status)0; /* failure */
     }
     *major_version_return = rep.majorVersion;
     *minor_version_return = rep.minorVersion;
-    UnlockDisplay (dpy);
+    UnlockDisplay(dpy);
 
-    SyncHandle ();
+    SyncHandle();
 
     if (*major_version_return != DBE_MAJOR_VERSION)
         return (Status)0; /* failure */
-    else
-        return (Status)1; /* success */
+    else return (Status)1; /* success */
 }
-
 
 /*
  * XdbeAllocateBackBuffer -
@@ -162,28 +161,28 @@ Status XdbeQueryExtension (
  *	accurate information whenever possible.
  */
 
-XdbeBackBuffer XdbeAllocateBackBufferName(
-    Display *dpy,
-    Window window,
-    XdbeSwapAction swap_action)
+XdbeBackBuffer
+XdbeAllocateBackBufferName(Display       *dpy,
+                           Window         window,
+                           XdbeSwapAction swap_action)
 {
-    XExtDisplayInfo *info = find_display (dpy);
+    XExtDisplayInfo                        *info = find_display(dpy);
     register xDbeAllocateBackBufferNameReq *req;
-    XdbeBackBuffer buffer;
+    XdbeBackBuffer                          buffer;
 
     /* make sure extension is available; if not, return the
      * third parameter (0).
      */
-    DbeCheckExtension (dpy, info, (XdbeBackBuffer)0);
+    DbeCheckExtension(dpy, info, (XdbeBackBuffer)0);
 
     LockDisplay(dpy);
     DbeGetReq(DbeAllocateBackBufferName, req, info);
-    req->window = window;
+    req->window     = window;
     req->swapAction = (unsigned char)swap_action;
-    req->buffer = buffer = XAllocID (dpy);
+    req->buffer = buffer = XAllocID(dpy);
 
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    UnlockDisplay(dpy);
+    SyncHandle();
     return buffer;
 
 } /* XdbeAllocateBackBufferName() */
@@ -194,24 +193,22 @@ XdbeBackBuffer XdbeAllocateBackBufferName(
  *	XdbeAllocateBackBufferName.  The buffer must refer to the back buffer
  *	of the specified window, or a protocol error results.
  */
-Status XdbeDeallocateBackBufferName (
-    Display *dpy,
-    XdbeBackBuffer buffer)
+Status
+XdbeDeallocateBackBufferName(Display *dpy, XdbeBackBuffer buffer)
 {
-    XExtDisplayInfo *info = find_display (dpy);
+    XExtDisplayInfo                          *info = find_display(dpy);
     register xDbeDeallocateBackBufferNameReq *req;
 
-    DbeCheckExtension (dpy, info, (Status)0 /* failure */);
+    DbeCheckExtension(dpy, info, (Status)0 /* failure */);
 
-    LockDisplay (dpy);
-    DbeGetReq (DbeDeallocateBackBufferName, req, info);
+    LockDisplay(dpy);
+    DbeGetReq(DbeDeallocateBackBufferName, req, info);
     req->buffer = buffer;
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    UnlockDisplay(dpy);
+    SyncHandle();
 
     return (Status)1; /* success */
 }
-
 
 /*
  * XdbeSwapBuffers -
@@ -221,20 +218,18 @@ Status XdbeDeallocateBackBufferName (
  *	The argument swap_info specifies the information needed per window
  *	to do the swap.
  */
-Status XdbeSwapBuffers (
-    Display *dpy,
-    XdbeSwapInfo *swap_info,
-    int num_windows)
+Status
+XdbeSwapBuffers(Display *dpy, XdbeSwapInfo *swap_info, int num_windows)
 {
-    XExtDisplayInfo *info = find_display (dpy);
+    XExtDisplayInfo             *info = find_display(dpy);
     register xDbeSwapBuffersReq *req;
-    int i;
+    int                          i;
 
-    DbeCheckExtension (dpy, info, (Status)0 /* failure */);
+    DbeCheckExtension(dpy, info, (Status)0 /* failure */);
 
-    LockDisplay (dpy);
-    DbeGetReq (DbeSwapBuffers, req, info);
-    req->length += 2*num_windows;
+    LockDisplay(dpy);
+    DbeGetReq(DbeSwapBuffers, req, info);
+    req->length += 2 * num_windows;
     req->n = num_windows;
 
     /* We need to handle 64-bit machines, where we can not use PackData32
@@ -244,59 +239,57 @@ Status XdbeSwapBuffers (
     for (i = 0; i < num_windows; i++)
     {
         char tmp[4];
-        Data32 (dpy, (long *)&swap_info[i].swap_window, 4);
+        Data32(dpy, (long *)&swap_info[i].swap_window, 4);
         tmp[0] = swap_info[i].swap_action;
-        Data (dpy, (char *)tmp, 4);
+        Data(dpy, (char *)tmp, 4);
     }
 
-    UnlockDisplay (dpy);
-    SyncHandle ();
-
+    UnlockDisplay(dpy);
+    SyncHandle();
 
     return (Status)1; /* success */
 
 } /* XdbeSwapBuffers() */
 
-
 /*
  * XdbeBeginIdiom -
  *	This function marks the beginning of an idiom sequence.
  */
-Status XdbeBeginIdiom (Display *dpy)
+Status
+XdbeBeginIdiom(Display *dpy)
 {
-    XExtDisplayInfo *info = find_display(dpy);
+    XExtDisplayInfo            *info = find_display(dpy);
     register xDbeBeginIdiomReq *req;
 
-    DbeCheckExtension (dpy, info, (Status)0 /* failure */);
+    DbeCheckExtension(dpy, info, (Status)0 /* failure */);
 
-    LockDisplay (dpy);
-    DbeGetReq (DbeBeginIdiom, req, info);
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    LockDisplay(dpy);
+    DbeGetReq(DbeBeginIdiom, req, info);
+    UnlockDisplay(dpy);
+    SyncHandle();
 
     return (Status)1; /* success */
 }
-
 
 /*
  * XdbeEndIdiom -
  *	This function marks the end of an idiom sequence.
  */
-Status XdbeEndIdiom (Display *dpy)
+Status
+XdbeEndIdiom(Display *dpy)
 {
-    XExtDisplayInfo *info = find_display(dpy);
+    XExtDisplayInfo          *info = find_display(dpy);
     register xDbeEndIdiomReq *req;
 
-    DbeCheckExtension (dpy, info, (Status)0 /* failure */);
+    DbeCheckExtension(dpy, info, (Status)0 /* failure */);
 
-    LockDisplay (dpy);
-    DbeGetReq (DbeEndIdiom, req, info);
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    LockDisplay(dpy);
+    DbeGetReq(DbeEndIdiom, req, info);
+    UnlockDisplay(dpy);
+    SyncHandle();
 
     return (Status)1; /* success */
 }
-
 
 /*
  * XdbeGetVisualInfo -
@@ -315,75 +308,78 @@ Status XdbeEndIdiom (Display *dpy)
  *	returned list corresponds to the nth screen of the server, starting
  *	with screen zero.
  */
-XdbeScreenVisualInfo *XdbeGetVisualInfo (
-    Display        *dpy,
-    Drawable       *screen_specifiers,
-    int            *num_screens)  /* SEND and RETURN */
+XdbeScreenVisualInfo *
+XdbeGetVisualInfo(Display  *dpy,
+                  Drawable *screen_specifiers,
+                  int      *num_screens) /* SEND and RETURN */
 {
-    XExtDisplayInfo *info = find_display(dpy);
+    XExtDisplayInfo               *info = find_display(dpy);
     register xDbeGetVisualInfoReq *req;
-    xDbeGetVisualInfoReply rep;
-    XdbeScreenVisualInfo *scrVisInfo;
-    int i;
+    xDbeGetVisualInfoReply         rep;
+    XdbeScreenVisualInfo          *scrVisInfo;
+    int                            i;
 
-    DbeCheckExtension (dpy, info, (XdbeScreenVisualInfo *)NULL);
+    DbeCheckExtension(dpy, info, (XdbeScreenVisualInfo *)NULL);
 
-    LockDisplay (dpy);
+    LockDisplay(dpy);
 
     DbeGetReq(DbeGetVisualInfo, req, info);
     req->length = 2 + *num_screens;
     req->n      = *num_screens;
-    Data32 (dpy, screen_specifiers, (*num_screens * sizeof (CARD32)));
+    Data32(dpy, screen_specifiers, (*num_screens * sizeof(CARD32)));
 
-    if (!_XReply (dpy, (xReply *) &rep, 0, xFalse)) {
-        UnlockDisplay (dpy);
-        SyncHandle ();
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
+        UnlockDisplay(dpy);
+        SyncHandle();
         return NULL;
     }
 
     /* return the number of screens actually found if we
      * requested information about all screens (*num_screens == 0)
      */
-    if (*num_screens == 0)
-       *num_screens = rep.m;
+    if (*num_screens == 0) *num_screens = rep.m;
 
     /* allocate list of visual information to be returned */
     if ((*num_screens > 0) && (*num_screens < 65536))
         scrVisInfo = Xcalloc(*num_screens, sizeof(XdbeScreenVisualInfo));
-    else
-        scrVisInfo = NULL;
-    if (scrVisInfo == NULL) {
+    else scrVisInfo = NULL;
+    if (scrVisInfo == NULL)
+    {
         _XEatDataWords(dpy, rep.length);
-        UnlockDisplay (dpy);
-        SyncHandle ();
+        UnlockDisplay(dpy);
+        SyncHandle();
         return NULL;
     }
 
     for (i = 0; i < *num_screens; i++)
     {
-        int j;
+        int           j;
         unsigned long c;
 
-        _XRead32 (dpy, (long *) &c, sizeof(CARD32));
+        _XRead32(dpy, (long *)&c, sizeof(CARD32));
 
-        if (c < 65536) {
-            scrVisInfo[i].count = c;
+        if (c < 65536)
+        {
+            scrVisInfo[i].count   = c;
             scrVisInfo[i].visinfo = Xmallocarray(c, sizeof(XdbeVisualInfo));
-        } else
-            scrVisInfo[i].visinfo = NULL;
+        }
+        else scrVisInfo[i].visinfo = NULL;
 
         /* if we can not allocate the list of visual/depth info
          * then free the lists that we already allocated as well
          * as the visual info list itself
          */
-        if (scrVisInfo[i].visinfo == NULL) {
-            for (j = 0; j < i; j++) {
-                Xfree (scrVisInfo[j].visinfo);
+        if (scrVisInfo[i].visinfo == NULL)
+        {
+            for (j = 0; j < i; j++)
+            {
+                Xfree(scrVisInfo[j].visinfo);
             }
-            Xfree (scrVisInfo);
+            Xfree(scrVisInfo);
             _XEatDataWords(dpy, rep.length);
-            UnlockDisplay (dpy);
-            SyncHandle ();
+            UnlockDisplay(dpy);
+            SyncHandle();
             return NULL;
         }
 
@@ -391,60 +387,61 @@ XdbeScreenVisualInfo *XdbeGetVisualInfo (
          * element into the library structure.  The element sizes and/or
          * padding may be different in the two structures.
          */
-        for (j = 0; j < scrVisInfo[i].count; j++) {
+        for (j = 0; j < scrVisInfo[i].count; j++)
+        {
             xDbeVisInfo xvi;
 
-            _XRead (dpy, (char *)&xvi, sizeof(xDbeVisInfo));
+            _XRead(dpy, (char *)&xvi, sizeof(xDbeVisInfo));
             scrVisInfo[i].visinfo[j].visual    = xvi.visualID;
             scrVisInfo[i].visinfo[j].depth     = xvi.depth;
             scrVisInfo[i].visinfo[j].perflevel = xvi.perfLevel;
         }
-
     }
 
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    UnlockDisplay(dpy);
+    SyncHandle();
     return scrVisInfo;
 
 } /* XdbeGetVisualInfo() */
-
 
 /*
  * XdbeFreeVisualInfo -
  *	This function frees the list of XdbeScreenVisualInfo returned by the
  *	function XdbeGetVisualInfo.
  */
-void XdbeFreeVisualInfo(XdbeScreenVisualInfo *visual_info)
+void
+XdbeFreeVisualInfo(XdbeScreenVisualInfo *visual_info)
 {
-    if (visual_info == NULL) {
+    if (visual_info == NULL)
+    {
         return;
     }
 
-    if (visual_info->visinfo) {
+    if (visual_info->visinfo)
+    {
         XFree(visual_info->visinfo);
     }
 
     XFree(visual_info);
 }
 
-
 /*
  * XdbeGetBackBufferAttributes -
  *	This function returns the attributes associated with the specified
  *	buffer.
  */
-XdbeBackBufferAttributes *XdbeGetBackBufferAttributes(
-    Display *dpy,
-    XdbeBackBuffer buffer)
+XdbeBackBufferAttributes *
+XdbeGetBackBufferAttributes(Display *dpy, XdbeBackBuffer buffer)
 {
-    XExtDisplayInfo *info = find_display(dpy);
+    XExtDisplayInfo                         *info = find_display(dpy);
     register xDbeGetBackBufferAttributesReq *req;
-    xDbeGetBackBufferAttributesReply rep;
-    XdbeBackBufferAttributes *attr;
+    xDbeGetBackBufferAttributesReply         rep;
+    XdbeBackBufferAttributes                *attr;
 
     DbeCheckExtension(dpy, info, (XdbeBackBufferAttributes *)NULL);
 
-    if (!(attr = Xmalloc(sizeof(XdbeBackBufferAttributes)))) {
+    if (!(attr = Xmalloc(sizeof(XdbeBackBufferAttributes))))
+    {
         return NULL;
     }
 
@@ -452,17 +449,17 @@ XdbeBackBufferAttributes *XdbeGetBackBufferAttributes(
     DbeGetReq(DbeGetBackBufferAttributes, req, info);
     req->buffer = buffer;
 
-    if (!_XReply (dpy, (xReply *) &rep, 0, xTrue)) {
-        UnlockDisplay (dpy);
-        SyncHandle ();
-	Xfree(attr);
+    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue))
+    {
+        UnlockDisplay(dpy);
+        SyncHandle();
+        Xfree(attr);
         return NULL;
     }
     attr->window = rep.attributes;
 
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    UnlockDisplay(dpy);
+    SyncHandle();
 
     return attr;
 }
-

@@ -22,26 +22,26 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xfixesint.h"
 
 void
-XFixesChangeSaveSet (Display *dpy, Window win, int mode, int target, int map)
+XFixesChangeSaveSet(Display *dpy, Window win, int mode, int target, int map)
 {
-    XFixesExtDisplayInfo	*info = XFixesFindDisplay (dpy);
-    xXFixesChangeSaveSetReq	*req;
+    XFixesExtDisplayInfo    *info = XFixesFindDisplay(dpy);
+    xXFixesChangeSaveSetReq *req;
 
-    XFixesSimpleCheckExtension (dpy, info);
+    XFixesSimpleCheckExtension(dpy, info);
 
-    LockDisplay (dpy);
-    GetReq (XFixesChangeSaveSet, req);
-    req->reqType = (CARD8) info->codes->major_opcode;
+    LockDisplay(dpy);
+    GetReq(XFixesChangeSaveSet, req);
+    req->reqType       = (CARD8)info->codes->major_opcode;
     req->xfixesReqType = X_XFixesChangeSaveSet;
-    req->mode = (BYTE) mode;
-    req->target = (BYTE) target;
-    req->map = (BYTE) map;
-    req->window = (CARD32) win;
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    req->mode          = (BYTE)mode;
+    req->target        = (BYTE)target;
+    req->map           = (BYTE)map;
+    req->window        = (CARD32)win;
+    UnlockDisplay(dpy);
+    SyncHandle();
 }

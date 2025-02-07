@@ -4,7 +4,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 #include <stdlib.h>
 #include <string.h>
@@ -13,10 +13,16 @@
 #include "xcb/xcbext.h"
 #include "xcb/xproto.h"
 
-#define ALIGNOF(type) offsetof(struct { char dummy; type member; }, member)
+#define ALIGNOF(type)    \
+    offsetof(            \
+        struct {         \
+            char dummy;  \
+            type member; \
+        },               \
+        member)
 
 void
-xcb_char2b_next (xcb_char2b_iterator_t *i)
+xcb_char2b_next(xcb_char2b_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -24,17 +30,17 @@ xcb_char2b_next (xcb_char2b_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_char2b_end (xcb_char2b_iterator_t i)
+xcb_char2b_end(xcb_char2b_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_window_next (xcb_window_iterator_t *i)
+xcb_window_next(xcb_window_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -42,17 +48,17 @@ xcb_window_next (xcb_window_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_window_end (xcb_window_iterator_t i)
+xcb_window_end(xcb_window_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_pixmap_next (xcb_pixmap_iterator_t *i)
+xcb_pixmap_next(xcb_pixmap_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -60,17 +66,17 @@ xcb_pixmap_next (xcb_pixmap_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_pixmap_end (xcb_pixmap_iterator_t i)
+xcb_pixmap_end(xcb_pixmap_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_cursor_next (xcb_cursor_iterator_t *i)
+xcb_cursor_next(xcb_cursor_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -78,17 +84,17 @@ xcb_cursor_next (xcb_cursor_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_cursor_end (xcb_cursor_iterator_t i)
+xcb_cursor_end(xcb_cursor_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_font_next (xcb_font_iterator_t *i)
+xcb_font_next(xcb_font_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -96,17 +102,17 @@ xcb_font_next (xcb_font_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_font_end (xcb_font_iterator_t i)
+xcb_font_end(xcb_font_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_gcontext_next (xcb_gcontext_iterator_t *i)
+xcb_gcontext_next(xcb_gcontext_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -114,17 +120,17 @@ xcb_gcontext_next (xcb_gcontext_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_gcontext_end (xcb_gcontext_iterator_t i)
+xcb_gcontext_end(xcb_gcontext_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_colormap_next (xcb_colormap_iterator_t *i)
+xcb_colormap_next(xcb_colormap_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -132,17 +138,17 @@ xcb_colormap_next (xcb_colormap_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_colormap_end (xcb_colormap_iterator_t i)
+xcb_colormap_end(xcb_colormap_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_atom_next (xcb_atom_iterator_t *i)
+xcb_atom_next(xcb_atom_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -150,17 +156,17 @@ xcb_atom_next (xcb_atom_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_atom_end (xcb_atom_iterator_t i)
+xcb_atom_end(xcb_atom_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_drawable_next (xcb_drawable_iterator_t *i)
+xcb_drawable_next(xcb_drawable_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -168,17 +174,17 @@ xcb_drawable_next (xcb_drawable_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_drawable_end (xcb_drawable_iterator_t i)
+xcb_drawable_end(xcb_drawable_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_fontable_next (xcb_fontable_iterator_t *i)
+xcb_fontable_next(xcb_fontable_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -186,17 +192,17 @@ xcb_fontable_next (xcb_fontable_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_fontable_end (xcb_fontable_iterator_t i)
+xcb_fontable_end(xcb_fontable_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_bool32_next (xcb_bool32_iterator_t *i)
+xcb_bool32_next(xcb_bool32_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -204,17 +210,17 @@ xcb_bool32_next (xcb_bool32_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_bool32_end (xcb_bool32_iterator_t i)
+xcb_bool32_end(xcb_bool32_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_visualid_next (xcb_visualid_iterator_t *i)
+xcb_visualid_next(xcb_visualid_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -222,17 +228,17 @@ xcb_visualid_next (xcb_visualid_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_visualid_end (xcb_visualid_iterator_t i)
+xcb_visualid_end(xcb_visualid_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_timestamp_next (xcb_timestamp_iterator_t *i)
+xcb_timestamp_next(xcb_timestamp_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -240,17 +246,17 @@ xcb_timestamp_next (xcb_timestamp_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_timestamp_end (xcb_timestamp_iterator_t i)
+xcb_timestamp_end(xcb_timestamp_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_keysym_next (xcb_keysym_iterator_t *i)
+xcb_keysym_next(xcb_keysym_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -258,17 +264,17 @@ xcb_keysym_next (xcb_keysym_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_keysym_end (xcb_keysym_iterator_t i)
+xcb_keysym_end(xcb_keysym_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_keycode_next (xcb_keycode_iterator_t *i)
+xcb_keycode_next(xcb_keycode_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -276,17 +282,17 @@ xcb_keycode_next (xcb_keycode_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_keycode_end (xcb_keycode_iterator_t i)
+xcb_keycode_end(xcb_keycode_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_keycode32_next (xcb_keycode32_iterator_t *i)
+xcb_keycode32_next(xcb_keycode32_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -294,17 +300,17 @@ xcb_keycode32_next (xcb_keycode32_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_keycode32_end (xcb_keycode32_iterator_t i)
+xcb_keycode32_end(xcb_keycode32_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_button_next (xcb_button_iterator_t *i)
+xcb_button_next(xcb_button_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -312,17 +318,17 @@ xcb_button_next (xcb_button_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_button_end (xcb_button_iterator_t i)
+xcb_button_end(xcb_button_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_point_next (xcb_point_iterator_t *i)
+xcb_point_next(xcb_point_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -330,17 +336,17 @@ xcb_point_next (xcb_point_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_point_end (xcb_point_iterator_t i)
+xcb_point_end(xcb_point_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_rectangle_next (xcb_rectangle_iterator_t *i)
+xcb_rectangle_next(xcb_rectangle_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -348,17 +354,17 @@ xcb_rectangle_next (xcb_rectangle_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_rectangle_end (xcb_rectangle_iterator_t i)
+xcb_rectangle_end(xcb_rectangle_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_arc_next (xcb_arc_iterator_t *i)
+xcb_arc_next(xcb_arc_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -366,17 +372,17 @@ xcb_arc_next (xcb_arc_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_arc_end (xcb_arc_iterator_t i)
+xcb_arc_end(xcb_arc_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_format_next (xcb_format_iterator_t *i)
+xcb_format_next(xcb_format_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -384,17 +390,17 @@ xcb_format_next (xcb_format_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_format_end (xcb_format_iterator_t i)
+xcb_format_end(xcb_format_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_visualtype_next (xcb_visualtype_iterator_t *i)
+xcb_visualtype_next(xcb_visualtype_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -402,25 +408,24 @@ xcb_visualtype_next (xcb_visualtype_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_visualtype_end (xcb_visualtype_iterator_t i)
+xcb_visualtype_end(xcb_visualtype_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 int
-xcb_depth_sizeof (const void  *_buffer)
+xcb_depth_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_depth_t *_aux = (xcb_depth_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    char              *xcb_tmp        = (char *)_buffer;
+    const xcb_depth_t *_aux           = (xcb_depth_t *)_buffer;
+    unsigned int       xcb_buffer_len = 0;
+    unsigned int       xcb_block_len  = 0;
+    unsigned int       xcb_pad        = 0;
+    unsigned int       xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_depth_t);
     xcb_tmp += xcb_block_len;
@@ -431,9 +436,10 @@ xcb_depth_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_visualtype_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -443,59 +449,59 @@ xcb_depth_sizeof (const void  *_buffer)
 }
 
 xcb_visualtype_t *
-xcb_depth_visuals (const xcb_depth_t *R)
+xcb_depth_visuals(const xcb_depth_t *R)
 {
-    return (xcb_visualtype_t *) (R + 1);
+    return (xcb_visualtype_t *)(R + 1);
 }
 
 int
-xcb_depth_visuals_length (const xcb_depth_t *R)
+xcb_depth_visuals_length(const xcb_depth_t *R)
 {
     return R->visuals_len;
 }
 
 xcb_visualtype_iterator_t
-xcb_depth_visuals_iterator (const xcb_depth_t *R)
+xcb_depth_visuals_iterator(const xcb_depth_t *R)
 {
     xcb_visualtype_iterator_t i;
-    i.data = (xcb_visualtype_t *) (R + 1);
-    i.rem = R->visuals_len;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_visualtype_t *)(R + 1);
+    i.rem   = R->visuals_len;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 void
-xcb_depth_next (xcb_depth_iterator_t *i)
+xcb_depth_next(xcb_depth_iterator_t *i)
 {
-    xcb_depth_t *R = i->data;
+    xcb_depth_t           *R = i->data;
     xcb_generic_iterator_t child;
     child.data = (xcb_depth_t *)(((char *)R) + xcb_depth_sizeof(R));
-    i->index = (char *) child.data - (char *) i->data;
+    i->index   = (char *)child.data - (char *)i->data;
     --i->rem;
-    i->data = (xcb_depth_t *) child.data;
+    i->data = (xcb_depth_t *)child.data;
 }
 
 xcb_generic_iterator_t
-xcb_depth_end (xcb_depth_iterator_t i)
+xcb_depth_end(xcb_depth_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    while(i.rem > 0)
+    while (i.rem > 0)
         xcb_depth_next(&i);
-    ret.data = i.data;
-    ret.rem = i.rem;
+    ret.data  = i.data;
+    ret.rem   = i.rem;
     ret.index = i.index;
     return ret;
 }
 
 int
-xcb_screen_sizeof (const void  *_buffer)
+xcb_screen_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_screen_t *_aux = (xcb_screen_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
+    char               *xcb_tmp        = (char *)_buffer;
+    const xcb_screen_t *_aux           = (xcb_screen_t *)_buffer;
+    unsigned int        xcb_buffer_len = 0;
+    unsigned int        xcb_block_len  = 0;
+    unsigned int        xcb_pad        = 0;
+    unsigned int        xcb_align_to   = 0;
 
     unsigned int i;
     unsigned int xcb_tmp_len;
@@ -505,16 +511,18 @@ xcb_screen_sizeof (const void  *_buffer)
     xcb_buffer_len += xcb_block_len;
     xcb_block_len = 0;
     /* allowed_depths */
-    for(i=0; i<_aux->allowed_depths_len; i++) {
+    for (i = 0; i < _aux->allowed_depths_len; i++)
+    {
         xcb_tmp_len = xcb_depth_sizeof(xcb_tmp);
         xcb_block_len += xcb_tmp_len;
         xcb_tmp += xcb_tmp_len;
     }
     xcb_align_to = ALIGNOF(xcb_depth_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -524,54 +532,53 @@ xcb_screen_sizeof (const void  *_buffer)
 }
 
 int
-xcb_screen_allowed_depths_length (const xcb_screen_t *R)
+xcb_screen_allowed_depths_length(const xcb_screen_t *R)
 {
     return R->allowed_depths_len;
 }
 
 xcb_depth_iterator_t
-xcb_screen_allowed_depths_iterator (const xcb_screen_t *R)
+xcb_screen_allowed_depths_iterator(const xcb_screen_t *R)
 {
     xcb_depth_iterator_t i;
-    i.data = (xcb_depth_t *) (R + 1);
-    i.rem = R->allowed_depths_len;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_depth_t *)(R + 1);
+    i.rem   = R->allowed_depths_len;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 void
-xcb_screen_next (xcb_screen_iterator_t *i)
+xcb_screen_next(xcb_screen_iterator_t *i)
 {
-    xcb_screen_t *R = i->data;
+    xcb_screen_t          *R = i->data;
     xcb_generic_iterator_t child;
     child.data = (xcb_screen_t *)(((char *)R) + xcb_screen_sizeof(R));
-    i->index = (char *) child.data - (char *) i->data;
+    i->index   = (char *)child.data - (char *)i->data;
     --i->rem;
-    i->data = (xcb_screen_t *) child.data;
+    i->data = (xcb_screen_t *)child.data;
 }
 
 xcb_generic_iterator_t
-xcb_screen_end (xcb_screen_iterator_t i)
+xcb_screen_end(xcb_screen_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    while(i.rem > 0)
+    while (i.rem > 0)
         xcb_screen_next(&i);
-    ret.data = i.data;
-    ret.rem = i.rem;
+    ret.data  = i.data;
+    ret.rem   = i.rem;
     ret.index = i.index;
     return ret;
 }
 
 int
-xcb_setup_request_sizeof (const void  *_buffer)
+xcb_setup_request_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_setup_request_t *_aux = (xcb_setup_request_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    char                      *xcb_tmp        = (char *)_buffer;
+    const xcb_setup_request_t *_aux           = (xcb_setup_request_t *)_buffer;
+    unsigned int               xcb_buffer_len = 0;
+    unsigned int               xcb_block_len  = 0;
+    unsigned int               xcb_pad        = 0;
+    unsigned int               xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_setup_request_t);
     xcb_tmp += xcb_block_len;
@@ -583,17 +590,19 @@ xcb_setup_request_sizeof (const void  *_buffer)
     xcb_align_to = ALIGNOF(char);
     xcb_align_to = 4;
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
     xcb_block_len = 0;
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad       = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -604,17 +613,19 @@ xcb_setup_request_sizeof (const void  *_buffer)
     xcb_align_to = ALIGNOF(char);
     xcb_align_to = 4;
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
     xcb_block_len = 0;
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad       = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -624,84 +635,89 @@ xcb_setup_request_sizeof (const void  *_buffer)
 }
 
 char *
-xcb_setup_request_authorization_protocol_name (const xcb_setup_request_t *R)
+xcb_setup_request_authorization_protocol_name(const xcb_setup_request_t *R)
 {
-    return (char *) (R + 1);
+    return (char *)(R + 1);
 }
 
 int
-xcb_setup_request_authorization_protocol_name_length (const xcb_setup_request_t *R)
+xcb_setup_request_authorization_protocol_name_length(
+    const xcb_setup_request_t *R)
 {
     return R->authorization_protocol_name_len;
 }
 
 xcb_generic_iterator_t
-xcb_setup_request_authorization_protocol_name_end (const xcb_setup_request_t *R)
+xcb_setup_request_authorization_protocol_name_end(const xcb_setup_request_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((char *) (R + 1)) + (R->authorization_protocol_name_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((char *)(R + 1)) + (R->authorization_protocol_name_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 char *
-xcb_setup_request_authorization_protocol_data (const xcb_setup_request_t *R)
+xcb_setup_request_authorization_protocol_data(const xcb_setup_request_t *R)
 {
-    xcb_generic_iterator_t prev = xcb_setup_request_authorization_protocol_name_end(R);
-    return (char *) ((char *) prev.data + ((-prev.index) & (4 - 1)) + 0);
+    xcb_generic_iterator_t prev =
+        xcb_setup_request_authorization_protocol_name_end(R);
+    return (char *)((char *)prev.data + ((-prev.index) & (4 - 1)) + 0);
 }
 
 int
-xcb_setup_request_authorization_protocol_data_length (const xcb_setup_request_t *R)
+xcb_setup_request_authorization_protocol_data_length(
+    const xcb_setup_request_t *R)
 {
     return R->authorization_protocol_data_len;
 }
 
 xcb_generic_iterator_t
-xcb_setup_request_authorization_protocol_data_end (const xcb_setup_request_t *R)
+xcb_setup_request_authorization_protocol_data_end(const xcb_setup_request_t *R)
 {
     xcb_generic_iterator_t i;
-    xcb_generic_iterator_t prev = xcb_setup_request_authorization_protocol_name_end(R);
-    i.data = ((char *) ((char*) prev.data + ((-prev.index) & (4 - 1)))) + (R->authorization_protocol_data_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    xcb_generic_iterator_t prev =
+        xcb_setup_request_authorization_protocol_name_end(R);
+    i.data = ((char *)((char *)prev.data + ((-prev.index) & (4 - 1)))) +
+             (R->authorization_protocol_data_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 void
-xcb_setup_request_next (xcb_setup_request_iterator_t *i)
+xcb_setup_request_next(xcb_setup_request_iterator_t *i)
 {
-    xcb_setup_request_t *R = i->data;
+    xcb_setup_request_t   *R = i->data;
     xcb_generic_iterator_t child;
-    child.data = (xcb_setup_request_t *)(((char *)R) + xcb_setup_request_sizeof(R));
-    i->index = (char *) child.data - (char *) i->data;
+    child.data =
+        (xcb_setup_request_t *)(((char *)R) + xcb_setup_request_sizeof(R));
+    i->index = (char *)child.data - (char *)i->data;
     --i->rem;
-    i->data = (xcb_setup_request_t *) child.data;
+    i->data = (xcb_setup_request_t *)child.data;
 }
 
 xcb_generic_iterator_t
-xcb_setup_request_end (xcb_setup_request_iterator_t i)
+xcb_setup_request_end(xcb_setup_request_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    while(i.rem > 0)
+    while (i.rem > 0)
         xcb_setup_request_next(&i);
-    ret.data = i.data;
-    ret.rem = i.rem;
+    ret.data  = i.data;
+    ret.rem   = i.rem;
     ret.index = i.index;
     return ret;
 }
 
 int
-xcb_setup_failed_sizeof (const void  *_buffer)
+xcb_setup_failed_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_setup_failed_t *_aux = (xcb_setup_failed_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    char                     *xcb_tmp        = (char *)_buffer;
+    const xcb_setup_failed_t *_aux           = (xcb_setup_failed_t *)_buffer;
+    unsigned int              xcb_buffer_len = 0;
+    unsigned int              xcb_block_len  = 0;
+    unsigned int              xcb_pad        = 0;
+    unsigned int              xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_setup_failed_t);
     xcb_tmp += xcb_block_len;
@@ -712,9 +728,10 @@ xcb_setup_failed_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -724,60 +741,60 @@ xcb_setup_failed_sizeof (const void  *_buffer)
 }
 
 char *
-xcb_setup_failed_reason (const xcb_setup_failed_t *R)
+xcb_setup_failed_reason(const xcb_setup_failed_t *R)
 {
-    return (char *) (R + 1);
+    return (char *)(R + 1);
 }
 
 int
-xcb_setup_failed_reason_length (const xcb_setup_failed_t *R)
+xcb_setup_failed_reason_length(const xcb_setup_failed_t *R)
 {
     return R->reason_len;
 }
 
 xcb_generic_iterator_t
-xcb_setup_failed_reason_end (const xcb_setup_failed_t *R)
+xcb_setup_failed_reason_end(const xcb_setup_failed_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((char *) (R + 1)) + (R->reason_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((char *)(R + 1)) + (R->reason_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 void
-xcb_setup_failed_next (xcb_setup_failed_iterator_t *i)
+xcb_setup_failed_next(xcb_setup_failed_iterator_t *i)
 {
-    xcb_setup_failed_t *R = i->data;
+    xcb_setup_failed_t    *R = i->data;
     xcb_generic_iterator_t child;
-    child.data = (xcb_setup_failed_t *)(((char *)R) + xcb_setup_failed_sizeof(R));
-    i->index = (char *) child.data - (char *) i->data;
+    child.data =
+        (xcb_setup_failed_t *)(((char *)R) + xcb_setup_failed_sizeof(R));
+    i->index = (char *)child.data - (char *)i->data;
     --i->rem;
-    i->data = (xcb_setup_failed_t *) child.data;
+    i->data = (xcb_setup_failed_t *)child.data;
 }
 
 xcb_generic_iterator_t
-xcb_setup_failed_end (xcb_setup_failed_iterator_t i)
+xcb_setup_failed_end(xcb_setup_failed_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    while(i.rem > 0)
+    while (i.rem > 0)
         xcb_setup_failed_next(&i);
-    ret.data = i.data;
-    ret.rem = i.rem;
+    ret.data  = i.data;
+    ret.rem   = i.rem;
     ret.index = i.index;
     return ret;
 }
 
 int
-xcb_setup_authenticate_sizeof (const void  *_buffer)
+xcb_setup_authenticate_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char                           *xcb_tmp = (char *)_buffer;
     const xcb_setup_authenticate_t *_aux = (xcb_setup_authenticate_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int                    xcb_buffer_len = 0;
+    unsigned int                    xcb_block_len  = 0;
+    unsigned int                    xcb_pad        = 0;
+    unsigned int                    xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_setup_authenticate_t);
     xcb_tmp += xcb_block_len;
@@ -788,9 +805,10 @@ xcb_setup_authenticate_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -800,59 +818,60 @@ xcb_setup_authenticate_sizeof (const void  *_buffer)
 }
 
 char *
-xcb_setup_authenticate_reason (const xcb_setup_authenticate_t *R)
+xcb_setup_authenticate_reason(const xcb_setup_authenticate_t *R)
 {
-    return (char *) (R + 1);
+    return (char *)(R + 1);
 }
 
 int
-xcb_setup_authenticate_reason_length (const xcb_setup_authenticate_t *R)
+xcb_setup_authenticate_reason_length(const xcb_setup_authenticate_t *R)
 {
     return (R->length * 4);
 }
 
 xcb_generic_iterator_t
-xcb_setup_authenticate_reason_end (const xcb_setup_authenticate_t *R)
+xcb_setup_authenticate_reason_end(const xcb_setup_authenticate_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((char *) (R + 1)) + ((R->length * 4));
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((char *)(R + 1)) + ((R->length * 4));
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 void
-xcb_setup_authenticate_next (xcb_setup_authenticate_iterator_t *i)
+xcb_setup_authenticate_next(xcb_setup_authenticate_iterator_t *i)
 {
     xcb_setup_authenticate_t *R = i->data;
-    xcb_generic_iterator_t child;
-    child.data = (xcb_setup_authenticate_t *)(((char *)R) + xcb_setup_authenticate_sizeof(R));
-    i->index = (char *) child.data - (char *) i->data;
+    xcb_generic_iterator_t    child;
+    child.data = (xcb_setup_authenticate_t *)(((char *)R) +
+                                              xcb_setup_authenticate_sizeof(R));
+    i->index   = (char *)child.data - (char *)i->data;
     --i->rem;
-    i->data = (xcb_setup_authenticate_t *) child.data;
+    i->data = (xcb_setup_authenticate_t *)child.data;
 }
 
 xcb_generic_iterator_t
-xcb_setup_authenticate_end (xcb_setup_authenticate_iterator_t i)
+xcb_setup_authenticate_end(xcb_setup_authenticate_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    while(i.rem > 0)
+    while (i.rem > 0)
         xcb_setup_authenticate_next(&i);
-    ret.data = i.data;
-    ret.rem = i.rem;
+    ret.data  = i.data;
+    ret.rem   = i.rem;
     ret.index = i.index;
     return ret;
 }
 
 int
-xcb_setup_sizeof (const void  *_buffer)
+xcb_setup_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_setup_t *_aux = (xcb_setup_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
+    char              *xcb_tmp        = (char *)_buffer;
+    const xcb_setup_t *_aux           = (xcb_setup_t *)_buffer;
+    unsigned int       xcb_buffer_len = 0;
+    unsigned int       xcb_block_len  = 0;
+    unsigned int       xcb_pad        = 0;
+    unsigned int       xcb_align_to   = 0;
 
     unsigned int i;
     unsigned int xcb_tmp_len;
@@ -867,17 +886,19 @@ xcb_setup_sizeof (const void  *_buffer)
     xcb_align_to = ALIGNOF(char);
     xcb_align_to = 4;
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
     xcb_block_len = 0;
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad       = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -887,24 +908,27 @@ xcb_setup_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_format_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
     xcb_block_len = 0;
     /* roots */
-    for(i=0; i<_aux->roots_len; i++) {
+    for (i = 0; i < _aux->roots_len; i++)
+    {
         xcb_tmp_len = xcb_screen_sizeof(xcb_tmp);
         xcb_block_len += xcb_tmp_len;
         xcb_tmp += xcb_tmp_len;
     }
     xcb_align_to = ALIGNOF(xcb_screen_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -914,93 +938,95 @@ xcb_setup_sizeof (const void  *_buffer)
 }
 
 char *
-xcb_setup_vendor (const xcb_setup_t *R)
+xcb_setup_vendor(const xcb_setup_t *R)
 {
-    return (char *) (R + 1);
+    return (char *)(R + 1);
 }
 
 int
-xcb_setup_vendor_length (const xcb_setup_t *R)
+xcb_setup_vendor_length(const xcb_setup_t *R)
 {
     return R->vendor_len;
 }
 
 xcb_generic_iterator_t
-xcb_setup_vendor_end (const xcb_setup_t *R)
+xcb_setup_vendor_end(const xcb_setup_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((char *) (R + 1)) + (R->vendor_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((char *)(R + 1)) + (R->vendor_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_format_t *
-xcb_setup_pixmap_formats (const xcb_setup_t *R)
+xcb_setup_pixmap_formats(const xcb_setup_t *R)
 {
     xcb_generic_iterator_t prev = xcb_setup_vendor_end(R);
-    return (xcb_format_t *) ((char *) prev.data + ((-prev.index) & (4 - 1)) + 0);
+    return (xcb_format_t *)((char *)prev.data + ((-prev.index) & (4 - 1)) + 0);
 }
 
 int
-xcb_setup_pixmap_formats_length (const xcb_setup_t *R)
+xcb_setup_pixmap_formats_length(const xcb_setup_t *R)
 {
     return R->pixmap_formats_len;
 }
 
 xcb_format_iterator_t
-xcb_setup_pixmap_formats_iterator (const xcb_setup_t *R)
+xcb_setup_pixmap_formats_iterator(const xcb_setup_t *R)
 {
-    xcb_format_iterator_t i;
+    xcb_format_iterator_t  i;
     xcb_generic_iterator_t prev = xcb_setup_vendor_end(R);
-    i.data = (xcb_format_t *) ((char *) prev.data + ((-prev.index) & (4 - 1)));
-    i.rem = R->pixmap_formats_len;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_format_t *)((char *)prev.data + ((-prev.index) & (4 - 1)));
+    i.rem   = R->pixmap_formats_len;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 int
-xcb_setup_roots_length (const xcb_setup_t *R)
+xcb_setup_roots_length(const xcb_setup_t *R)
 {
     return R->roots_len;
 }
 
 xcb_screen_iterator_t
-xcb_setup_roots_iterator (const xcb_setup_t *R)
+xcb_setup_roots_iterator(const xcb_setup_t *R)
 {
-    xcb_screen_iterator_t i;
-    xcb_generic_iterator_t prev = xcb_format_end(xcb_setup_pixmap_formats_iterator(R));
-    i.data = (xcb_screen_t *) ((char *) prev.data + XCB_TYPE_PAD(xcb_screen_t, prev.index));
-    i.rem = R->roots_len;
-    i.index = (char *) i.data - (char *) R;
+    xcb_screen_iterator_t  i;
+    xcb_generic_iterator_t prev =
+        xcb_format_end(xcb_setup_pixmap_formats_iterator(R));
+    i.data  = (xcb_screen_t *)((char *)prev.data +
+                              XCB_TYPE_PAD(xcb_screen_t, prev.index));
+    i.rem   = R->roots_len;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 void
-xcb_setup_next (xcb_setup_iterator_t *i)
+xcb_setup_next(xcb_setup_iterator_t *i)
 {
-    xcb_setup_t *R = i->data;
+    xcb_setup_t           *R = i->data;
     xcb_generic_iterator_t child;
     child.data = (xcb_setup_t *)(((char *)R) + xcb_setup_sizeof(R));
-    i->index = (char *) child.data - (char *) i->data;
+    i->index   = (char *)child.data - (char *)i->data;
     --i->rem;
-    i->data = (xcb_setup_t *) child.data;
+    i->data = (xcb_setup_t *)child.data;
 }
 
 xcb_generic_iterator_t
-xcb_setup_end (xcb_setup_iterator_t i)
+xcb_setup_end(xcb_setup_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    while(i.rem > 0)
+    while (i.rem > 0)
         xcb_setup_next(&i);
-    ret.data = i.data;
-    ret.rem = i.rem;
+    ret.data  = i.data;
+    ret.rem   = i.rem;
     ret.index = i.index;
     return ret;
 }
 
 void
-xcb_client_message_data_next (xcb_client_message_data_iterator_t *i)
+xcb_client_message_data_next(xcb_client_message_data_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -1008,148 +1034,165 @@ xcb_client_message_data_next (xcb_client_message_data_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_client_message_data_end (xcb_client_message_data_iterator_t i)
+xcb_client_message_data_end(xcb_client_message_data_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 int
-xcb_create_window_value_list_serialize (void                                 **_buffer,
-                                        uint32_t                               value_mask,
-                                        const xcb_create_window_value_list_t  *_aux)
+xcb_create_window_value_list_serialize(
+    void                                **_buffer,
+    uint32_t                              value_mask,
+    const xcb_create_window_value_list_t *_aux)
 {
-    char *xcb_out = *_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_align_to = 0;
+    char        *xcb_out            = *_buffer;
+    unsigned int xcb_buffer_len     = 0;
+    unsigned int xcb_align_to       = 0;
     unsigned int xcb_padding_offset = 0;
 
-    unsigned int xcb_pad = 0;
-    char xcb_pad0[3] = {0, 0, 0};
+    unsigned int xcb_pad     = 0;
+    char         xcb_pad0[3] = { 0, 0, 0 };
     struct iovec xcb_parts[16];
     unsigned int xcb_parts_idx = 0;
     unsigned int xcb_block_len = 0;
     unsigned int i;
-    char *xcb_tmp;
+    char        *xcb_tmp;
 
-    if(value_mask & XCB_CW_BACK_PIXMAP) {
+    if (value_mask & XCB_CW_BACK_PIXMAP)
+    {
         /* xcb_create_window_value_list_t.background_pixmap */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->background_pixmap;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->background_pixmap;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_pixmap_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_CW_BACK_PIXEL) {
+    if (value_mask & XCB_CW_BACK_PIXEL)
+    {
         /* xcb_create_window_value_list_t.background_pixel */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->background_pixel;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->background_pixel;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BORDER_PIXMAP) {
+    if (value_mask & XCB_CW_BORDER_PIXMAP)
+    {
         /* xcb_create_window_value_list_t.border_pixmap */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->border_pixmap;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->border_pixmap;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_pixmap_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_CW_BORDER_PIXEL) {
+    if (value_mask & XCB_CW_BORDER_PIXEL)
+    {
         /* xcb_create_window_value_list_t.border_pixel */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->border_pixel;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->border_pixel;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BIT_GRAVITY) {
+    if (value_mask & XCB_CW_BIT_GRAVITY)
+    {
         /* xcb_create_window_value_list_t.bit_gravity */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->bit_gravity;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->bit_gravity;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_WIN_GRAVITY) {
+    if (value_mask & XCB_CW_WIN_GRAVITY)
+    {
         /* xcb_create_window_value_list_t.win_gravity */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->win_gravity;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->win_gravity;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BACKING_STORE) {
+    if (value_mask & XCB_CW_BACKING_STORE)
+    {
         /* xcb_create_window_value_list_t.backing_store */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->backing_store;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->backing_store;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BACKING_PLANES) {
+    if (value_mask & XCB_CW_BACKING_PLANES)
+    {
         /* xcb_create_window_value_list_t.backing_planes */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->backing_planes;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->backing_planes;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BACKING_PIXEL) {
+    if (value_mask & XCB_CW_BACKING_PIXEL)
+    {
         /* xcb_create_window_value_list_t.backing_pixel */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->backing_pixel;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->backing_pixel;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_OVERRIDE_REDIRECT) {
+    if (value_mask & XCB_CW_OVERRIDE_REDIRECT)
+    {
         /* xcb_create_window_value_list_t.override_redirect */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->override_redirect;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->override_redirect;
         xcb_block_len += sizeof(xcb_bool32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_bool32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_bool32_t);
     }
-    if(value_mask & XCB_CW_SAVE_UNDER) {
+    if (value_mask & XCB_CW_SAVE_UNDER)
+    {
         /* xcb_create_window_value_list_t.save_under */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->save_under;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->save_under;
         xcb_block_len += sizeof(xcb_bool32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_bool32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_bool32_t);
     }
-    if(value_mask & XCB_CW_EVENT_MASK) {
+    if (value_mask & XCB_CW_EVENT_MASK)
+    {
         /* xcb_create_window_value_list_t.event_mask */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->event_mask;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->event_mask;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_DONT_PROPAGATE) {
+    if (value_mask & XCB_CW_DONT_PROPAGATE)
+    {
         /* xcb_create_window_value_list_t.do_not_propogate_mask */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->do_not_propogate_mask;
+        xcb_parts[xcb_parts_idx].iov_base =
+            (char *)&_aux->do_not_propogate_mask;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_COLORMAP) {
+    if (value_mask & XCB_CW_COLORMAP)
+    {
         /* xcb_create_window_value_list_t.colormap */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->colormap;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->colormap;
         xcb_block_len += sizeof(xcb_colormap_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_colormap_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_colormap_t);
     }
-    if(value_mask & XCB_CW_CURSOR) {
+    if (value_mask & XCB_CW_CURSOR)
+    {
         /* xcb_create_window_value_list_t.cursor */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->cursor;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->cursor;
         xcb_block_len += sizeof(xcb_cursor_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_cursor_t);
         xcb_parts_idx++;
@@ -1158,144 +1201,160 @@ xcb_create_window_value_list_serialize (void                                 **_
     /* insert padding */
     xcb_pad = -(xcb_block_len + xcb_padding_offset) & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_parts[xcb_parts_idx].iov_base = xcb_pad0;
-        xcb_parts[xcb_parts_idx].iov_len = xcb_pad;
+        xcb_parts[xcb_parts_idx].iov_len  = xcb_pad;
         xcb_parts_idx++;
         xcb_pad = 0;
     }
-    xcb_block_len = 0;
+    xcb_block_len      = 0;
     xcb_padding_offset = 0;
 
-    if (NULL == xcb_out) {
+    if (NULL == xcb_out)
+    {
         /* allocate memory */
-        xcb_out = malloc(xcb_buffer_len);
+        xcb_out  = malloc(xcb_buffer_len);
         *_buffer = xcb_out;
     }
 
     xcb_tmp = xcb_out;
-    for(i=0; i<xcb_parts_idx; i++) {
+    for (i = 0; i < xcb_parts_idx; i++)
+    {
         if (0 != xcb_parts[i].iov_base && 0 != xcb_parts[i].iov_len)
             memcpy(xcb_tmp, xcb_parts[i].iov_base, xcb_parts[i].iov_len);
-        if (0 != xcb_parts[i].iov_len)
-            xcb_tmp += xcb_parts[i].iov_len;
+        if (0 != xcb_parts[i].iov_len) xcb_tmp += xcb_parts[i].iov_len;
     }
 
     return xcb_buffer_len;
 }
 
 int
-xcb_create_window_value_list_unpack (const void                      *_buffer,
-                                     uint32_t                         value_mask,
-                                     xcb_create_window_value_list_t  *_aux)
+xcb_create_window_value_list_unpack(const void                     *_buffer,
+                                    uint32_t                        value_mask,
+                                    xcb_create_window_value_list_t *_aux)
 {
-    char *xcb_tmp = (char *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
+    char        *xcb_tmp            = (char *)_buffer;
+    unsigned int xcb_buffer_len     = 0;
+    unsigned int xcb_block_len      = 0;
+    unsigned int xcb_pad            = 0;
+    unsigned int xcb_align_to       = 0;
     unsigned int xcb_padding_offset = 0;
 
-
-    if(value_mask & XCB_CW_BACK_PIXMAP) {
+    if (value_mask & XCB_CW_BACK_PIXMAP)
+    {
         /* xcb_create_window_value_list_t.background_pixmap */
         _aux->background_pixmap = *(xcb_pixmap_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_tmp += sizeof(xcb_pixmap_t);
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_CW_BACK_PIXEL) {
+    if (value_mask & XCB_CW_BACK_PIXEL)
+    {
         /* xcb_create_window_value_list_t.background_pixel */
         _aux->background_pixel = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BORDER_PIXMAP) {
+    if (value_mask & XCB_CW_BORDER_PIXMAP)
+    {
         /* xcb_create_window_value_list_t.border_pixmap */
         _aux->border_pixmap = *(xcb_pixmap_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_tmp += sizeof(xcb_pixmap_t);
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_CW_BORDER_PIXEL) {
+    if (value_mask & XCB_CW_BORDER_PIXEL)
+    {
         /* xcb_create_window_value_list_t.border_pixel */
         _aux->border_pixel = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BIT_GRAVITY) {
+    if (value_mask & XCB_CW_BIT_GRAVITY)
+    {
         /* xcb_create_window_value_list_t.bit_gravity */
         _aux->bit_gravity = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_WIN_GRAVITY) {
+    if (value_mask & XCB_CW_WIN_GRAVITY)
+    {
         /* xcb_create_window_value_list_t.win_gravity */
         _aux->win_gravity = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BACKING_STORE) {
+    if (value_mask & XCB_CW_BACKING_STORE)
+    {
         /* xcb_create_window_value_list_t.backing_store */
         _aux->backing_store = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BACKING_PLANES) {
+    if (value_mask & XCB_CW_BACKING_PLANES)
+    {
         /* xcb_create_window_value_list_t.backing_planes */
         _aux->backing_planes = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BACKING_PIXEL) {
+    if (value_mask & XCB_CW_BACKING_PIXEL)
+    {
         /* xcb_create_window_value_list_t.backing_pixel */
         _aux->backing_pixel = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_OVERRIDE_REDIRECT) {
+    if (value_mask & XCB_CW_OVERRIDE_REDIRECT)
+    {
         /* xcb_create_window_value_list_t.override_redirect */
         _aux->override_redirect = *(xcb_bool32_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_bool32_t);
         xcb_tmp += sizeof(xcb_bool32_t);
         xcb_align_to = ALIGNOF(xcb_bool32_t);
     }
-    if(value_mask & XCB_CW_SAVE_UNDER) {
+    if (value_mask & XCB_CW_SAVE_UNDER)
+    {
         /* xcb_create_window_value_list_t.save_under */
         _aux->save_under = *(xcb_bool32_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_bool32_t);
         xcb_tmp += sizeof(xcb_bool32_t);
         xcb_align_to = ALIGNOF(xcb_bool32_t);
     }
-    if(value_mask & XCB_CW_EVENT_MASK) {
+    if (value_mask & XCB_CW_EVENT_MASK)
+    {
         /* xcb_create_window_value_list_t.event_mask */
         _aux->event_mask = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_DONT_PROPAGATE) {
+    if (value_mask & XCB_CW_DONT_PROPAGATE)
+    {
         /* xcb_create_window_value_list_t.do_not_propogate_mask */
         _aux->do_not_propogate_mask = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_COLORMAP) {
+    if (value_mask & XCB_CW_COLORMAP)
+    {
         /* xcb_create_window_value_list_t.colormap */
         _aux->colormap = *(xcb_colormap_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_colormap_t);
         xcb_tmp += sizeof(xcb_colormap_t);
         xcb_align_to = ALIGNOF(xcb_colormap_t);
     }
-    if(value_mask & XCB_CW_CURSOR) {
+    if (value_mask & XCB_CW_CURSOR)
+    {
         /* xcb_create_window_value_list_t.cursor */
         _aux->cursor = *(xcb_cursor_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_cursor_t);
@@ -1305,47 +1364,49 @@ xcb_create_window_value_list_unpack (const void                      *_buffer,
     /* insert padding */
     xcb_pad = -(xcb_block_len + xcb_padding_offset) & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
-    xcb_block_len = 0;
+    xcb_block_len      = 0;
     xcb_padding_offset = 0;
 
     return xcb_buffer_len;
 }
 
 int
-xcb_create_window_value_list_sizeof (const void  *_buffer,
-                                     uint32_t     value_mask)
+xcb_create_window_value_list_sizeof(const void *_buffer, uint32_t value_mask)
 {
     xcb_create_window_value_list_t _aux;
     return xcb_create_window_value_list_unpack(_buffer, value_mask, &_aux);
 }
 
 int
-xcb_create_window_sizeof (const void  *_buffer)
+xcb_create_window_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_create_window_request_t *_aux = (xcb_create_window_request_t *)_buffer;
+    char                              *xcb_tmp = (char *)_buffer;
+    const xcb_create_window_request_t *_aux =
+        (xcb_create_window_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_create_window_request_t);
     xcb_tmp += xcb_block_len;
     xcb_buffer_len += xcb_block_len;
     xcb_block_len = 0;
     /* value_list */
-    xcb_block_len += xcb_create_window_value_list_sizeof(xcb_tmp, _aux->value_mask);
+    xcb_block_len +=
+        xcb_create_window_value_list_sizeof(xcb_tmp, _aux->value_mask);
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -1355,206 +1416,202 @@ xcb_create_window_sizeof (const void  *_buffer)
 }
 
 xcb_void_cookie_t
-xcb_create_window_checked (xcb_connection_t *c,
-                           uint8_t           depth,
-                           xcb_window_t      wid,
-                           xcb_window_t      parent,
-                           int16_t           x,
-                           int16_t           y,
-                           uint16_t          width,
-                           uint16_t          height,
-                           uint16_t          border_width,
-                           uint16_t          _class,
-                           xcb_visualid_t    visual,
-                           uint32_t          value_mask,
-                           const void       *value_list)
+xcb_create_window_checked(xcb_connection_t *c,
+                          uint8_t           depth,
+                          xcb_window_t      wid,
+                          xcb_window_t      parent,
+                          int16_t           x,
+                          int16_t           y,
+                          uint16_t          width,
+                          uint16_t          height,
+                          uint16_t          border_width,
+                          uint16_t          _class,
+                          xcb_visualid_t    visual,
+                          uint32_t          value_mask,
+                          const void       *value_list)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
-        .opcode = XCB_CREATE_WINDOW,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 3,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CREATE_WINDOW,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                xcb_parts[5];
+    xcb_void_cookie_t           xcb_ret;
     xcb_create_window_request_t xcb_out;
 
-    xcb_out.depth = depth;
-    xcb_out.wid = wid;
-    xcb_out.parent = parent;
-    xcb_out.x = x;
-    xcb_out.y = y;
-    xcb_out.width = width;
-    xcb_out.height = height;
+    xcb_out.depth        = depth;
+    xcb_out.wid          = wid;
+    xcb_out.parent       = parent;
+    xcb_out.x            = x;
+    xcb_out.y            = y;
+    xcb_out.width        = width;
+    xcb_out.height       = height;
     xcb_out.border_width = border_width;
-    xcb_out._class = _class;
-    xcb_out.visual = visual;
-    xcb_out.value_mask = value_mask;
+    xcb_out._class       = _class;
+    xcb_out.visual       = visual;
+    xcb_out.value_mask   = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_create_window_value_list_t value_list */
-    xcb_parts[4].iov_base = (char *) value_list;
+    xcb_parts[4].iov_base = (char *)value_list;
     xcb_parts[4].iov_len =
-      xcb_create_window_value_list_sizeof (value_list, value_mask);
+        xcb_create_window_value_list_sizeof(value_list, value_mask);
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_create_window (xcb_connection_t *c,
-                   uint8_t           depth,
-                   xcb_window_t      wid,
-                   xcb_window_t      parent,
-                   int16_t           x,
-                   int16_t           y,
-                   uint16_t          width,
-                   uint16_t          height,
-                   uint16_t          border_width,
-                   uint16_t          _class,
-                   xcb_visualid_t    visual,
-                   uint32_t          value_mask,
-                   const void       *value_list)
+xcb_create_window(xcb_connection_t *c,
+                  uint8_t           depth,
+                  xcb_window_t      wid,
+                  xcb_window_t      parent,
+                  int16_t           x,
+                  int16_t           y,
+                  uint16_t          width,
+                  uint16_t          height,
+                  uint16_t          border_width,
+                  uint16_t          _class,
+                  xcb_visualid_t    visual,
+                  uint32_t          value_mask,
+                  const void       *value_list)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
-        .opcode = XCB_CREATE_WINDOW,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 3,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CREATE_WINDOW,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                xcb_parts[5];
+    xcb_void_cookie_t           xcb_ret;
     xcb_create_window_request_t xcb_out;
 
-    xcb_out.depth = depth;
-    xcb_out.wid = wid;
-    xcb_out.parent = parent;
-    xcb_out.x = x;
-    xcb_out.y = y;
-    xcb_out.width = width;
-    xcb_out.height = height;
+    xcb_out.depth        = depth;
+    xcb_out.wid          = wid;
+    xcb_out.parent       = parent;
+    xcb_out.x            = x;
+    xcb_out.y            = y;
+    xcb_out.width        = width;
+    xcb_out.height       = height;
     xcb_out.border_width = border_width;
-    xcb_out._class = _class;
-    xcb_out.visual = visual;
-    xcb_out.value_mask = value_mask;
+    xcb_out._class       = _class;
+    xcb_out.visual       = visual;
+    xcb_out.value_mask   = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_create_window_value_list_t value_list */
-    xcb_parts[4].iov_base = (char *) value_list;
+    xcb_parts[4].iov_base = (char *)value_list;
     xcb_parts[4].iov_len =
-      xcb_create_window_value_list_sizeof (value_list, value_mask);
+        xcb_create_window_value_list_sizeof(value_list, value_mask);
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_create_window_aux_checked (xcb_connection_t                     *c,
-                               uint8_t                               depth,
-                               xcb_window_t                          wid,
-                               xcb_window_t                          parent,
-                               int16_t                               x,
-                               int16_t                               y,
-                               uint16_t                              width,
-                               uint16_t                              height,
-                               uint16_t                              border_width,
-                               uint16_t                              _class,
-                               xcb_visualid_t                        visual,
-                               uint32_t                              value_mask,
-                               const xcb_create_window_value_list_t *value_list)
+xcb_create_window_aux_checked(xcb_connection_t *c,
+                              uint8_t           depth,
+                              xcb_window_t      wid,
+                              xcb_window_t      parent,
+                              int16_t           x,
+                              int16_t           y,
+                              uint16_t          width,
+                              uint16_t          height,
+                              uint16_t          border_width,
+                              uint16_t          _class,
+                              xcb_visualid_t    visual,
+                              uint32_t          value_mask,
+                              const xcb_create_window_value_list_t *value_list)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
-        .opcode = XCB_CREATE_WINDOW,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 3,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CREATE_WINDOW,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                xcb_parts[5];
+    xcb_void_cookie_t           xcb_ret;
     xcb_create_window_request_t xcb_out;
-    void *xcb_aux0 = 0;
+    void                       *xcb_aux0 = 0;
 
-    xcb_out.depth = depth;
-    xcb_out.wid = wid;
-    xcb_out.parent = parent;
-    xcb_out.x = x;
-    xcb_out.y = y;
-    xcb_out.width = width;
-    xcb_out.height = height;
+    xcb_out.depth        = depth;
+    xcb_out.wid          = wid;
+    xcb_out.parent       = parent;
+    xcb_out.x            = x;
+    xcb_out.y            = y;
+    xcb_out.width        = width;
+    xcb_out.height       = height;
     xcb_out.border_width = border_width;
-    xcb_out._class = _class;
-    xcb_out.visual = visual;
-    xcb_out.value_mask = value_mask;
+    xcb_out._class       = _class;
+    xcb_out.visual       = visual;
+    xcb_out.value_mask   = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_create_window_value_list_t value_list */
-    xcb_parts[4].iov_len =
-      xcb_create_window_value_list_serialize (&xcb_aux0, value_mask, value_list);
+    xcb_parts[4].iov_len  = xcb_create_window_value_list_serialize(&xcb_aux0,
+                                                                  value_mask,
+                                                                  value_list);
     xcb_parts[4].iov_base = xcb_aux0;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     free(xcb_aux0);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_create_window_aux (xcb_connection_t                     *c,
-                       uint8_t                               depth,
-                       xcb_window_t                          wid,
-                       xcb_window_t                          parent,
-                       int16_t                               x,
-                       int16_t                               y,
-                       uint16_t                              width,
-                       uint16_t                              height,
-                       uint16_t                              border_width,
-                       uint16_t                              _class,
-                       xcb_visualid_t                        visual,
-                       uint32_t                              value_mask,
-                       const xcb_create_window_value_list_t *value_list)
+xcb_create_window_aux(xcb_connection_t                     *c,
+                      uint8_t                               depth,
+                      xcb_window_t                          wid,
+                      xcb_window_t                          parent,
+                      int16_t                               x,
+                      int16_t                               y,
+                      uint16_t                              width,
+                      uint16_t                              height,
+                      uint16_t                              border_width,
+                      uint16_t                              _class,
+                      xcb_visualid_t                        visual,
+                      uint32_t                              value_mask,
+                      const xcb_create_window_value_list_t *value_list)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
-        .opcode = XCB_CREATE_WINDOW,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 3,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CREATE_WINDOW,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                xcb_parts[5];
+    xcb_void_cookie_t           xcb_ret;
     xcb_create_window_request_t xcb_out;
-    void *xcb_aux0 = 0;
+    void                       *xcb_aux0 = 0;
 
-    xcb_out.depth = depth;
-    xcb_out.wid = wid;
-    xcb_out.parent = parent;
-    xcb_out.x = x;
-    xcb_out.y = y;
-    xcb_out.width = width;
-    xcb_out.height = height;
+    xcb_out.depth        = depth;
+    xcb_out.wid          = wid;
+    xcb_out.parent       = parent;
+    xcb_out.x            = x;
+    xcb_out.y            = y;
+    xcb_out.width        = width;
+    xcb_out.height       = height;
     xcb_out.border_width = border_width;
-    xcb_out._class = _class;
-    xcb_out.visual = visual;
-    xcb_out.value_mask = value_mask;
+    xcb_out._class       = _class;
+    xcb_out.visual       = visual;
+    xcb_out.value_mask   = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_create_window_value_list_t value_list */
-    xcb_parts[4].iov_len =
-      xcb_create_window_value_list_serialize (&xcb_aux0, value_mask, value_list);
+    xcb_parts[4].iov_len  = xcb_create_window_value_list_serialize(&xcb_aux0,
+                                                                  value_mask,
+                                                                  value_list);
     xcb_parts[4].iov_base = xcb_aux0;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
@@ -1563,144 +1620,161 @@ xcb_create_window_aux (xcb_connection_t                     *c,
 }
 
 void *
-xcb_create_window_value_list (const xcb_create_window_request_t *R)
+xcb_create_window_value_list(const xcb_create_window_request_t *R)
 {
-    return (void *) (R + 1);
+    return (void *)(R + 1);
 }
 
 int
-xcb_change_window_attributes_value_list_serialize (void                                            **_buffer,
-                                                   uint32_t                                          value_mask,
-                                                   const xcb_change_window_attributes_value_list_t  *_aux)
+xcb_change_window_attributes_value_list_serialize(
+    void                                           **_buffer,
+    uint32_t                                         value_mask,
+    const xcb_change_window_attributes_value_list_t *_aux)
 {
-    char *xcb_out = *_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_align_to = 0;
+    char        *xcb_out            = *_buffer;
+    unsigned int xcb_buffer_len     = 0;
+    unsigned int xcb_align_to       = 0;
     unsigned int xcb_padding_offset = 0;
 
-    unsigned int xcb_pad = 0;
-    char xcb_pad0[3] = {0, 0, 0};
+    unsigned int xcb_pad     = 0;
+    char         xcb_pad0[3] = { 0, 0, 0 };
     struct iovec xcb_parts[16];
     unsigned int xcb_parts_idx = 0;
     unsigned int xcb_block_len = 0;
     unsigned int i;
-    char *xcb_tmp;
+    char        *xcb_tmp;
 
-    if(value_mask & XCB_CW_BACK_PIXMAP) {
+    if (value_mask & XCB_CW_BACK_PIXMAP)
+    {
         /* xcb_change_window_attributes_value_list_t.background_pixmap */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->background_pixmap;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->background_pixmap;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_pixmap_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_CW_BACK_PIXEL) {
+    if (value_mask & XCB_CW_BACK_PIXEL)
+    {
         /* xcb_change_window_attributes_value_list_t.background_pixel */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->background_pixel;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->background_pixel;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BORDER_PIXMAP) {
+    if (value_mask & XCB_CW_BORDER_PIXMAP)
+    {
         /* xcb_change_window_attributes_value_list_t.border_pixmap */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->border_pixmap;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->border_pixmap;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_pixmap_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_CW_BORDER_PIXEL) {
+    if (value_mask & XCB_CW_BORDER_PIXEL)
+    {
         /* xcb_change_window_attributes_value_list_t.border_pixel */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->border_pixel;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->border_pixel;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BIT_GRAVITY) {
+    if (value_mask & XCB_CW_BIT_GRAVITY)
+    {
         /* xcb_change_window_attributes_value_list_t.bit_gravity */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->bit_gravity;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->bit_gravity;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_WIN_GRAVITY) {
+    if (value_mask & XCB_CW_WIN_GRAVITY)
+    {
         /* xcb_change_window_attributes_value_list_t.win_gravity */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->win_gravity;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->win_gravity;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BACKING_STORE) {
+    if (value_mask & XCB_CW_BACKING_STORE)
+    {
         /* xcb_change_window_attributes_value_list_t.backing_store */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->backing_store;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->backing_store;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BACKING_PLANES) {
+    if (value_mask & XCB_CW_BACKING_PLANES)
+    {
         /* xcb_change_window_attributes_value_list_t.backing_planes */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->backing_planes;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->backing_planes;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BACKING_PIXEL) {
+    if (value_mask & XCB_CW_BACKING_PIXEL)
+    {
         /* xcb_change_window_attributes_value_list_t.backing_pixel */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->backing_pixel;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->backing_pixel;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_OVERRIDE_REDIRECT) {
+    if (value_mask & XCB_CW_OVERRIDE_REDIRECT)
+    {
         /* xcb_change_window_attributes_value_list_t.override_redirect */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->override_redirect;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->override_redirect;
         xcb_block_len += sizeof(xcb_bool32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_bool32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_bool32_t);
     }
-    if(value_mask & XCB_CW_SAVE_UNDER) {
+    if (value_mask & XCB_CW_SAVE_UNDER)
+    {
         /* xcb_change_window_attributes_value_list_t.save_under */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->save_under;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->save_under;
         xcb_block_len += sizeof(xcb_bool32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_bool32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_bool32_t);
     }
-    if(value_mask & XCB_CW_EVENT_MASK) {
+    if (value_mask & XCB_CW_EVENT_MASK)
+    {
         /* xcb_change_window_attributes_value_list_t.event_mask */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->event_mask;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->event_mask;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_DONT_PROPAGATE) {
+    if (value_mask & XCB_CW_DONT_PROPAGATE)
+    {
         /* xcb_change_window_attributes_value_list_t.do_not_propogate_mask */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->do_not_propogate_mask;
+        xcb_parts[xcb_parts_idx].iov_base =
+            (char *)&_aux->do_not_propogate_mask;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_COLORMAP) {
+    if (value_mask & XCB_CW_COLORMAP)
+    {
         /* xcb_change_window_attributes_value_list_t.colormap */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->colormap;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->colormap;
         xcb_block_len += sizeof(xcb_colormap_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_colormap_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_colormap_t);
     }
-    if(value_mask & XCB_CW_CURSOR) {
+    if (value_mask & XCB_CW_CURSOR)
+    {
         /* xcb_change_window_attributes_value_list_t.cursor */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->cursor;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->cursor;
         xcb_block_len += sizeof(xcb_cursor_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_cursor_t);
         xcb_parts_idx++;
@@ -1709,144 +1783,161 @@ xcb_change_window_attributes_value_list_serialize (void                         
     /* insert padding */
     xcb_pad = -(xcb_block_len + xcb_padding_offset) & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_parts[xcb_parts_idx].iov_base = xcb_pad0;
-        xcb_parts[xcb_parts_idx].iov_len = xcb_pad;
+        xcb_parts[xcb_parts_idx].iov_len  = xcb_pad;
         xcb_parts_idx++;
         xcb_pad = 0;
     }
-    xcb_block_len = 0;
+    xcb_block_len      = 0;
     xcb_padding_offset = 0;
 
-    if (NULL == xcb_out) {
+    if (NULL == xcb_out)
+    {
         /* allocate memory */
-        xcb_out = malloc(xcb_buffer_len);
+        xcb_out  = malloc(xcb_buffer_len);
         *_buffer = xcb_out;
     }
 
     xcb_tmp = xcb_out;
-    for(i=0; i<xcb_parts_idx; i++) {
+    for (i = 0; i < xcb_parts_idx; i++)
+    {
         if (0 != xcb_parts[i].iov_base && 0 != xcb_parts[i].iov_len)
             memcpy(xcb_tmp, xcb_parts[i].iov_base, xcb_parts[i].iov_len);
-        if (0 != xcb_parts[i].iov_len)
-            xcb_tmp += xcb_parts[i].iov_len;
+        if (0 != xcb_parts[i].iov_len) xcb_tmp += xcb_parts[i].iov_len;
     }
 
     return xcb_buffer_len;
 }
 
 int
-xcb_change_window_attributes_value_list_unpack (const void                                 *_buffer,
-                                                uint32_t                                    value_mask,
-                                                xcb_change_window_attributes_value_list_t  *_aux)
+xcb_change_window_attributes_value_list_unpack(
+    const void                                *_buffer,
+    uint32_t                                   value_mask,
+    xcb_change_window_attributes_value_list_t *_aux)
 {
-    char *xcb_tmp = (char *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
+    char        *xcb_tmp            = (char *)_buffer;
+    unsigned int xcb_buffer_len     = 0;
+    unsigned int xcb_block_len      = 0;
+    unsigned int xcb_pad            = 0;
+    unsigned int xcb_align_to       = 0;
     unsigned int xcb_padding_offset = 0;
 
-
-    if(value_mask & XCB_CW_BACK_PIXMAP) {
+    if (value_mask & XCB_CW_BACK_PIXMAP)
+    {
         /* xcb_change_window_attributes_value_list_t.background_pixmap */
         _aux->background_pixmap = *(xcb_pixmap_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_tmp += sizeof(xcb_pixmap_t);
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_CW_BACK_PIXEL) {
+    if (value_mask & XCB_CW_BACK_PIXEL)
+    {
         /* xcb_change_window_attributes_value_list_t.background_pixel */
         _aux->background_pixel = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BORDER_PIXMAP) {
+    if (value_mask & XCB_CW_BORDER_PIXMAP)
+    {
         /* xcb_change_window_attributes_value_list_t.border_pixmap */
         _aux->border_pixmap = *(xcb_pixmap_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_tmp += sizeof(xcb_pixmap_t);
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_CW_BORDER_PIXEL) {
+    if (value_mask & XCB_CW_BORDER_PIXEL)
+    {
         /* xcb_change_window_attributes_value_list_t.border_pixel */
         _aux->border_pixel = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BIT_GRAVITY) {
+    if (value_mask & XCB_CW_BIT_GRAVITY)
+    {
         /* xcb_change_window_attributes_value_list_t.bit_gravity */
         _aux->bit_gravity = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_WIN_GRAVITY) {
+    if (value_mask & XCB_CW_WIN_GRAVITY)
+    {
         /* xcb_change_window_attributes_value_list_t.win_gravity */
         _aux->win_gravity = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BACKING_STORE) {
+    if (value_mask & XCB_CW_BACKING_STORE)
+    {
         /* xcb_change_window_attributes_value_list_t.backing_store */
         _aux->backing_store = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BACKING_PLANES) {
+    if (value_mask & XCB_CW_BACKING_PLANES)
+    {
         /* xcb_change_window_attributes_value_list_t.backing_planes */
         _aux->backing_planes = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_BACKING_PIXEL) {
+    if (value_mask & XCB_CW_BACKING_PIXEL)
+    {
         /* xcb_change_window_attributes_value_list_t.backing_pixel */
         _aux->backing_pixel = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_OVERRIDE_REDIRECT) {
+    if (value_mask & XCB_CW_OVERRIDE_REDIRECT)
+    {
         /* xcb_change_window_attributes_value_list_t.override_redirect */
         _aux->override_redirect = *(xcb_bool32_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_bool32_t);
         xcb_tmp += sizeof(xcb_bool32_t);
         xcb_align_to = ALIGNOF(xcb_bool32_t);
     }
-    if(value_mask & XCB_CW_SAVE_UNDER) {
+    if (value_mask & XCB_CW_SAVE_UNDER)
+    {
         /* xcb_change_window_attributes_value_list_t.save_under */
         _aux->save_under = *(xcb_bool32_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_bool32_t);
         xcb_tmp += sizeof(xcb_bool32_t);
         xcb_align_to = ALIGNOF(xcb_bool32_t);
     }
-    if(value_mask & XCB_CW_EVENT_MASK) {
+    if (value_mask & XCB_CW_EVENT_MASK)
+    {
         /* xcb_change_window_attributes_value_list_t.event_mask */
         _aux->event_mask = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_DONT_PROPAGATE) {
+    if (value_mask & XCB_CW_DONT_PROPAGATE)
+    {
         /* xcb_change_window_attributes_value_list_t.do_not_propogate_mask */
         _aux->do_not_propogate_mask = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CW_COLORMAP) {
+    if (value_mask & XCB_CW_COLORMAP)
+    {
         /* xcb_change_window_attributes_value_list_t.colormap */
         _aux->colormap = *(xcb_colormap_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_colormap_t);
         xcb_tmp += sizeof(xcb_colormap_t);
         xcb_align_to = ALIGNOF(xcb_colormap_t);
     }
-    if(value_mask & XCB_CW_CURSOR) {
+    if (value_mask & XCB_CW_CURSOR)
+    {
         /* xcb_change_window_attributes_value_list_t.cursor */
         _aux->cursor = *(xcb_cursor_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_cursor_t);
@@ -1856,47 +1947,53 @@ xcb_change_window_attributes_value_list_unpack (const void                      
     /* insert padding */
     xcb_pad = -(xcb_block_len + xcb_padding_offset) & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
-    xcb_block_len = 0;
+    xcb_block_len      = 0;
     xcb_padding_offset = 0;
 
     return xcb_buffer_len;
 }
 
 int
-xcb_change_window_attributes_value_list_sizeof (const void  *_buffer,
-                                                uint32_t     value_mask)
+xcb_change_window_attributes_value_list_sizeof(const void *_buffer,
+                                               uint32_t    value_mask)
 {
     xcb_change_window_attributes_value_list_t _aux;
-    return xcb_change_window_attributes_value_list_unpack(_buffer, value_mask, &_aux);
+    return xcb_change_window_attributes_value_list_unpack(_buffer,
+                                                          value_mask,
+                                                          &_aux);
 }
 
 int
-xcb_change_window_attributes_sizeof (const void  *_buffer)
+xcb_change_window_attributes_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_change_window_attributes_request_t *_aux = (xcb_change_window_attributes_request_t *)_buffer;
+    char                                         *xcb_tmp = (char *)_buffer;
+    const xcb_change_window_attributes_request_t *_aux =
+        (xcb_change_window_attributes_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_change_window_attributes_request_t);
     xcb_tmp += xcb_block_len;
     xcb_buffer_len += xcb_block_len;
     xcb_block_len = 0;
     /* value_list */
-    xcb_block_len += xcb_change_window_attributes_value_list_sizeof(xcb_tmp, _aux->value_mask);
+    xcb_block_len +=
+        xcb_change_window_attributes_value_list_sizeof(xcb_tmp,
+                                                       _aux->value_mask);
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -1906,138 +2003,146 @@ xcb_change_window_attributes_sizeof (const void  *_buffer)
 }
 
 xcb_void_cookie_t
-xcb_change_window_attributes_checked (xcb_connection_t *c,
-                                      xcb_window_t      window,
-                                      uint32_t          value_mask,
-                                      const void       *value_list)
+xcb_change_window_attributes_checked(xcb_connection_t *c,
+                                     xcb_window_t      window,
+                                     uint32_t          value_mask,
+                                     const void       *value_list)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
+        .count  = 3,
+        .ext    = 0,
         .opcode = XCB_CHANGE_WINDOW_ATTRIBUTES,
         .isvoid = 1
     };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                           xcb_parts[5];
+    xcb_void_cookie_t                      xcb_ret;
     xcb_change_window_attributes_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.window = window;
+    xcb_out.pad0       = 0;
+    xcb_out.window     = window;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_change_window_attributes_value_list_t value_list */
-    xcb_parts[4].iov_base = (char *) value_list;
+    xcb_parts[4].iov_base = (char *)value_list;
     xcb_parts[4].iov_len =
-      xcb_change_window_attributes_value_list_sizeof (value_list, value_mask);
+        xcb_change_window_attributes_value_list_sizeof(value_list, value_mask);
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_change_window_attributes (xcb_connection_t *c,
-                              xcb_window_t      window,
-                              uint32_t          value_mask,
-                              const void       *value_list)
+xcb_change_window_attributes(xcb_connection_t *c,
+                             xcb_window_t      window,
+                             uint32_t          value_mask,
+                             const void       *value_list)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
+        .count  = 3,
+        .ext    = 0,
         .opcode = XCB_CHANGE_WINDOW_ATTRIBUTES,
         .isvoid = 1
     };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                           xcb_parts[5];
+    xcb_void_cookie_t                      xcb_ret;
     xcb_change_window_attributes_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.window = window;
+    xcb_out.pad0       = 0;
+    xcb_out.window     = window;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_change_window_attributes_value_list_t value_list */
-    xcb_parts[4].iov_base = (char *) value_list;
+    xcb_parts[4].iov_base = (char *)value_list;
     xcb_parts[4].iov_len =
-      xcb_change_window_attributes_value_list_sizeof (value_list, value_mask);
+        xcb_change_window_attributes_value_list_sizeof(value_list, value_mask);
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_change_window_attributes_aux_checked (xcb_connection_t                                *c,
-                                          xcb_window_t                                     window,
-                                          uint32_t                                         value_mask,
-                                          const xcb_change_window_attributes_value_list_t *value_list)
+xcb_change_window_attributes_aux_checked(
+    xcb_connection_t                                *c,
+    xcb_window_t                                     window,
+    uint32_t                                         value_mask,
+    const xcb_change_window_attributes_value_list_t *value_list)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
+        .count  = 3,
+        .ext    = 0,
         .opcode = XCB_CHANGE_WINDOW_ATTRIBUTES,
         .isvoid = 1
     };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                           xcb_parts[5];
+    xcb_void_cookie_t                      xcb_ret;
     xcb_change_window_attributes_request_t xcb_out;
-    void *xcb_aux0 = 0;
+    void                                  *xcb_aux0 = 0;
 
-    xcb_out.pad0 = 0;
-    xcb_out.window = window;
+    xcb_out.pad0       = 0;
+    xcb_out.window     = window;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_change_window_attributes_value_list_t value_list */
     xcb_parts[4].iov_len =
-      xcb_change_window_attributes_value_list_serialize (&xcb_aux0, value_mask, value_list);
+        xcb_change_window_attributes_value_list_serialize(&xcb_aux0,
+                                                          value_mask,
+                                                          value_list);
     xcb_parts[4].iov_base = xcb_aux0;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     free(xcb_aux0);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_change_window_attributes_aux (xcb_connection_t                                *c,
-                                  xcb_window_t                                     window,
-                                  uint32_t                                         value_mask,
-                                  const xcb_change_window_attributes_value_list_t *value_list)
+xcb_change_window_attributes_aux(
+    xcb_connection_t                                *c,
+    xcb_window_t                                     window,
+    uint32_t                                         value_mask,
+    const xcb_change_window_attributes_value_list_t *value_list)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
+        .count  = 3,
+        .ext    = 0,
         .opcode = XCB_CHANGE_WINDOW_ATTRIBUTES,
         .isvoid = 1
     };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                           xcb_parts[5];
+    xcb_void_cookie_t                      xcb_ret;
     xcb_change_window_attributes_request_t xcb_out;
-    void *xcb_aux0 = 0;
+    void                                  *xcb_aux0 = 0;
 
-    xcb_out.pad0 = 0;
-    xcb_out.window = window;
+    xcb_out.pad0       = 0;
+    xcb_out.window     = window;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_change_window_attributes_value_list_t value_list */
     xcb_parts[4].iov_len =
-      xcb_change_window_attributes_value_list_serialize (&xcb_aux0, value_mask, value_list);
+        xcb_change_window_attributes_value_list_serialize(&xcb_aux0,
+                                                          value_mask,
+                                                          value_list);
     xcb_parts[4].iov_base = xcb_aux0;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
@@ -2046,588 +2151,572 @@ xcb_change_window_attributes_aux (xcb_connection_t                              
 }
 
 void *
-xcb_change_window_attributes_value_list (const xcb_change_window_attributes_request_t *R)
+xcb_change_window_attributes_value_list(
+    const xcb_change_window_attributes_request_t *R)
 {
-    return (void *) (R + 1);
+    return (void *)(R + 1);
 }
 
 xcb_get_window_attributes_cookie_t
-xcb_get_window_attributes (xcb_connection_t *c,
-                           xcb_window_t      window)
+xcb_get_window_attributes(xcb_connection_t *c, xcb_window_t window)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
+        .count  = 2,
+        .ext    = 0,
         .opcode = XCB_GET_WINDOW_ATTRIBUTES,
         .isvoid = 0
     };
 
-    struct iovec xcb_parts[4];
-    xcb_get_window_attributes_cookie_t xcb_ret;
+    struct iovec                        xcb_parts[4];
+    xcb_get_window_attributes_cookie_t  xcb_ret;
     xcb_get_window_attributes_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_window_attributes_cookie_t
-xcb_get_window_attributes_unchecked (xcb_connection_t *c,
-                                     xcb_window_t      window)
+xcb_get_window_attributes_unchecked(xcb_connection_t *c, xcb_window_t window)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
+        .count  = 2,
+        .ext    = 0,
         .opcode = XCB_GET_WINDOW_ATTRIBUTES,
         .isvoid = 0
     };
 
-    struct iovec xcb_parts[4];
-    xcb_get_window_attributes_cookie_t xcb_ret;
+    struct iovec                        xcb_parts[4];
+    xcb_get_window_attributes_cookie_t  xcb_ret;
     xcb_get_window_attributes_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_window_attributes_reply_t *
-xcb_get_window_attributes_reply (xcb_connection_t                    *c,
-                                 xcb_get_window_attributes_cookie_t   cookie  /**< */,
-                                 xcb_generic_error_t                **e)
+xcb_get_window_attributes_reply(
+    xcb_connection_t                  *c,
+    xcb_get_window_attributes_cookie_t cookie /**< */,
+    xcb_generic_error_t              **e)
 {
-    return (xcb_get_window_attributes_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_get_window_attributes_reply_t *)
+        xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 xcb_void_cookie_t
-xcb_destroy_window_checked (xcb_connection_t *c,
-                            xcb_window_t      window)
+xcb_destroy_window_checked(xcb_connection_t *c, xcb_window_t window)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_DESTROY_WINDOW,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_DESTROY_WINDOW,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                 xcb_parts[4];
+    xcb_void_cookie_t            xcb_ret;
     xcb_destroy_window_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_destroy_window (xcb_connection_t *c,
-                    xcb_window_t      window)
+xcb_destroy_window(xcb_connection_t *c, xcb_window_t window)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_DESTROY_WINDOW,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_DESTROY_WINDOW,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                 xcb_parts[4];
+    xcb_void_cookie_t            xcb_ret;
     xcb_destroy_window_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_destroy_subwindows_checked (xcb_connection_t *c,
-                                xcb_window_t      window)
+xcb_destroy_subwindows_checked(xcb_connection_t *c, xcb_window_t window)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_DESTROY_SUBWINDOWS,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_DESTROY_SUBWINDOWS,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                     xcb_parts[4];
+    xcb_void_cookie_t                xcb_ret;
     xcb_destroy_subwindows_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_destroy_subwindows (xcb_connection_t *c,
-                        xcb_window_t      window)
+xcb_destroy_subwindows(xcb_connection_t *c, xcb_window_t window)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_DESTROY_SUBWINDOWS,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_DESTROY_SUBWINDOWS,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                     xcb_parts[4];
+    xcb_void_cookie_t                xcb_ret;
     xcb_destroy_subwindows_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_change_save_set_checked (xcb_connection_t *c,
-                             uint8_t           mode,
-                             xcb_window_t      window)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CHANGE_SAVE_SET,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_change_save_set_request_t xcb_out;
-
-    xcb_out.mode = mode;
-    xcb_out.window = window;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_change_save_set (xcb_connection_t *c,
-                     uint8_t           mode,
-                     xcb_window_t      window)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CHANGE_SAVE_SET,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_change_save_set_request_t xcb_out;
-
-    xcb_out.mode = mode;
-    xcb_out.window = window;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_reparent_window_checked (xcb_connection_t *c,
-                             xcb_window_t      window,
-                             xcb_window_t      parent,
-                             int16_t           x,
-                             int16_t           y)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_REPARENT_WINDOW,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_reparent_window_request_t xcb_out;
-
-    xcb_out.pad0 = 0;
-    xcb_out.window = window;
-    xcb_out.parent = parent;
-    xcb_out.x = x;
-    xcb_out.y = y;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_reparent_window (xcb_connection_t *c,
-                     xcb_window_t      window,
-                     xcb_window_t      parent,
-                     int16_t           x,
-                     int16_t           y)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_REPARENT_WINDOW,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_reparent_window_request_t xcb_out;
-
-    xcb_out.pad0 = 0;
-    xcb_out.window = window;
-    xcb_out.parent = parent;
-    xcb_out.x = x;
-    xcb_out.y = y;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_map_window_checked (xcb_connection_t *c,
-                        xcb_window_t      window)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_MAP_WINDOW,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_map_window_request_t xcb_out;
-
-    xcb_out.pad0 = 0;
-    xcb_out.window = window;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_map_window (xcb_connection_t *c,
-                xcb_window_t      window)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_MAP_WINDOW,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_map_window_request_t xcb_out;
-
-    xcb_out.pad0 = 0;
-    xcb_out.window = window;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_map_subwindows_checked (xcb_connection_t *c,
+xcb_change_save_set_checked(xcb_connection_t *c,
+                            uint8_t           mode,
                             xcb_window_t      window)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_MAP_SUBWINDOWS,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_CHANGE_SAVE_SET,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_map_subwindows_request_t xcb_out;
+    struct iovec                  xcb_parts[4];
+    xcb_void_cookie_t             xcb_ret;
+    xcb_change_save_set_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.mode   = mode;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_map_subwindows (xcb_connection_t *c,
-                    xcb_window_t      window)
+xcb_change_save_set(xcb_connection_t *c, uint8_t mode, xcb_window_t window)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_MAP_SUBWINDOWS,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_CHANGE_SAVE_SET,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_map_subwindows_request_t xcb_out;
+    struct iovec                  xcb_parts[4];
+    xcb_void_cookie_t             xcb_ret;
+    xcb_change_save_set_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.mode   = mode;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_unmap_window_checked (xcb_connection_t *c,
-                          xcb_window_t      window)
+xcb_reparent_window_checked(xcb_connection_t *c,
+                            xcb_window_t      window,
+                            xcb_window_t      parent,
+                            int16_t           x,
+                            int16_t           y)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_UNMAP_WINDOW,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_REPARENT_WINDOW,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_unmap_window_request_t xcb_out;
+    struct iovec                  xcb_parts[4];
+    xcb_void_cookie_t             xcb_ret;
+    xcb_reparent_window_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
+    xcb_out.parent = parent;
+    xcb_out.x      = x;
+    xcb_out.y      = y;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_unmap_window (xcb_connection_t *c,
-                  xcb_window_t      window)
+xcb_reparent_window(xcb_connection_t *c,
+                    xcb_window_t      window,
+                    xcb_window_t      parent,
+                    int16_t           x,
+                    int16_t           y)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_UNMAP_WINDOW,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_REPARENT_WINDOW,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_unmap_window_request_t xcb_out;
+    struct iovec                  xcb_parts[4];
+    xcb_void_cookie_t             xcb_ret;
+    xcb_reparent_window_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
+    xcb_out.parent = parent;
+    xcb_out.x      = x;
+    xcb_out.y      = y;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_unmap_subwindows_checked (xcb_connection_t *c,
-                              xcb_window_t      window)
+xcb_map_window_checked(xcb_connection_t *c, xcb_window_t window)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_UNMAP_SUBWINDOWS,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_MAP_WINDOW,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_unmap_subwindows_request_t xcb_out;
+    struct iovec             xcb_parts[4];
+    xcb_void_cookie_t        xcb_ret;
+    xcb_map_window_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_unmap_subwindows (xcb_connection_t *c,
-                      xcb_window_t      window)
+xcb_map_window(xcb_connection_t *c, xcb_window_t window)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_UNMAP_SUBWINDOWS,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_MAP_WINDOW,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_unmap_subwindows_request_t xcb_out;
+    struct iovec             xcb_parts[4];
+    xcb_void_cookie_t        xcb_ret;
+    xcb_map_window_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_map_subwindows_checked(xcb_connection_t *c, xcb_window_t window)
+{
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_MAP_SUBWINDOWS,
+                                                    .isvoid = 1 };
+
+    struct iovec                 xcb_parts[4];
+    xcb_void_cookie_t            xcb_ret;
+    xcb_map_subwindows_request_t xcb_out;
+
+    xcb_out.pad0   = 0;
+    xcb_out.window = window;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_map_subwindows(xcb_connection_t *c, xcb_window_t window)
+{
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_MAP_SUBWINDOWS,
+                                                    .isvoid = 1 };
+
+    struct iovec                 xcb_parts[4];
+    xcb_void_cookie_t            xcb_ret;
+    xcb_map_subwindows_request_t xcb_out;
+
+    xcb_out.pad0   = 0;
+    xcb_out.window = window;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_unmap_window_checked(xcb_connection_t *c, xcb_window_t window)
+{
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_UNMAP_WINDOW,
+                                                    .isvoid = 1 };
+
+    struct iovec               xcb_parts[4];
+    xcb_void_cookie_t          xcb_ret;
+    xcb_unmap_window_request_t xcb_out;
+
+    xcb_out.pad0   = 0;
+    xcb_out.window = window;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_unmap_window(xcb_connection_t *c, xcb_window_t window)
+{
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_UNMAP_WINDOW,
+                                                    .isvoid = 1 };
+
+    struct iovec               xcb_parts[4];
+    xcb_void_cookie_t          xcb_ret;
+    xcb_unmap_window_request_t xcb_out;
+
+    xcb_out.pad0   = 0;
+    xcb_out.window = window;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_unmap_subwindows_checked(xcb_connection_t *c, xcb_window_t window)
+{
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_UNMAP_SUBWINDOWS,
+                                                    .isvoid = 1 };
+
+    struct iovec                   xcb_parts[4];
+    xcb_void_cookie_t              xcb_ret;
+    xcb_unmap_subwindows_request_t xcb_out;
+
+    xcb_out.pad0   = 0;
+    xcb_out.window = window;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_unmap_subwindows(xcb_connection_t *c, xcb_window_t window)
+{
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_UNMAP_SUBWINDOWS,
+                                                    .isvoid = 1 };
+
+    struct iovec                   xcb_parts[4];
+    xcb_void_cookie_t              xcb_ret;
+    xcb_unmap_subwindows_request_t xcb_out;
+
+    xcb_out.pad0   = 0;
+    xcb_out.window = window;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 int
-xcb_configure_window_value_list_serialize (void                                    **_buffer,
-                                           uint16_t                                  value_mask,
-                                           const xcb_configure_window_value_list_t  *_aux)
+xcb_configure_window_value_list_serialize(
+    void                                   **_buffer,
+    uint16_t                                 value_mask,
+    const xcb_configure_window_value_list_t *_aux)
 {
-    char *xcb_out = *_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_align_to = 0;
+    char        *xcb_out            = *_buffer;
+    unsigned int xcb_buffer_len     = 0;
+    unsigned int xcb_align_to       = 0;
     unsigned int xcb_padding_offset = 0;
 
-    unsigned int xcb_pad = 0;
-    char xcb_pad0[3] = {0, 0, 0};
+    unsigned int xcb_pad     = 0;
+    char         xcb_pad0[3] = { 0, 0, 0 };
     struct iovec xcb_parts[8];
     unsigned int xcb_parts_idx = 0;
     unsigned int xcb_block_len = 0;
     unsigned int i;
-    char *xcb_tmp;
+    char        *xcb_tmp;
 
-    if(value_mask & XCB_CONFIG_WINDOW_X) {
+    if (value_mask & XCB_CONFIG_WINDOW_X)
+    {
         /* xcb_configure_window_value_list_t.x */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->x;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->x;
         xcb_block_len += sizeof(int32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(int32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_CONFIG_WINDOW_Y) {
+    if (value_mask & XCB_CONFIG_WINDOW_Y)
+    {
         /* xcb_configure_window_value_list_t.y */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->y;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->y;
         xcb_block_len += sizeof(int32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(int32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_CONFIG_WINDOW_WIDTH) {
+    if (value_mask & XCB_CONFIG_WINDOW_WIDTH)
+    {
         /* xcb_configure_window_value_list_t.width */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->width;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->width;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CONFIG_WINDOW_HEIGHT) {
+    if (value_mask & XCB_CONFIG_WINDOW_HEIGHT)
+    {
         /* xcb_configure_window_value_list_t.height */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->height;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->height;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CONFIG_WINDOW_BORDER_WIDTH) {
+    if (value_mask & XCB_CONFIG_WINDOW_BORDER_WIDTH)
+    {
         /* xcb_configure_window_value_list_t.border_width */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->border_width;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->border_width;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CONFIG_WINDOW_SIBLING) {
+    if (value_mask & XCB_CONFIG_WINDOW_SIBLING)
+    {
         /* xcb_configure_window_value_list_t.sibling */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->sibling;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->sibling;
         xcb_block_len += sizeof(xcb_window_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_window_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_window_t);
     }
-    if(value_mask & XCB_CONFIG_WINDOW_STACK_MODE) {
+    if (value_mask & XCB_CONFIG_WINDOW_STACK_MODE)
+    {
         /* xcb_configure_window_value_list_t.stack_mode */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->stack_mode;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->stack_mode;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
@@ -2636,88 +2725,96 @@ xcb_configure_window_value_list_serialize (void                                 
     /* insert padding */
     xcb_pad = -(xcb_block_len + xcb_padding_offset) & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_parts[xcb_parts_idx].iov_base = xcb_pad0;
-        xcb_parts[xcb_parts_idx].iov_len = xcb_pad;
+        xcb_parts[xcb_parts_idx].iov_len  = xcb_pad;
         xcb_parts_idx++;
         xcb_pad = 0;
     }
-    xcb_block_len = 0;
+    xcb_block_len      = 0;
     xcb_padding_offset = 0;
 
-    if (NULL == xcb_out) {
+    if (NULL == xcb_out)
+    {
         /* allocate memory */
-        xcb_out = malloc(xcb_buffer_len);
+        xcb_out  = malloc(xcb_buffer_len);
         *_buffer = xcb_out;
     }
 
     xcb_tmp = xcb_out;
-    for(i=0; i<xcb_parts_idx; i++) {
+    for (i = 0; i < xcb_parts_idx; i++)
+    {
         if (0 != xcb_parts[i].iov_base && 0 != xcb_parts[i].iov_len)
             memcpy(xcb_tmp, xcb_parts[i].iov_base, xcb_parts[i].iov_len);
-        if (0 != xcb_parts[i].iov_len)
-            xcb_tmp += xcb_parts[i].iov_len;
+        if (0 != xcb_parts[i].iov_len) xcb_tmp += xcb_parts[i].iov_len;
     }
 
     return xcb_buffer_len;
 }
 
 int
-xcb_configure_window_value_list_unpack (const void                         *_buffer,
-                                        uint16_t                            value_mask,
-                                        xcb_configure_window_value_list_t  *_aux)
+xcb_configure_window_value_list_unpack(const void *_buffer,
+                                       uint16_t    value_mask,
+                                       xcb_configure_window_value_list_t *_aux)
 {
-    char *xcb_tmp = (char *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
+    char        *xcb_tmp            = (char *)_buffer;
+    unsigned int xcb_buffer_len     = 0;
+    unsigned int xcb_block_len      = 0;
+    unsigned int xcb_pad            = 0;
+    unsigned int xcb_align_to       = 0;
     unsigned int xcb_padding_offset = 0;
 
-
-    if(value_mask & XCB_CONFIG_WINDOW_X) {
+    if (value_mask & XCB_CONFIG_WINDOW_X)
+    {
         /* xcb_configure_window_value_list_t.x */
         _aux->x = *(int32_t *)xcb_tmp;
         xcb_block_len += sizeof(int32_t);
         xcb_tmp += sizeof(int32_t);
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_CONFIG_WINDOW_Y) {
+    if (value_mask & XCB_CONFIG_WINDOW_Y)
+    {
         /* xcb_configure_window_value_list_t.y */
         _aux->y = *(int32_t *)xcb_tmp;
         xcb_block_len += sizeof(int32_t);
         xcb_tmp += sizeof(int32_t);
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_CONFIG_WINDOW_WIDTH) {
+    if (value_mask & XCB_CONFIG_WINDOW_WIDTH)
+    {
         /* xcb_configure_window_value_list_t.width */
         _aux->width = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CONFIG_WINDOW_HEIGHT) {
+    if (value_mask & XCB_CONFIG_WINDOW_HEIGHT)
+    {
         /* xcb_configure_window_value_list_t.height */
         _aux->height = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CONFIG_WINDOW_BORDER_WIDTH) {
+    if (value_mask & XCB_CONFIG_WINDOW_BORDER_WIDTH)
+    {
         /* xcb_configure_window_value_list_t.border_width */
         _aux->border_width = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_CONFIG_WINDOW_SIBLING) {
+    if (value_mask & XCB_CONFIG_WINDOW_SIBLING)
+    {
         /* xcb_configure_window_value_list_t.sibling */
         _aux->sibling = *(xcb_window_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_window_t);
         xcb_tmp += sizeof(xcb_window_t);
         xcb_align_to = ALIGNOF(xcb_window_t);
     }
-    if(value_mask & XCB_CONFIG_WINDOW_STACK_MODE) {
+    if (value_mask & XCB_CONFIG_WINDOW_STACK_MODE)
+    {
         /* xcb_configure_window_value_list_t.stack_mode */
         _aux->stack_mode = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
@@ -2727,47 +2824,49 @@ xcb_configure_window_value_list_unpack (const void                         *_buf
     /* insert padding */
     xcb_pad = -(xcb_block_len + xcb_padding_offset) & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
-    xcb_block_len = 0;
+    xcb_block_len      = 0;
     xcb_padding_offset = 0;
 
     return xcb_buffer_len;
 }
 
 int
-xcb_configure_window_value_list_sizeof (const void  *_buffer,
-                                        uint16_t     value_mask)
+xcb_configure_window_value_list_sizeof(const void *_buffer, uint16_t value_mask)
 {
     xcb_configure_window_value_list_t _aux;
     return xcb_configure_window_value_list_unpack(_buffer, value_mask, &_aux);
 }
 
 int
-xcb_configure_window_sizeof (const void  *_buffer)
+xcb_configure_window_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_configure_window_request_t *_aux = (xcb_configure_window_request_t *)_buffer;
+    char                                 *xcb_tmp = (char *)_buffer;
+    const xcb_configure_window_request_t *_aux =
+        (xcb_configure_window_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_configure_window_request_t);
     xcb_tmp += xcb_block_len;
     xcb_buffer_len += xcb_block_len;
     xcb_block_len = 0;
     /* value_list */
-    xcb_block_len += xcb_configure_window_value_list_sizeof(xcb_tmp, _aux->value_mask);
+    xcb_block_len +=
+        xcb_configure_window_value_list_sizeof(xcb_tmp, _aux->value_mask);
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -2777,142 +2876,145 @@ xcb_configure_window_sizeof (const void  *_buffer)
 }
 
 xcb_void_cookie_t
-xcb_configure_window_checked (xcb_connection_t *c,
-                              xcb_window_t      window,
-                              uint16_t          value_mask,
-                              const void       *value_list)
+xcb_configure_window_checked(xcb_connection_t *c,
+                             xcb_window_t      window,
+                             uint16_t          value_mask,
+                             const void       *value_list)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
-        .opcode = XCB_CONFIGURE_WINDOW,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 3,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_CONFIGURE_WINDOW,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                   xcb_parts[5];
+    xcb_void_cookie_t              xcb_ret;
     xcb_configure_window_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.window = window;
+    xcb_out.pad0       = 0;
+    xcb_out.window     = window;
     xcb_out.value_mask = value_mask;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_configure_window_value_list_t value_list */
-    xcb_parts[4].iov_base = (char *) value_list;
+    xcb_parts[4].iov_base = (char *)value_list;
     xcb_parts[4].iov_len =
-      xcb_configure_window_value_list_sizeof (value_list, value_mask);
+        xcb_configure_window_value_list_sizeof(value_list, value_mask);
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_configure_window (xcb_connection_t *c,
-                      xcb_window_t      window,
-                      uint16_t          value_mask,
-                      const void       *value_list)
+xcb_configure_window(xcb_connection_t *c,
+                     xcb_window_t      window,
+                     uint16_t          value_mask,
+                     const void       *value_list)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
-        .opcode = XCB_CONFIGURE_WINDOW,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 3,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_CONFIGURE_WINDOW,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                   xcb_parts[5];
+    xcb_void_cookie_t              xcb_ret;
     xcb_configure_window_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.window = window;
+    xcb_out.pad0       = 0;
+    xcb_out.window     = window;
     xcb_out.value_mask = value_mask;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_configure_window_value_list_t value_list */
-    xcb_parts[4].iov_base = (char *) value_list;
+    xcb_parts[4].iov_base = (char *)value_list;
     xcb_parts[4].iov_len =
-      xcb_configure_window_value_list_sizeof (value_list, value_mask);
+        xcb_configure_window_value_list_sizeof(value_list, value_mask);
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_configure_window_aux_checked (xcb_connection_t                        *c,
-                                  xcb_window_t                             window,
-                                  uint16_t                                 value_mask,
-                                  const xcb_configure_window_value_list_t *value_list)
+xcb_configure_window_aux_checked(
+    xcb_connection_t                        *c,
+    xcb_window_t                             window,
+    uint16_t                                 value_mask,
+    const xcb_configure_window_value_list_t *value_list)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
-        .opcode = XCB_CONFIGURE_WINDOW,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 3,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_CONFIGURE_WINDOW,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                   xcb_parts[5];
+    xcb_void_cookie_t              xcb_ret;
     xcb_configure_window_request_t xcb_out;
-    void *xcb_aux0 = 0;
+    void                          *xcb_aux0 = 0;
 
-    xcb_out.pad0 = 0;
-    xcb_out.window = window;
+    xcb_out.pad0       = 0;
+    xcb_out.window     = window;
     xcb_out.value_mask = value_mask;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_configure_window_value_list_t value_list */
     xcb_parts[4].iov_len =
-      xcb_configure_window_value_list_serialize (&xcb_aux0, value_mask, value_list);
+        xcb_configure_window_value_list_serialize(&xcb_aux0,
+                                                  value_mask,
+                                                  value_list);
     xcb_parts[4].iov_base = xcb_aux0;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     free(xcb_aux0);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_configure_window_aux (xcb_connection_t                        *c,
-                          xcb_window_t                             window,
-                          uint16_t                                 value_mask,
-                          const xcb_configure_window_value_list_t *value_list)
+xcb_configure_window_aux(xcb_connection_t                        *c,
+                         xcb_window_t                             window,
+                         uint16_t                                 value_mask,
+                         const xcb_configure_window_value_list_t *value_list)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
-        .opcode = XCB_CONFIGURE_WINDOW,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 3,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_CONFIGURE_WINDOW,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                   xcb_parts[5];
+    xcb_void_cookie_t              xcb_ret;
     xcb_configure_window_request_t xcb_out;
-    void *xcb_aux0 = 0;
+    void                          *xcb_aux0 = 0;
 
-    xcb_out.pad0 = 0;
-    xcb_out.window = window;
+    xcb_out.pad0       = 0;
+    xcb_out.window     = window;
     xcb_out.value_mask = value_mask;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_configure_window_value_list_t value_list */
     xcb_parts[4].iov_len =
-      xcb_configure_window_value_list_serialize (&xcb_aux0, value_mask, value_list);
+        xcb_configure_window_value_list_serialize(&xcb_aux0,
+                                                  value_mask,
+                                                  value_list);
     xcb_parts[4].iov_base = xcb_aux0;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
@@ -2921,139 +3023,133 @@ xcb_configure_window_aux (xcb_connection_t                        *c,
 }
 
 void *
-xcb_configure_window_value_list (const xcb_configure_window_request_t *R)
+xcb_configure_window_value_list(const xcb_configure_window_request_t *R)
 {
-    return (void *) (R + 1);
+    return (void *)(R + 1);
 }
 
 xcb_void_cookie_t
-xcb_circulate_window_checked (xcb_connection_t *c,
-                              uint8_t           direction,
-                              xcb_window_t      window)
+xcb_circulate_window_checked(xcb_connection_t *c,
+                             uint8_t           direction,
+                             xcb_window_t      window)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CIRCULATE_WINDOW,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_CIRCULATE_WINDOW,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                   xcb_parts[4];
+    xcb_void_cookie_t              xcb_ret;
     xcb_circulate_window_request_t xcb_out;
 
     xcb_out.direction = direction;
-    xcb_out.window = window;
+    xcb_out.window    = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_circulate_window (xcb_connection_t *c,
-                      uint8_t           direction,
-                      xcb_window_t      window)
+xcb_circulate_window(xcb_connection_t *c,
+                     uint8_t           direction,
+                     xcb_window_t      window)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CIRCULATE_WINDOW,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_CIRCULATE_WINDOW,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                   xcb_parts[4];
+    xcb_void_cookie_t              xcb_ret;
     xcb_circulate_window_request_t xcb_out;
 
     xcb_out.direction = direction;
-    xcb_out.window = window;
+    xcb_out.window    = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_geometry_cookie_t
-xcb_get_geometry (xcb_connection_t *c,
-                  xcb_drawable_t    drawable)
+xcb_get_geometry(xcb_connection_t *c, xcb_drawable_t drawable)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_GEOMETRY,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GET_GEOMETRY,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_geometry_cookie_t xcb_ret;
+    struct iovec               xcb_parts[4];
+    xcb_get_geometry_cookie_t  xcb_ret;
     xcb_get_geometry_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.drawable = drawable;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_geometry_cookie_t
-xcb_get_geometry_unchecked (xcb_connection_t *c,
-                            xcb_drawable_t    drawable)
+xcb_get_geometry_unchecked(xcb_connection_t *c, xcb_drawable_t drawable)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_GEOMETRY,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GET_GEOMETRY,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_geometry_cookie_t xcb_ret;
+    struct iovec               xcb_parts[4];
+    xcb_get_geometry_cookie_t  xcb_ret;
     xcb_get_geometry_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.drawable = drawable;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_geometry_reply_t *
-xcb_get_geometry_reply (xcb_connection_t           *c,
-                        xcb_get_geometry_cookie_t   cookie  /**< */,
-                        xcb_generic_error_t       **e)
+xcb_get_geometry_reply(xcb_connection_t         *c,
+                       xcb_get_geometry_cookie_t cookie /**< */,
+                       xcb_generic_error_t     **e)
 {
-    return (xcb_get_geometry_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (
+        xcb_get_geometry_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_query_tree_sizeof (const void  *_buffer)
+xcb_query_tree_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_query_tree_reply_t *_aux = (xcb_query_tree_reply_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    char                         *xcb_tmp = (char *)_buffer;
+    const xcb_query_tree_reply_t *_aux    = (xcb_query_tree_reply_t *)_buffer;
+    unsigned int                  xcb_buffer_len = 0;
+    unsigned int                  xcb_block_len  = 0;
+    unsigned int                  xcb_pad        = 0;
+    unsigned int                  xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_query_tree_reply_t);
     xcb_tmp += xcb_block_len;
@@ -3064,9 +3160,10 @@ xcb_query_tree_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_window_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -3076,99 +3173,94 @@ xcb_query_tree_sizeof (const void  *_buffer)
 }
 
 xcb_query_tree_cookie_t
-xcb_query_tree (xcb_connection_t *c,
-                xcb_window_t      window)
+xcb_query_tree(xcb_connection_t *c, xcb_window_t window)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_QUERY_TREE,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_QUERY_TREE,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_query_tree_cookie_t xcb_ret;
+    struct iovec             xcb_parts[4];
+    xcb_query_tree_cookie_t  xcb_ret;
     xcb_query_tree_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_query_tree_cookie_t
-xcb_query_tree_unchecked (xcb_connection_t *c,
-                          xcb_window_t      window)
+xcb_query_tree_unchecked(xcb_connection_t *c, xcb_window_t window)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_QUERY_TREE,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_QUERY_TREE,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_query_tree_cookie_t xcb_ret;
+    struct iovec             xcb_parts[4];
+    xcb_query_tree_cookie_t  xcb_ret;
     xcb_query_tree_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_window_t *
-xcb_query_tree_children (const xcb_query_tree_reply_t *R)
+xcb_query_tree_children(const xcb_query_tree_reply_t *R)
 {
-    return (xcb_window_t *) (R + 1);
+    return (xcb_window_t *)(R + 1);
 }
 
 int
-xcb_query_tree_children_length (const xcb_query_tree_reply_t *R)
+xcb_query_tree_children_length(const xcb_query_tree_reply_t *R)
 {
     return R->children_len;
 }
 
 xcb_generic_iterator_t
-xcb_query_tree_children_end (const xcb_query_tree_reply_t *R)
+xcb_query_tree_children_end(const xcb_query_tree_reply_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((xcb_window_t *) (R + 1)) + (R->children_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((xcb_window_t *)(R + 1)) + (R->children_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_query_tree_reply_t *
-xcb_query_tree_reply (xcb_connection_t         *c,
-                      xcb_query_tree_cookie_t   cookie  /**< */,
-                      xcb_generic_error_t     **e)
+xcb_query_tree_reply(xcb_connection_t       *c,
+                     xcb_query_tree_cookie_t cookie /**< */,
+                     xcb_generic_error_t   **e)
 {
-    return (xcb_query_tree_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_query_tree_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_intern_atom_sizeof (const void  *_buffer)
+xcb_intern_atom_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_intern_atom_request_t *_aux = (xcb_intern_atom_request_t *)_buffer;
+    char                            *xcb_tmp = (char *)_buffer;
+    const xcb_intern_atom_request_t *_aux =
+        (xcb_intern_atom_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_intern_atom_request_t);
     xcb_tmp += xcb_block_len;
@@ -3179,9 +3271,10 @@ xcb_intern_atom_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -3191,93 +3284,90 @@ xcb_intern_atom_sizeof (const void  *_buffer)
 }
 
 xcb_intern_atom_cookie_t
-xcb_intern_atom (xcb_connection_t *c,
-                 uint8_t           only_if_exists,
-                 uint16_t          name_len,
-                 const char       *name)
+xcb_intern_atom(xcb_connection_t *c,
+                uint8_t           only_if_exists,
+                uint16_t          name_len,
+                const char       *name)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_INTERN_ATOM,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_INTERN_ATOM,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[6];
-    xcb_intern_atom_cookie_t xcb_ret;
+    struct iovec              xcb_parts[6];
+    xcb_intern_atom_cookie_t  xcb_ret;
     xcb_intern_atom_request_t xcb_out;
 
     xcb_out.only_if_exists = only_if_exists;
-    xcb_out.name_len = name_len;
+    xcb_out.name_len       = name_len;
     memset(xcb_out.pad0, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char name */
-    xcb_parts[4].iov_base = (char *) name;
-    xcb_parts[4].iov_len = name_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)name;
+    xcb_parts[4].iov_len  = name_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_intern_atom_cookie_t
-xcb_intern_atom_unchecked (xcb_connection_t *c,
-                           uint8_t           only_if_exists,
-                           uint16_t          name_len,
-                           const char       *name)
+xcb_intern_atom_unchecked(xcb_connection_t *c,
+                          uint8_t           only_if_exists,
+                          uint16_t          name_len,
+                          const char       *name)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_INTERN_ATOM,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_INTERN_ATOM,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[6];
-    xcb_intern_atom_cookie_t xcb_ret;
+    struct iovec              xcb_parts[6];
+    xcb_intern_atom_cookie_t  xcb_ret;
     xcb_intern_atom_request_t xcb_out;
 
     xcb_out.only_if_exists = only_if_exists;
-    xcb_out.name_len = name_len;
+    xcb_out.name_len       = name_len;
     memset(xcb_out.pad0, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char name */
-    xcb_parts[4].iov_base = (char *) name;
-    xcb_parts[4].iov_len = name_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)name;
+    xcb_parts[4].iov_len  = name_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_intern_atom_reply_t *
-xcb_intern_atom_reply (xcb_connection_t          *c,
-                       xcb_intern_atom_cookie_t   cookie  /**< */,
-                       xcb_generic_error_t      **e)
+xcb_intern_atom_reply(xcb_connection_t        *c,
+                      xcb_intern_atom_cookie_t cookie /**< */,
+                      xcb_generic_error_t    **e)
 {
-    return (xcb_intern_atom_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_intern_atom_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_get_atom_name_sizeof (const void  *_buffer)
+xcb_get_atom_name_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_get_atom_name_reply_t *_aux = (xcb_get_atom_name_reply_t *)_buffer;
+    char                            *xcb_tmp = (char *)_buffer;
+    const xcb_get_atom_name_reply_t *_aux =
+        (xcb_get_atom_name_reply_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_get_atom_name_reply_t);
     xcb_tmp += xcb_block_len;
@@ -3288,9 +3378,10 @@ xcb_get_atom_name_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -3300,99 +3391,95 @@ xcb_get_atom_name_sizeof (const void  *_buffer)
 }
 
 xcb_get_atom_name_cookie_t
-xcb_get_atom_name (xcb_connection_t *c,
-                   xcb_atom_t        atom)
+xcb_get_atom_name(xcb_connection_t *c, xcb_atom_t atom)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_ATOM_NAME,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GET_ATOM_NAME,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_atom_name_cookie_t xcb_ret;
+    struct iovec                xcb_parts[4];
+    xcb_get_atom_name_cookie_t  xcb_ret;
     xcb_get_atom_name_request_t xcb_out;
 
     xcb_out.pad0 = 0;
     xcb_out.atom = atom;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_atom_name_cookie_t
-xcb_get_atom_name_unchecked (xcb_connection_t *c,
-                             xcb_atom_t        atom)
+xcb_get_atom_name_unchecked(xcb_connection_t *c, xcb_atom_t atom)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_ATOM_NAME,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GET_ATOM_NAME,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_atom_name_cookie_t xcb_ret;
+    struct iovec                xcb_parts[4];
+    xcb_get_atom_name_cookie_t  xcb_ret;
     xcb_get_atom_name_request_t xcb_out;
 
     xcb_out.pad0 = 0;
     xcb_out.atom = atom;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 char *
-xcb_get_atom_name_name (const xcb_get_atom_name_reply_t *R)
+xcb_get_atom_name_name(const xcb_get_atom_name_reply_t *R)
 {
-    return (char *) (R + 1);
+    return (char *)(R + 1);
 }
 
 int
-xcb_get_atom_name_name_length (const xcb_get_atom_name_reply_t *R)
+xcb_get_atom_name_name_length(const xcb_get_atom_name_reply_t *R)
 {
     return R->name_len;
 }
 
 xcb_generic_iterator_t
-xcb_get_atom_name_name_end (const xcb_get_atom_name_reply_t *R)
+xcb_get_atom_name_name_end(const xcb_get_atom_name_reply_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((char *) (R + 1)) + (R->name_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((char *)(R + 1)) + (R->name_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_get_atom_name_reply_t *
-xcb_get_atom_name_reply (xcb_connection_t            *c,
-                         xcb_get_atom_name_cookie_t   cookie  /**< */,
-                         xcb_generic_error_t        **e)
+xcb_get_atom_name_reply(xcb_connection_t          *c,
+                        xcb_get_atom_name_cookie_t cookie /**< */,
+                        xcb_generic_error_t      **e)
 {
-    return (xcb_get_atom_name_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (
+        xcb_get_atom_name_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_change_property_sizeof (const void  *_buffer)
+xcb_change_property_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_change_property_request_t *_aux = (xcb_change_property_request_t *)_buffer;
+    char                                *xcb_tmp = (char *)_buffer;
+    const xcb_change_property_request_t *_aux =
+        (xcb_change_property_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_change_property_request_t);
     xcb_tmp += xcb_block_len;
@@ -3403,9 +3490,10 @@ xcb_change_property_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -3415,181 +3503,178 @@ xcb_change_property_sizeof (const void  *_buffer)
 }
 
 xcb_void_cookie_t
-xcb_change_property_checked (xcb_connection_t *c,
-                             uint8_t           mode,
-                             xcb_window_t      window,
-                             xcb_atom_t        property,
-                             xcb_atom_t        type,
-                             uint8_t           format,
-                             uint32_t          data_len,
-                             const void       *data)
+xcb_change_property_checked(xcb_connection_t *c,
+                            uint8_t           mode,
+                            xcb_window_t      window,
+                            xcb_atom_t        property,
+                            xcb_atom_t        type,
+                            uint8_t           format,
+                            uint32_t          data_len,
+                            const void       *data)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_CHANGE_PROPERTY,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_CHANGE_PROPERTY,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[6];
+    xcb_void_cookie_t             xcb_ret;
     xcb_change_property_request_t xcb_out;
 
-    xcb_out.mode = mode;
-    xcb_out.window = window;
+    xcb_out.mode     = mode;
+    xcb_out.window   = window;
     xcb_out.property = property;
-    xcb_out.type = type;
-    xcb_out.format = format;
+    xcb_out.type     = type;
+    xcb_out.format   = format;
     memset(xcb_out.pad0, 0, 3);
     xcb_out.data_len = data_len;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* void data */
-    xcb_parts[4].iov_base = (char *) data;
-    xcb_parts[4].iov_len = ((data_len * format) / 8) * sizeof(char);
+    xcb_parts[4].iov_base = (char *)data;
+    xcb_parts[4].iov_len  = ((data_len * format) / 8) * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_change_property (xcb_connection_t *c,
-                     uint8_t           mode,
-                     xcb_window_t      window,
-                     xcb_atom_t        property,
-                     xcb_atom_t        type,
-                     uint8_t           format,
-                     uint32_t          data_len,
-                     const void       *data)
+xcb_change_property(xcb_connection_t *c,
+                    uint8_t           mode,
+                    xcb_window_t      window,
+                    xcb_atom_t        property,
+                    xcb_atom_t        type,
+                    uint8_t           format,
+                    uint32_t          data_len,
+                    const void       *data)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_CHANGE_PROPERTY,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_CHANGE_PROPERTY,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[6];
+    xcb_void_cookie_t             xcb_ret;
     xcb_change_property_request_t xcb_out;
 
-    xcb_out.mode = mode;
-    xcb_out.window = window;
+    xcb_out.mode     = mode;
+    xcb_out.window   = window;
     xcb_out.property = property;
-    xcb_out.type = type;
-    xcb_out.format = format;
+    xcb_out.type     = type;
+    xcb_out.format   = format;
     memset(xcb_out.pad0, 0, 3);
     xcb_out.data_len = data_len;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* void data */
-    xcb_parts[4].iov_base = (char *) data;
-    xcb_parts[4].iov_len = ((data_len * format) / 8) * sizeof(char);
+    xcb_parts[4].iov_base = (char *)data;
+    xcb_parts[4].iov_len  = ((data_len * format) / 8) * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 void *
-xcb_change_property_data (const xcb_change_property_request_t *R)
+xcb_change_property_data(const xcb_change_property_request_t *R)
 {
-    return (void *) (R + 1);
+    return (void *)(R + 1);
 }
 
 int
-xcb_change_property_data_length (const xcb_change_property_request_t *R)
+xcb_change_property_data_length(const xcb_change_property_request_t *R)
 {
     return ((R->data_len * R->format) / 8);
 }
 
 xcb_generic_iterator_t
-xcb_change_property_data_end (const xcb_change_property_request_t *R)
+xcb_change_property_data_end(const xcb_change_property_request_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((char *) (R + 1)) + (((R->data_len * R->format) / 8));
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((char *)(R + 1)) + (((R->data_len * R->format) / 8));
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_void_cookie_t
-xcb_delete_property_checked (xcb_connection_t *c,
-                             xcb_window_t      window,
-                             xcb_atom_t        property)
+xcb_delete_property_checked(xcb_connection_t *c,
+                            xcb_window_t      window,
+                            xcb_atom_t        property)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_DELETE_PROPERTY,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_DELETE_PROPERTY,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[4];
+    xcb_void_cookie_t             xcb_ret;
     xcb_delete_property_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.window = window;
+    xcb_out.pad0     = 0;
+    xcb_out.window   = window;
     xcb_out.property = property;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_delete_property (xcb_connection_t *c,
-                     xcb_window_t      window,
-                     xcb_atom_t        property)
+xcb_delete_property(xcb_connection_t *c,
+                    xcb_window_t      window,
+                    xcb_atom_t        property)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_DELETE_PROPERTY,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_DELETE_PROPERTY,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[4];
+    xcb_void_cookie_t             xcb_ret;
     xcb_delete_property_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.window = window;
+    xcb_out.pad0     = 0;
+    xcb_out.window   = window;
     xcb_out.property = property;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 int
-xcb_get_property_sizeof (const void  *_buffer)
+xcb_get_property_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char                           *xcb_tmp = (char *)_buffer;
     const xcb_get_property_reply_t *_aux = (xcb_get_property_reply_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int                    xcb_buffer_len = 0;
+    unsigned int                    xcb_block_len  = 0;
+    unsigned int                    xcb_pad        = 0;
+    unsigned int                    xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_get_property_reply_t);
     xcb_tmp += xcb_block_len;
@@ -3600,9 +3685,10 @@ xcb_get_property_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -3612,117 +3698,115 @@ xcb_get_property_sizeof (const void  *_buffer)
 }
 
 xcb_get_property_cookie_t
-xcb_get_property (xcb_connection_t *c,
-                  uint8_t           _delete,
-                  xcb_window_t      window,
-                  xcb_atom_t        property,
-                  xcb_atom_t        type,
-                  uint32_t          long_offset,
-                  uint32_t          long_length)
+xcb_get_property(xcb_connection_t *c,
+                 uint8_t           _delete,
+                 xcb_window_t      window,
+                 xcb_atom_t        property,
+                 xcb_atom_t        type,
+                 uint32_t          long_offset,
+                 uint32_t          long_length)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_PROPERTY,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GET_PROPERTY,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_property_cookie_t xcb_ret;
+    struct iovec               xcb_parts[4];
+    xcb_get_property_cookie_t  xcb_ret;
     xcb_get_property_request_t xcb_out;
 
-    xcb_out._delete = _delete;
-    xcb_out.window = window;
-    xcb_out.property = property;
-    xcb_out.type = type;
+    xcb_out._delete     = _delete;
+    xcb_out.window      = window;
+    xcb_out.property    = property;
+    xcb_out.type        = type;
     xcb_out.long_offset = long_offset;
     xcb_out.long_length = long_length;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_property_cookie_t
-xcb_get_property_unchecked (xcb_connection_t *c,
-                            uint8_t           _delete,
-                            xcb_window_t      window,
-                            xcb_atom_t        property,
-                            xcb_atom_t        type,
-                            uint32_t          long_offset,
-                            uint32_t          long_length)
+xcb_get_property_unchecked(xcb_connection_t *c,
+                           uint8_t           _delete,
+                           xcb_window_t      window,
+                           xcb_atom_t        property,
+                           xcb_atom_t        type,
+                           uint32_t          long_offset,
+                           uint32_t          long_length)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_PROPERTY,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GET_PROPERTY,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_property_cookie_t xcb_ret;
+    struct iovec               xcb_parts[4];
+    xcb_get_property_cookie_t  xcb_ret;
     xcb_get_property_request_t xcb_out;
 
-    xcb_out._delete = _delete;
-    xcb_out.window = window;
-    xcb_out.property = property;
-    xcb_out.type = type;
+    xcb_out._delete     = _delete;
+    xcb_out.window      = window;
+    xcb_out.property    = property;
+    xcb_out.type        = type;
     xcb_out.long_offset = long_offset;
     xcb_out.long_length = long_length;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 void *
-xcb_get_property_value (const xcb_get_property_reply_t *R)
+xcb_get_property_value(const xcb_get_property_reply_t *R)
 {
-    return (void *) (R + 1);
+    return (void *)(R + 1);
 }
 
 int
-xcb_get_property_value_length (const xcb_get_property_reply_t *R)
+xcb_get_property_value_length(const xcb_get_property_reply_t *R)
 {
     return (R->value_len * (R->format / 8));
 }
 
 xcb_generic_iterator_t
-xcb_get_property_value_end (const xcb_get_property_reply_t *R)
+xcb_get_property_value_end(const xcb_get_property_reply_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((char *) (R + 1)) + ((R->value_len * (R->format / 8)));
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((char *)(R + 1)) + ((R->value_len * (R->format / 8)));
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_get_property_reply_t *
-xcb_get_property_reply (xcb_connection_t           *c,
-                        xcb_get_property_cookie_t   cookie  /**< */,
-                        xcb_generic_error_t       **e)
+xcb_get_property_reply(xcb_connection_t         *c,
+                       xcb_get_property_cookie_t cookie /**< */,
+                       xcb_generic_error_t     **e)
 {
-    return (xcb_get_property_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (
+        xcb_get_property_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_list_properties_sizeof (const void  *_buffer)
+xcb_list_properties_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_list_properties_reply_t *_aux = (xcb_list_properties_reply_t *)_buffer;
+    char                              *xcb_tmp = (char *)_buffer;
+    const xcb_list_properties_reply_t *_aux =
+        (xcb_list_properties_reply_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_list_properties_reply_t);
     xcb_tmp += xcb_block_len;
@@ -3733,9 +3817,10 @@ xcb_list_properties_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_atom_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -3745,534 +3830,340 @@ xcb_list_properties_sizeof (const void  *_buffer)
 }
 
 xcb_list_properties_cookie_t
-xcb_list_properties (xcb_connection_t *c,
-                     xcb_window_t      window)
+xcb_list_properties(xcb_connection_t *c, xcb_window_t window)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_LIST_PROPERTIES,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_LIST_PROPERTIES,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_list_properties_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[4];
+    xcb_list_properties_cookie_t  xcb_ret;
     xcb_list_properties_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_list_properties_cookie_t
-xcb_list_properties_unchecked (xcb_connection_t *c,
-                               xcb_window_t      window)
+xcb_list_properties_unchecked(xcb_connection_t *c, xcb_window_t window)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_LIST_PROPERTIES,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_LIST_PROPERTIES,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_list_properties_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[4];
+    xcb_list_properties_cookie_t  xcb_ret;
     xcb_list_properties_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_atom_t *
-xcb_list_properties_atoms (const xcb_list_properties_reply_t *R)
+xcb_list_properties_atoms(const xcb_list_properties_reply_t *R)
 {
-    return (xcb_atom_t *) (R + 1);
+    return (xcb_atom_t *)(R + 1);
 }
 
 int
-xcb_list_properties_atoms_length (const xcb_list_properties_reply_t *R)
+xcb_list_properties_atoms_length(const xcb_list_properties_reply_t *R)
 {
     return R->atoms_len;
 }
 
 xcb_generic_iterator_t
-xcb_list_properties_atoms_end (const xcb_list_properties_reply_t *R)
+xcb_list_properties_atoms_end(const xcb_list_properties_reply_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((xcb_atom_t *) (R + 1)) + (R->atoms_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((xcb_atom_t *)(R + 1)) + (R->atoms_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_list_properties_reply_t *
-xcb_list_properties_reply (xcb_connection_t              *c,
-                           xcb_list_properties_cookie_t   cookie  /**< */,
-                           xcb_generic_error_t          **e)
+xcb_list_properties_reply(xcb_connection_t            *c,
+                          xcb_list_properties_cookie_t cookie /**< */,
+                          xcb_generic_error_t        **e)
 {
-    return (xcb_list_properties_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (
+        xcb_list_properties_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 xcb_void_cookie_t
-xcb_set_selection_owner_checked (xcb_connection_t *c,
-                                 xcb_window_t      owner,
-                                 xcb_atom_t        selection,
-                                 xcb_timestamp_t   time)
+xcb_set_selection_owner_checked(xcb_connection_t *c,
+                                xcb_window_t      owner,
+                                xcb_atom_t        selection,
+                                xcb_timestamp_t   time)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_SET_SELECTION_OWNER,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_SET_SELECTION_OWNER,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                      xcb_parts[4];
+    xcb_void_cookie_t                 xcb_ret;
     xcb_set_selection_owner_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.owner = owner;
+    xcb_out.pad0      = 0;
+    xcb_out.owner     = owner;
     xcb_out.selection = selection;
-    xcb_out.time = time;
+    xcb_out.time      = time;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_set_selection_owner (xcb_connection_t *c,
-                         xcb_window_t      owner,
-                         xcb_atom_t        selection,
-                         xcb_timestamp_t   time)
+xcb_set_selection_owner(xcb_connection_t *c,
+                        xcb_window_t      owner,
+                        xcb_atom_t        selection,
+                        xcb_timestamp_t   time)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_SET_SELECTION_OWNER,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_SET_SELECTION_OWNER,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                      xcb_parts[4];
+    xcb_void_cookie_t                 xcb_ret;
     xcb_set_selection_owner_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.owner = owner;
+    xcb_out.pad0      = 0;
+    xcb_out.owner     = owner;
     xcb_out.selection = selection;
-    xcb_out.time = time;
+    xcb_out.time      = time;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_selection_owner_cookie_t
-xcb_get_selection_owner (xcb_connection_t *c,
-                         xcb_atom_t        selection)
+xcb_get_selection_owner(xcb_connection_t *c, xcb_atom_t selection)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_SELECTION_OWNER,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_GET_SELECTION_OWNER,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_selection_owner_cookie_t xcb_ret;
+    struct iovec                      xcb_parts[4];
+    xcb_get_selection_owner_cookie_t  xcb_ret;
     xcb_get_selection_owner_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0      = 0;
     xcb_out.selection = selection;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_selection_owner_cookie_t
-xcb_get_selection_owner_unchecked (xcb_connection_t *c,
-                                   xcb_atom_t        selection)
+xcb_get_selection_owner_unchecked(xcb_connection_t *c, xcb_atom_t selection)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_SELECTION_OWNER,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_GET_SELECTION_OWNER,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_selection_owner_cookie_t xcb_ret;
+    struct iovec                      xcb_parts[4];
+    xcb_get_selection_owner_cookie_t  xcb_ret;
     xcb_get_selection_owner_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0      = 0;
     xcb_out.selection = selection;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_selection_owner_reply_t *
-xcb_get_selection_owner_reply (xcb_connection_t                  *c,
-                               xcb_get_selection_owner_cookie_t   cookie  /**< */,
-                               xcb_generic_error_t              **e)
+xcb_get_selection_owner_reply(xcb_connection_t                *c,
+                              xcb_get_selection_owner_cookie_t cookie /**< */,
+                              xcb_generic_error_t            **e)
 {
-    return (xcb_get_selection_owner_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_get_selection_owner_reply_t *)
+        xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 xcb_void_cookie_t
-xcb_convert_selection_checked (xcb_connection_t *c,
-                               xcb_window_t      requestor,
-                               xcb_atom_t        selection,
-                               xcb_atom_t        target,
-                               xcb_atom_t        property,
-                               xcb_timestamp_t   time)
+xcb_convert_selection_checked(xcb_connection_t *c,
+                              xcb_window_t      requestor,
+                              xcb_atom_t        selection,
+                              xcb_atom_t        target,
+                              xcb_atom_t        property,
+                              xcb_timestamp_t   time)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CONVERT_SELECTION,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_CONVERT_SELECTION,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                    xcb_parts[4];
+    xcb_void_cookie_t               xcb_ret;
     xcb_convert_selection_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0      = 0;
     xcb_out.requestor = requestor;
     xcb_out.selection = selection;
-    xcb_out.target = target;
-    xcb_out.property = property;
-    xcb_out.time = time;
+    xcb_out.target    = target;
+    xcb_out.property  = property;
+    xcb_out.time      = time;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_convert_selection (xcb_connection_t *c,
-                       xcb_window_t      requestor,
-                       xcb_atom_t        selection,
-                       xcb_atom_t        target,
-                       xcb_atom_t        property,
-                       xcb_timestamp_t   time)
+xcb_convert_selection(xcb_connection_t *c,
+                      xcb_window_t      requestor,
+                      xcb_atom_t        selection,
+                      xcb_atom_t        target,
+                      xcb_atom_t        property,
+                      xcb_timestamp_t   time)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CONVERT_SELECTION,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_CONVERT_SELECTION,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                    xcb_parts[4];
+    xcb_void_cookie_t               xcb_ret;
     xcb_convert_selection_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0      = 0;
     xcb_out.requestor = requestor;
     xcb_out.selection = selection;
-    xcb_out.target = target;
-    xcb_out.property = property;
-    xcb_out.time = time;
+    xcb_out.target    = target;
+    xcb_out.property  = property;
+    xcb_out.time      = time;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_send_event_checked (xcb_connection_t *c,
-                        uint8_t           propagate,
-                        xcb_window_t      destination,
-                        uint32_t          event_mask,
-                        const char       *event)
+xcb_send_event_checked(xcb_connection_t *c,
+                       uint8_t           propagate,
+                       xcb_window_t      destination,
+                       uint32_t          event_mask,
+                       const char       *event)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_SEND_EVENT,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_SEND_EVENT,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec             xcb_parts[4];
+    xcb_void_cookie_t        xcb_ret;
     xcb_send_event_request_t xcb_out;
 
-    xcb_out.propagate = propagate;
+    xcb_out.propagate   = propagate;
     xcb_out.destination = destination;
-    xcb_out.event_mask = event_mask;
+    xcb_out.event_mask  = event_mask;
     memcpy(xcb_out.event, event, 32);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_send_event (xcb_connection_t *c,
-                uint8_t           propagate,
-                xcb_window_t      destination,
-                uint32_t          event_mask,
-                const char       *event)
+xcb_send_event(xcb_connection_t *c,
+               uint8_t           propagate,
+               xcb_window_t      destination,
+               uint32_t          event_mask,
+               const char       *event)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_SEND_EVENT,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_SEND_EVENT,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec             xcb_parts[4];
+    xcb_void_cookie_t        xcb_ret;
     xcb_send_event_request_t xcb_out;
 
-    xcb_out.propagate = propagate;
+    xcb_out.propagate   = propagate;
     xcb_out.destination = destination;
-    xcb_out.event_mask = event_mask;
+    xcb_out.event_mask  = event_mask;
     memcpy(xcb_out.event, event, 32);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_grab_pointer_cookie_t
-xcb_grab_pointer (xcb_connection_t *c,
-                  uint8_t           owner_events,
-                  xcb_window_t      grab_window,
-                  uint16_t          event_mask,
-                  uint8_t           pointer_mode,
-                  uint8_t           keyboard_mode,
-                  xcb_window_t      confine_to,
-                  xcb_cursor_t      cursor,
-                  xcb_timestamp_t   time)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GRAB_POINTER,
-        .isvoid = 0
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_grab_pointer_cookie_t xcb_ret;
-    xcb_grab_pointer_request_t xcb_out;
-
-    xcb_out.owner_events = owner_events;
-    xcb_out.grab_window = grab_window;
-    xcb_out.event_mask = event_mask;
-    xcb_out.pointer_mode = pointer_mode;
-    xcb_out.keyboard_mode = keyboard_mode;
-    xcb_out.confine_to = confine_to;
-    xcb_out.cursor = cursor;
-    xcb_out.time = time;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_grab_pointer_cookie_t
-xcb_grab_pointer_unchecked (xcb_connection_t *c,
-                            uint8_t           owner_events,
-                            xcb_window_t      grab_window,
-                            uint16_t          event_mask,
-                            uint8_t           pointer_mode,
-                            uint8_t           keyboard_mode,
-                            xcb_window_t      confine_to,
-                            xcb_cursor_t      cursor,
-                            xcb_timestamp_t   time)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GRAB_POINTER,
-        .isvoid = 0
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_grab_pointer_cookie_t xcb_ret;
-    xcb_grab_pointer_request_t xcb_out;
-
-    xcb_out.owner_events = owner_events;
-    xcb_out.grab_window = grab_window;
-    xcb_out.event_mask = event_mask;
-    xcb_out.pointer_mode = pointer_mode;
-    xcb_out.keyboard_mode = keyboard_mode;
-    xcb_out.confine_to = confine_to;
-    xcb_out.cursor = cursor;
-    xcb_out.time = time;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_grab_pointer_reply_t *
-xcb_grab_pointer_reply (xcb_connection_t           *c,
-                        xcb_grab_pointer_cookie_t   cookie  /**< */,
-                        xcb_generic_error_t       **e)
-{
-    return (xcb_grab_pointer_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
-}
-
-xcb_void_cookie_t
-xcb_ungrab_pointer_checked (xcb_connection_t *c,
-                            xcb_timestamp_t   time)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_UNGRAB_POINTER,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_ungrab_pointer_request_t xcb_out;
-
-    xcb_out.pad0 = 0;
-    xcb_out.time = time;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_ungrab_pointer (xcb_connection_t *c,
-                    xcb_timestamp_t   time)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_UNGRAB_POINTER,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_ungrab_pointer_request_t xcb_out;
-
-    xcb_out.pad0 = 0;
-    xcb_out.time = time;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_grab_button_checked (xcb_connection_t *c,
-                         uint8_t           owner_events,
-                         xcb_window_t      grab_window,
-                         uint16_t          event_mask,
-                         uint8_t           pointer_mode,
-                         uint8_t           keyboard_mode,
-                         xcb_window_t      confine_to,
-                         xcb_cursor_t      cursor,
-                         uint8_t           button,
-                         uint16_t          modifiers)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GRAB_BUTTON,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_grab_button_request_t xcb_out;
-
-    xcb_out.owner_events = owner_events;
-    xcb_out.grab_window = grab_window;
-    xcb_out.event_mask = event_mask;
-    xcb_out.pointer_mode = pointer_mode;
-    xcb_out.keyboard_mode = keyboard_mode;
-    xcb_out.confine_to = confine_to;
-    xcb_out.cursor = cursor;
-    xcb_out.button = button;
-    xcb_out.pad0 = 0;
-    xcb_out.modifiers = modifiers;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_grab_button (xcb_connection_t *c,
+xcb_grab_pointer(xcb_connection_t *c,
                  uint8_t           owner_events,
                  xcb_window_t      grab_window,
                  uint16_t          event_mask,
@@ -4280,654 +4171,803 @@ xcb_grab_button (xcb_connection_t *c,
                  uint8_t           keyboard_mode,
                  xcb_window_t      confine_to,
                  xcb_cursor_t      cursor,
-                 uint8_t           button,
-                 uint16_t          modifiers)
+                 xcb_timestamp_t   time)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GRAB_BUTTON,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GRAB_POINTER,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec               xcb_parts[4];
+    xcb_grab_pointer_cookie_t  xcb_ret;
+    xcb_grab_pointer_request_t xcb_out;
+
+    xcb_out.owner_events  = owner_events;
+    xcb_out.grab_window   = grab_window;
+    xcb_out.event_mask    = event_mask;
+    xcb_out.pointer_mode  = pointer_mode;
+    xcb_out.keyboard_mode = keyboard_mode;
+    xcb_out.confine_to    = confine_to;
+    xcb_out.cursor        = cursor;
+    xcb_out.time          = time;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_grab_pointer_cookie_t
+xcb_grab_pointer_unchecked(xcb_connection_t *c,
+                           uint8_t           owner_events,
+                           xcb_window_t      grab_window,
+                           uint16_t          event_mask,
+                           uint8_t           pointer_mode,
+                           uint8_t           keyboard_mode,
+                           xcb_window_t      confine_to,
+                           xcb_cursor_t      cursor,
+                           xcb_timestamp_t   time)
+{
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GRAB_POINTER,
+                                                    .isvoid = 0 };
+
+    struct iovec               xcb_parts[4];
+    xcb_grab_pointer_cookie_t  xcb_ret;
+    xcb_grab_pointer_request_t xcb_out;
+
+    xcb_out.owner_events  = owner_events;
+    xcb_out.grab_window   = grab_window;
+    xcb_out.event_mask    = event_mask;
+    xcb_out.pointer_mode  = pointer_mode;
+    xcb_out.keyboard_mode = keyboard_mode;
+    xcb_out.confine_to    = confine_to;
+    xcb_out.cursor        = cursor;
+    xcb_out.time          = time;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_grab_pointer_reply_t *
+xcb_grab_pointer_reply(xcb_connection_t         *c,
+                       xcb_grab_pointer_cookie_t cookie /**< */,
+                       xcb_generic_error_t     **e)
+{
+    return (
+        xcb_grab_pointer_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
+}
+
+xcb_void_cookie_t
+xcb_ungrab_pointer_checked(xcb_connection_t *c, xcb_timestamp_t time)
+{
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_UNGRAB_POINTER,
+                                                    .isvoid = 1 };
+
+    struct iovec                 xcb_parts[4];
+    xcb_void_cookie_t            xcb_ret;
+    xcb_ungrab_pointer_request_t xcb_out;
+
+    xcb_out.pad0 = 0;
+    xcb_out.time = time;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_ungrab_pointer(xcb_connection_t *c, xcb_timestamp_t time)
+{
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_UNGRAB_POINTER,
+                                                    .isvoid = 1 };
+
+    struct iovec                 xcb_parts[4];
+    xcb_void_cookie_t            xcb_ret;
+    xcb_ungrab_pointer_request_t xcb_out;
+
+    xcb_out.pad0 = 0;
+    xcb_out.time = time;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_grab_button_checked(xcb_connection_t *c,
+                        uint8_t           owner_events,
+                        xcb_window_t      grab_window,
+                        uint16_t          event_mask,
+                        uint8_t           pointer_mode,
+                        uint8_t           keyboard_mode,
+                        xcb_window_t      confine_to,
+                        xcb_cursor_t      cursor,
+                        uint8_t           button,
+                        uint16_t          modifiers)
+{
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GRAB_BUTTON,
+                                                    .isvoid = 1 };
+
+    struct iovec              xcb_parts[4];
+    xcb_void_cookie_t         xcb_ret;
     xcb_grab_button_request_t xcb_out;
 
-    xcb_out.owner_events = owner_events;
-    xcb_out.grab_window = grab_window;
-    xcb_out.event_mask = event_mask;
-    xcb_out.pointer_mode = pointer_mode;
+    xcb_out.owner_events  = owner_events;
+    xcb_out.grab_window   = grab_window;
+    xcb_out.event_mask    = event_mask;
+    xcb_out.pointer_mode  = pointer_mode;
     xcb_out.keyboard_mode = keyboard_mode;
-    xcb_out.confine_to = confine_to;
-    xcb_out.cursor = cursor;
-    xcb_out.button = button;
-    xcb_out.pad0 = 0;
-    xcb_out.modifiers = modifiers;
+    xcb_out.confine_to    = confine_to;
+    xcb_out.cursor        = cursor;
+    xcb_out.button        = button;
+    xcb_out.pad0          = 0;
+    xcb_out.modifiers     = modifiers;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_grab_button(xcb_connection_t *c,
+                uint8_t           owner_events,
+                xcb_window_t      grab_window,
+                uint16_t          event_mask,
+                uint8_t           pointer_mode,
+                uint8_t           keyboard_mode,
+                xcb_window_t      confine_to,
+                xcb_cursor_t      cursor,
+                uint8_t           button,
+                uint16_t          modifiers)
+{
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GRAB_BUTTON,
+                                                    .isvoid = 1 };
+
+    struct iovec              xcb_parts[4];
+    xcb_void_cookie_t         xcb_ret;
+    xcb_grab_button_request_t xcb_out;
+
+    xcb_out.owner_events  = owner_events;
+    xcb_out.grab_window   = grab_window;
+    xcb_out.event_mask    = event_mask;
+    xcb_out.pointer_mode  = pointer_mode;
+    xcb_out.keyboard_mode = keyboard_mode;
+    xcb_out.confine_to    = confine_to;
+    xcb_out.cursor        = cursor;
+    xcb_out.button        = button;
+    xcb_out.pad0          = 0;
+    xcb_out.modifiers     = modifiers;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_ungrab_button_checked (xcb_connection_t *c,
-                           uint8_t           button,
-                           xcb_window_t      grab_window,
-                           uint16_t          modifiers)
+xcb_ungrab_button_checked(xcb_connection_t *c,
+                          uint8_t           button,
+                          xcb_window_t      grab_window,
+                          uint16_t          modifiers)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_UNGRAB_BUTTON,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_UNGRAB_BUTTON,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                xcb_parts[4];
+    xcb_void_cookie_t           xcb_ret;
     xcb_ungrab_button_request_t xcb_out;
 
-    xcb_out.button = button;
+    xcb_out.button      = button;
     xcb_out.grab_window = grab_window;
-    xcb_out.modifiers = modifiers;
+    xcb_out.modifiers   = modifiers;
     memset(xcb_out.pad0, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_ungrab_button (xcb_connection_t *c,
-                   uint8_t           button,
-                   xcb_window_t      grab_window,
-                   uint16_t          modifiers)
+xcb_ungrab_button(xcb_connection_t *c,
+                  uint8_t           button,
+                  xcb_window_t      grab_window,
+                  uint16_t          modifiers)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_UNGRAB_BUTTON,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_UNGRAB_BUTTON,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                xcb_parts[4];
+    xcb_void_cookie_t           xcb_ret;
     xcb_ungrab_button_request_t xcb_out;
 
-    xcb_out.button = button;
+    xcb_out.button      = button;
     xcb_out.grab_window = grab_window;
-    xcb_out.modifiers = modifiers;
+    xcb_out.modifiers   = modifiers;
     memset(xcb_out.pad0, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_change_active_pointer_grab_checked (xcb_connection_t *c,
-                                        xcb_cursor_t      cursor,
-                                        xcb_timestamp_t   time,
-                                        uint16_t          event_mask)
+xcb_change_active_pointer_grab_checked(xcb_connection_t *c,
+                                       xcb_cursor_t      cursor,
+                                       xcb_timestamp_t   time,
+                                       uint16_t          event_mask)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
+        .count  = 2,
+        .ext    = 0,
         .opcode = XCB_CHANGE_ACTIVE_POINTER_GRAB,
         .isvoid = 1
     };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                             xcb_parts[4];
+    xcb_void_cookie_t                        xcb_ret;
     xcb_change_active_pointer_grab_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.cursor = cursor;
-    xcb_out.time = time;
+    xcb_out.pad0       = 0;
+    xcb_out.cursor     = cursor;
+    xcb_out.time       = time;
     xcb_out.event_mask = event_mask;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_change_active_pointer_grab (xcb_connection_t *c,
-                                xcb_cursor_t      cursor,
-                                xcb_timestamp_t   time,
-                                uint16_t          event_mask)
+xcb_change_active_pointer_grab(xcb_connection_t *c,
+                               xcb_cursor_t      cursor,
+                               xcb_timestamp_t   time,
+                               uint16_t          event_mask)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
+        .count  = 2,
+        .ext    = 0,
         .opcode = XCB_CHANGE_ACTIVE_POINTER_GRAB,
         .isvoid = 1
     };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                             xcb_parts[4];
+    xcb_void_cookie_t                        xcb_ret;
     xcb_change_active_pointer_grab_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.cursor = cursor;
-    xcb_out.time = time;
+    xcb_out.pad0       = 0;
+    xcb_out.cursor     = cursor;
+    xcb_out.time       = time;
     xcb_out.event_mask = event_mask;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_grab_keyboard_cookie_t
-xcb_grab_keyboard (xcb_connection_t *c,
-                   uint8_t           owner_events,
-                   xcb_window_t      grab_window,
-                   xcb_timestamp_t   time,
-                   uint8_t           pointer_mode,
-                   uint8_t           keyboard_mode)
+xcb_grab_keyboard(xcb_connection_t *c,
+                  uint8_t           owner_events,
+                  xcb_window_t      grab_window,
+                  xcb_timestamp_t   time,
+                  uint8_t           pointer_mode,
+                  uint8_t           keyboard_mode)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GRAB_KEYBOARD,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GRAB_KEYBOARD,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_grab_keyboard_cookie_t xcb_ret;
+    struct iovec                xcb_parts[4];
+    xcb_grab_keyboard_cookie_t  xcb_ret;
     xcb_grab_keyboard_request_t xcb_out;
 
-    xcb_out.owner_events = owner_events;
-    xcb_out.grab_window = grab_window;
-    xcb_out.time = time;
-    xcb_out.pointer_mode = pointer_mode;
+    xcb_out.owner_events  = owner_events;
+    xcb_out.grab_window   = grab_window;
+    xcb_out.time          = time;
+    xcb_out.pointer_mode  = pointer_mode;
     xcb_out.keyboard_mode = keyboard_mode;
     memset(xcb_out.pad0, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_grab_keyboard_cookie_t
-xcb_grab_keyboard_unchecked (xcb_connection_t *c,
-                             uint8_t           owner_events,
-                             xcb_window_t      grab_window,
-                             xcb_timestamp_t   time,
-                             uint8_t           pointer_mode,
-                             uint8_t           keyboard_mode)
+xcb_grab_keyboard_unchecked(xcb_connection_t *c,
+                            uint8_t           owner_events,
+                            xcb_window_t      grab_window,
+                            xcb_timestamp_t   time,
+                            uint8_t           pointer_mode,
+                            uint8_t           keyboard_mode)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GRAB_KEYBOARD,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GRAB_KEYBOARD,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_grab_keyboard_cookie_t xcb_ret;
+    struct iovec                xcb_parts[4];
+    xcb_grab_keyboard_cookie_t  xcb_ret;
     xcb_grab_keyboard_request_t xcb_out;
 
-    xcb_out.owner_events = owner_events;
-    xcb_out.grab_window = grab_window;
-    xcb_out.time = time;
-    xcb_out.pointer_mode = pointer_mode;
+    xcb_out.owner_events  = owner_events;
+    xcb_out.grab_window   = grab_window;
+    xcb_out.time          = time;
+    xcb_out.pointer_mode  = pointer_mode;
     xcb_out.keyboard_mode = keyboard_mode;
     memset(xcb_out.pad0, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_grab_keyboard_reply_t *
-xcb_grab_keyboard_reply (xcb_connection_t            *c,
-                         xcb_grab_keyboard_cookie_t   cookie  /**< */,
-                         xcb_generic_error_t        **e)
+xcb_grab_keyboard_reply(xcb_connection_t          *c,
+                        xcb_grab_keyboard_cookie_t cookie /**< */,
+                        xcb_generic_error_t      **e)
 {
-    return (xcb_grab_keyboard_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (
+        xcb_grab_keyboard_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 xcb_void_cookie_t
-xcb_ungrab_keyboard_checked (xcb_connection_t *c,
-                             xcb_timestamp_t   time)
+xcb_ungrab_keyboard_checked(xcb_connection_t *c, xcb_timestamp_t time)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_UNGRAB_KEYBOARD,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_UNGRAB_KEYBOARD,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[4];
+    xcb_void_cookie_t             xcb_ret;
     xcb_ungrab_keyboard_request_t xcb_out;
 
     xcb_out.pad0 = 0;
     xcb_out.time = time;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_ungrab_keyboard (xcb_connection_t *c,
-                     xcb_timestamp_t   time)
+xcb_ungrab_keyboard(xcb_connection_t *c, xcb_timestamp_t time)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_UNGRAB_KEYBOARD,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_UNGRAB_KEYBOARD,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[4];
+    xcb_void_cookie_t             xcb_ret;
     xcb_ungrab_keyboard_request_t xcb_out;
 
     xcb_out.pad0 = 0;
     xcb_out.time = time;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_grab_key_checked (xcb_connection_t *c,
-                      uint8_t           owner_events,
-                      xcb_window_t      grab_window,
-                      uint16_t          modifiers,
-                      xcb_keycode_t     key,
-                      uint8_t           pointer_mode,
-                      uint8_t           keyboard_mode)
+xcb_grab_key_checked(xcb_connection_t *c,
+                     uint8_t           owner_events,
+                     xcb_window_t      grab_window,
+                     uint16_t          modifiers,
+                     xcb_keycode_t     key,
+                     uint8_t           pointer_mode,
+                     uint8_t           keyboard_mode)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GRAB_KEY,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GRAB_KEY,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec           xcb_parts[4];
+    xcb_void_cookie_t      xcb_ret;
     xcb_grab_key_request_t xcb_out;
 
-    xcb_out.owner_events = owner_events;
-    xcb_out.grab_window = grab_window;
-    xcb_out.modifiers = modifiers;
-    xcb_out.key = key;
-    xcb_out.pointer_mode = pointer_mode;
+    xcb_out.owner_events  = owner_events;
+    xcb_out.grab_window   = grab_window;
+    xcb_out.modifiers     = modifiers;
+    xcb_out.key           = key;
+    xcb_out.pointer_mode  = pointer_mode;
     xcb_out.keyboard_mode = keyboard_mode;
     memset(xcb_out.pad0, 0, 3);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_grab_key (xcb_connection_t *c,
-              uint8_t           owner_events,
-              xcb_window_t      grab_window,
-              uint16_t          modifiers,
-              xcb_keycode_t     key,
-              uint8_t           pointer_mode,
-              uint8_t           keyboard_mode)
+xcb_grab_key(xcb_connection_t *c,
+             uint8_t           owner_events,
+             xcb_window_t      grab_window,
+             uint16_t          modifiers,
+             xcb_keycode_t     key,
+             uint8_t           pointer_mode,
+             uint8_t           keyboard_mode)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GRAB_KEY,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GRAB_KEY,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec           xcb_parts[4];
+    xcb_void_cookie_t      xcb_ret;
     xcb_grab_key_request_t xcb_out;
 
-    xcb_out.owner_events = owner_events;
-    xcb_out.grab_window = grab_window;
-    xcb_out.modifiers = modifiers;
-    xcb_out.key = key;
-    xcb_out.pointer_mode = pointer_mode;
+    xcb_out.owner_events  = owner_events;
+    xcb_out.grab_window   = grab_window;
+    xcb_out.modifiers     = modifiers;
+    xcb_out.key           = key;
+    xcb_out.pointer_mode  = pointer_mode;
     xcb_out.keyboard_mode = keyboard_mode;
     memset(xcb_out.pad0, 0, 3);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_ungrab_key_checked (xcb_connection_t *c,
-                        xcb_keycode_t     key,
-                        xcb_window_t      grab_window,
-                        uint16_t          modifiers)
+xcb_ungrab_key_checked(xcb_connection_t *c,
+                       xcb_keycode_t     key,
+                       xcb_window_t      grab_window,
+                       uint16_t          modifiers)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_UNGRAB_KEY,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_UNGRAB_KEY,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec             xcb_parts[4];
+    xcb_void_cookie_t        xcb_ret;
     xcb_ungrab_key_request_t xcb_out;
 
-    xcb_out.key = key;
+    xcb_out.key         = key;
     xcb_out.grab_window = grab_window;
-    xcb_out.modifiers = modifiers;
+    xcb_out.modifiers   = modifiers;
     memset(xcb_out.pad0, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_ungrab_key (xcb_connection_t *c,
-                xcb_keycode_t     key,
-                xcb_window_t      grab_window,
-                uint16_t          modifiers)
+xcb_ungrab_key(xcb_connection_t *c,
+               xcb_keycode_t     key,
+               xcb_window_t      grab_window,
+               uint16_t          modifiers)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_UNGRAB_KEY,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_UNGRAB_KEY,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec             xcb_parts[4];
+    xcb_void_cookie_t        xcb_ret;
     xcb_ungrab_key_request_t xcb_out;
 
-    xcb_out.key = key;
+    xcb_out.key         = key;
     xcb_out.grab_window = grab_window;
-    xcb_out.modifiers = modifiers;
+    xcb_out.modifiers   = modifiers;
     memset(xcb_out.pad0, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_allow_events_checked (xcb_connection_t *c,
-                          uint8_t           mode,
-                          xcb_timestamp_t   time)
+xcb_allow_events_checked(xcb_connection_t *c,
+                         uint8_t           mode,
+                         xcb_timestamp_t   time)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_ALLOW_EVENTS,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_ALLOW_EVENTS,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec               xcb_parts[4];
+    xcb_void_cookie_t          xcb_ret;
     xcb_allow_events_request_t xcb_out;
 
     xcb_out.mode = mode;
     xcb_out.time = time;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_allow_events (xcb_connection_t *c,
-                  uint8_t           mode,
-                  xcb_timestamp_t   time)
+xcb_allow_events(xcb_connection_t *c, uint8_t mode, xcb_timestamp_t time)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_ALLOW_EVENTS,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_ALLOW_EVENTS,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec               xcb_parts[4];
+    xcb_void_cookie_t          xcb_ret;
     xcb_allow_events_request_t xcb_out;
 
     xcb_out.mode = mode;
     xcb_out.time = time;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_grab_server_checked (xcb_connection_t *c)
+xcb_grab_server_checked(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GRAB_SERVER,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GRAB_SERVER,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec              xcb_parts[4];
+    xcb_void_cookie_t         xcb_ret;
     xcb_grab_server_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_grab_server (xcb_connection_t *c)
+xcb_grab_server(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GRAB_SERVER,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GRAB_SERVER,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec              xcb_parts[4];
+    xcb_void_cookie_t         xcb_ret;
     xcb_grab_server_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_ungrab_server_checked (xcb_connection_t *c)
+xcb_ungrab_server_checked(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_UNGRAB_SERVER,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_UNGRAB_SERVER,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                xcb_parts[4];
+    xcb_void_cookie_t           xcb_ret;
     xcb_ungrab_server_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_ungrab_server (xcb_connection_t *c)
+xcb_ungrab_server(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_UNGRAB_SERVER,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_UNGRAB_SERVER,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                xcb_parts[4];
+    xcb_void_cookie_t           xcb_ret;
     xcb_ungrab_server_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_query_pointer_cookie_t
-xcb_query_pointer (xcb_connection_t *c,
-                   xcb_window_t      window)
+xcb_query_pointer(xcb_connection_t *c, xcb_window_t window)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_QUERY_POINTER,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_QUERY_POINTER,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_query_pointer_cookie_t xcb_ret;
+    struct iovec                xcb_parts[4];
+    xcb_query_pointer_cookie_t  xcb_ret;
     xcb_query_pointer_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_query_pointer_cookie_t
-xcb_query_pointer_unchecked (xcb_connection_t *c,
-                             xcb_window_t      window)
+xcb_query_pointer_unchecked(xcb_connection_t *c, xcb_window_t window)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_QUERY_POINTER,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_QUERY_POINTER,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_query_pointer_cookie_t xcb_ret;
+    struct iovec                xcb_parts[4];
+    xcb_query_pointer_cookie_t  xcb_ret;
     xcb_query_pointer_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_query_pointer_reply_t *
-xcb_query_pointer_reply (xcb_connection_t            *c,
-                         xcb_query_pointer_cookie_t   cookie  /**< */,
-                         xcb_generic_error_t        **e)
+xcb_query_pointer_reply(xcb_connection_t          *c,
+                        xcb_query_pointer_cookie_t cookie /**< */,
+                        xcb_generic_error_t      **e)
 {
-    return (xcb_query_pointer_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (
+        xcb_query_pointer_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 void
-xcb_timecoord_next (xcb_timecoord_iterator_t *i)
+xcb_timecoord_next(xcb_timecoord_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -4935,25 +4975,25 @@ xcb_timecoord_next (xcb_timecoord_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_timecoord_end (xcb_timecoord_iterator_t i)
+xcb_timecoord_end(xcb_timecoord_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 int
-xcb_get_motion_events_sizeof (const void  *_buffer)
+xcb_get_motion_events_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_get_motion_events_reply_t *_aux = (xcb_get_motion_events_reply_t *)_buffer;
+    char                                *xcb_tmp = (char *)_buffer;
+    const xcb_get_motion_events_reply_t *_aux =
+        (xcb_get_motion_events_reply_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_get_motion_events_reply_t);
     xcb_tmp += xcb_block_len;
@@ -4964,9 +5004,10 @@ xcb_get_motion_events_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_timecoord_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -4976,439 +5017,436 @@ xcb_get_motion_events_sizeof (const void  *_buffer)
 }
 
 xcb_get_motion_events_cookie_t
-xcb_get_motion_events (xcb_connection_t *c,
-                       xcb_window_t      window,
-                       xcb_timestamp_t   start,
-                       xcb_timestamp_t   stop)
+xcb_get_motion_events(xcb_connection_t *c,
+                      xcb_window_t      window,
+                      xcb_timestamp_t   start,
+                      xcb_timestamp_t   stop)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_MOTION_EVENTS,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_GET_MOTION_EVENTS,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_motion_events_cookie_t xcb_ret;
+    struct iovec                    xcb_parts[4];
+    xcb_get_motion_events_cookie_t  xcb_ret;
     xcb_get_motion_events_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
-    xcb_out.start = start;
-    xcb_out.stop = stop;
+    xcb_out.start  = start;
+    xcb_out.stop   = stop;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_motion_events_cookie_t
-xcb_get_motion_events_unchecked (xcb_connection_t *c,
-                                 xcb_window_t      window,
-                                 xcb_timestamp_t   start,
-                                 xcb_timestamp_t   stop)
+xcb_get_motion_events_unchecked(xcb_connection_t *c,
+                                xcb_window_t      window,
+                                xcb_timestamp_t   start,
+                                xcb_timestamp_t   stop)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_MOTION_EVENTS,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_GET_MOTION_EVENTS,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_motion_events_cookie_t xcb_ret;
+    struct iovec                    xcb_parts[4];
+    xcb_get_motion_events_cookie_t  xcb_ret;
     xcb_get_motion_events_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
-    xcb_out.start = start;
-    xcb_out.stop = stop;
+    xcb_out.start  = start;
+    xcb_out.stop   = stop;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_timecoord_t *
-xcb_get_motion_events_events (const xcb_get_motion_events_reply_t *R)
+xcb_get_motion_events_events(const xcb_get_motion_events_reply_t *R)
 {
-    return (xcb_timecoord_t *) (R + 1);
+    return (xcb_timecoord_t *)(R + 1);
 }
 
 int
-xcb_get_motion_events_events_length (const xcb_get_motion_events_reply_t *R)
+xcb_get_motion_events_events_length(const xcb_get_motion_events_reply_t *R)
 {
     return R->events_len;
 }
 
 xcb_timecoord_iterator_t
-xcb_get_motion_events_events_iterator (const xcb_get_motion_events_reply_t *R)
+xcb_get_motion_events_events_iterator(const xcb_get_motion_events_reply_t *R)
 {
     xcb_timecoord_iterator_t i;
-    i.data = (xcb_timecoord_t *) (R + 1);
-    i.rem = R->events_len;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_timecoord_t *)(R + 1);
+    i.rem   = R->events_len;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_get_motion_events_reply_t *
-xcb_get_motion_events_reply (xcb_connection_t                *c,
-                             xcb_get_motion_events_cookie_t   cookie  /**< */,
-                             xcb_generic_error_t            **e)
+xcb_get_motion_events_reply(xcb_connection_t              *c,
+                            xcb_get_motion_events_cookie_t cookie /**< */,
+                            xcb_generic_error_t          **e)
 {
-    return (xcb_get_motion_events_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_get_motion_events_reply_t *)xcb_wait_for_reply(c,
+                                                               cookie.sequence,
+                                                               e);
 }
 
 xcb_translate_coordinates_cookie_t
-xcb_translate_coordinates (xcb_connection_t *c,
-                           xcb_window_t      src_window,
-                           xcb_window_t      dst_window,
-                           int16_t           src_x,
-                           int16_t           src_y)
+xcb_translate_coordinates(xcb_connection_t *c,
+                          xcb_window_t      src_window,
+                          xcb_window_t      dst_window,
+                          int16_t           src_x,
+                          int16_t           src_y)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
+        .count  = 2,
+        .ext    = 0,
         .opcode = XCB_TRANSLATE_COORDINATES,
         .isvoid = 0
     };
 
-    struct iovec xcb_parts[4];
-    xcb_translate_coordinates_cookie_t xcb_ret;
+    struct iovec                        xcb_parts[4];
+    xcb_translate_coordinates_cookie_t  xcb_ret;
     xcb_translate_coordinates_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0       = 0;
     xcb_out.src_window = src_window;
     xcb_out.dst_window = dst_window;
-    xcb_out.src_x = src_x;
-    xcb_out.src_y = src_y;
+    xcb_out.src_x      = src_x;
+    xcb_out.src_y      = src_y;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_translate_coordinates_cookie_t
-xcb_translate_coordinates_unchecked (xcb_connection_t *c,
-                                     xcb_window_t      src_window,
-                                     xcb_window_t      dst_window,
-                                     int16_t           src_x,
-                                     int16_t           src_y)
+xcb_translate_coordinates_unchecked(xcb_connection_t *c,
+                                    xcb_window_t      src_window,
+                                    xcb_window_t      dst_window,
+                                    int16_t           src_x,
+                                    int16_t           src_y)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
+        .count  = 2,
+        .ext    = 0,
         .opcode = XCB_TRANSLATE_COORDINATES,
         .isvoid = 0
     };
 
-    struct iovec xcb_parts[4];
-    xcb_translate_coordinates_cookie_t xcb_ret;
+    struct iovec                        xcb_parts[4];
+    xcb_translate_coordinates_cookie_t  xcb_ret;
     xcb_translate_coordinates_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0       = 0;
     xcb_out.src_window = src_window;
     xcb_out.dst_window = dst_window;
-    xcb_out.src_x = src_x;
-    xcb_out.src_y = src_y;
+    xcb_out.src_x      = src_x;
+    xcb_out.src_y      = src_y;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_translate_coordinates_reply_t *
-xcb_translate_coordinates_reply (xcb_connection_t                    *c,
-                                 xcb_translate_coordinates_cookie_t   cookie  /**< */,
-                                 xcb_generic_error_t                **e)
+xcb_translate_coordinates_reply(
+    xcb_connection_t                  *c,
+    xcb_translate_coordinates_cookie_t cookie /**< */,
+    xcb_generic_error_t              **e)
 {
-    return (xcb_translate_coordinates_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_translate_coordinates_reply_t *)
+        xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 xcb_void_cookie_t
-xcb_warp_pointer_checked (xcb_connection_t *c,
-                          xcb_window_t      src_window,
-                          xcb_window_t      dst_window,
-                          int16_t           src_x,
-                          int16_t           src_y,
-                          uint16_t          src_width,
-                          uint16_t          src_height,
-                          int16_t           dst_x,
-                          int16_t           dst_y)
+xcb_warp_pointer_checked(xcb_connection_t *c,
+                         xcb_window_t      src_window,
+                         xcb_window_t      dst_window,
+                         int16_t           src_x,
+                         int16_t           src_y,
+                         uint16_t          src_width,
+                         uint16_t          src_height,
+                         int16_t           dst_x,
+                         int16_t           dst_y)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_WARP_POINTER,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_WARP_POINTER,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec               xcb_parts[4];
+    xcb_void_cookie_t          xcb_ret;
     xcb_warp_pointer_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0       = 0;
     xcb_out.src_window = src_window;
     xcb_out.dst_window = dst_window;
-    xcb_out.src_x = src_x;
-    xcb_out.src_y = src_y;
-    xcb_out.src_width = src_width;
+    xcb_out.src_x      = src_x;
+    xcb_out.src_y      = src_y;
+    xcb_out.src_width  = src_width;
     xcb_out.src_height = src_height;
-    xcb_out.dst_x = dst_x;
-    xcb_out.dst_y = dst_y;
+    xcb_out.dst_x      = dst_x;
+    xcb_out.dst_y      = dst_y;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_warp_pointer (xcb_connection_t *c,
-                  xcb_window_t      src_window,
-                  xcb_window_t      dst_window,
-                  int16_t           src_x,
-                  int16_t           src_y,
-                  uint16_t          src_width,
-                  uint16_t          src_height,
-                  int16_t           dst_x,
-                  int16_t           dst_y)
+xcb_warp_pointer(xcb_connection_t *c,
+                 xcb_window_t      src_window,
+                 xcb_window_t      dst_window,
+                 int16_t           src_x,
+                 int16_t           src_y,
+                 uint16_t          src_width,
+                 uint16_t          src_height,
+                 int16_t           dst_x,
+                 int16_t           dst_y)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_WARP_POINTER,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_WARP_POINTER,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec               xcb_parts[4];
+    xcb_void_cookie_t          xcb_ret;
     xcb_warp_pointer_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0       = 0;
     xcb_out.src_window = src_window;
     xcb_out.dst_window = dst_window;
-    xcb_out.src_x = src_x;
-    xcb_out.src_y = src_y;
-    xcb_out.src_width = src_width;
+    xcb_out.src_x      = src_x;
+    xcb_out.src_y      = src_y;
+    xcb_out.src_width  = src_width;
     xcb_out.src_height = src_height;
-    xcb_out.dst_x = dst_x;
-    xcb_out.dst_y = dst_y;
+    xcb_out.dst_x      = dst_x;
+    xcb_out.dst_y      = dst_y;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_set_input_focus_checked (xcb_connection_t *c,
-                             uint8_t           revert_to,
-                             xcb_window_t      focus,
-                             xcb_timestamp_t   time)
+xcb_set_input_focus_checked(xcb_connection_t *c,
+                            uint8_t           revert_to,
+                            xcb_window_t      focus,
+                            xcb_timestamp_t   time)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_SET_INPUT_FOCUS,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_SET_INPUT_FOCUS,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[4];
+    xcb_void_cookie_t             xcb_ret;
     xcb_set_input_focus_request_t xcb_out;
 
     xcb_out.revert_to = revert_to;
-    xcb_out.focus = focus;
-    xcb_out.time = time;
+    xcb_out.focus     = focus;
+    xcb_out.time      = time;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_set_input_focus (xcb_connection_t *c,
-                     uint8_t           revert_to,
-                     xcb_window_t      focus,
-                     xcb_timestamp_t   time)
+xcb_set_input_focus(xcb_connection_t *c,
+                    uint8_t           revert_to,
+                    xcb_window_t      focus,
+                    xcb_timestamp_t   time)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_SET_INPUT_FOCUS,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_SET_INPUT_FOCUS,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[4];
+    xcb_void_cookie_t             xcb_ret;
     xcb_set_input_focus_request_t xcb_out;
 
     xcb_out.revert_to = revert_to;
-    xcb_out.focus = focus;
-    xcb_out.time = time;
+    xcb_out.focus     = focus;
+    xcb_out.time      = time;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_input_focus_cookie_t
-xcb_get_input_focus (xcb_connection_t *c)
+xcb_get_input_focus(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_INPUT_FOCUS,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_GET_INPUT_FOCUS,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_input_focus_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[4];
+    xcb_get_input_focus_cookie_t  xcb_ret;
     xcb_get_input_focus_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_input_focus_cookie_t
-xcb_get_input_focus_unchecked (xcb_connection_t *c)
+xcb_get_input_focus_unchecked(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_INPUT_FOCUS,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_GET_INPUT_FOCUS,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_input_focus_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[4];
+    xcb_get_input_focus_cookie_t  xcb_ret;
     xcb_get_input_focus_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_input_focus_reply_t *
-xcb_get_input_focus_reply (xcb_connection_t              *c,
-                           xcb_get_input_focus_cookie_t   cookie  /**< */,
-                           xcb_generic_error_t          **e)
+xcb_get_input_focus_reply(xcb_connection_t            *c,
+                          xcb_get_input_focus_cookie_t cookie /**< */,
+                          xcb_generic_error_t        **e)
 {
-    return (xcb_get_input_focus_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (
+        xcb_get_input_focus_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 xcb_query_keymap_cookie_t
-xcb_query_keymap (xcb_connection_t *c)
+xcb_query_keymap(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_QUERY_KEYMAP,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_QUERY_KEYMAP,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_query_keymap_cookie_t xcb_ret;
+    struct iovec               xcb_parts[4];
+    xcb_query_keymap_cookie_t  xcb_ret;
     xcb_query_keymap_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_query_keymap_cookie_t
-xcb_query_keymap_unchecked (xcb_connection_t *c)
+xcb_query_keymap_unchecked(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_QUERY_KEYMAP,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_QUERY_KEYMAP,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_query_keymap_cookie_t xcb_ret;
+    struct iovec               xcb_parts[4];
+    xcb_query_keymap_cookie_t  xcb_ret;
     xcb_query_keymap_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_query_keymap_reply_t *
-xcb_query_keymap_reply (xcb_connection_t           *c,
-                        xcb_query_keymap_cookie_t   cookie  /**< */,
-                        xcb_generic_error_t       **e)
+xcb_query_keymap_reply(xcb_connection_t         *c,
+                       xcb_query_keymap_cookie_t cookie /**< */,
+                       xcb_generic_error_t     **e)
 {
-    return (xcb_query_keymap_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (
+        xcb_query_keymap_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_open_font_sizeof (const void  *_buffer)
+xcb_open_font_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_open_font_request_t *_aux = (xcb_open_font_request_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    char                          *xcb_tmp = (char *)_buffer;
+    const xcb_open_font_request_t *_aux    = (xcb_open_font_request_t *)_buffer;
+    unsigned int                   xcb_buffer_len = 0;
+    unsigned int                   xcb_block_len  = 0;
+    unsigned int                   xcb_pad        = 0;
+    unsigned int                   xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_open_font_request_t);
     xcb_tmp += xcb_block_len;
@@ -5419,9 +5457,10 @@ xcb_open_font_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -5431,155 +5470,147 @@ xcb_open_font_sizeof (const void  *_buffer)
 }
 
 xcb_void_cookie_t
-xcb_open_font_checked (xcb_connection_t *c,
-                       xcb_font_t        fid,
-                       uint16_t          name_len,
-                       const char       *name)
+xcb_open_font_checked(xcb_connection_t *c,
+                      xcb_font_t        fid,
+                      uint16_t          name_len,
+                      const char       *name)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_OPEN_FONT,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_OPEN_FONT,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec            xcb_parts[6];
+    xcb_void_cookie_t       xcb_ret;
     xcb_open_font_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.fid = fid;
+    xcb_out.pad0     = 0;
+    xcb_out.fid      = fid;
     xcb_out.name_len = name_len;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char name */
-    xcb_parts[4].iov_base = (char *) name;
-    xcb_parts[4].iov_len = name_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)name;
+    xcb_parts[4].iov_len  = name_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_open_font (xcb_connection_t *c,
-               xcb_font_t        fid,
-               uint16_t          name_len,
-               const char       *name)
+xcb_open_font(xcb_connection_t *c,
+              xcb_font_t        fid,
+              uint16_t          name_len,
+              const char       *name)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_OPEN_FONT,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_OPEN_FONT,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec            xcb_parts[6];
+    xcb_void_cookie_t       xcb_ret;
     xcb_open_font_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.fid = fid;
+    xcb_out.pad0     = 0;
+    xcb_out.fid      = fid;
     xcb_out.name_len = name_len;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char name */
-    xcb_parts[4].iov_base = (char *) name;
-    xcb_parts[4].iov_len = name_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)name;
+    xcb_parts[4].iov_len  = name_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 char *
-xcb_open_font_name (const xcb_open_font_request_t *R)
+xcb_open_font_name(const xcb_open_font_request_t *R)
 {
-    return (char *) (R + 1);
+    return (char *)(R + 1);
 }
 
 int
-xcb_open_font_name_length (const xcb_open_font_request_t *R)
+xcb_open_font_name_length(const xcb_open_font_request_t *R)
 {
     return R->name_len;
 }
 
 xcb_generic_iterator_t
-xcb_open_font_name_end (const xcb_open_font_request_t *R)
+xcb_open_font_name_end(const xcb_open_font_request_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((char *) (R + 1)) + (R->name_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((char *)(R + 1)) + (R->name_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_void_cookie_t
-xcb_close_font_checked (xcb_connection_t *c,
-                        xcb_font_t        font)
+xcb_close_font_checked(xcb_connection_t *c, xcb_font_t font)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CLOSE_FONT,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CLOSE_FONT,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec             xcb_parts[4];
+    xcb_void_cookie_t        xcb_ret;
     xcb_close_font_request_t xcb_out;
 
     xcb_out.pad0 = 0;
     xcb_out.font = font;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_close_font (xcb_connection_t *c,
-                xcb_font_t        font)
+xcb_close_font(xcb_connection_t *c, xcb_font_t font)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CLOSE_FONT,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CLOSE_FONT,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec             xcb_parts[4];
+    xcb_void_cookie_t        xcb_ret;
     xcb_close_font_request_t xcb_out;
 
     xcb_out.pad0 = 0;
     xcb_out.font = font;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 void
-xcb_fontprop_next (xcb_fontprop_iterator_t *i)
+xcb_fontprop_next(xcb_fontprop_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -5587,17 +5618,17 @@ xcb_fontprop_next (xcb_fontprop_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_fontprop_end (xcb_fontprop_iterator_t i)
+xcb_fontprop_end(xcb_fontprop_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 void
-xcb_charinfo_next (xcb_charinfo_iterator_t *i)
+xcb_charinfo_next(xcb_charinfo_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -5605,25 +5636,24 @@ xcb_charinfo_next (xcb_charinfo_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_charinfo_end (xcb_charinfo_iterator_t i)
+xcb_charinfo_end(xcb_charinfo_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 int
-xcb_query_font_sizeof (const void  *_buffer)
+xcb_query_font_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_query_font_reply_t *_aux = (xcb_query_font_reply_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    char                         *xcb_tmp = (char *)_buffer;
+    const xcb_query_font_reply_t *_aux    = (xcb_query_font_reply_t *)_buffer;
+    unsigned int                  xcb_buffer_len = 0;
+    unsigned int                  xcb_block_len  = 0;
+    unsigned int                  xcb_pad        = 0;
+    unsigned int                  xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_query_font_reply_t);
     xcb_tmp += xcb_block_len;
@@ -5634,9 +5664,10 @@ xcb_query_font_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_fontprop_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -5646,9 +5677,10 @@ xcb_query_font_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_charinfo_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -5658,123 +5690,120 @@ xcb_query_font_sizeof (const void  *_buffer)
 }
 
 xcb_query_font_cookie_t
-xcb_query_font (xcb_connection_t *c,
-                xcb_fontable_t    font)
+xcb_query_font(xcb_connection_t *c, xcb_fontable_t font)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_QUERY_FONT,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_QUERY_FONT,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_query_font_cookie_t xcb_ret;
+    struct iovec             xcb_parts[4];
+    xcb_query_font_cookie_t  xcb_ret;
     xcb_query_font_request_t xcb_out;
 
     xcb_out.pad0 = 0;
     xcb_out.font = font;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_query_font_cookie_t
-xcb_query_font_unchecked (xcb_connection_t *c,
-                          xcb_fontable_t    font)
+xcb_query_font_unchecked(xcb_connection_t *c, xcb_fontable_t font)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_QUERY_FONT,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_QUERY_FONT,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_query_font_cookie_t xcb_ret;
+    struct iovec             xcb_parts[4];
+    xcb_query_font_cookie_t  xcb_ret;
     xcb_query_font_request_t xcb_out;
 
     xcb_out.pad0 = 0;
     xcb_out.font = font;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_fontprop_t *
-xcb_query_font_properties (const xcb_query_font_reply_t *R)
+xcb_query_font_properties(const xcb_query_font_reply_t *R)
 {
-    return (xcb_fontprop_t *) (R + 1);
+    return (xcb_fontprop_t *)(R + 1);
 }
 
 int
-xcb_query_font_properties_length (const xcb_query_font_reply_t *R)
+xcb_query_font_properties_length(const xcb_query_font_reply_t *R)
 {
     return R->properties_len;
 }
 
 xcb_fontprop_iterator_t
-xcb_query_font_properties_iterator (const xcb_query_font_reply_t *R)
+xcb_query_font_properties_iterator(const xcb_query_font_reply_t *R)
 {
     xcb_fontprop_iterator_t i;
-    i.data = (xcb_fontprop_t *) (R + 1);
-    i.rem = R->properties_len;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_fontprop_t *)(R + 1);
+    i.rem   = R->properties_len;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_charinfo_t *
-xcb_query_font_char_infos (const xcb_query_font_reply_t *R)
+xcb_query_font_char_infos(const xcb_query_font_reply_t *R)
 {
-    xcb_generic_iterator_t prev = xcb_fontprop_end(xcb_query_font_properties_iterator(R));
-    return (xcb_charinfo_t *) ((char *) prev.data + XCB_TYPE_PAD(xcb_charinfo_t, prev.index) + 0);
+    xcb_generic_iterator_t prev =
+        xcb_fontprop_end(xcb_query_font_properties_iterator(R));
+    return (xcb_charinfo_t *)((char *)prev.data +
+                              XCB_TYPE_PAD(xcb_charinfo_t, prev.index) + 0);
 }
 
 int
-xcb_query_font_char_infos_length (const xcb_query_font_reply_t *R)
+xcb_query_font_char_infos_length(const xcb_query_font_reply_t *R)
 {
     return R->char_infos_len;
 }
 
 xcb_charinfo_iterator_t
-xcb_query_font_char_infos_iterator (const xcb_query_font_reply_t *R)
+xcb_query_font_char_infos_iterator(const xcb_query_font_reply_t *R)
 {
     xcb_charinfo_iterator_t i;
-    xcb_generic_iterator_t prev = xcb_fontprop_end(xcb_query_font_properties_iterator(R));
-    i.data = (xcb_charinfo_t *) ((char *) prev.data + XCB_TYPE_PAD(xcb_charinfo_t, prev.index));
-    i.rem = R->char_infos_len;
-    i.index = (char *) i.data - (char *) R;
+    xcb_generic_iterator_t  prev =
+        xcb_fontprop_end(xcb_query_font_properties_iterator(R));
+    i.data  = (xcb_charinfo_t *)((char *)prev.data +
+                                XCB_TYPE_PAD(xcb_charinfo_t, prev.index));
+    i.rem   = R->char_infos_len;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_query_font_reply_t *
-xcb_query_font_reply (xcb_connection_t         *c,
-                      xcb_query_font_cookie_t   cookie  /**< */,
-                      xcb_generic_error_t     **e)
+xcb_query_font_reply(xcb_connection_t       *c,
+                     xcb_query_font_cookie_t cookie /**< */,
+                     xcb_generic_error_t   **e)
 {
-    return (xcb_query_font_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_query_font_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_query_text_extents_sizeof (const void  *_buffer,
-                               uint32_t     string_len)
+xcb_query_text_extents_sizeof(const void *_buffer, uint32_t string_len)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char        *xcb_tmp        = (char *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_query_text_extents_request_t);
     xcb_tmp += xcb_block_len;
@@ -5785,9 +5814,10 @@ xcb_query_text_extents_sizeof (const void  *_buffer,
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_char2b_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -5797,91 +5827,91 @@ xcb_query_text_extents_sizeof (const void  *_buffer,
 }
 
 xcb_query_text_extents_cookie_t
-xcb_query_text_extents (xcb_connection_t   *c,
-                        xcb_fontable_t      font,
-                        uint32_t            string_len,
-                        const xcb_char2b_t *string)
+xcb_query_text_extents(xcb_connection_t   *c,
+                       xcb_fontable_t      font,
+                       uint32_t            string_len,
+                       const xcb_char2b_t *string)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_QUERY_TEXT_EXTENTS,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_QUERY_TEXT_EXTENTS,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[6];
-    xcb_query_text_extents_cookie_t xcb_ret;
+    struct iovec                     xcb_parts[6];
+    xcb_query_text_extents_cookie_t  xcb_ret;
     xcb_query_text_extents_request_t xcb_out;
 
     xcb_out.odd_length = (string_len & 1);
-    xcb_out.font = font;
+    xcb_out.font       = font;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_char2b_t string */
-    xcb_parts[4].iov_base = (char *) string;
-    xcb_parts[4].iov_len = string_len * sizeof(xcb_char2b_t);
+    xcb_parts[4].iov_base = (char *)string;
+    xcb_parts[4].iov_len  = string_len * sizeof(xcb_char2b_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_query_text_extents_cookie_t
-xcb_query_text_extents_unchecked (xcb_connection_t   *c,
-                                  xcb_fontable_t      font,
-                                  uint32_t            string_len,
-                                  const xcb_char2b_t *string)
+xcb_query_text_extents_unchecked(xcb_connection_t   *c,
+                                 xcb_fontable_t      font,
+                                 uint32_t            string_len,
+                                 const xcb_char2b_t *string)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_QUERY_TEXT_EXTENTS,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_QUERY_TEXT_EXTENTS,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[6];
-    xcb_query_text_extents_cookie_t xcb_ret;
+    struct iovec                     xcb_parts[6];
+    xcb_query_text_extents_cookie_t  xcb_ret;
     xcb_query_text_extents_request_t xcb_out;
 
     xcb_out.odd_length = (string_len & 1);
-    xcb_out.font = font;
+    xcb_out.font       = font;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_char2b_t string */
-    xcb_parts[4].iov_base = (char *) string;
-    xcb_parts[4].iov_len = string_len * sizeof(xcb_char2b_t);
+    xcb_parts[4].iov_base = (char *)string;
+    xcb_parts[4].iov_len  = string_len * sizeof(xcb_char2b_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_query_text_extents_reply_t *
-xcb_query_text_extents_reply (xcb_connection_t                 *c,
-                              xcb_query_text_extents_cookie_t   cookie  /**< */,
-                              xcb_generic_error_t             **e)
+xcb_query_text_extents_reply(xcb_connection_t               *c,
+                             xcb_query_text_extents_cookie_t cookie /**< */,
+                             xcb_generic_error_t           **e)
 {
-    return (xcb_query_text_extents_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_query_text_extents_reply_t *)xcb_wait_for_reply(c,
+                                                                cookie.sequence,
+                                                                e);
 }
 
 int
-xcb_str_sizeof (const void  *_buffer)
+xcb_str_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_str_t *_aux = (xcb_str_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    char            *xcb_tmp        = (char *)_buffer;
+    const xcb_str_t *_aux           = (xcb_str_t *)_buffer;
+    unsigned int     xcb_buffer_len = 0;
+    unsigned int     xcb_block_len  = 0;
+    unsigned int     xcb_pad        = 0;
+    unsigned int     xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_str_t);
     xcb_tmp += xcb_block_len;
@@ -5892,9 +5922,10 @@ xcb_str_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -5904,60 +5935,59 @@ xcb_str_sizeof (const void  *_buffer)
 }
 
 char *
-xcb_str_name (const xcb_str_t *R)
+xcb_str_name(const xcb_str_t *R)
 {
-    return (char *) (R + 1);
+    return (char *)(R + 1);
 }
 
 int
-xcb_str_name_length (const xcb_str_t *R)
+xcb_str_name_length(const xcb_str_t *R)
 {
     return R->name_len;
 }
 
 xcb_generic_iterator_t
-xcb_str_name_end (const xcb_str_t *R)
+xcb_str_name_end(const xcb_str_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((char *) (R + 1)) + (R->name_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((char *)(R + 1)) + (R->name_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 void
-xcb_str_next (xcb_str_iterator_t *i)
+xcb_str_next(xcb_str_iterator_t *i)
 {
-    xcb_str_t *R = i->data;
+    xcb_str_t             *R = i->data;
     xcb_generic_iterator_t child;
     child.data = (xcb_str_t *)(((char *)R) + xcb_str_sizeof(R));
-    i->index = (char *) child.data - (char *) i->data;
+    i->index   = (char *)child.data - (char *)i->data;
     --i->rem;
-    i->data = (xcb_str_t *) child.data;
+    i->data = (xcb_str_t *)child.data;
 }
 
 xcb_generic_iterator_t
-xcb_str_end (xcb_str_iterator_t i)
+xcb_str_end(xcb_str_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    while(i.rem > 0)
+    while (i.rem > 0)
         xcb_str_next(&i);
-    ret.data = i.data;
-    ret.rem = i.rem;
+    ret.data  = i.data;
+    ret.rem   = i.rem;
     ret.index = i.index;
     return ret;
 }
 
 int
-xcb_list_fonts_sizeof (const void  *_buffer)
+xcb_list_fonts_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char                           *xcb_tmp = (char *)_buffer;
     const xcb_list_fonts_request_t *_aux = (xcb_list_fonts_request_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int                    xcb_buffer_len = 0;
+    unsigned int                    xcb_block_len  = 0;
+    unsigned int                    xcb_pad        = 0;
+    unsigned int                    xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_list_fonts_request_t);
     xcb_tmp += xcb_block_len;
@@ -5968,9 +5998,10 @@ xcb_list_fonts_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -5980,109 +6011,106 @@ xcb_list_fonts_sizeof (const void  *_buffer)
 }
 
 xcb_list_fonts_cookie_t
-xcb_list_fonts (xcb_connection_t *c,
-                uint16_t          max_names,
-                uint16_t          pattern_len,
-                const char       *pattern)
+xcb_list_fonts(xcb_connection_t *c,
+               uint16_t          max_names,
+               uint16_t          pattern_len,
+               const char       *pattern)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_LIST_FONTS,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_LIST_FONTS,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[6];
-    xcb_list_fonts_cookie_t xcb_ret;
+    struct iovec             xcb_parts[6];
+    xcb_list_fonts_cookie_t  xcb_ret;
     xcb_list_fonts_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.max_names = max_names;
+    xcb_out.pad0        = 0;
+    xcb_out.max_names   = max_names;
     xcb_out.pattern_len = pattern_len;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char pattern */
-    xcb_parts[4].iov_base = (char *) pattern;
-    xcb_parts[4].iov_len = pattern_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)pattern;
+    xcb_parts[4].iov_len  = pattern_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_list_fonts_cookie_t
-xcb_list_fonts_unchecked (xcb_connection_t *c,
-                          uint16_t          max_names,
-                          uint16_t          pattern_len,
-                          const char       *pattern)
+xcb_list_fonts_unchecked(xcb_connection_t *c,
+                         uint16_t          max_names,
+                         uint16_t          pattern_len,
+                         const char       *pattern)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_LIST_FONTS,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_LIST_FONTS,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[6];
-    xcb_list_fonts_cookie_t xcb_ret;
+    struct iovec             xcb_parts[6];
+    xcb_list_fonts_cookie_t  xcb_ret;
     xcb_list_fonts_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.max_names = max_names;
+    xcb_out.pad0        = 0;
+    xcb_out.max_names   = max_names;
     xcb_out.pattern_len = pattern_len;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char pattern */
-    xcb_parts[4].iov_base = (char *) pattern;
-    xcb_parts[4].iov_len = pattern_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)pattern;
+    xcb_parts[4].iov_len  = pattern_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 int
-xcb_list_fonts_names_length (const xcb_list_fonts_reply_t *R)
+xcb_list_fonts_names_length(const xcb_list_fonts_reply_t *R)
 {
     return R->names_len;
 }
 
 xcb_str_iterator_t
-xcb_list_fonts_names_iterator (const xcb_list_fonts_reply_t *R)
+xcb_list_fonts_names_iterator(const xcb_list_fonts_reply_t *R)
 {
     xcb_str_iterator_t i;
-    i.data = (xcb_str_t *) (R + 1);
-    i.rem = R->names_len;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_str_t *)(R + 1);
+    i.rem   = R->names_len;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_list_fonts_reply_t *
-xcb_list_fonts_reply (xcb_connection_t         *c,
-                      xcb_list_fonts_cookie_t   cookie  /**< */,
-                      xcb_generic_error_t     **e)
+xcb_list_fonts_reply(xcb_connection_t       *c,
+                     xcb_list_fonts_cookie_t cookie /**< */,
+                     xcb_generic_error_t   **e)
 {
-    return (xcb_list_fonts_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_list_fonts_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_list_fonts_with_info_sizeof (const void  *_buffer)
+xcb_list_fonts_with_info_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_list_fonts_with_info_request_t *_aux = (xcb_list_fonts_with_info_request_t *)_buffer;
+    char                                     *xcb_tmp = (char *)_buffer;
+    const xcb_list_fonts_with_info_request_t *_aux =
+        (xcb_list_fonts_with_info_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_list_fonts_with_info_request_t);
     xcb_tmp += xcb_block_len;
@@ -6093,9 +6121,10 @@ xcb_list_fonts_with_info_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -6105,138 +6134,146 @@ xcb_list_fonts_with_info_sizeof (const void  *_buffer)
 }
 
 xcb_list_fonts_with_info_cookie_t
-xcb_list_fonts_with_info (xcb_connection_t *c,
-                          uint16_t          max_names,
-                          uint16_t          pattern_len,
-                          const char       *pattern)
+xcb_list_fonts_with_info(xcb_connection_t *c,
+                         uint16_t          max_names,
+                         uint16_t          pattern_len,
+                         const char       *pattern)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
+        .count  = 4,
+        .ext    = 0,
         .opcode = XCB_LIST_FONTS_WITH_INFO,
         .isvoid = 0
     };
 
-    struct iovec xcb_parts[6];
-    xcb_list_fonts_with_info_cookie_t xcb_ret;
+    struct iovec                       xcb_parts[6];
+    xcb_list_fonts_with_info_cookie_t  xcb_ret;
     xcb_list_fonts_with_info_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.max_names = max_names;
+    xcb_out.pad0        = 0;
+    xcb_out.max_names   = max_names;
     xcb_out.pattern_len = pattern_len;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char pattern */
-    xcb_parts[4].iov_base = (char *) pattern;
-    xcb_parts[4].iov_len = pattern_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)pattern;
+    xcb_parts[4].iov_len  = pattern_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_list_fonts_with_info_cookie_t
-xcb_list_fonts_with_info_unchecked (xcb_connection_t *c,
-                                    uint16_t          max_names,
-                                    uint16_t          pattern_len,
-                                    const char       *pattern)
+xcb_list_fonts_with_info_unchecked(xcb_connection_t *c,
+                                   uint16_t          max_names,
+                                   uint16_t          pattern_len,
+                                   const char       *pattern)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
+        .count  = 4,
+        .ext    = 0,
         .opcode = XCB_LIST_FONTS_WITH_INFO,
         .isvoid = 0
     };
 
-    struct iovec xcb_parts[6];
-    xcb_list_fonts_with_info_cookie_t xcb_ret;
+    struct iovec                       xcb_parts[6];
+    xcb_list_fonts_with_info_cookie_t  xcb_ret;
     xcb_list_fonts_with_info_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.max_names = max_names;
+    xcb_out.pad0        = 0;
+    xcb_out.max_names   = max_names;
     xcb_out.pattern_len = pattern_len;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char pattern */
-    xcb_parts[4].iov_base = (char *) pattern;
-    xcb_parts[4].iov_len = pattern_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)pattern;
+    xcb_parts[4].iov_len  = pattern_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_fontprop_t *
-xcb_list_fonts_with_info_properties (const xcb_list_fonts_with_info_reply_t *R)
+xcb_list_fonts_with_info_properties(const xcb_list_fonts_with_info_reply_t *R)
 {
-    return (xcb_fontprop_t *) (R + 1);
+    return (xcb_fontprop_t *)(R + 1);
 }
 
 int
-xcb_list_fonts_with_info_properties_length (const xcb_list_fonts_with_info_reply_t *R)
+xcb_list_fonts_with_info_properties_length(
+    const xcb_list_fonts_with_info_reply_t *R)
 {
     return R->properties_len;
 }
 
 xcb_fontprop_iterator_t
-xcb_list_fonts_with_info_properties_iterator (const xcb_list_fonts_with_info_reply_t *R)
+xcb_list_fonts_with_info_properties_iterator(
+    const xcb_list_fonts_with_info_reply_t *R)
 {
     xcb_fontprop_iterator_t i;
-    i.data = (xcb_fontprop_t *) (R + 1);
-    i.rem = R->properties_len;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_fontprop_t *)(R + 1);
+    i.rem   = R->properties_len;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 char *
-xcb_list_fonts_with_info_name (const xcb_list_fonts_with_info_reply_t *R)
+xcb_list_fonts_with_info_name(const xcb_list_fonts_with_info_reply_t *R)
 {
-    xcb_generic_iterator_t prev = xcb_fontprop_end(xcb_list_fonts_with_info_properties_iterator(R));
-    return (char *) ((char *) prev.data + XCB_TYPE_PAD(char, prev.index) + 0);
+    xcb_generic_iterator_t prev =
+        xcb_fontprop_end(xcb_list_fonts_with_info_properties_iterator(R));
+    return (char *)((char *)prev.data + XCB_TYPE_PAD(char, prev.index) + 0);
 }
 
 int
-xcb_list_fonts_with_info_name_length (const xcb_list_fonts_with_info_reply_t *R)
+xcb_list_fonts_with_info_name_length(const xcb_list_fonts_with_info_reply_t *R)
 {
     return R->name_len;
 }
 
 xcb_generic_iterator_t
-xcb_list_fonts_with_info_name_end (const xcb_list_fonts_with_info_reply_t *R)
+xcb_list_fonts_with_info_name_end(const xcb_list_fonts_with_info_reply_t *R)
 {
     xcb_generic_iterator_t i;
-    xcb_generic_iterator_t prev = xcb_fontprop_end(xcb_list_fonts_with_info_properties_iterator(R));
-    i.data = ((char *) ((char*) prev.data + XCB_TYPE_PAD(char, prev.index))) + (R->name_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    xcb_generic_iterator_t prev =
+        xcb_fontprop_end(xcb_list_fonts_with_info_properties_iterator(R));
+    i.data = ((char *)((char *)prev.data + XCB_TYPE_PAD(char, prev.index))) +
+             (R->name_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_list_fonts_with_info_reply_t *
-xcb_list_fonts_with_info_reply (xcb_connection_t                   *c,
-                                xcb_list_fonts_with_info_cookie_t   cookie  /**< */,
-                                xcb_generic_error_t               **e)
+xcb_list_fonts_with_info_reply(xcb_connection_t                 *c,
+                               xcb_list_fonts_with_info_cookie_t cookie /**< */,
+                               xcb_generic_error_t             **e)
 {
-    return (xcb_list_fonts_with_info_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_list_fonts_with_info_reply_t *)
+        xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_set_font_path_sizeof (const void  *_buffer)
+xcb_set_font_path_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_set_font_path_request_t *_aux = (xcb_set_font_path_request_t *)_buffer;
+    char                              *xcb_tmp = (char *)_buffer;
+    const xcb_set_font_path_request_t *_aux =
+        (xcb_set_font_path_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     unsigned int i;
     unsigned int xcb_tmp_len;
@@ -6246,16 +6283,18 @@ xcb_set_font_path_sizeof (const void  *_buffer)
     xcb_buffer_len += xcb_block_len;
     xcb_block_len = 0;
     /* font */
-    for(i=0; i<_aux->font_qty; i++) {
+    for (i = 0; i < _aux->font_qty; i++)
+    {
         xcb_tmp_len = xcb_str_sizeof(xcb_tmp);
         xcb_block_len += xcb_tmp_len;
         xcb_tmp += xcb_tmp_len;
     }
     xcb_align_to = ALIGNOF(xcb_str_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -6265,116 +6304,114 @@ xcb_set_font_path_sizeof (const void  *_buffer)
 }
 
 xcb_void_cookie_t
-xcb_set_font_path_checked (xcb_connection_t *c,
-                           uint16_t          font_qty,
-                           const xcb_str_t  *font)
+xcb_set_font_path_checked(xcb_connection_t *c,
+                          uint16_t          font_qty,
+                          const xcb_str_t  *font)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_SET_FONT_PATH,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_SET_FONT_PATH,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                xcb_parts[6];
+    xcb_void_cookie_t           xcb_ret;
     xcb_set_font_path_request_t xcb_out;
-    unsigned int xcb_tmp_len;
-    char *xcb_tmp;
-    unsigned int i;
+    unsigned int                xcb_tmp_len;
+    char                       *xcb_tmp;
+    unsigned int                i;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.font_qty = font_qty;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_str_t font */
-    xcb_parts[4].iov_base = (char *) font;
-    xcb_parts[4].iov_len = 0;
-    xcb_tmp = (char *)font;
-    for(i=0; i<font_qty; i++) {
+    xcb_parts[4].iov_base = (char *)font;
+    xcb_parts[4].iov_len  = 0;
+    xcb_tmp               = (char *)font;
+    for (i = 0; i < font_qty; i++)
+    {
         xcb_tmp_len = xcb_str_sizeof(xcb_tmp);
         xcb_parts[4].iov_len += xcb_tmp_len;
         xcb_tmp += xcb_tmp_len;
     }
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_set_font_path (xcb_connection_t *c,
-                   uint16_t          font_qty,
-                   const xcb_str_t  *font)
+xcb_set_font_path(xcb_connection_t *c, uint16_t font_qty, const xcb_str_t *font)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_SET_FONT_PATH,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_SET_FONT_PATH,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                xcb_parts[6];
+    xcb_void_cookie_t           xcb_ret;
     xcb_set_font_path_request_t xcb_out;
-    unsigned int xcb_tmp_len;
-    char *xcb_tmp;
-    unsigned int i;
+    unsigned int                xcb_tmp_len;
+    char                       *xcb_tmp;
+    unsigned int                i;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.font_qty = font_qty;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_str_t font */
-    xcb_parts[4].iov_base = (char *) font;
-    xcb_parts[4].iov_len = 0;
-    xcb_tmp = (char *)font;
-    for(i=0; i<font_qty; i++) {
+    xcb_parts[4].iov_base = (char *)font;
+    xcb_parts[4].iov_len  = 0;
+    xcb_tmp               = (char *)font;
+    for (i = 0; i < font_qty; i++)
+    {
         xcb_tmp_len = xcb_str_sizeof(xcb_tmp);
         xcb_parts[4].iov_len += xcb_tmp_len;
         xcb_tmp += xcb_tmp_len;
     }
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 int
-xcb_set_font_path_font_length (const xcb_set_font_path_request_t *R)
+xcb_set_font_path_font_length(const xcb_set_font_path_request_t *R)
 {
     return R->font_qty;
 }
 
 xcb_str_iterator_t
-xcb_set_font_path_font_iterator (const xcb_set_font_path_request_t *R)
+xcb_set_font_path_font_iterator(const xcb_set_font_path_request_t *R)
 {
     xcb_str_iterator_t i;
-    i.data = (xcb_str_t *) (R + 1);
-    i.rem = R->font_qty;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_str_t *)(R + 1);
+    i.rem   = R->font_qty;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 int
-xcb_get_font_path_sizeof (const void  *_buffer)
+xcb_get_font_path_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_get_font_path_reply_t *_aux = (xcb_get_font_path_reply_t *)_buffer;
+    char                            *xcb_tmp = (char *)_buffer;
+    const xcb_get_font_path_reply_t *_aux =
+        (xcb_get_font_path_reply_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     unsigned int i;
     unsigned int xcb_tmp_len;
@@ -6384,16 +6421,18 @@ xcb_get_font_path_sizeof (const void  *_buffer)
     xcb_buffer_len += xcb_block_len;
     xcb_block_len = 0;
     /* path */
-    for(i=0; i<_aux->path_len; i++) {
+    for (i = 0; i < _aux->path_len; i++)
+    {
         xcb_tmp_len = xcb_str_sizeof(xcb_tmp);
         xcb_block_len += xcb_tmp_len;
         xcb_tmp += xcb_tmp_len;
     }
     xcb_align_to = ALIGNOF(xcb_str_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -6403,398 +6442,413 @@ xcb_get_font_path_sizeof (const void  *_buffer)
 }
 
 xcb_get_font_path_cookie_t
-xcb_get_font_path (xcb_connection_t *c)
+xcb_get_font_path(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_FONT_PATH,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GET_FONT_PATH,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_font_path_cookie_t xcb_ret;
+    struct iovec                xcb_parts[4];
+    xcb_get_font_path_cookie_t  xcb_ret;
     xcb_get_font_path_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_font_path_cookie_t
-xcb_get_font_path_unchecked (xcb_connection_t *c)
+xcb_get_font_path_unchecked(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_FONT_PATH,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GET_FONT_PATH,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_font_path_cookie_t xcb_ret;
+    struct iovec                xcb_parts[4];
+    xcb_get_font_path_cookie_t  xcb_ret;
     xcb_get_font_path_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 int
-xcb_get_font_path_path_length (const xcb_get_font_path_reply_t *R)
+xcb_get_font_path_path_length(const xcb_get_font_path_reply_t *R)
 {
     return R->path_len;
 }
 
 xcb_str_iterator_t
-xcb_get_font_path_path_iterator (const xcb_get_font_path_reply_t *R)
+xcb_get_font_path_path_iterator(const xcb_get_font_path_reply_t *R)
 {
     xcb_str_iterator_t i;
-    i.data = (xcb_str_t *) (R + 1);
-    i.rem = R->path_len;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_str_t *)(R + 1);
+    i.rem   = R->path_len;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_get_font_path_reply_t *
-xcb_get_font_path_reply (xcb_connection_t            *c,
-                         xcb_get_font_path_cookie_t   cookie  /**< */,
-                         xcb_generic_error_t        **e)
+xcb_get_font_path_reply(xcb_connection_t          *c,
+                        xcb_get_font_path_cookie_t cookie /**< */,
+                        xcb_generic_error_t      **e)
 {
-    return (xcb_get_font_path_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (
+        xcb_get_font_path_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 xcb_void_cookie_t
-xcb_create_pixmap_checked (xcb_connection_t *c,
-                           uint8_t           depth,
-                           xcb_pixmap_t      pid,
-                           xcb_drawable_t    drawable,
-                           uint16_t          width,
-                           uint16_t          height)
+xcb_create_pixmap_checked(xcb_connection_t *c,
+                          uint8_t           depth,
+                          xcb_pixmap_t      pid,
+                          xcb_drawable_t    drawable,
+                          uint16_t          width,
+                          uint16_t          height)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CREATE_PIXMAP,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CREATE_PIXMAP,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                xcb_parts[4];
+    xcb_void_cookie_t           xcb_ret;
     xcb_create_pixmap_request_t xcb_out;
 
-    xcb_out.depth = depth;
-    xcb_out.pid = pid;
+    xcb_out.depth    = depth;
+    xcb_out.pid      = pid;
     xcb_out.drawable = drawable;
-    xcb_out.width = width;
-    xcb_out.height = height;
+    xcb_out.width    = width;
+    xcb_out.height   = height;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_create_pixmap (xcb_connection_t *c,
-                   uint8_t           depth,
-                   xcb_pixmap_t      pid,
-                   xcb_drawable_t    drawable,
-                   uint16_t          width,
-                   uint16_t          height)
+xcb_create_pixmap(xcb_connection_t *c,
+                  uint8_t           depth,
+                  xcb_pixmap_t      pid,
+                  xcb_drawable_t    drawable,
+                  uint16_t          width,
+                  uint16_t          height)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CREATE_PIXMAP,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CREATE_PIXMAP,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                xcb_parts[4];
+    xcb_void_cookie_t           xcb_ret;
     xcb_create_pixmap_request_t xcb_out;
 
-    xcb_out.depth = depth;
-    xcb_out.pid = pid;
+    xcb_out.depth    = depth;
+    xcb_out.pid      = pid;
     xcb_out.drawable = drawable;
-    xcb_out.width = width;
-    xcb_out.height = height;
+    xcb_out.width    = width;
+    xcb_out.height   = height;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_free_pixmap_checked (xcb_connection_t *c,
-                         xcb_pixmap_t      pixmap)
+xcb_free_pixmap_checked(xcb_connection_t *c, xcb_pixmap_t pixmap)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_FREE_PIXMAP,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_FREE_PIXMAP,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec              xcb_parts[4];
+    xcb_void_cookie_t         xcb_ret;
     xcb_free_pixmap_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.pixmap = pixmap;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_free_pixmap (xcb_connection_t *c,
-                 xcb_pixmap_t      pixmap)
+xcb_free_pixmap(xcb_connection_t *c, xcb_pixmap_t pixmap)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_FREE_PIXMAP,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_FREE_PIXMAP,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec              xcb_parts[4];
+    xcb_void_cookie_t         xcb_ret;
     xcb_free_pixmap_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.pixmap = pixmap;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 int
-xcb_create_gc_value_list_serialize (void                             **_buffer,
-                                    uint32_t                           value_mask,
-                                    const xcb_create_gc_value_list_t  *_aux)
+xcb_create_gc_value_list_serialize(void                            **_buffer,
+                                   uint32_t                          value_mask,
+                                   const xcb_create_gc_value_list_t *_aux)
 {
-    char *xcb_out = *_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_align_to = 0;
+    char        *xcb_out            = *_buffer;
+    unsigned int xcb_buffer_len     = 0;
+    unsigned int xcb_align_to       = 0;
     unsigned int xcb_padding_offset = 0;
 
-    unsigned int xcb_pad = 0;
-    char xcb_pad0[3] = {0, 0, 0};
+    unsigned int xcb_pad     = 0;
+    char         xcb_pad0[3] = { 0, 0, 0 };
     struct iovec xcb_parts[24];
     unsigned int xcb_parts_idx = 0;
     unsigned int xcb_block_len = 0;
     unsigned int i;
-    char *xcb_tmp;
+    char        *xcb_tmp;
 
-    if(value_mask & XCB_GC_FUNCTION) {
+    if (value_mask & XCB_GC_FUNCTION)
+    {
         /* xcb_create_gc_value_list_t.function */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->function;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->function;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_PLANE_MASK) {
+    if (value_mask & XCB_GC_PLANE_MASK)
+    {
         /* xcb_create_gc_value_list_t.plane_mask */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->plane_mask;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->plane_mask;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_FOREGROUND) {
+    if (value_mask & XCB_GC_FOREGROUND)
+    {
         /* xcb_create_gc_value_list_t.foreground */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->foreground;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->foreground;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_BACKGROUND) {
+    if (value_mask & XCB_GC_BACKGROUND)
+    {
         /* xcb_create_gc_value_list_t.background */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->background;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->background;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_LINE_WIDTH) {
+    if (value_mask & XCB_GC_LINE_WIDTH)
+    {
         /* xcb_create_gc_value_list_t.line_width */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->line_width;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->line_width;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_LINE_STYLE) {
+    if (value_mask & XCB_GC_LINE_STYLE)
+    {
         /* xcb_create_gc_value_list_t.line_style */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->line_style;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->line_style;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_CAP_STYLE) {
+    if (value_mask & XCB_GC_CAP_STYLE)
+    {
         /* xcb_create_gc_value_list_t.cap_style */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->cap_style;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->cap_style;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_JOIN_STYLE) {
+    if (value_mask & XCB_GC_JOIN_STYLE)
+    {
         /* xcb_create_gc_value_list_t.join_style */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->join_style;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->join_style;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_FILL_STYLE) {
+    if (value_mask & XCB_GC_FILL_STYLE)
+    {
         /* xcb_create_gc_value_list_t.fill_style */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->fill_style;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->fill_style;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_FILL_RULE) {
+    if (value_mask & XCB_GC_FILL_RULE)
+    {
         /* xcb_create_gc_value_list_t.fill_rule */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->fill_rule;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->fill_rule;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_TILE) {
+    if (value_mask & XCB_GC_TILE)
+    {
         /* xcb_create_gc_value_list_t.tile */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->tile;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->tile;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_pixmap_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_GC_STIPPLE) {
+    if (value_mask & XCB_GC_STIPPLE)
+    {
         /* xcb_create_gc_value_list_t.stipple */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->stipple;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->stipple;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_pixmap_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_GC_TILE_STIPPLE_ORIGIN_X) {
+    if (value_mask & XCB_GC_TILE_STIPPLE_ORIGIN_X)
+    {
         /* xcb_create_gc_value_list_t.tile_stipple_x_origin */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->tile_stipple_x_origin;
+        xcb_parts[xcb_parts_idx].iov_base =
+            (char *)&_aux->tile_stipple_x_origin;
         xcb_block_len += sizeof(int32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(int32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_GC_TILE_STIPPLE_ORIGIN_Y) {
+    if (value_mask & XCB_GC_TILE_STIPPLE_ORIGIN_Y)
+    {
         /* xcb_create_gc_value_list_t.tile_stipple_y_origin */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->tile_stipple_y_origin;
+        xcb_parts[xcb_parts_idx].iov_base =
+            (char *)&_aux->tile_stipple_y_origin;
         xcb_block_len += sizeof(int32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(int32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_GC_FONT) {
+    if (value_mask & XCB_GC_FONT)
+    {
         /* xcb_create_gc_value_list_t.font */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->font;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->font;
         xcb_block_len += sizeof(xcb_font_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_font_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_font_t);
     }
-    if(value_mask & XCB_GC_SUBWINDOW_MODE) {
+    if (value_mask & XCB_GC_SUBWINDOW_MODE)
+    {
         /* xcb_create_gc_value_list_t.subwindow_mode */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->subwindow_mode;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->subwindow_mode;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_GRAPHICS_EXPOSURES) {
+    if (value_mask & XCB_GC_GRAPHICS_EXPOSURES)
+    {
         /* xcb_create_gc_value_list_t.graphics_exposures */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->graphics_exposures;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->graphics_exposures;
         xcb_block_len += sizeof(xcb_bool32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_bool32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_bool32_t);
     }
-    if(value_mask & XCB_GC_CLIP_ORIGIN_X) {
+    if (value_mask & XCB_GC_CLIP_ORIGIN_X)
+    {
         /* xcb_create_gc_value_list_t.clip_x_origin */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->clip_x_origin;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->clip_x_origin;
         xcb_block_len += sizeof(int32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(int32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_GC_CLIP_ORIGIN_Y) {
+    if (value_mask & XCB_GC_CLIP_ORIGIN_Y)
+    {
         /* xcb_create_gc_value_list_t.clip_y_origin */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->clip_y_origin;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->clip_y_origin;
         xcb_block_len += sizeof(int32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(int32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_GC_CLIP_MASK) {
+    if (value_mask & XCB_GC_CLIP_MASK)
+    {
         /* xcb_create_gc_value_list_t.clip_mask */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->clip_mask;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->clip_mask;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_pixmap_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_GC_DASH_OFFSET) {
+    if (value_mask & XCB_GC_DASH_OFFSET)
+    {
         /* xcb_create_gc_value_list_t.dash_offset */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->dash_offset;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->dash_offset;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_DASH_LIST) {
+    if (value_mask & XCB_GC_DASH_LIST)
+    {
         /* xcb_create_gc_value_list_t.dashes */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->dashes;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->dashes;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_ARC_MODE) {
+    if (value_mask & XCB_GC_ARC_MODE)
+    {
         /* xcb_create_gc_value_list_t.arc_mode */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->arc_mode;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->arc_mode;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
@@ -6803,200 +6857,224 @@ xcb_create_gc_value_list_serialize (void                             **_buffer,
     /* insert padding */
     xcb_pad = -(xcb_block_len + xcb_padding_offset) & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_parts[xcb_parts_idx].iov_base = xcb_pad0;
-        xcb_parts[xcb_parts_idx].iov_len = xcb_pad;
+        xcb_parts[xcb_parts_idx].iov_len  = xcb_pad;
         xcb_parts_idx++;
         xcb_pad = 0;
     }
-    xcb_block_len = 0;
+    xcb_block_len      = 0;
     xcb_padding_offset = 0;
 
-    if (NULL == xcb_out) {
+    if (NULL == xcb_out)
+    {
         /* allocate memory */
-        xcb_out = malloc(xcb_buffer_len);
+        xcb_out  = malloc(xcb_buffer_len);
         *_buffer = xcb_out;
     }
 
     xcb_tmp = xcb_out;
-    for(i=0; i<xcb_parts_idx; i++) {
+    for (i = 0; i < xcb_parts_idx; i++)
+    {
         if (0 != xcb_parts[i].iov_base && 0 != xcb_parts[i].iov_len)
             memcpy(xcb_tmp, xcb_parts[i].iov_base, xcb_parts[i].iov_len);
-        if (0 != xcb_parts[i].iov_len)
-            xcb_tmp += xcb_parts[i].iov_len;
+        if (0 != xcb_parts[i].iov_len) xcb_tmp += xcb_parts[i].iov_len;
     }
 
     return xcb_buffer_len;
 }
 
 int
-xcb_create_gc_value_list_unpack (const void                  *_buffer,
-                                 uint32_t                     value_mask,
-                                 xcb_create_gc_value_list_t  *_aux)
+xcb_create_gc_value_list_unpack(const void                 *_buffer,
+                                uint32_t                    value_mask,
+                                xcb_create_gc_value_list_t *_aux)
 {
-    char *xcb_tmp = (char *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
+    char        *xcb_tmp            = (char *)_buffer;
+    unsigned int xcb_buffer_len     = 0;
+    unsigned int xcb_block_len      = 0;
+    unsigned int xcb_pad            = 0;
+    unsigned int xcb_align_to       = 0;
     unsigned int xcb_padding_offset = 0;
 
-
-    if(value_mask & XCB_GC_FUNCTION) {
+    if (value_mask & XCB_GC_FUNCTION)
+    {
         /* xcb_create_gc_value_list_t.function */
         _aux->function = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_PLANE_MASK) {
+    if (value_mask & XCB_GC_PLANE_MASK)
+    {
         /* xcb_create_gc_value_list_t.plane_mask */
         _aux->plane_mask = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_FOREGROUND) {
+    if (value_mask & XCB_GC_FOREGROUND)
+    {
         /* xcb_create_gc_value_list_t.foreground */
         _aux->foreground = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_BACKGROUND) {
+    if (value_mask & XCB_GC_BACKGROUND)
+    {
         /* xcb_create_gc_value_list_t.background */
         _aux->background = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_LINE_WIDTH) {
+    if (value_mask & XCB_GC_LINE_WIDTH)
+    {
         /* xcb_create_gc_value_list_t.line_width */
         _aux->line_width = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_LINE_STYLE) {
+    if (value_mask & XCB_GC_LINE_STYLE)
+    {
         /* xcb_create_gc_value_list_t.line_style */
         _aux->line_style = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_CAP_STYLE) {
+    if (value_mask & XCB_GC_CAP_STYLE)
+    {
         /* xcb_create_gc_value_list_t.cap_style */
         _aux->cap_style = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_JOIN_STYLE) {
+    if (value_mask & XCB_GC_JOIN_STYLE)
+    {
         /* xcb_create_gc_value_list_t.join_style */
         _aux->join_style = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_FILL_STYLE) {
+    if (value_mask & XCB_GC_FILL_STYLE)
+    {
         /* xcb_create_gc_value_list_t.fill_style */
         _aux->fill_style = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_FILL_RULE) {
+    if (value_mask & XCB_GC_FILL_RULE)
+    {
         /* xcb_create_gc_value_list_t.fill_rule */
         _aux->fill_rule = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_TILE) {
+    if (value_mask & XCB_GC_TILE)
+    {
         /* xcb_create_gc_value_list_t.tile */
         _aux->tile = *(xcb_pixmap_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_tmp += sizeof(xcb_pixmap_t);
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_GC_STIPPLE) {
+    if (value_mask & XCB_GC_STIPPLE)
+    {
         /* xcb_create_gc_value_list_t.stipple */
         _aux->stipple = *(xcb_pixmap_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_tmp += sizeof(xcb_pixmap_t);
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_GC_TILE_STIPPLE_ORIGIN_X) {
+    if (value_mask & XCB_GC_TILE_STIPPLE_ORIGIN_X)
+    {
         /* xcb_create_gc_value_list_t.tile_stipple_x_origin */
         _aux->tile_stipple_x_origin = *(int32_t *)xcb_tmp;
         xcb_block_len += sizeof(int32_t);
         xcb_tmp += sizeof(int32_t);
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_GC_TILE_STIPPLE_ORIGIN_Y) {
+    if (value_mask & XCB_GC_TILE_STIPPLE_ORIGIN_Y)
+    {
         /* xcb_create_gc_value_list_t.tile_stipple_y_origin */
         _aux->tile_stipple_y_origin = *(int32_t *)xcb_tmp;
         xcb_block_len += sizeof(int32_t);
         xcb_tmp += sizeof(int32_t);
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_GC_FONT) {
+    if (value_mask & XCB_GC_FONT)
+    {
         /* xcb_create_gc_value_list_t.font */
         _aux->font = *(xcb_font_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_font_t);
         xcb_tmp += sizeof(xcb_font_t);
         xcb_align_to = ALIGNOF(xcb_font_t);
     }
-    if(value_mask & XCB_GC_SUBWINDOW_MODE) {
+    if (value_mask & XCB_GC_SUBWINDOW_MODE)
+    {
         /* xcb_create_gc_value_list_t.subwindow_mode */
         _aux->subwindow_mode = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_GRAPHICS_EXPOSURES) {
+    if (value_mask & XCB_GC_GRAPHICS_EXPOSURES)
+    {
         /* xcb_create_gc_value_list_t.graphics_exposures */
         _aux->graphics_exposures = *(xcb_bool32_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_bool32_t);
         xcb_tmp += sizeof(xcb_bool32_t);
         xcb_align_to = ALIGNOF(xcb_bool32_t);
     }
-    if(value_mask & XCB_GC_CLIP_ORIGIN_X) {
+    if (value_mask & XCB_GC_CLIP_ORIGIN_X)
+    {
         /* xcb_create_gc_value_list_t.clip_x_origin */
         _aux->clip_x_origin = *(int32_t *)xcb_tmp;
         xcb_block_len += sizeof(int32_t);
         xcb_tmp += sizeof(int32_t);
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_GC_CLIP_ORIGIN_Y) {
+    if (value_mask & XCB_GC_CLIP_ORIGIN_Y)
+    {
         /* xcb_create_gc_value_list_t.clip_y_origin */
         _aux->clip_y_origin = *(int32_t *)xcb_tmp;
         xcb_block_len += sizeof(int32_t);
         xcb_tmp += sizeof(int32_t);
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_GC_CLIP_MASK) {
+    if (value_mask & XCB_GC_CLIP_MASK)
+    {
         /* xcb_create_gc_value_list_t.clip_mask */
         _aux->clip_mask = *(xcb_pixmap_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_tmp += sizeof(xcb_pixmap_t);
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_GC_DASH_OFFSET) {
+    if (value_mask & XCB_GC_DASH_OFFSET)
+    {
         /* xcb_create_gc_value_list_t.dash_offset */
         _aux->dash_offset = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_DASH_LIST) {
+    if (value_mask & XCB_GC_DASH_LIST)
+    {
         /* xcb_create_gc_value_list_t.dashes */
         _aux->dashes = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_ARC_MODE) {
+    if (value_mask & XCB_GC_ARC_MODE)
+    {
         /* xcb_create_gc_value_list_t.arc_mode */
         _aux->arc_mode = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
@@ -7006,34 +7084,33 @@ xcb_create_gc_value_list_unpack (const void                  *_buffer,
     /* insert padding */
     xcb_pad = -(xcb_block_len + xcb_padding_offset) & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
-    xcb_block_len = 0;
+    xcb_block_len      = 0;
     xcb_padding_offset = 0;
 
     return xcb_buffer_len;
 }
 
 int
-xcb_create_gc_value_list_sizeof (const void  *_buffer,
-                                 uint32_t     value_mask)
+xcb_create_gc_value_list_sizeof(const void *_buffer, uint32_t value_mask)
 {
     xcb_create_gc_value_list_t _aux;
     return xcb_create_gc_value_list_unpack(_buffer, value_mask, &_aux);
 }
 
 int
-xcb_create_gc_sizeof (const void  *_buffer)
+xcb_create_gc_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_create_gc_request_t *_aux = (xcb_create_gc_request_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    char                          *xcb_tmp = (char *)_buffer;
+    const xcb_create_gc_request_t *_aux    = (xcb_create_gc_request_t *)_buffer;
+    unsigned int                   xcb_buffer_len = 0;
+    unsigned int                   xcb_block_len  = 0;
+    unsigned int                   xcb_pad        = 0;
+    unsigned int                   xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_create_gc_request_t);
     xcb_tmp += xcb_block_len;
@@ -7044,9 +7121,10 @@ xcb_create_gc_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -7056,146 +7134,140 @@ xcb_create_gc_sizeof (const void  *_buffer)
 }
 
 xcb_void_cookie_t
-xcb_create_gc_checked (xcb_connection_t *c,
-                       xcb_gcontext_t    cid,
-                       xcb_drawable_t    drawable,
-                       uint32_t          value_mask,
-                       const void       *value_list)
+xcb_create_gc_checked(xcb_connection_t *c,
+                      xcb_gcontext_t    cid,
+                      xcb_drawable_t    drawable,
+                      uint32_t          value_mask,
+                      const void       *value_list)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
-        .opcode = XCB_CREATE_GC,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 3,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CREATE_GC,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec            xcb_parts[5];
+    xcb_void_cookie_t       xcb_ret;
     xcb_create_gc_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.cid = cid;
-    xcb_out.drawable = drawable;
+    xcb_out.pad0       = 0;
+    xcb_out.cid        = cid;
+    xcb_out.drawable   = drawable;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_create_gc_value_list_t value_list */
-    xcb_parts[4].iov_base = (char *) value_list;
+    xcb_parts[4].iov_base = (char *)value_list;
     xcb_parts[4].iov_len =
-      xcb_create_gc_value_list_sizeof (value_list, value_mask);
+        xcb_create_gc_value_list_sizeof(value_list, value_mask);
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_create_gc (xcb_connection_t *c,
-               xcb_gcontext_t    cid,
-               xcb_drawable_t    drawable,
-               uint32_t          value_mask,
-               const void       *value_list)
+xcb_create_gc(xcb_connection_t *c,
+              xcb_gcontext_t    cid,
+              xcb_drawable_t    drawable,
+              uint32_t          value_mask,
+              const void       *value_list)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
-        .opcode = XCB_CREATE_GC,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 3,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CREATE_GC,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec            xcb_parts[5];
+    xcb_void_cookie_t       xcb_ret;
     xcb_create_gc_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.cid = cid;
-    xcb_out.drawable = drawable;
+    xcb_out.pad0       = 0;
+    xcb_out.cid        = cid;
+    xcb_out.drawable   = drawable;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_create_gc_value_list_t value_list */
-    xcb_parts[4].iov_base = (char *) value_list;
+    xcb_parts[4].iov_base = (char *)value_list;
     xcb_parts[4].iov_len =
-      xcb_create_gc_value_list_sizeof (value_list, value_mask);
+        xcb_create_gc_value_list_sizeof(value_list, value_mask);
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_create_gc_aux_checked (xcb_connection_t                 *c,
-                           xcb_gcontext_t                    cid,
-                           xcb_drawable_t                    drawable,
-                           uint32_t                          value_mask,
-                           const xcb_create_gc_value_list_t *value_list)
+xcb_create_gc_aux_checked(xcb_connection_t                 *c,
+                          xcb_gcontext_t                    cid,
+                          xcb_drawable_t                    drawable,
+                          uint32_t                          value_mask,
+                          const xcb_create_gc_value_list_t *value_list)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
-        .opcode = XCB_CREATE_GC,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 3,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CREATE_GC,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec            xcb_parts[5];
+    xcb_void_cookie_t       xcb_ret;
     xcb_create_gc_request_t xcb_out;
-    void *xcb_aux0 = 0;
+    void                   *xcb_aux0 = 0;
 
-    xcb_out.pad0 = 0;
-    xcb_out.cid = cid;
-    xcb_out.drawable = drawable;
+    xcb_out.pad0       = 0;
+    xcb_out.cid        = cid;
+    xcb_out.drawable   = drawable;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_create_gc_value_list_t value_list */
     xcb_parts[4].iov_len =
-      xcb_create_gc_value_list_serialize (&xcb_aux0, value_mask, value_list);
+        xcb_create_gc_value_list_serialize(&xcb_aux0, value_mask, value_list);
     xcb_parts[4].iov_base = xcb_aux0;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     free(xcb_aux0);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_create_gc_aux (xcb_connection_t                 *c,
-                   xcb_gcontext_t                    cid,
-                   xcb_drawable_t                    drawable,
-                   uint32_t                          value_mask,
-                   const xcb_create_gc_value_list_t *value_list)
+xcb_create_gc_aux(xcb_connection_t                 *c,
+                  xcb_gcontext_t                    cid,
+                  xcb_drawable_t                    drawable,
+                  uint32_t                          value_mask,
+                  const xcb_create_gc_value_list_t *value_list)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
-        .opcode = XCB_CREATE_GC,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 3,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CREATE_GC,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec            xcb_parts[5];
+    xcb_void_cookie_t       xcb_ret;
     xcb_create_gc_request_t xcb_out;
-    void *xcb_aux0 = 0;
+    void                   *xcb_aux0 = 0;
 
-    xcb_out.pad0 = 0;
-    xcb_out.cid = cid;
-    xcb_out.drawable = drawable;
+    xcb_out.pad0       = 0;
+    xcb_out.cid        = cid;
+    xcb_out.drawable   = drawable;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_create_gc_value_list_t value_list */
     xcb_parts[4].iov_len =
-      xcb_create_gc_value_list_serialize (&xcb_aux0, value_mask, value_list);
+        xcb_create_gc_value_list_serialize(&xcb_aux0, value_mask, value_list);
     xcb_parts[4].iov_base = xcb_aux0;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
@@ -7204,208 +7276,233 @@ xcb_create_gc_aux (xcb_connection_t                 *c,
 }
 
 void *
-xcb_create_gc_value_list (const xcb_create_gc_request_t *R)
+xcb_create_gc_value_list(const xcb_create_gc_request_t *R)
 {
-    return (void *) (R + 1);
+    return (void *)(R + 1);
 }
 
 int
-xcb_change_gc_value_list_serialize (void                             **_buffer,
-                                    uint32_t                           value_mask,
-                                    const xcb_change_gc_value_list_t  *_aux)
+xcb_change_gc_value_list_serialize(void                            **_buffer,
+                                   uint32_t                          value_mask,
+                                   const xcb_change_gc_value_list_t *_aux)
 {
-    char *xcb_out = *_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_align_to = 0;
+    char        *xcb_out            = *_buffer;
+    unsigned int xcb_buffer_len     = 0;
+    unsigned int xcb_align_to       = 0;
     unsigned int xcb_padding_offset = 0;
 
-    unsigned int xcb_pad = 0;
-    char xcb_pad0[3] = {0, 0, 0};
+    unsigned int xcb_pad     = 0;
+    char         xcb_pad0[3] = { 0, 0, 0 };
     struct iovec xcb_parts[24];
     unsigned int xcb_parts_idx = 0;
     unsigned int xcb_block_len = 0;
     unsigned int i;
-    char *xcb_tmp;
+    char        *xcb_tmp;
 
-    if(value_mask & XCB_GC_FUNCTION) {
+    if (value_mask & XCB_GC_FUNCTION)
+    {
         /* xcb_change_gc_value_list_t.function */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->function;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->function;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_PLANE_MASK) {
+    if (value_mask & XCB_GC_PLANE_MASK)
+    {
         /* xcb_change_gc_value_list_t.plane_mask */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->plane_mask;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->plane_mask;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_FOREGROUND) {
+    if (value_mask & XCB_GC_FOREGROUND)
+    {
         /* xcb_change_gc_value_list_t.foreground */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->foreground;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->foreground;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_BACKGROUND) {
+    if (value_mask & XCB_GC_BACKGROUND)
+    {
         /* xcb_change_gc_value_list_t.background */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->background;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->background;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_LINE_WIDTH) {
+    if (value_mask & XCB_GC_LINE_WIDTH)
+    {
         /* xcb_change_gc_value_list_t.line_width */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->line_width;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->line_width;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_LINE_STYLE) {
+    if (value_mask & XCB_GC_LINE_STYLE)
+    {
         /* xcb_change_gc_value_list_t.line_style */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->line_style;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->line_style;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_CAP_STYLE) {
+    if (value_mask & XCB_GC_CAP_STYLE)
+    {
         /* xcb_change_gc_value_list_t.cap_style */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->cap_style;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->cap_style;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_JOIN_STYLE) {
+    if (value_mask & XCB_GC_JOIN_STYLE)
+    {
         /* xcb_change_gc_value_list_t.join_style */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->join_style;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->join_style;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_FILL_STYLE) {
+    if (value_mask & XCB_GC_FILL_STYLE)
+    {
         /* xcb_change_gc_value_list_t.fill_style */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->fill_style;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->fill_style;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_FILL_RULE) {
+    if (value_mask & XCB_GC_FILL_RULE)
+    {
         /* xcb_change_gc_value_list_t.fill_rule */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->fill_rule;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->fill_rule;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_TILE) {
+    if (value_mask & XCB_GC_TILE)
+    {
         /* xcb_change_gc_value_list_t.tile */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->tile;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->tile;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_pixmap_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_GC_STIPPLE) {
+    if (value_mask & XCB_GC_STIPPLE)
+    {
         /* xcb_change_gc_value_list_t.stipple */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->stipple;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->stipple;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_pixmap_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_GC_TILE_STIPPLE_ORIGIN_X) {
+    if (value_mask & XCB_GC_TILE_STIPPLE_ORIGIN_X)
+    {
         /* xcb_change_gc_value_list_t.tile_stipple_x_origin */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->tile_stipple_x_origin;
+        xcb_parts[xcb_parts_idx].iov_base =
+            (char *)&_aux->tile_stipple_x_origin;
         xcb_block_len += sizeof(int32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(int32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_GC_TILE_STIPPLE_ORIGIN_Y) {
+    if (value_mask & XCB_GC_TILE_STIPPLE_ORIGIN_Y)
+    {
         /* xcb_change_gc_value_list_t.tile_stipple_y_origin */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->tile_stipple_y_origin;
+        xcb_parts[xcb_parts_idx].iov_base =
+            (char *)&_aux->tile_stipple_y_origin;
         xcb_block_len += sizeof(int32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(int32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_GC_FONT) {
+    if (value_mask & XCB_GC_FONT)
+    {
         /* xcb_change_gc_value_list_t.font */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->font;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->font;
         xcb_block_len += sizeof(xcb_font_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_font_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_font_t);
     }
-    if(value_mask & XCB_GC_SUBWINDOW_MODE) {
+    if (value_mask & XCB_GC_SUBWINDOW_MODE)
+    {
         /* xcb_change_gc_value_list_t.subwindow_mode */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->subwindow_mode;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->subwindow_mode;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_GRAPHICS_EXPOSURES) {
+    if (value_mask & XCB_GC_GRAPHICS_EXPOSURES)
+    {
         /* xcb_change_gc_value_list_t.graphics_exposures */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->graphics_exposures;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->graphics_exposures;
         xcb_block_len += sizeof(xcb_bool32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_bool32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_bool32_t);
     }
-    if(value_mask & XCB_GC_CLIP_ORIGIN_X) {
+    if (value_mask & XCB_GC_CLIP_ORIGIN_X)
+    {
         /* xcb_change_gc_value_list_t.clip_x_origin */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->clip_x_origin;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->clip_x_origin;
         xcb_block_len += sizeof(int32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(int32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_GC_CLIP_ORIGIN_Y) {
+    if (value_mask & XCB_GC_CLIP_ORIGIN_Y)
+    {
         /* xcb_change_gc_value_list_t.clip_y_origin */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->clip_y_origin;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->clip_y_origin;
         xcb_block_len += sizeof(int32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(int32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_GC_CLIP_MASK) {
+    if (value_mask & XCB_GC_CLIP_MASK)
+    {
         /* xcb_change_gc_value_list_t.clip_mask */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->clip_mask;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->clip_mask;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_pixmap_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_GC_DASH_OFFSET) {
+    if (value_mask & XCB_GC_DASH_OFFSET)
+    {
         /* xcb_change_gc_value_list_t.dash_offset */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->dash_offset;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->dash_offset;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_DASH_LIST) {
+    if (value_mask & XCB_GC_DASH_LIST)
+    {
         /* xcb_change_gc_value_list_t.dashes */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->dashes;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->dashes;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_ARC_MODE) {
+    if (value_mask & XCB_GC_ARC_MODE)
+    {
         /* xcb_change_gc_value_list_t.arc_mode */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->arc_mode;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->arc_mode;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
@@ -7414,200 +7511,224 @@ xcb_change_gc_value_list_serialize (void                             **_buffer,
     /* insert padding */
     xcb_pad = -(xcb_block_len + xcb_padding_offset) & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_parts[xcb_parts_idx].iov_base = xcb_pad0;
-        xcb_parts[xcb_parts_idx].iov_len = xcb_pad;
+        xcb_parts[xcb_parts_idx].iov_len  = xcb_pad;
         xcb_parts_idx++;
         xcb_pad = 0;
     }
-    xcb_block_len = 0;
+    xcb_block_len      = 0;
     xcb_padding_offset = 0;
 
-    if (NULL == xcb_out) {
+    if (NULL == xcb_out)
+    {
         /* allocate memory */
-        xcb_out = malloc(xcb_buffer_len);
+        xcb_out  = malloc(xcb_buffer_len);
         *_buffer = xcb_out;
     }
 
     xcb_tmp = xcb_out;
-    for(i=0; i<xcb_parts_idx; i++) {
+    for (i = 0; i < xcb_parts_idx; i++)
+    {
         if (0 != xcb_parts[i].iov_base && 0 != xcb_parts[i].iov_len)
             memcpy(xcb_tmp, xcb_parts[i].iov_base, xcb_parts[i].iov_len);
-        if (0 != xcb_parts[i].iov_len)
-            xcb_tmp += xcb_parts[i].iov_len;
+        if (0 != xcb_parts[i].iov_len) xcb_tmp += xcb_parts[i].iov_len;
     }
 
     return xcb_buffer_len;
 }
 
 int
-xcb_change_gc_value_list_unpack (const void                  *_buffer,
-                                 uint32_t                     value_mask,
-                                 xcb_change_gc_value_list_t  *_aux)
+xcb_change_gc_value_list_unpack(const void                 *_buffer,
+                                uint32_t                    value_mask,
+                                xcb_change_gc_value_list_t *_aux)
 {
-    char *xcb_tmp = (char *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
+    char        *xcb_tmp            = (char *)_buffer;
+    unsigned int xcb_buffer_len     = 0;
+    unsigned int xcb_block_len      = 0;
+    unsigned int xcb_pad            = 0;
+    unsigned int xcb_align_to       = 0;
     unsigned int xcb_padding_offset = 0;
 
-
-    if(value_mask & XCB_GC_FUNCTION) {
+    if (value_mask & XCB_GC_FUNCTION)
+    {
         /* xcb_change_gc_value_list_t.function */
         _aux->function = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_PLANE_MASK) {
+    if (value_mask & XCB_GC_PLANE_MASK)
+    {
         /* xcb_change_gc_value_list_t.plane_mask */
         _aux->plane_mask = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_FOREGROUND) {
+    if (value_mask & XCB_GC_FOREGROUND)
+    {
         /* xcb_change_gc_value_list_t.foreground */
         _aux->foreground = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_BACKGROUND) {
+    if (value_mask & XCB_GC_BACKGROUND)
+    {
         /* xcb_change_gc_value_list_t.background */
         _aux->background = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_LINE_WIDTH) {
+    if (value_mask & XCB_GC_LINE_WIDTH)
+    {
         /* xcb_change_gc_value_list_t.line_width */
         _aux->line_width = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_LINE_STYLE) {
+    if (value_mask & XCB_GC_LINE_STYLE)
+    {
         /* xcb_change_gc_value_list_t.line_style */
         _aux->line_style = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_CAP_STYLE) {
+    if (value_mask & XCB_GC_CAP_STYLE)
+    {
         /* xcb_change_gc_value_list_t.cap_style */
         _aux->cap_style = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_JOIN_STYLE) {
+    if (value_mask & XCB_GC_JOIN_STYLE)
+    {
         /* xcb_change_gc_value_list_t.join_style */
         _aux->join_style = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_FILL_STYLE) {
+    if (value_mask & XCB_GC_FILL_STYLE)
+    {
         /* xcb_change_gc_value_list_t.fill_style */
         _aux->fill_style = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_FILL_RULE) {
+    if (value_mask & XCB_GC_FILL_RULE)
+    {
         /* xcb_change_gc_value_list_t.fill_rule */
         _aux->fill_rule = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_TILE) {
+    if (value_mask & XCB_GC_TILE)
+    {
         /* xcb_change_gc_value_list_t.tile */
         _aux->tile = *(xcb_pixmap_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_tmp += sizeof(xcb_pixmap_t);
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_GC_STIPPLE) {
+    if (value_mask & XCB_GC_STIPPLE)
+    {
         /* xcb_change_gc_value_list_t.stipple */
         _aux->stipple = *(xcb_pixmap_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_tmp += sizeof(xcb_pixmap_t);
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_GC_TILE_STIPPLE_ORIGIN_X) {
+    if (value_mask & XCB_GC_TILE_STIPPLE_ORIGIN_X)
+    {
         /* xcb_change_gc_value_list_t.tile_stipple_x_origin */
         _aux->tile_stipple_x_origin = *(int32_t *)xcb_tmp;
         xcb_block_len += sizeof(int32_t);
         xcb_tmp += sizeof(int32_t);
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_GC_TILE_STIPPLE_ORIGIN_Y) {
+    if (value_mask & XCB_GC_TILE_STIPPLE_ORIGIN_Y)
+    {
         /* xcb_change_gc_value_list_t.tile_stipple_y_origin */
         _aux->tile_stipple_y_origin = *(int32_t *)xcb_tmp;
         xcb_block_len += sizeof(int32_t);
         xcb_tmp += sizeof(int32_t);
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_GC_FONT) {
+    if (value_mask & XCB_GC_FONT)
+    {
         /* xcb_change_gc_value_list_t.font */
         _aux->font = *(xcb_font_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_font_t);
         xcb_tmp += sizeof(xcb_font_t);
         xcb_align_to = ALIGNOF(xcb_font_t);
     }
-    if(value_mask & XCB_GC_SUBWINDOW_MODE) {
+    if (value_mask & XCB_GC_SUBWINDOW_MODE)
+    {
         /* xcb_change_gc_value_list_t.subwindow_mode */
         _aux->subwindow_mode = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_GRAPHICS_EXPOSURES) {
+    if (value_mask & XCB_GC_GRAPHICS_EXPOSURES)
+    {
         /* xcb_change_gc_value_list_t.graphics_exposures */
         _aux->graphics_exposures = *(xcb_bool32_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_bool32_t);
         xcb_tmp += sizeof(xcb_bool32_t);
         xcb_align_to = ALIGNOF(xcb_bool32_t);
     }
-    if(value_mask & XCB_GC_CLIP_ORIGIN_X) {
+    if (value_mask & XCB_GC_CLIP_ORIGIN_X)
+    {
         /* xcb_change_gc_value_list_t.clip_x_origin */
         _aux->clip_x_origin = *(int32_t *)xcb_tmp;
         xcb_block_len += sizeof(int32_t);
         xcb_tmp += sizeof(int32_t);
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_GC_CLIP_ORIGIN_Y) {
+    if (value_mask & XCB_GC_CLIP_ORIGIN_Y)
+    {
         /* xcb_change_gc_value_list_t.clip_y_origin */
         _aux->clip_y_origin = *(int32_t *)xcb_tmp;
         xcb_block_len += sizeof(int32_t);
         xcb_tmp += sizeof(int32_t);
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_GC_CLIP_MASK) {
+    if (value_mask & XCB_GC_CLIP_MASK)
+    {
         /* xcb_change_gc_value_list_t.clip_mask */
         _aux->clip_mask = *(xcb_pixmap_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_pixmap_t);
         xcb_tmp += sizeof(xcb_pixmap_t);
         xcb_align_to = ALIGNOF(xcb_pixmap_t);
     }
-    if(value_mask & XCB_GC_DASH_OFFSET) {
+    if (value_mask & XCB_GC_DASH_OFFSET)
+    {
         /* xcb_change_gc_value_list_t.dash_offset */
         _aux->dash_offset = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_DASH_LIST) {
+    if (value_mask & XCB_GC_DASH_LIST)
+    {
         /* xcb_change_gc_value_list_t.dashes */
         _aux->dashes = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_GC_ARC_MODE) {
+    if (value_mask & XCB_GC_ARC_MODE)
+    {
         /* xcb_change_gc_value_list_t.arc_mode */
         _aux->arc_mode = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
@@ -7617,34 +7738,33 @@ xcb_change_gc_value_list_unpack (const void                  *_buffer,
     /* insert padding */
     xcb_pad = -(xcb_block_len + xcb_padding_offset) & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
-    xcb_block_len = 0;
+    xcb_block_len      = 0;
     xcb_padding_offset = 0;
 
     return xcb_buffer_len;
 }
 
 int
-xcb_change_gc_value_list_sizeof (const void  *_buffer,
-                                 uint32_t     value_mask)
+xcb_change_gc_value_list_sizeof(const void *_buffer, uint32_t value_mask)
 {
     xcb_change_gc_value_list_t _aux;
     return xcb_change_gc_value_list_unpack(_buffer, value_mask, &_aux);
 }
 
 int
-xcb_change_gc_sizeof (const void  *_buffer)
+xcb_change_gc_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_change_gc_request_t *_aux = (xcb_change_gc_request_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    char                          *xcb_tmp = (char *)_buffer;
+    const xcb_change_gc_request_t *_aux    = (xcb_change_gc_request_t *)_buffer;
+    unsigned int                   xcb_buffer_len = 0;
+    unsigned int                   xcb_block_len  = 0;
+    unsigned int                   xcb_pad        = 0;
+    unsigned int                   xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_change_gc_request_t);
     xcb_tmp += xcb_block_len;
@@ -7655,9 +7775,10 @@ xcb_change_gc_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -7667,138 +7788,132 @@ xcb_change_gc_sizeof (const void  *_buffer)
 }
 
 xcb_void_cookie_t
-xcb_change_gc_checked (xcb_connection_t *c,
-                       xcb_gcontext_t    gc,
-                       uint32_t          value_mask,
-                       const void       *value_list)
+xcb_change_gc_checked(xcb_connection_t *c,
+                      xcb_gcontext_t    gc,
+                      uint32_t          value_mask,
+                      const void       *value_list)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
-        .opcode = XCB_CHANGE_GC,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 3,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CHANGE_GC,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec            xcb_parts[5];
+    xcb_void_cookie_t       xcb_ret;
     xcb_change_gc_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.gc = gc;
+    xcb_out.pad0       = 0;
+    xcb_out.gc         = gc;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_change_gc_value_list_t value_list */
-    xcb_parts[4].iov_base = (char *) value_list;
+    xcb_parts[4].iov_base = (char *)value_list;
     xcb_parts[4].iov_len =
-      xcb_change_gc_value_list_sizeof (value_list, value_mask);
+        xcb_change_gc_value_list_sizeof(value_list, value_mask);
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_change_gc (xcb_connection_t *c,
-               xcb_gcontext_t    gc,
-               uint32_t          value_mask,
-               const void       *value_list)
+xcb_change_gc(xcb_connection_t *c,
+              xcb_gcontext_t    gc,
+              uint32_t          value_mask,
+              const void       *value_list)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
-        .opcode = XCB_CHANGE_GC,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 3,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CHANGE_GC,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec            xcb_parts[5];
+    xcb_void_cookie_t       xcb_ret;
     xcb_change_gc_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.gc = gc;
+    xcb_out.pad0       = 0;
+    xcb_out.gc         = gc;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_change_gc_value_list_t value_list */
-    xcb_parts[4].iov_base = (char *) value_list;
+    xcb_parts[4].iov_base = (char *)value_list;
     xcb_parts[4].iov_len =
-      xcb_change_gc_value_list_sizeof (value_list, value_mask);
+        xcb_change_gc_value_list_sizeof(value_list, value_mask);
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_change_gc_aux_checked (xcb_connection_t                 *c,
-                           xcb_gcontext_t                    gc,
-                           uint32_t                          value_mask,
-                           const xcb_change_gc_value_list_t *value_list)
+xcb_change_gc_aux_checked(xcb_connection_t                 *c,
+                          xcb_gcontext_t                    gc,
+                          uint32_t                          value_mask,
+                          const xcb_change_gc_value_list_t *value_list)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
-        .opcode = XCB_CHANGE_GC,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 3,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CHANGE_GC,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec            xcb_parts[5];
+    xcb_void_cookie_t       xcb_ret;
     xcb_change_gc_request_t xcb_out;
-    void *xcb_aux0 = 0;
+    void                   *xcb_aux0 = 0;
 
-    xcb_out.pad0 = 0;
-    xcb_out.gc = gc;
+    xcb_out.pad0       = 0;
+    xcb_out.gc         = gc;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_change_gc_value_list_t value_list */
     xcb_parts[4].iov_len =
-      xcb_change_gc_value_list_serialize (&xcb_aux0, value_mask, value_list);
+        xcb_change_gc_value_list_serialize(&xcb_aux0, value_mask, value_list);
     xcb_parts[4].iov_base = xcb_aux0;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     free(xcb_aux0);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_change_gc_aux (xcb_connection_t                 *c,
-                   xcb_gcontext_t                    gc,
-                   uint32_t                          value_mask,
-                   const xcb_change_gc_value_list_t *value_list)
+xcb_change_gc_aux(xcb_connection_t                 *c,
+                  xcb_gcontext_t                    gc,
+                  uint32_t                          value_mask,
+                  const xcb_change_gc_value_list_t *value_list)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
-        .opcode = XCB_CHANGE_GC,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 3,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CHANGE_GC,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec            xcb_parts[5];
+    xcb_void_cookie_t       xcb_ret;
     xcb_change_gc_request_t xcb_out;
-    void *xcb_aux0 = 0;
+    void                   *xcb_aux0 = 0;
 
-    xcb_out.pad0 = 0;
-    xcb_out.gc = gc;
+    xcb_out.pad0       = 0;
+    xcb_out.gc         = gc;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_change_gc_value_list_t value_list */
     xcb_parts[4].iov_len =
-      xcb_change_gc_value_list_serialize (&xcb_aux0, value_mask, value_list);
+        xcb_change_gc_value_list_serialize(&xcb_aux0, value_mask, value_list);
     xcb_parts[4].iov_base = xcb_aux0;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
@@ -7807,83 +7922,79 @@ xcb_change_gc_aux (xcb_connection_t                 *c,
 }
 
 void *
-xcb_change_gc_value_list (const xcb_change_gc_request_t *R)
+xcb_change_gc_value_list(const xcb_change_gc_request_t *R)
 {
-    return (void *) (R + 1);
+    return (void *)(R + 1);
 }
 
 xcb_void_cookie_t
-xcb_copy_gc_checked (xcb_connection_t *c,
-                     xcb_gcontext_t    src_gc,
-                     xcb_gcontext_t    dst_gc,
-                     uint32_t          value_mask)
+xcb_copy_gc_checked(xcb_connection_t *c,
+                    xcb_gcontext_t    src_gc,
+                    xcb_gcontext_t    dst_gc,
+                    uint32_t          value_mask)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_COPY_GC,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_COPY_GC,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec          xcb_parts[4];
+    xcb_void_cookie_t     xcb_ret;
     xcb_copy_gc_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.src_gc = src_gc;
-    xcb_out.dst_gc = dst_gc;
+    xcb_out.pad0       = 0;
+    xcb_out.src_gc     = src_gc;
+    xcb_out.dst_gc     = dst_gc;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_copy_gc (xcb_connection_t *c,
-             xcb_gcontext_t    src_gc,
-             xcb_gcontext_t    dst_gc,
-             uint32_t          value_mask)
+xcb_copy_gc(xcb_connection_t *c,
+            xcb_gcontext_t    src_gc,
+            xcb_gcontext_t    dst_gc,
+            uint32_t          value_mask)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_COPY_GC,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_COPY_GC,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec          xcb_parts[4];
+    xcb_void_cookie_t     xcb_ret;
     xcb_copy_gc_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.src_gc = src_gc;
-    xcb_out.dst_gc = dst_gc;
+    xcb_out.pad0       = 0;
+    xcb_out.src_gc     = src_gc;
+    xcb_out.dst_gc     = dst_gc;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 int
-xcb_set_dashes_sizeof (const void  *_buffer)
+xcb_set_dashes_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char                           *xcb_tmp = (char *)_buffer;
     const xcb_set_dashes_request_t *_aux = (xcb_set_dashes_request_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int                    xcb_buffer_len = 0;
+    unsigned int                    xcb_block_len  = 0;
+    unsigned int                    xcb_pad        = 0;
+    unsigned int                    xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_set_dashes_request_t);
     xcb_tmp += xcb_block_len;
@@ -7894,9 +8005,10 @@ xcb_set_dashes_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(uint8_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -7906,111 +8018,106 @@ xcb_set_dashes_sizeof (const void  *_buffer)
 }
 
 xcb_void_cookie_t
-xcb_set_dashes_checked (xcb_connection_t *c,
-                        xcb_gcontext_t    gc,
-                        uint16_t          dash_offset,
-                        uint16_t          dashes_len,
-                        const uint8_t    *dashes)
+xcb_set_dashes_checked(xcb_connection_t *c,
+                       xcb_gcontext_t    gc,
+                       uint16_t          dash_offset,
+                       uint16_t          dashes_len,
+                       const uint8_t    *dashes)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_SET_DASHES,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_SET_DASHES,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec             xcb_parts[6];
+    xcb_void_cookie_t        xcb_ret;
     xcb_set_dashes_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.gc = gc;
+    xcb_out.pad0        = 0;
+    xcb_out.gc          = gc;
     xcb_out.dash_offset = dash_offset;
-    xcb_out.dashes_len = dashes_len;
+    xcb_out.dashes_len  = dashes_len;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* uint8_t dashes */
-    xcb_parts[4].iov_base = (char *) dashes;
-    xcb_parts[4].iov_len = dashes_len * sizeof(uint8_t);
+    xcb_parts[4].iov_base = (char *)dashes;
+    xcb_parts[4].iov_len  = dashes_len * sizeof(uint8_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_set_dashes (xcb_connection_t *c,
-                xcb_gcontext_t    gc,
-                uint16_t          dash_offset,
-                uint16_t          dashes_len,
-                const uint8_t    *dashes)
+xcb_set_dashes(xcb_connection_t *c,
+               xcb_gcontext_t    gc,
+               uint16_t          dash_offset,
+               uint16_t          dashes_len,
+               const uint8_t    *dashes)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_SET_DASHES,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_SET_DASHES,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec             xcb_parts[6];
+    xcb_void_cookie_t        xcb_ret;
     xcb_set_dashes_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.gc = gc;
+    xcb_out.pad0        = 0;
+    xcb_out.gc          = gc;
     xcb_out.dash_offset = dash_offset;
-    xcb_out.dashes_len = dashes_len;
+    xcb_out.dashes_len  = dashes_len;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* uint8_t dashes */
-    xcb_parts[4].iov_base = (char *) dashes;
-    xcb_parts[4].iov_len = dashes_len * sizeof(uint8_t);
+    xcb_parts[4].iov_base = (char *)dashes;
+    xcb_parts[4].iov_len  = dashes_len * sizeof(uint8_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 uint8_t *
-xcb_set_dashes_dashes (const xcb_set_dashes_request_t *R)
+xcb_set_dashes_dashes(const xcb_set_dashes_request_t *R)
 {
-    return (uint8_t *) (R + 1);
+    return (uint8_t *)(R + 1);
 }
 
 int
-xcb_set_dashes_dashes_length (const xcb_set_dashes_request_t *R)
+xcb_set_dashes_dashes_length(const xcb_set_dashes_request_t *R)
 {
     return R->dashes_len;
 }
 
 xcb_generic_iterator_t
-xcb_set_dashes_dashes_end (const xcb_set_dashes_request_t *R)
+xcb_set_dashes_dashes_end(const xcb_set_dashes_request_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((uint8_t *) (R + 1)) + (R->dashes_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((uint8_t *)(R + 1)) + (R->dashes_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 int
-xcb_set_clip_rectangles_sizeof (const void  *_buffer,
-                                uint32_t     rectangles_len)
+xcb_set_clip_rectangles_sizeof(const void *_buffer, uint32_t rectangles_len)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char        *xcb_tmp        = (char *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_set_clip_rectangles_request_t);
     xcb_tmp += xcb_block_len;
@@ -8021,9 +8128,10 @@ xcb_set_clip_rectangles_sizeof (const void  *_buffer,
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_rectangle_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -8033,233 +8141,311 @@ xcb_set_clip_rectangles_sizeof (const void  *_buffer,
 }
 
 xcb_void_cookie_t
-xcb_set_clip_rectangles_checked (xcb_connection_t      *c,
-                                 uint8_t                ordering,
-                                 xcb_gcontext_t         gc,
-                                 int16_t                clip_x_origin,
-                                 int16_t                clip_y_origin,
-                                 uint32_t               rectangles_len,
-                                 const xcb_rectangle_t *rectangles)
+xcb_set_clip_rectangles_checked(xcb_connection_t      *c,
+                                uint8_t                ordering,
+                                xcb_gcontext_t         gc,
+                                int16_t                clip_x_origin,
+                                int16_t                clip_y_origin,
+                                uint32_t               rectangles_len,
+                                const xcb_rectangle_t *rectangles)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_SET_CLIP_RECTANGLES,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_SET_CLIP_RECTANGLES,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                      xcb_parts[6];
+    xcb_void_cookie_t                 xcb_ret;
     xcb_set_clip_rectangles_request_t xcb_out;
 
-    xcb_out.ordering = ordering;
-    xcb_out.gc = gc;
+    xcb_out.ordering      = ordering;
+    xcb_out.gc            = gc;
     xcb_out.clip_x_origin = clip_x_origin;
     xcb_out.clip_y_origin = clip_y_origin;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_rectangle_t rectangles */
-    xcb_parts[4].iov_base = (char *) rectangles;
-    xcb_parts[4].iov_len = rectangles_len * sizeof(xcb_rectangle_t);
+    xcb_parts[4].iov_base = (char *)rectangles;
+    xcb_parts[4].iov_len  = rectangles_len * sizeof(xcb_rectangle_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_set_clip_rectangles (xcb_connection_t      *c,
-                         uint8_t                ordering,
-                         xcb_gcontext_t         gc,
-                         int16_t                clip_x_origin,
-                         int16_t                clip_y_origin,
-                         uint32_t               rectangles_len,
-                         const xcb_rectangle_t *rectangles)
+xcb_set_clip_rectangles(xcb_connection_t      *c,
+                        uint8_t                ordering,
+                        xcb_gcontext_t         gc,
+                        int16_t                clip_x_origin,
+                        int16_t                clip_y_origin,
+                        uint32_t               rectangles_len,
+                        const xcb_rectangle_t *rectangles)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_SET_CLIP_RECTANGLES,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_SET_CLIP_RECTANGLES,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                      xcb_parts[6];
+    xcb_void_cookie_t                 xcb_ret;
     xcb_set_clip_rectangles_request_t xcb_out;
 
-    xcb_out.ordering = ordering;
-    xcb_out.gc = gc;
+    xcb_out.ordering      = ordering;
+    xcb_out.gc            = gc;
     xcb_out.clip_x_origin = clip_x_origin;
     xcb_out.clip_y_origin = clip_y_origin;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_rectangle_t rectangles */
-    xcb_parts[4].iov_base = (char *) rectangles;
-    xcb_parts[4].iov_len = rectangles_len * sizeof(xcb_rectangle_t);
+    xcb_parts[4].iov_base = (char *)rectangles;
+    xcb_parts[4].iov_len  = rectangles_len * sizeof(xcb_rectangle_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_rectangle_t *
-xcb_set_clip_rectangles_rectangles (const xcb_set_clip_rectangles_request_t *R)
+xcb_set_clip_rectangles_rectangles(const xcb_set_clip_rectangles_request_t *R)
 {
-    return (xcb_rectangle_t *) (R + 1);
+    return (xcb_rectangle_t *)(R + 1);
 }
 
 int
-xcb_set_clip_rectangles_rectangles_length (const xcb_set_clip_rectangles_request_t *R)
+xcb_set_clip_rectangles_rectangles_length(
+    const xcb_set_clip_rectangles_request_t *R)
 {
-    return (((R->length * 4) - sizeof(xcb_set_clip_rectangles_request_t))/sizeof(xcb_rectangle_t));
+    return (((R->length * 4) - sizeof(xcb_set_clip_rectangles_request_t)) /
+            sizeof(xcb_rectangle_t));
 }
 
 xcb_rectangle_iterator_t
-xcb_set_clip_rectangles_rectangles_iterator (const xcb_set_clip_rectangles_request_t *R)
+xcb_set_clip_rectangles_rectangles_iterator(
+    const xcb_set_clip_rectangles_request_t *R)
 {
     xcb_rectangle_iterator_t i;
-    i.data = (xcb_rectangle_t *) (R + 1);
-    i.rem = (((R->length * 4) - sizeof(xcb_set_clip_rectangles_request_t))/sizeof(xcb_rectangle_t));
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_rectangle_t *)(R + 1);
+    i.rem   = (((R->length * 4) - sizeof(xcb_set_clip_rectangles_request_t)) /
+             sizeof(xcb_rectangle_t));
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_void_cookie_t
-xcb_free_gc_checked (xcb_connection_t *c,
-                     xcb_gcontext_t    gc)
+xcb_free_gc_checked(xcb_connection_t *c, xcb_gcontext_t gc)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_FREE_GC,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_FREE_GC,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec          xcb_parts[4];
+    xcb_void_cookie_t     xcb_ret;
     xcb_free_gc_request_t xcb_out;
 
     xcb_out.pad0 = 0;
-    xcb_out.gc = gc;
+    xcb_out.gc   = gc;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_free_gc (xcb_connection_t *c,
-             xcb_gcontext_t    gc)
+xcb_free_gc(xcb_connection_t *c, xcb_gcontext_t gc)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_FREE_GC,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_FREE_GC,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec          xcb_parts[4];
+    xcb_void_cookie_t     xcb_ret;
     xcb_free_gc_request_t xcb_out;
 
     xcb_out.pad0 = 0;
-    xcb_out.gc = gc;
+    xcb_out.gc   = gc;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_clear_area_checked (xcb_connection_t *c,
-                        uint8_t           exposures,
-                        xcb_window_t      window,
-                        int16_t           x,
-                        int16_t           y,
-                        uint16_t          width,
-                        uint16_t          height)
+xcb_clear_area_checked(xcb_connection_t *c,
+                       uint8_t           exposures,
+                       xcb_window_t      window,
+                       int16_t           x,
+                       int16_t           y,
+                       uint16_t          width,
+                       uint16_t          height)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CLEAR_AREA,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CLEAR_AREA,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec             xcb_parts[4];
+    xcb_void_cookie_t        xcb_ret;
     xcb_clear_area_request_t xcb_out;
 
     xcb_out.exposures = exposures;
-    xcb_out.window = window;
-    xcb_out.x = x;
-    xcb_out.y = y;
-    xcb_out.width = width;
-    xcb_out.height = height;
+    xcb_out.window    = window;
+    xcb_out.x         = x;
+    xcb_out.y         = y;
+    xcb_out.width     = width;
+    xcb_out.height    = height;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_clear_area (xcb_connection_t *c,
-                uint8_t           exposures,
-                xcb_window_t      window,
-                int16_t           x,
-                int16_t           y,
-                uint16_t          width,
-                uint16_t          height)
+xcb_clear_area(xcb_connection_t *c,
+               uint8_t           exposures,
+               xcb_window_t      window,
+               int16_t           x,
+               int16_t           y,
+               uint16_t          width,
+               uint16_t          height)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CLEAR_AREA,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CLEAR_AREA,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec             xcb_parts[4];
+    xcb_void_cookie_t        xcb_ret;
     xcb_clear_area_request_t xcb_out;
 
     xcb_out.exposures = exposures;
-    xcb_out.window = window;
-    xcb_out.x = x;
-    xcb_out.y = y;
-    xcb_out.width = width;
-    xcb_out.height = height;
+    xcb_out.window    = window;
+    xcb_out.x         = x;
+    xcb_out.y         = y;
+    xcb_out.width     = width;
+    xcb_out.height    = height;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_copy_area_checked (xcb_connection_t *c,
+xcb_copy_area_checked(xcb_connection_t *c,
+                      xcb_drawable_t    src_drawable,
+                      xcb_drawable_t    dst_drawable,
+                      xcb_gcontext_t    gc,
+                      int16_t           src_x,
+                      int16_t           src_y,
+                      int16_t           dst_x,
+                      int16_t           dst_y,
+                      uint16_t          width,
+                      uint16_t          height)
+{
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_COPY_AREA,
+                                                    .isvoid = 1 };
+
+    struct iovec            xcb_parts[4];
+    xcb_void_cookie_t       xcb_ret;
+    xcb_copy_area_request_t xcb_out;
+
+    xcb_out.pad0         = 0;
+    xcb_out.src_drawable = src_drawable;
+    xcb_out.dst_drawable = dst_drawable;
+    xcb_out.gc           = gc;
+    xcb_out.src_x        = src_x;
+    xcb_out.src_y        = src_y;
+    xcb_out.dst_x        = dst_x;
+    xcb_out.dst_y        = dst_y;
+    xcb_out.width        = width;
+    xcb_out.height       = height;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_copy_area(xcb_connection_t *c,
+              xcb_drawable_t    src_drawable,
+              xcb_drawable_t    dst_drawable,
+              xcb_gcontext_t    gc,
+              int16_t           src_x,
+              int16_t           src_y,
+              int16_t           dst_x,
+              int16_t           dst_y,
+              uint16_t          width,
+              uint16_t          height)
+{
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_COPY_AREA,
+                                                    .isvoid = 1 };
+
+    struct iovec            xcb_parts[4];
+    xcb_void_cookie_t       xcb_ret;
+    xcb_copy_area_request_t xcb_out;
+
+    xcb_out.pad0         = 0;
+    xcb_out.src_drawable = src_drawable;
+    xcb_out.dst_drawable = dst_drawable;
+    xcb_out.gc           = gc;
+    xcb_out.src_x        = src_x;
+    xcb_out.src_y        = src_y;
+    xcb_out.dst_x        = dst_x;
+    xcb_out.dst_y        = dst_y;
+    xcb_out.width        = width;
+    xcb_out.height       = height;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_copy_plane_checked(xcb_connection_t *c,
                        xcb_drawable_t    src_drawable,
                        xcb_drawable_t    dst_drawable,
                        xcb_gcontext_t    gc,
@@ -8268,41 +8454,42 @@ xcb_copy_area_checked (xcb_connection_t *c,
                        int16_t           dst_x,
                        int16_t           dst_y,
                        uint16_t          width,
-                       uint16_t          height)
+                       uint16_t          height,
+                       uint32_t          bit_plane)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_COPY_AREA,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_COPY_PLANE,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_copy_area_request_t xcb_out;
+    struct iovec             xcb_parts[4];
+    xcb_void_cookie_t        xcb_ret;
+    xcb_copy_plane_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0         = 0;
     xcb_out.src_drawable = src_drawable;
     xcb_out.dst_drawable = dst_drawable;
-    xcb_out.gc = gc;
-    xcb_out.src_x = src_x;
-    xcb_out.src_y = src_y;
-    xcb_out.dst_x = dst_x;
-    xcb_out.dst_y = dst_y;
-    xcb_out.width = width;
-    xcb_out.height = height;
+    xcb_out.gc           = gc;
+    xcb_out.src_x        = src_x;
+    xcb_out.src_y        = src_y;
+    xcb_out.dst_x        = dst_x;
+    xcb_out.dst_y        = dst_y;
+    xcb_out.width        = width;
+    xcb_out.height       = height;
+    xcb_out.bit_plane    = bit_plane;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_copy_area (xcb_connection_t *c,
+xcb_copy_plane(xcb_connection_t *c,
                xcb_drawable_t    src_drawable,
                xcb_drawable_t    dst_drawable,
                xcb_gcontext_t    gc,
@@ -8311,139 +8498,47 @@ xcb_copy_area (xcb_connection_t *c,
                int16_t           dst_x,
                int16_t           dst_y,
                uint16_t          width,
-               uint16_t          height)
+               uint16_t          height,
+               uint32_t          bit_plane)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_COPY_AREA,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_COPY_PLANE,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_copy_area_request_t xcb_out;
-
-    xcb_out.pad0 = 0;
-    xcb_out.src_drawable = src_drawable;
-    xcb_out.dst_drawable = dst_drawable;
-    xcb_out.gc = gc;
-    xcb_out.src_x = src_x;
-    xcb_out.src_y = src_y;
-    xcb_out.dst_x = dst_x;
-    xcb_out.dst_y = dst_y;
-    xcb_out.width = width;
-    xcb_out.height = height;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_copy_plane_checked (xcb_connection_t *c,
-                        xcb_drawable_t    src_drawable,
-                        xcb_drawable_t    dst_drawable,
-                        xcb_gcontext_t    gc,
-                        int16_t           src_x,
-                        int16_t           src_y,
-                        int16_t           dst_x,
-                        int16_t           dst_y,
-                        uint16_t          width,
-                        uint16_t          height,
-                        uint32_t          bit_plane)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_COPY_PLANE,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec             xcb_parts[4];
+    xcb_void_cookie_t        xcb_ret;
     xcb_copy_plane_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0         = 0;
     xcb_out.src_drawable = src_drawable;
     xcb_out.dst_drawable = dst_drawable;
-    xcb_out.gc = gc;
-    xcb_out.src_x = src_x;
-    xcb_out.src_y = src_y;
-    xcb_out.dst_x = dst_x;
-    xcb_out.dst_y = dst_y;
-    xcb_out.width = width;
-    xcb_out.height = height;
-    xcb_out.bit_plane = bit_plane;
+    xcb_out.gc           = gc;
+    xcb_out.src_x        = src_x;
+    xcb_out.src_y        = src_y;
+    xcb_out.dst_x        = dst_x;
+    xcb_out.dst_y        = dst_y;
+    xcb_out.width        = width;
+    xcb_out.height       = height;
+    xcb_out.bit_plane    = bit_plane;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_copy_plane (xcb_connection_t *c,
-                xcb_drawable_t    src_drawable,
-                xcb_drawable_t    dst_drawable,
-                xcb_gcontext_t    gc,
-                int16_t           src_x,
-                int16_t           src_y,
-                int16_t           dst_x,
-                int16_t           dst_y,
-                uint16_t          width,
-                uint16_t          height,
-                uint32_t          bit_plane)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_COPY_PLANE,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_copy_plane_request_t xcb_out;
-
-    xcb_out.pad0 = 0;
-    xcb_out.src_drawable = src_drawable;
-    xcb_out.dst_drawable = dst_drawable;
-    xcb_out.gc = gc;
-    xcb_out.src_x = src_x;
-    xcb_out.src_y = src_y;
-    xcb_out.dst_x = dst_x;
-    xcb_out.dst_y = dst_y;
-    xcb_out.width = width;
-    xcb_out.height = height;
-    xcb_out.bit_plane = bit_plane;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 int
-xcb_poly_point_sizeof (const void  *_buffer,
-                       uint32_t     points_len)
+xcb_poly_point_sizeof(const void *_buffer, uint32_t points_len)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char        *xcb_tmp        = (char *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_poly_point_request_t);
     xcb_tmp += xcb_block_len;
@@ -8454,9 +8549,10 @@ xcb_poly_point_sizeof (const void  *_buffer,
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_point_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -8466,111 +8562,108 @@ xcb_poly_point_sizeof (const void  *_buffer,
 }
 
 xcb_void_cookie_t
-xcb_poly_point_checked (xcb_connection_t  *c,
-                        uint8_t            coordinate_mode,
-                        xcb_drawable_t     drawable,
-                        xcb_gcontext_t     gc,
-                        uint32_t           points_len,
-                        const xcb_point_t *points)
+xcb_poly_point_checked(xcb_connection_t  *c,
+                       uint8_t            coordinate_mode,
+                       xcb_drawable_t     drawable,
+                       xcb_gcontext_t     gc,
+                       uint32_t           points_len,
+                       const xcb_point_t *points)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_POINT,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_POLY_POINT,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec             xcb_parts[6];
+    xcb_void_cookie_t        xcb_ret;
     xcb_poly_point_request_t xcb_out;
 
     xcb_out.coordinate_mode = coordinate_mode;
-    xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
+    xcb_out.drawable        = drawable;
+    xcb_out.gc              = gc;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_point_t points */
-    xcb_parts[4].iov_base = (char *) points;
-    xcb_parts[4].iov_len = points_len * sizeof(xcb_point_t);
+    xcb_parts[4].iov_base = (char *)points;
+    xcb_parts[4].iov_len  = points_len * sizeof(xcb_point_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_poly_point (xcb_connection_t  *c,
-                uint8_t            coordinate_mode,
-                xcb_drawable_t     drawable,
-                xcb_gcontext_t     gc,
-                uint32_t           points_len,
-                const xcb_point_t *points)
+xcb_poly_point(xcb_connection_t  *c,
+               uint8_t            coordinate_mode,
+               xcb_drawable_t     drawable,
+               xcb_gcontext_t     gc,
+               uint32_t           points_len,
+               const xcb_point_t *points)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_POINT,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_POLY_POINT,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec             xcb_parts[6];
+    xcb_void_cookie_t        xcb_ret;
     xcb_poly_point_request_t xcb_out;
 
     xcb_out.coordinate_mode = coordinate_mode;
-    xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
+    xcb_out.drawable        = drawable;
+    xcb_out.gc              = gc;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_point_t points */
-    xcb_parts[4].iov_base = (char *) points;
-    xcb_parts[4].iov_len = points_len * sizeof(xcb_point_t);
+    xcb_parts[4].iov_base = (char *)points;
+    xcb_parts[4].iov_len  = points_len * sizeof(xcb_point_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_point_t *
-xcb_poly_point_points (const xcb_poly_point_request_t *R)
+xcb_poly_point_points(const xcb_poly_point_request_t *R)
 {
-    return (xcb_point_t *) (R + 1);
+    return (xcb_point_t *)(R + 1);
 }
 
 int
-xcb_poly_point_points_length (const xcb_poly_point_request_t *R)
+xcb_poly_point_points_length(const xcb_poly_point_request_t *R)
 {
-    return (((R->length * 4) - sizeof(xcb_poly_point_request_t))/sizeof(xcb_point_t));
+    return (((R->length * 4) - sizeof(xcb_poly_point_request_t)) /
+            sizeof(xcb_point_t));
 }
 
 xcb_point_iterator_t
-xcb_poly_point_points_iterator (const xcb_poly_point_request_t *R)
+xcb_poly_point_points_iterator(const xcb_poly_point_request_t *R)
 {
     xcb_point_iterator_t i;
-    i.data = (xcb_point_t *) (R + 1);
-    i.rem = (((R->length * 4) - sizeof(xcb_poly_point_request_t))/sizeof(xcb_point_t));
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_point_t *)(R + 1);
+    i.rem   = (((R->length * 4) - sizeof(xcb_poly_point_request_t)) /
+             sizeof(xcb_point_t));
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 int
-xcb_poly_line_sizeof (const void  *_buffer,
-                      uint32_t     points_len)
+xcb_poly_line_sizeof(const void *_buffer, uint32_t points_len)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char        *xcb_tmp        = (char *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_poly_line_request_t);
     xcb_tmp += xcb_block_len;
@@ -8581,9 +8674,10 @@ xcb_poly_line_sizeof (const void  *_buffer,
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_point_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -8593,103 +8687,102 @@ xcb_poly_line_sizeof (const void  *_buffer,
 }
 
 xcb_void_cookie_t
-xcb_poly_line_checked (xcb_connection_t  *c,
-                       uint8_t            coordinate_mode,
-                       xcb_drawable_t     drawable,
-                       xcb_gcontext_t     gc,
-                       uint32_t           points_len,
-                       const xcb_point_t *points)
+xcb_poly_line_checked(xcb_connection_t  *c,
+                      uint8_t            coordinate_mode,
+                      xcb_drawable_t     drawable,
+                      xcb_gcontext_t     gc,
+                      uint32_t           points_len,
+                      const xcb_point_t *points)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_LINE,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_POLY_LINE,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec            xcb_parts[6];
+    xcb_void_cookie_t       xcb_ret;
     xcb_poly_line_request_t xcb_out;
 
     xcb_out.coordinate_mode = coordinate_mode;
-    xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
+    xcb_out.drawable        = drawable;
+    xcb_out.gc              = gc;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_point_t points */
-    xcb_parts[4].iov_base = (char *) points;
-    xcb_parts[4].iov_len = points_len * sizeof(xcb_point_t);
+    xcb_parts[4].iov_base = (char *)points;
+    xcb_parts[4].iov_len  = points_len * sizeof(xcb_point_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_poly_line (xcb_connection_t  *c,
-               uint8_t            coordinate_mode,
-               xcb_drawable_t     drawable,
-               xcb_gcontext_t     gc,
-               uint32_t           points_len,
-               const xcb_point_t *points)
+xcb_poly_line(xcb_connection_t  *c,
+              uint8_t            coordinate_mode,
+              xcb_drawable_t     drawable,
+              xcb_gcontext_t     gc,
+              uint32_t           points_len,
+              const xcb_point_t *points)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_LINE,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_POLY_LINE,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec            xcb_parts[6];
+    xcb_void_cookie_t       xcb_ret;
     xcb_poly_line_request_t xcb_out;
 
     xcb_out.coordinate_mode = coordinate_mode;
-    xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
+    xcb_out.drawable        = drawable;
+    xcb_out.gc              = gc;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_point_t points */
-    xcb_parts[4].iov_base = (char *) points;
-    xcb_parts[4].iov_len = points_len * sizeof(xcb_point_t);
+    xcb_parts[4].iov_base = (char *)points;
+    xcb_parts[4].iov_len  = points_len * sizeof(xcb_point_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_point_t *
-xcb_poly_line_points (const xcb_poly_line_request_t *R)
+xcb_poly_line_points(const xcb_poly_line_request_t *R)
 {
-    return (xcb_point_t *) (R + 1);
+    return (xcb_point_t *)(R + 1);
 }
 
 int
-xcb_poly_line_points_length (const xcb_poly_line_request_t *R)
+xcb_poly_line_points_length(const xcb_poly_line_request_t *R)
 {
-    return (((R->length * 4) - sizeof(xcb_poly_line_request_t))/sizeof(xcb_point_t));
+    return (((R->length * 4) - sizeof(xcb_poly_line_request_t)) /
+            sizeof(xcb_point_t));
 }
 
 xcb_point_iterator_t
-xcb_poly_line_points_iterator (const xcb_poly_line_request_t *R)
+xcb_poly_line_points_iterator(const xcb_poly_line_request_t *R)
 {
     xcb_point_iterator_t i;
-    i.data = (xcb_point_t *) (R + 1);
-    i.rem = (((R->length * 4) - sizeof(xcb_poly_line_request_t))/sizeof(xcb_point_t));
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_point_t *)(R + 1);
+    i.rem   = (((R->length * 4) - sizeof(xcb_poly_line_request_t)) /
+             sizeof(xcb_point_t));
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 void
-xcb_segment_next (xcb_segment_iterator_t *i)
+xcb_segment_next(xcb_segment_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -8697,25 +8790,23 @@ xcb_segment_next (xcb_segment_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_segment_end (xcb_segment_iterator_t i)
+xcb_segment_end(xcb_segment_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 int
-xcb_poly_segment_sizeof (const void  *_buffer,
-                         uint32_t     segments_len)
+xcb_poly_segment_sizeof(const void *_buffer, uint32_t segments_len)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char        *xcb_tmp        = (char *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_poly_segment_request_t);
     xcb_tmp += xcb_block_len;
@@ -8726,9 +8817,10 @@ xcb_poly_segment_sizeof (const void  *_buffer,
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_segment_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -8738,109 +8830,106 @@ xcb_poly_segment_sizeof (const void  *_buffer,
 }
 
 xcb_void_cookie_t
-xcb_poly_segment_checked (xcb_connection_t    *c,
-                          xcb_drawable_t       drawable,
-                          xcb_gcontext_t       gc,
-                          uint32_t             segments_len,
-                          const xcb_segment_t *segments)
+xcb_poly_segment_checked(xcb_connection_t    *c,
+                         xcb_drawable_t       drawable,
+                         xcb_gcontext_t       gc,
+                         uint32_t             segments_len,
+                         const xcb_segment_t *segments)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_SEGMENT,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_POLY_SEGMENT,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec               xcb_parts[6];
+    xcb_void_cookie_t          xcb_ret;
     xcb_poly_segment_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
+    xcb_out.gc       = gc;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_segment_t segments */
-    xcb_parts[4].iov_base = (char *) segments;
-    xcb_parts[4].iov_len = segments_len * sizeof(xcb_segment_t);
+    xcb_parts[4].iov_base = (char *)segments;
+    xcb_parts[4].iov_len  = segments_len * sizeof(xcb_segment_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_poly_segment (xcb_connection_t    *c,
-                  xcb_drawable_t       drawable,
-                  xcb_gcontext_t       gc,
-                  uint32_t             segments_len,
-                  const xcb_segment_t *segments)
+xcb_poly_segment(xcb_connection_t    *c,
+                 xcb_drawable_t       drawable,
+                 xcb_gcontext_t       gc,
+                 uint32_t             segments_len,
+                 const xcb_segment_t *segments)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_SEGMENT,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_POLY_SEGMENT,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec               xcb_parts[6];
+    xcb_void_cookie_t          xcb_ret;
     xcb_poly_segment_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
+    xcb_out.gc       = gc;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_segment_t segments */
-    xcb_parts[4].iov_base = (char *) segments;
-    xcb_parts[4].iov_len = segments_len * sizeof(xcb_segment_t);
+    xcb_parts[4].iov_base = (char *)segments;
+    xcb_parts[4].iov_len  = segments_len * sizeof(xcb_segment_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_segment_t *
-xcb_poly_segment_segments (const xcb_poly_segment_request_t *R)
+xcb_poly_segment_segments(const xcb_poly_segment_request_t *R)
 {
-    return (xcb_segment_t *) (R + 1);
+    return (xcb_segment_t *)(R + 1);
 }
 
 int
-xcb_poly_segment_segments_length (const xcb_poly_segment_request_t *R)
+xcb_poly_segment_segments_length(const xcb_poly_segment_request_t *R)
 {
-    return (((R->length * 4) - sizeof(xcb_poly_segment_request_t))/sizeof(xcb_segment_t));
+    return (((R->length * 4) - sizeof(xcb_poly_segment_request_t)) /
+            sizeof(xcb_segment_t));
 }
 
 xcb_segment_iterator_t
-xcb_poly_segment_segments_iterator (const xcb_poly_segment_request_t *R)
+xcb_poly_segment_segments_iterator(const xcb_poly_segment_request_t *R)
 {
     xcb_segment_iterator_t i;
-    i.data = (xcb_segment_t *) (R + 1);
-    i.rem = (((R->length * 4) - sizeof(xcb_poly_segment_request_t))/sizeof(xcb_segment_t));
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_segment_t *)(R + 1);
+    i.rem   = (((R->length * 4) - sizeof(xcb_poly_segment_request_t)) /
+             sizeof(xcb_segment_t));
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 int
-xcb_poly_rectangle_sizeof (const void  *_buffer,
-                           uint32_t     rectangles_len)
+xcb_poly_rectangle_sizeof(const void *_buffer, uint32_t rectangles_len)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char        *xcb_tmp        = (char *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_poly_rectangle_request_t);
     xcb_tmp += xcb_block_len;
@@ -8851,9 +8940,10 @@ xcb_poly_rectangle_sizeof (const void  *_buffer,
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_rectangle_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -8863,109 +8953,108 @@ xcb_poly_rectangle_sizeof (const void  *_buffer,
 }
 
 xcb_void_cookie_t
-xcb_poly_rectangle_checked (xcb_connection_t      *c,
-                            xcb_drawable_t         drawable,
-                            xcb_gcontext_t         gc,
-                            uint32_t               rectangles_len,
-                            const xcb_rectangle_t *rectangles)
+xcb_poly_rectangle_checked(xcb_connection_t      *c,
+                           xcb_drawable_t         drawable,
+                           xcb_gcontext_t         gc,
+                           uint32_t               rectangles_len,
+                           const xcb_rectangle_t *rectangles)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_RECTANGLE,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_POLY_RECTANGLE,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                 xcb_parts[6];
+    xcb_void_cookie_t            xcb_ret;
     xcb_poly_rectangle_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
+    xcb_out.gc       = gc;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_rectangle_t rectangles */
-    xcb_parts[4].iov_base = (char *) rectangles;
-    xcb_parts[4].iov_len = rectangles_len * sizeof(xcb_rectangle_t);
+    xcb_parts[4].iov_base = (char *)rectangles;
+    xcb_parts[4].iov_len  = rectangles_len * sizeof(xcb_rectangle_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_poly_rectangle (xcb_connection_t      *c,
-                    xcb_drawable_t         drawable,
-                    xcb_gcontext_t         gc,
-                    uint32_t               rectangles_len,
-                    const xcb_rectangle_t *rectangles)
+xcb_poly_rectangle(xcb_connection_t      *c,
+                   xcb_drawable_t         drawable,
+                   xcb_gcontext_t         gc,
+                   uint32_t               rectangles_len,
+                   const xcb_rectangle_t *rectangles)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_RECTANGLE,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_POLY_RECTANGLE,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                 xcb_parts[6];
+    xcb_void_cookie_t            xcb_ret;
     xcb_poly_rectangle_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
+    xcb_out.gc       = gc;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_rectangle_t rectangles */
-    xcb_parts[4].iov_base = (char *) rectangles;
-    xcb_parts[4].iov_len = rectangles_len * sizeof(xcb_rectangle_t);
+    xcb_parts[4].iov_base = (char *)rectangles;
+    xcb_parts[4].iov_len  = rectangles_len * sizeof(xcb_rectangle_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_rectangle_t *
-xcb_poly_rectangle_rectangles (const xcb_poly_rectangle_request_t *R)
+xcb_poly_rectangle_rectangles(const xcb_poly_rectangle_request_t *R)
 {
-    return (xcb_rectangle_t *) (R + 1);
+    return (xcb_rectangle_t *)(R + 1);
 }
 
 int
-xcb_poly_rectangle_rectangles_length (const xcb_poly_rectangle_request_t *R)
+xcb_poly_rectangle_rectangles_length(const xcb_poly_rectangle_request_t *R)
 {
-    return (((R->length * 4) - sizeof(xcb_poly_rectangle_request_t))/sizeof(xcb_rectangle_t));
+    return (((R->length * 4) - sizeof(xcb_poly_rectangle_request_t)) /
+            sizeof(xcb_rectangle_t));
 }
 
 xcb_rectangle_iterator_t
-xcb_poly_rectangle_rectangles_iterator (const xcb_poly_rectangle_request_t *R)
+xcb_poly_rectangle_rectangles_iterator(const xcb_poly_rectangle_request_t *R)
 {
     xcb_rectangle_iterator_t i;
-    i.data = (xcb_rectangle_t *) (R + 1);
-    i.rem = (((R->length * 4) - sizeof(xcb_poly_rectangle_request_t))/sizeof(xcb_rectangle_t));
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_rectangle_t *)(R + 1);
+    i.rem   = (((R->length * 4) - sizeof(xcb_poly_rectangle_request_t)) /
+             sizeof(xcb_rectangle_t));
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 int
-xcb_poly_arc_sizeof (const void  *_buffer,
-                     uint32_t     arcs_len)
+xcb_poly_arc_sizeof(const void *_buffer, uint32_t arcs_len)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char        *xcb_tmp        = (char *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_poly_arc_request_t);
     xcb_tmp += xcb_block_len;
@@ -8976,9 +9065,10 @@ xcb_poly_arc_sizeof (const void  *_buffer,
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_arc_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -8988,109 +9078,106 @@ xcb_poly_arc_sizeof (const void  *_buffer,
 }
 
 xcb_void_cookie_t
-xcb_poly_arc_checked (xcb_connection_t *c,
-                      xcb_drawable_t    drawable,
-                      xcb_gcontext_t    gc,
-                      uint32_t          arcs_len,
-                      const xcb_arc_t  *arcs)
+xcb_poly_arc_checked(xcb_connection_t *c,
+                     xcb_drawable_t    drawable,
+                     xcb_gcontext_t    gc,
+                     uint32_t          arcs_len,
+                     const xcb_arc_t  *arcs)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_ARC,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_POLY_ARC,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec           xcb_parts[6];
+    xcb_void_cookie_t      xcb_ret;
     xcb_poly_arc_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
+    xcb_out.gc       = gc;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_arc_t arcs */
-    xcb_parts[4].iov_base = (char *) arcs;
-    xcb_parts[4].iov_len = arcs_len * sizeof(xcb_arc_t);
+    xcb_parts[4].iov_base = (char *)arcs;
+    xcb_parts[4].iov_len  = arcs_len * sizeof(xcb_arc_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_poly_arc (xcb_connection_t *c,
-              xcb_drawable_t    drawable,
-              xcb_gcontext_t    gc,
-              uint32_t          arcs_len,
-              const xcb_arc_t  *arcs)
+xcb_poly_arc(xcb_connection_t *c,
+             xcb_drawable_t    drawable,
+             xcb_gcontext_t    gc,
+             uint32_t          arcs_len,
+             const xcb_arc_t  *arcs)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_ARC,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_POLY_ARC,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec           xcb_parts[6];
+    xcb_void_cookie_t      xcb_ret;
     xcb_poly_arc_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
+    xcb_out.gc       = gc;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_arc_t arcs */
-    xcb_parts[4].iov_base = (char *) arcs;
-    xcb_parts[4].iov_len = arcs_len * sizeof(xcb_arc_t);
+    xcb_parts[4].iov_base = (char *)arcs;
+    xcb_parts[4].iov_len  = arcs_len * sizeof(xcb_arc_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_arc_t *
-xcb_poly_arc_arcs (const xcb_poly_arc_request_t *R)
+xcb_poly_arc_arcs(const xcb_poly_arc_request_t *R)
 {
-    return (xcb_arc_t *) (R + 1);
+    return (xcb_arc_t *)(R + 1);
 }
 
 int
-xcb_poly_arc_arcs_length (const xcb_poly_arc_request_t *R)
+xcb_poly_arc_arcs_length(const xcb_poly_arc_request_t *R)
 {
-    return (((R->length * 4) - sizeof(xcb_poly_arc_request_t))/sizeof(xcb_arc_t));
+    return (((R->length * 4) - sizeof(xcb_poly_arc_request_t)) /
+            sizeof(xcb_arc_t));
 }
 
 xcb_arc_iterator_t
-xcb_poly_arc_arcs_iterator (const xcb_poly_arc_request_t *R)
+xcb_poly_arc_arcs_iterator(const xcb_poly_arc_request_t *R)
 {
     xcb_arc_iterator_t i;
-    i.data = (xcb_arc_t *) (R + 1);
-    i.rem = (((R->length * 4) - sizeof(xcb_poly_arc_request_t))/sizeof(xcb_arc_t));
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_arc_t *)(R + 1);
+    i.rem   = (((R->length * 4) - sizeof(xcb_poly_arc_request_t)) /
+             sizeof(xcb_arc_t));
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 int
-xcb_fill_poly_sizeof (const void  *_buffer,
-                      uint32_t     points_len)
+xcb_fill_poly_sizeof(const void *_buffer, uint32_t points_len)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char        *xcb_tmp        = (char *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_fill_poly_request_t);
     xcb_tmp += xcb_block_len;
@@ -9101,9 +9188,10 @@ xcb_fill_poly_sizeof (const void  *_buffer,
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_point_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -9113,119 +9201,116 @@ xcb_fill_poly_sizeof (const void  *_buffer,
 }
 
 xcb_void_cookie_t
-xcb_fill_poly_checked (xcb_connection_t  *c,
-                       xcb_drawable_t     drawable,
-                       xcb_gcontext_t     gc,
-                       uint8_t            shape,
-                       uint8_t            coordinate_mode,
-                       uint32_t           points_len,
-                       const xcb_point_t *points)
+xcb_fill_poly_checked(xcb_connection_t  *c,
+                      xcb_drawable_t     drawable,
+                      xcb_gcontext_t     gc,
+                      uint8_t            shape,
+                      uint8_t            coordinate_mode,
+                      uint32_t           points_len,
+                      const xcb_point_t *points)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_FILL_POLY,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_FILL_POLY,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec            xcb_parts[6];
+    xcb_void_cookie_t       xcb_ret;
     xcb_fill_poly_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
-    xcb_out.shape = shape;
+    xcb_out.pad0            = 0;
+    xcb_out.drawable        = drawable;
+    xcb_out.gc              = gc;
+    xcb_out.shape           = shape;
     xcb_out.coordinate_mode = coordinate_mode;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_point_t points */
-    xcb_parts[4].iov_base = (char *) points;
-    xcb_parts[4].iov_len = points_len * sizeof(xcb_point_t);
+    xcb_parts[4].iov_base = (char *)points;
+    xcb_parts[4].iov_len  = points_len * sizeof(xcb_point_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_fill_poly (xcb_connection_t  *c,
-               xcb_drawable_t     drawable,
-               xcb_gcontext_t     gc,
-               uint8_t            shape,
-               uint8_t            coordinate_mode,
-               uint32_t           points_len,
-               const xcb_point_t *points)
+xcb_fill_poly(xcb_connection_t  *c,
+              xcb_drawable_t     drawable,
+              xcb_gcontext_t     gc,
+              uint8_t            shape,
+              uint8_t            coordinate_mode,
+              uint32_t           points_len,
+              const xcb_point_t *points)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_FILL_POLY,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_FILL_POLY,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec            xcb_parts[6];
+    xcb_void_cookie_t       xcb_ret;
     xcb_fill_poly_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
-    xcb_out.shape = shape;
+    xcb_out.pad0            = 0;
+    xcb_out.drawable        = drawable;
+    xcb_out.gc              = gc;
+    xcb_out.shape           = shape;
     xcb_out.coordinate_mode = coordinate_mode;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_point_t points */
-    xcb_parts[4].iov_base = (char *) points;
-    xcb_parts[4].iov_len = points_len * sizeof(xcb_point_t);
+    xcb_parts[4].iov_base = (char *)points;
+    xcb_parts[4].iov_len  = points_len * sizeof(xcb_point_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_point_t *
-xcb_fill_poly_points (const xcb_fill_poly_request_t *R)
+xcb_fill_poly_points(const xcb_fill_poly_request_t *R)
 {
-    return (xcb_point_t *) (R + 1);
+    return (xcb_point_t *)(R + 1);
 }
 
 int
-xcb_fill_poly_points_length (const xcb_fill_poly_request_t *R)
+xcb_fill_poly_points_length(const xcb_fill_poly_request_t *R)
 {
-    return (((R->length * 4) - sizeof(xcb_fill_poly_request_t))/sizeof(xcb_point_t));
+    return (((R->length * 4) - sizeof(xcb_fill_poly_request_t)) /
+            sizeof(xcb_point_t));
 }
 
 xcb_point_iterator_t
-xcb_fill_poly_points_iterator (const xcb_fill_poly_request_t *R)
+xcb_fill_poly_points_iterator(const xcb_fill_poly_request_t *R)
 {
     xcb_point_iterator_t i;
-    i.data = (xcb_point_t *) (R + 1);
-    i.rem = (((R->length * 4) - sizeof(xcb_fill_poly_request_t))/sizeof(xcb_point_t));
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_point_t *)(R + 1);
+    i.rem   = (((R->length * 4) - sizeof(xcb_fill_poly_request_t)) /
+             sizeof(xcb_point_t));
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 int
-xcb_poly_fill_rectangle_sizeof (const void  *_buffer,
-                                uint32_t     rectangles_len)
+xcb_poly_fill_rectangle_sizeof(const void *_buffer, uint32_t rectangles_len)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char        *xcb_tmp        = (char *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_poly_fill_rectangle_request_t);
     xcb_tmp += xcb_block_len;
@@ -9236,9 +9321,10 @@ xcb_poly_fill_rectangle_sizeof (const void  *_buffer,
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_rectangle_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -9248,109 +9334,110 @@ xcb_poly_fill_rectangle_sizeof (const void  *_buffer,
 }
 
 xcb_void_cookie_t
-xcb_poly_fill_rectangle_checked (xcb_connection_t      *c,
-                                 xcb_drawable_t         drawable,
-                                 xcb_gcontext_t         gc,
-                                 uint32_t               rectangles_len,
-                                 const xcb_rectangle_t *rectangles)
+xcb_poly_fill_rectangle_checked(xcb_connection_t      *c,
+                                xcb_drawable_t         drawable,
+                                xcb_gcontext_t         gc,
+                                uint32_t               rectangles_len,
+                                const xcb_rectangle_t *rectangles)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_FILL_RECTANGLE,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_POLY_FILL_RECTANGLE,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                      xcb_parts[6];
+    xcb_void_cookie_t                 xcb_ret;
     xcb_poly_fill_rectangle_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
+    xcb_out.gc       = gc;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_rectangle_t rectangles */
-    xcb_parts[4].iov_base = (char *) rectangles;
-    xcb_parts[4].iov_len = rectangles_len * sizeof(xcb_rectangle_t);
+    xcb_parts[4].iov_base = (char *)rectangles;
+    xcb_parts[4].iov_len  = rectangles_len * sizeof(xcb_rectangle_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_poly_fill_rectangle (xcb_connection_t      *c,
-                         xcb_drawable_t         drawable,
-                         xcb_gcontext_t         gc,
-                         uint32_t               rectangles_len,
-                         const xcb_rectangle_t *rectangles)
+xcb_poly_fill_rectangle(xcb_connection_t      *c,
+                        xcb_drawable_t         drawable,
+                        xcb_gcontext_t         gc,
+                        uint32_t               rectangles_len,
+                        const xcb_rectangle_t *rectangles)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_FILL_RECTANGLE,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_POLY_FILL_RECTANGLE,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                      xcb_parts[6];
+    xcb_void_cookie_t                 xcb_ret;
     xcb_poly_fill_rectangle_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
+    xcb_out.gc       = gc;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_rectangle_t rectangles */
-    xcb_parts[4].iov_base = (char *) rectangles;
-    xcb_parts[4].iov_len = rectangles_len * sizeof(xcb_rectangle_t);
+    xcb_parts[4].iov_base = (char *)rectangles;
+    xcb_parts[4].iov_len  = rectangles_len * sizeof(xcb_rectangle_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_rectangle_t *
-xcb_poly_fill_rectangle_rectangles (const xcb_poly_fill_rectangle_request_t *R)
+xcb_poly_fill_rectangle_rectangles(const xcb_poly_fill_rectangle_request_t *R)
 {
-    return (xcb_rectangle_t *) (R + 1);
+    return (xcb_rectangle_t *)(R + 1);
 }
 
 int
-xcb_poly_fill_rectangle_rectangles_length (const xcb_poly_fill_rectangle_request_t *R)
+xcb_poly_fill_rectangle_rectangles_length(
+    const xcb_poly_fill_rectangle_request_t *R)
 {
-    return (((R->length * 4) - sizeof(xcb_poly_fill_rectangle_request_t))/sizeof(xcb_rectangle_t));
+    return (((R->length * 4) - sizeof(xcb_poly_fill_rectangle_request_t)) /
+            sizeof(xcb_rectangle_t));
 }
 
 xcb_rectangle_iterator_t
-xcb_poly_fill_rectangle_rectangles_iterator (const xcb_poly_fill_rectangle_request_t *R)
+xcb_poly_fill_rectangle_rectangles_iterator(
+    const xcb_poly_fill_rectangle_request_t *R)
 {
     xcb_rectangle_iterator_t i;
-    i.data = (xcb_rectangle_t *) (R + 1);
-    i.rem = (((R->length * 4) - sizeof(xcb_poly_fill_rectangle_request_t))/sizeof(xcb_rectangle_t));
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_rectangle_t *)(R + 1);
+    i.rem   = (((R->length * 4) - sizeof(xcb_poly_fill_rectangle_request_t)) /
+             sizeof(xcb_rectangle_t));
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 int
-xcb_poly_fill_arc_sizeof (const void  *_buffer,
-                          uint32_t     arcs_len)
+xcb_poly_fill_arc_sizeof(const void *_buffer, uint32_t arcs_len)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char        *xcb_tmp        = (char *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_poly_fill_arc_request_t);
     xcb_tmp += xcb_block_len;
@@ -9361,9 +9448,10 @@ xcb_poly_fill_arc_sizeof (const void  *_buffer,
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_arc_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -9373,109 +9461,106 @@ xcb_poly_fill_arc_sizeof (const void  *_buffer,
 }
 
 xcb_void_cookie_t
-xcb_poly_fill_arc_checked (xcb_connection_t *c,
-                           xcb_drawable_t    drawable,
-                           xcb_gcontext_t    gc,
-                           uint32_t          arcs_len,
-                           const xcb_arc_t  *arcs)
+xcb_poly_fill_arc_checked(xcb_connection_t *c,
+                          xcb_drawable_t    drawable,
+                          xcb_gcontext_t    gc,
+                          uint32_t          arcs_len,
+                          const xcb_arc_t  *arcs)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_FILL_ARC,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_POLY_FILL_ARC,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                xcb_parts[6];
+    xcb_void_cookie_t           xcb_ret;
     xcb_poly_fill_arc_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
+    xcb_out.gc       = gc;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_arc_t arcs */
-    xcb_parts[4].iov_base = (char *) arcs;
-    xcb_parts[4].iov_len = arcs_len * sizeof(xcb_arc_t);
+    xcb_parts[4].iov_base = (char *)arcs;
+    xcb_parts[4].iov_len  = arcs_len * sizeof(xcb_arc_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_poly_fill_arc (xcb_connection_t *c,
-                   xcb_drawable_t    drawable,
-                   xcb_gcontext_t    gc,
-                   uint32_t          arcs_len,
-                   const xcb_arc_t  *arcs)
+xcb_poly_fill_arc(xcb_connection_t *c,
+                  xcb_drawable_t    drawable,
+                  xcb_gcontext_t    gc,
+                  uint32_t          arcs_len,
+                  const xcb_arc_t  *arcs)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_FILL_ARC,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_POLY_FILL_ARC,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                xcb_parts[6];
+    xcb_void_cookie_t           xcb_ret;
     xcb_poly_fill_arc_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
+    xcb_out.gc       = gc;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_arc_t arcs */
-    xcb_parts[4].iov_base = (char *) arcs;
-    xcb_parts[4].iov_len = arcs_len * sizeof(xcb_arc_t);
+    xcb_parts[4].iov_base = (char *)arcs;
+    xcb_parts[4].iov_len  = arcs_len * sizeof(xcb_arc_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_arc_t *
-xcb_poly_fill_arc_arcs (const xcb_poly_fill_arc_request_t *R)
+xcb_poly_fill_arc_arcs(const xcb_poly_fill_arc_request_t *R)
 {
-    return (xcb_arc_t *) (R + 1);
+    return (xcb_arc_t *)(R + 1);
 }
 
 int
-xcb_poly_fill_arc_arcs_length (const xcb_poly_fill_arc_request_t *R)
+xcb_poly_fill_arc_arcs_length(const xcb_poly_fill_arc_request_t *R)
 {
-    return (((R->length * 4) - sizeof(xcb_poly_fill_arc_request_t))/sizeof(xcb_arc_t));
+    return (((R->length * 4) - sizeof(xcb_poly_fill_arc_request_t)) /
+            sizeof(xcb_arc_t));
 }
 
 xcb_arc_iterator_t
-xcb_poly_fill_arc_arcs_iterator (const xcb_poly_fill_arc_request_t *R)
+xcb_poly_fill_arc_arcs_iterator(const xcb_poly_fill_arc_request_t *R)
 {
     xcb_arc_iterator_t i;
-    i.data = (xcb_arc_t *) (R + 1);
-    i.rem = (((R->length * 4) - sizeof(xcb_poly_fill_arc_request_t))/sizeof(xcb_arc_t));
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_arc_t *)(R + 1);
+    i.rem   = (((R->length * 4) - sizeof(xcb_poly_fill_arc_request_t)) /
+             sizeof(xcb_arc_t));
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 int
-xcb_put_image_sizeof (const void  *_buffer,
-                      uint32_t     data_len)
+xcb_put_image_sizeof(const void *_buffer, uint32_t data_len)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char        *xcb_tmp        = (char *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_put_image_request_t);
     xcb_tmp += xcb_block_len;
@@ -9486,9 +9571,10 @@ xcb_put_image_sizeof (const void  *_buffer,
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(uint8_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -9498,137 +9584,136 @@ xcb_put_image_sizeof (const void  *_buffer,
 }
 
 xcb_void_cookie_t
-xcb_put_image_checked (xcb_connection_t *c,
-                       uint8_t           format,
-                       xcb_drawable_t    drawable,
-                       xcb_gcontext_t    gc,
-                       uint16_t          width,
-                       uint16_t          height,
-                       int16_t           dst_x,
-                       int16_t           dst_y,
-                       uint8_t           left_pad,
-                       uint8_t           depth,
-                       uint32_t          data_len,
-                       const uint8_t    *data)
+xcb_put_image_checked(xcb_connection_t *c,
+                      uint8_t           format,
+                      xcb_drawable_t    drawable,
+                      xcb_gcontext_t    gc,
+                      uint16_t          width,
+                      uint16_t          height,
+                      int16_t           dst_x,
+                      int16_t           dst_y,
+                      uint8_t           left_pad,
+                      uint8_t           depth,
+                      uint32_t          data_len,
+                      const uint8_t    *data)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_PUT_IMAGE,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_PUT_IMAGE,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec            xcb_parts[6];
+    xcb_void_cookie_t       xcb_ret;
     xcb_put_image_request_t xcb_out;
 
-    xcb_out.format = format;
+    xcb_out.format   = format;
     xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
-    xcb_out.width = width;
-    xcb_out.height = height;
-    xcb_out.dst_x = dst_x;
-    xcb_out.dst_y = dst_y;
+    xcb_out.gc       = gc;
+    xcb_out.width    = width;
+    xcb_out.height   = height;
+    xcb_out.dst_x    = dst_x;
+    xcb_out.dst_y    = dst_y;
     xcb_out.left_pad = left_pad;
-    xcb_out.depth = depth;
+    xcb_out.depth    = depth;
     memset(xcb_out.pad0, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* uint8_t data */
-    xcb_parts[4].iov_base = (char *) data;
-    xcb_parts[4].iov_len = data_len * sizeof(uint8_t);
+    xcb_parts[4].iov_base = (char *)data;
+    xcb_parts[4].iov_len  = data_len * sizeof(uint8_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_put_image (xcb_connection_t *c,
-               uint8_t           format,
-               xcb_drawable_t    drawable,
-               xcb_gcontext_t    gc,
-               uint16_t          width,
-               uint16_t          height,
-               int16_t           dst_x,
-               int16_t           dst_y,
-               uint8_t           left_pad,
-               uint8_t           depth,
-               uint32_t          data_len,
-               const uint8_t    *data)
+xcb_put_image(xcb_connection_t *c,
+              uint8_t           format,
+              xcb_drawable_t    drawable,
+              xcb_gcontext_t    gc,
+              uint16_t          width,
+              uint16_t          height,
+              int16_t           dst_x,
+              int16_t           dst_y,
+              uint8_t           left_pad,
+              uint8_t           depth,
+              uint32_t          data_len,
+              const uint8_t    *data)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_PUT_IMAGE,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_PUT_IMAGE,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec            xcb_parts[6];
+    xcb_void_cookie_t       xcb_ret;
     xcb_put_image_request_t xcb_out;
 
-    xcb_out.format = format;
+    xcb_out.format   = format;
     xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
-    xcb_out.width = width;
-    xcb_out.height = height;
-    xcb_out.dst_x = dst_x;
-    xcb_out.dst_y = dst_y;
+    xcb_out.gc       = gc;
+    xcb_out.width    = width;
+    xcb_out.height   = height;
+    xcb_out.dst_x    = dst_x;
+    xcb_out.dst_y    = dst_y;
     xcb_out.left_pad = left_pad;
-    xcb_out.depth = depth;
+    xcb_out.depth    = depth;
     memset(xcb_out.pad0, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* uint8_t data */
-    xcb_parts[4].iov_base = (char *) data;
-    xcb_parts[4].iov_len = data_len * sizeof(uint8_t);
+    xcb_parts[4].iov_base = (char *)data;
+    xcb_parts[4].iov_len  = data_len * sizeof(uint8_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 uint8_t *
-xcb_put_image_data (const xcb_put_image_request_t *R)
+xcb_put_image_data(const xcb_put_image_request_t *R)
 {
-    return (uint8_t *) (R + 1);
+    return (uint8_t *)(R + 1);
 }
 
 int
-xcb_put_image_data_length (const xcb_put_image_request_t *R)
+xcb_put_image_data_length(const xcb_put_image_request_t *R)
 {
-    return (((R->length * 4) - sizeof(xcb_put_image_request_t))/sizeof(uint8_t));
+    return (((R->length * 4) - sizeof(xcb_put_image_request_t)) /
+            sizeof(uint8_t));
 }
 
 xcb_generic_iterator_t
-xcb_put_image_data_end (const xcb_put_image_request_t *R)
+xcb_put_image_data_end(const xcb_put_image_request_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((uint8_t *) (R + 1)) + ((((R->length * 4) - sizeof(xcb_put_image_request_t))/sizeof(uint8_t)));
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data = ((uint8_t *)(R + 1)) +
+             ((((R->length * 4) - sizeof(xcb_put_image_request_t)) /
+               sizeof(uint8_t)));
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 int
-xcb_get_image_sizeof (const void  *_buffer)
+xcb_get_image_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_get_image_reply_t *_aux = (xcb_get_image_reply_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    char                        *xcb_tmp = (char *)_buffer;
+    const xcb_get_image_reply_t *_aux    = (xcb_get_image_reply_t *)_buffer;
+    unsigned int                 xcb_buffer_len = 0;
+    unsigned int                 xcb_block_len  = 0;
+    unsigned int                 xcb_pad        = 0;
+    unsigned int                 xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_get_image_reply_t);
     xcb_tmp += xcb_block_len;
@@ -9639,9 +9724,10 @@ xcb_get_image_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(uint8_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -9651,121 +9737,116 @@ xcb_get_image_sizeof (const void  *_buffer)
 }
 
 xcb_get_image_cookie_t
-xcb_get_image (xcb_connection_t *c,
-               uint8_t           format,
-               xcb_drawable_t    drawable,
-               int16_t           x,
-               int16_t           y,
-               uint16_t          width,
-               uint16_t          height,
-               uint32_t          plane_mask)
+xcb_get_image(xcb_connection_t *c,
+              uint8_t           format,
+              xcb_drawable_t    drawable,
+              int16_t           x,
+              int16_t           y,
+              uint16_t          width,
+              uint16_t          height,
+              uint32_t          plane_mask)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_IMAGE,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GET_IMAGE,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_image_cookie_t xcb_ret;
+    struct iovec            xcb_parts[4];
+    xcb_get_image_cookie_t  xcb_ret;
     xcb_get_image_request_t xcb_out;
 
-    xcb_out.format = format;
-    xcb_out.drawable = drawable;
-    xcb_out.x = x;
-    xcb_out.y = y;
-    xcb_out.width = width;
-    xcb_out.height = height;
+    xcb_out.format     = format;
+    xcb_out.drawable   = drawable;
+    xcb_out.x          = x;
+    xcb_out.y          = y;
+    xcb_out.width      = width;
+    xcb_out.height     = height;
     xcb_out.plane_mask = plane_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_image_cookie_t
-xcb_get_image_unchecked (xcb_connection_t *c,
-                         uint8_t           format,
-                         xcb_drawable_t    drawable,
-                         int16_t           x,
-                         int16_t           y,
-                         uint16_t          width,
-                         uint16_t          height,
-                         uint32_t          plane_mask)
+xcb_get_image_unchecked(xcb_connection_t *c,
+                        uint8_t           format,
+                        xcb_drawable_t    drawable,
+                        int16_t           x,
+                        int16_t           y,
+                        uint16_t          width,
+                        uint16_t          height,
+                        uint32_t          plane_mask)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_IMAGE,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_GET_IMAGE,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_image_cookie_t xcb_ret;
+    struct iovec            xcb_parts[4];
+    xcb_get_image_cookie_t  xcb_ret;
     xcb_get_image_request_t xcb_out;
 
-    xcb_out.format = format;
-    xcb_out.drawable = drawable;
-    xcb_out.x = x;
-    xcb_out.y = y;
-    xcb_out.width = width;
-    xcb_out.height = height;
+    xcb_out.format     = format;
+    xcb_out.drawable   = drawable;
+    xcb_out.x          = x;
+    xcb_out.y          = y;
+    xcb_out.width      = width;
+    xcb_out.height     = height;
     xcb_out.plane_mask = plane_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 uint8_t *
-xcb_get_image_data (const xcb_get_image_reply_t *R)
+xcb_get_image_data(const xcb_get_image_reply_t *R)
 {
-    return (uint8_t *) (R + 1);
+    return (uint8_t *)(R + 1);
 }
 
 int
-xcb_get_image_data_length (const xcb_get_image_reply_t *R)
+xcb_get_image_data_length(const xcb_get_image_reply_t *R)
 {
     return (R->length * 4);
 }
 
 xcb_generic_iterator_t
-xcb_get_image_data_end (const xcb_get_image_reply_t *R)
+xcb_get_image_data_end(const xcb_get_image_reply_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((uint8_t *) (R + 1)) + ((R->length * 4));
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((uint8_t *)(R + 1)) + ((R->length * 4));
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_get_image_reply_t *
-xcb_get_image_reply (xcb_connection_t        *c,
-                     xcb_get_image_cookie_t   cookie  /**< */,
-                     xcb_generic_error_t    **e)
+xcb_get_image_reply(xcb_connection_t      *c,
+                    xcb_get_image_cookie_t cookie /**< */,
+                    xcb_generic_error_t  **e)
 {
-    return (xcb_get_image_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_get_image_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_poly_text_8_sizeof (const void  *_buffer,
-                        uint32_t     items_len)
+xcb_poly_text_8_sizeof(const void *_buffer, uint32_t items_len)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char        *xcb_tmp        = (char *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_poly_text_8_request_t);
     xcb_tmp += xcb_block_len;
@@ -9776,9 +9857,10 @@ xcb_poly_text_8_sizeof (const void  *_buffer,
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(uint8_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -9788,117 +9870,115 @@ xcb_poly_text_8_sizeof (const void  *_buffer,
 }
 
 xcb_void_cookie_t
-xcb_poly_text_8_checked (xcb_connection_t *c,
-                         xcb_drawable_t    drawable,
-                         xcb_gcontext_t    gc,
-                         int16_t           x,
-                         int16_t           y,
-                         uint32_t          items_len,
-                         const uint8_t    *items)
+xcb_poly_text_8_checked(xcb_connection_t *c,
+                        xcb_drawable_t    drawable,
+                        xcb_gcontext_t    gc,
+                        int16_t           x,
+                        int16_t           y,
+                        uint32_t          items_len,
+                        const uint8_t    *items)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_TEXT_8,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_POLY_TEXT_8,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec              xcb_parts[6];
+    xcb_void_cookie_t         xcb_ret;
     xcb_poly_text_8_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
-    xcb_out.x = x;
-    xcb_out.y = y;
+    xcb_out.gc       = gc;
+    xcb_out.x        = x;
+    xcb_out.y        = y;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* uint8_t items */
-    xcb_parts[4].iov_base = (char *) items;
-    xcb_parts[4].iov_len = items_len * sizeof(uint8_t);
+    xcb_parts[4].iov_base = (char *)items;
+    xcb_parts[4].iov_len  = items_len * sizeof(uint8_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_poly_text_8 (xcb_connection_t *c,
-                 xcb_drawable_t    drawable,
-                 xcb_gcontext_t    gc,
-                 int16_t           x,
-                 int16_t           y,
-                 uint32_t          items_len,
-                 const uint8_t    *items)
+xcb_poly_text_8(xcb_connection_t *c,
+                xcb_drawable_t    drawable,
+                xcb_gcontext_t    gc,
+                int16_t           x,
+                int16_t           y,
+                uint32_t          items_len,
+                const uint8_t    *items)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_TEXT_8,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_POLY_TEXT_8,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec              xcb_parts[6];
+    xcb_void_cookie_t         xcb_ret;
     xcb_poly_text_8_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
-    xcb_out.x = x;
-    xcb_out.y = y;
+    xcb_out.gc       = gc;
+    xcb_out.x        = x;
+    xcb_out.y        = y;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* uint8_t items */
-    xcb_parts[4].iov_base = (char *) items;
-    xcb_parts[4].iov_len = items_len * sizeof(uint8_t);
+    xcb_parts[4].iov_base = (char *)items;
+    xcb_parts[4].iov_len  = items_len * sizeof(uint8_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 uint8_t *
-xcb_poly_text_8_items (const xcb_poly_text_8_request_t *R)
+xcb_poly_text_8_items(const xcb_poly_text_8_request_t *R)
 {
-    return (uint8_t *) (R + 1);
+    return (uint8_t *)(R + 1);
 }
 
 int
-xcb_poly_text_8_items_length (const xcb_poly_text_8_request_t *R)
+xcb_poly_text_8_items_length(const xcb_poly_text_8_request_t *R)
 {
-    return (((R->length * 4) - sizeof(xcb_poly_text_8_request_t))/sizeof(uint8_t));
+    return (((R->length * 4) - sizeof(xcb_poly_text_8_request_t)) /
+            sizeof(uint8_t));
 }
 
 xcb_generic_iterator_t
-xcb_poly_text_8_items_end (const xcb_poly_text_8_request_t *R)
+xcb_poly_text_8_items_end(const xcb_poly_text_8_request_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((uint8_t *) (R + 1)) + ((((R->length * 4) - sizeof(xcb_poly_text_8_request_t))/sizeof(uint8_t)));
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data = ((uint8_t *)(R + 1)) +
+             ((((R->length * 4) - sizeof(xcb_poly_text_8_request_t)) /
+               sizeof(uint8_t)));
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 int
-xcb_poly_text_16_sizeof (const void  *_buffer,
-                         uint32_t     items_len)
+xcb_poly_text_16_sizeof(const void *_buffer, uint32_t items_len)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char        *xcb_tmp        = (char *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_poly_text_16_request_t);
     xcb_tmp += xcb_block_len;
@@ -9909,9 +9989,10 @@ xcb_poly_text_16_sizeof (const void  *_buffer,
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(uint8_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -9921,117 +10002,117 @@ xcb_poly_text_16_sizeof (const void  *_buffer,
 }
 
 xcb_void_cookie_t
-xcb_poly_text_16_checked (xcb_connection_t *c,
-                          xcb_drawable_t    drawable,
-                          xcb_gcontext_t    gc,
-                          int16_t           x,
-                          int16_t           y,
-                          uint32_t          items_len,
-                          const uint8_t    *items)
+xcb_poly_text_16_checked(xcb_connection_t *c,
+                         xcb_drawable_t    drawable,
+                         xcb_gcontext_t    gc,
+                         int16_t           x,
+                         int16_t           y,
+                         uint32_t          items_len,
+                         const uint8_t    *items)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_TEXT_16,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_POLY_TEXT_16,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec               xcb_parts[6];
+    xcb_void_cookie_t          xcb_ret;
     xcb_poly_text_16_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
-    xcb_out.x = x;
-    xcb_out.y = y;
+    xcb_out.gc       = gc;
+    xcb_out.x        = x;
+    xcb_out.y        = y;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* uint8_t items */
-    xcb_parts[4].iov_base = (char *) items;
-    xcb_parts[4].iov_len = items_len * sizeof(uint8_t);
+    xcb_parts[4].iov_base = (char *)items;
+    xcb_parts[4].iov_len  = items_len * sizeof(uint8_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_poly_text_16 (xcb_connection_t *c,
-                  xcb_drawable_t    drawable,
-                  xcb_gcontext_t    gc,
-                  int16_t           x,
-                  int16_t           y,
-                  uint32_t          items_len,
-                  const uint8_t    *items)
+xcb_poly_text_16(xcb_connection_t *c,
+                 xcb_drawable_t    drawable,
+                 xcb_gcontext_t    gc,
+                 int16_t           x,
+                 int16_t           y,
+                 uint32_t          items_len,
+                 const uint8_t    *items)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_POLY_TEXT_16,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_POLY_TEXT_16,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec               xcb_parts[6];
+    xcb_void_cookie_t          xcb_ret;
     xcb_poly_text_16_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
-    xcb_out.x = x;
-    xcb_out.y = y;
+    xcb_out.gc       = gc;
+    xcb_out.x        = x;
+    xcb_out.y        = y;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* uint8_t items */
-    xcb_parts[4].iov_base = (char *) items;
-    xcb_parts[4].iov_len = items_len * sizeof(uint8_t);
+    xcb_parts[4].iov_base = (char *)items;
+    xcb_parts[4].iov_len  = items_len * sizeof(uint8_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 uint8_t *
-xcb_poly_text_16_items (const xcb_poly_text_16_request_t *R)
+xcb_poly_text_16_items(const xcb_poly_text_16_request_t *R)
 {
-    return (uint8_t *) (R + 1);
+    return (uint8_t *)(R + 1);
 }
 
 int
-xcb_poly_text_16_items_length (const xcb_poly_text_16_request_t *R)
+xcb_poly_text_16_items_length(const xcb_poly_text_16_request_t *R)
 {
-    return (((R->length * 4) - sizeof(xcb_poly_text_16_request_t))/sizeof(uint8_t));
+    return (((R->length * 4) - sizeof(xcb_poly_text_16_request_t)) /
+            sizeof(uint8_t));
 }
 
 xcb_generic_iterator_t
-xcb_poly_text_16_items_end (const xcb_poly_text_16_request_t *R)
+xcb_poly_text_16_items_end(const xcb_poly_text_16_request_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((uint8_t *) (R + 1)) + ((((R->length * 4) - sizeof(xcb_poly_text_16_request_t))/sizeof(uint8_t)));
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data = ((uint8_t *)(R + 1)) +
+             ((((R->length * 4) - sizeof(xcb_poly_text_16_request_t)) /
+               sizeof(uint8_t)));
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 int
-xcb_image_text_8_sizeof (const void  *_buffer)
+xcb_image_text_8_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_image_text_8_request_t *_aux = (xcb_image_text_8_request_t *)_buffer;
+    char                             *xcb_tmp = (char *)_buffer;
+    const xcb_image_text_8_request_t *_aux =
+        (xcb_image_text_8_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_image_text_8_request_t);
     xcb_tmp += xcb_block_len;
@@ -10042,9 +10123,10 @@ xcb_image_text_8_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -10054,117 +10136,114 @@ xcb_image_text_8_sizeof (const void  *_buffer)
 }
 
 xcb_void_cookie_t
-xcb_image_text_8_checked (xcb_connection_t *c,
-                          uint8_t           string_len,
-                          xcb_drawable_t    drawable,
-                          xcb_gcontext_t    gc,
-                          int16_t           x,
-                          int16_t           y,
-                          const char       *string)
+xcb_image_text_8_checked(xcb_connection_t *c,
+                         uint8_t           string_len,
+                         xcb_drawable_t    drawable,
+                         xcb_gcontext_t    gc,
+                         int16_t           x,
+                         int16_t           y,
+                         const char       *string)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_IMAGE_TEXT_8,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_IMAGE_TEXT_8,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec               xcb_parts[6];
+    xcb_void_cookie_t          xcb_ret;
     xcb_image_text_8_request_t xcb_out;
 
     xcb_out.string_len = string_len;
-    xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
-    xcb_out.x = x;
-    xcb_out.y = y;
+    xcb_out.drawable   = drawable;
+    xcb_out.gc         = gc;
+    xcb_out.x          = x;
+    xcb_out.y          = y;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char string */
-    xcb_parts[4].iov_base = (char *) string;
-    xcb_parts[4].iov_len = string_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)string;
+    xcb_parts[4].iov_len  = string_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_image_text_8 (xcb_connection_t *c,
-                  uint8_t           string_len,
-                  xcb_drawable_t    drawable,
-                  xcb_gcontext_t    gc,
-                  int16_t           x,
-                  int16_t           y,
-                  const char       *string)
+xcb_image_text_8(xcb_connection_t *c,
+                 uint8_t           string_len,
+                 xcb_drawable_t    drawable,
+                 xcb_gcontext_t    gc,
+                 int16_t           x,
+                 int16_t           y,
+                 const char       *string)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_IMAGE_TEXT_8,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_IMAGE_TEXT_8,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec               xcb_parts[6];
+    xcb_void_cookie_t          xcb_ret;
     xcb_image_text_8_request_t xcb_out;
 
     xcb_out.string_len = string_len;
-    xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
-    xcb_out.x = x;
-    xcb_out.y = y;
+    xcb_out.drawable   = drawable;
+    xcb_out.gc         = gc;
+    xcb_out.x          = x;
+    xcb_out.y          = y;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char string */
-    xcb_parts[4].iov_base = (char *) string;
-    xcb_parts[4].iov_len = string_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)string;
+    xcb_parts[4].iov_len  = string_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 char *
-xcb_image_text_8_string (const xcb_image_text_8_request_t *R)
+xcb_image_text_8_string(const xcb_image_text_8_request_t *R)
 {
-    return (char *) (R + 1);
+    return (char *)(R + 1);
 }
 
 int
-xcb_image_text_8_string_length (const xcb_image_text_8_request_t *R)
+xcb_image_text_8_string_length(const xcb_image_text_8_request_t *R)
 {
     return R->string_len;
 }
 
 xcb_generic_iterator_t
-xcb_image_text_8_string_end (const xcb_image_text_8_request_t *R)
+xcb_image_text_8_string_end(const xcb_image_text_8_request_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((char *) (R + 1)) + (R->string_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((char *)(R + 1)) + (R->string_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 int
-xcb_image_text_16_sizeof (const void  *_buffer)
+xcb_image_text_16_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_image_text_16_request_t *_aux = (xcb_image_text_16_request_t *)_buffer;
+    char                              *xcb_tmp = (char *)_buffer;
+    const xcb_image_text_16_request_t *_aux =
+        (xcb_image_text_16_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_image_text_16_request_t);
     xcb_tmp += xcb_block_len;
@@ -10175,9 +10254,10 @@ xcb_image_text_16_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_char2b_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -10187,401 +10267,387 @@ xcb_image_text_16_sizeof (const void  *_buffer)
 }
 
 xcb_void_cookie_t
-xcb_image_text_16_checked (xcb_connection_t   *c,
-                           uint8_t             string_len,
-                           xcb_drawable_t      drawable,
-                           xcb_gcontext_t      gc,
-                           int16_t             x,
-                           int16_t             y,
-                           const xcb_char2b_t *string)
+xcb_image_text_16_checked(xcb_connection_t   *c,
+                          uint8_t             string_len,
+                          xcb_drawable_t      drawable,
+                          xcb_gcontext_t      gc,
+                          int16_t             x,
+                          int16_t             y,
+                          const xcb_char2b_t *string)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_IMAGE_TEXT_16,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_IMAGE_TEXT_16,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                xcb_parts[6];
+    xcb_void_cookie_t           xcb_ret;
     xcb_image_text_16_request_t xcb_out;
 
     xcb_out.string_len = string_len;
-    xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
-    xcb_out.x = x;
-    xcb_out.y = y;
+    xcb_out.drawable   = drawable;
+    xcb_out.gc         = gc;
+    xcb_out.x          = x;
+    xcb_out.y          = y;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_char2b_t string */
-    xcb_parts[4].iov_base = (char *) string;
-    xcb_parts[4].iov_len = string_len * sizeof(xcb_char2b_t);
+    xcb_parts[4].iov_base = (char *)string;
+    xcb_parts[4].iov_len  = string_len * sizeof(xcb_char2b_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_image_text_16 (xcb_connection_t   *c,
-                   uint8_t             string_len,
-                   xcb_drawable_t      drawable,
-                   xcb_gcontext_t      gc,
-                   int16_t             x,
-                   int16_t             y,
-                   const xcb_char2b_t *string)
+xcb_image_text_16(xcb_connection_t   *c,
+                  uint8_t             string_len,
+                  xcb_drawable_t      drawable,
+                  xcb_gcontext_t      gc,
+                  int16_t             x,
+                  int16_t             y,
+                  const xcb_char2b_t *string)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_IMAGE_TEXT_16,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_IMAGE_TEXT_16,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                xcb_parts[6];
+    xcb_void_cookie_t           xcb_ret;
     xcb_image_text_16_request_t xcb_out;
 
     xcb_out.string_len = string_len;
-    xcb_out.drawable = drawable;
-    xcb_out.gc = gc;
-    xcb_out.x = x;
-    xcb_out.y = y;
+    xcb_out.drawable   = drawable;
+    xcb_out.gc         = gc;
+    xcb_out.x          = x;
+    xcb_out.y          = y;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_char2b_t string */
-    xcb_parts[4].iov_base = (char *) string;
-    xcb_parts[4].iov_len = string_len * sizeof(xcb_char2b_t);
+    xcb_parts[4].iov_base = (char *)string;
+    xcb_parts[4].iov_len  = string_len * sizeof(xcb_char2b_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_char2b_t *
-xcb_image_text_16_string (const xcb_image_text_16_request_t *R)
+xcb_image_text_16_string(const xcb_image_text_16_request_t *R)
 {
-    return (xcb_char2b_t *) (R + 1);
+    return (xcb_char2b_t *)(R + 1);
 }
 
 int
-xcb_image_text_16_string_length (const xcb_image_text_16_request_t *R)
+xcb_image_text_16_string_length(const xcb_image_text_16_request_t *R)
 {
     return R->string_len;
 }
 
 xcb_char2b_iterator_t
-xcb_image_text_16_string_iterator (const xcb_image_text_16_request_t *R)
+xcb_image_text_16_string_iterator(const xcb_image_text_16_request_t *R)
 {
     xcb_char2b_iterator_t i;
-    i.data = (xcb_char2b_t *) (R + 1);
-    i.rem = R->string_len;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_char2b_t *)(R + 1);
+    i.rem   = R->string_len;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_void_cookie_t
-xcb_create_colormap_checked (xcb_connection_t *c,
-                             uint8_t           alloc,
-                             xcb_colormap_t    mid,
-                             xcb_window_t      window,
-                             xcb_visualid_t    visual)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CREATE_COLORMAP,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_create_colormap_request_t xcb_out;
-
-    xcb_out.alloc = alloc;
-    xcb_out.mid = mid;
-    xcb_out.window = window;
-    xcb_out.visual = visual;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_create_colormap (xcb_connection_t *c,
-                     uint8_t           alloc,
-                     xcb_colormap_t    mid,
-                     xcb_window_t      window,
-                     xcb_visualid_t    visual)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CREATE_COLORMAP,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_create_colormap_request_t xcb_out;
-
-    xcb_out.alloc = alloc;
-    xcb_out.mid = mid;
-    xcb_out.window = window;
-    xcb_out.visual = visual;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_free_colormap_checked (xcb_connection_t *c,
-                           xcb_colormap_t    cmap)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_FREE_COLORMAP,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_free_colormap_request_t xcb_out;
-
-    xcb_out.pad0 = 0;
-    xcb_out.cmap = cmap;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_free_colormap (xcb_connection_t *c,
-                   xcb_colormap_t    cmap)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_FREE_COLORMAP,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_free_colormap_request_t xcb_out;
-
-    xcb_out.pad0 = 0;
-    xcb_out.cmap = cmap;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_copy_colormap_and_free_checked (xcb_connection_t *c,
-                                    xcb_colormap_t    mid,
-                                    xcb_colormap_t    src_cmap)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_COPY_COLORMAP_AND_FREE,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_copy_colormap_and_free_request_t xcb_out;
-
-    xcb_out.pad0 = 0;
-    xcb_out.mid = mid;
-    xcb_out.src_cmap = src_cmap;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_copy_colormap_and_free (xcb_connection_t *c,
+xcb_create_colormap_checked(xcb_connection_t *c,
+                            uint8_t           alloc,
                             xcb_colormap_t    mid,
-                            xcb_colormap_t    src_cmap)
+                            xcb_window_t      window,
+                            xcb_visualid_t    visual)
+{
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_CREATE_COLORMAP,
+                                                    .isvoid = 1 };
+
+    struct iovec                  xcb_parts[4];
+    xcb_void_cookie_t             xcb_ret;
+    xcb_create_colormap_request_t xcb_out;
+
+    xcb_out.alloc  = alloc;
+    xcb_out.mid    = mid;
+    xcb_out.window = window;
+    xcb_out.visual = visual;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_create_colormap(xcb_connection_t *c,
+                    uint8_t           alloc,
+                    xcb_colormap_t    mid,
+                    xcb_window_t      window,
+                    xcb_visualid_t    visual)
+{
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_CREATE_COLORMAP,
+                                                    .isvoid = 1 };
+
+    struct iovec                  xcb_parts[4];
+    xcb_void_cookie_t             xcb_ret;
+    xcb_create_colormap_request_t xcb_out;
+
+    xcb_out.alloc  = alloc;
+    xcb_out.mid    = mid;
+    xcb_out.window = window;
+    xcb_out.visual = visual;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_free_colormap_checked(xcb_connection_t *c, xcb_colormap_t cmap)
+{
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_FREE_COLORMAP,
+                                                    .isvoid = 1 };
+
+    struct iovec                xcb_parts[4];
+    xcb_void_cookie_t           xcb_ret;
+    xcb_free_colormap_request_t xcb_out;
+
+    xcb_out.pad0 = 0;
+    xcb_out.cmap = cmap;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_free_colormap(xcb_connection_t *c, xcb_colormap_t cmap)
+{
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_FREE_COLORMAP,
+                                                    .isvoid = 1 };
+
+    struct iovec                xcb_parts[4];
+    xcb_void_cookie_t           xcb_ret;
+    xcb_free_colormap_request_t xcb_out;
+
+    xcb_out.pad0 = 0;
+    xcb_out.cmap = cmap;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_copy_colormap_and_free_checked(xcb_connection_t *c,
+                                   xcb_colormap_t    mid,
+                                   xcb_colormap_t    src_cmap)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
+        .count  = 2,
+        .ext    = 0,
         .opcode = XCB_COPY_COLORMAP_AND_FREE,
         .isvoid = 1
     };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                         xcb_parts[4];
+    xcb_void_cookie_t                    xcb_ret;
     xcb_copy_colormap_and_free_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.mid = mid;
+    xcb_out.pad0     = 0;
+    xcb_out.mid      = mid;
     xcb_out.src_cmap = src_cmap;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_copy_colormap_and_free(xcb_connection_t *c,
+                           xcb_colormap_t    mid,
+                           xcb_colormap_t    src_cmap)
+{
+    static const xcb_protocol_request_t xcb_req = {
+        .count  = 2,
+        .ext    = 0,
+        .opcode = XCB_COPY_COLORMAP_AND_FREE,
+        .isvoid = 1
+    };
+
+    struct iovec                         xcb_parts[4];
+    xcb_void_cookie_t                    xcb_ret;
+    xcb_copy_colormap_and_free_request_t xcb_out;
+
+    xcb_out.pad0     = 0;
+    xcb_out.mid      = mid;
+    xcb_out.src_cmap = src_cmap;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_install_colormap_checked (xcb_connection_t *c,
-                              xcb_colormap_t    cmap)
+xcb_install_colormap_checked(xcb_connection_t *c, xcb_colormap_t cmap)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_INSTALL_COLORMAP,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_INSTALL_COLORMAP,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                   xcb_parts[4];
+    xcb_void_cookie_t              xcb_ret;
     xcb_install_colormap_request_t xcb_out;
 
     xcb_out.pad0 = 0;
     xcb_out.cmap = cmap;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_install_colormap (xcb_connection_t *c,
-                      xcb_colormap_t    cmap)
+xcb_install_colormap(xcb_connection_t *c, xcb_colormap_t cmap)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_INSTALL_COLORMAP,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_INSTALL_COLORMAP,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                   xcb_parts[4];
+    xcb_void_cookie_t              xcb_ret;
     xcb_install_colormap_request_t xcb_out;
 
     xcb_out.pad0 = 0;
     xcb_out.cmap = cmap;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_uninstall_colormap_checked (xcb_connection_t *c,
-                                xcb_colormap_t    cmap)
+xcb_uninstall_colormap_checked(xcb_connection_t *c, xcb_colormap_t cmap)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_UNINSTALL_COLORMAP,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_UNINSTALL_COLORMAP,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                     xcb_parts[4];
+    xcb_void_cookie_t                xcb_ret;
     xcb_uninstall_colormap_request_t xcb_out;
 
     xcb_out.pad0 = 0;
     xcb_out.cmap = cmap;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_uninstall_colormap (xcb_connection_t *c,
-                        xcb_colormap_t    cmap)
+xcb_uninstall_colormap(xcb_connection_t *c, xcb_colormap_t cmap)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_UNINSTALL_COLORMAP,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_UNINSTALL_COLORMAP,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                     xcb_parts[4];
+    xcb_void_cookie_t                xcb_ret;
     xcb_uninstall_colormap_request_t xcb_out;
 
     xcb_out.pad0 = 0;
     xcb_out.cmap = cmap;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 int
-xcb_list_installed_colormaps_sizeof (const void  *_buffer)
+xcb_list_installed_colormaps_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_list_installed_colormaps_reply_t *_aux = (xcb_list_installed_colormaps_reply_t *)_buffer;
+    char                                       *xcb_tmp = (char *)_buffer;
+    const xcb_list_installed_colormaps_reply_t *_aux =
+        (xcb_list_installed_colormaps_reply_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_list_installed_colormaps_reply_t);
     xcb_tmp += xcb_block_len;
@@ -10592,9 +10658,10 @@ xcb_list_installed_colormaps_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_colormap_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -10604,175 +10671,176 @@ xcb_list_installed_colormaps_sizeof (const void  *_buffer)
 }
 
 xcb_list_installed_colormaps_cookie_t
-xcb_list_installed_colormaps (xcb_connection_t *c,
-                              xcb_window_t      window)
+xcb_list_installed_colormaps(xcb_connection_t *c, xcb_window_t window)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
+        .count  = 2,
+        .ext    = 0,
         .opcode = XCB_LIST_INSTALLED_COLORMAPS,
         .isvoid = 0
     };
 
-    struct iovec xcb_parts[4];
-    xcb_list_installed_colormaps_cookie_t xcb_ret;
+    struct iovec                           xcb_parts[4];
+    xcb_list_installed_colormaps_cookie_t  xcb_ret;
     xcb_list_installed_colormaps_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_list_installed_colormaps_cookie_t
-xcb_list_installed_colormaps_unchecked (xcb_connection_t *c,
-                                        xcb_window_t      window)
+xcb_list_installed_colormaps_unchecked(xcb_connection_t *c, xcb_window_t window)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
+        .count  = 2,
+        .ext    = 0,
         .opcode = XCB_LIST_INSTALLED_COLORMAPS,
         .isvoid = 0
     };
 
-    struct iovec xcb_parts[4];
-    xcb_list_installed_colormaps_cookie_t xcb_ret;
+    struct iovec                           xcb_parts[4];
+    xcb_list_installed_colormaps_cookie_t  xcb_ret;
     xcb_list_installed_colormaps_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0   = 0;
     xcb_out.window = window;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_colormap_t *
-xcb_list_installed_colormaps_cmaps (const xcb_list_installed_colormaps_reply_t *R)
+xcb_list_installed_colormaps_cmaps(
+    const xcb_list_installed_colormaps_reply_t *R)
 {
-    return (xcb_colormap_t *) (R + 1);
+    return (xcb_colormap_t *)(R + 1);
 }
 
 int
-xcb_list_installed_colormaps_cmaps_length (const xcb_list_installed_colormaps_reply_t *R)
+xcb_list_installed_colormaps_cmaps_length(
+    const xcb_list_installed_colormaps_reply_t *R)
 {
     return R->cmaps_len;
 }
 
 xcb_generic_iterator_t
-xcb_list_installed_colormaps_cmaps_end (const xcb_list_installed_colormaps_reply_t *R)
+xcb_list_installed_colormaps_cmaps_end(
+    const xcb_list_installed_colormaps_reply_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((xcb_colormap_t *) (R + 1)) + (R->cmaps_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((xcb_colormap_t *)(R + 1)) + (R->cmaps_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_list_installed_colormaps_reply_t *
-xcb_list_installed_colormaps_reply (xcb_connection_t                       *c,
-                                    xcb_list_installed_colormaps_cookie_t   cookie  /**< */,
-                                    xcb_generic_error_t                   **e)
+xcb_list_installed_colormaps_reply(
+    xcb_connection_t                     *c,
+    xcb_list_installed_colormaps_cookie_t cookie /**< */,
+    xcb_generic_error_t                 **e)
 {
-    return (xcb_list_installed_colormaps_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_list_installed_colormaps_reply_t *)
+        xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 xcb_alloc_color_cookie_t
-xcb_alloc_color (xcb_connection_t *c,
-                 xcb_colormap_t    cmap,
-                 uint16_t          red,
-                 uint16_t          green,
-                 uint16_t          blue)
+xcb_alloc_color(xcb_connection_t *c,
+                xcb_colormap_t    cmap,
+                uint16_t          red,
+                uint16_t          green,
+                uint16_t          blue)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_ALLOC_COLOR,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_ALLOC_COLOR,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_alloc_color_cookie_t xcb_ret;
+    struct iovec              xcb_parts[4];
+    xcb_alloc_color_cookie_t  xcb_ret;
     xcb_alloc_color_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.cmap = cmap;
-    xcb_out.red = red;
+    xcb_out.pad0  = 0;
+    xcb_out.cmap  = cmap;
+    xcb_out.red   = red;
     xcb_out.green = green;
-    xcb_out.blue = blue;
+    xcb_out.blue  = blue;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_alloc_color_cookie_t
-xcb_alloc_color_unchecked (xcb_connection_t *c,
-                           xcb_colormap_t    cmap,
-                           uint16_t          red,
-                           uint16_t          green,
-                           uint16_t          blue)
+xcb_alloc_color_unchecked(xcb_connection_t *c,
+                          xcb_colormap_t    cmap,
+                          uint16_t          red,
+                          uint16_t          green,
+                          uint16_t          blue)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_ALLOC_COLOR,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_ALLOC_COLOR,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_alloc_color_cookie_t xcb_ret;
+    struct iovec              xcb_parts[4];
+    xcb_alloc_color_cookie_t  xcb_ret;
     xcb_alloc_color_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.cmap = cmap;
-    xcb_out.red = red;
+    xcb_out.pad0  = 0;
+    xcb_out.cmap  = cmap;
+    xcb_out.red   = red;
     xcb_out.green = green;
-    xcb_out.blue = blue;
+    xcb_out.blue  = blue;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_alloc_color_reply_t *
-xcb_alloc_color_reply (xcb_connection_t          *c,
-                       xcb_alloc_color_cookie_t   cookie  /**< */,
-                       xcb_generic_error_t      **e)
+xcb_alloc_color_reply(xcb_connection_t        *c,
+                      xcb_alloc_color_cookie_t cookie /**< */,
+                      xcb_generic_error_t    **e)
 {
-    return (xcb_alloc_color_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_alloc_color_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_alloc_named_color_sizeof (const void  *_buffer)
+xcb_alloc_named_color_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_alloc_named_color_request_t *_aux = (xcb_alloc_named_color_request_t *)_buffer;
+    char                                  *xcb_tmp = (char *)_buffer;
+    const xcb_alloc_named_color_request_t *_aux =
+        (xcb_alloc_named_color_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_alloc_named_color_request_t);
     xcb_tmp += xcb_block_len;
@@ -10783,9 +10851,10 @@ xcb_alloc_named_color_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -10795,95 +10864,96 @@ xcb_alloc_named_color_sizeof (const void  *_buffer)
 }
 
 xcb_alloc_named_color_cookie_t
-xcb_alloc_named_color (xcb_connection_t *c,
-                       xcb_colormap_t    cmap,
-                       uint16_t          name_len,
-                       const char       *name)
+xcb_alloc_named_color(xcb_connection_t *c,
+                      xcb_colormap_t    cmap,
+                      uint16_t          name_len,
+                      const char       *name)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_ALLOC_NAMED_COLOR,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_ALLOC_NAMED_COLOR,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[6];
-    xcb_alloc_named_color_cookie_t xcb_ret;
+    struct iovec                    xcb_parts[6];
+    xcb_alloc_named_color_cookie_t  xcb_ret;
     xcb_alloc_named_color_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.cmap = cmap;
+    xcb_out.pad0     = 0;
+    xcb_out.cmap     = cmap;
     xcb_out.name_len = name_len;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char name */
-    xcb_parts[4].iov_base = (char *) name;
-    xcb_parts[4].iov_len = name_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)name;
+    xcb_parts[4].iov_len  = name_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_alloc_named_color_cookie_t
-xcb_alloc_named_color_unchecked (xcb_connection_t *c,
-                                 xcb_colormap_t    cmap,
-                                 uint16_t          name_len,
-                                 const char       *name)
+xcb_alloc_named_color_unchecked(xcb_connection_t *c,
+                                xcb_colormap_t    cmap,
+                                uint16_t          name_len,
+                                const char       *name)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_ALLOC_NAMED_COLOR,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_ALLOC_NAMED_COLOR,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[6];
-    xcb_alloc_named_color_cookie_t xcb_ret;
+    struct iovec                    xcb_parts[6];
+    xcb_alloc_named_color_cookie_t  xcb_ret;
     xcb_alloc_named_color_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.cmap = cmap;
+    xcb_out.pad0     = 0;
+    xcb_out.cmap     = cmap;
     xcb_out.name_len = name_len;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char name */
-    xcb_parts[4].iov_base = (char *) name;
-    xcb_parts[4].iov_len = name_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)name;
+    xcb_parts[4].iov_len  = name_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_alloc_named_color_reply_t *
-xcb_alloc_named_color_reply (xcb_connection_t                *c,
-                             xcb_alloc_named_color_cookie_t   cookie  /**< */,
-                             xcb_generic_error_t            **e)
+xcb_alloc_named_color_reply(xcb_connection_t              *c,
+                            xcb_alloc_named_color_cookie_t cookie /**< */,
+                            xcb_generic_error_t          **e)
 {
-    return (xcb_alloc_named_color_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_alloc_named_color_reply_t *)xcb_wait_for_reply(c,
+                                                               cookie.sequence,
+                                                               e);
 }
 
 int
-xcb_alloc_color_cells_sizeof (const void  *_buffer)
+xcb_alloc_color_cells_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_alloc_color_cells_reply_t *_aux = (xcb_alloc_color_cells_reply_t *)_buffer;
+    char                                *xcb_tmp = (char *)_buffer;
+    const xcb_alloc_color_cells_reply_t *_aux =
+        (xcb_alloc_color_cells_reply_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_alloc_color_cells_reply_t);
     xcb_tmp += xcb_block_len;
@@ -10894,9 +10964,10 @@ xcb_alloc_color_cells_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(uint32_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -10906,9 +10977,10 @@ xcb_alloc_color_cells_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(uint32_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -10918,133 +10990,137 @@ xcb_alloc_color_cells_sizeof (const void  *_buffer)
 }
 
 xcb_alloc_color_cells_cookie_t
-xcb_alloc_color_cells (xcb_connection_t *c,
-                       uint8_t           contiguous,
-                       xcb_colormap_t    cmap,
-                       uint16_t          colors,
-                       uint16_t          planes)
+xcb_alloc_color_cells(xcb_connection_t *c,
+                      uint8_t           contiguous,
+                      xcb_colormap_t    cmap,
+                      uint16_t          colors,
+                      uint16_t          planes)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_ALLOC_COLOR_CELLS,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_ALLOC_COLOR_CELLS,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_alloc_color_cells_cookie_t xcb_ret;
+    struct iovec                    xcb_parts[4];
+    xcb_alloc_color_cells_cookie_t  xcb_ret;
     xcb_alloc_color_cells_request_t xcb_out;
 
     xcb_out.contiguous = contiguous;
-    xcb_out.cmap = cmap;
-    xcb_out.colors = colors;
-    xcb_out.planes = planes;
+    xcb_out.cmap       = cmap;
+    xcb_out.colors     = colors;
+    xcb_out.planes     = planes;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_alloc_color_cells_cookie_t
-xcb_alloc_color_cells_unchecked (xcb_connection_t *c,
-                                 uint8_t           contiguous,
-                                 xcb_colormap_t    cmap,
-                                 uint16_t          colors,
-                                 uint16_t          planes)
+xcb_alloc_color_cells_unchecked(xcb_connection_t *c,
+                                uint8_t           contiguous,
+                                xcb_colormap_t    cmap,
+                                uint16_t          colors,
+                                uint16_t          planes)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_ALLOC_COLOR_CELLS,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_ALLOC_COLOR_CELLS,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_alloc_color_cells_cookie_t xcb_ret;
+    struct iovec                    xcb_parts[4];
+    xcb_alloc_color_cells_cookie_t  xcb_ret;
     xcb_alloc_color_cells_request_t xcb_out;
 
     xcb_out.contiguous = contiguous;
-    xcb_out.cmap = cmap;
-    xcb_out.colors = colors;
-    xcb_out.planes = planes;
+    xcb_out.cmap       = cmap;
+    xcb_out.colors     = colors;
+    xcb_out.planes     = planes;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 uint32_t *
-xcb_alloc_color_cells_pixels (const xcb_alloc_color_cells_reply_t *R)
+xcb_alloc_color_cells_pixels(const xcb_alloc_color_cells_reply_t *R)
 {
-    return (uint32_t *) (R + 1);
+    return (uint32_t *)(R + 1);
 }
 
 int
-xcb_alloc_color_cells_pixels_length (const xcb_alloc_color_cells_reply_t *R)
+xcb_alloc_color_cells_pixels_length(const xcb_alloc_color_cells_reply_t *R)
 {
     return R->pixels_len;
 }
 
 xcb_generic_iterator_t
-xcb_alloc_color_cells_pixels_end (const xcb_alloc_color_cells_reply_t *R)
+xcb_alloc_color_cells_pixels_end(const xcb_alloc_color_cells_reply_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((uint32_t *) (R + 1)) + (R->pixels_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((uint32_t *)(R + 1)) + (R->pixels_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 uint32_t *
-xcb_alloc_color_cells_masks (const xcb_alloc_color_cells_reply_t *R)
+xcb_alloc_color_cells_masks(const xcb_alloc_color_cells_reply_t *R)
 {
     xcb_generic_iterator_t prev = xcb_alloc_color_cells_pixels_end(R);
-    return (uint32_t *) ((char *) prev.data + XCB_TYPE_PAD(uint32_t, prev.index) + 0);
+    return (uint32_t *)((char *)prev.data + XCB_TYPE_PAD(uint32_t, prev.index) +
+                        0);
 }
 
 int
-xcb_alloc_color_cells_masks_length (const xcb_alloc_color_cells_reply_t *R)
+xcb_alloc_color_cells_masks_length(const xcb_alloc_color_cells_reply_t *R)
 {
     return R->masks_len;
 }
 
 xcb_generic_iterator_t
-xcb_alloc_color_cells_masks_end (const xcb_alloc_color_cells_reply_t *R)
+xcb_alloc_color_cells_masks_end(const xcb_alloc_color_cells_reply_t *R)
 {
     xcb_generic_iterator_t i;
     xcb_generic_iterator_t prev = xcb_alloc_color_cells_pixels_end(R);
-    i.data = ((uint32_t *) ((char*) prev.data + XCB_TYPE_PAD(uint32_t, prev.index))) + (R->masks_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data =
+        ((uint32_t *)((char *)prev.data + XCB_TYPE_PAD(uint32_t, prev.index))) +
+        (R->masks_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_alloc_color_cells_reply_t *
-xcb_alloc_color_cells_reply (xcb_connection_t                *c,
-                             xcb_alloc_color_cells_cookie_t   cookie  /**< */,
-                             xcb_generic_error_t            **e)
+xcb_alloc_color_cells_reply(xcb_connection_t              *c,
+                            xcb_alloc_color_cells_cookie_t cookie /**< */,
+                            xcb_generic_error_t          **e)
 {
-    return (xcb_alloc_color_cells_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_alloc_color_cells_reply_t *)xcb_wait_for_reply(c,
+                                                               cookie.sequence,
+                                                               e);
 }
 
 int
-xcb_alloc_color_planes_sizeof (const void  *_buffer)
+xcb_alloc_color_planes_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_alloc_color_planes_reply_t *_aux = (xcb_alloc_color_planes_reply_t *)_buffer;
+    char                                 *xcb_tmp = (char *)_buffer;
+    const xcb_alloc_color_planes_reply_t *_aux =
+        (xcb_alloc_color_planes_reply_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_alloc_color_planes_reply_t);
     xcb_tmp += xcb_block_len;
@@ -11055,9 +11131,10 @@ xcb_alloc_color_planes_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(uint32_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -11067,117 +11144,116 @@ xcb_alloc_color_planes_sizeof (const void  *_buffer)
 }
 
 xcb_alloc_color_planes_cookie_t
-xcb_alloc_color_planes (xcb_connection_t *c,
-                        uint8_t           contiguous,
-                        xcb_colormap_t    cmap,
-                        uint16_t          colors,
-                        uint16_t          reds,
-                        uint16_t          greens,
-                        uint16_t          blues)
+xcb_alloc_color_planes(xcb_connection_t *c,
+                       uint8_t           contiguous,
+                       xcb_colormap_t    cmap,
+                       uint16_t          colors,
+                       uint16_t          reds,
+                       uint16_t          greens,
+                       uint16_t          blues)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_ALLOC_COLOR_PLANES,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_ALLOC_COLOR_PLANES,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_alloc_color_planes_cookie_t xcb_ret;
+    struct iovec                     xcb_parts[4];
+    xcb_alloc_color_planes_cookie_t  xcb_ret;
     xcb_alloc_color_planes_request_t xcb_out;
 
     xcb_out.contiguous = contiguous;
-    xcb_out.cmap = cmap;
-    xcb_out.colors = colors;
-    xcb_out.reds = reds;
-    xcb_out.greens = greens;
-    xcb_out.blues = blues;
+    xcb_out.cmap       = cmap;
+    xcb_out.colors     = colors;
+    xcb_out.reds       = reds;
+    xcb_out.greens     = greens;
+    xcb_out.blues      = blues;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_alloc_color_planes_cookie_t
-xcb_alloc_color_planes_unchecked (xcb_connection_t *c,
-                                  uint8_t           contiguous,
-                                  xcb_colormap_t    cmap,
-                                  uint16_t          colors,
-                                  uint16_t          reds,
-                                  uint16_t          greens,
-                                  uint16_t          blues)
+xcb_alloc_color_planes_unchecked(xcb_connection_t *c,
+                                 uint8_t           contiguous,
+                                 xcb_colormap_t    cmap,
+                                 uint16_t          colors,
+                                 uint16_t          reds,
+                                 uint16_t          greens,
+                                 uint16_t          blues)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_ALLOC_COLOR_PLANES,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_ALLOC_COLOR_PLANES,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_alloc_color_planes_cookie_t xcb_ret;
+    struct iovec                     xcb_parts[4];
+    xcb_alloc_color_planes_cookie_t  xcb_ret;
     xcb_alloc_color_planes_request_t xcb_out;
 
     xcb_out.contiguous = contiguous;
-    xcb_out.cmap = cmap;
-    xcb_out.colors = colors;
-    xcb_out.reds = reds;
-    xcb_out.greens = greens;
-    xcb_out.blues = blues;
+    xcb_out.cmap       = cmap;
+    xcb_out.colors     = colors;
+    xcb_out.reds       = reds;
+    xcb_out.greens     = greens;
+    xcb_out.blues      = blues;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 uint32_t *
-xcb_alloc_color_planes_pixels (const xcb_alloc_color_planes_reply_t *R)
+xcb_alloc_color_planes_pixels(const xcb_alloc_color_planes_reply_t *R)
 {
-    return (uint32_t *) (R + 1);
+    return (uint32_t *)(R + 1);
 }
 
 int
-xcb_alloc_color_planes_pixels_length (const xcb_alloc_color_planes_reply_t *R)
+xcb_alloc_color_planes_pixels_length(const xcb_alloc_color_planes_reply_t *R)
 {
     return R->pixels_len;
 }
 
 xcb_generic_iterator_t
-xcb_alloc_color_planes_pixels_end (const xcb_alloc_color_planes_reply_t *R)
+xcb_alloc_color_planes_pixels_end(const xcb_alloc_color_planes_reply_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((uint32_t *) (R + 1)) + (R->pixels_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((uint32_t *)(R + 1)) + (R->pixels_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_alloc_color_planes_reply_t *
-xcb_alloc_color_planes_reply (xcb_connection_t                 *c,
-                              xcb_alloc_color_planes_cookie_t   cookie  /**< */,
-                              xcb_generic_error_t             **e)
+xcb_alloc_color_planes_reply(xcb_connection_t               *c,
+                             xcb_alloc_color_planes_cookie_t cookie /**< */,
+                             xcb_generic_error_t           **e)
 {
-    return (xcb_alloc_color_planes_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_alloc_color_planes_reply_t *)xcb_wait_for_reply(c,
+                                                                cookie.sequence,
+                                                                e);
 }
 
 int
-xcb_free_colors_sizeof (const void  *_buffer,
-                        uint32_t     pixels_len)
+xcb_free_colors_sizeof(const void *_buffer, uint32_t pixels_len)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char        *xcb_tmp        = (char *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_free_colors_request_t);
     xcb_tmp += xcb_block_len;
@@ -11188,9 +11264,10 @@ xcb_free_colors_sizeof (const void  *_buffer,
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(uint32_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -11200,101 +11277,101 @@ xcb_free_colors_sizeof (const void  *_buffer,
 }
 
 xcb_void_cookie_t
-xcb_free_colors_checked (xcb_connection_t *c,
-                         xcb_colormap_t    cmap,
-                         uint32_t          plane_mask,
-                         uint32_t          pixels_len,
-                         const uint32_t   *pixels)
+xcb_free_colors_checked(xcb_connection_t *c,
+                        xcb_colormap_t    cmap,
+                        uint32_t          plane_mask,
+                        uint32_t          pixels_len,
+                        const uint32_t   *pixels)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_FREE_COLORS,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_FREE_COLORS,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec              xcb_parts[6];
+    xcb_void_cookie_t         xcb_ret;
     xcb_free_colors_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.cmap = cmap;
+    xcb_out.pad0       = 0;
+    xcb_out.cmap       = cmap;
     xcb_out.plane_mask = plane_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* uint32_t pixels */
-    xcb_parts[4].iov_base = (char *) pixels;
-    xcb_parts[4].iov_len = pixels_len * sizeof(uint32_t);
+    xcb_parts[4].iov_base = (char *)pixels;
+    xcb_parts[4].iov_len  = pixels_len * sizeof(uint32_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_free_colors (xcb_connection_t *c,
-                 xcb_colormap_t    cmap,
-                 uint32_t          plane_mask,
-                 uint32_t          pixels_len,
-                 const uint32_t   *pixels)
+xcb_free_colors(xcb_connection_t *c,
+                xcb_colormap_t    cmap,
+                uint32_t          plane_mask,
+                uint32_t          pixels_len,
+                const uint32_t   *pixels)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_FREE_COLORS,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_FREE_COLORS,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec              xcb_parts[6];
+    xcb_void_cookie_t         xcb_ret;
     xcb_free_colors_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.cmap = cmap;
+    xcb_out.pad0       = 0;
+    xcb_out.cmap       = cmap;
     xcb_out.plane_mask = plane_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* uint32_t pixels */
-    xcb_parts[4].iov_base = (char *) pixels;
-    xcb_parts[4].iov_len = pixels_len * sizeof(uint32_t);
+    xcb_parts[4].iov_base = (char *)pixels;
+    xcb_parts[4].iov_len  = pixels_len * sizeof(uint32_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 uint32_t *
-xcb_free_colors_pixels (const xcb_free_colors_request_t *R)
+xcb_free_colors_pixels(const xcb_free_colors_request_t *R)
 {
-    return (uint32_t *) (R + 1);
+    return (uint32_t *)(R + 1);
 }
 
 int
-xcb_free_colors_pixels_length (const xcb_free_colors_request_t *R)
+xcb_free_colors_pixels_length(const xcb_free_colors_request_t *R)
 {
-    return (((R->length * 4) - sizeof(xcb_free_colors_request_t))/sizeof(uint32_t));
+    return (((R->length * 4) - sizeof(xcb_free_colors_request_t)) /
+            sizeof(uint32_t));
 }
 
 xcb_generic_iterator_t
-xcb_free_colors_pixels_end (const xcb_free_colors_request_t *R)
+xcb_free_colors_pixels_end(const xcb_free_colors_request_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((uint32_t *) (R + 1)) + ((((R->length * 4) - sizeof(xcb_free_colors_request_t))/sizeof(uint32_t)));
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data = ((uint32_t *)(R + 1)) +
+             ((((R->length * 4) - sizeof(xcb_free_colors_request_t)) /
+               sizeof(uint32_t)));
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 void
-xcb_coloritem_next (xcb_coloritem_iterator_t *i)
+xcb_coloritem_next(xcb_coloritem_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -11302,25 +11379,23 @@ xcb_coloritem_next (xcb_coloritem_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_coloritem_end (xcb_coloritem_iterator_t i)
+xcb_coloritem_end(xcb_coloritem_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 int
-xcb_store_colors_sizeof (const void  *_buffer,
-                         uint32_t     items_len)
+xcb_store_colors_sizeof(const void *_buffer, uint32_t items_len)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char        *xcb_tmp        = (char *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_store_colors_request_t);
     xcb_tmp += xcb_block_len;
@@ -11331,9 +11406,10 @@ xcb_store_colors_sizeof (const void  *_buffer,
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_coloritem_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -11343,105 +11419,104 @@ xcb_store_colors_sizeof (const void  *_buffer,
 }
 
 xcb_void_cookie_t
-xcb_store_colors_checked (xcb_connection_t      *c,
-                          xcb_colormap_t         cmap,
-                          uint32_t               items_len,
-                          const xcb_coloritem_t *items)
+xcb_store_colors_checked(xcb_connection_t      *c,
+                         xcb_colormap_t         cmap,
+                         uint32_t               items_len,
+                         const xcb_coloritem_t *items)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_STORE_COLORS,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_STORE_COLORS,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec               xcb_parts[6];
+    xcb_void_cookie_t          xcb_ret;
     xcb_store_colors_request_t xcb_out;
 
     xcb_out.pad0 = 0;
     xcb_out.cmap = cmap;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_coloritem_t items */
-    xcb_parts[4].iov_base = (char *) items;
-    xcb_parts[4].iov_len = items_len * sizeof(xcb_coloritem_t);
+    xcb_parts[4].iov_base = (char *)items;
+    xcb_parts[4].iov_len  = items_len * sizeof(xcb_coloritem_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_store_colors (xcb_connection_t      *c,
-                  xcb_colormap_t         cmap,
-                  uint32_t               items_len,
-                  const xcb_coloritem_t *items)
+xcb_store_colors(xcb_connection_t      *c,
+                 xcb_colormap_t         cmap,
+                 uint32_t               items_len,
+                 const xcb_coloritem_t *items)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_STORE_COLORS,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_STORE_COLORS,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec               xcb_parts[6];
+    xcb_void_cookie_t          xcb_ret;
     xcb_store_colors_request_t xcb_out;
 
     xcb_out.pad0 = 0;
     xcb_out.cmap = cmap;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_coloritem_t items */
-    xcb_parts[4].iov_base = (char *) items;
-    xcb_parts[4].iov_len = items_len * sizeof(xcb_coloritem_t);
+    xcb_parts[4].iov_base = (char *)items;
+    xcb_parts[4].iov_len  = items_len * sizeof(xcb_coloritem_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_coloritem_t *
-xcb_store_colors_items (const xcb_store_colors_request_t *R)
+xcb_store_colors_items(const xcb_store_colors_request_t *R)
 {
-    return (xcb_coloritem_t *) (R + 1);
+    return (xcb_coloritem_t *)(R + 1);
 }
 
 int
-xcb_store_colors_items_length (const xcb_store_colors_request_t *R)
+xcb_store_colors_items_length(const xcb_store_colors_request_t *R)
 {
-    return (((R->length * 4) - sizeof(xcb_store_colors_request_t))/sizeof(xcb_coloritem_t));
+    return (((R->length * 4) - sizeof(xcb_store_colors_request_t)) /
+            sizeof(xcb_coloritem_t));
 }
 
 xcb_coloritem_iterator_t
-xcb_store_colors_items_iterator (const xcb_store_colors_request_t *R)
+xcb_store_colors_items_iterator(const xcb_store_colors_request_t *R)
 {
     xcb_coloritem_iterator_t i;
-    i.data = (xcb_coloritem_t *) (R + 1);
-    i.rem = (((R->length * 4) - sizeof(xcb_store_colors_request_t))/sizeof(xcb_coloritem_t));
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_coloritem_t *)(R + 1);
+    i.rem   = (((R->length * 4) - sizeof(xcb_store_colors_request_t)) /
+             sizeof(xcb_coloritem_t));
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 int
-xcb_store_named_color_sizeof (const void  *_buffer)
+xcb_store_named_color_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_store_named_color_request_t *_aux = (xcb_store_named_color_request_t *)_buffer;
+    char                                  *xcb_tmp = (char *)_buffer;
+    const xcb_store_named_color_request_t *_aux =
+        (xcb_store_named_color_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_store_named_color_request_t);
     xcb_tmp += xcb_block_len;
@@ -11452,9 +11527,10 @@ xcb_store_named_color_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -11464,107 +11540,106 @@ xcb_store_named_color_sizeof (const void  *_buffer)
 }
 
 xcb_void_cookie_t
-xcb_store_named_color_checked (xcb_connection_t *c,
-                               uint8_t           flags,
-                               xcb_colormap_t    cmap,
-                               uint32_t          pixel,
-                               uint16_t          name_len,
-                               const char       *name)
+xcb_store_named_color_checked(xcb_connection_t *c,
+                              uint8_t           flags,
+                              xcb_colormap_t    cmap,
+                              uint32_t          pixel,
+                              uint16_t          name_len,
+                              const char       *name)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_STORE_NAMED_COLOR,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_STORE_NAMED_COLOR,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                    xcb_parts[6];
+    xcb_void_cookie_t               xcb_ret;
     xcb_store_named_color_request_t xcb_out;
 
-    xcb_out.flags = flags;
-    xcb_out.cmap = cmap;
-    xcb_out.pixel = pixel;
+    xcb_out.flags    = flags;
+    xcb_out.cmap     = cmap;
+    xcb_out.pixel    = pixel;
     xcb_out.name_len = name_len;
     memset(xcb_out.pad0, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char name */
-    xcb_parts[4].iov_base = (char *) name;
-    xcb_parts[4].iov_len = name_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)name;
+    xcb_parts[4].iov_len  = name_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_store_named_color (xcb_connection_t *c,
-                       uint8_t           flags,
-                       xcb_colormap_t    cmap,
-                       uint32_t          pixel,
-                       uint16_t          name_len,
-                       const char       *name)
+xcb_store_named_color(xcb_connection_t *c,
+                      uint8_t           flags,
+                      xcb_colormap_t    cmap,
+                      uint32_t          pixel,
+                      uint16_t          name_len,
+                      const char       *name)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_STORE_NAMED_COLOR,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_STORE_NAMED_COLOR,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                    xcb_parts[6];
+    xcb_void_cookie_t               xcb_ret;
     xcb_store_named_color_request_t xcb_out;
 
-    xcb_out.flags = flags;
-    xcb_out.cmap = cmap;
-    xcb_out.pixel = pixel;
+    xcb_out.flags    = flags;
+    xcb_out.cmap     = cmap;
+    xcb_out.pixel    = pixel;
     xcb_out.name_len = name_len;
     memset(xcb_out.pad0, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char name */
-    xcb_parts[4].iov_base = (char *) name;
-    xcb_parts[4].iov_len = name_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)name;
+    xcb_parts[4].iov_len  = name_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 char *
-xcb_store_named_color_name (const xcb_store_named_color_request_t *R)
+xcb_store_named_color_name(const xcb_store_named_color_request_t *R)
 {
-    return (char *) (R + 1);
+    return (char *)(R + 1);
 }
 
 int
-xcb_store_named_color_name_length (const xcb_store_named_color_request_t *R)
+xcb_store_named_color_name_length(const xcb_store_named_color_request_t *R)
 {
     return R->name_len;
 }
 
 xcb_generic_iterator_t
-xcb_store_named_color_name_end (const xcb_store_named_color_request_t *R)
+xcb_store_named_color_name_end(const xcb_store_named_color_request_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((char *) (R + 1)) + (R->name_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((char *)(R + 1)) + (R->name_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 void
-xcb_rgb_next (xcb_rgb_iterator_t *i)
+xcb_rgb_next(xcb_rgb_iterator_t *i)
 {
     --i->rem;
     ++i->data;
@@ -11572,25 +11647,23 @@ xcb_rgb_next (xcb_rgb_iterator_t *i)
 }
 
 xcb_generic_iterator_t
-xcb_rgb_end (xcb_rgb_iterator_t i)
+xcb_rgb_end(xcb_rgb_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    ret.data = i.data + i.rem;
-    ret.index = i.index + ((char *) ret.data - (char *) i.data);
-    ret.rem = 0;
+    ret.data  = i.data + i.rem;
+    ret.index = i.index + ((char *)ret.data - (char *)i.data);
+    ret.rem   = 0;
     return ret;
 }
 
 int
-xcb_query_colors_sizeof (const void  *_buffer,
-                         uint32_t     pixels_len)
+xcb_query_colors_sizeof(const void *_buffer, uint32_t pixels_len)
 {
-    char *xcb_tmp = (char *)_buffer;
+    char        *xcb_tmp        = (char *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_query_colors_request_t);
     xcb_tmp += xcb_block_len;
@@ -11601,9 +11674,10 @@ xcb_query_colors_sizeof (const void  *_buffer,
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(uint32_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -11613,113 +11687,111 @@ xcb_query_colors_sizeof (const void  *_buffer,
 }
 
 xcb_query_colors_cookie_t
-xcb_query_colors (xcb_connection_t *c,
-                  xcb_colormap_t    cmap,
-                  uint32_t          pixels_len,
-                  const uint32_t   *pixels)
+xcb_query_colors(xcb_connection_t *c,
+                 xcb_colormap_t    cmap,
+                 uint32_t          pixels_len,
+                 const uint32_t   *pixels)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_QUERY_COLORS,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_QUERY_COLORS,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[6];
-    xcb_query_colors_cookie_t xcb_ret;
+    struct iovec               xcb_parts[6];
+    xcb_query_colors_cookie_t  xcb_ret;
     xcb_query_colors_request_t xcb_out;
 
     xcb_out.pad0 = 0;
     xcb_out.cmap = cmap;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* uint32_t pixels */
-    xcb_parts[4].iov_base = (char *) pixels;
-    xcb_parts[4].iov_len = pixels_len * sizeof(uint32_t);
+    xcb_parts[4].iov_base = (char *)pixels;
+    xcb_parts[4].iov_len  = pixels_len * sizeof(uint32_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_query_colors_cookie_t
-xcb_query_colors_unchecked (xcb_connection_t *c,
-                            xcb_colormap_t    cmap,
-                            uint32_t          pixels_len,
-                            const uint32_t   *pixels)
+xcb_query_colors_unchecked(xcb_connection_t *c,
+                           xcb_colormap_t    cmap,
+                           uint32_t          pixels_len,
+                           const uint32_t   *pixels)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_QUERY_COLORS,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_QUERY_COLORS,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[6];
-    xcb_query_colors_cookie_t xcb_ret;
+    struct iovec               xcb_parts[6];
+    xcb_query_colors_cookie_t  xcb_ret;
     xcb_query_colors_request_t xcb_out;
 
     xcb_out.pad0 = 0;
     xcb_out.cmap = cmap;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* uint32_t pixels */
-    xcb_parts[4].iov_base = (char *) pixels;
-    xcb_parts[4].iov_len = pixels_len * sizeof(uint32_t);
+    xcb_parts[4].iov_base = (char *)pixels;
+    xcb_parts[4].iov_len  = pixels_len * sizeof(uint32_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_rgb_t *
-xcb_query_colors_colors (const xcb_query_colors_reply_t *R)
+xcb_query_colors_colors(const xcb_query_colors_reply_t *R)
 {
-    return (xcb_rgb_t *) (R + 1);
+    return (xcb_rgb_t *)(R + 1);
 }
 
 int
-xcb_query_colors_colors_length (const xcb_query_colors_reply_t *R)
+xcb_query_colors_colors_length(const xcb_query_colors_reply_t *R)
 {
     return R->colors_len;
 }
 
 xcb_rgb_iterator_t
-xcb_query_colors_colors_iterator (const xcb_query_colors_reply_t *R)
+xcb_query_colors_colors_iterator(const xcb_query_colors_reply_t *R)
 {
     xcb_rgb_iterator_t i;
-    i.data = (xcb_rgb_t *) (R + 1);
-    i.rem = R->colors_len;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_rgb_t *)(R + 1);
+    i.rem   = R->colors_len;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_query_colors_reply_t *
-xcb_query_colors_reply (xcb_connection_t           *c,
-                        xcb_query_colors_cookie_t   cookie  /**< */,
-                        xcb_generic_error_t       **e)
+xcb_query_colors_reply(xcb_connection_t         *c,
+                       xcb_query_colors_cookie_t cookie /**< */,
+                       xcb_generic_error_t     **e)
 {
-    return (xcb_query_colors_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (
+        xcb_query_colors_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_lookup_color_sizeof (const void  *_buffer)
+xcb_lookup_color_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_lookup_color_request_t *_aux = (xcb_lookup_color_request_t *)_buffer;
+    char                             *xcb_tmp = (char *)_buffer;
+    const xcb_lookup_color_request_t *_aux =
+        (xcb_lookup_color_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_lookup_color_request_t);
     xcb_tmp += xcb_block_len;
@@ -11730,9 +11802,10 @@ xcb_lookup_color_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -11742,487 +11815,475 @@ xcb_lookup_color_sizeof (const void  *_buffer)
 }
 
 xcb_lookup_color_cookie_t
-xcb_lookup_color (xcb_connection_t *c,
-                  xcb_colormap_t    cmap,
-                  uint16_t          name_len,
-                  const char       *name)
+xcb_lookup_color(xcb_connection_t *c,
+                 xcb_colormap_t    cmap,
+                 uint16_t          name_len,
+                 const char       *name)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_LOOKUP_COLOR,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_LOOKUP_COLOR,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[6];
-    xcb_lookup_color_cookie_t xcb_ret;
+    struct iovec               xcb_parts[6];
+    xcb_lookup_color_cookie_t  xcb_ret;
     xcb_lookup_color_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.cmap = cmap;
+    xcb_out.pad0     = 0;
+    xcb_out.cmap     = cmap;
     xcb_out.name_len = name_len;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char name */
-    xcb_parts[4].iov_base = (char *) name;
-    xcb_parts[4].iov_len = name_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)name;
+    xcb_parts[4].iov_len  = name_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_lookup_color_cookie_t
-xcb_lookup_color_unchecked (xcb_connection_t *c,
-                            xcb_colormap_t    cmap,
-                            uint16_t          name_len,
-                            const char       *name)
+xcb_lookup_color_unchecked(xcb_connection_t *c,
+                           xcb_colormap_t    cmap,
+                           uint16_t          name_len,
+                           const char       *name)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_LOOKUP_COLOR,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_LOOKUP_COLOR,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[6];
-    xcb_lookup_color_cookie_t xcb_ret;
+    struct iovec               xcb_parts[6];
+    xcb_lookup_color_cookie_t  xcb_ret;
     xcb_lookup_color_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.cmap = cmap;
+    xcb_out.pad0     = 0;
+    xcb_out.cmap     = cmap;
     xcb_out.name_len = name_len;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char name */
-    xcb_parts[4].iov_base = (char *) name;
-    xcb_parts[4].iov_len = name_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)name;
+    xcb_parts[4].iov_len  = name_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_lookup_color_reply_t *
-xcb_lookup_color_reply (xcb_connection_t           *c,
-                        xcb_lookup_color_cookie_t   cookie  /**< */,
-                        xcb_generic_error_t       **e)
+xcb_lookup_color_reply(xcb_connection_t         *c,
+                       xcb_lookup_color_cookie_t cookie /**< */,
+                       xcb_generic_error_t     **e)
 {
-    return (xcb_lookup_color_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (
+        xcb_lookup_color_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 xcb_void_cookie_t
-xcb_create_cursor_checked (xcb_connection_t *c,
-                           xcb_cursor_t      cid,
-                           xcb_pixmap_t      source,
-                           xcb_pixmap_t      mask,
+xcb_create_cursor_checked(xcb_connection_t *c,
+                          xcb_cursor_t      cid,
+                          xcb_pixmap_t      source,
+                          xcb_pixmap_t      mask,
+                          uint16_t          fore_red,
+                          uint16_t          fore_green,
+                          uint16_t          fore_blue,
+                          uint16_t          back_red,
+                          uint16_t          back_green,
+                          uint16_t          back_blue,
+                          uint16_t          x,
+                          uint16_t          y)
+{
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CREATE_CURSOR,
+                                                    .isvoid = 1 };
+
+    struct iovec                xcb_parts[4];
+    xcb_void_cookie_t           xcb_ret;
+    xcb_create_cursor_request_t xcb_out;
+
+    xcb_out.pad0       = 0;
+    xcb_out.cid        = cid;
+    xcb_out.source     = source;
+    xcb_out.mask       = mask;
+    xcb_out.fore_red   = fore_red;
+    xcb_out.fore_green = fore_green;
+    xcb_out.fore_blue  = fore_blue;
+    xcb_out.back_red   = back_red;
+    xcb_out.back_green = back_green;
+    xcb_out.back_blue  = back_blue;
+    xcb_out.x          = x;
+    xcb_out.y          = y;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_create_cursor(xcb_connection_t *c,
+                  xcb_cursor_t      cid,
+                  xcb_pixmap_t      source,
+                  xcb_pixmap_t      mask,
+                  uint16_t          fore_red,
+                  uint16_t          fore_green,
+                  uint16_t          fore_blue,
+                  uint16_t          back_red,
+                  uint16_t          back_green,
+                  uint16_t          back_blue,
+                  uint16_t          x,
+                  uint16_t          y)
+{
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CREATE_CURSOR,
+                                                    .isvoid = 1 };
+
+    struct iovec                xcb_parts[4];
+    xcb_void_cookie_t           xcb_ret;
+    xcb_create_cursor_request_t xcb_out;
+
+    xcb_out.pad0       = 0;
+    xcb_out.cid        = cid;
+    xcb_out.source     = source;
+    xcb_out.mask       = mask;
+    xcb_out.fore_red   = fore_red;
+    xcb_out.fore_green = fore_green;
+    xcb_out.fore_blue  = fore_blue;
+    xcb_out.back_red   = back_red;
+    xcb_out.back_green = back_green;
+    xcb_out.back_blue  = back_blue;
+    xcb_out.x          = x;
+    xcb_out.y          = y;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_create_glyph_cursor_checked(xcb_connection_t *c,
+                                xcb_cursor_t      cid,
+                                xcb_font_t        source_font,
+                                xcb_font_t        mask_font,
+                                uint16_t          source_char,
+                                uint16_t          mask_char,
+                                uint16_t          fore_red,
+                                uint16_t          fore_green,
+                                uint16_t          fore_blue,
+                                uint16_t          back_red,
+                                uint16_t          back_green,
+                                uint16_t          back_blue)
+{
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_CREATE_GLYPH_CURSOR,
+                                                    .isvoid = 1 };
+
+    struct iovec                      xcb_parts[4];
+    xcb_void_cookie_t                 xcb_ret;
+    xcb_create_glyph_cursor_request_t xcb_out;
+
+    xcb_out.pad0        = 0;
+    xcb_out.cid         = cid;
+    xcb_out.source_font = source_font;
+    xcb_out.mask_font   = mask_font;
+    xcb_out.source_char = source_char;
+    xcb_out.mask_char   = mask_char;
+    xcb_out.fore_red    = fore_red;
+    xcb_out.fore_green  = fore_green;
+    xcb_out.fore_blue   = fore_blue;
+    xcb_out.back_red    = back_red;
+    xcb_out.back_green  = back_green;
+    xcb_out.back_blue   = back_blue;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_create_glyph_cursor(xcb_connection_t *c,
+                        xcb_cursor_t      cid,
+                        xcb_font_t        source_font,
+                        xcb_font_t        mask_font,
+                        uint16_t          source_char,
+                        uint16_t          mask_char,
+                        uint16_t          fore_red,
+                        uint16_t          fore_green,
+                        uint16_t          fore_blue,
+                        uint16_t          back_red,
+                        uint16_t          back_green,
+                        uint16_t          back_blue)
+{
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_CREATE_GLYPH_CURSOR,
+                                                    .isvoid = 1 };
+
+    struct iovec                      xcb_parts[4];
+    xcb_void_cookie_t                 xcb_ret;
+    xcb_create_glyph_cursor_request_t xcb_out;
+
+    xcb_out.pad0        = 0;
+    xcb_out.cid         = cid;
+    xcb_out.source_font = source_font;
+    xcb_out.mask_font   = mask_font;
+    xcb_out.source_char = source_char;
+    xcb_out.mask_char   = mask_char;
+    xcb_out.fore_red    = fore_red;
+    xcb_out.fore_green  = fore_green;
+    xcb_out.fore_blue   = fore_blue;
+    xcb_out.back_red    = back_red;
+    xcb_out.back_green  = back_green;
+    xcb_out.back_blue   = back_blue;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_free_cursor_checked(xcb_connection_t *c, xcb_cursor_t cursor)
+{
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_FREE_CURSOR,
+                                                    .isvoid = 1 };
+
+    struct iovec              xcb_parts[4];
+    xcb_void_cookie_t         xcb_ret;
+    xcb_free_cursor_request_t xcb_out;
+
+    xcb_out.pad0   = 0;
+    xcb_out.cursor = cursor;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_free_cursor(xcb_connection_t *c, xcb_cursor_t cursor)
+{
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_FREE_CURSOR,
+                                                    .isvoid = 1 };
+
+    struct iovec              xcb_parts[4];
+    xcb_void_cookie_t         xcb_ret;
+    xcb_free_cursor_request_t xcb_out;
+
+    xcb_out.pad0   = 0;
+    xcb_out.cursor = cursor;
+
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
+    xcb_parts[3].iov_base = 0;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
+
+    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
+    return xcb_ret;
+}
+
+xcb_void_cookie_t
+xcb_recolor_cursor_checked(xcb_connection_t *c,
+                           xcb_cursor_t      cursor,
                            uint16_t          fore_red,
                            uint16_t          fore_green,
                            uint16_t          fore_blue,
                            uint16_t          back_red,
                            uint16_t          back_green,
-                           uint16_t          back_blue,
-                           uint16_t          x,
-                           uint16_t          y)
+                           uint16_t          back_blue)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CREATE_CURSOR,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_RECOLOR_CURSOR,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_create_cursor_request_t xcb_out;
+    struct iovec                 xcb_parts[4];
+    xcb_void_cookie_t            xcb_ret;
+    xcb_recolor_cursor_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.cid = cid;
-    xcb_out.source = source;
-    xcb_out.mask = mask;
-    xcb_out.fore_red = fore_red;
+    xcb_out.pad0       = 0;
+    xcb_out.cursor     = cursor;
+    xcb_out.fore_red   = fore_red;
     xcb_out.fore_green = fore_green;
-    xcb_out.fore_blue = fore_blue;
-    xcb_out.back_red = back_red;
+    xcb_out.fore_blue  = fore_blue;
+    xcb_out.back_red   = back_red;
     xcb_out.back_green = back_green;
-    xcb_out.back_blue = back_blue;
-    xcb_out.x = x;
-    xcb_out.y = y;
+    xcb_out.back_blue  = back_blue;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_create_cursor (xcb_connection_t *c,
-                   xcb_cursor_t      cid,
-                   xcb_pixmap_t      source,
-                   xcb_pixmap_t      mask,
+xcb_recolor_cursor(xcb_connection_t *c,
+                   xcb_cursor_t      cursor,
                    uint16_t          fore_red,
                    uint16_t          fore_green,
                    uint16_t          fore_blue,
                    uint16_t          back_red,
                    uint16_t          back_green,
-                   uint16_t          back_blue,
-                   uint16_t          x,
-                   uint16_t          y)
+                   uint16_t          back_blue)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CREATE_CURSOR,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_RECOLOR_CURSOR,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_create_cursor_request_t xcb_out;
-
-    xcb_out.pad0 = 0;
-    xcb_out.cid = cid;
-    xcb_out.source = source;
-    xcb_out.mask = mask;
-    xcb_out.fore_red = fore_red;
-    xcb_out.fore_green = fore_green;
-    xcb_out.fore_blue = fore_blue;
-    xcb_out.back_red = back_red;
-    xcb_out.back_green = back_green;
-    xcb_out.back_blue = back_blue;
-    xcb_out.x = x;
-    xcb_out.y = y;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_create_glyph_cursor_checked (xcb_connection_t *c,
-                                 xcb_cursor_t      cid,
-                                 xcb_font_t        source_font,
-                                 xcb_font_t        mask_font,
-                                 uint16_t          source_char,
-                                 uint16_t          mask_char,
-                                 uint16_t          fore_red,
-                                 uint16_t          fore_green,
-                                 uint16_t          fore_blue,
-                                 uint16_t          back_red,
-                                 uint16_t          back_green,
-                                 uint16_t          back_blue)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CREATE_GLYPH_CURSOR,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_create_glyph_cursor_request_t xcb_out;
-
-    xcb_out.pad0 = 0;
-    xcb_out.cid = cid;
-    xcb_out.source_font = source_font;
-    xcb_out.mask_font = mask_font;
-    xcb_out.source_char = source_char;
-    xcb_out.mask_char = mask_char;
-    xcb_out.fore_red = fore_red;
-    xcb_out.fore_green = fore_green;
-    xcb_out.fore_blue = fore_blue;
-    xcb_out.back_red = back_red;
-    xcb_out.back_green = back_green;
-    xcb_out.back_blue = back_blue;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_create_glyph_cursor (xcb_connection_t *c,
-                         xcb_cursor_t      cid,
-                         xcb_font_t        source_font,
-                         xcb_font_t        mask_font,
-                         uint16_t          source_char,
-                         uint16_t          mask_char,
-                         uint16_t          fore_red,
-                         uint16_t          fore_green,
-                         uint16_t          fore_blue,
-                         uint16_t          back_red,
-                         uint16_t          back_green,
-                         uint16_t          back_blue)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_CREATE_GLYPH_CURSOR,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_create_glyph_cursor_request_t xcb_out;
-
-    xcb_out.pad0 = 0;
-    xcb_out.cid = cid;
-    xcb_out.source_font = source_font;
-    xcb_out.mask_font = mask_font;
-    xcb_out.source_char = source_char;
-    xcb_out.mask_char = mask_char;
-    xcb_out.fore_red = fore_red;
-    xcb_out.fore_green = fore_green;
-    xcb_out.fore_blue = fore_blue;
-    xcb_out.back_red = back_red;
-    xcb_out.back_green = back_green;
-    xcb_out.back_blue = back_blue;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_free_cursor_checked (xcb_connection_t *c,
-                         xcb_cursor_t      cursor)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_FREE_CURSOR,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_free_cursor_request_t xcb_out;
-
-    xcb_out.pad0 = 0;
-    xcb_out.cursor = cursor;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_free_cursor (xcb_connection_t *c,
-                 xcb_cursor_t      cursor)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_FREE_CURSOR,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_free_cursor_request_t xcb_out;
-
-    xcb_out.pad0 = 0;
-    xcb_out.cursor = cursor;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_recolor_cursor_checked (xcb_connection_t *c,
-                            xcb_cursor_t      cursor,
-                            uint16_t          fore_red,
-                            uint16_t          fore_green,
-                            uint16_t          fore_blue,
-                            uint16_t          back_red,
-                            uint16_t          back_green,
-                            uint16_t          back_blue)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_RECOLOR_CURSOR,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                 xcb_parts[4];
+    xcb_void_cookie_t            xcb_ret;
     xcb_recolor_cursor_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.cursor = cursor;
-    xcb_out.fore_red = fore_red;
+    xcb_out.pad0       = 0;
+    xcb_out.cursor     = cursor;
+    xcb_out.fore_red   = fore_red;
     xcb_out.fore_green = fore_green;
-    xcb_out.fore_blue = fore_blue;
-    xcb_out.back_red = back_red;
+    xcb_out.fore_blue  = fore_blue;
+    xcb_out.back_red   = back_red;
     xcb_out.back_green = back_green;
-    xcb_out.back_blue = back_blue;
+    xcb_out.back_blue  = back_blue;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
-
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
-    return xcb_ret;
-}
-
-xcb_void_cookie_t
-xcb_recolor_cursor (xcb_connection_t *c,
-                    xcb_cursor_t      cursor,
-                    uint16_t          fore_red,
-                    uint16_t          fore_green,
-                    uint16_t          fore_blue,
-                    uint16_t          back_red,
-                    uint16_t          back_green,
-                    uint16_t          back_blue)
-{
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_RECOLOR_CURSOR,
-        .isvoid = 1
-    };
-
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
-    xcb_recolor_cursor_request_t xcb_out;
-
-    xcb_out.pad0 = 0;
-    xcb_out.cursor = cursor;
-    xcb_out.fore_red = fore_red;
-    xcb_out.fore_green = fore_green;
-    xcb_out.fore_blue = fore_blue;
-    xcb_out.back_red = back_red;
-    xcb_out.back_green = back_green;
-    xcb_out.back_blue = back_blue;
-
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
-    xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_query_best_size_cookie_t
-xcb_query_best_size (xcb_connection_t *c,
-                     uint8_t           _class,
-                     xcb_drawable_t    drawable,
-                     uint16_t          width,
-                     uint16_t          height)
+xcb_query_best_size(xcb_connection_t *c,
+                    uint8_t           _class,
+                    xcb_drawable_t    drawable,
+                    uint16_t          width,
+                    uint16_t          height)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_QUERY_BEST_SIZE,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_QUERY_BEST_SIZE,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_query_best_size_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[4];
+    xcb_query_best_size_cookie_t  xcb_ret;
     xcb_query_best_size_request_t xcb_out;
 
-    xcb_out._class = _class;
+    xcb_out._class   = _class;
     xcb_out.drawable = drawable;
-    xcb_out.width = width;
-    xcb_out.height = height;
+    xcb_out.width    = width;
+    xcb_out.height   = height;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_query_best_size_cookie_t
-xcb_query_best_size_unchecked (xcb_connection_t *c,
-                               uint8_t           _class,
-                               xcb_drawable_t    drawable,
-                               uint16_t          width,
-                               uint16_t          height)
+xcb_query_best_size_unchecked(xcb_connection_t *c,
+                              uint8_t           _class,
+                              xcb_drawable_t    drawable,
+                              uint16_t          width,
+                              uint16_t          height)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_QUERY_BEST_SIZE,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_QUERY_BEST_SIZE,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_query_best_size_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[4];
+    xcb_query_best_size_cookie_t  xcb_ret;
     xcb_query_best_size_request_t xcb_out;
 
-    xcb_out._class = _class;
+    xcb_out._class   = _class;
     xcb_out.drawable = drawable;
-    xcb_out.width = width;
-    xcb_out.height = height;
+    xcb_out.width    = width;
+    xcb_out.height   = height;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_query_best_size_reply_t *
-xcb_query_best_size_reply (xcb_connection_t              *c,
-                           xcb_query_best_size_cookie_t   cookie  /**< */,
-                           xcb_generic_error_t          **e)
+xcb_query_best_size_reply(xcb_connection_t            *c,
+                          xcb_query_best_size_cookie_t cookie /**< */,
+                          xcb_generic_error_t        **e)
 {
-    return (xcb_query_best_size_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (
+        xcb_query_best_size_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_query_extension_sizeof (const void  *_buffer)
+xcb_query_extension_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_query_extension_request_t *_aux = (xcb_query_extension_request_t *)_buffer;
+    char                                *xcb_tmp = (char *)_buffer;
+    const xcb_query_extension_request_t *_aux =
+        (xcb_query_extension_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_query_extension_request_t);
     xcb_tmp += xcb_block_len;
@@ -12233,9 +12294,10 @@ xcb_query_extension_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -12245,90 +12307,89 @@ xcb_query_extension_sizeof (const void  *_buffer)
 }
 
 xcb_query_extension_cookie_t
-xcb_query_extension (xcb_connection_t *c,
-                     uint16_t          name_len,
-                     const char       *name)
+xcb_query_extension(xcb_connection_t *c, uint16_t name_len, const char *name)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_QUERY_EXTENSION,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_QUERY_EXTENSION,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[6];
-    xcb_query_extension_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[6];
+    xcb_query_extension_cookie_t  xcb_ret;
     xcb_query_extension_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.name_len = name_len;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char name */
-    xcb_parts[4].iov_base = (char *) name;
-    xcb_parts[4].iov_len = name_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)name;
+    xcb_parts[4].iov_len  = name_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_query_extension_cookie_t
-xcb_query_extension_unchecked (xcb_connection_t *c,
-                               uint16_t          name_len,
-                               const char       *name)
+xcb_query_extension_unchecked(xcb_connection_t *c,
+                              uint16_t          name_len,
+                              const char       *name)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_QUERY_EXTENSION,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_QUERY_EXTENSION,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[6];
-    xcb_query_extension_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[6];
+    xcb_query_extension_cookie_t  xcb_ret;
     xcb_query_extension_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.name_len = name_len;
     memset(xcb_out.pad1, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* char name */
-    xcb_parts[4].iov_base = (char *) name;
-    xcb_parts[4].iov_len = name_len * sizeof(char);
+    xcb_parts[4].iov_base = (char *)name;
+    xcb_parts[4].iov_len  = name_len * sizeof(char);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_query_extension_reply_t *
-xcb_query_extension_reply (xcb_connection_t              *c,
-                           xcb_query_extension_cookie_t   cookie  /**< */,
-                           xcb_generic_error_t          **e)
+xcb_query_extension_reply(xcb_connection_t            *c,
+                          xcb_query_extension_cookie_t cookie /**< */,
+                          xcb_generic_error_t        **e)
 {
-    return (xcb_query_extension_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (
+        xcb_query_extension_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_list_extensions_sizeof (const void  *_buffer)
+xcb_list_extensions_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_list_extensions_reply_t *_aux = (xcb_list_extensions_reply_t *)_buffer;
+    char                              *xcb_tmp = (char *)_buffer;
+    const xcb_list_extensions_reply_t *_aux =
+        (xcb_list_extensions_reply_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     unsigned int i;
     unsigned int xcb_tmp_len;
@@ -12338,16 +12399,18 @@ xcb_list_extensions_sizeof (const void  *_buffer)
     xcb_buffer_len += xcb_block_len;
     xcb_block_len = 0;
     /* names */
-    for(i=0; i<_aux->names_len; i++) {
+    for (i = 0; i < _aux->names_len; i++)
+    {
         xcb_tmp_len = xcb_str_sizeof(xcb_tmp);
         xcb_block_len += xcb_tmp_len;
         xcb_tmp += xcb_tmp_len;
     }
     xcb_align_to = ALIGNOF(xcb_str_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -12357,102 +12420,104 @@ xcb_list_extensions_sizeof (const void  *_buffer)
 }
 
 xcb_list_extensions_cookie_t
-xcb_list_extensions (xcb_connection_t *c)
+xcb_list_extensions(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_LIST_EXTENSIONS,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_LIST_EXTENSIONS,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_list_extensions_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[4];
+    xcb_list_extensions_cookie_t  xcb_ret;
     xcb_list_extensions_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_list_extensions_cookie_t
-xcb_list_extensions_unchecked (xcb_connection_t *c)
+xcb_list_extensions_unchecked(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_LIST_EXTENSIONS,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_LIST_EXTENSIONS,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_list_extensions_cookie_t xcb_ret;
+    struct iovec                  xcb_parts[4];
+    xcb_list_extensions_cookie_t  xcb_ret;
     xcb_list_extensions_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 int
-xcb_list_extensions_names_length (const xcb_list_extensions_reply_t *R)
+xcb_list_extensions_names_length(const xcb_list_extensions_reply_t *R)
 {
     return R->names_len;
 }
 
 xcb_str_iterator_t
-xcb_list_extensions_names_iterator (const xcb_list_extensions_reply_t *R)
+xcb_list_extensions_names_iterator(const xcb_list_extensions_reply_t *R)
 {
     xcb_str_iterator_t i;
-    i.data = (xcb_str_t *) (R + 1);
-    i.rem = R->names_len;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_str_t *)(R + 1);
+    i.rem   = R->names_len;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_list_extensions_reply_t *
-xcb_list_extensions_reply (xcb_connection_t              *c,
-                           xcb_list_extensions_cookie_t   cookie  /**< */,
-                           xcb_generic_error_t          **e)
+xcb_list_extensions_reply(xcb_connection_t            *c,
+                          xcb_list_extensions_cookie_t cookie /**< */,
+                          xcb_generic_error_t        **e)
 {
-    return (xcb_list_extensions_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (
+        xcb_list_extensions_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_change_keyboard_mapping_sizeof (const void  *_buffer)
+xcb_change_keyboard_mapping_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_change_keyboard_mapping_request_t *_aux = (xcb_change_keyboard_mapping_request_t *)_buffer;
+    char                                        *xcb_tmp = (char *)_buffer;
+    const xcb_change_keyboard_mapping_request_t *_aux =
+        (xcb_change_keyboard_mapping_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_change_keyboard_mapping_request_t);
     xcb_tmp += xcb_block_len;
     xcb_buffer_len += xcb_block_len;
     xcb_block_len = 0;
     /* keysyms */
-    xcb_block_len += (_aux->keycode_count * _aux->keysyms_per_keycode) * sizeof(xcb_keysym_t);
+    xcb_block_len += (_aux->keycode_count * _aux->keysyms_per_keycode) *
+                     sizeof(xcb_keysym_t);
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_keysym_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -12462,111 +12527,118 @@ xcb_change_keyboard_mapping_sizeof (const void  *_buffer)
 }
 
 xcb_void_cookie_t
-xcb_change_keyboard_mapping_checked (xcb_connection_t   *c,
-                                     uint8_t             keycode_count,
-                                     xcb_keycode_t       first_keycode,
-                                     uint8_t             keysyms_per_keycode,
-                                     const xcb_keysym_t *keysyms)
+xcb_change_keyboard_mapping_checked(xcb_connection_t   *c,
+                                    uint8_t             keycode_count,
+                                    xcb_keycode_t       first_keycode,
+                                    uint8_t             keysyms_per_keycode,
+                                    const xcb_keysym_t *keysyms)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
+        .count  = 4,
+        .ext    = 0,
         .opcode = XCB_CHANGE_KEYBOARD_MAPPING,
         .isvoid = 1
     };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                          xcb_parts[6];
+    xcb_void_cookie_t                     xcb_ret;
     xcb_change_keyboard_mapping_request_t xcb_out;
 
-    xcb_out.keycode_count = keycode_count;
-    xcb_out.first_keycode = first_keycode;
+    xcb_out.keycode_count       = keycode_count;
+    xcb_out.first_keycode       = first_keycode;
     xcb_out.keysyms_per_keycode = keysyms_per_keycode;
     memset(xcb_out.pad0, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_keysym_t keysyms */
-    xcb_parts[4].iov_base = (char *) keysyms;
-    xcb_parts[4].iov_len = (keycode_count * keysyms_per_keycode) * sizeof(xcb_keysym_t);
+    xcb_parts[4].iov_base = (char *)keysyms;
+    xcb_parts[4].iov_len =
+        (keycode_count * keysyms_per_keycode) * sizeof(xcb_keysym_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_change_keyboard_mapping (xcb_connection_t   *c,
-                             uint8_t             keycode_count,
-                             xcb_keycode_t       first_keycode,
-                             uint8_t             keysyms_per_keycode,
-                             const xcb_keysym_t *keysyms)
+xcb_change_keyboard_mapping(xcb_connection_t   *c,
+                            uint8_t             keycode_count,
+                            xcb_keycode_t       first_keycode,
+                            uint8_t             keysyms_per_keycode,
+                            const xcb_keysym_t *keysyms)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
+        .count  = 4,
+        .ext    = 0,
         .opcode = XCB_CHANGE_KEYBOARD_MAPPING,
         .isvoid = 1
     };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                          xcb_parts[6];
+    xcb_void_cookie_t                     xcb_ret;
     xcb_change_keyboard_mapping_request_t xcb_out;
 
-    xcb_out.keycode_count = keycode_count;
-    xcb_out.first_keycode = first_keycode;
+    xcb_out.keycode_count       = keycode_count;
+    xcb_out.first_keycode       = first_keycode;
     xcb_out.keysyms_per_keycode = keysyms_per_keycode;
     memset(xcb_out.pad0, 0, 2);
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_keysym_t keysyms */
-    xcb_parts[4].iov_base = (char *) keysyms;
-    xcb_parts[4].iov_len = (keycode_count * keysyms_per_keycode) * sizeof(xcb_keysym_t);
+    xcb_parts[4].iov_base = (char *)keysyms;
+    xcb_parts[4].iov_len =
+        (keycode_count * keysyms_per_keycode) * sizeof(xcb_keysym_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_keysym_t *
-xcb_change_keyboard_mapping_keysyms (const xcb_change_keyboard_mapping_request_t *R)
+xcb_change_keyboard_mapping_keysyms(
+    const xcb_change_keyboard_mapping_request_t *R)
 {
-    return (xcb_keysym_t *) (R + 1);
+    return (xcb_keysym_t *)(R + 1);
 }
 
 int
-xcb_change_keyboard_mapping_keysyms_length (const xcb_change_keyboard_mapping_request_t *R)
+xcb_change_keyboard_mapping_keysyms_length(
+    const xcb_change_keyboard_mapping_request_t *R)
 {
     return (R->keycode_count * R->keysyms_per_keycode);
 }
 
 xcb_generic_iterator_t
-xcb_change_keyboard_mapping_keysyms_end (const xcb_change_keyboard_mapping_request_t *R)
+xcb_change_keyboard_mapping_keysyms_end(
+    const xcb_change_keyboard_mapping_request_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((xcb_keysym_t *) (R + 1)) + ((R->keycode_count * R->keysyms_per_keycode));
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data = ((xcb_keysym_t *)(R + 1)) +
+             ((R->keycode_count * R->keysyms_per_keycode));
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 int
-xcb_get_keyboard_mapping_sizeof (const void  *_buffer)
+xcb_get_keyboard_mapping_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_get_keyboard_mapping_reply_t *_aux = (xcb_get_keyboard_mapping_reply_t *)_buffer;
+    char                                   *xcb_tmp = (char *)_buffer;
+    const xcb_get_keyboard_mapping_reply_t *_aux =
+        (xcb_get_keyboard_mapping_reply_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_get_keyboard_mapping_reply_t);
     xcb_tmp += xcb_block_len;
@@ -12577,9 +12649,10 @@ xcb_get_keyboard_mapping_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_keysym_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -12589,170 +12662,182 @@ xcb_get_keyboard_mapping_sizeof (const void  *_buffer)
 }
 
 xcb_get_keyboard_mapping_cookie_t
-xcb_get_keyboard_mapping (xcb_connection_t *c,
-                          xcb_keycode_t     first_keycode,
-                          uint8_t           count)
+xcb_get_keyboard_mapping(xcb_connection_t *c,
+                         xcb_keycode_t     first_keycode,
+                         uint8_t           count)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
+        .count  = 2,
+        .ext    = 0,
         .opcode = XCB_GET_KEYBOARD_MAPPING,
         .isvoid = 0
     };
 
-    struct iovec xcb_parts[4];
-    xcb_get_keyboard_mapping_cookie_t xcb_ret;
+    struct iovec                       xcb_parts[4];
+    xcb_get_keyboard_mapping_cookie_t  xcb_ret;
     xcb_get_keyboard_mapping_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0          = 0;
     xcb_out.first_keycode = first_keycode;
-    xcb_out.count = count;
+    xcb_out.count         = count;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_keyboard_mapping_cookie_t
-xcb_get_keyboard_mapping_unchecked (xcb_connection_t *c,
-                                    xcb_keycode_t     first_keycode,
-                                    uint8_t           count)
+xcb_get_keyboard_mapping_unchecked(xcb_connection_t *c,
+                                   xcb_keycode_t     first_keycode,
+                                   uint8_t           count)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
+        .count  = 2,
+        .ext    = 0,
         .opcode = XCB_GET_KEYBOARD_MAPPING,
         .isvoid = 0
     };
 
-    struct iovec xcb_parts[4];
-    xcb_get_keyboard_mapping_cookie_t xcb_ret;
+    struct iovec                       xcb_parts[4];
+    xcb_get_keyboard_mapping_cookie_t  xcb_ret;
     xcb_get_keyboard_mapping_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0          = 0;
     xcb_out.first_keycode = first_keycode;
-    xcb_out.count = count;
+    xcb_out.count         = count;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_keysym_t *
-xcb_get_keyboard_mapping_keysyms (const xcb_get_keyboard_mapping_reply_t *R)
+xcb_get_keyboard_mapping_keysyms(const xcb_get_keyboard_mapping_reply_t *R)
 {
-    return (xcb_keysym_t *) (R + 1);
+    return (xcb_keysym_t *)(R + 1);
 }
 
 int
-xcb_get_keyboard_mapping_keysyms_length (const xcb_get_keyboard_mapping_reply_t *R)
+xcb_get_keyboard_mapping_keysyms_length(
+    const xcb_get_keyboard_mapping_reply_t *R)
 {
     return R->length;
 }
 
 xcb_generic_iterator_t
-xcb_get_keyboard_mapping_keysyms_end (const xcb_get_keyboard_mapping_reply_t *R)
+xcb_get_keyboard_mapping_keysyms_end(const xcb_get_keyboard_mapping_reply_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((xcb_keysym_t *) (R + 1)) + (R->length);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((xcb_keysym_t *)(R + 1)) + (R->length);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_get_keyboard_mapping_reply_t *
-xcb_get_keyboard_mapping_reply (xcb_connection_t                   *c,
-                                xcb_get_keyboard_mapping_cookie_t   cookie  /**< */,
-                                xcb_generic_error_t               **e)
+xcb_get_keyboard_mapping_reply(xcb_connection_t                 *c,
+                               xcb_get_keyboard_mapping_cookie_t cookie /**< */,
+                               xcb_generic_error_t             **e)
 {
-    return (xcb_get_keyboard_mapping_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_get_keyboard_mapping_reply_t *)
+        xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_change_keyboard_control_value_list_serialize (void                                           **_buffer,
-                                                  uint32_t                                         value_mask,
-                                                  const xcb_change_keyboard_control_value_list_t  *_aux)
+xcb_change_keyboard_control_value_list_serialize(
+    void                                          **_buffer,
+    uint32_t                                        value_mask,
+    const xcb_change_keyboard_control_value_list_t *_aux)
 {
-    char *xcb_out = *_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_align_to = 0;
+    char        *xcb_out            = *_buffer;
+    unsigned int xcb_buffer_len     = 0;
+    unsigned int xcb_align_to       = 0;
     unsigned int xcb_padding_offset = 0;
 
-    unsigned int xcb_pad = 0;
-    char xcb_pad0[3] = {0, 0, 0};
+    unsigned int xcb_pad     = 0;
+    char         xcb_pad0[3] = { 0, 0, 0 };
     struct iovec xcb_parts[9];
     unsigned int xcb_parts_idx = 0;
     unsigned int xcb_block_len = 0;
     unsigned int i;
-    char *xcb_tmp;
+    char        *xcb_tmp;
 
-    if(value_mask & XCB_KB_KEY_CLICK_PERCENT) {
+    if (value_mask & XCB_KB_KEY_CLICK_PERCENT)
+    {
         /* xcb_change_keyboard_control_value_list_t.key_click_percent */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->key_click_percent;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->key_click_percent;
         xcb_block_len += sizeof(int32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(int32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_KB_BELL_PERCENT) {
+    if (value_mask & XCB_KB_BELL_PERCENT)
+    {
         /* xcb_change_keyboard_control_value_list_t.bell_percent */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->bell_percent;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->bell_percent;
         xcb_block_len += sizeof(int32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(int32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_KB_BELL_PITCH) {
+    if (value_mask & XCB_KB_BELL_PITCH)
+    {
         /* xcb_change_keyboard_control_value_list_t.bell_pitch */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->bell_pitch;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->bell_pitch;
         xcb_block_len += sizeof(int32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(int32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_KB_BELL_DURATION) {
+    if (value_mask & XCB_KB_BELL_DURATION)
+    {
         /* xcb_change_keyboard_control_value_list_t.bell_duration */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->bell_duration;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->bell_duration;
         xcb_block_len += sizeof(int32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(int32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_KB_LED) {
+    if (value_mask & XCB_KB_LED)
+    {
         /* xcb_change_keyboard_control_value_list_t.led */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->led;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->led;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_KB_LED_MODE) {
+    if (value_mask & XCB_KB_LED_MODE)
+    {
         /* xcb_change_keyboard_control_value_list_t.led_mode */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->led_mode;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->led_mode;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_KB_KEY) {
+    if (value_mask & XCB_KB_KEY)
+    {
         /* xcb_change_keyboard_control_value_list_t.key */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->key;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->key;
         xcb_block_len += sizeof(xcb_keycode32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(xcb_keycode32_t);
         xcb_parts_idx++;
         xcb_align_to = ALIGNOF(xcb_keycode32_t);
     }
-    if(value_mask & XCB_KB_AUTO_REPEAT_MODE) {
+    if (value_mask & XCB_KB_AUTO_REPEAT_MODE)
+    {
         /* xcb_change_keyboard_control_value_list_t.auto_repeat_mode */
-        xcb_parts[xcb_parts_idx].iov_base = (char *) &_aux->auto_repeat_mode;
+        xcb_parts[xcb_parts_idx].iov_base = (char *)&_aux->auto_repeat_mode;
         xcb_block_len += sizeof(uint32_t);
         xcb_parts[xcb_parts_idx].iov_len = sizeof(uint32_t);
         xcb_parts_idx++;
@@ -12761,95 +12846,105 @@ xcb_change_keyboard_control_value_list_serialize (void                          
     /* insert padding */
     xcb_pad = -(xcb_block_len + xcb_padding_offset) & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_parts[xcb_parts_idx].iov_base = xcb_pad0;
-        xcb_parts[xcb_parts_idx].iov_len = xcb_pad;
+        xcb_parts[xcb_parts_idx].iov_len  = xcb_pad;
         xcb_parts_idx++;
         xcb_pad = 0;
     }
-    xcb_block_len = 0;
+    xcb_block_len      = 0;
     xcb_padding_offset = 0;
 
-    if (NULL == xcb_out) {
+    if (NULL == xcb_out)
+    {
         /* allocate memory */
-        xcb_out = malloc(xcb_buffer_len);
+        xcb_out  = malloc(xcb_buffer_len);
         *_buffer = xcb_out;
     }
 
     xcb_tmp = xcb_out;
-    for(i=0; i<xcb_parts_idx; i++) {
+    for (i = 0; i < xcb_parts_idx; i++)
+    {
         if (0 != xcb_parts[i].iov_base && 0 != xcb_parts[i].iov_len)
             memcpy(xcb_tmp, xcb_parts[i].iov_base, xcb_parts[i].iov_len);
-        if (0 != xcb_parts[i].iov_len)
-            xcb_tmp += xcb_parts[i].iov_len;
+        if (0 != xcb_parts[i].iov_len) xcb_tmp += xcb_parts[i].iov_len;
     }
 
     return xcb_buffer_len;
 }
 
 int
-xcb_change_keyboard_control_value_list_unpack (const void                                *_buffer,
-                                               uint32_t                                   value_mask,
-                                               xcb_change_keyboard_control_value_list_t  *_aux)
+xcb_change_keyboard_control_value_list_unpack(
+    const void                               *_buffer,
+    uint32_t                                  value_mask,
+    xcb_change_keyboard_control_value_list_t *_aux)
 {
-    char *xcb_tmp = (char *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
+    char        *xcb_tmp            = (char *)_buffer;
+    unsigned int xcb_buffer_len     = 0;
+    unsigned int xcb_block_len      = 0;
+    unsigned int xcb_pad            = 0;
+    unsigned int xcb_align_to       = 0;
     unsigned int xcb_padding_offset = 0;
 
-
-    if(value_mask & XCB_KB_KEY_CLICK_PERCENT) {
+    if (value_mask & XCB_KB_KEY_CLICK_PERCENT)
+    {
         /* xcb_change_keyboard_control_value_list_t.key_click_percent */
         _aux->key_click_percent = *(int32_t *)xcb_tmp;
         xcb_block_len += sizeof(int32_t);
         xcb_tmp += sizeof(int32_t);
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_KB_BELL_PERCENT) {
+    if (value_mask & XCB_KB_BELL_PERCENT)
+    {
         /* xcb_change_keyboard_control_value_list_t.bell_percent */
         _aux->bell_percent = *(int32_t *)xcb_tmp;
         xcb_block_len += sizeof(int32_t);
         xcb_tmp += sizeof(int32_t);
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_KB_BELL_PITCH) {
+    if (value_mask & XCB_KB_BELL_PITCH)
+    {
         /* xcb_change_keyboard_control_value_list_t.bell_pitch */
         _aux->bell_pitch = *(int32_t *)xcb_tmp;
         xcb_block_len += sizeof(int32_t);
         xcb_tmp += sizeof(int32_t);
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_KB_BELL_DURATION) {
+    if (value_mask & XCB_KB_BELL_DURATION)
+    {
         /* xcb_change_keyboard_control_value_list_t.bell_duration */
         _aux->bell_duration = *(int32_t *)xcb_tmp;
         xcb_block_len += sizeof(int32_t);
         xcb_tmp += sizeof(int32_t);
         xcb_align_to = ALIGNOF(int32_t);
     }
-    if(value_mask & XCB_KB_LED) {
+    if (value_mask & XCB_KB_LED)
+    {
         /* xcb_change_keyboard_control_value_list_t.led */
         _aux->led = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_KB_LED_MODE) {
+    if (value_mask & XCB_KB_LED_MODE)
+    {
         /* xcb_change_keyboard_control_value_list_t.led_mode */
         _aux->led_mode = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
         xcb_tmp += sizeof(uint32_t);
         xcb_align_to = ALIGNOF(uint32_t);
     }
-    if(value_mask & XCB_KB_KEY) {
+    if (value_mask & XCB_KB_KEY)
+    {
         /* xcb_change_keyboard_control_value_list_t.key */
         _aux->key = *(xcb_keycode32_t *)xcb_tmp;
         xcb_block_len += sizeof(xcb_keycode32_t);
         xcb_tmp += sizeof(xcb_keycode32_t);
         xcb_align_to = ALIGNOF(xcb_keycode32_t);
     }
-    if(value_mask & XCB_KB_AUTO_REPEAT_MODE) {
+    if (value_mask & XCB_KB_AUTO_REPEAT_MODE)
+    {
         /* xcb_change_keyboard_control_value_list_t.auto_repeat_mode */
         _aux->auto_repeat_mode = *(uint32_t *)xcb_tmp;
         xcb_block_len += sizeof(uint32_t);
@@ -12859,47 +12954,53 @@ xcb_change_keyboard_control_value_list_unpack (const void                       
     /* insert padding */
     xcb_pad = -(xcb_block_len + xcb_padding_offset) & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
-    xcb_block_len = 0;
+    xcb_block_len      = 0;
     xcb_padding_offset = 0;
 
     return xcb_buffer_len;
 }
 
 int
-xcb_change_keyboard_control_value_list_sizeof (const void  *_buffer,
-                                               uint32_t     value_mask)
+xcb_change_keyboard_control_value_list_sizeof(const void *_buffer,
+                                              uint32_t    value_mask)
 {
     xcb_change_keyboard_control_value_list_t _aux;
-    return xcb_change_keyboard_control_value_list_unpack(_buffer, value_mask, &_aux);
+    return xcb_change_keyboard_control_value_list_unpack(_buffer,
+                                                         value_mask,
+                                                         &_aux);
 }
 
 int
-xcb_change_keyboard_control_sizeof (const void  *_buffer)
+xcb_change_keyboard_control_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_change_keyboard_control_request_t *_aux = (xcb_change_keyboard_control_request_t *)_buffer;
+    char                                        *xcb_tmp = (char *)_buffer;
+    const xcb_change_keyboard_control_request_t *_aux =
+        (xcb_change_keyboard_control_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_change_keyboard_control_request_t);
     xcb_tmp += xcb_block_len;
     xcb_buffer_len += xcb_block_len;
     xcb_block_len = 0;
     /* value_list */
-    xcb_block_len += xcb_change_keyboard_control_value_list_sizeof(xcb_tmp, _aux->value_mask);
+    xcb_block_len +=
+        xcb_change_keyboard_control_value_list_sizeof(xcb_tmp,
+                                                      _aux->value_mask);
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(char);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -12909,130 +13010,138 @@ xcb_change_keyboard_control_sizeof (const void  *_buffer)
 }
 
 xcb_void_cookie_t
-xcb_change_keyboard_control_checked (xcb_connection_t *c,
-                                     uint32_t          value_mask,
-                                     const void       *value_list)
+xcb_change_keyboard_control_checked(xcb_connection_t *c,
+                                    uint32_t          value_mask,
+                                    const void       *value_list)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
+        .count  = 3,
+        .ext    = 0,
         .opcode = XCB_CHANGE_KEYBOARD_CONTROL,
         .isvoid = 1
     };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                          xcb_parts[5];
+    xcb_void_cookie_t                     xcb_ret;
     xcb_change_keyboard_control_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0       = 0;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_change_keyboard_control_value_list_t value_list */
-    xcb_parts[4].iov_base = (char *) value_list;
+    xcb_parts[4].iov_base = (char *)value_list;
     xcb_parts[4].iov_len =
-      xcb_change_keyboard_control_value_list_sizeof (value_list, value_mask);
+        xcb_change_keyboard_control_value_list_sizeof(value_list, value_mask);
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_change_keyboard_control (xcb_connection_t *c,
-                             uint32_t          value_mask,
-                             const void       *value_list)
+xcb_change_keyboard_control(xcb_connection_t *c,
+                            uint32_t          value_mask,
+                            const void       *value_list)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
+        .count  = 3,
+        .ext    = 0,
         .opcode = XCB_CHANGE_KEYBOARD_CONTROL,
         .isvoid = 1
     };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                          xcb_parts[5];
+    xcb_void_cookie_t                     xcb_ret;
     xcb_change_keyboard_control_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0       = 0;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_change_keyboard_control_value_list_t value_list */
-    xcb_parts[4].iov_base = (char *) value_list;
+    xcb_parts[4].iov_base = (char *)value_list;
     xcb_parts[4].iov_len =
-      xcb_change_keyboard_control_value_list_sizeof (value_list, value_mask);
+        xcb_change_keyboard_control_value_list_sizeof(value_list, value_mask);
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_change_keyboard_control_aux_checked (xcb_connection_t                               *c,
-                                         uint32_t                                        value_mask,
-                                         const xcb_change_keyboard_control_value_list_t *value_list)
+xcb_change_keyboard_control_aux_checked(
+    xcb_connection_t                               *c,
+    uint32_t                                        value_mask,
+    const xcb_change_keyboard_control_value_list_t *value_list)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
+        .count  = 3,
+        .ext    = 0,
         .opcode = XCB_CHANGE_KEYBOARD_CONTROL,
         .isvoid = 1
     };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                          xcb_parts[5];
+    xcb_void_cookie_t                     xcb_ret;
     xcb_change_keyboard_control_request_t xcb_out;
-    void *xcb_aux0 = 0;
+    void                                 *xcb_aux0 = 0;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0       = 0;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_change_keyboard_control_value_list_t value_list */
     xcb_parts[4].iov_len =
-      xcb_change_keyboard_control_value_list_serialize (&xcb_aux0, value_mask, value_list);
+        xcb_change_keyboard_control_value_list_serialize(&xcb_aux0,
+                                                         value_mask,
+                                                         value_list);
     xcb_parts[4].iov_base = xcb_aux0;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     free(xcb_aux0);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_change_keyboard_control_aux (xcb_connection_t                               *c,
-                                 uint32_t                                        value_mask,
-                                 const xcb_change_keyboard_control_value_list_t *value_list)
+xcb_change_keyboard_control_aux(
+    xcb_connection_t                               *c,
+    uint32_t                                        value_mask,
+    const xcb_change_keyboard_control_value_list_t *value_list)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 3,
-        .ext = 0,
+        .count  = 3,
+        .ext    = 0,
         .opcode = XCB_CHANGE_KEYBOARD_CONTROL,
         .isvoid = 1
     };
 
-    struct iovec xcb_parts[5];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                          xcb_parts[5];
+    xcb_void_cookie_t                     xcb_ret;
     xcb_change_keyboard_control_request_t xcb_out;
-    void *xcb_aux0 = 0;
+    void                                 *xcb_aux0 = 0;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0       = 0;
     xcb_out.value_mask = value_mask;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_change_keyboard_control_value_list_t value_list */
     xcb_parts[4].iov_len =
-      xcb_change_keyboard_control_value_list_serialize (&xcb_aux0, value_mask, value_list);
+        xcb_change_keyboard_control_value_list_serialize(&xcb_aux0,
+                                                         value_mask,
+                                                         value_list);
     xcb_parts[4].iov_base = xcb_aux0;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
@@ -13041,383 +13150,382 @@ xcb_change_keyboard_control_aux (xcb_connection_t                               
 }
 
 void *
-xcb_change_keyboard_control_value_list (const xcb_change_keyboard_control_request_t *R)
+xcb_change_keyboard_control_value_list(
+    const xcb_change_keyboard_control_request_t *R)
 {
-    return (void *) (R + 1);
+    return (void *)(R + 1);
 }
 
 xcb_get_keyboard_control_cookie_t
-xcb_get_keyboard_control (xcb_connection_t *c)
+xcb_get_keyboard_control(xcb_connection_t *c)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
+        .count  = 2,
+        .ext    = 0,
         .opcode = XCB_GET_KEYBOARD_CONTROL,
         .isvoid = 0
     };
 
-    struct iovec xcb_parts[4];
-    xcb_get_keyboard_control_cookie_t xcb_ret;
+    struct iovec                       xcb_parts[4];
+    xcb_get_keyboard_control_cookie_t  xcb_ret;
     xcb_get_keyboard_control_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_keyboard_control_cookie_t
-xcb_get_keyboard_control_unchecked (xcb_connection_t *c)
+xcb_get_keyboard_control_unchecked(xcb_connection_t *c)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
+        .count  = 2,
+        .ext    = 0,
         .opcode = XCB_GET_KEYBOARD_CONTROL,
         .isvoid = 0
     };
 
-    struct iovec xcb_parts[4];
-    xcb_get_keyboard_control_cookie_t xcb_ret;
+    struct iovec                       xcb_parts[4];
+    xcb_get_keyboard_control_cookie_t  xcb_ret;
     xcb_get_keyboard_control_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_keyboard_control_reply_t *
-xcb_get_keyboard_control_reply (xcb_connection_t                   *c,
-                                xcb_get_keyboard_control_cookie_t   cookie  /**< */,
-                                xcb_generic_error_t               **e)
+xcb_get_keyboard_control_reply(xcb_connection_t                 *c,
+                               xcb_get_keyboard_control_cookie_t cookie /**< */,
+                               xcb_generic_error_t             **e)
 {
-    return (xcb_get_keyboard_control_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_get_keyboard_control_reply_t *)
+        xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 xcb_void_cookie_t
-xcb_bell_checked (xcb_connection_t *c,
-                  int8_t            percent)
+xcb_bell_checked(xcb_connection_t *c, int8_t percent)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_BELL,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_BELL,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec       xcb_parts[4];
+    xcb_void_cookie_t  xcb_ret;
     xcb_bell_request_t xcb_out;
 
     xcb_out.percent = percent;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_bell (xcb_connection_t *c,
-          int8_t            percent)
+xcb_bell(xcb_connection_t *c, int8_t percent)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_BELL,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_BELL,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec       xcb_parts[4];
+    xcb_void_cookie_t  xcb_ret;
     xcb_bell_request_t xcb_out;
 
     xcb_out.percent = percent;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_change_pointer_control_checked (xcb_connection_t *c,
-                                    int16_t           acceleration_numerator,
-                                    int16_t           acceleration_denominator,
-                                    int16_t           threshold,
-                                    uint8_t           do_acceleration,
-                                    uint8_t           do_threshold)
+xcb_change_pointer_control_checked(xcb_connection_t *c,
+                                   int16_t           acceleration_numerator,
+                                   int16_t           acceleration_denominator,
+                                   int16_t           threshold,
+                                   uint8_t           do_acceleration,
+                                   uint8_t           do_threshold)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
+        .count  = 2,
+        .ext    = 0,
         .opcode = XCB_CHANGE_POINTER_CONTROL,
         .isvoid = 1
     };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                         xcb_parts[4];
+    xcb_void_cookie_t                    xcb_ret;
     xcb_change_pointer_control_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.acceleration_numerator = acceleration_numerator;
+    xcb_out.pad0                     = 0;
+    xcb_out.acceleration_numerator   = acceleration_numerator;
     xcb_out.acceleration_denominator = acceleration_denominator;
-    xcb_out.threshold = threshold;
-    xcb_out.do_acceleration = do_acceleration;
-    xcb_out.do_threshold = do_threshold;
+    xcb_out.threshold                = threshold;
+    xcb_out.do_acceleration          = do_acceleration;
+    xcb_out.do_threshold             = do_threshold;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_change_pointer_control (xcb_connection_t *c,
-                            int16_t           acceleration_numerator,
-                            int16_t           acceleration_denominator,
-                            int16_t           threshold,
-                            uint8_t           do_acceleration,
-                            uint8_t           do_threshold)
+xcb_change_pointer_control(xcb_connection_t *c,
+                           int16_t           acceleration_numerator,
+                           int16_t           acceleration_denominator,
+                           int16_t           threshold,
+                           uint8_t           do_acceleration,
+                           uint8_t           do_threshold)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
+        .count  = 2,
+        .ext    = 0,
         .opcode = XCB_CHANGE_POINTER_CONTROL,
         .isvoid = 1
     };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                         xcb_parts[4];
+    xcb_void_cookie_t                    xcb_ret;
     xcb_change_pointer_control_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.acceleration_numerator = acceleration_numerator;
+    xcb_out.pad0                     = 0;
+    xcb_out.acceleration_numerator   = acceleration_numerator;
     xcb_out.acceleration_denominator = acceleration_denominator;
-    xcb_out.threshold = threshold;
-    xcb_out.do_acceleration = do_acceleration;
-    xcb_out.do_threshold = do_threshold;
+    xcb_out.threshold                = threshold;
+    xcb_out.do_acceleration          = do_acceleration;
+    xcb_out.do_threshold             = do_threshold;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_pointer_control_cookie_t
-xcb_get_pointer_control (xcb_connection_t *c)
+xcb_get_pointer_control(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_POINTER_CONTROL,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_GET_POINTER_CONTROL,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_pointer_control_cookie_t xcb_ret;
+    struct iovec                      xcb_parts[4];
+    xcb_get_pointer_control_cookie_t  xcb_ret;
     xcb_get_pointer_control_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_pointer_control_cookie_t
-xcb_get_pointer_control_unchecked (xcb_connection_t *c)
+xcb_get_pointer_control_unchecked(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_POINTER_CONTROL,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_GET_POINTER_CONTROL,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_pointer_control_cookie_t xcb_ret;
+    struct iovec                      xcb_parts[4];
+    xcb_get_pointer_control_cookie_t  xcb_ret;
     xcb_get_pointer_control_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_pointer_control_reply_t *
-xcb_get_pointer_control_reply (xcb_connection_t                  *c,
-                               xcb_get_pointer_control_cookie_t   cookie  /**< */,
-                               xcb_generic_error_t              **e)
+xcb_get_pointer_control_reply(xcb_connection_t                *c,
+                              xcb_get_pointer_control_cookie_t cookie /**< */,
+                              xcb_generic_error_t            **e)
 {
-    return (xcb_get_pointer_control_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_get_pointer_control_reply_t *)
+        xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 xcb_void_cookie_t
-xcb_set_screen_saver_checked (xcb_connection_t *c,
-                              int16_t           timeout,
-                              int16_t           interval,
-                              uint8_t           prefer_blanking,
-                              uint8_t           allow_exposures)
+xcb_set_screen_saver_checked(xcb_connection_t *c,
+                             int16_t           timeout,
+                             int16_t           interval,
+                             uint8_t           prefer_blanking,
+                             uint8_t           allow_exposures)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_SET_SCREEN_SAVER,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_SET_SCREEN_SAVER,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                   xcb_parts[4];
+    xcb_void_cookie_t              xcb_ret;
     xcb_set_screen_saver_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.timeout = timeout;
-    xcb_out.interval = interval;
+    xcb_out.pad0            = 0;
+    xcb_out.timeout         = timeout;
+    xcb_out.interval        = interval;
     xcb_out.prefer_blanking = prefer_blanking;
     xcb_out.allow_exposures = allow_exposures;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_set_screen_saver (xcb_connection_t *c,
-                      int16_t           timeout,
-                      int16_t           interval,
-                      uint8_t           prefer_blanking,
-                      uint8_t           allow_exposures)
+xcb_set_screen_saver(xcb_connection_t *c,
+                     int16_t           timeout,
+                     int16_t           interval,
+                     uint8_t           prefer_blanking,
+                     uint8_t           allow_exposures)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_SET_SCREEN_SAVER,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_SET_SCREEN_SAVER,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                   xcb_parts[4];
+    xcb_void_cookie_t              xcb_ret;
     xcb_set_screen_saver_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.timeout = timeout;
-    xcb_out.interval = interval;
+    xcb_out.pad0            = 0;
+    xcb_out.timeout         = timeout;
+    xcb_out.interval        = interval;
     xcb_out.prefer_blanking = prefer_blanking;
     xcb_out.allow_exposures = allow_exposures;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_screen_saver_cookie_t
-xcb_get_screen_saver (xcb_connection_t *c)
+xcb_get_screen_saver(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_SCREEN_SAVER,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_GET_SCREEN_SAVER,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_screen_saver_cookie_t xcb_ret;
+    struct iovec                   xcb_parts[4];
+    xcb_get_screen_saver_cookie_t  xcb_ret;
     xcb_get_screen_saver_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_screen_saver_cookie_t
-xcb_get_screen_saver_unchecked (xcb_connection_t *c)
+xcb_get_screen_saver_unchecked(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_SCREEN_SAVER,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_GET_SCREEN_SAVER,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_screen_saver_cookie_t xcb_ret;
+    struct iovec                   xcb_parts[4];
+    xcb_get_screen_saver_cookie_t  xcb_ret;
     xcb_get_screen_saver_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_screen_saver_reply_t *
-xcb_get_screen_saver_reply (xcb_connection_t               *c,
-                            xcb_get_screen_saver_cookie_t   cookie  /**< */,
-                            xcb_generic_error_t           **e)
+xcb_get_screen_saver_reply(xcb_connection_t             *c,
+                           xcb_get_screen_saver_cookie_t cookie /**< */,
+                           xcb_generic_error_t         **e)
 {
-    return (xcb_get_screen_saver_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_get_screen_saver_reply_t *)xcb_wait_for_reply(c,
+                                                              cookie.sequence,
+                                                              e);
 }
 
 int
-xcb_change_hosts_sizeof (const void  *_buffer)
+xcb_change_hosts_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_change_hosts_request_t *_aux = (xcb_change_hosts_request_t *)_buffer;
+    char                             *xcb_tmp = (char *)_buffer;
+    const xcb_change_hosts_request_t *_aux =
+        (xcb_change_hosts_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_change_hosts_request_t);
     xcb_tmp += xcb_block_len;
@@ -13428,9 +13536,10 @@ xcb_change_hosts_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(uint8_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -13440,111 +13549,107 @@ xcb_change_hosts_sizeof (const void  *_buffer)
 }
 
 xcb_void_cookie_t
-xcb_change_hosts_checked (xcb_connection_t *c,
-                          uint8_t           mode,
-                          uint8_t           family,
-                          uint16_t          address_len,
-                          const uint8_t    *address)
+xcb_change_hosts_checked(xcb_connection_t *c,
+                         uint8_t           mode,
+                         uint8_t           family,
+                         uint16_t          address_len,
+                         const uint8_t    *address)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_CHANGE_HOSTS,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CHANGE_HOSTS,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec               xcb_parts[6];
+    xcb_void_cookie_t          xcb_ret;
     xcb_change_hosts_request_t xcb_out;
 
-    xcb_out.mode = mode;
-    xcb_out.family = family;
-    xcb_out.pad0 = 0;
+    xcb_out.mode        = mode;
+    xcb_out.family      = family;
+    xcb_out.pad0        = 0;
     xcb_out.address_len = address_len;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* uint8_t address */
-    xcb_parts[4].iov_base = (char *) address;
-    xcb_parts[4].iov_len = address_len * sizeof(uint8_t);
+    xcb_parts[4].iov_base = (char *)address;
+    xcb_parts[4].iov_len  = address_len * sizeof(uint8_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_change_hosts (xcb_connection_t *c,
-                  uint8_t           mode,
-                  uint8_t           family,
-                  uint16_t          address_len,
-                  const uint8_t    *address)
+xcb_change_hosts(xcb_connection_t *c,
+                 uint8_t           mode,
+                 uint8_t           family,
+                 uint16_t          address_len,
+                 const uint8_t    *address)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_CHANGE_HOSTS,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 4,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_CHANGE_HOSTS,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec               xcb_parts[6];
+    xcb_void_cookie_t          xcb_ret;
     xcb_change_hosts_request_t xcb_out;
 
-    xcb_out.mode = mode;
-    xcb_out.family = family;
-    xcb_out.pad0 = 0;
+    xcb_out.mode        = mode;
+    xcb_out.family      = family;
+    xcb_out.pad0        = 0;
     xcb_out.address_len = address_len;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* uint8_t address */
-    xcb_parts[4].iov_base = (char *) address;
-    xcb_parts[4].iov_len = address_len * sizeof(uint8_t);
+    xcb_parts[4].iov_base = (char *)address;
+    xcb_parts[4].iov_len  = address_len * sizeof(uint8_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 uint8_t *
-xcb_change_hosts_address (const xcb_change_hosts_request_t *R)
+xcb_change_hosts_address(const xcb_change_hosts_request_t *R)
 {
-    return (uint8_t *) (R + 1);
+    return (uint8_t *)(R + 1);
 }
 
 int
-xcb_change_hosts_address_length (const xcb_change_hosts_request_t *R)
+xcb_change_hosts_address_length(const xcb_change_hosts_request_t *R)
 {
     return R->address_len;
 }
 
 xcb_generic_iterator_t
-xcb_change_hosts_address_end (const xcb_change_hosts_request_t *R)
+xcb_change_hosts_address_end(const xcb_change_hosts_request_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((uint8_t *) (R + 1)) + (R->address_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((uint8_t *)(R + 1)) + (R->address_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 int
-xcb_host_sizeof (const void  *_buffer)
+xcb_host_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_host_t *_aux = (xcb_host_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    char             *xcb_tmp        = (char *)_buffer;
+    const xcb_host_t *_aux           = (xcb_host_t *)_buffer;
+    unsigned int      xcb_buffer_len = 0;
+    unsigned int      xcb_block_len  = 0;
+    unsigned int      xcb_pad        = 0;
+    unsigned int      xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_host_t);
     xcb_tmp += xcb_block_len;
@@ -13556,17 +13661,19 @@ xcb_host_sizeof (const void  *_buffer)
     xcb_align_to = ALIGNOF(uint8_t);
     xcb_align_to = 4;
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
     xcb_block_len = 0;
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad       = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -13576,59 +13683,59 @@ xcb_host_sizeof (const void  *_buffer)
 }
 
 uint8_t *
-xcb_host_address (const xcb_host_t *R)
+xcb_host_address(const xcb_host_t *R)
 {
-    return (uint8_t *) (R + 1);
+    return (uint8_t *)(R + 1);
 }
 
 int
-xcb_host_address_length (const xcb_host_t *R)
+xcb_host_address_length(const xcb_host_t *R)
 {
     return R->address_len;
 }
 
 xcb_generic_iterator_t
-xcb_host_address_end (const xcb_host_t *R)
+xcb_host_address_end(const xcb_host_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((uint8_t *) (R + 1)) + (R->address_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((uint8_t *)(R + 1)) + (R->address_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 void
-xcb_host_next (xcb_host_iterator_t *i)
+xcb_host_next(xcb_host_iterator_t *i)
 {
-    xcb_host_t *R = i->data;
+    xcb_host_t            *R = i->data;
     xcb_generic_iterator_t child;
     child.data = (xcb_host_t *)(((char *)R) + xcb_host_sizeof(R));
-    i->index = (char *) child.data - (char *) i->data;
+    i->index   = (char *)child.data - (char *)i->data;
     --i->rem;
-    i->data = (xcb_host_t *) child.data;
+    i->data = (xcb_host_t *)child.data;
 }
 
 xcb_generic_iterator_t
-xcb_host_end (xcb_host_iterator_t i)
+xcb_host_end(xcb_host_iterator_t i)
 {
     xcb_generic_iterator_t ret;
-    while(i.rem > 0)
+    while (i.rem > 0)
         xcb_host_next(&i);
-    ret.data = i.data;
-    ret.rem = i.rem;
+    ret.data  = i.data;
+    ret.rem   = i.rem;
     ret.index = i.index;
     return ret;
 }
 
 int
-xcb_list_hosts_sizeof (const void  *_buffer)
+xcb_list_hosts_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_list_hosts_reply_t *_aux = (xcb_list_hosts_reply_t *)_buffer;
-    unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
+    char                         *xcb_tmp = (char *)_buffer;
+    const xcb_list_hosts_reply_t *_aux    = (xcb_list_hosts_reply_t *)_buffer;
+    unsigned int                  xcb_buffer_len = 0;
+    unsigned int                  xcb_block_len  = 0;
+    unsigned int                  xcb_pad        = 0;
+    unsigned int                  xcb_align_to   = 0;
 
     unsigned int i;
     unsigned int xcb_tmp_len;
@@ -13638,16 +13745,18 @@ xcb_list_hosts_sizeof (const void  *_buffer)
     xcb_buffer_len += xcb_block_len;
     xcb_block_len = 0;
     /* hosts */
-    for(i=0; i<_aux->hosts_len; i++) {
+    for (i = 0; i < _aux->hosts_len; i++)
+    {
         xcb_tmp_len = xcb_host_sizeof(xcb_tmp);
         xcb_block_len += xcb_tmp_len;
         xcb_tmp += xcb_tmp_len;
     }
     xcb_align_to = ALIGNOF(xcb_host_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -13657,247 +13766,233 @@ xcb_list_hosts_sizeof (const void  *_buffer)
 }
 
 xcb_list_hosts_cookie_t
-xcb_list_hosts (xcb_connection_t *c)
+xcb_list_hosts(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_LIST_HOSTS,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_LIST_HOSTS,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_list_hosts_cookie_t xcb_ret;
+    struct iovec             xcb_parts[4];
+    xcb_list_hosts_cookie_t  xcb_ret;
     xcb_list_hosts_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_list_hosts_cookie_t
-xcb_list_hosts_unchecked (xcb_connection_t *c)
+xcb_list_hosts_unchecked(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_LIST_HOSTS,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_LIST_HOSTS,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_list_hosts_cookie_t xcb_ret;
+    struct iovec             xcb_parts[4];
+    xcb_list_hosts_cookie_t  xcb_ret;
     xcb_list_hosts_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 int
-xcb_list_hosts_hosts_length (const xcb_list_hosts_reply_t *R)
+xcb_list_hosts_hosts_length(const xcb_list_hosts_reply_t *R)
 {
     return R->hosts_len;
 }
 
 xcb_host_iterator_t
-xcb_list_hosts_hosts_iterator (const xcb_list_hosts_reply_t *R)
+xcb_list_hosts_hosts_iterator(const xcb_list_hosts_reply_t *R)
 {
     xcb_host_iterator_t i;
-    i.data = (xcb_host_t *) (R + 1);
-    i.rem = R->hosts_len;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = (xcb_host_t *)(R + 1);
+    i.rem   = R->hosts_len;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_list_hosts_reply_t *
-xcb_list_hosts_reply (xcb_connection_t         *c,
-                      xcb_list_hosts_cookie_t   cookie  /**< */,
-                      xcb_generic_error_t     **e)
+xcb_list_hosts_reply(xcb_connection_t       *c,
+                     xcb_list_hosts_cookie_t cookie /**< */,
+                     xcb_generic_error_t   **e)
 {
-    return (xcb_list_hosts_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_list_hosts_reply_t *)xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 xcb_void_cookie_t
-xcb_set_access_control_checked (xcb_connection_t *c,
-                                uint8_t           mode)
+xcb_set_access_control_checked(xcb_connection_t *c, uint8_t mode)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_SET_ACCESS_CONTROL,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_SET_ACCESS_CONTROL,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                     xcb_parts[4];
+    xcb_void_cookie_t                xcb_ret;
     xcb_set_access_control_request_t xcb_out;
 
     xcb_out.mode = mode;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_set_access_control (xcb_connection_t *c,
-                        uint8_t           mode)
+xcb_set_access_control(xcb_connection_t *c, uint8_t mode)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_SET_ACCESS_CONTROL,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_SET_ACCESS_CONTROL,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                     xcb_parts[4];
+    xcb_void_cookie_t                xcb_ret;
     xcb_set_access_control_request_t xcb_out;
 
     xcb_out.mode = mode;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_set_close_down_mode_checked (xcb_connection_t *c,
-                                 uint8_t           mode)
+xcb_set_close_down_mode_checked(xcb_connection_t *c, uint8_t mode)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_SET_CLOSE_DOWN_MODE,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_SET_CLOSE_DOWN_MODE,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                      xcb_parts[4];
+    xcb_void_cookie_t                 xcb_ret;
     xcb_set_close_down_mode_request_t xcb_out;
 
     xcb_out.mode = mode;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_set_close_down_mode (xcb_connection_t *c,
-                         uint8_t           mode)
+xcb_set_close_down_mode(xcb_connection_t *c, uint8_t mode)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_SET_CLOSE_DOWN_MODE,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_SET_CLOSE_DOWN_MODE,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                      xcb_parts[4];
+    xcb_void_cookie_t                 xcb_ret;
     xcb_set_close_down_mode_request_t xcb_out;
 
     xcb_out.mode = mode;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_kill_client_checked (xcb_connection_t *c,
-                         uint32_t          resource)
+xcb_kill_client_checked(xcb_connection_t *c, uint32_t resource)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_KILL_CLIENT,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_KILL_CLIENT,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec              xcb_parts[4];
+    xcb_void_cookie_t         xcb_ret;
     xcb_kill_client_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.resource = resource;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_kill_client (xcb_connection_t *c,
-                 uint32_t          resource)
+xcb_kill_client(xcb_connection_t *c, uint32_t resource)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_KILL_CLIENT,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_KILL_CLIENT,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec              xcb_parts[4];
+    xcb_void_cookie_t         xcb_ret;
     xcb_kill_client_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
+    xcb_out.pad0     = 0;
     xcb_out.resource = resource;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 int
-xcb_rotate_properties_sizeof (const void  *_buffer)
+xcb_rotate_properties_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_rotate_properties_request_t *_aux = (xcb_rotate_properties_request_t *)_buffer;
+    char                                  *xcb_tmp = (char *)_buffer;
+    const xcb_rotate_properties_request_t *_aux =
+        (xcb_rotate_properties_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_rotate_properties_request_t);
     xcb_tmp += xcb_block_len;
@@ -13908,9 +14003,10 @@ xcb_rotate_properties_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_atom_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -13920,163 +14016,159 @@ xcb_rotate_properties_sizeof (const void  *_buffer)
 }
 
 xcb_void_cookie_t
-xcb_rotate_properties_checked (xcb_connection_t *c,
-                               xcb_window_t      window,
-                               uint16_t          atoms_len,
-                               int16_t           delta,
-                               const xcb_atom_t *atoms)
+xcb_rotate_properties_checked(xcb_connection_t *c,
+                              xcb_window_t      window,
+                              uint16_t          atoms_len,
+                              int16_t           delta,
+                              const xcb_atom_t *atoms)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_ROTATE_PROPERTIES,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_ROTATE_PROPERTIES,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                    xcb_parts[6];
+    xcb_void_cookie_t               xcb_ret;
     xcb_rotate_properties_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.window = window;
+    xcb_out.pad0      = 0;
+    xcb_out.window    = window;
     xcb_out.atoms_len = atoms_len;
-    xcb_out.delta = delta;
+    xcb_out.delta     = delta;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_atom_t atoms */
-    xcb_parts[4].iov_base = (char *) atoms;
-    xcb_parts[4].iov_len = atoms_len * sizeof(xcb_atom_t);
+    xcb_parts[4].iov_base = (char *)atoms;
+    xcb_parts[4].iov_len  = atoms_len * sizeof(xcb_atom_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_rotate_properties (xcb_connection_t *c,
-                       xcb_window_t      window,
-                       uint16_t          atoms_len,
-                       int16_t           delta,
-                       const xcb_atom_t *atoms)
+xcb_rotate_properties(xcb_connection_t *c,
+                      xcb_window_t      window,
+                      uint16_t          atoms_len,
+                      int16_t           delta,
+                      const xcb_atom_t *atoms)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_ROTATE_PROPERTIES,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_ROTATE_PROPERTIES,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[6];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                    xcb_parts[6];
+    xcb_void_cookie_t               xcb_ret;
     xcb_rotate_properties_request_t xcb_out;
 
-    xcb_out.pad0 = 0;
-    xcb_out.window = window;
+    xcb_out.pad0      = 0;
+    xcb_out.window    = window;
     xcb_out.atoms_len = atoms_len;
-    xcb_out.delta = delta;
+    xcb_out.delta     = delta;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_atom_t atoms */
-    xcb_parts[4].iov_base = (char *) atoms;
-    xcb_parts[4].iov_len = atoms_len * sizeof(xcb_atom_t);
+    xcb_parts[4].iov_base = (char *)atoms;
+    xcb_parts[4].iov_len  = atoms_len * sizeof(xcb_atom_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_atom_t *
-xcb_rotate_properties_atoms (const xcb_rotate_properties_request_t *R)
+xcb_rotate_properties_atoms(const xcb_rotate_properties_request_t *R)
 {
-    return (xcb_atom_t *) (R + 1);
+    return (xcb_atom_t *)(R + 1);
 }
 
 int
-xcb_rotate_properties_atoms_length (const xcb_rotate_properties_request_t *R)
+xcb_rotate_properties_atoms_length(const xcb_rotate_properties_request_t *R)
 {
     return R->atoms_len;
 }
 
 xcb_generic_iterator_t
-xcb_rotate_properties_atoms_end (const xcb_rotate_properties_request_t *R)
+xcb_rotate_properties_atoms_end(const xcb_rotate_properties_request_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((xcb_atom_t *) (R + 1)) + (R->atoms_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((xcb_atom_t *)(R + 1)) + (R->atoms_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_void_cookie_t
-xcb_force_screen_saver_checked (xcb_connection_t *c,
-                                uint8_t           mode)
+xcb_force_screen_saver_checked(xcb_connection_t *c, uint8_t mode)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_FORCE_SCREEN_SAVER,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_FORCE_SCREEN_SAVER,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                     xcb_parts[4];
+    xcb_void_cookie_t                xcb_ret;
     xcb_force_screen_saver_request_t xcb_out;
 
     xcb_out.mode = mode;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_force_screen_saver (xcb_connection_t *c,
-                        uint8_t           mode)
+xcb_force_screen_saver(xcb_connection_t *c, uint8_t mode)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_FORCE_SCREEN_SAVER,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_FORCE_SCREEN_SAVER,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec                     xcb_parts[4];
+    xcb_void_cookie_t                xcb_ret;
     xcb_force_screen_saver_request_t xcb_out;
 
     xcb_out.mode = mode;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 int
-xcb_set_pointer_mapping_sizeof (const void  *_buffer)
+xcb_set_pointer_mapping_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_set_pointer_mapping_request_t *_aux = (xcb_set_pointer_mapping_request_t *)_buffer;
+    char                                    *xcb_tmp = (char *)_buffer;
+    const xcb_set_pointer_mapping_request_t *_aux =
+        (xcb_set_pointer_mapping_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_set_pointer_mapping_request_t);
     xcb_tmp += xcb_block_len;
@@ -14087,9 +14179,10 @@ xcb_set_pointer_mapping_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(uint8_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -14099,87 +14192,87 @@ xcb_set_pointer_mapping_sizeof (const void  *_buffer)
 }
 
 xcb_set_pointer_mapping_cookie_t
-xcb_set_pointer_mapping (xcb_connection_t *c,
-                         uint8_t           map_len,
-                         const uint8_t    *map)
+xcb_set_pointer_mapping(xcb_connection_t *c,
+                        uint8_t           map_len,
+                        const uint8_t    *map)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_SET_POINTER_MAPPING,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_SET_POINTER_MAPPING,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[6];
-    xcb_set_pointer_mapping_cookie_t xcb_ret;
+    struct iovec                      xcb_parts[6];
+    xcb_set_pointer_mapping_cookie_t  xcb_ret;
     xcb_set_pointer_mapping_request_t xcb_out;
 
     xcb_out.map_len = map_len;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* uint8_t map */
-    xcb_parts[4].iov_base = (char *) map;
-    xcb_parts[4].iov_len = map_len * sizeof(uint8_t);
+    xcb_parts[4].iov_base = (char *)map;
+    xcb_parts[4].iov_len  = map_len * sizeof(uint8_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_set_pointer_mapping_cookie_t
-xcb_set_pointer_mapping_unchecked (xcb_connection_t *c,
-                                   uint8_t           map_len,
-                                   const uint8_t    *map)
+xcb_set_pointer_mapping_unchecked(xcb_connection_t *c,
+                                  uint8_t           map_len,
+                                  const uint8_t    *map)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
-        .opcode = XCB_SET_POINTER_MAPPING,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 4,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_SET_POINTER_MAPPING,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[6];
-    xcb_set_pointer_mapping_cookie_t xcb_ret;
+    struct iovec                      xcb_parts[6];
+    xcb_set_pointer_mapping_cookie_t  xcb_ret;
     xcb_set_pointer_mapping_request_t xcb_out;
 
     xcb_out.map_len = map_len;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* uint8_t map */
-    xcb_parts[4].iov_base = (char *) map;
-    xcb_parts[4].iov_len = map_len * sizeof(uint8_t);
+    xcb_parts[4].iov_base = (char *)map;
+    xcb_parts[4].iov_len  = map_len * sizeof(uint8_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_set_pointer_mapping_reply_t *
-xcb_set_pointer_mapping_reply (xcb_connection_t                  *c,
-                               xcb_set_pointer_mapping_cookie_t   cookie  /**< */,
-                               xcb_generic_error_t              **e)
+xcb_set_pointer_mapping_reply(xcb_connection_t                *c,
+                              xcb_set_pointer_mapping_cookie_t cookie /**< */,
+                              xcb_generic_error_t            **e)
 {
-    return (xcb_set_pointer_mapping_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_set_pointer_mapping_reply_t *)
+        xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_get_pointer_mapping_sizeof (const void  *_buffer)
+xcb_get_pointer_mapping_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_get_pointer_mapping_reply_t *_aux = (xcb_get_pointer_mapping_reply_t *)_buffer;
+    char                                  *xcb_tmp = (char *)_buffer;
+    const xcb_get_pointer_mapping_reply_t *_aux =
+        (xcb_get_pointer_mapping_reply_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_get_pointer_mapping_reply_t);
     xcb_tmp += xcb_block_len;
@@ -14190,9 +14283,10 @@ xcb_get_pointer_mapping_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(uint8_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -14202,95 +14296,95 @@ xcb_get_pointer_mapping_sizeof (const void  *_buffer)
 }
 
 xcb_get_pointer_mapping_cookie_t
-xcb_get_pointer_mapping (xcb_connection_t *c)
+xcb_get_pointer_mapping(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_POINTER_MAPPING,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_GET_POINTER_MAPPING,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_pointer_mapping_cookie_t xcb_ret;
+    struct iovec                      xcb_parts[4];
+    xcb_get_pointer_mapping_cookie_t  xcb_ret;
     xcb_get_pointer_mapping_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_pointer_mapping_cookie_t
-xcb_get_pointer_mapping_unchecked (xcb_connection_t *c)
+xcb_get_pointer_mapping_unchecked(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_GET_POINTER_MAPPING,
-        .isvoid = 0
-    };
+    static const xcb_protocol_request_t xcb_req = { .count = 2,
+                                                    .ext   = 0,
+                                                    .opcode =
+                                                        XCB_GET_POINTER_MAPPING,
+                                                    .isvoid = 0 };
 
-    struct iovec xcb_parts[4];
-    xcb_get_pointer_mapping_cookie_t xcb_ret;
+    struct iovec                      xcb_parts[4];
+    xcb_get_pointer_mapping_cookie_t  xcb_ret;
     xcb_get_pointer_mapping_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 uint8_t *
-xcb_get_pointer_mapping_map (const xcb_get_pointer_mapping_reply_t *R)
+xcb_get_pointer_mapping_map(const xcb_get_pointer_mapping_reply_t *R)
 {
-    return (uint8_t *) (R + 1);
+    return (uint8_t *)(R + 1);
 }
 
 int
-xcb_get_pointer_mapping_map_length (const xcb_get_pointer_mapping_reply_t *R)
+xcb_get_pointer_mapping_map_length(const xcb_get_pointer_mapping_reply_t *R)
 {
     return R->map_len;
 }
 
 xcb_generic_iterator_t
-xcb_get_pointer_mapping_map_end (const xcb_get_pointer_mapping_reply_t *R)
+xcb_get_pointer_mapping_map_end(const xcb_get_pointer_mapping_reply_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((uint8_t *) (R + 1)) + (R->map_len);
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((uint8_t *)(R + 1)) + (R->map_len);
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_get_pointer_mapping_reply_t *
-xcb_get_pointer_mapping_reply (xcb_connection_t                  *c,
-                               xcb_get_pointer_mapping_cookie_t   cookie  /**< */,
-                               xcb_generic_error_t              **e)
+xcb_get_pointer_mapping_reply(xcb_connection_t                *c,
+                              xcb_get_pointer_mapping_cookie_t cookie /**< */,
+                              xcb_generic_error_t            **e)
 {
-    return (xcb_get_pointer_mapping_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_get_pointer_mapping_reply_t *)
+        xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_set_modifier_mapping_sizeof (const void  *_buffer)
+xcb_set_modifier_mapping_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_set_modifier_mapping_request_t *_aux = (xcb_set_modifier_mapping_request_t *)_buffer;
+    char                                     *xcb_tmp = (char *)_buffer;
+    const xcb_set_modifier_mapping_request_t *_aux =
+        (xcb_set_modifier_mapping_request_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_set_modifier_mapping_request_t);
     xcb_tmp += xcb_block_len;
@@ -14301,9 +14395,10 @@ xcb_set_modifier_mapping_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_keycode_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -14313,87 +14408,89 @@ xcb_set_modifier_mapping_sizeof (const void  *_buffer)
 }
 
 xcb_set_modifier_mapping_cookie_t
-xcb_set_modifier_mapping (xcb_connection_t    *c,
-                          uint8_t              keycodes_per_modifier,
-                          const xcb_keycode_t *keycodes)
+xcb_set_modifier_mapping(xcb_connection_t    *c,
+                         uint8_t              keycodes_per_modifier,
+                         const xcb_keycode_t *keycodes)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
+        .count  = 4,
+        .ext    = 0,
         .opcode = XCB_SET_MODIFIER_MAPPING,
         .isvoid = 0
     };
 
-    struct iovec xcb_parts[6];
-    xcb_set_modifier_mapping_cookie_t xcb_ret;
+    struct iovec                       xcb_parts[6];
+    xcb_set_modifier_mapping_cookie_t  xcb_ret;
     xcb_set_modifier_mapping_request_t xcb_out;
 
     xcb_out.keycodes_per_modifier = keycodes_per_modifier;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_keycode_t keycodes */
-    xcb_parts[4].iov_base = (char *) keycodes;
-    xcb_parts[4].iov_len = (keycodes_per_modifier * 8) * sizeof(uint8_t);
+    xcb_parts[4].iov_base = (char *)keycodes;
+    xcb_parts[4].iov_len  = (keycodes_per_modifier * 8) * sizeof(uint8_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_set_modifier_mapping_cookie_t
-xcb_set_modifier_mapping_unchecked (xcb_connection_t    *c,
-                                    uint8_t              keycodes_per_modifier,
-                                    const xcb_keycode_t *keycodes)
+xcb_set_modifier_mapping_unchecked(xcb_connection_t    *c,
+                                   uint8_t              keycodes_per_modifier,
+                                   const xcb_keycode_t *keycodes)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 4,
-        .ext = 0,
+        .count  = 4,
+        .ext    = 0,
         .opcode = XCB_SET_MODIFIER_MAPPING,
         .isvoid = 0
     };
 
-    struct iovec xcb_parts[6];
-    xcb_set_modifier_mapping_cookie_t xcb_ret;
+    struct iovec                       xcb_parts[6];
+    xcb_set_modifier_mapping_cookie_t  xcb_ret;
     xcb_set_modifier_mapping_request_t xcb_out;
 
     xcb_out.keycodes_per_modifier = keycodes_per_modifier;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
     /* xcb_keycode_t keycodes */
-    xcb_parts[4].iov_base = (char *) keycodes;
-    xcb_parts[4].iov_len = (keycodes_per_modifier * 8) * sizeof(uint8_t);
+    xcb_parts[4].iov_base = (char *)keycodes;
+    xcb_parts[4].iov_len  = (keycodes_per_modifier * 8) * sizeof(uint8_t);
     xcb_parts[5].iov_base = 0;
-    xcb_parts[5].iov_len = -xcb_parts[4].iov_len & 3;
+    xcb_parts[5].iov_len  = -xcb_parts[4].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_set_modifier_mapping_reply_t *
-xcb_set_modifier_mapping_reply (xcb_connection_t                   *c,
-                                xcb_set_modifier_mapping_cookie_t   cookie  /**< */,
-                                xcb_generic_error_t               **e)
+xcb_set_modifier_mapping_reply(xcb_connection_t                 *c,
+                               xcb_set_modifier_mapping_cookie_t cookie /**< */,
+                               xcb_generic_error_t             **e)
 {
-    return (xcb_set_modifier_mapping_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_set_modifier_mapping_reply_t *)
+        xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 int
-xcb_get_modifier_mapping_sizeof (const void  *_buffer)
+xcb_get_modifier_mapping_sizeof(const void *_buffer)
 {
-    char *xcb_tmp = (char *)_buffer;
-    const xcb_get_modifier_mapping_reply_t *_aux = (xcb_get_modifier_mapping_reply_t *)_buffer;
+    char                                   *xcb_tmp = (char *)_buffer;
+    const xcb_get_modifier_mapping_reply_t *_aux =
+        (xcb_get_modifier_mapping_reply_t *)_buffer;
     unsigned int xcb_buffer_len = 0;
-    unsigned int xcb_block_len = 0;
-    unsigned int xcb_pad = 0;
-    unsigned int xcb_align_to = 0;
-
+    unsigned int xcb_block_len  = 0;
+    unsigned int xcb_pad        = 0;
+    unsigned int xcb_align_to   = 0;
 
     xcb_block_len += sizeof(xcb_get_modifier_mapping_reply_t);
     xcb_tmp += xcb_block_len;
@@ -14404,9 +14501,10 @@ xcb_get_modifier_mapping_sizeof (const void  *_buffer)
     xcb_tmp += xcb_block_len;
     xcb_align_to = ALIGNOF(xcb_keycode_t);
     /* insert padding */
-    xcb_pad = -xcb_block_len & (xcb_align_to - 1);
+    xcb_pad      = -xcb_block_len & (xcb_align_to - 1);
     xcb_buffer_len += xcb_block_len + xcb_pad;
-    if (0 != xcb_pad) {
+    if (0 != xcb_pad)
+    {
         xcb_tmp += xcb_pad;
         xcb_pad = 0;
     }
@@ -14416,132 +14514,131 @@ xcb_get_modifier_mapping_sizeof (const void  *_buffer)
 }
 
 xcb_get_modifier_mapping_cookie_t
-xcb_get_modifier_mapping (xcb_connection_t *c)
+xcb_get_modifier_mapping(xcb_connection_t *c)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
+        .count  = 2,
+        .ext    = 0,
         .opcode = XCB_GET_MODIFIER_MAPPING,
         .isvoid = 0
     };
 
-    struct iovec xcb_parts[4];
-    xcb_get_modifier_mapping_cookie_t xcb_ret;
+    struct iovec                       xcb_parts[4];
+    xcb_get_modifier_mapping_cookie_t  xcb_ret;
     xcb_get_modifier_mapping_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_get_modifier_mapping_cookie_t
-xcb_get_modifier_mapping_unchecked (xcb_connection_t *c)
+xcb_get_modifier_mapping_unchecked(xcb_connection_t *c)
 {
     static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
+        .count  = 2,
+        .ext    = 0,
         .opcode = XCB_GET_MODIFIER_MAPPING,
         .isvoid = 0
     };
 
-    struct iovec xcb_parts[4];
-    xcb_get_modifier_mapping_cookie_t xcb_ret;
+    struct iovec                       xcb_parts[4];
+    xcb_get_modifier_mapping_cookie_t  xcb_ret;
     xcb_get_modifier_mapping_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_keycode_t *
-xcb_get_modifier_mapping_keycodes (const xcb_get_modifier_mapping_reply_t *R)
+xcb_get_modifier_mapping_keycodes(const xcb_get_modifier_mapping_reply_t *R)
 {
-    return (xcb_keycode_t *) (R + 1);
+    return (xcb_keycode_t *)(R + 1);
 }
 
 int
-xcb_get_modifier_mapping_keycodes_length (const xcb_get_modifier_mapping_reply_t *R)
+xcb_get_modifier_mapping_keycodes_length(
+    const xcb_get_modifier_mapping_reply_t *R)
 {
     return (R->keycodes_per_modifier * 8);
 }
 
 xcb_generic_iterator_t
-xcb_get_modifier_mapping_keycodes_end (const xcb_get_modifier_mapping_reply_t *R)
+xcb_get_modifier_mapping_keycodes_end(const xcb_get_modifier_mapping_reply_t *R)
 {
     xcb_generic_iterator_t i;
-    i.data = ((xcb_keycode_t *) (R + 1)) + ((R->keycodes_per_modifier * 8));
-    i.rem = 0;
-    i.index = (char *) i.data - (char *) R;
+    i.data  = ((xcb_keycode_t *)(R + 1)) + ((R->keycodes_per_modifier * 8));
+    i.rem   = 0;
+    i.index = (char *)i.data - (char *)R;
     return i;
 }
 
 xcb_get_modifier_mapping_reply_t *
-xcb_get_modifier_mapping_reply (xcb_connection_t                   *c,
-                                xcb_get_modifier_mapping_cookie_t   cookie  /**< */,
-                                xcb_generic_error_t               **e)
+xcb_get_modifier_mapping_reply(xcb_connection_t                 *c,
+                               xcb_get_modifier_mapping_cookie_t cookie /**< */,
+                               xcb_generic_error_t             **e)
 {
-    return (xcb_get_modifier_mapping_reply_t *) xcb_wait_for_reply(c, cookie.sequence, e);
+    return (xcb_get_modifier_mapping_reply_t *)
+        xcb_wait_for_reply(c, cookie.sequence, e);
 }
 
 xcb_void_cookie_t
-xcb_no_operation_checked (xcb_connection_t *c)
+xcb_no_operation_checked(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_NO_OPERATION,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_NO_OPERATION,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec               xcb_parts[4];
+    xcb_void_cookie_t          xcb_ret;
     xcb_no_operation_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
-    xcb_ret.sequence = xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
+    xcb_ret.sequence =
+        xcb_send_request(c, XCB_REQUEST_CHECKED, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
 
 xcb_void_cookie_t
-xcb_no_operation (xcb_connection_t *c)
+xcb_no_operation(xcb_connection_t *c)
 {
-    static const xcb_protocol_request_t xcb_req = {
-        .count = 2,
-        .ext = 0,
-        .opcode = XCB_NO_OPERATION,
-        .isvoid = 1
-    };
+    static const xcb_protocol_request_t xcb_req = { .count  = 2,
+                                                    .ext    = 0,
+                                                    .opcode = XCB_NO_OPERATION,
+                                                    .isvoid = 1 };
 
-    struct iovec xcb_parts[4];
-    xcb_void_cookie_t xcb_ret;
+    struct iovec               xcb_parts[4];
+    xcb_void_cookie_t          xcb_ret;
     xcb_no_operation_request_t xcb_out;
 
     xcb_out.pad0 = 0;
 
-    xcb_parts[2].iov_base = (char *) &xcb_out;
-    xcb_parts[2].iov_len = sizeof(xcb_out);
+    xcb_parts[2].iov_base = (char *)&xcb_out;
+    xcb_parts[2].iov_len  = sizeof(xcb_out);
     xcb_parts[3].iov_base = 0;
-    xcb_parts[3].iov_len = -xcb_parts[2].iov_len & 3;
+    xcb_parts[3].iov_len  = -xcb_parts[2].iov_len & 3;
 
     xcb_ret.sequence = xcb_send_request(c, 0, xcb_parts + 2, &xcb_req);
     return xcb_ret;
 }
-

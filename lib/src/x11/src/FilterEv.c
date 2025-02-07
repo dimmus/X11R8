@@ -101,7 +101,7 @@ XFilterEvent(XEvent *ev, Window window)
     }
     for (p = ev->xany.display->im_filters; p != NULL; p = p->next)
     {
-    /* Java sometimes calls XFilterEvent() with window=0 and ev come from
+        /* Java sometimes calls XFilterEvent() with window=0 and ev come from
 	 * XNextEvent() when users type some keys quickly and switch multiple
 	 * input focuses in a Java window with the keys.
 	 * But XKeyEvent filters need to receive the event with window=0 for

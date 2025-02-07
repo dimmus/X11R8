@@ -1887,7 +1887,7 @@ GetGC(AsciiSinkObject sink)
     XtGCMask  valuemask = (GCFont | GCGraphicsExposures | GCClipXOrigin |
                           GCForeground | GCBackground);
     XGCValues values    = {
-    /* XXX We dont want to share a gc that will change the clip-mask */
+        /* XXX We dont want to share a gc that will change the clip-mask */
            .clip_x_origin      = (int)(long)sink,
            .clip_mask          = None,
            .font               = sink->ascii_sink.font->fid,

@@ -23,7 +23,7 @@
  */
 
 #if HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include <limits.h>
@@ -34,49 +34,46 @@
 #include "X11/extensions/extutil.h"
 #include "XIint.h"
 
-extern int copy_classes(XIDeviceInfo* to, xXIAnyInfo* from, int *nclasses);
-extern int size_classes(xXIAnyInfo* from, int nclasses);
+extern int copy_classes(XIDeviceInfo *to, xXIAnyInfo *from, int *nclasses);
+extern int size_classes(xXIAnyInfo *from, int nclasses);
 
-XIDeviceInfo*
+XIDeviceInfo *
 XIQueryDevice(Display *dpy, int deviceid, int *ndevices_return)
 {
-    XIDeviceInfo        *info = NULL;
-    xXIQueryDeviceReq   *req;
+    XIDeviceInfo       *info = NULL;
+    xXIQueryDeviceReq  *req;
     xXIQueryDeviceReply reply;
-    char                *ptr;
-    char                *end;
+    char               *ptr;
+    char               *end;
     int                 i;
-    char                *buf = NULL;
+    char               *buf = NULL;
 
     XExtDisplayInfo *extinfo = XInput_find_display(dpy);
 
     LockDisplay(dpy);
-    if (_XiCheckExtInit(dpy, XInput_2_0, extinfo) == -1)
-        goto error_unlocked;
+    if (_XiCheckExtInit(dpy, XInput_2_0, extinfo) == -1) goto error_unlocked;
 
     GetReq(XIQueryDevice, req);
     req->reqType  = extinfo->codes->major_opcode;
     req->ReqType  = X_XIQueryDevice;
     req->deviceid = deviceid;
 
-    if (!_XReply(dpy, (xReply*) &reply, 0, xFalse))
-        goto error;
+    if (!_XReply(dpy, (xReply *)&reply, 0, xFalse)) goto error;
 
     if (reply.length < INT_MAX / 4)
     {
-	*ndevices_return = reply.num_devices;
-	info = Xmalloc((reply.num_devices + 1) * sizeof(XIDeviceInfo));
-	buf = Xmalloc(reply.length * 4);
+        *ndevices_return = reply.num_devices;
+        info = Xmalloc((reply.num_devices + 1) * sizeof(XIDeviceInfo));
+        buf  = Xmalloc(reply.length * 4);
     }
     else
     {
-	*ndevices_return = 0;
-	info = NULL;
-	buf = NULL;
+        *ndevices_return = 0;
+        info             = NULL;
+        buf              = NULL;
     }
 
-    if (!info || !buf)
-        goto error;
+    if (!info || !buf) goto error;
 
     _XRead(dpy, buf, reply.length * 4);
     ptr = buf;
@@ -87,40 +84,37 @@ XIQueryDevice(Display *dpy, int deviceid, int *ndevices_return)
 
     for (i = 0; i < reply.num_devices; i++)
     {
-        int             nclasses;
-        size_t          sz;
-        XIDeviceInfo    *lib = &info[i];
-        xXIDeviceInfo   *wire = (xXIDeviceInfo*)ptr;
+        int            nclasses;
+        size_t         sz;
+        XIDeviceInfo  *lib  = &info[i];
+        xXIDeviceInfo *wire = (xXIDeviceInfo *)ptr;
 
-        if (ptr + sizeof(xXIDeviceInfo) > end)
-            goto error_loop;
+        if (ptr + sizeof(xXIDeviceInfo) > end) goto error_loop;
 
-        lib->deviceid    = wire->deviceid;
-        lib->use         = wire->use;
-        lib->attachment  = wire->attachment;
-        lib->enabled     = wire->enabled;
-        nclasses         = wire->num_classes;
+        lib->deviceid   = wire->deviceid;
+        lib->use        = wire->use;
+        lib->attachment = wire->attachment;
+        lib->enabled    = wire->enabled;
+        nclasses        = wire->num_classes;
 
         ptr += sizeof(xXIDeviceInfo);
 
-        if (ptr + wire->name_len > end)
-            goto error_loop;
+        if (ptr + wire->name_len > end) goto error_loop;
 
         lib->name = Xcalloc(wire->name_len + 1, 1);
-        if (lib->name == NULL)
-            goto error_loop;
+        if (lib->name == NULL) goto error_loop;
         strncpy(lib->name, ptr, wire->name_len);
         lib->name[wire->name_len] = '\0';
-        ptr += ((wire->name_len + 3)/4) * 4;
+        ptr += ((wire->name_len + 3) / 4) * 4;
 
-        sz = size_classes((xXIAnyInfo*)ptr, nclasses);
+        sz           = size_classes((xXIAnyInfo *)ptr, nclasses);
         lib->classes = Xmalloc(sz);
         if (lib->classes == NULL)
         {
             Xfree(lib->name);
             goto error_loop;
         }
-        ptr += copy_classes(lib, (xXIAnyInfo*)ptr, &nclasses);
+        ptr += copy_classes(lib, (xXIAnyInfo *)ptr, &nclasses);
         /* We skip over unused classes */
         lib->num_classes = nclasses;
     }
@@ -147,10 +141,10 @@ error_unlocked:
 }
 
 void
-XIFreeDeviceInfo(XIDeviceInfo* info)
+XIFreeDeviceInfo(XIDeviceInfo *info)
 {
     XIDeviceInfo *ptr = info;
-    while(ptr && ptr->name)
+    while (ptr && ptr->name)
     {
         Xfree(ptr->classes);
         Xfree(ptr->name);

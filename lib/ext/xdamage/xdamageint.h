@@ -30,33 +30,40 @@
 #include "X11/extensions/damageproto.h"
 #include "Xdamage.h"
 
-typedef struct _XDamageExtDisplayInfo {
-    struct _XDamageExtDisplayInfo  *next;    /* keep a linked list */
-    Display                 *display;	    /* which display this is */
-    XExtCodes               *codes;	    /* the extension protocol codes */
-    int			    major_version;  /* -1 means we don't know */
-    int			    minor_version;  /* -1 means we don't know */
+typedef struct _XDamageExtDisplayInfo
+{
+    struct _XDamageExtDisplayInfo *next;    /* keep a linked list */
+    Display                       *display;     /* which display this is */
+    XExtCodes                     *codes; /* the extension protocol codes */
+    int                            major_version; /* -1 means we don't know */
+    int                            minor_version; /* -1 means we don't know */
 } XDamageExtDisplayInfo;
 
 /* replaces XExtensionInfo */
-typedef struct _XDamageExtInfo {
-    XDamageExtDisplayInfo    *head;          /* start of the list */
-    XDamageExtDisplayInfo    *cur;           /* most recently used */
-    int                     ndisplays;      /* number of displays */
+typedef struct _XDamageExtInfo
+{
+    XDamageExtDisplayInfo *head; /* start of the list */
+    XDamageExtDisplayInfo *cur; /* most recently used */
+    int                    ndisplays; /* number of displays */
 } XDamageExtInfo;
 
 extern XDamageExtInfo XDamageExtensionInfo;
-extern const char XDamageExtensionName[];
+extern const char     XDamageExtensionName[];
 
-XDamageExtDisplayInfo *
-XDamageFindDisplay (Display *dpy);
+XDamageExtDisplayInfo *XDamageFindDisplay(Display *dpy);
 
 #define XDamageHasExtension(i) ((i) && ((i)->codes))
 
-#define XDamageCheckExtension(dpy,i,val) \
-  if (!XDamageHasExtension(i)) { return val; }
+#define XDamageCheckExtension(dpy, i, val) \
+    if (!XDamageHasExtension(i))           \
+    {                                      \
+        return val;                        \
+    }
 
-#define XDamageSimpleCheckExtension(dpy,i) \
-  if (!XDamageHasExtension(i)) { return; }
+#define XDamageSimpleCheckExtension(dpy, i) \
+    if (!XDamageHasExtension(i))            \
+    {                                       \
+        return;                             \
+    }
 
 #endif /* _XDAMAGEINT_H_ */

@@ -50,7 +50,7 @@ SOFTWARE.
  *
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/extensions/XI.h"
@@ -61,41 +61,38 @@ SOFTWARE.
 #include "XIint.h"
 
 int
-XGrabDeviceButton(
-    register Display	*dpy,
-    XDevice		*dev,
-    unsigned int	 button,	/* CARD8 */
-    unsigned int	 modifiers,	/* CARD16 */
-    XDevice		*modifier_device,
-    Window		 grab_window,
-    Bool		 owner_events,
-    unsigned int	 event_count,
-    XEventClass		*event_list,
-    int			 this_device_mode,
-    int			 other_devices_mode)
+XGrabDeviceButton(register Display *dpy,
+                  XDevice          *dev,
+                  unsigned int      button, /* CARD8 */
+                  unsigned int      modifiers, /* CARD16 */
+                  XDevice          *modifier_device,
+                  Window            grab_window,
+                  Bool              owner_events,
+                  unsigned int      event_count,
+                  XEventClass      *event_list,
+                  int               this_device_mode,
+                  int               other_devices_mode)
 {
     register xGrabDeviceButtonReq *req;
-    XExtDisplayInfo *info = XInput_find_display(dpy);
+    XExtDisplayInfo               *info = XInput_find_display(dpy);
 
     LockDisplay(dpy);
     if (_XiCheckExtInit(dpy, XInput_Initial_Release, info) == -1)
-	return (NoSuchExtension);
+        return (NoSuchExtension);
 
     GetReq(GrabDeviceButton, req);
 
-    req->reqType = info->codes->major_opcode;
-    req->ReqType = X_GrabDeviceButton;
+    req->reqType        = info->codes->major_opcode;
+    req->ReqType        = X_GrabDeviceButton;
     req->grabbed_device = dev->device_id;
-    req->button = button;
-    req->modifiers = modifiers;
-    if (modifier_device)
-	req->modifier_device = modifier_device->device_id;
-    else
-	req->modifier_device = UseXKeyboard;
-    req->grabWindow = grab_window;
-    req->ownerEvents = owner_events;
-    req->event_count = event_count;
-    req->this_device_mode = this_device_mode;
+    req->button         = button;
+    req->modifiers      = modifiers;
+    if (modifier_device) req->modifier_device = modifier_device->device_id;
+    else req->modifier_device = UseXKeyboard;
+    req->grabWindow         = grab_window;
+    req->ownerEvents        = owner_events;
+    req->event_count        = event_count;
+    req->this_device_mode   = this_device_mode;
     req->other_devices_mode = other_devices_mode;
     req->length += event_count;
 

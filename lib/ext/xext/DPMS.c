@@ -31,7 +31,7 @@ Equipment Corporation.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xlibint.h"
 #include "X11/extensions/dpms.h"
@@ -40,12 +40,12 @@ Equipment Corporation.
 #include "X11/extensions/extutil.h"
 #include <stdio.h>
 
-static XExtensionInfo _dpms_info_data;
-static XExtensionInfo *dpms_info = &_dpms_info_data;
-static const char *dpms_extension_name = DPMSExtensionName;
+static XExtensionInfo  _dpms_info_data;
+static XExtensionInfo *dpms_info           = &_dpms_info_data;
+static const char     *dpms_extension_name = DPMSExtensionName;
 
-#define DPMSCheckExtension(dpy,i,val) \
-  XextCheckExtension (dpy, i, dpms_extension_name, val)
+#define DPMSCheckExtension(dpy, i, val) \
+    XextCheckExtension(dpy, i, dpms_extension_name, val)
 
 /*****************************************************************************
  *                                                                           *
@@ -68,76 +68,82 @@ static /* const */ XExtensionHooks dpms_extension_hooks = {
     NULL                                /* error_string */
 };
 
-static XEXT_GENERATE_FIND_DISPLAY (find_display, dpms_info,
-				   dpms_extension_name,
-                                   &dpms_extension_hooks, DPMSNumberEvents,
-                                   NULL)
+static XEXT_GENERATE_FIND_DISPLAY(find_display,
+                                  dpms_info,
+                                  dpms_extension_name,
+                                  &dpms_extension_hooks,
+                                  DPMSNumberEvents,
+                                  NULL)
 
-static XEXT_GENERATE_CLOSE_DISPLAY (close_display, dpms_info)
+    static XEXT_GENERATE_CLOSE_DISPLAY(close_display, dpms_info)
 
-/*****************************************************************************
+    /*****************************************************************************
  *                                                                           *
  *                  public routines                                          *
  *                                                                           *
  *****************************************************************************/
 
-Bool
-DPMSQueryExtension (Display *dpy, int *event_basep, int *error_basep)
+    Bool DPMSQueryExtension(Display *dpy, int *event_basep, int *error_basep)
 {
-    XExtDisplayInfo *info = find_display (dpy);
+    XExtDisplayInfo *info = find_display(dpy);
 
-    if (XextHasExtension(info)) {
-	*event_basep = info->codes->first_event;
-	*error_basep = info->codes->first_error;
-	return True;
-    } else {
-	return False;
+    if (XextHasExtension(info))
+    {
+        *event_basep = info->codes->first_event;
+        *error_basep = info->codes->first_error;
+        return True;
+    }
+    else
+    {
+        return False;
     }
 }
 
 Status
 DPMSGetVersion(Display *dpy, int *major_versionp, int *minor_versionp)
 {
-    XExtDisplayInfo *info = find_display (dpy);
-    xDPMSGetVersionReply	    rep;
-    register xDPMSGetVersionReq  *req;
+    XExtDisplayInfo             *info = find_display(dpy);
+    xDPMSGetVersionReply         rep;
+    register xDPMSGetVersionReq *req;
 
-    DPMSCheckExtension (dpy, info, 0);
+    DPMSCheckExtension(dpy, info, 0);
 
-    LockDisplay (dpy);
-    GetReq (DPMSGetVersion, req);
-    req->reqType = info->codes->major_opcode;
+    LockDisplay(dpy);
+    GetReq(DPMSGetVersion, req);
+    req->reqType     = info->codes->major_opcode;
     req->dpmsReqType = X_DPMSGetVersion;
-    if (!_XReply (dpy, (xReply *) &rep, 0, xTrue)) {
-	UnlockDisplay (dpy);
-	SyncHandle ();
-	return 0;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue))
+    {
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return 0;
     }
     *major_versionp = rep.majorVersion;
     *minor_versionp = rep.minorVersion;
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    UnlockDisplay(dpy);
+    SyncHandle();
     return 1;
 }
 
 Bool
 DPMSCapable(Display *dpy)
 {
-    XExtDisplayInfo *info = find_display (dpy);
+    XExtDisplayInfo          *info = find_display(dpy);
     register xDPMSCapableReq *req;
-    xDPMSCapableReply rep;
+    xDPMSCapableReply         rep;
 
-    DPMSCheckExtension (dpy, info, 0);
+    DPMSCheckExtension(dpy, info, 0);
 
     LockDisplay(dpy);
     GetReq(DPMSCapable, req);
-    req->reqType = info->codes->major_opcode;
+    req->reqType     = info->codes->major_opcode;
     req->dpmsReqType = X_DPMSCapable;
 
-    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse)) {
-	UnlockDisplay(dpy);
-	SyncHandle();
-	return False;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return False;
     }
     UnlockDisplay(dpy);
     SyncHandle();
@@ -147,26 +153,26 @@ DPMSCapable(Display *dpy)
 Status
 DPMSSetTimeouts(Display *dpy, CARD16 standby, CARD16 suspend, CARD16 off)
 {
-    XExtDisplayInfo *info = find_display (dpy);
+    XExtDisplayInfo              *info = find_display(dpy);
     register xDPMSSetTimeoutsReq *req;
 
-    if ((off != 0)&&(off < suspend))
+    if ((off != 0) && (off < suspend))
     {
-	return BadValue;
+        return BadValue;
     }
-    if ((suspend != 0)&&(suspend < standby))
+    if ((suspend != 0) && (suspend < standby))
     {
-	return BadValue;
+        return BadValue;
     }
 
-    DPMSCheckExtension (dpy, info, 0);
+    DPMSCheckExtension(dpy, info, 0);
     LockDisplay(dpy);
     GetReq(DPMSSetTimeouts, req);
-    req->reqType = info->codes->major_opcode;
+    req->reqType     = info->codes->major_opcode;
     req->dpmsReqType = X_DPMSSetTimeouts;
-    req->standby = standby;
-    req->suspend = suspend;
-    req->off = off;
+    req->standby     = standby;
+    req->suspend     = suspend;
+    req->off         = off;
 
     UnlockDisplay(dpy);
     SyncHandle();
@@ -176,40 +182,41 @@ DPMSSetTimeouts(Display *dpy, CARD16 standby, CARD16 suspend, CARD16 off)
 Bool
 DPMSGetTimeouts(Display *dpy, CARD16 *standby, CARD16 *suspend, CARD16 *off)
 {
-    XExtDisplayInfo *info = find_display (dpy);
+    XExtDisplayInfo              *info = find_display(dpy);
     register xDPMSGetTimeoutsReq *req;
-    xDPMSGetTimeoutsReply rep;
+    xDPMSGetTimeoutsReply         rep;
 
-    DPMSCheckExtension (dpy, info, 0);
+    DPMSCheckExtension(dpy, info, 0);
 
     LockDisplay(dpy);
     GetReq(DPMSGetTimeouts, req);
-    req->reqType = info->codes->major_opcode;
+    req->reqType     = info->codes->major_opcode;
     req->dpmsReqType = X_DPMSGetTimeouts;
 
-    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue)) {
-	UnlockDisplay(dpy);
-	SyncHandle();
-	return False;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue))
+    {
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return False;
     }
     UnlockDisplay(dpy);
     SyncHandle();
     *standby = rep.standby;
     *suspend = rep.suspend;
-    *off = rep.off;
+    *off     = rep.off;
     return 1;
 }
 
 Status
 DPMSEnable(Display *dpy)
 {
-    XExtDisplayInfo *info = find_display (dpy);
+    XExtDisplayInfo         *info = find_display(dpy);
     register xDPMSEnableReq *req;
 
-    DPMSCheckExtension (dpy, info, 0);
+    DPMSCheckExtension(dpy, info, 0);
     LockDisplay(dpy);
     GetReq(DPMSEnable, req);
-    req->reqType = info->codes->major_opcode;
+    req->reqType     = info->codes->major_opcode;
     req->dpmsReqType = X_DPMSEnable;
 
     UnlockDisplay(dpy);
@@ -220,13 +227,13 @@ DPMSEnable(Display *dpy)
 Status
 DPMSDisable(Display *dpy)
 {
-    XExtDisplayInfo *info = find_display (dpy);
+    XExtDisplayInfo          *info = find_display(dpy);
     register xDPMSDisableReq *req;
 
-    DPMSCheckExtension (dpy, info, 0);
+    DPMSCheckExtension(dpy, info, 0);
     LockDisplay(dpy);
     GetReq(DPMSDisable, req);
-    req->reqType = info->codes->major_opcode;
+    req->reqType     = info->codes->major_opcode;
     req->dpmsReqType = X_DPMSDisable;
 
     UnlockDisplay(dpy);
@@ -234,26 +241,23 @@ DPMSDisable(Display *dpy)
     return 1;
 }
 
-
 Status
 DPMSForceLevel(Display *dpy, CARD16 level)
 {
-    XExtDisplayInfo *info = find_display (dpy);
+    XExtDisplayInfo             *info = find_display(dpy);
     register xDPMSForceLevelReq *req;
 
-    DPMSCheckExtension (dpy, info, 0);
+    DPMSCheckExtension(dpy, info, 0);
 
-    if ((level != DPMSModeOn) &&
-	(level != DPMSModeStandby) &&
-	(level != DPMSModeSuspend) &&
-	(level != DPMSModeOff))
-	return BadValue;
+    if ((level != DPMSModeOn) && (level != DPMSModeStandby) &&
+        (level != DPMSModeSuspend) && (level != DPMSModeOff))
+        return BadValue;
 
     LockDisplay(dpy);
     GetReq(DPMSForceLevel, req);
-    req->reqType = info->codes->major_opcode;
+    req->reqType     = info->codes->major_opcode;
     req->dpmsReqType = X_DPMSForceLevel;
-    req->level = level;
+    req->level       = level;
 
     UnlockDisplay(dpy);
     SyncHandle();
@@ -263,28 +267,26 @@ DPMSForceLevel(Display *dpy, CARD16 level)
 Status
 DPMSInfo(Display *dpy, CARD16 *power_level, BOOL *state)
 {
-    XExtDisplayInfo *info = find_display (dpy);
+    XExtDisplayInfo       *info = find_display(dpy);
     register xDPMSInfoReq *req;
-    xDPMSInfoReply rep;
+    xDPMSInfoReply         rep;
 
-    DPMSCheckExtension (dpy, info, 0);
+    DPMSCheckExtension(dpy, info, 0);
 
     LockDisplay(dpy);
     GetReq(DPMSInfo, req);
-    req->reqType = info->codes->major_opcode;
+    req->reqType     = info->codes->major_opcode;
     req->dpmsReqType = X_DPMSInfo;
 
-    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue)) {
-	UnlockDisplay(dpy);
-	SyncHandle();
-	return False;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue))
+    {
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return False;
     }
     UnlockDisplay(dpy);
     SyncHandle();
     *power_level = rep.power_level;
-    *state = rep.state;
+    *state       = rep.state;
     return 1;
 }
-
-
-

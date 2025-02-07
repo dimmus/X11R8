@@ -29,21 +29,22 @@
 #include <inttypes.h>
 
 /* Test what happens if you try to allocate an array with too many entries */
-#define TestAllocOversize(type, len) {                          \
-    type newArray = { -1, (void *) -1 };                        \
-    int result;                                                 \
-    printf("Checking XdmcpAlloc%s(%d)...\n", #type, len);       \
-    result = XdmcpAlloc##type(&newArray, len)    ;              \
-    assert(result == FALSE);                                    \
-    assert(newArray.length == 0);                               \
-    assert(newArray.data == NULL);                              \
-    printf("Checking XdmcpRealloc%s(%d)...\n", #type, len);     \
-    result = XdmcpRealloc##type(&newArray, len);                \
-    assert(result == FALSE);                                    \
-    assert(newArray.length == 0);                               \
-    assert(newArray.data == NULL);                              \
-    XdmcpDispose##type(&newArray);                              \
-}
+#define TestAllocOversize(type, len)                            \
+    {                                                           \
+        type newArray = { -1, (void *)-1 };                     \
+        int  result;                                            \
+        printf("Checking XdmcpAlloc%s(%d)...\n", #type, len);   \
+        result = XdmcpAlloc##type(&newArray, len);              \
+        assert(result == FALSE);                                \
+        assert(newArray.length == 0);                           \
+        assert(newArray.data == NULL);                          \
+        printf("Checking XdmcpRealloc%s(%d)...\n", #type, len); \
+        result = XdmcpRealloc##type(&newArray, len);            \
+        assert(result == FALSE);                                \
+        assert(newArray.length == 0);                           \
+        assert(newArray.data == NULL);                          \
+        XdmcpDispose##type(&newArray);                          \
+    }
 
 static void
 TestAllocOversizeArrays(void)
@@ -62,8 +63,8 @@ static void
 TestZeroFillARRAYofARRAY8(void)
 {
     ARRAYofARRAY8 aa;
-    int result;
-    char *noise;
+    int           result;
+    char         *noise;
 
     printf("Checking XdmcpAllocARRAYofARRAY8 zero fills array...\n");
     /* prefill memory with junk - hopefully next malloc will pick up some */

@@ -50,7 +50,7 @@ SOFTWARE.
  *
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/extensions/XI.h"
@@ -61,26 +61,23 @@ SOFTWARE.
 #include "XIint.h"
 
 int
-XSetDeviceMode(
-    register Display	*dpy,
-    XDevice		*dev,
-    int			 mode)
+XSetDeviceMode(register Display *dpy, XDevice *dev, int mode)
 {
-    xSetDeviceModeReq *req;
+    xSetDeviceModeReq  *req;
     xSetDeviceModeReply rep;
-    XExtDisplayInfo *info = XInput_find_display(dpy);
+    XExtDisplayInfo    *info = XInput_find_display(dpy);
 
     LockDisplay(dpy);
     if (_XiCheckExtInit(dpy, XInput_Initial_Release, info) == -1)
-	return (NoSuchExtension);
+        return (NoSuchExtension);
 
     GetReq(SetDeviceMode, req);
-    req->reqType = info->codes->major_opcode;
-    req->ReqType = X_SetDeviceMode;
+    req->reqType  = info->codes->major_opcode;
+    req->ReqType  = X_SetDeviceMode;
     req->deviceid = dev->device_id;
-    req->mode = mode;
+    req->mode     = mode;
 
-    (void)_XReply(dpy, (xReply *) & rep, 0, xTrue);
+    (void)_XReply(dpy, (xReply *)&rep, 0, xTrue);
     UnlockDisplay(dpy);
     SyncHandle();
     return (rep.status);

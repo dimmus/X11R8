@@ -23,7 +23,7 @@
 
 /* Test code for functions in src/StrToGrav.c */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/Xmu/Converters.h"
@@ -32,29 +32,30 @@
 #include <setjmp.h>
 #include <stdio.h>
 
-struct TestData {
+struct TestData
+{
     const char *name;
-    int value;
-    Bool dupvalue; /* value maps to a different string already */
+    int         value;
+    Bool        dupvalue; /* value maps to a different string already */
 };
 
 static const struct TestData data[] = {
-    { XtEForget,        ForgetGravity,          False },
-    { XtENorthWest,     NorthWestGravity,       False },
-    { XtENorth,         NorthGravity,           False },
-    { XtENorthEast,     NorthEastGravity,       False },
-    { XtEWest,          WestGravity,            False },
-    { XtECenter,        CenterGravity,          False },
-    { XtEEast,          EastGravity,            False },
-    { XtESouthWest,     SouthWestGravity,       False },
-    { XtESouth,         SouthGravity,           False },
-    { XtESouthEast,     SouthEastGravity,       False },
-    { XtEStatic,        StaticGravity,          False },
-    { XtEUnmap,         UnmapGravity,           True },
-    { XtEleft,          WestGravity,            True },
-    { XtEtop,           NorthGravity,           True },
-    { XtEright,         EastGravity,            True },
-    { XtEbottom,        SouthGravity,           True }
+    { XtEForget,    ForgetGravity,    False },
+    { XtENorthWest, NorthWestGravity, False },
+    { XtENorth,     NorthGravity,     False },
+    { XtENorthEast, NorthEastGravity, False },
+    { XtEWest,      WestGravity,      False },
+    { XtECenter,    CenterGravity,    False },
+    { XtEEast,      EastGravity,      False },
+    { XtESouthWest, SouthWestGravity, False },
+    { XtESouth,     SouthGravity,     False },
+    { XtESouthEast, SouthEastGravity, False },
+    { XtEStatic,    StaticGravity,    False },
+    { XtEUnmap,     UnmapGravity,     True  },
+    { XtEleft,      WestGravity,      True  },
+    { XtEtop,       NorthGravity,     True  },
+    { XtEright,     EastGravity,      True  },
+    { XtEbottom,    SouthGravity,     True  }
 };
 #define DATA_ENTRIES (sizeof(data) / sizeof(data[0]))
 
@@ -80,7 +81,6 @@ xt_error_handler(String message)
     longjmp(jmp_env, 1);
 }
 
-
 static void
 test_XmuCvtStringToGravity(void)
 {
@@ -89,17 +89,17 @@ test_XmuCvtStringToGravity(void)
 
     char namebuf[16];
 
-    for (unsigned int i = 0; i < DATA_ENTRIES; i++) {
+    for (unsigned int i = 0; i < DATA_ENTRIES; i++)
+    {
         printf("StringToGravity(%s)", data[i].name);
 
         strncpy(namebuf, data[i].name, sizeof(namebuf) - 1);
         namebuf[sizeof(namebuf) - 1] = 0;
-        from.addr = namebuf;
-        from.size = sizeof(char *);
+        from.addr                    = namebuf;
+        from.size                    = sizeof(char *);
         XmuCvtStringToGravity(NULL, &nargs, &from, &to);
         assert(*(int *)to.addr == data[i].value);
         assert(to.size == sizeof(int));
-
 
         XmuNCopyISOLatin1Uppered(namebuf, data[i].name, sizeof(namebuf));
         from.addr = namebuf;
@@ -111,15 +111,15 @@ test_XmuCvtStringToGravity(void)
 
     /* Verify warning issued for unused args */
     warning_count = 0;
-    nargs = 1;
+    nargs         = 1;
     printf("StringToGravity with extra args");
     XmuCvtStringToGravity(&args, &nargs, &from, &to);
     assert(warning_count > 0);
 
     /* Verify warning issued for unknown string */
     warning_count = 0;
-    from.addr = (char *) "DoesNotExist";
-    nargs = 0;
+    from.addr     = (char *)"DoesNotExist";
+    nargs         = 0;
     printf("StringToGravity(%s)", from.addr);
     XmuCvtStringToGravity(NULL, &nargs, &from, &to);
     assert(warning_count > 0);
@@ -129,28 +129,29 @@ static void
 test_XmuCvtGravityToString(void)
 {
     XrmValue from, to;
-    int value;
+    int      value;
     Cardinal nargs = 0;
-    Boolean ret;
-    char namebuf[16];
+    Boolean  ret;
+    char     namebuf[16];
 
-
-    for (unsigned int i = 0; i < DATA_ENTRIES; i++) {
-        if (data[i].dupvalue == True) {
+    for (unsigned int i = 0; i < DATA_ENTRIES; i++)
+    {
+        if (data[i].dupvalue == True)
+        {
             /* skip values that map to different names */
             continue;
         }
 
         printf("GravityToString(%d)", data[i].value);
 
-        value = data[i].value;
-        from.addr = (XPointer) &value;
+        value     = data[i].value;
+        from.addr = (XPointer)&value;
         from.size = sizeof(int *);
 
         /* First test without providing a buffer to copy the string into */
         to.addr = NULL;
         to.size = 0;
-        ret = XmuCvtGravityToString(NULL, NULL, &nargs, &from, &to, NULL);
+        ret     = XmuCvtGravityToString(NULL, NULL, &nargs, &from, &to, NULL);
         assert(ret == True);
         assert(strcmp(to.addr, data[i].name) == 0);
         /* Unlike StrtoBS, this always returns string length in to.size */
@@ -159,14 +160,14 @@ test_XmuCvtGravityToString(void)
         /* Then test with a buffer that's too small to copy the string into */
         to.addr = namebuf;
         to.size = 4;
-        ret = XmuCvtGravityToString(NULL, NULL, &nargs, &from, &to, NULL);
+        ret     = XmuCvtGravityToString(NULL, NULL, &nargs, &from, &to, NULL);
         assert(ret == False);
         assert(to.size == strlen(data[i].name) + 1);
 
         /* Then test with a buffer that's big enough to copy the string into */
         to.addr = namebuf;
         to.size = sizeof(namebuf);
-        ret = XmuCvtGravityToString(NULL, NULL, &nargs, &from, &to, NULL);
+        ret     = XmuCvtGravityToString(NULL, NULL, &nargs, &from, &to, NULL);
         assert(ret == True);
         assert(strcmp(to.addr, data[i].name) == 0);
         assert(to.size == strlen(data[i].name) + 1);
@@ -174,20 +175,23 @@ test_XmuCvtGravityToString(void)
 
     /* Verify warning and return of False for invalid value */
     warning_count = 0;
-    value = 1984;
-    from.addr = (XPointer) &value;
+    value         = 1984;
+    from.addr     = (XPointer)&value;
     printf("GravityToString(%d)", value);
-    if (setjmp(jmp_env) == 0) {
+    if (setjmp(jmp_env) == 0)
+    {
         ret = XmuCvtGravityToString(NULL, NULL, &nargs, &from, &to, NULL);
         assert(ret == False);
-    } else {
+    }
+    else
+    {
         /* We jumped here from error handler as expected. */
     }
     assert(warning_count > 0);
 }
 
 int
-main(int argc, char** argv)
+main(int argc, char **argv)
 {
     XtSetWarningHandler(xt_warning_handler);
     XtSetErrorHandler(xt_error_handler);

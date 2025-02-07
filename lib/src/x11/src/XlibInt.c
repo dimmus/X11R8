@@ -580,8 +580,8 @@ XRemoveConnectionWatch(Display             *dpy,
         /* remove our watch_data for each connection */
             for (conni = dpy->im_fd_info; conni; conni = conni->next)
             {
-        /* don't bother realloc'ing; these arrays are small anyway */
-        /* overlapping */
+                /* don't bother realloc'ing; these arrays are small anyway */
+                /* overlapping */
                 memmove(conni->watch_data + counter,
                         conni->watch_data + counter + 1,
                         dpy->watcher_count - counter);
@@ -802,7 +802,7 @@ _XDeq(register Display  *dpy,
     }
     else
     {
-    /* no prev, so removing first elt */
+        /* no prev, so removing first elt */
         if ((dpy->head = qelt->next) == NULL) dpy->tail = NULL;
     }
     qelt->qserial_num = 0;
@@ -813,7 +813,7 @@ _XDeq(register Display  *dpy,
     if (_XIsEventCookie(dpy, &qelt->event))
     {
         XGenericEventCookie *cookie = &qelt->event.xcookie;
-    /* dpy->qfree is re-used, reset memory to avoid double free on
+        /* dpy->qfree is re-used, reset memory to avoid double free on
 	 * _XFreeDisplayStructure */
         cookie->data                = NULL;
     }

@@ -31,7 +31,7 @@
 #define _EXTUTILP_H_
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/Xfuncproto.h"
@@ -40,7 +40,8 @@
 /*
  * Extensions need to register callbacks for their events.
  */
-_X_HIDDEN Bool xgeExtRegister(Display* dpy, int offset,
-                              XExtensionHooks* callbacks);
+_X_HIDDEN Bool xgeExtRegister(Display         *dpy,
+                              int              offset,
+                              XExtensionHooks *callbacks);
 
 #endif /* _EXTUTILP_H_ */

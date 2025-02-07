@@ -39,10 +39,11 @@ SOFTWARE.
 #include <X11/extensions/xtraplib.h>
 #include <X11/extensions/xtraplibp.h>
 
-static void XETrapDispatchCB(XETC *tc, XETrapDatum *pdatum)
+static void
+XETrapDispatchCB(XETC *tc, XETrapDatum *pdatum)
 {
     void_function pfunc = NULL;
-    BYTE *userp = NULL;
+    BYTE         *userp = NULL;
 
     /* Need to deal with Delta Timestamps here before calling client CB */
     if (XETrapGetTCFlagDeltaTimes(tc))
@@ -50,8 +51,7 @@ static void XETrapDispatchCB(XETC *tc, XETrapDatum *pdatum)
         CARD32 last_time = XETrapGetTCTime(tc);
         if (XETrapHeaderIsEvent(&pdatum->hdr))
         {   /* then we can play with the timestamps */
-            pdatum->hdr.timestamp = 
-                pdatum->u.event.u.keyButtonPointer.time;
+            pdatum->hdr.timestamp = pdatum->u.event.u.keyButtonPointer.time;
         }
         else
         {   /* 
@@ -86,7 +86,7 @@ static void XETrapDispatchCB(XETC *tc, XETrapDatum *pdatum)
         userp = tc->values.evt_cb[pdatum->u.event.u.u.type].data;
     }
     else if (XETrapHeaderIsRequest(&pdatum->hdr) ||
-        XETrapHeaderIsReply(&pdatum->hdr))
+             XETrapHeaderIsReply(&pdatum->hdr))
     {
         pfunc = tc->values.req_cb[pdatum->u.req.reqType].func;
         userp = tc->values.req_cb[pdatum->u.req.reqType].data;
@@ -94,14 +94,15 @@ static void XETrapDispatchCB(XETC *tc, XETrapDatum *pdatum)
 
     /* If there is a callback then call it with the data */
     if (pfunc != NULL)
-    { 
-        (*pfunc)(tc,pdatum,userp); 
+    {
+        (*pfunc)(tc, pdatum, userp);
     }
 }
-
-Boolean XETrapDispatchXLib(XETrapDataEvent *event, XETC *tc)
-{   
-    memcpy(&tc->xbuff[event->idx*sz_EventData], event->data, sz_EventData);
+
+Boolean
+XETrapDispatchXLib(XETrapDataEvent *event, XETC *tc)
+{
+    memcpy(&tc->xbuff[event->idx * sz_EventData], event->data, sz_EventData);
 
     if (event->detail == XETrapDataLast)
     {

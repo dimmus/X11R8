@@ -23,7 +23,7 @@
 
 /* Test code for functions in src/StrToOrnt.c */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/Xmu/Converters.h"
@@ -32,14 +32,15 @@
 #include <assert.h>
 #include <stdio.h>
 
-struct TestData {
-    const char *name;
+struct TestData
+{
+    const char   *name;
     XtOrientation value;
 };
 
 static const struct TestData data[] = {
-        { XtEvertical,          XtorientVertical },
-        { XtEhorizontal,        XtorientHorizontal }
+    { XtEvertical,   XtorientVertical   },
+    { XtEhorizontal, XtorientHorizontal }
 };
 #define DATA_ENTRIES (sizeof(data) / sizeof(data[0]))
 
@@ -60,17 +61,17 @@ test_XmuCvtStringToOrientation(void)
 
     char namebuf[16];
 
-    for (unsigned int i = 0; i < DATA_ENTRIES; i++) {
+    for (unsigned int i = 0; i < DATA_ENTRIES; i++)
+    {
         printf("StringToOrientation(%s)", data[i].name);
 
         strncpy(namebuf, data[i].name, sizeof(namebuf) - 1);
         namebuf[sizeof(namebuf) - 1] = 0;
-        from.addr = namebuf;
-        from.size = sizeof(char *);
+        from.addr                    = namebuf;
+        from.size                    = sizeof(char *);
         XmuCvtStringToOrientation(NULL, &nargs, &from, &to);
         assert(*(XtOrientation *)to.addr == data[i].value);
         assert(to.size == sizeof(int));
-
 
         XmuNCopyISOLatin1Uppered(namebuf, data[i].name, sizeof(namebuf));
         from.addr = namebuf;
@@ -91,8 +92,8 @@ test_XmuCvtStringToOrientation(void)
 
     /* Verify warning issued for unknown string */
     warning_count = 0;
-    from.addr = (char *) "DoesNotExist";
-    nargs = 0;
+    from.addr     = (char *)"DoesNotExist";
+    nargs         = 0;
     printf("StringToOrientation(%s)", from.addr);
     XmuCvtStringToOrientation(NULL, &nargs, &from, &to);
     assert(warning_count > 0);
@@ -101,18 +102,18 @@ test_XmuCvtStringToOrientation(void)
 static void
 test_XmuCvtOrientationToString(void)
 {
-    XrmValue from, to;
+    XrmValue      from, to;
     XtOrientation value;
-    Cardinal nargs = 0;
-    Boolean ret;
-    char namebuf[16];
+    Cardinal      nargs = 0;
+    Boolean       ret;
+    char          namebuf[16];
 
-
-    for (unsigned int i = 0; i < DATA_ENTRIES; i++) {
+    for (unsigned int i = 0; i < DATA_ENTRIES; i++)
+    {
         printf("OrientationToString(%d)", data[i].value);
 
-        value = data[i].value;
-        from.addr = (XPointer) &value;
+        value     = data[i].value;
+        from.addr = (XPointer)&value;
         from.size = sizeof(XtOrientation);
 
         /* First test without providing a buffer to copy the string into */
@@ -141,8 +142,8 @@ test_XmuCvtOrientationToString(void)
 
     /* Verify warning and return of False for invalid value */
     warning_count = 0;
-    value = 1984;
-    from.addr = (XPointer) &value;
+    value         = 1984;
+    from.addr     = (XPointer)&value;
     printf("OrientationToString(%d)", value);
     ret = XmuCvtOrientationToString(NULL, NULL, &nargs, &from, &to, NULL);
     assert(ret == False);
@@ -150,7 +151,7 @@ test_XmuCvtOrientationToString(void)
 }
 
 int
-main(int argc, char** argv)
+main(int argc, char **argv)
 {
     XtSetWarningHandler(xt_warning_handler);
 

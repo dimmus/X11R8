@@ -434,7 +434,7 @@ handle_response(Display *dpy, xcb_generic_reply_t *response, Bool in_XReply)
             break;
 
         default: /* event */
-        /* GenericEvents may be > 32 bytes. In this case, the
+            /* GenericEvents may be > 32 bytes. In this case, the
 		 * event struct is trailed by the additional bytes. the
 		 * xcb_generic_event_t struct uses 4 bytes for internal
 		 * numbering, so we need to shift the trailing data to
@@ -897,7 +897,7 @@ _XEatDataWords(Display *dpy, unsigned long n)
 {
     if (n < ((INT_MAX - dpy->xcb->reply_consumed) >> 2))
         dpy->xcb->reply_consumed += (n << 2);
-    else  /* Overflow would happen, so just eat the rest of the reply */
+    else /* Overflow would happen, so just eat the rest of the reply */
         dpy->xcb->reply_consumed = dpy->xcb->reply_length;
     _XFreeReplyData(dpy, False);
 }

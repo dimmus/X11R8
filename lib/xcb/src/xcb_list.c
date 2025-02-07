@@ -26,7 +26,7 @@
 /* A generic implementation of a list of void-pointers. */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include <stdlib.h>
@@ -34,69 +34,70 @@
 #include "xcb/xcb.h"
 #include "xcbint.h"
 
-typedef struct node {
+typedef struct node
+{
     struct node *next;
-    uint64_t key;
-    void *data;
+    uint64_t     key;
+    void        *data;
 } node;
 
-struct _xcb_map {
-    node *head;
+struct _xcb_map
+{
+    node  *head;
     node **tail;
 };
 
 /* Private interface */
 
-_xcb_map *_xcb_map_new(void)
+_xcb_map *
+_xcb_map_new(void)
 {
     _xcb_map *list;
     list = malloc(sizeof(_xcb_map));
-    if(!list)
-        return 0;
+    if (!list) return 0;
     list->head = 0;
     list->tail = &list->head;
     return list;
 }
 
-void _xcb_map_delete(_xcb_map *list, xcb_list_free_func_t do_free)
+void
+_xcb_map_delete(_xcb_map *list, xcb_list_free_func_t do_free)
 {
-    if(!list)
-        return;
-    while(list->head)
+    if (!list) return;
+    while (list->head)
     {
         node *cur = list->head;
-        if(do_free)
-            do_free(cur->data);
+        if (do_free) do_free(cur->data);
         list->head = cur->next;
         free(cur);
     }
     free(list);
 }
 
-int _xcb_map_put(_xcb_map *list, uint64_t key, void *data)
+int
+_xcb_map_put(_xcb_map *list, uint64_t key, void *data)
 {
     node *cur = malloc(sizeof(node));
-    if(!cur)
-        return 0;
-    cur->key = key;
-    cur->data = data;
-    cur->next = 0;
+    if (!cur) return 0;
+    cur->key    = key;
+    cur->data   = data;
+    cur->next   = 0;
     *list->tail = cur;
-    list->tail = &cur->next;
+    list->tail  = &cur->next;
     return 1;
 }
 
-void *_xcb_map_remove(_xcb_map *list, uint64_t key)
+void *
+_xcb_map_remove(_xcb_map *list, uint64_t key)
 {
     node **cur;
-    for(cur = &list->head; *cur; cur = &(*cur)->next)
-        if((*cur)->key == key)
+    for (cur = &list->head; *cur; cur = &(*cur)->next)
+        if ((*cur)->key == key)
         {
             node *tmp = *cur;
             void *ret = (*cur)->data;
-            *cur = (*cur)->next;
-            if(!*cur)
-                list->tail = cur;
+            *cur      = (*cur)->next;
+            if (!*cur) list->tail = cur;
 
             free(tmp);
             return ret;

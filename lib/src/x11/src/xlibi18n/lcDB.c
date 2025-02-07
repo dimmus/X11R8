@@ -564,7 +564,7 @@ append_value_list(void)
         char *old_list;
         old_list    = *value_list;
         *value_list = value;
-    /* Re-derive pointers from the new realloc() result to avoid undefined
+        /* Re-derive pointers from the new realloc() result to avoid undefined
 	   behaviour (and crashes on architectures with pointer bounds). */
         for (i = 1; i < value_num; ++i)
         {
@@ -836,7 +836,7 @@ f_right_brace(const char *str, Token token, Database *db)
             return 0;
         case S_VALUE:
             if (!store_to_database(db)) return 0;
-    /* fall through - to next case */
+            /* fall through - to next case */
         case S_CATEGORY:
             if (parse_info.name[parse_info.nest_depth] != NULL)
             {
@@ -981,7 +981,7 @@ f_default(const char *str, Token token, Database *db)
             {
                 if (check_category_end(str))
                 {
-        /* end of category is detected.
+                    /* end of category is detected.
 		   clear context and zap to end of this line */
                     clear_parse_info();
                     len = (int)strlen(str);

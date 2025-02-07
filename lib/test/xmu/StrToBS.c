@@ -24,7 +24,7 @@
 /* Test code for functions in src/StrToBS.c */
 #include "Intrinsic.h"
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/Xmu/Converters.h"
@@ -32,16 +32,17 @@
 #include <assert.h>
 #include <stdio.h>
 
-struct TestData {
+struct TestData
+{
     const char *name;
-    int value;
+    int         value;
 };
 
 static const struct TestData data[] = {
-    { XtEnotUseful, NotUseful },
-    { XtEwhenMapped, WhenMapped },
-    { XtEalways, Always },
-    { XtEdefault, Always + WhenMapped + NotUseful}
+    { XtEnotUseful,  NotUseful                       },
+    { XtEwhenMapped, WhenMapped                      },
+    { XtEalways,     Always                          },
+    { XtEdefault,    Always + WhenMapped + NotUseful }
 };
 #define DATA_ENTRIES (sizeof(data) / sizeof(data[0]))
 
@@ -54,8 +55,6 @@ xt_warning_handler(String message)
     warning_count++;
 }
 
-
-
 static void
 test_XmuCvtStringToBackingStore(void)
 {
@@ -64,17 +63,17 @@ test_XmuCvtStringToBackingStore(void)
 
     char namebuf[16];
 
-    for (unsigned int i = 0; i < DATA_ENTRIES; i++) {
+    for (unsigned int i = 0; i < DATA_ENTRIES; i++)
+    {
         printf("StringToBackingStore(%s)", data[i].name);
 
         strncpy(namebuf, data[i].name, sizeof(namebuf) - 1);
         namebuf[sizeof(namebuf) - 1] = 0;
-        from.addr = namebuf;
-        from.size = sizeof(char *);
+        from.addr                    = namebuf;
+        from.size                    = sizeof(char *);
         XmuCvtStringToBackingStore(NULL, &nargs, &from, &to);
         assert(*(int *)to.addr == data[i].value);
         assert(to.size == sizeof(int));
-
 
         XmuNCopyISOLatin1Uppered(namebuf, data[i].name, sizeof(namebuf));
         from.addr = namebuf;
@@ -86,15 +85,15 @@ test_XmuCvtStringToBackingStore(void)
 
     /* Verify warning issued for unused args */
     warning_count = 0;
-    nargs = 1;
+    nargs         = 1;
     printf("StringToBackingStore with extra args");
     XmuCvtStringToBackingStore(&args, &nargs, &from, &to);
     assert(warning_count > 0);
 
     /* Verify warning issued for unknown string */
     warning_count = 0;
-    from.addr = (char *) "DoesNotExist";
-    nargs = 0;
+    from.addr     = (char *)"DoesNotExist";
+    nargs         = 0;
     printf("StringToBackingStore(%s)", from.addr);
     XmuCvtStringToBackingStore(NULL, &nargs, &from, &to);
     assert(warning_count > 0);
@@ -104,17 +103,17 @@ static void
 test_XmuCvtBackingStoreToString(void)
 {
     XrmValue from, to;
-    int value;
+    int      value;
     Cardinal nargs = 0;
-    Boolean ret;
-    char namebuf[16];
+    Boolean  ret;
+    char     namebuf[16];
 
-
-    for (unsigned int i = 0; i < DATA_ENTRIES; i++) {
+    for (unsigned int i = 0; i < DATA_ENTRIES; i++)
+    {
         printf("BackingStoreToString(%d)", data[i].value);
 
-        value = data[i].value;
-        from.addr = (XPointer) &value;
+        value     = data[i].value;
+        from.addr = (XPointer)&value;
         from.size = sizeof(int *);
 
         /* First test without providing a buffer to copy the string into */
@@ -143,8 +142,8 @@ test_XmuCvtBackingStoreToString(void)
 
     /* Verify warning and return of False for invalid value */
     warning_count = 0;
-    value = 1984;
-    from.addr = (XPointer) &value;
+    value         = 1984;
+    from.addr     = (XPointer)&value;
     printf("BackingStoreToString(%d)", value);
     ret = XmuCvtBackingStoreToString(NULL, NULL, &nargs, &from, &to, NULL);
     assert(ret == False);
@@ -152,7 +151,7 @@ test_XmuCvtBackingStoreToString(void)
 }
 
 int
-main(int argc, char** argv)
+main(int argc, char **argv)
 {
     XtSetWarningHandler(xt_warning_handler);
 

@@ -28,23 +28,25 @@
 
 #include "xcb/xcb_errors.h"
 
-struct static_extension_info_t {
-	uint16_t num_minor;
-	uint16_t num_xge_events;
-	uint8_t num_events;
-	uint8_t num_errors;
-	const char *strings_minor;
-	const char *strings_xge_events;
-	const char *strings_events;
-	const char *strings_errors;
-	const char *name;
+struct static_extension_info_t
+{
+    uint16_t    num_minor;
+    uint16_t    num_xge_events;
+    uint8_t     num_events;
+    uint8_t     num_errors;
+    const char *strings_minor;
+    const char *strings_xge_events;
+    const char *strings_events;
+    const char *strings_errors;
+    const char *name;
 };
 
 extern const struct static_extension_info_t xproto_info;
 
 int register_extensions(xcb_errors_context_t *ctx, xcb_connection_t *conn);
-int register_extension(xcb_errors_context_t *ctx, xcb_connection_t *conn,
-		xcb_query_extension_cookie_t cookie,
-		const struct static_extension_info_t *static_info);
+int register_extension(xcb_errors_context_t                 *ctx,
+                       xcb_connection_t                     *conn,
+                       xcb_query_extension_cookie_t          cookie,
+                       const struct static_extension_info_t *static_info);
 
 #endif /* __ERRORS_H__ */

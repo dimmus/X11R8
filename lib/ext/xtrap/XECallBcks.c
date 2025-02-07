@@ -43,73 +43,77 @@ SOFTWARE.
 #include <X11/extensions/xtraplib.h>
 #include <X11/extensions/xtraplibp.h>
 
-int XEAddRequestCB(XETC *tc, CARD8 req, void_function func, BYTE *data)
+int
+XEAddRequestCB(XETC *tc, CARD8 req, void_function func, BYTE *data)
 {
     if (!tc->values.req_cb)
     {   /* This is the first time for this particular TC, need to malloc */
         if ((tc->values.req_cb =
-            (XETrapCB *)XtCalloc(256L,sizeof(XETrapCB))) == NULL)
+                 (XETrapCB *)XtCalloc(256L, sizeof(XETrapCB))) == NULL)
         {
             /* XtCalloc already reported the error */
-            return(False);
+            return (False);
         }
     }
     tc->values.req_cb[req].func = func;
     tc->values.req_cb[req].data = data;
 
-    return(True);
+    return (True);
 }
 
-int XEAddRequestCBs(XETC *tc, ReqFlags req_flags, void_function func,
-    BYTE *data)
+int
+XEAddRequestCBs(XETC *tc, ReqFlags req_flags, void_function func, BYTE *data)
 {
     int i;
     int status = True;
 
-    for (i=0; i<=255L; i++)
+    for (i = 0; i <= 255L; i++)
     {
         if (BitIsTrue(req_flags, i))
         {
             status = XEAddRequestCB(tc, (CARD8)i, func, data);
         }
     }
-    return(status);
+    return (status);
 }
-
-int XEAddEventCB(XETC *tc, CARD8 evt, void_function func, BYTE *data)
+
+int
+XEAddEventCB(XETC *tc, CARD8 evt, void_function func, BYTE *data)
 {
     if (!tc->values.evt_cb)
     {   /* This is the first time for this particular TC, need to malloc */
-        if ((tc->values.evt_cb = 
-            (XETrapCB *)XtCalloc(XETrapCoreEvents,sizeof(XETrapCB))) == NULL)
+        if ((tc->values.evt_cb =
+                 (XETrapCB *)XtCalloc(XETrapCoreEvents, sizeof(XETrapCB))) ==
+            NULL)
         {
             /* XtCalloc already reported the error */
-            return(False);
+            return (False);
         }
     }
     tc->values.evt_cb[evt].func = func;
     tc->values.evt_cb[evt].data = data;
 
-    return(True);
+    return (True);
 }
 
-int XEAddEventCBs(XETC *tc, EventFlags evt_flags, void_function func,
-    BYTE *data)
+int
+XEAddEventCBs(XETC *tc, EventFlags evt_flags, void_function func, BYTE *data)
 {
     int i;
     int status = True;
 
-    for (i=KeyPress; i<=MotionNotify; i++)
+    for (i = KeyPress; i <= MotionNotify; i++)
     {
         if (BitIsTrue(evt_flags, i))
         {
             status = XEAddEventCB(tc, (CARD8)i, func, data);
         }
     }
-    return(status);
+    return (status);
 }
-
-void XERemoveRequestCB(XETC *tc, CARD8 req)
+
+void
+XERemoveRequestCB(XETC *tc, CARD8 req)
 {
     if (!tc->values.req_cb)
     {   /* We gotta problem!  CB struct not allocated! */
@@ -119,11 +123,13 @@ void XERemoveRequestCB(XETC *tc, CARD8 req)
     tc->values.req_cb[req].data = (BYTE *)NULL;
     return;
 }
-void XERemoveRequestCBs(XETC *tc, ReqFlags req_flags)
+
+void
+XERemoveRequestCBs(XETC *tc, ReqFlags req_flags)
 {
     int i;
 
-    for (i=0; i<=255L; i++)
+    for (i = 0; i <= 255L; i++)
     {
         if (BitIsTrue(req_flags, i))
         {
@@ -132,7 +138,8 @@ void XERemoveRequestCBs(XETC *tc, ReqFlags req_flags)
     }
 }
 
-void XERemoveAllRequestCBs(XETC *tc)
+void
+XERemoveAllRequestCBs(XETC *tc)
 {
     if (!tc->values.req_cb)
     {   /* We gotta problem!  CB struct not allocated! */
@@ -141,7 +148,8 @@ void XERemoveAllRequestCBs(XETC *tc)
     XtFree((XtPointer)tc->values.req_cb);
 }
 
-void XERemoveEventCB(XETC *tc, CARD8 evt)
+void
+XERemoveEventCB(XETC *tc, CARD8 evt)
 {
     if (!tc->values.evt_cb)
     {   /* We gotta problem!  CB struct not allocated! */
@@ -152,11 +160,12 @@ void XERemoveEventCB(XETC *tc, CARD8 evt)
     return;
 }
 
-void XERemoveEventCBs(XETC *tc, EventFlags evt_flags)
+void
+XERemoveEventCBs(XETC *tc, EventFlags evt_flags)
 {
     int i;
 
-    for (i=KeyPress; i<=MotionNotify; i++)
+    for (i = KeyPress; i <= MotionNotify; i++)
     {
         if (BitIsTrue(evt_flags, i))
         {
@@ -165,7 +174,8 @@ void XERemoveEventCBs(XETC *tc, EventFlags evt_flags)
     }
 }
 
-void XERemoveAllEventCBs(XETC *tc)
+void
+XERemoveAllEventCBs(XETC *tc)
 {
     if (!tc->values.evt_cb)
     {   /* We gotta problem!  CB struct not allocated! */

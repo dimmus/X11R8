@@ -2814,7 +2814,7 @@ _XawTextSourceChanged(Widget          w,
             update_from =
                 SrcScan(src, update_from, XawstWhiteSpace, XawsdLeft, 1, True);
             if (update_to >= ctx->text.lastPos)
-        /* this is not an error, it just tells _BuildLineTable to
+                /* this is not an error, it just tells _BuildLineTable to
 	     * clear to the bottom of the window. The value of update_to
 	     * should not be > ctx->text.lastPos.
 	     */
@@ -3143,7 +3143,7 @@ DoSelection(TextWidget ctx, XawTextPosition pos, Time time, Bool motion)
                 else if (newType == XawselectParagraph) stype = XawstParagraph;
                 else stype = XawstAlphaNumeric;
 
-        /*
+                /*
 	     * Somewhat complicated, but basically I treat the space between
 	     * two objects as another object.  The object that I am currently
 	     * in then becomes the end of the selection.
@@ -3276,7 +3276,7 @@ ExtendSelection(TextWidget ctx, XawTextPosition pos, Bool motion)
                     stype = XawstParagraph;
                 else stype = XawstAlphaNumeric;
 
-        /*
+                /*
 	     * Somewhat complicated, but basically I treat the space between
 	     * two objects as another object.  The object that I am currently
 	     * in then becomes the end of the selection.
@@ -3770,7 +3770,7 @@ _XawTextShowPosition(TextWidget ctx)
                       1,
                       False);
 
-    /*
+        /*
 	 * Finds the nearest left position from ctx->text.insertPos
 	 */
         if (ctx->text.wrap != XawtextWrapNever)
@@ -3778,7 +3778,7 @@ _XawTextShowPosition(TextWidget ctx)
             int dim, vwidth = GetMaxTextWidth(ctx);
 
             last = top;
-        /*CONSTCOND*/
+            /*CONSTCOND*/
             while (1)
             {
                 tmp = last;
@@ -3819,7 +3819,7 @@ _XawTextShowPosition(TextWidget ctx)
             }
         }
         else if (!visible)
-        {   /* Scroll Up */
+        { /* Scroll Up */
             while (first < top)
             {
                 last  = first;
@@ -4359,7 +4359,7 @@ XawTextUnsetSelection(Widget w)
 
         if (sel != (Atom)0)
         {
-        /*
+            /*
 	     * As selections are lost the atom_count will decrement
 	     */
             if (GetCutBufferNumber(sel) == NOT_A_CUT_BUFFER)
@@ -4486,51 +4486,51 @@ XawTextSearch(Widget w,
 }
 
 TextClassRec textClassRec = {
-  /* core */
+    /* core */
     {
      (WidgetClass)&simpleClassRec, /* superclass */
-        "Text",    /* class_name */
-        sizeof(TextRec),   /* widget_size */
-        XawTextClassInitialize,  /* class_initialize */
-        NULL,    /* class_part_init */
-        False,    /* class_inited */
-        XawTextInitialize,   /* initialize */
-        NULL,    /* initialize_hook */
-        XawTextRealize,   /* realize */
-        _XawTextActionsTable,  /* actions */
-        0,     /* num_actions */
-        resources,    /* resources */
-        XtNumber(resources),  /* num_resource */
-        NULLQUARK,    /* xrm_class */
-        True,    /* compress_motion */
-        XtExposeGraphicsExpose |  /* compress_exposure */
-            XtExposeNoExpose, True,    /* compress_enterleave */
-        False,    /* visible_interest */
-        XawTextDestroy,   /* destroy */
-        XawTextResize,   /* resize */
-        XawTextExpose,   /* expose */
-        XawTextSetValues,   /* set_values */
-        NULL,    /* set_values_hook */
-        XtInheritSetValuesAlmost,  /* set_values_almost */
-        XawTextGetValuesHook,  /* get_values_hook */
-        NULL,    /* accept_focus */
-        XtVersion,    /* version */
-        NULL,    /* callback_private */
+        "Text", /* class_name */
+        sizeof(TextRec), /* widget_size */
+        XawTextClassInitialize, /* class_initialize */
+        NULL, /* class_part_init */
+        False, /* class_inited */
+        XawTextInitialize, /* initialize */
+        NULL, /* initialize_hook */
+        XawTextRealize, /* realize */
+        _XawTextActionsTable, /* actions */
+        0, /* num_actions */
+        resources, /* resources */
+        XtNumber(resources), /* num_resource */
+        NULLQUARK, /* xrm_class */
+        True, /* compress_motion */
+        XtExposeGraphicsExpose | /* compress_exposure */
+            XtExposeNoExpose, True, /* compress_enterleave */
+        False, /* visible_interest */
+        XawTextDestroy, /* destroy */
+        XawTextResize, /* resize */
+        XawTextExpose, /* expose */
+        XawTextSetValues, /* set_values */
+        NULL, /* set_values_hook */
+        XtInheritSetValuesAlmost, /* set_values_almost */
+        XawTextGetValuesHook, /* get_values_hook */
+        NULL, /* accept_focus */
+        XtVersion, /* version */
+        NULL, /* callback_private */
         _XawDefaultTextTranslations, /* tm_table */
-        XtInheritQueryGeometry,  /* query_geometry */
+        XtInheritQueryGeometry, /* query_geometry */
         XtInheritDisplayAccelerator, /* display_accelerator */
-        NULL,    /* extension */
+        NULL, /* extension */
     },
-  /* simple */
+    /* simple */
     {
-     XawTextChangeSensitive,  /* change_sensitive */
+     XawTextChangeSensitive, /* change_sensitive */
 #ifndef OLDXAW
         NULL,
 #endif
      },
-  /* text */
+    /* text */
     {
-     NULL,    /* extension */
+     NULL, /* extension */
     }
 };
 

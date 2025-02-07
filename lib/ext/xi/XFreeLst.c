@@ -51,7 +51,7 @@ SOFTWARE.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include <stdio.h>
@@ -65,8 +65,9 @@ SOFTWARE.
 
 XFreeDeviceList(XDeviceList *list)
 {
-    if (list != NULL) {
-	XFree((list->name) - sizeof(XDeviceList));
-	XFree((XDeviceList *) list);
+    if (list != NULL)
+    {
+        XFree((list->name) - sizeof(XDeviceList));
+        XFree((XDeviceList *)list);
     }
 }

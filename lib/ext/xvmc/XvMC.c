@@ -1,11 +1,11 @@
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "XvMClibint.h"
 #ifdef HAVE_SHMAT
-#include <sys/ipc.h>
-#include <sys/shm.h>
+#  include <sys/ipc.h>
+#  include <sys/shm.h>
 #endif /* HAVE_SHMAT */
 #include <unistd.h>
 #include <sys/time.h>
@@ -13,50 +13,54 @@
 #include "X11/extensions/extutil.h"
 #include <limits.h>
 
-static XExtensionInfo _xvmc_info_data;
-static XExtensionInfo *xvmc_info = &_xvmc_info_data;
-static const char *xvmc_extension_name = XvMCName;
+static XExtensionInfo  _xvmc_info_data;
+static XExtensionInfo *xvmc_info           = &_xvmc_info_data;
+static const char     *xvmc_extension_name = XvMCName;
 
-static const char *xvmc_error_list[] = {
-    "BadContext",
-    "BadSurface",
-    "BadSubpicture"
-};
+static const char *xvmc_error_list[] = { "BadContext",
+                                         "BadSurface",
+                                         "BadSubpicture" };
 
-static XEXT_GENERATE_CLOSE_DISPLAY(xvmc_close_display, xvmc_info)
-static XEXT_GENERATE_ERROR_STRING(xvmc_error_string, xvmc_extension_name,
-                                  XvMCNumErrors, xvmc_error_list)
+static XEXT_GENERATE_CLOSE_DISPLAY(
+    xvmc_close_display,
+    xvmc_info) static XEXT_GENERATE_ERROR_STRING(xvmc_error_string,
+                                                 xvmc_extension_name,
+                                                 XvMCNumErrors,
+                                                 xvmc_error_list)
 
-static XExtensionHooks xvmc_extension_hooks = {
-    NULL,                       /* create_gc */
-    NULL,                       /* copy_gc */
-    NULL,                       /* flush_gc */
-    NULL,                       /* free_gc */
-    NULL,                       /* create_font */
-    NULL,                       /* free_font */
-    xvmc_close_display,         /* close_display */
-    NULL,                       /* wire_to_event */
-    NULL,                       /* event_to_wire */
-    NULL,                       /* error */
-    xvmc_error_string           /* error_string */
-};
+    static XExtensionHooks xvmc_extension_hooks = {
+        NULL,                       /* create_gc */
+        NULL,                       /* copy_gc */
+        NULL,                       /* flush_gc */
+        NULL,                       /* free_gc */
+        NULL,                       /* create_font */
+        NULL,                       /* free_font */
+        xvmc_close_display,         /* close_display */
+        NULL,                       /* wire_to_event */
+        NULL,                       /* event_to_wire */
+        NULL,                       /* error */
+        xvmc_error_string           /* error_string */
+    };
 
-static XEXT_GENERATE_FIND_DISPLAY(xvmc_find_display, xvmc_info,
+static XEXT_GENERATE_FIND_DISPLAY(xvmc_find_display,
+                                  xvmc_info,
                                   xvmc_extension_name,
                                   &xvmc_extension_hooks,
-                                  XvMCNumEvents, NULL)
+                                  XvMCNumEvents,
+                                  NULL)
 
-Bool
-XvMCQueryExtension(Display *dpy, int *event_basep, int *error_basep)
+    Bool XvMCQueryExtension(Display *dpy, int *event_basep, int *error_basep)
 {
     XExtDisplayInfo *info = xvmc_find_display(dpy);
 
-    if (XextHasExtension(info)) {
+    if (XextHasExtension(info))
+    {
         *event_basep = info->codes->first_event;
         *error_basep = info->codes->first_error;
         return True;
     }
-    else {
+    else
+    {
         return False;
     }
 }
@@ -64,21 +68,22 @@ XvMCQueryExtension(Display *dpy, int *event_basep, int *error_basep)
 Status
 XvMCQueryVersion(Display *dpy, int *major, int *minor)
 {
-    XExtDisplayInfo *info = xvmc_find_display(dpy);
+    XExtDisplayInfo      *info = xvmc_find_display(dpy);
     xvmcQueryVersionReply rep;
-    xvmcQueryVersionReq *req;
+    xvmcQueryVersionReq  *req;
 
     XvMCCheckExtension(dpy, info, BadImplementation);
 
     LockDisplay(dpy);
     XvMCGetReq(QueryVersion, req);
-    if (!_XReply(dpy, (xReply *) &rep, 0, xTrue)) {
+    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return BadImplementation;
     }
-    *major = (int) rep.major;
-    *minor = (int) rep.minor;
+    *major = (int)rep.major;
+    *minor = (int)rep.minor;
     UnlockDisplay(dpy);
     SyncHandle();
     return Success;
@@ -87,10 +92,10 @@ XvMCQueryVersion(Display *dpy, int *major, int *minor)
 XvMCSurfaceInfo *
 XvMCListSurfaceTypes(Display *dpy, XvPortID port, int *num)
 {
-    XExtDisplayInfo *info = xvmc_find_display(dpy);
+    XExtDisplayInfo          *info = xvmc_find_display(dpy);
     xvmcListSurfaceTypesReply rep;
     xvmcListSurfaceTypesReq  *req;
-    XvMCSurfaceInfo *surface_info = NULL;
+    XvMCSurfaceInfo          *surface_info = NULL;
 
     *num = 0;
 
@@ -98,38 +103,41 @@ XvMCListSurfaceTypes(Display *dpy, XvPortID port, int *num)
 
     LockDisplay(dpy);
     XvMCGetReq(ListSurfaceTypes, req);
-    req->port = (CARD32) port;
-    if (!_XReply(dpy, (xReply *) &rep, 0, xFalse)) {
+    req->port = (CARD32)port;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return NULL;
     }
 
-    if (rep.num > 0) {
+    if (rep.num > 0)
+    {
         if (rep.num < (INT_MAX / sizeof(XvMCSurfaceInfo)))
             surface_info = Xmalloc(rep.num * sizeof(XvMCSurfaceInfo));
 
-        if (surface_info) {
-            *num = (int) rep.num;
+        if (surface_info)
+        {
+            *num = (int)rep.num;
 
-            for (CARD32 i = 0; i < rep.num; i++) {
+            for (CARD32 i = 0; i < rep.num; i++)
+            {
                 xvmcSurfaceInfo sinfo;
 
-                _XRead(dpy, (char *) &sinfo, sizeof(xvmcSurfaceInfo));
-                surface_info[i].surface_type_id = (int) sinfo.surface_type_id;
-                surface_info[i].chroma_format = sinfo.chroma_format;
-                surface_info[i].max_width = sinfo.max_width;
-                surface_info[i].max_height = sinfo.max_height;
+                _XRead(dpy, (char *)&sinfo, sizeof(xvmcSurfaceInfo));
+                surface_info[i].surface_type_id = (int)sinfo.surface_type_id;
+                surface_info[i].chroma_format   = sinfo.chroma_format;
+                surface_info[i].max_width       = sinfo.max_width;
+                surface_info[i].max_height      = sinfo.max_height;
                 surface_info[i].subpicture_max_width =
                     sinfo.subpicture_max_width;
                 surface_info[i].subpicture_max_height =
                     sinfo.subpicture_max_height;
-                surface_info[i].mc_type = (int) sinfo.mc_type;
-                surface_info[i].flags = (int) sinfo.flags;
+                surface_info[i].mc_type = (int)sinfo.mc_type;
+                surface_info[i].flags   = (int)sinfo.flags;
             }
         }
-        else
-            _XEatDataWords(dpy, rep.length);
+        else _XEatDataWords(dpy, rep.length);
     }
 
     UnlockDisplay(dpy);
@@ -140,13 +148,13 @@ XvMCListSurfaceTypes(Display *dpy, XvPortID port, int *num)
 XvImageFormatValues *
 XvMCListSubpictureTypes(Display *dpy,
                         XvPortID port,
-                        int surface_type_id,
-                        int *count_return)
+                        int      surface_type_id,
+                        int     *count_return)
 {
-    XExtDisplayInfo *info = xvmc_find_display(dpy);
+    XExtDisplayInfo             *info = xvmc_find_display(dpy);
     xvmcListSubpictureTypesReply rep;
     xvmcListSubpictureTypesReq  *req;
-    XvImageFormatValues *ret = NULL;
+    XvImageFormatValues         *ret = NULL;
 
     *count_return = 0;
 
@@ -154,51 +162,54 @@ XvMCListSubpictureTypes(Display *dpy,
 
     LockDisplay(dpy);
     XvMCGetReq(ListSubpictureTypes, req);
-    req->port = (CARD32) port;
-    req->surface_type_id = (CARD32) surface_type_id;
-    if (!_XReply(dpy, (xReply *) &rep, 0, xFalse)) {
+    req->port            = (CARD32)port;
+    req->surface_type_id = (CARD32)surface_type_id;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return NULL;
     }
 
-    if (rep.num > 0) {
+    if (rep.num > 0)
+    {
         if (rep.num < (INT_MAX / sizeof(XvImageFormatValues)))
             ret = Xmalloc(rep.num * sizeof(XvImageFormatValues));
 
-        if (ret) {
-            *count_return = (int) rep.num;
+        if (ret)
+        {
+            *count_return = (int)rep.num;
 
-            for (CARD32 i = 0; i < rep.num; i++) {
+            for (CARD32 i = 0; i < rep.num; i++)
+            {
                 xvImageFormatInfo Info;
 
-                _XRead(dpy, (char *) (&Info), sz_xvImageFormatInfo);
-                ret[i].id = (int) Info.id;
-                ret[i].type = Info.type;
+                _XRead(dpy, (char *)(&Info), sz_xvImageFormatInfo);
+                ret[i].id         = (int)Info.id;
+                ret[i].type       = Info.type;
                 ret[i].byte_order = Info.byte_order;
                 memcpy(&(ret[i].guid[0]), &(Info.guid[0]), 16);
                 ret[i].bits_per_pixel = Info.bpp;
-                ret[i].format = Info.format;
-                ret[i].num_planes = Info.num_planes;
-                ret[i].depth = Info.depth;
-                ret[i].red_mask = Info.red_mask;
-                ret[i].green_mask = Info.green_mask;
-                ret[i].blue_mask = Info.blue_mask;
-                ret[i].y_sample_bits = Info.y_sample_bits;
-                ret[i].u_sample_bits = Info.u_sample_bits;
-                ret[i].v_sample_bits = Info.v_sample_bits;
-                ret[i].horz_y_period = Info.horz_y_period;
-                ret[i].horz_u_period = Info.horz_u_period;
-                ret[i].horz_v_period = Info.horz_v_period;
-                ret[i].vert_y_period = Info.vert_y_period;
-                ret[i].vert_u_period = Info.vert_u_period;
-                ret[i].vert_v_period = Info.vert_v_period;
+                ret[i].format         = Info.format;
+                ret[i].num_planes     = Info.num_planes;
+                ret[i].depth          = Info.depth;
+                ret[i].red_mask       = Info.red_mask;
+                ret[i].green_mask     = Info.green_mask;
+                ret[i].blue_mask      = Info.blue_mask;
+                ret[i].y_sample_bits  = Info.y_sample_bits;
+                ret[i].u_sample_bits  = Info.u_sample_bits;
+                ret[i].v_sample_bits  = Info.v_sample_bits;
+                ret[i].horz_y_period  = Info.horz_y_period;
+                ret[i].horz_u_period  = Info.horz_u_period;
+                ret[i].horz_v_period  = Info.horz_v_period;
+                ret[i].vert_y_period  = Info.vert_y_period;
+                ret[i].vert_u_period  = Info.vert_u_period;
+                ret[i].vert_v_period  = Info.vert_v_period;
                 memcpy(&(ret[i].component_order[0]), &(Info.comp_order[0]), 32);
                 ret[i].scanline_order = Info.scanline_order;
             }
         }
-        else
-            _XEatDataWords(dpy, rep.length);
+        else _XEatDataWords(dpy, rep.length);
     }
 
     UnlockDisplay(dpy);
@@ -228,47 +239,48 @@ XvMCListSubpictureTypes(Display *dpy,
 */
 
 Status
-_xvmc_create_context(Display *dpy,
+_xvmc_create_context(Display     *dpy,
                      XvMCContext *context,
-                     int *priv_count,
-                     CARD32 **priv_data)
+                     int         *priv_count,
+                     CARD32     **priv_data)
 {
-    XExtDisplayInfo *info = xvmc_find_display(dpy);
+    XExtDisplayInfo       *info = xvmc_find_display(dpy);
     xvmcCreateContextReply rep;
     xvmcCreateContextReq  *req;
 
     *priv_count = 0;
-    *priv_data = NULL;
+    *priv_data  = NULL;
 
     XvMCCheckExtension(dpy, info, BadImplementation);
 
     LockDisplay(dpy);
     XvMCGetReq(CreateContext, req);
-    context->context_id = XAllocID(dpy);
-    req->context_id = (CARD32) context->context_id;
-    req->port =  (CARD32) context->port;
-    req->surface_type_id = (CARD32) context->surface_type_id;
-    req->width = context->width;
-    req->height = context->height;
-    req->flags = (CARD32) context->flags;
-    if (!_XReply(dpy, (xReply *) &rep, 0, xFalse)) {
+    context->context_id  = XAllocID(dpy);
+    req->context_id      = (CARD32)context->context_id;
+    req->port            = (CARD32)context->port;
+    req->surface_type_id = (CARD32)context->surface_type_id;
+    req->width           = context->width;
+    req->height          = context->height;
+    req->flags           = (CARD32)context->flags;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return BadImplementation;
     }
-    context->width = rep.width_actual;
+    context->width  = rep.width_actual;
     context->height = rep.height_actual;
-    context->flags = (int) rep.flags_return;
+    context->flags  = (int)rep.flags_return;
 
-    if (rep.length) {
-        if (rep.length < (INT_MAX >> 2))
-            *priv_data = Xmalloc(rep.length << 2);
-        if (*priv_data) {
-            _XRead(dpy, (char *) (*priv_data), rep.length << 2);
-            *priv_count = (int) rep.length;
+    if (rep.length)
+    {
+        if (rep.length < (INT_MAX >> 2)) *priv_data = Xmalloc(rep.length << 2);
+        if (*priv_data)
+        {
+            _XRead(dpy, (char *)(*priv_data), rep.length << 2);
+            *priv_count = (int)rep.length;
         }
-        else
-            _XEatDataWords(dpy, rep.length);
+        else _XEatDataWords(dpy, rep.length);
     }
 
     UnlockDisplay(dpy);
@@ -279,14 +291,14 @@ _xvmc_create_context(Display *dpy,
 Status
 _xvmc_destroy_context(Display *dpy, XvMCContext *context)
 {
-    XExtDisplayInfo *info = xvmc_find_display(dpy);
-    xvmcDestroyContextReq  *req;
+    XExtDisplayInfo       *info = xvmc_find_display(dpy);
+    xvmcDestroyContextReq *req;
 
     XvMCCheckExtension(dpy, info, BadImplementation);
 
     LockDisplay(dpy);
     XvMCGetReq(DestroyContext, req);
-    req->context_id = (CARD32) context->context_id;
+    req->context_id = (CARD32)context->context_id;
     UnlockDisplay(dpy);
     SyncHandle();
     return Success;
@@ -307,47 +319,48 @@ _xvmc_destroy_context(Display *dpy, XvMCContext *context)
 */
 
 Status
-_xvmc_create_surface(Display *dpy,
+_xvmc_create_surface(Display     *dpy,
                      XvMCContext *context,
                      XvMCSurface *surface,
-                     int *priv_count,
-                     CARD32 **priv_data)
+                     int         *priv_count,
+                     CARD32     **priv_data)
 {
-    XExtDisplayInfo *info = xvmc_find_display(dpy);
+    XExtDisplayInfo       *info = xvmc_find_display(dpy);
     xvmcCreateSurfaceReply rep;
     xvmcCreateSurfaceReq  *req;
 
     *priv_count = 0;
-    *priv_data = NULL;
+    *priv_data  = NULL;
 
     XvMCCheckExtension(dpy, info, BadImplementation);
 
     LockDisplay(dpy);
     XvMCGetReq(CreateSurface, req);
 
-    surface->surface_id = XAllocID(dpy);
-    surface->context_id = context->context_id;
+    surface->surface_id      = XAllocID(dpy);
+    surface->context_id      = context->context_id;
     surface->surface_type_id = context->surface_type_id;
-    surface->width = context->width;
-    surface->height = context->height;
+    surface->width           = context->width;
+    surface->height          = context->height;
 
-    req->surface_id = (CARD32) surface->surface_id;
-    req->context_id = (CARD32) surface->context_id;
-    if (!_XReply(dpy, (xReply *) &rep, 0, xFalse)) {
+    req->surface_id = (CARD32)surface->surface_id;
+    req->context_id = (CARD32)surface->context_id;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return BadImplementation;
     }
 
-    if (rep.length) {
-        if (rep.length < (INT_MAX >> 2))
-            *priv_data = Xmalloc(rep.length << 2);
-        if (*priv_data) {
-            _XRead(dpy, (char *) (*priv_data), rep.length << 2);
-            *priv_count = (int) rep.length;
+    if (rep.length)
+    {
+        if (rep.length < (INT_MAX >> 2)) *priv_data = Xmalloc(rep.length << 2);
+        if (*priv_data)
+        {
+            _XRead(dpy, (char *)(*priv_data), rep.length << 2);
+            *priv_count = (int)rep.length;
         }
-        else
-            _XEatDataWords(dpy, rep.length);
+        else _XEatDataWords(dpy, rep.length);
     }
 
     UnlockDisplay(dpy);
@@ -358,14 +371,14 @@ _xvmc_create_surface(Display *dpy,
 Status
 _xvmc_destroy_surface(Display *dpy, XvMCSurface *surface)
 {
-    XExtDisplayInfo *info = xvmc_find_display(dpy);
-    xvmcDestroySurfaceReq  *req;
+    XExtDisplayInfo       *info = xvmc_find_display(dpy);
+    xvmcDestroySurfaceReq *req;
 
     XvMCCheckExtension(dpy, info, BadImplementation);
 
     LockDisplay(dpy);
     XvMCGetReq(DestroySurface, req);
-    req->surface_id = (CARD32) surface->surface_id;
+    req->surface_id = (CARD32)surface->surface_id;
     UnlockDisplay(dpy);
     SyncHandle();
     return Success;
@@ -387,18 +400,18 @@ _xvmc_destroy_surface(Display *dpy, XvMCSurface *surface)
 */
 
 Status
-_xvmc_create_subpicture(Display *dpy,
-                        XvMCContext *context,
+_xvmc_create_subpicture(Display        *dpy,
+                        XvMCContext    *context,
                         XvMCSubpicture *subpicture,
-                        int *priv_count,
-                        CARD32 **priv_data)
+                        int            *priv_count,
+                        CARD32        **priv_data)
 {
-    XExtDisplayInfo *info = xvmc_find_display(dpy);
+    XExtDisplayInfo          *info = xvmc_find_display(dpy);
     xvmcCreateSubpictureReply rep;
     xvmcCreateSubpictureReq  *req;
 
     *priv_count = 0;
-    *priv_data = NULL;
+    *priv_data  = NULL;
 
     XvMCCheckExtension(dpy, info, BadImplementation);
 
@@ -406,37 +419,38 @@ _xvmc_create_subpicture(Display *dpy,
     XvMCGetReq(CreateSubpicture, req);
 
     subpicture->subpicture_id = XAllocID(dpy);
-    subpicture->context_id = context->context_id;
+    subpicture->context_id    = context->context_id;
 
-    req->subpicture_id = (CARD32) subpicture->subpicture_id;
-    req->context_id = (CARD32) subpicture->context_id;
-    req->xvimage_id = (CARD32) subpicture->xvimage_id;
-    req->width = subpicture->width;
-    req->height = subpicture->height;
-    if (!_XReply(dpy, (xReply *) &rep, 0, xFalse)) {
+    req->subpicture_id = (CARD32)subpicture->subpicture_id;
+    req->context_id    = (CARD32)subpicture->context_id;
+    req->xvimage_id    = (CARD32)subpicture->xvimage_id;
+    req->width         = subpicture->width;
+    req->height        = subpicture->height;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return BadImplementation;
     }
 
-    subpicture->width = rep.width_actual;
-    subpicture->height = rep.height_actual;
+    subpicture->width               = rep.width_actual;
+    subpicture->height              = rep.height_actual;
     subpicture->num_palette_entries = rep.num_palette_entries;
-    subpicture->entry_bytes = rep.entry_bytes;
-    subpicture->component_order[0] = (char) rep.component_order[0];
-    subpicture->component_order[1] = (char) rep.component_order[1];
-    subpicture->component_order[2] = (char) rep.component_order[2];
-    subpicture->component_order[3] = (char) rep.component_order[3];
+    subpicture->entry_bytes         = rep.entry_bytes;
+    subpicture->component_order[0]  = (char)rep.component_order[0];
+    subpicture->component_order[1]  = (char)rep.component_order[1];
+    subpicture->component_order[2]  = (char)rep.component_order[2];
+    subpicture->component_order[3]  = (char)rep.component_order[3];
 
-    if (rep.length) {
-        if (rep.length < (INT_MAX >> 2))
-            *priv_data = Xmalloc(rep.length << 2);
-        if (*priv_data) {
-            _XRead(dpy, (char *) (*priv_data), rep.length << 2);
-            *priv_count = (int) rep.length;
+    if (rep.length)
+    {
+        if (rep.length < (INT_MAX >> 2)) *priv_data = Xmalloc(rep.length << 2);
+        if (*priv_data)
+        {
+            _XRead(dpy, (char *)(*priv_data), rep.length << 2);
+            *priv_count = (int)rep.length;
         }
-        else
-            _XEatDataWords(dpy, rep.length);
+        else _XEatDataWords(dpy, rep.length);
     }
 
     UnlockDisplay(dpy);
@@ -447,36 +461,39 @@ _xvmc_create_subpicture(Display *dpy,
 Status
 _xvmc_destroy_subpicture(Display *dpy, XvMCSubpicture *subpicture)
 {
-    XExtDisplayInfo *info = xvmc_find_display(dpy);
-    xvmcDestroySubpictureReq  *req;
+    XExtDisplayInfo          *info = xvmc_find_display(dpy);
+    xvmcDestroySubpictureReq *req;
 
     XvMCCheckExtension(dpy, info, BadImplementation);
 
     LockDisplay(dpy);
     XvMCGetReq(DestroySubpicture, req);
-    req->subpicture_id = (CARD32) subpicture->subpicture_id;
+    req->subpicture_id = (CARD32)subpicture->subpicture_id;
     UnlockDisplay(dpy);
     SyncHandle();
     return Success;
 }
 
 Status
-XvMCGetDRInfo(Display *dpy, XvPortID port,
-              char **name, char **busID,
-              int *major, int *minor,
-              int *patchLevel,
-              int *isLocal)
+XvMCGetDRInfo(Display *dpy,
+              XvPortID port,
+              char   **name,
+              char   **busID,
+              int     *major,
+              int     *minor,
+              int     *patchLevel,
+              int     *isLocal)
 {
-    XExtDisplayInfo *info = xvmc_find_display(dpy);
+    XExtDisplayInfo   *info = xvmc_find_display(dpy);
     xvmcGetDRInfoReply rep;
     xvmcGetDRInfoReq  *req;
 
 #ifdef HAVE_SHMAT
-    int shmKey;
+    int              shmKey;
     volatile CARD32 *shMem;
 #endif
 
-    *name = NULL;
+    *name  = NULL;
     *busID = NULL;
 
     XvMCCheckExtension(dpy, info, BadImplementation);
@@ -484,11 +501,11 @@ XvMCGetDRInfo(Display *dpy, XvPortID port,
     LockDisplay(dpy);
     XvMCGetReq(GetDRInfo, req);
 
-    req->port = (CARD32) port;
+    req->port  = (CARD32)port;
     req->magic = 0;
 #ifdef HAVE_SHMAT
-    shmKey = shmget(IPC_PRIVATE, 1024, IPC_CREAT | 0600);
-    req->shmKey = (CARD32) shmKey;
+    shmKey      = shmget(IPC_PRIVATE, 1024, IPC_CREAT | 0600);
+    req->shmKey = (CARD32)shmKey;
 
     /*
      * We fill a shared memory page with a repetitive pattern. If the
@@ -499,74 +516,85 @@ XvMCGetDRInfo(Display *dpy, XvPortID port,
      * otherwise stupid-looking pattern algorithm.
      */
 
-    if (shmKey >= 0) {
-        shMem = (CARD32 *) shmat(shmKey, NULL, 0);
+    if (shmKey >= 0)
+    {
+        shMem = (CARD32 *)shmat(shmKey, NULL, 0);
         shmctl(shmKey, IPC_RMID, NULL);
-        if (shMem != (void *) -1) {
-
+        if (shMem != (void *)-1)
+        {
             register volatile CARD32 *shMemC = shMem;
-            register int i;
-            CARD32 magic;
-            struct timezone here = {0, 0};
-            struct timeval now;
+            register int              i;
+            CARD32                    magic;
+            struct timezone           here = { 0, 0 };
+            struct timeval            now;
 
             gettimeofday(&now, &here);
-            magic = now.tv_usec & 0x000FFFFF;
+            magic      = now.tv_usec & 0x000FFFFF;
             req->magic = magic;
-            i = 1024 / sizeof(CARD32);
-            while (i--) {
+            i          = 1024 / sizeof(CARD32);
+            while (i--)
+            {
                 *shMemC++ = magic;
-                magic = ~magic;
+                magic     = ~magic;
             }
         }
-        else {
-            req->shmKey = (CARD32) -1;
-            shmKey = -1;
+        else
+        {
+            req->shmKey = (CARD32)-1;
+            shmKey      = -1;
         }
     }
 #else
     req->shmKey = 0;
 #endif
-    if (!_XReply(dpy, (xReply *) &rep, 0, xFalse)) {
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
 #ifdef HAVE_SHMAT
-        if (shmKey >= 0) {
-            shmdt((const void *) shMem);
+        if (shmKey >= 0)
+        {
+            shmdt((const void *)shMem);
         }
 #endif
         return -1;
     }
 #ifdef HAVE_SHMAT
-    if (shmKey >= 0) {
-        shmdt((const void *) shMem);
+    if (shmKey >= 0)
+    {
+        shmdt((const void *)shMem);
     }
 #endif
 
-    if (rep.length > 0) {
+    if (rep.length > 0)
+    {
         unsigned long realSize = 0;
-        char *tmpBuf = NULL;
+        char         *tmpBuf   = NULL;
 
         if ((rep.length < (INT_MAX >> 2)) &&
             /* protect against overflow in strncpy below */
-            (rep.nameLen + rep.busIDLen > rep.nameLen)) {
+            (rep.nameLen + rep.busIDLen > rep.nameLen))
+        {
             realSize = rep.length << 2;
-            if (realSize >= (rep.nameLen + rep.busIDLen)) {
+            if (realSize >= (rep.nameLen + rep.busIDLen))
+            {
                 tmpBuf = Xmalloc(realSize);
-                *name = Xmalloc(rep.nameLen);
+                *name  = Xmalloc(rep.nameLen);
                 *busID = Xmalloc(rep.busIDLen);
             }
         }
 
-        if (*name && *busID && tmpBuf) {
-            _XRead(dpy, tmpBuf, (long) realSize);
+        if (*name && *busID && tmpBuf)
+        {
+            _XRead(dpy, tmpBuf, (long)realSize);
             strncpy(*name, tmpBuf, rep.nameLen);
             (*name)[rep.nameLen == 0 ? 0 : rep.nameLen - 1] = '\0';
             strncpy(*busID, tmpBuf + rep.nameLen, rep.busIDLen);
             (*busID)[rep.busIDLen == 0 ? 0 : rep.busIDLen - 1] = '\0';
             XFree(tmpBuf);
         }
-        else {
+        else
+        {
             XFree(*name);
             *name = NULL;
             XFree(*busID);
@@ -577,18 +605,16 @@ XvMCGetDRInfo(Display *dpy, XvPortID port,
             UnlockDisplay(dpy);
             SyncHandle();
             return -1;
-
         }
     }
 
     UnlockDisplay(dpy);
     SyncHandle();
-    *major = (int) rep.major;
-    *minor = (int) rep.minor;
-    *patchLevel = (int) rep.patchLevel;
+    *major      = (int)rep.major;
+    *minor      = (int)rep.minor;
+    *patchLevel = (int)rep.patchLevel;
 #ifdef HAVE_SHMAT
-    if (shmKey >= 0)
-        *isLocal = (int) rep.isLocal;
+    if (shmKey >= 0) *isLocal = (int)rep.isLocal;
     else
 #endif
         *isLocal = 1;

@@ -102,16 +102,16 @@ XcmsAddColorSpace(XcmsColorSpace *pCS)
             /* a. duplicate*/
                         return (XcmsSuccess);
                     }
-            /* b. same ID/prefix but different XcmsColorSpace */
+                    /* b. same ID/prefix but different XcmsColorSpace */
                     break;
                 }
             }
         }
-    /* c. None found */
+        /* c. None found */
     }
     else
     {
-    /*
+        /*
 	 * UNREGISTERED DI Color Space
 	 *    then see if the color space has already been added to the
 	 *    system:
@@ -133,16 +133,16 @@ XcmsAddColorSpace(XcmsColorSpace *pCS)
                 {
                     if (pCS == ptmpCS)
                     {
-            /* a. duplicate */
+                        /* a. duplicate */
                         return (XcmsSuccess);
                     }
-            /* b. same prefix but different XcmsColorSpec */
+                    /* b. same prefix but different XcmsColorSpec */
                     pCS->id = ptmpCS->id;
                     goto AddColorSpace;
                 }
             }
         }
-    /* c. None found */
+        /* c. None found */
         pCS->id = NextUnregDiCsID(lastID);
     }
 

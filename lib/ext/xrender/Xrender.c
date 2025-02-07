@@ -23,15 +23,15 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xrenderint.h"
 #include <limits.h>
 
 XRenderExtInfo XRenderExtensionInfo;
-char XRenderExtensionName[] = RENDER_NAME;
+char           XRenderExtensionName[] = RENDER_NAME;
 
-static int XRenderCloseDisplay (Display *dpy, XExtCodes *codes);
+static int XRenderCloseDisplay(Display *dpy, XExtCodes *codes);
 
 /*
  * XRenderExtFindDisplay - look for a display in this extension; keeps a
@@ -39,23 +39,23 @@ static int XRenderCloseDisplay (Display *dpy, XExtCodes *codes);
  * XextFindDisplay.)
  */
 static XRenderExtDisplayInfo *
-XRenderExtFindDisplay (XRenderExtInfo *extinfo,
-                       Display        *dpy)
+XRenderExtFindDisplay(XRenderExtInfo *extinfo, Display *dpy)
 {
     XRenderExtDisplayInfo *dpyinfo;
 
     /*
      * see if this was the most recently accessed display
      */
-    if ((dpyinfo = extinfo->cur) && dpyinfo->display == dpy)
-        return dpyinfo;
+    if ((dpyinfo = extinfo->cur) && dpyinfo->display == dpy) return dpyinfo;
 
     /*
      * look for display in list
      */
     _XLockMutex(_Xglobal_lock);
-    for (dpyinfo = extinfo->head; dpyinfo; dpyinfo = dpyinfo->next) {
-        if (dpyinfo->display == dpy) {
+    for (dpyinfo = extinfo->head; dpyinfo; dpyinfo = dpyinfo->next)
+    {
+        if (dpyinfo->display == dpy)
+        {
             extinfo->cur = dpyinfo;     /* cache most recently used */
             _XUnlockMutex(_Xglobal_lock);
             return dpyinfo;
@@ -71,117 +71,119 @@ XRenderExtFindDisplay (XRenderExtInfo *extinfo,
  * any screen, tell the application that Render is not present.
  */
 
-#define DEPTH_MASK(d)	(1U << ((d) - 1))
+#define DEPTH_MASK(d) (1U << ((d) - 1))
 
 /*
  * Render requires support for depth 1, 4, 8, 24 and 32 pixmaps
  */
 
-#define REQUIRED_DEPTHS	(DEPTH_MASK(1) | \
-			 DEPTH_MASK(4) | \
-			 DEPTH_MASK(8) | \
-			 DEPTH_MASK(24) | \
-			 DEPTH_MASK(32))
+#define REQUIRED_DEPTHS                                               \
+    (DEPTH_MASK(1) | DEPTH_MASK(4) | DEPTH_MASK(8) | DEPTH_MASK(24) | \
+     DEPTH_MASK(32))
 
-typedef struct _DepthCheckRec {
+typedef struct _DepthCheckRec
+{
     struct _DepthCheckRec *next;
-    Display *dpy;
-    CARD32  missing;
-    unsigned long serial;
+    Display               *dpy;
+    CARD32                 missing;
+    unsigned long          serial;
 } DepthCheckRec, *DepthCheckPtr;
 
-static DepthCheckPtr	depthChecks;
+static DepthCheckPtr depthChecks;
 
 static int
-XRenderDepthCheckErrorHandler (Display *dpy, XErrorEvent *evt)
+XRenderDepthCheckErrorHandler(Display *dpy, XErrorEvent *evt)
 {
     if (evt->request_code == X_CreatePixmap && evt->error_code == BadValue)
     {
-	DepthCheckPtr	d;
+        DepthCheckPtr d;
 
-	_XLockMutex(_Xglobal_lock);
-	for (d = depthChecks; d; d = d->next)
-	{
-	    if (d->dpy == dpy)
-	    {
-		if ((long) (evt->serial - d->serial) >= 0)
-		    d->missing |= DEPTH_MASK(evt->resourceid);
-		break;
-	    }
+        _XLockMutex(_Xglobal_lock);
+        for (d = depthChecks; d; d = d->next)
+        {
+            if (d->dpy == dpy)
+            {
+                if ((long)(evt->serial - d->serial) >= 0)
+                    d->missing |= DEPTH_MASK(evt->resourceid);
+                break;
+            }
         }
-	_XUnlockMutex (_Xglobal_lock);
+        _XUnlockMutex(_Xglobal_lock);
     }
     return 0;
 }
 
 static Bool
-XRenderHasDepths (Display *dpy)
+XRenderHasDepths(Display *dpy)
 {
-    int	s;
+    int s;
 
-    for (s = 0; s < ScreenCount (dpy); s++)
+    for (s = 0; s < ScreenCount(dpy); s++)
     {
-	CARD32		    depths = 0;
-	CARD32		    missing;
-	Screen		    *scr = ScreenOfDisplay (dpy, s);
-	int		    d;
+        CARD32  depths = 0;
+        CARD32  missing;
+        Screen *scr = ScreenOfDisplay(dpy, s);
+        int     d;
 
-	for (d = 0; d < scr->ndepths; d++)
-	    depths |= DEPTH_MASK(scr->depths[d].depth);
-	missing = ~depths & REQUIRED_DEPTHS;
-	if (missing)
-	{
-	    DepthCheckRec   dc, **dp;
-	    XErrorHandler   previousHandler;
+        for (d = 0; d < scr->ndepths; d++)
+            depths |= DEPTH_MASK(scr->depths[d].depth);
+        missing = ~depths & REQUIRED_DEPTHS;
+        if (missing)
+        {
+            DepthCheckRec dc, **dp;
+            XErrorHandler previousHandler;
 
-	    /*
+        /*
 	     * Ok, this is ugly.  It should be sufficient at this
 	     * point to just return False, but Xinerama is broken at
 	     * this point and only advertises depths which have an
 	     * associated visual.  Of course, the other depths still
 	     * work, but the only way to find out is to try them.
 	     */
-	    dc.dpy = dpy;
-	    dc.missing = 0;
-	    dc.serial = XNextRequest (dpy);
-	    _XLockMutex(_Xglobal_lock);
-	    dc.next = depthChecks;
-	    depthChecks = &dc;
-	    _XUnlockMutex (_Xglobal_lock);
-	    /*
+            dc.dpy     = dpy;
+            dc.missing = 0;
+            dc.serial  = XNextRequest(dpy);
+            _XLockMutex(_Xglobal_lock);
+            dc.next     = depthChecks;
+            depthChecks = &dc;
+            _XUnlockMutex(_Xglobal_lock);
+        /*
 	     * I suspect this is not really thread safe, but Xlib doesn't
 	     * provide a lot of options here
 	     */
-	    previousHandler = XSetErrorHandler (XRenderDepthCheckErrorHandler);
-	    /*
+            previousHandler = XSetErrorHandler(XRenderDepthCheckErrorHandler);
+        /*
 	     * Try each missing depth and see if pixmap creation succeeds
 	     */
-	    for (d = 1; d <= 32; d++)
-		/* don't check depth 1 == Xcursor recurses... */
-		if ((missing & DEPTH_MASK(d)) && d != 1)
-		{
-		    Pixmap  p;
-		    p = XCreatePixmap (dpy, RootWindow (dpy, s), 1, 1, (unsigned) d);
-		    XFreePixmap (dpy, p);
-		}
-	    XSync (dpy, False);
-	    XSetErrorHandler (previousHandler);
-	    /*
+            for (d = 1; d <= 32; d++)
+        /* don't check depth 1 == Xcursor recurses... */
+                if ((missing & DEPTH_MASK(d)) && d != 1)
+                {
+                    Pixmap p;
+                    p = XCreatePixmap(dpy,
+                                      RootWindow(dpy, s),
+                                      1,
+                                      1,
+                                      (unsigned)d);
+                    XFreePixmap(dpy, p);
+                }
+            XSync(dpy, False);
+            XSetErrorHandler(previousHandler);
+        /*
 	     * Unhook from the list of depth check records
 	     */
-	    _XLockMutex(_Xglobal_lock);
-	    for (dp = &depthChecks; *dp; dp = &(*dp)->next)
-	    {
-		if (*dp == &dc)
-		{
-		    *dp = dc.next;
-		    break;
-		}
-	    }
-	    _XUnlockMutex (_Xglobal_lock);
-	    if (dc.missing)
-		return False;
-	}
+            _XLockMutex(_Xglobal_lock);
+            for (dp = &depthChecks; *dp; dp = &(*dp)->next)
+            {
+                if (*dp == &dc)
+                {
+                    *dp = dc.next;
+                    break;
+                }
+            }
+            _XUnlockMutex(_Xglobal_lock);
+            if (dc.missing) return False;
+        }
     }
     return True;
 }
@@ -191,41 +193,40 @@ XRenderHasDepths (Display *dpy)
  * XextAddDisplay)
  */
 static XRenderExtDisplayInfo *
-XRenderExtAddDisplay (XRenderExtInfo *extinfo,
-                      Display        *dpy,
-                      char           *ext_name)
+XRenderExtAddDisplay(XRenderExtInfo *extinfo, Display *dpy, char *ext_name)
 {
     XRenderExtDisplayInfo *dpyinfo;
 
-    dpyinfo = Xmalloc (sizeof (XRenderExtDisplayInfo));
+    dpyinfo = Xmalloc(sizeof(XRenderExtDisplayInfo));
     if (!dpyinfo) return NULL;
     dpyinfo->display = dpy;
-    dpyinfo->info = NULL;
+    dpyinfo->info    = NULL;
 
-    if (XRenderHasDepths (dpy))
-	dpyinfo->codes = XInitExtension (dpy, ext_name);
-    else
-	dpyinfo->codes = NULL;
+    if (XRenderHasDepths(dpy)) dpyinfo->codes = XInitExtension(dpy, ext_name);
+    else dpyinfo->codes = NULL;
 
     /*
      * if the server has the extension, then we can initialize the
      * appropriate function vectors
      */
-    if (dpyinfo->codes) {
-        XESetCloseDisplay (dpy, dpyinfo->codes->extension,
-                           XRenderCloseDisplay);
-    } else {
-	/* The server doesn't have this extension.
+    if (dpyinfo->codes)
+    {
+        XESetCloseDisplay(dpy, dpyinfo->codes->extension, XRenderCloseDisplay);
+    }
+    else
+    {
+    /* The server doesn't have this extension.
 	 * Use a private Xlib-internal extension to hang the close_display
 	 * hook on so that the "cache" (extinfo->cur) is properly cleaned.
 	 * (XBUG 7955)
 	 */
-	XExtCodes *codes = XAddExtension(dpy);
-	if (!codes) {
-	    XFree(dpyinfo);
-	    return NULL;
-	}
-        XESetCloseDisplay (dpy, codes->extension, XRenderCloseDisplay);
+        XExtCodes *codes = XAddExtension(dpy);
+        if (!codes)
+        {
+            XFree(dpyinfo);
+            return NULL;
+        }
+        XESetCloseDisplay(dpy, codes->extension, XRenderCloseDisplay);
     }
 
     /*
@@ -234,19 +235,18 @@ XRenderExtAddDisplay (XRenderExtInfo *extinfo,
     _XLockMutex(_Xglobal_lock);
     dpyinfo->next = extinfo->head;
     extinfo->head = dpyinfo;
-    extinfo->cur = dpyinfo;
+    extinfo->cur  = dpyinfo;
     extinfo->ndisplays++;
     _XUnlockMutex(_Xglobal_lock);
     return dpyinfo;
 }
-
 
 /*
  * XRenderExtRemoveDisplay - remove the indicated display from the
  * extension object. (Replaces XextRemoveDisplay.)
  */
 static int
-XRenderExtRemoveDisplay (XRenderExtInfo *extinfo, Display *dpy)
+XRenderExtRemoveDisplay(XRenderExtInfo *extinfo, Display *dpy)
 {
     XRenderExtDisplayInfo *dpyinfo, *prev;
 
@@ -255,47 +255,46 @@ XRenderExtRemoveDisplay (XRenderExtInfo *extinfo, Display *dpy)
      */
     _XLockMutex(_Xglobal_lock);
     prev = NULL;
-    for (dpyinfo = extinfo->head; dpyinfo; dpyinfo = dpyinfo->next) {
-	if (dpyinfo->display == dpy) break;
-	prev = dpyinfo;
+    for (dpyinfo = extinfo->head; dpyinfo; dpyinfo = dpyinfo->next)
+    {
+        if (dpyinfo->display == dpy) break;
+        prev = dpyinfo;
     }
-    if (!dpyinfo) {
-	_XUnlockMutex(_Xglobal_lock);
-	return 0;		/* hmm, actually an error */
+    if (!dpyinfo)
+    {
+        _XUnlockMutex(_Xglobal_lock);
+        return 0;  /* hmm, actually an error */
     }
 
     /*
      * remove the display from the list; handles going to zero
      */
-    if (prev)
-	prev->next = dpyinfo->next;
-    else
-	extinfo->head = dpyinfo->next;
+    if (prev) prev->next = dpyinfo->next;
+    else extinfo->head = dpyinfo->next;
 
     extinfo->ndisplays--;
     if (dpyinfo == extinfo->cur) extinfo->cur = NULL;  /* flush cache */
     _XUnlockMutex(_Xglobal_lock);
 
-    Xfree (dpyinfo);
+    Xfree(dpyinfo);
     return 1;
 }
 
-
-
 XRenderExtDisplayInfo *
-XRenderFindDisplay (Display *dpy)
+XRenderFindDisplay(Display *dpy)
 {
     XRenderExtDisplayInfo *dpyinfo;
 
-    dpyinfo = XRenderExtFindDisplay (&XRenderExtensionInfo, dpy);
+    dpyinfo = XRenderExtFindDisplay(&XRenderExtensionInfo, dpy);
     if (!dpyinfo)
-	dpyinfo = XRenderExtAddDisplay (&XRenderExtensionInfo, dpy,
-                                        XRenderExtensionName);
+        dpyinfo = XRenderExtAddDisplay(&XRenderExtensionInfo,
+                                       dpy,
+                                       XRenderExtensionName);
     return dpyinfo;
 }
 
 static void
-XRenderFreeXRenderInfo (XRenderInfo *xri)
+XRenderFreeXRenderInfo(XRenderInfo *xri)
 {
     Xfree(xri->format);
     Xfree(xri->screen);
@@ -305,12 +304,12 @@ XRenderFreeXRenderInfo (XRenderInfo *xri)
 }
 
 static int
-XRenderCloseDisplay (Display *dpy, XExtCodes *codes _X_UNUSED)
+XRenderCloseDisplay(Display *dpy, XExtCodes *codes _X_UNUSED)
 {
-    XRenderExtDisplayInfo *info = XRenderFindDisplay (dpy);
-    if (info && info->info) XRenderFreeXRenderInfo (info->info);
+    XRenderExtDisplayInfo *info = XRenderFindDisplay(dpy);
+    if (info && info->info) XRenderFreeXRenderInfo(info->info);
 
-    return XRenderExtRemoveDisplay (&XRenderExtensionInfo, dpy);
+    return XRenderExtRemoveDisplay(&XRenderExtensionInfo, dpy);
 }
 
 /****************************************************************************
@@ -319,622 +318,591 @@ XRenderCloseDisplay (Display *dpy, XExtCodes *codes _X_UNUSED)
  *                                                                          *
  ****************************************************************************/
 
-Bool XRenderQueryExtension (Display *dpy, int *event_basep, int *error_basep)
+Bool
+XRenderQueryExtension(Display *dpy, int *event_basep, int *error_basep)
 {
-    XRenderExtDisplayInfo *info = XRenderFindDisplay (dpy);
+    XRenderExtDisplayInfo *info = XRenderFindDisplay(dpy);
 
-    if (RenderHasExtension(info)) {
-	*event_basep = info->codes->first_event;
-	*error_basep = info->codes->first_error;
-	return True;
-    } else {
-	return False;
+    if (RenderHasExtension(info))
+    {
+        *event_basep = info->codes->first_event;
+        *error_basep = info->codes->first_error;
+        return True;
+    }
+    else
+    {
+        return False;
     }
 }
 
-
-Status XRenderQueryVersion (Display *dpy,
-			    int	    *major_versionp,
-			    int	    *minor_versionp)
+Status
+XRenderQueryVersion(Display *dpy, int *major_versionp, int *minor_versionp)
 {
-    XRenderExtDisplayInfo *info = XRenderFindDisplay (dpy);
-    XRenderInfo	    *xri;
+    XRenderExtDisplayInfo *info = XRenderFindDisplay(dpy);
+    XRenderInfo           *xri;
 
-    if (!RenderHasExtension (info))
-	return 0;
+    if (!RenderHasExtension(info)) return 0;
 
-    if (!XRenderQueryFormats (dpy))
-	return 0;
+    if (!XRenderQueryFormats(dpy)) return 0;
 
-    xri = info->info;
+    xri             = info->info;
     *major_versionp = xri->major_version;
     *minor_versionp = xri->minor_version;
     return 1;
 }
 
 static XRenderPictFormat *
-_XRenderFindFormat (XRenderInfo *xri, PictFormat format)
+_XRenderFindFormat(XRenderInfo *xri, PictFormat format)
 {
-    int	nf;
+    int nf;
 
     for (nf = 0; nf < xri->nformat; nf++)
-	if (xri->format[nf].id == format)
-	    return &xri->format[nf];
+        if (xri->format[nf].id == format) return &xri->format[nf];
     return NULL;
 }
 
 static Visual *
-_XRenderFindVisual (Display *dpy, VisualID vid)
+_XRenderFindVisual(Display *dpy, VisualID vid)
 {
-    return _XVIDtoVisual (dpy, vid);
+    return _XVIDtoVisual(dpy, vid);
 }
 
-typedef struct _renderVersionState {
-    unsigned long   version_seq;
-    Bool	    error;
-    int		    major_version;
-    int		    minor_version;
+typedef struct _renderVersionState
+{
+    unsigned long version_seq;
+    Bool          error;
+    int           major_version;
+    int           minor_version;
 
 } _XrenderVersionState;
 
 static Bool
-_XRenderVersionHandler (Display	    *dpy,
-			xReply	    *rep,
-			char	    *buf,
-			int	    len,
-			XPointer    data)
+_XRenderVersionHandler(Display *dpy,
+                       xReply  *rep,
+                       char    *buf,
+                       int      len,
+                       XPointer data)
 {
-    xRenderQueryVersionReply	replbuf;
-    xRenderQueryVersionReply	*repl;
-    _XrenderVersionState	*state = (_XrenderVersionState *) data;
+    xRenderQueryVersionReply  replbuf;
+    xRenderQueryVersionReply *repl;
+    _XrenderVersionState     *state = (_XrenderVersionState *)data;
 
-    if (dpy->last_request_read != state->version_seq)
-	return False;
+    if (dpy->last_request_read != state->version_seq) return False;
     if (rep->generic.type == X_Error)
     {
-	state->error = True;
-	return False;
+        state->error = True;
+        return False;
     }
-    repl = (xRenderQueryVersionReply *)
-	_XGetAsyncReply(dpy, (char *)&replbuf, rep, buf, len,
-		     (SIZEOF(xRenderQueryVersionReply) - SIZEOF(xReply)) >> 2,
-			True);
-    state->major_version = (int) repl->majorVersion;
-    state->minor_version = (int) repl->minorVersion;
+    repl = (xRenderQueryVersionReply *)_XGetAsyncReply(
+        dpy,
+        (char *)&replbuf,
+        rep,
+        buf,
+        len,
+        (SIZEOF(xRenderQueryVersionReply) - SIZEOF(xReply)) >> 2,
+        True);
+    state->major_version = (int)repl->majorVersion;
+    state->minor_version = (int)repl->minorVersion;
     return True;
 }
 
 Status
-XRenderQueryFormats (Display *dpy)
+XRenderQueryFormats(Display *dpy)
 {
-    XRenderExtDisplayInfo	*info = XRenderFindDisplay (dpy);
-    _XAsyncHandler		async;
-    _XrenderVersionState	async_state;
-    xRenderQueryVersionReq	*vreq;
+    XRenderExtDisplayInfo       *info = XRenderFindDisplay(dpy);
+    _XAsyncHandler               async;
+    _XrenderVersionState         async_state;
+    xRenderQueryVersionReq      *vreq;
     xRenderQueryPictFormatsReply rep;
     xRenderQueryPictFormatsReq  *req;
-    XRenderInfo			*xri;
-    XRenderPictFormat		*format;
-    XRenderScreen		*screen;
-    XRenderDepth		*depth;
-    XRenderVisual		*visual;
-    xPictFormInfo		*xFormat;
-    xPictScreen			*xScreen;
-    xPictDepth			*xPDepth;
-    xPictVisual			*xVisual;
-    CARD32			*xSubpixel;
-    void			*xData;
-    int				ns, nd;
-    unsigned			nf;
-    unsigned long		rlength;
-    unsigned long		nbytes;
+    XRenderInfo                 *xri;
+    XRenderPictFormat           *format;
+    XRenderScreen               *screen;
+    XRenderDepth                *depth;
+    XRenderVisual               *visual;
+    xPictFormInfo               *xFormat;
+    xPictScreen                 *xScreen;
+    xPictDepth                  *xPDepth;
+    xPictVisual                 *xVisual;
+    CARD32                      *xSubpixel;
+    void                        *xData;
+    int                          ns, nd;
+    unsigned                     nf;
+    unsigned long                rlength;
+    unsigned long                nbytes;
 
-    RenderCheckExtension (dpy, info, 0);
-    LockDisplay (dpy);
+    RenderCheckExtension(dpy, info, 0);
+    LockDisplay(dpy);
     if (info->info)
     {
-	UnlockDisplay (dpy);
-	return 1;
+        UnlockDisplay(dpy);
+        return 1;
     }
-    GetReq (RenderQueryVersion, vreq);
-    vreq->reqType = (CARD8) info->codes->major_opcode;
+    GetReq(RenderQueryVersion, vreq);
+    vreq->reqType       = (CARD8)info->codes->major_opcode;
     vreq->renderReqType = X_RenderQueryVersion;
-    vreq->majorVersion = RENDER_MAJOR;
-    vreq->minorVersion = RENDER_MINOR;
+    vreq->majorVersion  = RENDER_MAJOR;
+    vreq->minorVersion  = RENDER_MINOR;
 
     async_state.version_seq = dpy->request;
-    async_state.error = False;
-    async.next = dpy->async_handlers;
-    async.handler = _XRenderVersionHandler;
-    async.data = (XPointer) &async_state;
-    dpy->async_handlers = &async;
+    async_state.error       = False;
+    async.next              = dpy->async_handlers;
+    async.handler           = _XRenderVersionHandler;
+    async.data              = (XPointer)&async_state;
+    dpy->async_handlers     = &async;
 
-    GetReq (RenderQueryPictFormats, req);
-    req->reqType = (CARD8) info->codes->major_opcode;
+    GetReq(RenderQueryPictFormats, req);
+    req->reqType       = (CARD8)info->codes->major_opcode;
     req->renderReqType = X_RenderQueryPictFormats;
 
-    if (!_XReply (dpy, (xReply *) &rep, 0, xFalse))
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
     {
-	DeqAsyncHandler (dpy, &async);
-	UnlockDisplay (dpy);
-	SyncHandle ();
-	return 0;
+        DeqAsyncHandler(dpy, &async);
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return 0;
     }
-    DeqAsyncHandler (dpy, &async);
+    DeqAsyncHandler(dpy, &async);
     if (async_state.error)
     {
-	UnlockDisplay(dpy);
-	SyncHandle();
-	return 0;
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return 0;
     }
     /*
      * Check for the lack of sub-pixel data
      */
     if (async_state.major_version == 0 && async_state.minor_version < 6)
-	rep.numSubpixel = 0;
+        rep.numSubpixel = 0;
 
-    if ((rep.numFormats < ((INT_MAX / 4) / sizeof (XRenderPictFormat))) &&
-	(rep.numScreens < ((INT_MAX / 4) / sizeof (XRenderScreen))) &&
-	(rep.numDepths  < ((INT_MAX / 4) / sizeof (XRenderDepth))) &&
-	(rep.numVisuals < ((INT_MAX / 4) / sizeof (XRenderVisual))) &&
-	(rep.numSubpixel < ((INT_MAX / 4) / 4)) &&
-	(rep.length < (INT_MAX >> 2)) ) {
+    if ((rep.numFormats < ((INT_MAX / 4) / sizeof(XRenderPictFormat))) &&
+        (rep.numScreens < ((INT_MAX / 4) / sizeof(XRenderScreen))) &&
+        (rep.numDepths < ((INT_MAX / 4) / sizeof(XRenderDepth))) &&
+        (rep.numVisuals < ((INT_MAX / 4) / sizeof(XRenderVisual))) &&
+        (rep.numSubpixel < ((INT_MAX / 4) / 4)) &&
+        (rep.length < (INT_MAX >> 2)))
+    {
         /* Zero-initialize so that pointers are NULL if there is a failure. */
-	xri = Xcalloc (1, sizeof (XRenderInfo));
-	rlength = ((rep.numFormats * sizeof (xPictFormInfo)) +
-		   (rep.numScreens * sizeof (xPictScreen)) +
-		   (rep.numDepths * sizeof (xPictDepth)) +
-		   (rep.numVisuals * sizeof (xPictVisual)) +
-		   (rep.numSubpixel * 4));
-	xData = Xmalloc (rlength);
-	nbytes = (unsigned long) rep.length << 2;
-    } else {
-	xri = NULL;
-	xData = NULL;
-	rlength = nbytes = 0;
+        xri = Xcalloc(1, sizeof(XRenderInfo));
+        rlength =
+            ((rep.numFormats * sizeof(xPictFormInfo)) +
+             (rep.numScreens * sizeof(xPictScreen)) +
+             (rep.numDepths * sizeof(xPictDepth)) +
+             (rep.numVisuals * sizeof(xPictVisual)) + (rep.numSubpixel * 4));
+        xData  = Xmalloc(rlength);
+        nbytes = (unsigned long)rep.length << 2;
+    }
+    else
+    {
+        xri     = NULL;
+        xData   = NULL;
+        rlength = nbytes = 0;
     }
 
     if (!xri || !xData || nbytes < rlength)
     {
-	if (xri) Xfree (xri);
-	if (xData) Xfree (xData);
-	_XEatDataWords (dpy, rep.length);
-	UnlockDisplay (dpy);
-	SyncHandle ();
-	return 0;
+        if (xri) Xfree(xri);
+        if (xData) Xfree(xData);
+        _XEatDataWords(dpy, rep.length);
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return 0;
     }
     xri->major_version = async_state.major_version;
     xri->minor_version = async_state.minor_version;
-    xri->format = Xcalloc(rep.numFormats, sizeof(XRenderPictFormat));
-    xri->nformat = (int) rep.numFormats;
-    xri->screen = Xcalloc(rep.numScreens, sizeof(XRenderScreen));
-    xri->nscreen = (int) rep.numScreens;
-    xri->depth = Xcalloc(rep.numDepths, sizeof(XRenderDepth));
-    xri->ndepth = (int) rep.numDepths;
-    xri->visual = Xcalloc(rep.numVisuals, sizeof(XRenderVisual));
-    xri->nvisual = (int) rep.numVisuals;
-    _XRead (dpy, (char *) xData, (long) rlength);
-    format = xri->format;
-    xFormat = (xPictFormInfo *) xData;
+    xri->format        = Xcalloc(rep.numFormats, sizeof(XRenderPictFormat));
+    xri->nformat       = (int)rep.numFormats;
+    xri->screen        = Xcalloc(rep.numScreens, sizeof(XRenderScreen));
+    xri->nscreen       = (int)rep.numScreens;
+    xri->depth         = Xcalloc(rep.numDepths, sizeof(XRenderDepth));
+    xri->ndepth        = (int)rep.numDepths;
+    xri->visual        = Xcalloc(rep.numVisuals, sizeof(XRenderVisual));
+    xri->nvisual       = (int)rep.numVisuals;
+    _XRead(dpy, (char *)xData, (long)rlength);
+    format  = xri->format;
+    xFormat = (xPictFormInfo *)xData;
     for (nf = 0; nf < rep.numFormats; nf++)
     {
-	format->id = xFormat->id;
-	format->type = xFormat->type;
-	format->depth = xFormat->depth;
-	format->direct.red       = (short) xFormat->direct.red;
-	format->direct.redMask   = (short) xFormat->direct.redMask;
-	format->direct.green     = (short) xFormat->direct.green;
-	format->direct.greenMask = (short) xFormat->direct.greenMask;
-	format->direct.blue      = (short) xFormat->direct.blue;
-	format->direct.blueMask  = (short) xFormat->direct.blueMask;
-	format->direct.alpha     = (short) xFormat->direct.alpha;
-	format->direct.alphaMask = (short) xFormat->direct.alphaMask;
-	format->colormap = xFormat->colormap;
-	format++;
-	xFormat++;
+        format->id               = xFormat->id;
+        format->type             = xFormat->type;
+        format->depth            = xFormat->depth;
+        format->direct.red       = (short)xFormat->direct.red;
+        format->direct.redMask   = (short)xFormat->direct.redMask;
+        format->direct.green     = (short)xFormat->direct.green;
+        format->direct.greenMask = (short)xFormat->direct.greenMask;
+        format->direct.blue      = (short)xFormat->direct.blue;
+        format->direct.blueMask  = (short)xFormat->direct.blueMask;
+        format->direct.alpha     = (short)xFormat->direct.alpha;
+        format->direct.alphaMask = (short)xFormat->direct.alphaMask;
+        format->colormap         = xFormat->colormap;
+        format++;
+        xFormat++;
     }
-    xScreen = (xPictScreen *) xFormat;
-    screen = xri->screen;
-    depth = xri->depth;
-    visual = xri->visual;
+    xScreen = (xPictScreen *)xFormat;
+    screen  = xri->screen;
+    depth   = xri->depth;
+    visual  = xri->visual;
     for (ns = 0; ns < xri->nscreen; ns++)
     {
-	screen->depths = depth;
-	screen->ndepths = (int) xScreen->nDepth;
-	screen->fallback = _XRenderFindFormat (xri, xScreen->fallback);
-	screen->subpixel = SubPixelUnknown;
-	xPDepth = (xPictDepth *) (xScreen + 1);
-	if (screen->ndepths > rep.numDepths) {
-	    XRenderFreeXRenderInfo(xri);
-	    Xfree (xData);
-	    _XEatDataWords (dpy, rep.length);
-	    UnlockDisplay (dpy);
-	    SyncHandle ();
-	    return 0;
-	}
-	rep.numDepths -= (CARD32) screen->ndepths;
-	for (nd = 0; nd < screen->ndepths; nd++)
-	{
-	    int nv;
+        screen->depths   = depth;
+        screen->ndepths  = (int)xScreen->nDepth;
+        screen->fallback = _XRenderFindFormat(xri, xScreen->fallback);
+        screen->subpixel = SubPixelUnknown;
+        xPDepth          = (xPictDepth *)(xScreen + 1);
+        if (screen->ndepths > rep.numDepths)
+        {
+            XRenderFreeXRenderInfo(xri);
+            Xfree(xData);
+            _XEatDataWords(dpy, rep.length);
+            UnlockDisplay(dpy);
+            SyncHandle();
+            return 0;
+        }
+        rep.numDepths -= (CARD32)screen->ndepths;
+        for (nd = 0; nd < screen->ndepths; nd++)
+        {
+            int nv;
 
-	    depth->depth = xPDepth->depth;
-	    depth->nvisuals = xPDepth->nPictVisuals;
-	    depth->visuals = visual;
-	    xVisual = (xPictVisual *) (xPDepth + 1);
-	    if (depth->nvisuals > rep.numVisuals) {
-		XRenderFreeXRenderInfo (xri);
-		Xfree (xData);
-		_XEatDataWords (dpy, rep.length);
-		UnlockDisplay (dpy);
-		SyncHandle ();
-		return 0;
-	    }
-	    rep.numVisuals -= (CARD32) depth->nvisuals;
-	    for (nv = 0; nv < depth->nvisuals; nv++)
-	    {
-		visual->visual = _XRenderFindVisual (dpy, xVisual->visual);
-		visual->format = _XRenderFindFormat (xri, xVisual->format);
-		visual++;
-		xVisual++;
-	    }
-	    depth++;
-	    xPDepth = (xPictDepth *) xVisual;
-	}
-	screen++;
-	xScreen = (xPictScreen *) xPDepth;
+            depth->depth    = xPDepth->depth;
+            depth->nvisuals = xPDepth->nPictVisuals;
+            depth->visuals  = visual;
+            xVisual         = (xPictVisual *)(xPDepth + 1);
+            if (depth->nvisuals > rep.numVisuals)
+            {
+                XRenderFreeXRenderInfo(xri);
+                Xfree(xData);
+                _XEatDataWords(dpy, rep.length);
+                UnlockDisplay(dpy);
+                SyncHandle();
+                return 0;
+            }
+            rep.numVisuals -= (CARD32)depth->nvisuals;
+            for (nv = 0; nv < depth->nvisuals; nv++)
+            {
+                visual->visual = _XRenderFindVisual(dpy, xVisual->visual);
+                visual->format = _XRenderFindFormat(xri, xVisual->format);
+                visual++;
+                xVisual++;
+            }
+            depth++;
+            xPDepth = (xPictDepth *)xVisual;
+        }
+        screen++;
+        xScreen = (xPictScreen *)xPDepth;
     }
-    xSubpixel = (CARD32 *) xScreen;
-    screen = xri->screen;
+    xSubpixel = (CARD32 *)xScreen;
+    screen    = xri->screen;
     for (ns = 0; ns < rep.numSubpixel; ns++)
     {
-	screen->subpixel = (int) *xSubpixel;
-	xSubpixel++;
-	screen++;
+        screen->subpixel = (int)*xSubpixel;
+        xSubpixel++;
+        screen++;
     }
     info->info = xri;
     /*
      * Skip any extra data
      */
-    if (nbytes > rlength)
-	_XEatData (dpy, (unsigned long) (nbytes - rlength));
+    if (nbytes > rlength) _XEatData(dpy, (unsigned long)(nbytes - rlength));
 
-    UnlockDisplay (dpy);
-    SyncHandle ();
-    Xfree (xData);
+    UnlockDisplay(dpy);
+    SyncHandle();
+    Xfree(xData);
     return 1;
 }
 
 int
-XRenderQuerySubpixelOrder (Display *dpy, int screen)
+XRenderQuerySubpixelOrder(Display *dpy, int screen)
 {
-    XRenderExtDisplayInfo *info = XRenderFindDisplay (dpy);
-    XRenderInfo	    *xri;
+    XRenderExtDisplayInfo *info = XRenderFindDisplay(dpy);
+    XRenderInfo           *xri;
 
-    if (!RenderHasExtension (info))
-	return SubPixelUnknown;
+    if (!RenderHasExtension(info)) return SubPixelUnknown;
 
-    if (!XRenderQueryFormats (dpy))
-	return SubPixelUnknown;
+    if (!XRenderQueryFormats(dpy)) return SubPixelUnknown;
 
     xri = info->info;
     return xri->screen[screen].subpixel;
 }
 
 Bool
-XRenderSetSubpixelOrder (Display *dpy, int screen, int subpixel)
+XRenderSetSubpixelOrder(Display *dpy, int screen, int subpixel)
 {
-    XRenderExtDisplayInfo *info = XRenderFindDisplay (dpy);
-    XRenderInfo	    *xri;
+    XRenderExtDisplayInfo *info = XRenderFindDisplay(dpy);
+    XRenderInfo           *xri;
 
-    if (!RenderHasExtension (info))
-	return False;
+    if (!RenderHasExtension(info)) return False;
 
-    if (!XRenderQueryFormats (dpy))
-	return False;
+    if (!XRenderQueryFormats(dpy)) return False;
 
-    xri = info->info;
+    xri                          = info->info;
     xri->screen[screen].subpixel = subpixel;
     return True;
 }
 
 XRenderPictFormat *
-XRenderFindVisualFormat (Display *dpy, _Xconst Visual *visual)
+XRenderFindVisualFormat(Display *dpy, _Xconst Visual *visual)
 {
-    XRenderExtDisplayInfo *info = XRenderFindDisplay (dpy);
-    int		    nv;
-    XRenderInfo	    *xri;
-    XRenderVisual   *xrv;
+    XRenderExtDisplayInfo *info = XRenderFindDisplay(dpy);
+    int                    nv;
+    XRenderInfo           *xri;
+    XRenderVisual         *xrv;
 
-    RenderCheckExtension (dpy, info, NULL);
-    if (!XRenderQueryFormats (dpy))
-        return NULL;
+    RenderCheckExtension(dpy, info, NULL);
+    if (!XRenderQueryFormats(dpy)) return NULL;
     xri = info->info;
     for (nv = 0, xrv = xri->visual; nv < xri->nvisual; nv++, xrv++)
-	if (xrv->visual == visual)
-	    return xrv->format;
+        if (xrv->visual == visual) return xrv->format;
     return NULL;
 }
 
 XRenderPictFormat *
-XRenderFindFormat (Display		*dpy,
-		   unsigned long	mask,
-		   _Xconst XRenderPictFormat	*template,
-		   int			count)
+XRenderFindFormat(Display      *dpy,
+                  unsigned long mask,
+                  _Xconst XRenderPictFormat *template,
+                  int count)
 {
-    XRenderExtDisplayInfo *info = XRenderFindDisplay (dpy);
-    int		    nf;
-    XRenderInfo     *xri;
+    XRenderExtDisplayInfo *info = XRenderFindDisplay(dpy);
+    int                    nf;
+    XRenderInfo           *xri;
 
-    RenderCheckExtension (dpy, info, NULL);
-    if (!XRenderQueryFormats (dpy))
-	return NULL;
+    RenderCheckExtension(dpy, info, NULL);
+    if (!XRenderQueryFormats(dpy)) return NULL;
     xri = info->info;
     for (nf = 0; nf < xri->nformat; nf++)
     {
-	if (mask & PictFormatID)
-	    if (template->id != xri->format[nf].id)
-		continue;
-	if (mask & PictFormatType)
-	if (template->type != xri->format[nf].type)
-		continue;
-	if (mask & PictFormatDepth)
-	    if (template->depth != xri->format[nf].depth)
-		continue;
-	if (mask & PictFormatRed)
-	    if (template->direct.red != xri->format[nf].direct.red)
-		continue;
-	if (mask & PictFormatRedMask)
-	    if (template->direct.redMask != xri->format[nf].direct.redMask)
-		continue;
-	if (mask & PictFormatGreen)
-	    if (template->direct.green != xri->format[nf].direct.green)
-		continue;
-	if (mask & PictFormatGreenMask)
-	    if (template->direct.greenMask != xri->format[nf].direct.greenMask)
-		continue;
-	if (mask & PictFormatBlue)
-	    if (template->direct.blue != xri->format[nf].direct.blue)
-		continue;
-	if (mask & PictFormatBlueMask)
-	    if (template->direct.blueMask != xri->format[nf].direct.blueMask)
-		continue;
-	if (mask & PictFormatAlpha)
-	    if (template->direct.alpha != xri->format[nf].direct.alpha)
-		continue;
-	if (mask & PictFormatAlphaMask)
-	    if (template->direct.alphaMask != xri->format[nf].direct.alphaMask)
-		continue;
-	if (mask & PictFormatColormap)
-	    if (template->colormap != xri->format[nf].colormap)
-		continue;
-	if (count-- == 0)
-	    return &xri->format[nf];
+        if (mask & PictFormatID)
+            if (template->id != xri->format[nf].id) continue;
+        if (mask & PictFormatType)
+            if (template->type != xri->format[nf].type) continue;
+        if (mask & PictFormatDepth)
+            if (template->depth != xri->format[nf].depth) continue;
+        if (mask & PictFormatRed)
+            if (template->direct.red != xri->format[nf].direct.red) continue;
+        if (mask & PictFormatRedMask)
+            if (template->direct.redMask != xri->format[nf].direct.redMask)
+                continue;
+        if (mask & PictFormatGreen)
+            if (template->direct.green != xri->format[nf].direct.green)
+                continue;
+        if (mask & PictFormatGreenMask)
+            if (template->direct.greenMask != xri->format[nf].direct.greenMask)
+                continue;
+        if (mask & PictFormatBlue)
+            if (template->direct.blue != xri->format[nf].direct.blue) continue;
+        if (mask & PictFormatBlueMask)
+            if (template->direct.blueMask != xri->format[nf].direct.blueMask)
+                continue;
+        if (mask & PictFormatAlpha)
+            if (template->direct.alpha != xri->format[nf].direct.alpha)
+                continue;
+        if (mask & PictFormatAlphaMask)
+            if (template->direct.alphaMask != xri->format[nf].direct.alphaMask)
+                continue;
+        if (mask & PictFormatColormap)
+            if (template->colormap != xri->format[nf].colormap) continue;
+        if (count-- == 0) return &xri->format[nf];
     }
     return NULL;
 }
 
 XRenderPictFormat *
-XRenderFindStandardFormat (Display  *dpy,
-			   int	    format)
+XRenderFindStandardFormat(Display *dpy, int format)
 {
-    static struct {
-	XRenderPictFormat   templ;
-	unsigned long	    mask;
+    static struct
+    {
+        XRenderPictFormat templ;
+        unsigned long     mask;
     } standardFormats[PictStandardNUM] = {
-	/* PictStandardARGB32 */
-	{
-	    {
-		0,			    /* id */
-		PictTypeDirect,		    /* type */
-		32,			    /* depth */
-		{			    /* direct */
-		    16,			    /* direct.red */
-		    0xff,		    /* direct.redMask */
-		    8,			    /* direct.green */
-		    0xff,		    /* direct.greenMask */
-		    0,			    /* direct.blue */
-		    0xff,		    /* direct.blueMask */
-		    24,			    /* direct.alpha */
-		    0xff,		    /* direct.alphaMask */
-		},
-		0,			    /* colormap */
-	    },
-	    PictFormatType |
-	    PictFormatDepth |
-	    PictFormatRed |
-	    PictFormatRedMask |
-	    PictFormatGreen |
-	    PictFormatGreenMask |
-	    PictFormatBlue |
-	    PictFormatBlueMask |
-	    PictFormatAlpha |
-	    PictFormatAlphaMask,
-	},
-	/* PictStandardRGB24 */
-	{
-	    {
-		0,			    /* id */
-		PictTypeDirect,		    /* type */
-		24,			    /* depth */
-		{			    /* direct */
-		    16,			    /* direct.red */
-		    0xff,		    /* direct.redMask */
-		    8,			    /* direct.green */
-		    0xff,		    /* direct.greenMask */
-		    0,			    /* direct.blue */
-		    0xff,		    /* direct.blueMask */
-		    0,			    /* direct.alpha */
-		    0x00,		    /* direct.alphaMask */
-		},
-		0,			    /* colormap */
-	    },
-	    PictFormatType |
-	    PictFormatDepth |
-	    PictFormatRed |
-	    PictFormatRedMask |
-	    PictFormatGreen |
-	    PictFormatGreenMask |
-	    PictFormatBlue |
-	    PictFormatBlueMask |
-	    PictFormatAlphaMask,
-	},
-	/* PictStandardA8 */
-	{
-	    {
-		0,			    /* id */
-		PictTypeDirect,		    /* type */
-		8,			    /* depth */
-		{			    /* direct */
-		    0,			    /* direct.red */
-		    0x00,		    /* direct.redMask */
-		    0,			    /* direct.green */
-		    0x00,		    /* direct.greenMask */
-		    0,			    /* direct.blue */
-		    0x00,		    /* direct.blueMask */
-		    0,			    /* direct.alpha */
-		    0xff,		    /* direct.alphaMask */
-		},
-		0,			    /* colormap */
-	    },
-	    PictFormatType |
-	    PictFormatDepth |
-	    PictFormatRedMask |
-	    PictFormatGreenMask |
-	    PictFormatBlueMask |
-	    PictFormatAlpha |
-	    PictFormatAlphaMask,
-	},
-	/* PictStandardA4 */
-	{
-	    {
-		0,			    /* id */
-		PictTypeDirect,		    /* type */
-		4,			    /* depth */
-		{			    /* direct */
-		    0,			    /* direct.red */
-		    0x00,		    /* direct.redMask */
-		    0,			    /* direct.green */
-		    0x00,		    /* direct.greenMask */
-		    0,			    /* direct.blue */
-		    0x00,		    /* direct.blueMask */
-		    0,			    /* direct.alpha */
-		    0x0f,		    /* direct.alphaMask */
-		},
-		0,			    /* colormap */
-	    },
-	    PictFormatType |
-	    PictFormatDepth |
-	    PictFormatRedMask |
-	    PictFormatGreenMask |
-	    PictFormatBlueMask |
-	    PictFormatAlpha |
-	    PictFormatAlphaMask,
-	},
-	/* PictStandardA1 */
-	{
-	    {
-		0,			    /* id */
-		PictTypeDirect,		    /* type */
-		1,			    /* depth */
-		{			    /* direct */
-		    0,			    /* direct.red */
-		    0x00,		    /* direct.redMask */
-		    0,			    /* direct.green */
-		    0x00,		    /* direct.greenMask */
-		    0,			    /* direct.blue */
-		    0x00,		    /* direct.blueMask */
-		    0,			    /* direct.alpha */
-		    0x01,		    /* direct.alphaMask */
-		},
-		0,			    /* colormap */
-	    },
-	    PictFormatType |
-	    PictFormatDepth |
-	    PictFormatRedMask |
-	    PictFormatGreenMask |
-	    PictFormatBlueMask |
-	    PictFormatAlpha |
-	    PictFormatAlphaMask,
-	},
+        /* PictStandardARGB32 */
+        {
+         {
+                0, /* id */
+                PictTypeDirect, /* type */
+                32, /* depth */
+                {
+                    /* direct */
+                    16, /* direct.red */
+                    0xff, /* direct.redMask */
+                    8, /* direct.green */
+                    0xff, /* direct.greenMask */
+                    0, /* direct.blue */
+                    0xff, /* direct.blueMask */
+                    24, /* direct.alpha */
+                    0xff, /* direct.alphaMask */
+                },
+                0, /* colormap */
+            }, PictFormatType | PictFormatDepth | PictFormatRed |
+                PictFormatRedMask | PictFormatGreen | PictFormatGreenMask |
+                PictFormatBlue | PictFormatBlueMask | PictFormatAlpha |
+                PictFormatAlphaMask, },
+        /* PictStandardRGB24 */
+        {
+         {
+                0, /* id */
+                PictTypeDirect, /* type */
+                24, /* depth */
+                {
+                    /* direct */
+                    16, /* direct.red */
+                    0xff, /* direct.redMask */
+                    8, /* direct.green */
+                    0xff, /* direct.greenMask */
+                    0, /* direct.blue */
+                    0xff, /* direct.blueMask */
+                    0, /* direct.alpha */
+                    0x00, /* direct.alphaMask */
+                },
+                0, /* colormap */
+            },   PictFormatType | PictFormatDepth | PictFormatRed |
+                PictFormatRedMask | PictFormatGreen | PictFormatGreenMask |
+                PictFormatBlue | PictFormatBlueMask | PictFormatAlphaMask,
+         },
+        /* PictStandardA8 */
+        {
+         {
+                0, /* id */
+                PictTypeDirect, /* type */
+                8, /* depth */
+                {
+                    /* direct */
+                    0, /* direct.red */
+                    0x00, /* direct.redMask */
+                    0, /* direct.green */
+                    0x00, /* direct.greenMask */
+                    0, /* direct.blue */
+                    0x00, /* direct.blueMask */
+                    0, /* direct.alpha */
+                    0xff, /* direct.alphaMask */
+                },
+                0, /* colormap */
+            }, PictFormatType | PictFormatDepth | PictFormatRedMask |
+                PictFormatGreenMask | PictFormatBlueMask | PictFormatAlpha |
+                PictFormatAlphaMask, },
+        /* PictStandardA4 */
+        {
+         {
+                0, /* id */
+                PictTypeDirect, /* type */
+                4, /* depth */
+                {
+                    /* direct */
+                    0, /* direct.red */
+                    0x00, /* direct.redMask */
+                    0, /* direct.green */
+                    0x00, /* direct.greenMask */
+                    0, /* direct.blue */
+                    0x00, /* direct.blueMask */
+                    0, /* direct.alpha */
+                    0x0f, /* direct.alphaMask */
+                },
+                0, /* colormap */
+            },    PictFormatType | PictFormatDepth | PictFormatRedMask |
+                PictFormatGreenMask | PictFormatBlueMask | PictFormatAlpha |
+                PictFormatAlphaMask, },
+        /* PictStandardA1 */
+        {
+         {
+                0, /* id */
+                PictTypeDirect, /* type */
+                1, /* depth */
+                {
+                    /* direct */
+                    0, /* direct.red */
+                    0x00, /* direct.redMask */
+                    0, /* direct.green */
+                    0x00, /* direct.greenMask */
+                    0, /* direct.blue */
+                    0x00, /* direct.blueMask */
+                    0, /* direct.alpha */
+                    0x01, /* direct.alphaMask */
+                },
+                0, /* colormap */
+            }, PictFormatType | PictFormatDepth | PictFormatRedMask |
+                PictFormatGreenMask | PictFormatBlueMask | PictFormatAlpha |
+                PictFormatAlphaMask, },
     };
 
     if (0 <= format && format < PictStandardNUM)
-	return XRenderFindFormat (dpy,
-				  standardFormats[format].mask,
-				  &standardFormats[format].templ,
-				  0);
+        return XRenderFindFormat(dpy,
+                                 standardFormats[format].mask,
+                                 &standardFormats[format].templ,
+                                 0);
     return NULL;
 }
 
 XIndexValue *
-XRenderQueryPictIndexValues(Display			*dpy,
-			    _Xconst XRenderPictFormat	*format,
-			    int				*num)
+XRenderQueryPictIndexValues(Display                   *dpy,
+                            _Xconst XRenderPictFormat *format,
+                            int                       *num)
 {
-    XRenderExtDisplayInfo		*info = XRenderFindDisplay (dpy);
-    xRenderQueryPictIndexValuesReq	*req;
-    xRenderQueryPictIndexValuesReply	rep;
-    XIndexValue				*values;
-    unsigned int			nbytes, nread, i;
+    XRenderExtDisplayInfo           *info = XRenderFindDisplay(dpy);
+    xRenderQueryPictIndexValuesReq  *req;
+    xRenderQueryPictIndexValuesReply rep;
+    XIndexValue                     *values;
+    unsigned int                     nbytes, nread, i;
 
-    RenderCheckExtension (dpy, info, NULL);
+    RenderCheckExtension(dpy, info, NULL);
 
-    LockDisplay (dpy);
-    GetReq (RenderQueryPictIndexValues, req);
-    req->reqType       = (CARD8) info->codes->major_opcode;
+    LockDisplay(dpy);
+    GetReq(RenderQueryPictIndexValues, req);
+    req->reqType       = (CARD8)info->codes->major_opcode;
     req->renderReqType = X_RenderQueryPictIndexValues;
-    req->format        = (CARD32) format->id;
-    if (!_XReply (dpy, (xReply *) &rep, 0, xFalse))
+    req->format        = (CARD32)format->id;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
     {
-	UnlockDisplay (dpy);
-	SyncHandle ();
-	return NULL;
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return NULL;
     }
 
     if ((rep.length < (INT_MAX >> 2)) &&
-	(rep.numIndexValues < (INT_MAX / sizeof (XIndexValue)))) {
-	unsigned int rlength;
-	/* request data length */
-	nbytes = rep.length << 2;
-	/* bytes of actual data in the request */
-	nread = rep.numIndexValues * SIZEOF (xIndexValue);
-	/* size of array returned to application */
-	rlength = (unsigned) ((unsigned long) rep.numIndexValues * sizeof (XIndexValue));
+        (rep.numIndexValues < (INT_MAX / sizeof(XIndexValue))))
+    {
+        unsigned int rlength;
+        /* request data length */
+        nbytes = rep.length << 2;
+        /* bytes of actual data in the request */
+        nread  = rep.numIndexValues * SIZEOF(xIndexValue);
+        /* size of array returned to application */
+        rlength =
+            (unsigned)((unsigned long)rep.numIndexValues * sizeof(XIndexValue));
 
-	/* allocate returned data */
-	values = Xmalloc (rlength);
-    } else {
-	nbytes = nread = 0;
-	values = NULL;
+        /* allocate returned data */
+        values = Xmalloc(rlength);
+    }
+    else
+    {
+        nbytes = nread = 0;
+        values         = NULL;
     }
 
     if (!values)
     {
-	_XEatDataWords (dpy, rep.length);
-	UnlockDisplay (dpy);
-	SyncHandle ();
-	return NULL;
+        _XEatDataWords(dpy, rep.length);
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return NULL;
     }
 
     /* read the values one at a time and convert */
-    *num = (int) rep.numIndexValues;
+    *num = (int)rep.numIndexValues;
     for (i = 0; i < rep.numIndexValues; i++)
     {
-	xIndexValue value;
+        xIndexValue value;
 
-	_XRead (dpy, (char *) &value, SIZEOF (xIndexValue));
-	values[i].pixel = value.pixel;
-	values[i].red = value.red;
-	values[i].green = value.green;
-	values[i].blue = value.blue;
-	values[i].alpha = value.alpha;
+        _XRead(dpy, (char *)&value, SIZEOF(xIndexValue));
+        values[i].pixel = value.pixel;
+        values[i].red   = value.red;
+        values[i].green = value.green;
+        values[i].blue  = value.blue;
+        values[i].alpha = value.alpha;
     }
     /* skip any padding */
-    if(nbytes > nread)
+    if (nbytes > nread)
     {
-	_XEatData (dpy, (unsigned long) (nbytes - nread));
+        _XEatData(dpy, (unsigned long)(nbytes - nread));
     }
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    UnlockDisplay(dpy);
+    SyncHandle();
     return values;
 }

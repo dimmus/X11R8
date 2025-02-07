@@ -22,9 +22,8 @@
  *
  */
 
-
 #if HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include <stdint.h>
@@ -48,9 +47,9 @@ XIQueryVersion(Display *dpy, int *major_inout, int *minor_inout)
 }
 
 _X_HIDDEN Status
-_xiQueryVersion(Display * dpy, int *major, int *minor, XExtDisplayInfo *info)
+_xiQueryVersion(Display *dpy, int *major, int *minor, XExtDisplayInfo *info)
 {
-    xXIQueryVersionReq *req;
+    xXIQueryVersionReq  *req;
     xXIQueryVersionReply rep;
 
     LockDisplay(dpy);
@@ -60,30 +59,32 @@ _xiQueryVersion(Display * dpy, int *major, int *minor, XExtDisplayInfo *info)
     if (_XiCheckExtInit(dpy, XInput_2_0, info) == -1)
     {
         XExtensionVersion *ext;
-        XExtDisplayInfo *extinfo = XInput_find_display(dpy);
+        XExtDisplayInfo   *extinfo = XInput_find_display(dpy);
 
-        if (!extinfo || !extinfo->data) {
+        if (!extinfo || !extinfo->data)
+        {
             *major = 0;
             *minor = 0;
             return BadRequest;
         }
 
-        ext = ((XInputData*)extinfo->data)->vers;
+        ext = ((XInputData *)extinfo->data)->vers;
 
         *major = ext->major_version;
         *minor = ext->minor_version;
-	return BadRequest;
+        return BadRequest;
     }
 
     GetReq(XIQueryVersion, req);
-    req->reqType = info->codes->major_opcode;
-    req->ReqType = X_XIQueryVersion;
+    req->reqType       = info->codes->major_opcode;
+    req->ReqType       = X_XIQueryVersion;
     req->major_version = *major;
     req->minor_version = *minor;
 
-    if (!_XReply(dpy, (xReply*)&rep, 0, xTrue)) {
+    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue))
+    {
         UnlockDisplay(dpy);
-	return BadImplementation;
+        return BadImplementation;
     }
 
     *major = rep.major_version;

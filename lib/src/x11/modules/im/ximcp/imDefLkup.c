@@ -376,7 +376,7 @@ _XimUnfabricateSerial(Xim im, Xic ic, XKeyEvent *event)
     /* GTK2 XIM module sets serial=0. */
     if (!event->serial)
     {
-    /* _XimCommitRecv() sets event->serial and call _XimFabricateSerial()
+        /* _XimCommitRecv() sets event->serial and call _XimFabricateSerial()
 	 * but GTK2 XIM always reset event->serial=0 with XFilterEvent().
 	 */
         if (ic && ic->private.proto.commit_info)
@@ -497,8 +497,8 @@ _XimRegisterTriggerkey(Xim im, XPointer buf)
      *  register onkeylist
      */
 
-    len = buf_l[0];    /* length of on-keys */
-    len += sizeof(INT32);   /* sizeof length of on-keys */
+    len = buf_l[0]; /* length of on-keys */
+    len += sizeof(INT32); /* sizeof length of on-keys */
 
     if (!(key = Xmalloc(len)))
     {
@@ -515,8 +515,8 @@ _XimRegisterTriggerkey(Xim im, XPointer buf)
      */
 
     buf_l = (CARD32 *)((char *)buf + len);
-    len   = buf_l[0];    /* length of off-keys */
-    len += sizeof(INT32);   /* sizeof length of off-keys */
+    len   = buf_l[0]; /* length of off-keys */
+    len += sizeof(INT32); /* sizeof length of off-keys */
 
     if (!(key = Xmalloc(len)))
     {
@@ -591,15 +591,15 @@ _XimTriggerNotify(Xim im, Xic ic, int mode, CARD32 idx)
 
     buf_s[0] = im->private.proto.imid; /* imid */
     buf_s[1] = ic->private.proto.icid; /* icid */
-    buf_l[1] = mode;   /* flag */
-    buf_l[2] = idx;   /* index of keys list */
-    buf_l[3] = mask;   /* select-event-mask */
+    buf_l[1] = mode; /* flag */
+    buf_l[2] = idx; /* index of keys list */
+    buf_l[3] = mask; /* select-event-mask */
 
-    len = sizeof(CARD16)  /* sizeof imid */
-          + sizeof(CARD16)  /* sizeof icid */
-          + sizeof(CARD32)  /* sizeof flag */
-          + sizeof(CARD32)  /* sizeof index of key list */
-          + sizeof(EVENTMASK);  /* sizeof select-event-mask */
+    len = sizeof(CARD16) /* sizeof imid */
+          + sizeof(CARD16) /* sizeof icid */
+          + sizeof(CARD32) /* sizeof flag */
+          + sizeof(CARD32) /* sizeof index of key list */
+          + sizeof(EVENTMASK); /* sizeof select-event-mask */
 
     _XimSetHeader((XPointer)buf, XIM_TRIGGER_NOTIFY, 0, &len);
     if (!(_XimWrite(im, len, (XPointer)buf))) return False;

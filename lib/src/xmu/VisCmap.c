@@ -99,7 +99,7 @@ XmuVisualStandardColormaps(Display     *dpy,
 
     if (vinfo->colormap_size <= 2)
     {
-    /* Monochrome visuals have no standard maps; considered successful */
+        /* Monochrome visuals have no standard maps; considered successful */
         XFree((char *)vinfo);
         return 1;
     }
@@ -174,7 +174,7 @@ XmuVisualStandardColormaps(Display     *dpy,
                 XmuDeleteStandardColormap(dpy, screen, XA_RGB_GREEN_MAP);
                 break;
             }
-    /* fall through */
+            /* fall through */
 
         case StaticColor:
         case TrueColor:

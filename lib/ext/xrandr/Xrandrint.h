@@ -35,28 +35,29 @@
 
 extern char XRRExtensionName[];
 
-#define RRCheckExtension(dpy,i,val) \
-  XextCheckExtension (dpy, i, XRRExtensionName, val)
-#define RRSimpleCheckExtension(dpy,i) \
-  XextSimpleCheckExtension (dpy, i, XRRExtensionName)
+#define RRCheckExtension(dpy, i, val) \
+    XextCheckExtension(dpy, i, XRRExtensionName, val)
+#define RRSimpleCheckExtension(dpy, i) \
+    XextSimpleCheckExtension(dpy, i, XRRExtensionName)
 
-XExtDisplayInfo *XRRFindDisplay (Display *dpy);
+XExtDisplayInfo *XRRFindDisplay(Display *dpy);
 
 /* deliberately opaque internal data structure; can be extended,
    but not reordered */
-struct _XRRScreenConfiguration {
-  Screen *screen;	/* the root window in GetScreenInfo */
-  XRRScreenSize *sizes;
-  Rotation rotations;
-  Rotation current_rotation;
-  int nsizes;
-  int current_size;
-  short current_rate;
-  Time timestamp;
-  Time config_timestamp;
-  int subpixel_order;	/* introduced in randr v0.1 */
-  short *rates;		/* introduced in randr v1.1 */
-  int nrates;
+struct _XRRScreenConfiguration
+{
+    Screen        *screen; /* the root window in GetScreenInfo */
+    XRRScreenSize *sizes;
+    Rotation       rotations;
+    Rotation       current_rotation;
+    int            nsizes;
+    int            current_size;
+    short          current_rate;
+    Time           timestamp;
+    Time           config_timestamp;
+    int            subpixel_order; /* introduced in randr v0.1 */
+    short         *rates;  /* introduced in randr v1.1 */
+    int            nrates;
 };
 
 /*
@@ -71,27 +72,28 @@ struct _XRRScreenConfiguration {
 
 /* we cache one screen configuration/screen */
 
-typedef struct _XRandRInfo {
-  XRRScreenConfiguration **config;
-  int major_version, minor_version;	/* major_version = -1 means we don't know */
-  Bool has_rates;			/* Server supports refresh rates */
+typedef struct _XRandRInfo
+{
+    XRRScreenConfiguration **config;
+    int                      major_version,
+        minor_version; /* major_version = -1 means we don't know */
+    Bool has_rates;   /* Server supports refresh rates */
 } XRandRInfo;
 
-typedef struct _randrVersionState {
-    unsigned long   version_seq;
-    Bool	    error;
-    int		    major_version;
-    int		    minor_version;
+typedef struct _randrVersionState
+{
+    unsigned long version_seq;
+    Bool          error;
+    int           major_version;
+    int           minor_version;
 } _XRRVersionState;
 
-Bool
-_XRRVersionHandler (Display	*dpy,
-		    xReply	*rep,
-		    char	*buf,
-		    int		len,
-		    XPointer    data);
+Bool _XRRVersionHandler(Display *dpy,
+                        xReply  *rep,
+                        char    *buf,
+                        int      len,
+                        XPointer data);
 
-_X_HIDDEN Bool
-_XRRHasRates (int major, int minor);
+_X_HIDDEN Bool _XRRHasRates(int major, int minor);
 
 #endif /* _XRANDRINT_H_ */

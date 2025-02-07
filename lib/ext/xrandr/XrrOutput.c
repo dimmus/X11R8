@@ -22,7 +22,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include <limits.h>
@@ -34,49 +34,46 @@
 #include "X11/extensions/Xrender.h"
 #include "Xrandrint.h"
 
-#define OutputInfoExtra	(SIZEOF(xRRGetOutputInfoReply) - 32)
+#define OutputInfoExtra (SIZEOF(xRRGetOutputInfoReply) - 32)
 
 XRROutputInfo *
-XRRGetOutputInfo (Display *dpy, XRRScreenResources *resources, RROutput output)
+XRRGetOutputInfo(Display *dpy, XRRScreenResources *resources, RROutput output)
 {
-    XExtDisplayInfo		*info = XRRFindDisplay(dpy);
-    xRRGetOutputInfoReply	rep;
-    xRRGetOutputInfoReq		*req;
-    int				nbytes, nbytesRead, rbytes;
-    XRROutputInfo		*xoi;
+    XExtDisplayInfo      *info = XRRFindDisplay(dpy);
+    xRRGetOutputInfoReply rep;
+    xRRGetOutputInfoReq  *req;
+    int                   nbytes, nbytesRead, rbytes;
+    XRROutputInfo        *xoi;
 
-    RRCheckExtension (dpy, info, NULL);
+    RRCheckExtension(dpy, info, NULL);
 
-    LockDisplay (dpy);
-    GetReq (RRGetOutputInfo, req);
-    req->reqType = info->codes->major_opcode;
-    req->randrReqType = X_RRGetOutputInfo;
-    req->output = output;
+    LockDisplay(dpy);
+    GetReq(RRGetOutputInfo, req);
+    req->reqType         = info->codes->major_opcode;
+    req->randrReqType    = X_RRGetOutputInfo;
+    req->output          = output;
     req->configTimestamp = resources->configTimestamp;
 
-    if (!_XReply (dpy, (xReply *) &rep, OutputInfoExtra >> 2, xFalse))
+    if (!_XReply(dpy, (xReply *)&rep, OutputInfoExtra >> 2, xFalse))
     {
-	UnlockDisplay (dpy);
-	SyncHandle ();
-	return NULL;
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return NULL;
     }
 
     if (rep.length > INT_MAX >> 2 || rep.length < (OutputInfoExtra >> 2))
     {
         if (rep.length > (OutputInfoExtra >> 2))
-	    _XEatDataWords (dpy, rep.length - (OutputInfoExtra >> 2));
-	else
-	    _XEatDataWords (dpy, rep.length);
-	UnlockDisplay (dpy);
-	SyncHandle ();
-	return NULL;
+            _XEatDataWords(dpy, rep.length - (OutputInfoExtra >> 2));
+        else _XEatDataWords(dpy, rep.length);
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return NULL;
     }
-    nbytes = ((long) (rep.length) << 2) - OutputInfoExtra;
+    nbytes = ((long)(rep.length) << 2) - OutputInfoExtra;
 
-    nbytesRead = (long) (rep.nCrtcs * 4 +
-			 rep.nModes * 4 +
-			 rep.nClones * 4 +
-			 ((rep.nameLength + 3) & ~3));
+    nbytesRead = (long)(rep.nCrtcs * 4 + rep.nModes * 4 + rep.nClones * 4 +
+                        ((rep.nameLength + 3) & ~3));
 
     /*
      * first we must compute how much space to allocate for
@@ -84,65 +81,64 @@ XRRGetOutputInfo (Display *dpy, XRRScreenResources *resources, RROutput output)
      * allocation, on cleanlyness grounds.
      */
 
-    rbytes = (sizeof (XRROutputInfo) +
-	      rep.nCrtcs * sizeof (RRCrtc) +
-	      rep.nModes * sizeof (RRMode) +
-	      rep.nClones * sizeof (RROutput) +
-	      rep.nameLength + 1);	    /* '\0' terminate name */
+    rbytes = (sizeof(XRROutputInfo) + rep.nCrtcs * sizeof(RRCrtc) +
+              rep.nModes * sizeof(RRMode) + rep.nClones * sizeof(RROutput) +
+              rep.nameLength + 1);     /* '\0' terminate name */
 
     xoi = Xmalloc(rbytes);
-    if (xoi == NULL) {
-	_XEatDataWords (dpy, rep.length - (OutputInfoExtra >> 2));
-	UnlockDisplay (dpy);
-	SyncHandle ();
-	return NULL;
+    if (xoi == NULL)
+    {
+        _XEatDataWords(dpy, rep.length - (OutputInfoExtra >> 2));
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return NULL;
     }
 
-    xoi->timestamp = rep.timestamp;
-    xoi->crtc = rep.crtc;
-    xoi->mm_width = rep.mmWidth;
-    xoi->mm_height = rep.mmHeight;
-    xoi->connection = rep.connection;
+    xoi->timestamp      = rep.timestamp;
+    xoi->crtc           = rep.crtc;
+    xoi->mm_width       = rep.mmWidth;
+    xoi->mm_height      = rep.mmHeight;
+    xoi->connection     = rep.connection;
     xoi->subpixel_order = rep.subpixelOrder;
-    xoi->ncrtc = rep.nCrtcs;
-    xoi->crtcs = (RRCrtc *) (xoi + 1);
-    xoi->nmode = rep.nModes;
-    xoi->npreferred = rep.nPreferred;
-    xoi->modes = (RRMode *) (xoi->crtcs + rep.nCrtcs);
-    xoi->nclone = rep.nClones;
-    xoi->clones = (RROutput *) (xoi->modes + rep.nModes);
-    xoi->name = (char *) (xoi->clones + rep.nClones);
+    xoi->ncrtc          = rep.nCrtcs;
+    xoi->crtcs          = (RRCrtc *)(xoi + 1);
+    xoi->nmode          = rep.nModes;
+    xoi->npreferred     = rep.nPreferred;
+    xoi->modes          = (RRMode *)(xoi->crtcs + rep.nCrtcs);
+    xoi->nclone         = rep.nClones;
+    xoi->clones         = (RROutput *)(xoi->modes + rep.nModes);
+    xoi->name           = (char *)(xoi->clones + rep.nClones);
 
-    _XRead32 (dpy, (long *) xoi->crtcs, rep.nCrtcs << 2);
-    _XRead32 (dpy, (long *) xoi->modes, rep.nModes << 2);
-    _XRead32 (dpy, (long *) xoi->clones, rep.nClones << 2);
+    _XRead32(dpy, (long *)xoi->crtcs, rep.nCrtcs << 2);
+    _XRead32(dpy, (long *)xoi->modes, rep.nModes << 2);
+    _XRead32(dpy, (long *)xoi->clones, rep.nClones << 2);
 
     /*
      * Read name and '\0' terminate
      */
-    _XReadPad (dpy, xoi->name, rep.nameLength);
+    _XReadPad(dpy, xoi->name, rep.nameLength);
     xoi->name[rep.nameLength] = '\0';
-    xoi->nameLen = rep.nameLength;
+    xoi->nameLen              = rep.nameLength;
 
     /*
      * Skip any extra data
      */
     if (nbytes > nbytesRead)
-	_XEatData (dpy, (unsigned long) (nbytes - nbytesRead));
+        _XEatData(dpy, (unsigned long)(nbytes - nbytesRead));
 
-    UnlockDisplay (dpy);
-    SyncHandle ();
-    return (XRROutputInfo *) xoi;
+    UnlockDisplay(dpy);
+    SyncHandle();
+    return (XRROutputInfo *)xoi;
 }
 
 void
-XRRFreeOutputInfo (XRROutputInfo *outputInfo)
+XRRFreeOutputInfo(XRROutputInfo *outputInfo)
 {
-    Xfree (outputInfo);
+    Xfree(outputInfo);
 }
 
 static Bool
-_XRRHasOutputPrimary (int major, int minor)
+_XRRHasOutputPrimary(int major, int minor)
 {
     return major > 1 || (major == 1 && minor >= 3);
 }
@@ -150,49 +146,48 @@ _XRRHasOutputPrimary (int major, int minor)
 void
 XRRSetOutputPrimary(Display *dpy, Window window, RROutput output)
 {
-    XExtDisplayInfo	    *info = XRRFindDisplay(dpy);
-    xRRSetOutputPrimaryReq  *req;
-    int			    major_version, minor_version;
+    XExtDisplayInfo        *info = XRRFindDisplay(dpy);
+    xRRSetOutputPrimaryReq *req;
+    int                     major_version, minor_version;
 
-    RRSimpleCheckExtension (dpy, info);
+    RRSimpleCheckExtension(dpy, info);
 
-    if (!XRRQueryVersion (dpy, &major_version, &minor_version) ||
-	!_XRRHasOutputPrimary (major_version, minor_version))
-	return;
+    if (!XRRQueryVersion(dpy, &major_version, &minor_version) ||
+        !_XRRHasOutputPrimary(major_version, minor_version))
+        return;
 
     LockDisplay(dpy);
-    GetReq (RRSetOutputPrimary, req);
-    req->reqType       = info->codes->major_opcode;
-    req->randrReqType  = X_RRSetOutputPrimary;
-    req->window        = window;
-    req->output	       = output;
+    GetReq(RRSetOutputPrimary, req);
+    req->reqType      = info->codes->major_opcode;
+    req->randrReqType = X_RRSetOutputPrimary;
+    req->window       = window;
+    req->output       = output;
 
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    UnlockDisplay(dpy);
+    SyncHandle();
 }
 
 RROutput
 XRRGetOutputPrimary(Display *dpy, Window window)
 {
-    XExtDisplayInfo	    *info = XRRFindDisplay(dpy);
+    XExtDisplayInfo         *info = XRRFindDisplay(dpy);
     xRRGetOutputPrimaryReq  *req;
     xRRGetOutputPrimaryReply rep;
-    int			    major_version, minor_version;
+    int                      major_version, minor_version;
 
-    RRCheckExtension (dpy, info, 0);
+    RRCheckExtension(dpy, info, 0);
 
-    if (!XRRQueryVersion (dpy, &major_version, &minor_version) ||
-	!_XRRHasOutputPrimary (major_version, minor_version))
-	return None;
+    if (!XRRQueryVersion(dpy, &major_version, &minor_version) ||
+        !_XRRHasOutputPrimary(major_version, minor_version))
+        return None;
 
     LockDisplay(dpy);
-    GetReq (RRGetOutputPrimary, req);
-    req->reqType	= info->codes->major_opcode;
-    req->randrReqType	= X_RRGetOutputPrimary;
-    req->window		= window;
+    GetReq(RRGetOutputPrimary, req);
+    req->reqType      = info->codes->major_opcode;
+    req->randrReqType = X_RRGetOutputPrimary;
+    req->window       = window;
 
-    if (!_XReply (dpy, (xReply *) &rep, 0, xFalse))
-	rep.output = None;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse)) rep.output = None;
 
     UnlockDisplay(dpy);
     SyncHandle();

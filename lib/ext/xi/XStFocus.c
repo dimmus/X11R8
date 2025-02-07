@@ -50,7 +50,7 @@ SOFTWARE.
  *
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/extensions/XI.h"
@@ -61,27 +61,26 @@ SOFTWARE.
 #include "XIint.h"
 
 int
-XSetDeviceFocus(
-    register Display	*dpy,
-    XDevice		*dev,
-    Window		 focus,
-    int			 revert_to,
-    Time		 time)
+XSetDeviceFocus(register Display *dpy,
+                XDevice          *dev,
+                Window            focus,
+                int               revert_to,
+                Time              time)
 {
     xSetDeviceFocusReq *req;
-    XExtDisplayInfo *info = XInput_find_display(dpy);
+    XExtDisplayInfo    *info = XInput_find_display(dpy);
 
     LockDisplay(dpy);
     if (_XiCheckExtInit(dpy, XInput_Initial_Release, info) == -1)
-	return (NoSuchExtension);
+        return (NoSuchExtension);
 
     GetReq(SetDeviceFocus, req);
-    req->reqType = info->codes->major_opcode;
-    req->ReqType = X_SetDeviceFocus;
-    req->device = dev->device_id;
-    req->focus = focus;
+    req->reqType  = info->codes->major_opcode;
+    req->ReqType  = X_SetDeviceFocus;
+    req->device   = dev->device_id;
+    req->focus    = focus;
     req->revertTo = revert_to;
-    req->time = time;
+    req->time     = time;
 
     UnlockDisplay(dpy);
     SyncHandle();

@@ -31,7 +31,7 @@
 #include "X11/xpm.h"
 
 #ifndef O_CLOEXEC
-# define O_CLOEXEC 0
+#  define O_CLOEXEC 0
 #endif
 
 /*
@@ -43,12 +43,13 @@ static int
 TestReadFileToXpmImage(const char *filepath)
 {
     XpmImage image;
-    XpmInfo info;
-    int status;
+    XpmInfo  info;
+    int      status;
 
     status = XpmReadFileToXpmImage(filepath, &image, &info);
 
-    if (status == XpmSuccess) {
+    if (status == XpmSuccess)
+    {
         XpmFreeXpmImage(&image);
         XpmFreeXpmInfo(&info);
     }
@@ -83,13 +84,14 @@ static int
 TestReadFileToData(const char *filepath)
 {
     char **data = NULL;
-    int status;
+    int    status;
 
     status = XpmReadFileToData(filepath, &data);
 
-    if (status == XpmSuccess) {
+    if (status == XpmSuccess)
+    {
         XpmImage image;
-        XpmInfo info;
+        XpmInfo  info;
 
         assert(data != NULL);
 
@@ -114,14 +116,13 @@ test_XpmReadFileToData(void)
 
     TestAllNormalFiles("good", XpmSuccess, TestReadFileToData);
     TestAllNormalFiles("invalid", XpmFileInvalid, TestReadFileToData);
-    TestAllNormalFiles("no-mem", XpmNoMemory,  TestReadFileToData);
+    TestAllNormalFiles("no-mem", XpmNoMemory, TestReadFileToData);
     /* XpmReadFileToData calls XpmReadFileToXpmImage so it
        supports compressed files */
     TestAllCompressedFiles("good", XpmSuccess, TestReadFileToData);
     TestAllCompressedFiles("invalid", XpmFileInvalid, TestReadFileToData);
     TestAllCompressedFiles("no-mem", XpmNoMemory, TestReadFileToData);
 }
-
 
 /*
  * XpmReadFileToBuffer - helper function that just reads the file
@@ -131,21 +132,23 @@ static int
 TestReadFileToBuffer(const char *filepath)
 {
     char *buffer = NULL;
-    int status;
+    int   status;
 
     status = XpmReadFileToBuffer(filepath, &buffer);
 
-    if (status == XpmSuccess) {
-        char readbuf[8192];
-        char *b = buffer;
-        int fd;
+    if (status == XpmSuccess)
+    {
+        char    readbuf[8192];
+        char   *b = buffer;
+        int     fd;
         ssize_t rd;
 
         assert(buffer != NULL);
 
         /* Read file ourselves and verify the data matches */
         assert_no_errno(fd = open(filepath, O_RDONLY | O_CLOEXEC));
-        while ((rd = read(fd, readbuf, sizeof(readbuf))) > 0) {
+        while ((rd = read(fd, readbuf, sizeof(readbuf))) > 0)
+        {
             assert(memcmp(b, readbuf, rd) == 0);
             b += rd;
         }
@@ -176,7 +179,7 @@ test_XpmReadFileToBuffer(void)
 }
 
 int
-main(int argc, char** argv)
+main(int argc, char **argv)
 {
     test_XpmReadFileToXpmImage();
     test_XpmReadFileToData();

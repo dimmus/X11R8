@@ -1,5 +1,5 @@
 #ifndef _XKBFILEINT_H_
-#define	_XKBFILEINT_H_ 1
+#define _XKBFILEINT_H_ 1
 
 /************************************************************
  Copyright (c) 1994 by Silicon Graphics Computer Systems, Inc.
@@ -28,7 +28,7 @@
  ********************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/Xfuncproto.h"
@@ -38,36 +38,42 @@
 #include <strings.h>
 
 #ifdef DEBUG
-#define	_XkbLibError(c,l,d) \
-	{ fprintf(stderr,"xkbfile: %s in %s\n",_XkbErrMessages[c],(l)); \
-	 _XkbErrCode= (c); _XkbErrLocation= (l); _XkbErrData= (d); }
+#  define _XkbLibError(c, l, d)                                            \
+      {                                                                    \
+          fprintf(stderr, "xkbfile: %s in %s\n", _XkbErrMessages[c], (l)); \
+          _XkbErrCode     = (c);                                           \
+          _XkbErrLocation = (l);                                           \
+          _XkbErrData     = (d);                                           \
+      }
 #else
-#define	_XkbLibError(c,l,d) \
-	{ _XkbErrCode= (c); _XkbErrLocation= (l); _XkbErrData= (d); }
+#  define _XkbLibError(c, l, d)  \
+      {                          \
+          _XkbErrCode     = (c); \
+          _XkbErrLocation = (l); \
+          _XkbErrData     = (d); \
+      }
 #endif
 
-
-#define	_XkbAlloc(s)		malloc((s))
-#define	_XkbCalloc(n,s)		calloc((n),(s))
-#define	_XkbRealloc(o,s)	realloc((o),(s))
-#define	_XkbReallocF(o,s)	reallocf((o),(s))
-#define	_XkbTypedAlloc(t)	((t *)malloc(sizeof(t)))
-#define	_XkbTypedCalloc(n,t)	((t *)calloc((n),sizeof(t)))
-#define	_XkbTypedRealloc(o,n,t) \
-	((o)?(t *)realloc((o),(n)*sizeof(t)):_XkbTypedCalloc(n,t))
-#define	_XkbTypedReallocF(o,n,t) \
-	((o)?(t *)reallocf((o),(n)*sizeof(t)):_XkbTypedCalloc(n,t))
-#define	_XkbClearElems(a,f,l,t)	bzero(&(a)[f],((l)-(f)+1)*sizeof(t))
-#define	_XkbFree(p)		free(p)
+#define _XkbAlloc(s)          malloc((s))
+#define _XkbCalloc(n, s)      calloc((n), (s))
+#define _XkbRealloc(o, s)     realloc((o), (s))
+#define _XkbReallocF(o, s)    reallocf((o), (s))
+#define _XkbTypedAlloc(t)     ((t *)malloc(sizeof(t)))
+#define _XkbTypedCalloc(n, t) ((t *)calloc((n), sizeof(t)))
+#define _XkbTypedRealloc(o, n, t) \
+    ((o) ? (t *)realloc((o), (n) * sizeof(t)) : _XkbTypedCalloc(n, t))
+#define _XkbTypedReallocF(o, n, t) \
+    ((o) ? (t *)reallocf((o), (n) * sizeof(t)) : _XkbTypedCalloc(n, t))
+#define _XkbClearElems(a, f, l, t) bzero(&(a)[f], ((l) - (f) + 1) * sizeof(t))
+#define _XkbFree(p)                free(p)
 
 #ifndef PATH_MAX
-#ifdef MAXPATHLEN
-#define PATH_MAX MAXPATHLEN
-#else
-#define PATH_MAX 1024
+#  ifdef MAXPATHLEN
+#    define PATH_MAX MAXPATHLEN
+#  else
+#    define PATH_MAX 1024
+#  endif
 #endif
-#endif
-
 
 _XFUNCPROTOBEGIN
 
@@ -78,8 +84,7 @@ reallocf(void *old, size_t size)
 {
     void *new = realloc(old, size);
 
-    if (_X_UNLIKELY(new == NULL))
-        free(old);
+    if (_X_UNLIKELY(new == NULL)) free(old);
 
     return new;
 }
@@ -91,8 +96,8 @@ _XkbDupString(const char *s)
     return s ? strdup(s) : NULL;
 }
 
-#define _XkbStrCaseEqual(s1,s2)	(_XkbStrCaseCmp(s1,s2)==0)
-#define _XkbStrCaseCmp strcasecmp
+#define _XkbStrCaseEqual(s1, s2) (_XkbStrCaseCmp(s1, s2) == 0)
+#define _XkbStrCaseCmp           strcasecmp
 
 _XFUNCPROTOEND
 #endif                          /* _XKBFILEINT_H_ */

@@ -28,9 +28,8 @@ in this Software without prior written authorization from the author.
  * XListDeviceProperties - List an input device's properties.
  */
 
-
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/Xlibint.h"
@@ -40,36 +39,35 @@ in this Software without prior written authorization from the author.
 #include "X11/extensions/extutil.h"
 #include "XIint.h"
 
-Atom*
-XListDeviceProperties(Display* dpy, XDevice* dev, int *nprops_return)
+Atom *
+XListDeviceProperties(Display *dpy, XDevice *dev, int *nprops_return)
 {
-    xListDevicePropertiesReq    *req;
-    xListDevicePropertiesReply  rep;
-    XExtDisplayInfo             *info = XInput_find_display(dpy);
-    Atom                        *props = NULL;
+    xListDevicePropertiesReq  *req;
+    xListDevicePropertiesReply rep;
+    XExtDisplayInfo           *info  = XInput_find_display(dpy);
+    Atom                      *props = NULL;
 
     LockDisplay(dpy);
     *nprops_return = 0;
-    if (_XiCheckExtInit(dpy, XInput_Initial_Release, info) == -1)
-        return NULL;
+    if (_XiCheckExtInit(dpy, XInput_Initial_Release, info) == -1) return NULL;
 
     GetReq(ListDeviceProperties, req);
-    req->reqType = info->codes->major_opcode;
-    req->ReqType = X_ListDeviceProperties;
+    req->reqType  = info->codes->major_opcode;
+    req->ReqType  = X_ListDeviceProperties;
     req->deviceid = dev->device_id;
 
-    if (!_XReply(dpy, (xReply*)&rep, 0, xFalse))
-        goto cleanup;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse)) goto cleanup;
 
-    if (rep.nAtoms) {
-        props = (Atom*)Xmalloc(rep.nAtoms * sizeof(Atom));
+    if (rep.nAtoms)
+    {
+        props = (Atom *)Xmalloc(rep.nAtoms * sizeof(Atom));
         if (!props)
         {
             _XEatDataWords(dpy, rep.length);
             goto cleanup;
         }
 
-        _XRead32(dpy, (long*)props, rep.nAtoms << 2);
+        _XRead32(dpy, (long *)props, rep.nAtoms << 2);
     }
 
     *nprops_return = rep.nAtoms;
@@ -79,4 +77,3 @@ cleanup:
     SyncHandle();
     return props;
 }
-

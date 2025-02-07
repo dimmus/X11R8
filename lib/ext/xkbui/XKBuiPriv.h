@@ -1,5 +1,5 @@
 #ifndef XKBUIPRIV_H
-#define	XKBUIPRIV_H 1
+#define XKBUIPRIV_H 1
 /* $XConsortium: XKBuiPriv.h /main/2 1995/12/07 21:18:19 kaleb $ */
 /************************************************************
  Copyright (c) 1996 by Silicon Graphics Computer Systems, Inc.
@@ -32,40 +32,42 @@
 #include "X11/extensions/XKB.h"
 #include "X11/extensions/XKBgeom.h"
 
-typedef struct _XkbUI_Point {
-	double			x;
-	double			y;
-} XkbUI_PointRec,*XkbUI_PointPtr;
+typedef struct _XkbUI_Point
+{
+    double x;
+    double y;
+} XkbUI_PointRec, *XkbUI_PointPtr;
 
-typedef struct _XkbUI_View {
-	Display *		dpy;
-	XkbDescPtr		xkb;
-	Window			win;
-	GC			gc;
-	XkbUI_ViewOptsRec	opts;
-	unsigned int		canvas_width;
-	unsigned int		canvas_height;
-	unsigned char		state[XkbMaxLegalKeyCode];
+typedef struct _XkbUI_View
+{
+    Display          *dpy;
+    XkbDescPtr        xkb;
+    Window            win;
+    GC                gc;
+    XkbUI_ViewOptsRec opts;
+    unsigned int      canvas_width;
+    unsigned int      canvas_height;
+    unsigned char     state[XkbMaxLegalKeyCode];
 
-	double			xscale;
-	double			yscale;
+    double xscale;
+    double yscale;
 } XkbUI_ViewRec;
 
-#define	_XkbAlloc(s)		malloc((s))
-#define	_XkbCalloc(n,s)		calloc((n),(s))
-#define	_XkbRealloc(o,s)	realloc((o),(s))
-#define	_XkbTypedAlloc(t)	((t *)malloc(sizeof(t)))
-#define	_XkbTypedCalloc(n,t)	((t *)calloc((n),sizeof(t)))
-#define	_XkbTypedRealloc(o,n,t) \
-	((o)?(t *)realloc((o),(n)*sizeof(t)):_XkbTypedCalloc(n,t))
-#define	_XkbClearElems(a,f,l,t)	bzero(&(a)[f],((l)-(f)+1)*sizeof(t))
-#define	_XkbFree(p)		free(p)
+#define _XkbAlloc(s)          malloc((s))
+#define _XkbCalloc(n, s)      calloc((n), (s))
+#define _XkbRealloc(o, s)     realloc((o), (s))
+#define _XkbTypedAlloc(t)     ((t *)malloc(sizeof(t)))
+#define _XkbTypedCalloc(n, t) ((t *)calloc((n), sizeof(t)))
+#define _XkbTypedRealloc(o, n, t) \
+    ((o) ? (t *)realloc((o), (n) * sizeof(t)) : _XkbTypedCalloc(n, t))
+#define _XkbClearElems(a, f, l, t) bzero(&(a)[f], ((l) - (f) + 1) * sizeof(t))
+#define _XkbFree(p)                free(p)
 
-	/*
+    /*
 	 * private values for key appearance flags 
 	 * must not conflict with values from XKBui.h
 	 */
-#define	XkbUI_Obscured		(1<<7)
+#define XkbUI_Obscured (1 << 7)
 
 _XFUNCPROTOBEGIN
 

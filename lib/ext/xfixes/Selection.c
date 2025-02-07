@@ -22,28 +22,28 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xfixesint.h"
 
 void
-XFixesSelectSelectionInput (Display	    *dpy,
-			    Window	    win,
-			    Atom	    selection,
-			    unsigned long   eventMask)
+XFixesSelectSelectionInput(Display      *dpy,
+                           Window        win,
+                           Atom          selection,
+                           unsigned long eventMask)
 {
-    XFixesExtDisplayInfo	    *info = XFixesFindDisplay (dpy);
-    xXFixesSelectSelectionInputReq  *req;
+    XFixesExtDisplayInfo           *info = XFixesFindDisplay(dpy);
+    xXFixesSelectSelectionInputReq *req;
 
-    XFixesSimpleCheckExtension (dpy, info);
+    XFixesSimpleCheckExtension(dpy, info);
 
-    LockDisplay (dpy);
-    GetReq (XFixesSelectSelectionInput, req);
-    req->reqType = (CARD8) info->codes->major_opcode;
+    LockDisplay(dpy);
+    GetReq(XFixesSelectSelectionInput, req);
+    req->reqType       = (CARD8)info->codes->major_opcode;
     req->xfixesReqType = X_XFixesSelectSelectionInput;
-    req->window = (CARD32) win;
-    req->selection = (CARD32) selection;
-    req->eventMask = (CARD32) eventMask;
-    UnlockDisplay (dpy);
-    SyncHandle ();
+    req->window        = (CARD32)win;
+    req->selection     = (CARD32)selection;
+    req->eventMask     = (CARD32)eventMask;
+    UnlockDisplay(dpy);
+    SyncHandle();
 }

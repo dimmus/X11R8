@@ -27,54 +27,62 @@
 /* Test for Solaris bug 4163152 XtCvtIntToPixmap() gets a SIGBUS in 64-bit
    Fixed by libXt commit 16d9941f3aa38dde115cbff639e131761c1b36d0
  */
-static void test_XtCvtIntToPixmap(void)
+static void
+test_XtCvtIntToPixmap(void)
 {
-    Display         *display = NULL; /* not actually used */
-    Boolean         status;
-    XrmValue        args[2];
-    Cardinal        num_args;
-    XrmValue        fromVal;
-    XrmValue        toVal;
-    Pixmap          res;
-    XtPointer       *closure_ret = NULL;
-    int             num[2];
-
+    Display   *display = NULL; /* not actually used */
+    Boolean    status;
+    XrmValue   args[2];
+    Cardinal   num_args;
+    XrmValue   fromVal;
+    XrmValue   toVal;
+    Pixmap     res;
+    XtPointer *closure_ret = NULL;
+    int        num[2];
 
     XtToolkitInitialize();
 
     num[0] = 7;
     num[1] = -1;
 
-    num_args = 0;
-    fromVal.addr = (XtPointer) num;
+    num_args     = 0;
+    fromVal.addr = (XtPointer)num;
     fromVal.size = sizeof(int);
-    toVal.addr = (XtPointer) &res;
-    toVal.size = sizeof(Pixmap);
+    toVal.addr   = (XtPointer)&res;
+    toVal.size   = sizeof(Pixmap);
 
-    status = XtCvtIntToPixmap(display, &args[0], &num_args,
-			      &fromVal, &toVal, closure_ret);
+    status = XtCvtIntToPixmap(display,
+                              &args[0],
+                              &num_args,
+                              &fromVal,
+                              &toVal,
+                              closure_ret);
 
     assert(status == True);
     assert(res == num[0]);
 
-
     num[0] = -1;
     num[1] = 7;
 
-    num_args = 0;
-    fromVal.addr = (XtPointer) (&num[1]);
+    num_args     = 0;
+    fromVal.addr = (XtPointer)(&num[1]);
     fromVal.size = sizeof(int);
-    toVal.addr = (XtPointer) &res;
-    toVal.size = sizeof(Pixmap);
+    toVal.addr   = (XtPointer)&res;
+    toVal.size   = sizeof(Pixmap);
 
-    status = XtCvtIntToPixmap(display, &args[0], &num_args,
-			      &fromVal, &toVal, closure_ret);
+    status = XtCvtIntToPixmap(display,
+                              &args[0],
+                              &num_args,
+                              &fromVal,
+                              &toVal,
+                              closure_ret);
 
     assert(status == True);
     assert(res == num[1]);
 }
 
-int main(int argc, char** argv)
+int
+main(int argc, char **argv)
 {
     test_XtCvtIntToPixmap();
 }

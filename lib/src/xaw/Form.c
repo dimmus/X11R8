@@ -1037,7 +1037,7 @@ XawFormConstraintSetValues(Widget             current,
     {
         FormWidget fp = (FormWidget)XtParent(cnew);
 
-    /* If there are no subclass ConstraintSetValues procedures remaining
+        /* If there are no subclass ConstraintSetValues procedures remaining
 	 * to be invoked, and if there is no geometry request about to be
 	 * made, then invoke the new layout now; else defer it
 	 */
@@ -1135,7 +1135,7 @@ XawFormDoLayout(Widget w,
         {
             FormConstraints form = (FormConstraints)nw->core.constraints;
 
-        /*
+            /*
 	     * Xt Configure widget is too smart, and optimizes out
 	     * my changes
 	     */

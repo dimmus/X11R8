@@ -232,7 +232,7 @@ best_allocation(XVisualInfo   *vinfo,
     {
         register int bits, n;
 
-    /* Determine n such that n is the least integral power of 2 which is
+        /* Determine n such that n is the least integral power of 2 which is
 	 * greater than or equal to the number of entries in the colormap.
          */
         n    = 1;
@@ -243,7 +243,7 @@ best_allocation(XVisualInfo   *vinfo,
             bits++;
         }
 
-    /* If the number of entries in the colormap is a power of 2, determine
+        /* If the number of entries in the colormap is a power of 2, determine
 	 * the allocation by "dealing" the bits, first to green, then red, then
 	 * blue.  If not, find the maximum integral red, green, and blue values
 	 * which, when multiplied together, do not exceed the number of
@@ -295,7 +295,7 @@ icbrt(int a)
 
 static int
 icbrt_with_bits(int a, int bits)
-     /* bits - log 2 of a */
+/* bits - log 2 of a */
 {
     return icbrt_with_guess(a, a >> 2 * bits / 3);
 }

@@ -51,7 +51,7 @@ SOFTWARE.
  *
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/extensions/XI.h"
@@ -62,27 +62,26 @@ SOFTWARE.
 #include "XIint.h"
 
 int
-XSetDeviceValuators(
-    register Display	*dpy,
-    XDevice		*dev,
-    int			*valuators,
-    int			 first_valuator,
-    int			 num_valuators)
+XSetDeviceValuators(register Display *dpy,
+                    XDevice          *dev,
+                    int              *valuators,
+                    int               first_valuator,
+                    int               num_valuators)
 {
-    xSetDeviceValuatorsReq *req;
+    xSetDeviceValuatorsReq  *req;
     xSetDeviceValuatorsReply rep;
-    XExtDisplayInfo *info = XInput_find_display(dpy);
+    XExtDisplayInfo         *info = XInput_find_display(dpy);
 
     LockDisplay(dpy);
     if (_XiCheckExtInit(dpy, XInput_Add_XSetDeviceValuators, info) == -1)
-	return (NoSuchExtension);
+        return (NoSuchExtension);
 
     GetReq(SetDeviceValuators, req);
-    req->reqType = info->codes->major_opcode;
-    req->ReqType = X_SetDeviceValuators;
-    req->deviceid = dev->device_id;
+    req->reqType        = info->codes->major_opcode;
+    req->ReqType        = X_SetDeviceValuators;
+    req->deviceid       = dev->device_id;
     req->first_valuator = first_valuator;
-    req->num_valuators = num_valuators;
+    req->num_valuators  = num_valuators;
     req->length += num_valuators;
 
     /* note: Data is a macro that uses its arguments multiple
@@ -92,7 +91,7 @@ XSetDeviceValuators(
     num_valuators <<= 2;
     Data(dpy, (char *)valuators, num_valuators);
 
-    (void)_XReply(dpy, (xReply *) & rep, 0, xTrue);
+    (void)_XReply(dpy, (xReply *)&rep, 0, xTrue);
     UnlockDisplay(dpy);
     SyncHandle();
     return (rep.status);

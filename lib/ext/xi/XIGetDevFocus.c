@@ -22,7 +22,7 @@
  *
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include <stdint.h>
@@ -35,21 +35,22 @@
 Status
 XIGetFocus(Display *dpy, int deviceid, Window *focus_return)
 {
-    xXIGetFocusReq   *req;
+    xXIGetFocusReq  *req;
     xXIGetFocusReply reply;
 
     XExtDisplayInfo *extinfo = XInput_find_display(dpy);
 
     LockDisplay(dpy);
     if (_XiCheckExtInit(dpy, XInput_2_0, extinfo) == -1)
-	return (NoSuchExtension);
+        return (NoSuchExtension);
 
     GetReq(XIGetFocus, req);
     req->reqType  = extinfo->codes->major_opcode;
     req->ReqType  = X_XIGetFocus;
     req->deviceid = deviceid;
 
-    if (!_XReply(dpy, (xReply*) &reply, 0, xFalse)) {
+    if (!_XReply(dpy, (xReply *)&reply, 0, xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return False;
@@ -60,6 +61,4 @@ XIGetFocus(Display *dpy, int deviceid, Window *focus_return)
     UnlockDisplay(dpy);
     SyncHandle();
     return Success;
-
 }
-

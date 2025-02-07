@@ -26,7 +26,7 @@
 #define _XRENDERINT_H_
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xlibint.h"
 #include "X11/Xutil.h"
@@ -34,74 +34,85 @@
 #include "X11/extensions/Xrender.h"
 
 #ifndef _X_UNUSED
-#define _X_UNUSED /* nothing */
+#  define _X_UNUSED /* nothing */
 #endif
 
-typedef struct {
-    Visual		*visual;
-    XRenderPictFormat	*format;
+typedef struct
+{
+    Visual            *visual;
+    XRenderPictFormat *format;
 } XRenderVisual;
 
-typedef struct {
-    int			depth;
-    int			nvisuals;
-    XRenderVisual	*visuals;
+typedef struct
+{
+    int            depth;
+    int            nvisuals;
+    XRenderVisual *visuals;
 } XRenderDepth;
 
-typedef struct {
-    XRenderDepth	*depths;
-    int			ndepths;
-    XRenderPictFormat	*fallback;
-    int			subpixel;
+typedef struct
+{
+    XRenderDepth      *depths;
+    int                ndepths;
+    XRenderPictFormat *fallback;
+    int                subpixel;
 } XRenderScreen;
 
-typedef struct _XRenderInfo {
-    int			major_version;
-    int			minor_version;
-    XRenderPictFormat	*format;
-    int			nformat;
-    XRenderScreen	*screen;
-    int			nscreen;
-    XRenderDepth	*depth;
-    int			ndepth;
-    XRenderVisual	*visual;
-    int			nvisual;
-    int			*subpixel;
-    int			nsubpixel;
-    char		**filter;
-    int			nfilter;
-    short    		*filter_alias;
-    int			nfilter_alias;
+typedef struct _XRenderInfo
+{
+    int                major_version;
+    int                minor_version;
+    XRenderPictFormat *format;
+    int                nformat;
+    XRenderScreen     *screen;
+    int                nscreen;
+    XRenderDepth      *depth;
+    int                ndepth;
+    XRenderVisual     *visual;
+    int                nvisual;
+    int               *subpixel;
+    int                nsubpixel;
+    char             **filter;
+    int                nfilter;
+    short             *filter_alias;
+    int                nfilter_alias;
 } XRenderInfo;
 
 /* replaces XRenderExtDisplayInfo */
-typedef struct _XRenderExtDisplayInfo {
+typedef struct _XRenderExtDisplayInfo
+{
     struct _XRenderExtDisplayInfo *next;    /* keep a linked list */
     Display                       *display; /* which display this is */
     XExtCodes                     *codes;   /* the extension protocol codes */
-    XRenderInfo                   *info;    /* extra data for the extension to use */
+    XRenderInfo *info;    /* extra data for the extension to use */
 } XRenderExtDisplayInfo;
 
 /* replaces XExtensionInfo */
-typedef struct _XRenderExtInfo {
-    XRenderExtDisplayInfo  *head;           /* start of the list */
-    XRenderExtDisplayInfo  *cur;            /* most recently used */
-    int                     ndisplays;      /* number of displays */
+typedef struct _XRenderExtInfo
+{
+    XRenderExtDisplayInfo *head;           /* start of the list */
+    XRenderExtDisplayInfo *cur;            /* most recently used */
+    int                    ndisplays;      /* number of displays */
 } XRenderExtInfo;
 
 extern XRenderExtInfo XRenderExtensionInfo;
-extern char XRenderExtensionName[];
+extern char           XRenderExtensionName[];
 
-XRenderExtDisplayInfo *
-XRenderFindDisplay (Display *dpy);
+XRenderExtDisplayInfo *XRenderFindDisplay(Display *dpy);
 
 #define RenderHasExtension(i) ((i) && ((i)->codes))
 
-#define RenderCheckExtension(dpy,i,val) \
-  if (!RenderHasExtension(i)) { return val; }
+#define RenderCheckExtension(dpy, i, val) \
+    if (!RenderHasExtension(i))           \
+    {                                     \
+        return val;                       \
+    }
 
-#define RenderSimpleCheckExtension(dpy,i) \
-  if (!RenderHasExtension(i)) { return; }
+#define RenderSimpleCheckExtension(dpy, i) \
+    if (!RenderHasExtension(i))            \
+    {                                      \
+        return;                            \
+    }
 
 /*
  * Xlib uses long for 32-bit values.  Xrender uses int.  This
@@ -110,9 +121,9 @@ XRenderFindDisplay (Display *dpy);
  */
 
 #ifdef WORD64
-#define DataInt32(dpy,d,len)	Data32(dpy,(_Xconst long *) (d),len)
+#  define DataInt32(dpy, d, len) Data32(dpy, (_Xconst long *)(d), len)
 #else
-#define DataInt32(dpy,d,len)	Data(dpy,(_Xconst char *) (d),len)
+#  define DataInt32(dpy, d, len) Data(dpy, (_Xconst char *)(d), len)
 #endif
 
 #endif /* _XRENDERINT_H_ */

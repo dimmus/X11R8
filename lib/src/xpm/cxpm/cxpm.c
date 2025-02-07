@@ -109,18 +109,18 @@ ErrorMessage(int ErrorStatus, xpmData *data)
             error = gettext("Cannot open file");
             break;
         case XpmFileInvalid:
-    /* L10N_Comments : Error produced when filename can be read, but
+            /* L10N_Comments : Error produced when filename can be read, but
 	   is not an XPM file (i.e. cxpm /dev/null ) */
             error = gettext("Invalid XPM file");
             break;
         case XpmNoMemory:
-    /* L10N_Comments : Error produced when filename can be read, but
+            /* L10N_Comments : Error produced when filename can be read, but
 	   is too big for memory
 	   (i.e. limit datasize 32 ; cxpm /usr/dt/backdrops/Crochet.pm ) */
             error = gettext("Not enough memory");
             break;
         case XpmColorFailed:
-    /* L10N_Comments : Error produced when filename can be read, but
+            /* L10N_Comments : Error produced when filename can be read, but
 	   contains an invalid color specification (need to create test case)*/
             error = gettext("Failed to parse color");
             break;
@@ -128,11 +128,11 @@ ErrorMessage(int ErrorStatus, xpmData *data)
 
     if (error)
     {
-    /* L10N_Comments : Wrapper around above Xpm errors - %s is
+        /* L10N_Comments : Wrapper around above Xpm errors - %s is
 	   replaced with the contents of the error message retrieved above */
         fprintf(stderr, gettext("Xpm Error: %s.\n"), error);
         if (ErrorStatus == XpmFileInvalid && data)
-    /* L10N_Comments : Error produced when filename can be read, but
+            /* L10N_Comments : Error produced when filename can be read, but
 	   is not an XPM file (i.e. cxpm /dev/null ) */
             fprintf(stderr,
                     gettext("Error found line %d near character %d\n"),
@@ -160,7 +160,7 @@ main(int argc, char **argv)
     {
         if (!strcmp(argv[1], "-?") || !strncmp(argv[1], "-h", 2))
         {
-        /* L10N_Comments : Usage message produced by running cxpm -h
+            /* L10N_Comments : Usage message produced by running cxpm -h
 		%s will be replaced by argv[0] (program name) */
             fprintf(stderr, gettext("Usage: %s [filename]\n"), argv[0]);
             exit(1);

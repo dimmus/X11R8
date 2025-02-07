@@ -23,21 +23,22 @@
  * authorization from the authors.
  */
 
-
 #ifndef _XCB_WINDEFS_H
 #define _XCB_WINDEFS_H
 
 #ifndef WINVER
-#define WINVER 0x0501 /* required for getaddrinfo/freeaddrinfo defined only for WinXP and above */
+#  define WINVER \
+      0x0501 /* required for getaddrinfo/freeaddrinfo defined only for WinXP and above */
 #endif
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <windef.h>
 
-struct iovec  {
-    void *iov_base;    /* Pointer to data.  */
-    int iov_len;       /* Length of data.  */
+struct iovec
+{
+    void *iov_base; /* Pointer to data.  */
+    int   iov_len; /* Length of data.  */
 };
 
 typedef unsigned int in_addr_t;

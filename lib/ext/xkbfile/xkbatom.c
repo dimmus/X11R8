@@ -72,7 +72,7 @@ SOFTWARE.
  ********************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include <ctype.h>
@@ -88,60 +88,61 @@ SOFTWARE.
 
 #define InitialTableSize 100
 
-typedef struct _Node {
+typedef struct _Node
+{
     struct _Node *left, *right;
-    Atom a;
-    unsigned int fingerPrint;
-    char *string;
+    Atom          a;
+    unsigned int  fingerPrint;
+    char         *string;
 } NodeRec, *NodePtr;
 
 #define BAD_RESOURCE 0xe0000000
 
-static Atom lastAtom = None;
-static NodePtr atomRoot = (NodePtr) NULL;
+static Atom          lastAtom = None;
+static NodePtr       atomRoot = (NodePtr)NULL;
 static unsigned long tableLength;
-static NodePtr *nodeTable = NULL;
+static NodePtr      *nodeTable = NULL;
 
 static Atom
 _XkbMakeAtom(const char *string, size_t len, Bool makeit)
 {
-    register NodePtr *np;
-    unsigned i;
-    int comp;
+    register NodePtr     *np;
+    unsigned              i;
+    int                   comp;
     register unsigned int fp = 0;
 
     np = &atomRoot;
-    for (i = 0; i < (len + 1) / 2; i++) {
+    for (i = 0; i < (len + 1) / 2; i++)
+    {
         fp = fp * 27 + string[i];
         fp = fp * 27 + string[len - 1 - i];
     }
-    while (*np != (NodePtr) NULL) {
-        if (fp < (*np)->fingerPrint)
-            np = &((*np)->left);
-        else if (fp > (*np)->fingerPrint)
-            np = &((*np)->right);
-        else {                  /* now start testing the strings */
+    while (*np != (NodePtr)NULL)
+    {
+        if (fp < (*np)->fingerPrint) np = &((*np)->left);
+        else if (fp > (*np)->fingerPrint) np = &((*np)->right);
+        else
+        {                  /* now start testing the strings */
             comp = strncmp(string, (*np)->string, len);
             if ((comp < 0) || ((comp == 0) && (len < strlen((*np)->string))))
                 np = &((*np)->left);
-            else if (comp > 0)
-                np = &((*np)->right);
-            else
-                return (*np)->a;
+            else if (comp > 0) np = &((*np)->right);
+            else return (*np)->a;
         }
     }
-    if (makeit) {
+    if (makeit)
+    {
         register NodePtr nd;
 
-        nd = (NodePtr) _XkbAlloc(sizeof(NodeRec));
-        if (!nd)
-            return BAD_RESOURCE;
+        nd = (NodePtr)_XkbAlloc(sizeof(NodeRec));
+        if (!nd) return BAD_RESOURCE;
 #ifdef HAVE_STRNDUP
         nd->string = strndup(string, len);
 #else
-        nd->string = (char *) _XkbAlloc(len + 1);
+        nd->string = (char *)_XkbAlloc(len + 1);
 #endif
-        if (!nd->string) {
+        if (!nd->string)
+        {
             _XkbFree(nd);
             return BAD_RESOURCE;
         }
@@ -149,13 +150,14 @@ _XkbMakeAtom(const char *string, size_t len, Bool makeit)
         strncpy(nd->string, string, len);
         nd->string[len] = 0;
 #endif
-        if ((lastAtom + 1) >= tableLength) {
+        if ((lastAtom + 1) >= tableLength)
+        {
             NodePtr *table;
 
-            table = (NodePtr *) _XkbRealloc(nodeTable,
-                                            tableLength * (2 *
-                                                           sizeof(NodePtr)));
-            if (!table) {
+            table = (NodePtr *)_XkbRealloc(nodeTable,
+                                           tableLength * (2 * sizeof(NodePtr)));
+            if (!table)
+            {
                 _XkbFree(nd->string);
                 _XkbFree(nd);
                 return BAD_RESOURCE;
@@ -163,15 +165,14 @@ _XkbMakeAtom(const char *string, size_t len, Bool makeit)
             tableLength <<= 1;
             nodeTable = table;
         }
-        *np = nd;
-        nd->left = nd->right = (NodePtr) NULL;
-        nd->fingerPrint = fp;
-        nd->a = (++lastAtom);
+        *np      = nd;
+        nd->left = nd->right    = (NodePtr)NULL;
+        nd->fingerPrint         = fp;
+        nd->a                   = (++lastAtom);
         *(nodeTable + lastAtom) = nd;
         return nd->a;
     }
-    else
-        return None;
+    else return None;
 }
 
 static char *
@@ -179,10 +180,8 @@ _XkbNameForAtom(Atom atom)
 {
     NodePtr node;
 
-    if (atom > lastAtom)
-        return NULL;
-    if ((node = nodeTable[atom]) == (NodePtr) NULL)
-        return NULL;
+    if (atom > lastAtom) return NULL;
+    if ((node = nodeTable[atom]) == (NodePtr)NULL) return NULL;
     return strdup(node->string);
 }
 
@@ -190,9 +189,8 @@ static void
 _XkbInitAtoms(void)
 {
     tableLength = InitialTableSize;
-    nodeTable = (NodePtr *) _XkbAlloc(InitialTableSize * sizeof(NodePtr));
-    if (nodeTable != NULL)
-        nodeTable[None] = (NodePtr) NULL;
+    nodeTable   = (NodePtr *)_XkbAlloc(InitialTableSize * sizeof(NodePtr));
+    if (nodeTable != NULL) nodeTable[None] = (NodePtr)NULL;
 }
 
 /***====================================================================***/
@@ -200,10 +198,8 @@ _XkbInitAtoms(void)
 char *
 XkbAtomGetString(Display *dpy, Atom atm)
 {
-    if (atm == None)
-        return NULL;
-    if (dpy == NULL)
-        return _XkbNameForAtom(atm);
+    if (atm == None) return NULL;
+    if (dpy == NULL) return _XkbNameForAtom(atm);
     return XGetAtomName(dpy, atm);
 }
 
@@ -212,9 +208,9 @@ XkbAtomGetString(Display *dpy, Atom atm)
 Atom
 XkbInternAtom(Display *dpy, const char *name, Bool onlyIfExists)
 {
-    if (name == NULL)
-        return None;
-    if (dpy == NULL) {
+    if (name == NULL) return None;
+    if (dpy == NULL)
+    {
         return _XkbMakeAtom(name, strlen(name), (!onlyIfExists));
     }
     return XInternAtom(dpy, name, onlyIfExists);
@@ -225,9 +221,11 @@ XkbInternAtom(Display *dpy, const char *name, Bool onlyIfExists)
 Atom
 XkbChangeAtomDisplay(Display *oldDpy, Display *newDpy, Atom atm)
 {
-    if (atm != None) {
+    if (atm != None)
+    {
         char *tmp = XkbAtomGetString(oldDpy, atm);
-        if (tmp != NULL) {
+        if (tmp != NULL)
+        {
             Atom a = XkbInternAtom(newDpy, tmp, False);
             _XkbFree(tmp);
             return a;
@@ -241,7 +239,8 @@ XkbChangeAtomDisplay(Display *oldDpy, Display *newDpy, Atom atm)
 void
 XkbInitAtoms(Display *dpy)
 {
-    if ((dpy == NULL) && (nodeTable == NULL)) {
+    if ((dpy == NULL) && (nodeTable == NULL))
+    {
         _XkbInitAtoms();
     }
     return;

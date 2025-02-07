@@ -46,14 +46,14 @@
 #include "X11/extensions/dmxext.h"
 #include <limits.h>
 
-static XExtensionInfo dmx_extension_info_data;
+static XExtensionInfo  dmx_extension_info_data;
 static XExtensionInfo *dmx_extension_info = &dmx_extension_info_data;
 static const char     *dmx_extension_name = DMX_EXTENSION_NAME;
 
-#define DMXCheckExtension(dpy,i,val) \
-  XextCheckExtension(dpy, i, dmx_extension_name, val)
-#define DMXSimpleCheckExtension(dpy,i) \
-  XextSimpleCheckExtension(dpy, i, dmx_extension_name)
+#define DMXCheckExtension(dpy, i, val) \
+    XextCheckExtension(dpy, i, dmx_extension_name, val)
+#define DMXSimpleCheckExtension(dpy, i) \
+    XextSimpleCheckExtension(dpy, i, dmx_extension_name)
 
 /*****************************************************************************
  *                                                                           *
@@ -63,48 +63,52 @@ static const char     *dmx_extension_name = DMX_EXTENSION_NAME;
 
 static int close_display(Display *dpy, XExtCodes *extCodes);
 static /* const */ XExtensionHooks dmx_extension_hooks = {
-    NULL,				/* create_gc */
-    NULL,				/* copy_gc */
-    NULL,				/* flush_gc */
-    NULL,				/* free_gc */
-    NULL,				/* create_font */
-    NULL,				/* free_font */
-    close_display,			/* close_display */
-    NULL,				/* wire_to_event */
-    NULL,				/* event_to_wire */
-    NULL,				/* error */
-    NULL,				/* error_string */
+    NULL,    /* create_gc */
+    NULL,    /* copy_gc */
+    NULL,    /* flush_gc */
+    NULL,    /* free_gc */
+    NULL,    /* create_font */
+    NULL,    /* free_font */
+    close_display,   /* close_display */
+    NULL,    /* wire_to_event */
+    NULL,    /* event_to_wire */
+    NULL,    /* error */
+    NULL,    /* error_string */
 };
 
-static XEXT_GENERATE_FIND_DISPLAY(find_display, dmx_extension_info,
+static XEXT_GENERATE_FIND_DISPLAY(find_display,
+                                  dmx_extension_info,
                                   dmx_extension_name,
                                   &dmx_extension_hooks,
-                                  0, NULL)
+                                  0,
+                                  NULL)
 
-static XEXT_GENERATE_CLOSE_DISPLAY(close_display, dmx_extension_info)
+    static XEXT_GENERATE_CLOSE_DISPLAY(close_display, dmx_extension_info)
 
-
-/*****************************************************************************
+    /*****************************************************************************
  *                                                                           *
  *                  public DMX Extension routines                            *
  *                                                                           *
  *****************************************************************************/
 
-/** If the server has the DMX extension, the event and error bases will
+    /** If the server has the DMX extension, the event and error bases will
  * be placed in \a event_basep and \a error_basep, and True will be
  * returned.  Otherwise, False will be returned.
  *
  * Available in DMX Protocol Version 1.0 */
-Bool DMXQueryExtension(Display *dpy, int *event_basep, int *error_basep)
+    Bool DMXQueryExtension(Display *dpy, int *event_basep, int *error_basep)
 {
     XExtDisplayInfo *info = find_display(dpy);
 
-    if (XextHasExtension(info)) {
-	*event_basep = info->codes->first_event;
-	*error_basep = info->codes->first_error;
-	return True;
-    } else {
-	return False;
+    if (XextHasExtension(info))
+    {
+        *event_basep = info->codes->first_event;
+        *error_basep = info->codes->first_error;
+        return True;
+    }
+    else
+    {
+        return False;
     }
 }
 
@@ -114,23 +118,27 @@ Bool DMXQueryExtension(Display *dpy, int *event_basep, int *error_basep)
  * is returned.  Otherwise, False will be returned.
  *
  * Available in DMX Protocol Version 1.0 */
-Bool DMXQueryVersion(Display *dpy,
-                     int *majorVersion, int *minorVersion, int *patchVersion)
+Bool
+DMXQueryVersion(Display *dpy,
+                int     *majorVersion,
+                int     *minorVersion,
+                int     *patchVersion)
 {
-    XExtDisplayInfo       *info = find_display(dpy);
+    XExtDisplayInfo      *info = find_display(dpy);
     xDMXQueryVersionReply rep;
-    xDMXQueryVersionReq   *req;
+    xDMXQueryVersionReq  *req;
 
     DMXCheckExtension(dpy, info, False);
 
     LockDisplay(dpy);
     GetReq(DMXQueryVersion, req);
-    req->reqType     = info->codes->major_opcode;
-    req->dmxReqType  = X_DMXQueryVersion;
-    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue)) {
-	UnlockDisplay(dpy);
-	SyncHandle();
-	return False;
+    req->reqType    = info->codes->major_opcode;
+    req->dmxReqType = X_DMXQueryVersion;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue))
+    {
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return False;
     }
     *majorVersion = rep.majorVersion;
     *minorVersion = rep.minorVersion;
@@ -143,10 +151,11 @@ Bool DMXQueryVersion(Display *dpy,
 /** Flush all pending dmxSync requests in DMX server.
  *
  * Available in DMX Protocol Version 1.5 */
-Bool DMXSync(Display *dpy)
+Bool
+DMXSync(Display *dpy)
 {
     XExtDisplayInfo *info = find_display(dpy);
-    xDMXSyncReply   rep;
+    xDMXSyncReply    rep;
     xDMXSyncReq     *req;
 
     DMXCheckExtension(dpy, info, False);
@@ -155,7 +164,8 @@ Bool DMXSync(Display *dpy)
     GetReq(DMXSync, req);
     req->reqType    = info->codes->major_opcode;
     req->dmxReqType = X_DMXSync;
-    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue)) {
+    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return False;
@@ -170,10 +180,11 @@ Bool DMXSync(Display *dpy)
  *
  * Available in DMX Protocol Version 1.2
  * Reply added in DMX Protocol Version 2.0 */
-Bool DMXForceWindowCreation(Display *dpy, Window window)
+Bool
+DMXForceWindowCreation(Display *dpy, Window window)
 {
-    XExtDisplayInfo              *info = find_display(dpy);
-    xDMXForceWindowCreationReq   *req;
+    XExtDisplayInfo             *info = find_display(dpy);
+    xDMXForceWindowCreationReq  *req;
     xDMXForceWindowCreationReply rep;
 
     DMXCheckExtension(dpy, info, False);
@@ -183,7 +194,8 @@ Bool DMXForceWindowCreation(Display *dpy, Window window)
     req->reqType    = info->codes->major_opcode;
     req->dmxReqType = X_DMXForceWindowCreation;
     req->window     = window;
-    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue)) {
+    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return False;
@@ -199,11 +211,12 @@ Bool DMXForceWindowCreation(Display *dpy, Window window)
  * returned.  Otherwise, False will be returned.
  *
  * Available in DMX Protocol Version 1.0 */
-Bool DMXGetScreenCount(Display *dpy, int *screen_count)
+Bool
+DMXGetScreenCount(Display *dpy, int *screen_count)
 {
-    XExtDisplayInfo         *info = find_display(dpy);
+    XExtDisplayInfo        *info = find_display(dpy);
     xDMXGetScreenCountReply rep;
-    xDMXGetScreenCountReq   *req;
+    xDMXGetScreenCountReq  *req;
 
     DMXCheckExtension(dpy, info, False);
 
@@ -211,7 +224,8 @@ Bool DMXGetScreenCount(Display *dpy, int *screen_count)
     GetReq(DMXGetScreenCount, req);
     req->reqType    = info->codes->major_opcode;
     req->dmxReqType = X_DMXGetScreenCount;
-    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue)) {
+    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return False;
@@ -228,13 +242,15 @@ Bool DMXGetScreenCount(Display *dpy, int *screen_count)
  * False will be returned.
  *
  * Available in DMX Protocol Version 1.0; Modified in Version 2.0 */
-Bool DMXGetScreenAttributes(Display *dpy, int physical_screen,
-                            DMXScreenAttributes *attr)
+Bool
+DMXGetScreenAttributes(Display             *dpy,
+                       int                  physical_screen,
+                       DMXScreenAttributes *attr)
 {
-    XExtDisplayInfo              *info = find_display(dpy);
+    XExtDisplayInfo             *info = find_display(dpy);
     xDMXGetScreenAttributesReply rep;
-    xDMXGetScreenAttributesReq   *req;
-    Bool                          ret = False;
+    xDMXGetScreenAttributesReq  *req;
+    Bool                         ret = False;
 
     DMXCheckExtension(dpy, info, False);
 
@@ -243,73 +259,93 @@ Bool DMXGetScreenAttributes(Display *dpy, int physical_screen,
     req->reqType        = info->codes->major_opcode;
     req->dmxReqType     = X_DMXGetScreenAttributes;
     req->physicalScreen = physical_screen;
-    if (!_XReply(dpy, (xReply *)&rep,
-                 (SIZEOF(xDMXGetScreenAttributesReply) - 32) >> 2, xFalse)) {
+    if (!_XReply(dpy,
+                 (xReply *)&rep,
+                 (SIZEOF(xDMXGetScreenAttributesReply) - 32) >> 2,
+                 xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return False;
     }
 
     if (rep.displayNameLength < 1024)
-        attr->displayName = Xmalloc(rep.displayNameLength + 1 + 4 /* for pad */);
-    else
-        attr->displayName = NULL;  /* name length is unbelievable, reject */
-    if (attr->displayName == NULL) {
+        attr->displayName =
+            Xmalloc(rep.displayNameLength + 1 + 4 /* for pad */);
+    else attr->displayName = NULL; /* name length is unbelievable, reject */
+    if (attr->displayName == NULL)
+    {
         _XEatDataWords(dpy, rep.length);
         goto end;
     }
     _XReadPad(dpy, attr->displayName, rep.displayNameLength);
     attr->displayName[rep.displayNameLength] = '\0';
-    attr->logicalScreen       = rep.logicalScreen;
+    attr->logicalScreen                      = rep.logicalScreen;
 
     attr->screenWindowWidth   = rep.screenWindowWidth;
     attr->screenWindowHeight  = rep.screenWindowHeight;
     attr->screenWindowXoffset = rep.screenWindowXoffset;
     attr->screenWindowYoffset = rep.screenWindowYoffset;
 
-    attr->rootWindowWidth     = rep.rootWindowWidth;
-    attr->rootWindowHeight    = rep.rootWindowHeight;
-    attr->rootWindowXoffset   = rep.rootWindowXoffset;
-    attr->rootWindowYoffset   = rep.rootWindowYoffset;
-    attr->rootWindowXorigin   = rep.rootWindowXorigin;
-    attr->rootWindowYorigin   = rep.rootWindowYorigin;
+    attr->rootWindowWidth   = rep.rootWindowWidth;
+    attr->rootWindowHeight  = rep.rootWindowHeight;
+    attr->rootWindowXoffset = rep.rootWindowXoffset;
+    attr->rootWindowYoffset = rep.rootWindowYoffset;
+    attr->rootWindowXorigin = rep.rootWindowXorigin;
+    attr->rootWindowYorigin = rep.rootWindowYorigin;
 
     ret = True;
 
-  end:
+end:
     UnlockDisplay(dpy);
     SyncHandle();
     return ret;
 }
 
-static CARD32 _DMXGetScreenAttribute(int bit, DMXScreenAttributes *attr)
+static CARD32
+_DMXGetScreenAttribute(int bit, DMXScreenAttributes *attr)
 {
-    switch (1 << bit) {
-    case DMXScreenWindowWidth:   return attr->screenWindowWidth;
-    case DMXScreenWindowHeight:  return attr->screenWindowHeight;
-    case DMXScreenWindowXoffset: return attr->screenWindowXoffset;
-    case DMXScreenWindowYoffset: return attr->screenWindowYoffset;
-    case DMXRootWindowWidth:     return attr->rootWindowWidth;
-    case DMXRootWindowHeight:    return attr->rootWindowHeight;
-    case DMXRootWindowXoffset:   return attr->rootWindowXoffset;
-    case DMXRootWindowYoffset:   return attr->rootWindowYoffset;
-    case DMXRootWindowXorigin:   return attr->rootWindowXorigin;
-    case DMXRootWindowYorigin:   return attr->rootWindowYorigin;
-    default:                     return 0;
+    switch (1 << bit)
+    {
+        case DMXScreenWindowWidth:
+            return attr->screenWindowWidth;
+        case DMXScreenWindowHeight:
+            return attr->screenWindowHeight;
+        case DMXScreenWindowXoffset:
+            return attr->screenWindowXoffset;
+        case DMXScreenWindowYoffset:
+            return attr->screenWindowYoffset;
+        case DMXRootWindowWidth:
+            return attr->rootWindowWidth;
+        case DMXRootWindowHeight:
+            return attr->rootWindowHeight;
+        case DMXRootWindowXoffset:
+            return attr->rootWindowXoffset;
+        case DMXRootWindowYoffset:
+            return attr->rootWindowYoffset;
+        case DMXRootWindowXorigin:
+            return attr->rootWindowXorigin;
+        case DMXRootWindowYorigin:
+            return attr->rootWindowYorigin;
+        default:
+            return 0;
     }
 }
 
-static int _DMXDumpScreenAttributes(Display *dpy,
-                                    unsigned long mask,
-                                    DMXScreenAttributes *attr)
+static int
+_DMXDumpScreenAttributes(Display             *dpy,
+                         unsigned long        mask,
+                         DMXScreenAttributes *attr)
 {
-    int           i;
-    unsigned long value_list[32];
+    int            i;
+    unsigned long  value_list[32];
     unsigned long *value = value_list;
-    int           count  = 0;
+    int            count = 0;
 
-    for (i = 0; i < 32; i++) {
-        if (mask & (1 << i)) {
+    for (i = 0; i < 32; i++)
+    {
+        if (mask & (1 << i))
+        {
             *value++ = _DMXGetScreenAttribute(i, attr);
             ++count;
         }
@@ -318,33 +354,45 @@ static int _DMXDumpScreenAttributes(Display *dpy,
     return count;
 }
 
-static CARD32 _DMXGetInputAttribute(int bit, DMXInputAttributes *attr)
+static CARD32
+_DMXGetInputAttribute(int bit, DMXInputAttributes *attr)
 {
-    switch (1 << bit) {
-    case DMXInputType:
-        switch (attr->inputType) {
-        case DMXLocalInputType:   return 0;
-        case DMXConsoleInputType: return 1;
-        case DMXBackendInputType: return 2;
-        }
-        return attr->inputType;
-    case DMXInputPhysicalScreen: return attr->physicalScreen;
-    case DMXInputSendsCore:      return attr->sendsCore;
-    default:                     return 0;
+    switch (1 << bit)
+    {
+        case DMXInputType:
+            switch (attr->inputType)
+            {
+                case DMXLocalInputType:
+                    return 0;
+                case DMXConsoleInputType:
+                    return 1;
+                case DMXBackendInputType:
+                    return 2;
+            }
+            return attr->inputType;
+        case DMXInputPhysicalScreen:
+            return attr->physicalScreen;
+        case DMXInputSendsCore:
+            return attr->sendsCore;
+        default:
+            return 0;
     }
 }
 
-static int _DMXDumpInputAttributes(Display *dpy,
-                                   unsigned long mask,
-                                   DMXInputAttributes *attr)
+static int
+_DMXDumpInputAttributes(Display            *dpy,
+                        unsigned long       mask,
+                        DMXInputAttributes *attr)
 {
-    int           i;
-    unsigned long value_list[32];
+    int            i;
+    unsigned long  value_list[32];
     unsigned long *value = value_list;
-    int           count = 0;
+    int            count = 0;
 
-    for (i = 0; i < 32; i++) {
-        if (mask & (1 << i)) {
+    for (i = 0; i < 32; i++)
+    {
+        if (mask & (1 << i))
+        {
             *value++ = _DMXGetInputAttribute(i, attr);
             ++count;
         }
@@ -355,21 +403,22 @@ static int _DMXDumpInputAttributes(Display *dpy,
 
 /** Change geometries and positions of the DMX screen and root windows
  * on the back-end X server. */
-int DMXChangeScreensAttributes(Display *dpy,
-                               int screen_count,
-                               int *screens,
-                               int mask_count,
-                               unsigned int *masks,
-                               DMXScreenAttributes *attrs, /* vector */
-                               int *error_screen)
+int
+DMXChangeScreensAttributes(Display             *dpy,
+                           int                  screen_count,
+                           int                 *screens,
+                           int                  mask_count,
+                           unsigned int        *masks,
+                           DMXScreenAttributes *attrs, /* vector */
+                           int                 *error_screen)
 {
-    XExtDisplayInfo                  *info = find_display(dpy);
+    XExtDisplayInfo                 *info = find_display(dpy);
     xDMXChangeScreensAttributesReply rep;
-    xDMXChangeScreensAttributesReq   *req;
+    xDMXChangeScreensAttributesReq  *req;
     int                              i;
-    unsigned int                     mask  = 0;
-    CARD32                           *screen_list;
-    CARD32                           *mask_list;
+    unsigned int                     mask = 0;
+    CARD32                          *screen_list;
+    CARD32                          *mask_list;
 
     DMXCheckExtension(dpy, info, False);
 
@@ -377,28 +426,32 @@ int DMXChangeScreensAttributes(Display *dpy,
 
     LockDisplay(dpy);
     GetReq(DMXChangeScreensAttributes, req);
-    req->reqType      = info->codes->major_opcode;
-    req->dmxReqType   = X_DMXChangeScreensAttributes;
-    req->screenCount  = screen_count;
-    req->maskCount    = mask_count;
-    req->length      += screen_count + mask_count;
+    req->reqType     = info->codes->major_opcode;
+    req->dmxReqType  = X_DMXChangeScreensAttributes;
+    req->screenCount = screen_count;
+    req->maskCount   = mask_count;
+    req->length += screen_count + mask_count;
 
     screen_list = (CARD32 *)Xmalloc(sizeof(*screen_list) * screen_count);
-    for (i = 0; i < screen_count; i++) screen_list[i] = screens[i];
+    for (i = 0; i < screen_count; i++)
+        screen_list[i] = screens[i];
     Data32(dpy, screen_list, screen_count * sizeof(CARD32));
     Xfree(screen_list);
 
     mask_list = (CARD32 *)Xmalloc(sizeof(*mask_list) * mask_count);
-    for (i = 0; i < mask_count;   i++) mask_list[i]   = masks[i];
+    for (i = 0; i < mask_count; i++)
+        mask_list[i] = masks[i];
     Data32(dpy, mask_list, mask_count * sizeof(CARD32));
     Xfree(mask_list);
 
-    for (i = 0; i < screen_count; i++) {
+    for (i = 0; i < screen_count; i++)
+    {
         if (i < mask_count) mask = masks[i];
         req->length += _DMXDumpScreenAttributes(dpy, mask, attrs + i);
     }
 
-    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse)) {
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return DmxBadReply;
@@ -410,17 +463,20 @@ int DMXChangeScreensAttributes(Display *dpy,
 }
 
 /** Add a screen. */
-Bool DMXAddScreen(Display *dpy, const char *displayName, unsigned int mask,
-                  DMXScreenAttributes *attr, int *screen)
+Bool
+DMXAddScreen(Display             *dpy,
+             const char          *displayName,
+             unsigned int         mask,
+             DMXScreenAttributes *attr,
+             int                 *screen)
 {
-    XExtDisplayInfo    *info = find_display(dpy);
+    XExtDisplayInfo   *info = find_display(dpy);
     xDMXAddScreenReply rep;
-    xDMXAddScreenReq   *req;
+    xDMXAddScreenReq  *req;
     int                length;
     int                paddedLength;
 
-    if (!screen)
-	return False;
+    if (!screen) return False;
 
     DMXCheckExtension(dpy, info, False);
 
@@ -433,17 +489,19 @@ Bool DMXAddScreen(Display *dpy, const char *displayName, unsigned int mask,
     req->displayNameLength = length;
     req->physicalScreen    = *screen;
     req->valueMask         = mask;
-    req->length           += paddedLength/4;
-    req->length           += _DMXDumpScreenAttributes(dpy, mask, attr);
+    req->length += paddedLength / 4;
+    req->length += _DMXDumpScreenAttributes(dpy, mask, attr);
 
-    if (length) {
-        char *buffer       = Xcalloc(paddedLength, 1);
+    if (length)
+    {
+        char *buffer = Xcalloc(paddedLength, 1);
         memcpy(buffer, displayName, length);
         Data32(dpy, buffer, paddedLength);
         Xfree(buffer);
     }
 
-    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse)) {
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return False;
@@ -455,21 +513,23 @@ Bool DMXAddScreen(Display *dpy, const char *displayName, unsigned int mask,
 }
 
 /** Remove a screen. */
-Bool DMXRemoveScreen(Display *dpy, int screen)
+Bool
+DMXRemoveScreen(Display *dpy, int screen)
 {
-    XExtDisplayInfo       *info = find_display(dpy);
+    XExtDisplayInfo      *info = find_display(dpy);
     xDMXRemoveScreenReply rep;
-    xDMXRemoveScreenReq   *req;
+    xDMXRemoveScreenReq  *req;
 
     DMXCheckExtension(dpy, info, False);
 
     LockDisplay(dpy);
     GetReq(DMXRemoveScreen, req);
-    req->reqType           = info->codes->major_opcode;
-    req->dmxReqType        = X_DMXRemoveScreen;
-    req->physicalScreen    = screen;
+    req->reqType        = info->codes->major_opcode;
+    req->dmxReqType     = X_DMXRemoveScreen;
+    req->physicalScreen = screen;
 
-    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse)) {
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return False;
@@ -495,19 +555,22 @@ Bool DMXRemoveScreen(Display *dpy, int screen)
  *
  * Available in DMX Protocol Version 1.0, but not working correctly
  * until DMX Protocol Version 1.4 */
-Bool DMXGetWindowAttributes(Display *dpy, Window window,
-                            int *screen_count, int available_count,
-                            DMXWindowAttributes *inf)
+Bool
+DMXGetWindowAttributes(Display             *dpy,
+                       Window               window,
+                       int                 *screen_count,
+                       int                  available_count,
+                       DMXWindowAttributes *inf)
 {
-    XExtDisplayInfo              *info = find_display(dpy);
+    XExtDisplayInfo             *info = find_display(dpy);
     xDMXGetWindowAttributesReply rep;
-    xDMXGetWindowAttributesReq   *req;
+    xDMXGetWindowAttributesReq  *req;
     unsigned long                current;
-    CARD32                       *screens; /* Must match protocol size */
-    CARD32                       *windows; /* Must match protocol size */
-    XRectangle                   *pos;     /* Must match protocol size */
-    XRectangle                   *vis;     /* Must match protocol size */
-    Bool                          ret = False;
+    CARD32                      *screens; /* Must match protocol size */
+    CARD32                      *windows; /* Must match protocol size */
+    XRectangle                  *pos; /* Must match protocol size */
+    XRectangle                  *vis; /* Must match protocol size */
+    Bool                         ret = False;
 
     DMXCheckExtension(dpy, info, False);
 
@@ -516,7 +579,8 @@ Bool DMXGetWindowAttributes(Display *dpy, Window window,
     req->reqType    = info->codes->major_opcode;
     req->dmxReqType = X_DMXGetWindowAttributes;
     req->window     = window;
-    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse)) {
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return False;
@@ -532,38 +596,43 @@ Bool DMXGetWindowAttributes(Display *dpy, Window window,
      * integer overflow in the size calculations, and bad X server
      * responses causing massive memory allocation.
      */
-    if (rep.screenCount < 65536) {
-        screens    = Xmalloc(rep.screenCount * sizeof(*screens));
-        windows    = Xmalloc(rep.screenCount * sizeof(*windows));
-        pos        = Xmalloc(rep.screenCount * sizeof(*pos));
-        vis        = Xmalloc(rep.screenCount * sizeof(*vis));
-    } else {
+    if (rep.screenCount < 65536)
+    {
+        screens = Xmalloc(rep.screenCount * sizeof(*screens));
+        windows = Xmalloc(rep.screenCount * sizeof(*windows));
+        pos     = Xmalloc(rep.screenCount * sizeof(*pos));
+        vis     = Xmalloc(rep.screenCount * sizeof(*vis));
+    }
+    else
+    {
         screens = windows = NULL;
         pos = vis = NULL;
     }
 
-    if (!screens || !windows || !pos || !vis) {
+    if (!screens || !windows || !pos || !vis)
+    {
         _XEatDataWords(dpy, rep.length);
         goto end;
     }
 
     _XRead(dpy, (char *)screens, rep.screenCount * sizeof(*screens));
     _XRead(dpy, (char *)windows, rep.screenCount * sizeof(*windows));
-    _XRead(dpy, (char *)pos,     rep.screenCount * sizeof(*pos));
-    _XRead(dpy, (char *)vis,     rep.screenCount * sizeof(*vis));
+    _XRead(dpy, (char *)pos, rep.screenCount * sizeof(*pos));
+    _XRead(dpy, (char *)vis, rep.screenCount * sizeof(*vis));
 
     *screen_count = rep.screenCount;
     for (current = 0;
          current < rep.screenCount && current < (unsigned)available_count;
-         current++, inf++) {
-        inf->screen    = screens[current];
-        inf->window    = windows[current];
-        inf->pos       = pos[current];
-        inf->vis       = vis[current];
+         current++, inf++)
+    {
+        inf->screen = screens[current];
+        inf->window = windows[current];
+        inf->pos    = pos[current];
+        inf->vis    = vis[current];
     }
     ret = True;
 
-  end:
+end:
     Xfree(vis);
     Xfree(pos);
     Xfree(windows);
@@ -579,19 +648,21 @@ Bool DMXGetWindowAttributes(Display *dpy, Window window,
  * be returned.  Otherwise, False will be returned.
  *
  * Available in DMX Protocol Version 2.0 */
-Bool DMXGetDesktopAttributes(Display *dpy, DMXDesktopAttributes *attr)
+Bool
+DMXGetDesktopAttributes(Display *dpy, DMXDesktopAttributes *attr)
 {
-    XExtDisplayInfo               *info = find_display(dpy);
+    XExtDisplayInfo              *info = find_display(dpy);
     xDMXGetDesktopAttributesReply rep;
-    xDMXGetDesktopAttributesReq   *req;
+    xDMXGetDesktopAttributesReq  *req;
 
     DMXCheckExtension(dpy, info, False);
 
     LockDisplay(dpy);
     GetReq(DMXGetDesktopAttributes, req);
-    req->reqType        = info->codes->major_opcode;
-    req->dmxReqType     = X_DMXGetDesktopAttributes;
-    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse)) {
+    req->reqType    = info->codes->major_opcode;
+    req->dmxReqType = X_DMXGetDesktopAttributes;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return False;
@@ -606,28 +677,38 @@ Bool DMXGetDesktopAttributes(Display *dpy, DMXDesktopAttributes *attr)
     return True;
 }
 
-static CARD32 _DMXGetDesktopAttribute(int bit, DMXDesktopAttributes *attr)
+static CARD32
+_DMXGetDesktopAttribute(int bit, DMXDesktopAttributes *attr)
 {
-    switch (1 << bit) {
-    case DMXDesktopWidth:  return attr->width;
-    case DMXDesktopHeight: return attr->height;
-    case DMXDesktopShiftX: return attr->shiftX;
-    case DMXDesktopShiftY: return attr->shiftY;
-    default:               return 0;
+    switch (1 << bit)
+    {
+        case DMXDesktopWidth:
+            return attr->width;
+        case DMXDesktopHeight:
+            return attr->height;
+        case DMXDesktopShiftX:
+            return attr->shiftX;
+        case DMXDesktopShiftY:
+            return attr->shiftY;
+        default:
+            return 0;
     }
 }
 
-static int _DMXDumpDesktopAttributes(Display *dpy,
-                                     unsigned long mask,
-                                     DMXDesktopAttributes *attr)
+static int
+_DMXDumpDesktopAttributes(Display              *dpy,
+                          unsigned long         mask,
+                          DMXDesktopAttributes *attr)
 {
-    int           i;
-    unsigned long value_list[32];
+    int            i;
+    unsigned long  value_list[32];
     unsigned long *value = value_list;
-    int           count  = 0;
+    int            count = 0;
 
-    for (i = 0; i < 32; i++) {
-        if (mask & (1 << i)) {
+    for (i = 0; i < 32; i++)
+    {
+        if (mask & (1 << i))
+        {
             *value++ = _DMXGetDesktopAttribute(i, attr);
             ++count;
         }
@@ -639,24 +720,26 @@ static int _DMXDumpDesktopAttributes(Display *dpy,
 /** Change the global bounding box and origin offset.
  *
  * Available in DMX Protocol Version 2.0 */
-int DMXChangeDesktopAttributes(Display *dpy,
-                               unsigned int mask,
-                               DMXDesktopAttributes *attr)
+int
+DMXChangeDesktopAttributes(Display              *dpy,
+                           unsigned int          mask,
+                           DMXDesktopAttributes *attr)
 {
-    XExtDisplayInfo                  *info = find_display(dpy);
+    XExtDisplayInfo                 *info = find_display(dpy);
     xDMXChangeDesktopAttributesReply rep;
-    xDMXChangeDesktopAttributesReq   *req;
+    xDMXChangeDesktopAttributesReq  *req;
 
     DMXCheckExtension(dpy, info, False);
 
     LockDisplay(dpy);
     GetReq(DMXChangeDesktopAttributes, req);
-    req->reqType      = info->codes->major_opcode;
-    req->dmxReqType   = X_DMXChangeDesktopAttributes;
-    req->valueMask    = mask;
-    req->length      +=_DMXDumpDesktopAttributes(dpy, mask, attr);
+    req->reqType    = info->codes->major_opcode;
+    req->dmxReqType = X_DMXChangeDesktopAttributes;
+    req->valueMask  = mask;
+    req->length += _DMXDumpDesktopAttributes(dpy, mask, attr);
 
-    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse)) {
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return DmxBadReply;
@@ -671,11 +754,12 @@ int DMXChangeDesktopAttributes(Display *dpy,
  * returned.  Otherwise, False will be returned.
  *
  * Available in DMX Protocol Version 1.1 */
-Bool DMXGetInputCount(Display *dpy, int *input_count)
+Bool
+DMXGetInputCount(Display *dpy, int *input_count)
 {
-    XExtDisplayInfo         *info = find_display(dpy);
-    xDMXGetInputCountReply  rep;
-    xDMXGetInputCountReq    *req;
+    XExtDisplayInfo       *info = find_display(dpy);
+    xDMXGetInputCountReply rep;
+    xDMXGetInputCountReq  *req;
 
     DMXCheckExtension(dpy, info, False);
 
@@ -683,7 +767,8 @@ Bool DMXGetInputCount(Display *dpy, int *input_count)
     GetReq(DMXGetInputCount, req);
     req->reqType    = info->codes->major_opcode;
     req->dmxReqType = X_DMXGetInputCount;
-    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue)) {
+    if (!_XReply(dpy, (xReply *)&rep, 0, xTrue))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return False;
@@ -700,13 +785,14 @@ Bool DMXGetInputCount(Display *dpy, int *input_count)
  * Otherwise, False will be returned.
  *
  * Available in DMX Protocol Version 1.1 */
-Bool DMXGetInputAttributes(Display *dpy, int id, DMXInputAttributes *inf)
+Bool
+DMXGetInputAttributes(Display *dpy, int id, DMXInputAttributes *inf)
 {
-    XExtDisplayInfo             *info = find_display(dpy);
+    XExtDisplayInfo            *info = find_display(dpy);
     xDMXGetInputAttributesReply rep;
-    xDMXGetInputAttributesReq   *req;
-    char                        *buffer;
-    Bool                         ret = False;
+    xDMXGetInputAttributesReq  *req;
+    char                       *buffer;
+    Bool                        ret = False;
 
     DMXCheckExtension(dpy, info, False);
 
@@ -715,26 +801,34 @@ Bool DMXGetInputAttributes(Display *dpy, int id, DMXInputAttributes *inf)
     req->reqType    = info->codes->major_opcode;
     req->dmxReqType = X_DMXGetInputAttributes;
     req->deviceId   = id;
-    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse)) {
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return False;
     }
 
     if (rep.nameLength < 1024)
-        buffer      = Xmalloc(rep.nameLength + 1 + 4 /* for pad */);
-    else
-        buffer      = NULL;  /* name length is unbelievable, reject */
+        buffer = Xmalloc(rep.nameLength + 1 + 4 /* for pad */);
+    else buffer = NULL; /* name length is unbelievable, reject */
 
-    if (buffer == NULL) {
+    if (buffer == NULL)
+    {
         _XEatDataWords(dpy, rep.length);
         goto end;
     }
 
-    switch (rep.inputType) {
-    case 0: inf->inputType = DMXLocalInputType;   break;
-    case 1: inf->inputType = DMXConsoleInputType; break;
-    case 2: inf->inputType = DMXBackendInputType; break;
+    switch (rep.inputType)
+    {
+        case 0:
+            inf->inputType = DMXLocalInputType;
+            break;
+        case 1:
+            inf->inputType = DMXConsoleInputType;
+            break;
+        case 2:
+            inf->inputType = DMXBackendInputType;
+            break;
     }
 
     inf->physicalScreen = rep.physicalScreen;
@@ -744,23 +838,23 @@ Bool DMXGetInputAttributes(Display *dpy, int id, DMXInputAttributes *inf)
     inf->detached       = rep.detached;
     _XReadPad(dpy, buffer, rep.nameLength);
     buffer[rep.nameLength] = '\0';
-    inf->name           = buffer;
-    ret = True;
-  end:
+    inf->name              = buffer;
+    ret                    = True;
+end:
     UnlockDisplay(dpy);
     SyncHandle();
     return ret;
 }
 
 /** Add input. */
-Bool DMXAddInput(Display *dpy, unsigned int mask, DMXInputAttributes *attr,
-                 int *id)
+Bool
+DMXAddInput(Display *dpy, unsigned int mask, DMXInputAttributes *attr, int *id)
 {
-    XExtDisplayInfo         *info = find_display(dpy);
-    xDMXAddInputReply       rep;
-    xDMXAddInputReq         *req;
-    int                     length;
-    int                     paddedLength;
+    XExtDisplayInfo  *info = find_display(dpy);
+    xDMXAddInputReply rep;
+    xDMXAddInputReq  *req;
+    int               length;
+    int               paddedLength;
 
     DMXCheckExtension(dpy, info, False);
 
@@ -772,17 +866,19 @@ Bool DMXAddInput(Display *dpy, unsigned int mask, DMXInputAttributes *attr,
     req->dmxReqType        = X_DMXAddInput;
     req->displayNameLength = length;
     req->valueMask         = mask;
-    req->length           += paddedLength/4;
-    req->length           += _DMXDumpInputAttributes(dpy, mask, attr);
+    req->length += paddedLength / 4;
+    req->length += _DMXDumpInputAttributes(dpy, mask, attr);
 
-    if (length) {
-        char *buffer       = Xcalloc(paddedLength, 1);
+    if (length)
+    {
+        char *buffer = Xcalloc(paddedLength, 1);
         memcpy(buffer, attr->name, paddedLength);
         Data32(dpy, buffer, paddedLength);
         Xfree(buffer);
     }
 
-    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse)) {
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return False;
@@ -794,51 +890,52 @@ Bool DMXAddInput(Display *dpy, unsigned int mask, DMXInputAttributes *attr,
 }
 
 /** Add backend input (a helper function that calls #DMXAddInput). */
-Bool DMXAddBackendInput(Display *dpy, int screen, int sendsCore, int *newId)
+Bool
+DMXAddBackendInput(Display *dpy, int screen, int sendsCore, int *newId)
 {
     DMXInputAttributes attr;
-    unsigned int       mask = (DMXInputType
-                               | DMXInputPhysicalScreen
-                               | DMXInputSendsCore);
+    unsigned int       mask =
+        (DMXInputType | DMXInputPhysicalScreen | DMXInputSendsCore);
 
-    attr.inputType        = DMXBackendInputType;
-    attr.physicalScreen   = screen;
-    attr.sendsCore        = sendsCore;
-    attr.name             = NULL;
+    attr.inputType      = DMXBackendInputType;
+    attr.physicalScreen = screen;
+    attr.sendsCore      = sendsCore;
+    attr.name           = NULL;
     return DMXAddInput(dpy, mask, &attr, newId);
 }
 
 /** Add console input (a helper function that calls #DMXAddInput). */
-Bool DMXAddConsoleInput(Display *dpy, const char *name, int sendsCore,
-                        int *newId)
+Bool
+DMXAddConsoleInput(Display *dpy, const char *name, int sendsCore, int *newId)
 {
     DMXInputAttributes attr;
-    unsigned int       mask = (DMXInputType
-                               | DMXInputSendsCore);
+    unsigned int       mask = (DMXInputType | DMXInputSendsCore);
 
-    attr.inputType        = DMXConsoleInputType;
-    attr.physicalScreen   = 0;
-    attr.sendsCore        = sendsCore;
-    attr.name             = name;
+    attr.inputType      = DMXConsoleInputType;
+    attr.physicalScreen = 0;
+    attr.sendsCore      = sendsCore;
+    attr.name           = name;
     return DMXAddInput(dpy, mask, &attr, newId);
 }
 
 /** Remove an input. */
-Bool DMXRemoveInput(Display *dpy, int id)
+Bool
+DMXRemoveInput(Display *dpy, int id)
 {
-    XExtDisplayInfo      *info = find_display(dpy);
+    XExtDisplayInfo     *info = find_display(dpy);
     xDMXRemoveInputReply rep;
-    xDMXRemoveInputReq   *req;
+    xDMXRemoveInputReq  *req;
 
     DMXCheckExtension(dpy, info, False);
 
     LockDisplay(dpy);
     GetReq(DMXRemoveInput, req);
-    req->reqType          = info->codes->major_opcode;
-    req->dmxReqType       = X_DMXRemoveInput;
-    req->physicalId       = id;
+    req->reqType    = info->codes->major_opcode;
+    req->dmxReqType = X_DMXRemoveInput;
+    req->physicalId = id;
 
-    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse)) {
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
         UnlockDisplay(dpy);
         SyncHandle();
         return False;

@@ -35,7 +35,7 @@
 #include "X11/xpm.h"
 
 #ifndef O_CLOEXEC
-# define O_CLOEXEC 0
+#  define O_CLOEXEC 0
 #endif
 
 /*
@@ -48,7 +48,8 @@ is_compressed(const char *filepath)
 
     if ((ext != NULL) &&
         (((ext[1] == 'Z') && (ext[2] == 0)) ||
-         ((ext[1] == 'g') && (ext[2] == 'z') && (ext[3] == 0)))) {
+         ((ext[1] == 'g') && (ext[2] == 'z') && (ext[3] == 0))))
+    {
         return True;
     }
 
@@ -66,7 +67,8 @@ strip_compress_ext(char *filepath)
 
     if ((ext != NULL) &&
         (((ext[1] == 'Z') && (ext[2] == 0)) ||
-         ((ext[1] == 'g') && (ext[2] == 'z') && (ext[3] == 0)))) {
+         ((ext[1] == 'g') && (ext[2] == 'z') && (ext[3] == 0))))
+    {
         *ext = '\0';
     }
 }
@@ -78,20 +80,21 @@ static void
 test_WFFXI_helper(const char *newfilepath, XpmImage *imageA, XpmInfo *infoA)
 {
     XpmImage imageB;
-    XpmInfo infoB;
-    int status;
+    XpmInfo  infoB;
+    int      status;
 
     printf("...writing %s", newfilepath);
 
     status = XpmWriteFileFromXpmImage(newfilepath, imageA, infoA);
     assert(status == XpmSuccess);
 
-    if (is_compressed(newfilepath)) {
-         /* Wait a moment for the compression command to finish writing,
+    if (is_compressed(newfilepath))
+    {
+        /* Wait a moment for the compression command to finish writing,
           * since OpenWriteFile() does a double fork so we can't just wait
           * for the child command to exit.
           */
-         usleep(10000);
+        usleep(10000);
     }
 
     status = XpmReadFileToXpmImage(newfilepath, &imageB, &infoB);
@@ -103,16 +106,15 @@ test_WFFXI_helper(const char *newfilepath, XpmImage *imageA, XpmInfo *infoA)
 
     status = remove(newfilepath);
     assert_no_errno(status);
-
 }
 
 static int
 TestWriteFileFromXpmImage(const char *filepath)
 {
     XpmImage imageA;
-    XpmInfo infoA;
-    int status;
-    char *testdir, *filename, *newfilepath;
+    XpmInfo  infoA;
+    int      status;
+    char    *testdir, *filename, *newfilepath;
 
 #ifndef NO_ZPIPE
     char *cmpfilepath;
@@ -135,11 +137,11 @@ TestWriteFileFromXpmImage(const char *filepath)
     test_WFFXI_helper(cmpfilepath, &imageA, &infoA);
     free(cmpfilepath);
 
-#ifdef XPM_PATH_COMPRESS
+#  ifdef XPM_PATH_COMPRESS
     cmpfilepath = strdup_printf("%s.Z", newfilepath);
     test_WFFXI_helper(cmpfilepath, &imageA, &infoA);
     free(cmpfilepath);
-#endif
+#  endif
 #endif
 
     XpmFreeXpmImage(&imageA);
@@ -172,19 +174,20 @@ static void
 test_WFFXD_helper(const char *newfilepath, char **dataA)
 {
     char **dataB;
-    int status;
+    int    status;
 
     printf("...writing %s", newfilepath);
 
     status = XpmWriteFileFromData(newfilepath, dataA);
     assert(status == XpmSuccess);
 
-    if (is_compressed(newfilepath)) {
-         /* Wait a moment for the compression command to finish writing,
+    if (is_compressed(newfilepath))
+    {
+        /* Wait a moment for the compression command to finish writing,
           * since OpenWriteFile() does a double fork so we can't just wait
           * for the child command to exit.
           */
-         usleep(10000);
+        usleep(10000);
     }
 
     status = XpmReadFileToData(newfilepath, &dataB);
@@ -195,15 +198,14 @@ test_WFFXD_helper(const char *newfilepath, char **dataA)
 
     status = remove(newfilepath);
     assert_no_errno(status);
-
 }
 
 static int
 TestWriteFileFromData(const char *filepath)
 {
     char **data = NULL;
-    int status;
-    char *testdir, *filename, *newfilepath;
+    int    status;
+    char  *testdir, *filename, *newfilepath;
 
 #ifndef NO_ZPIPE
     char *cmpfilepath;
@@ -226,11 +228,11 @@ TestWriteFileFromData(const char *filepath)
     test_WFFXD_helper(cmpfilepath, data);
     free(cmpfilepath);
 
-#ifdef XPM_PATH_COMPRESS
+#  ifdef XPM_PATH_COMPRESS
     cmpfilepath = strdup_printf("%s.Z", newfilepath);
     test_WFFXD_helper(cmpfilepath, data);
     free(cmpfilepath);
-#endif
+#  endif
 #endif
 
     XpmFree(data);
@@ -264,7 +266,7 @@ TestWriteFileFromBuffer(const char *filepath)
 {
     char *buffer = NULL;
     char *testdir, *filename, *newfilepath;
-    int status;
+    int   status;
 
     status = XpmReadFileToBuffer(filepath, &buffer);
     assert(status == XpmSuccess);
@@ -281,15 +283,17 @@ TestWriteFileFromBuffer(const char *filepath)
     status = XpmWriteFileFromBuffer(newfilepath, buffer);
     assert(status == XpmSuccess);
 
-    if (status == XpmSuccess) {
-        char readbuf[8192];
-        char *b = buffer;
-        int fd;
+    if (status == XpmSuccess)
+    {
+        char    readbuf[8192];
+        char   *b = buffer;
+        int     fd;
         ssize_t rd;
 
         /* Read file ourselves and verify the data matches */
         assert_no_errno(fd = open(newfilepath, O_RDONLY | O_CLOEXEC));
-        while ((rd = read(fd, readbuf, sizeof(readbuf))) > 0) {
+        while ((rd = read(fd, readbuf, sizeof(readbuf))) > 0)
+        {
             assert(memcmp(b, readbuf, rd) == 0);
             b += rd;
         }
@@ -320,7 +324,7 @@ test_XpmWriteFileFromBuffer(void)
 }
 
 int
-main(int argc, char** argv)
+main(int argc, char **argv)
 {
     test_XpmWriteFileFromXpmImage();
     test_XpmWriteFileFromData();

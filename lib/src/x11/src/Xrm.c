@@ -536,7 +536,7 @@ MoveValues(LTable ftable, register LTable ttable)
             prev   = &LeafHash(ttable, fentry->name);
             tentry = *prev;
             *prev  = fentry;
-        /* chain on all with same name, to preserve invariant order */
+            /* chain on all with same name, to preserve invariant order */
             while ((nfentry = fentry->next) && nfentry->name == fentry->name)
                 fentry = nfentry;
             fentry->next = tentry;
@@ -564,7 +564,7 @@ MoveTables(NTable ftable, register NTable ttable)
             prev   = &NodeHash(ttable, fentry->name);
             tentry = *prev;
             *prev  = fentry;
-        /* chain on all with same name, to preserve invariant order */
+            /* chain on all with same name, to preserve invariant order */
             while ((nfentry = fentry->next) && nfentry->name == fentry->name)
                 fentry = nfentry;
             fentry->next = tentry;
@@ -593,7 +593,7 @@ GrowTable(NTable *prev)
         LTableRec       otable;
 
         ltable          = (LTable)table;
-    /* cons up a copy to make MoveValues look symmetric */
+        /* cons up a copy to make MoveValues look symmetric */
         otable          = *ltable;
         ltable->buckets = Xcalloc(i, sizeof(VEntry));
         if (!ltable->buckets)
@@ -640,11 +640,11 @@ MergeValues(LTable ftable, NTable *pprev, Bool override)
             tentry = *prev;
             while (tentry && tentry->name != q)
                 tentry = *(prev = &tentry->next);
-        /* note: test intentionally uses fentry->name instead of q */
-        /* permits serendipitous inserts */
+            /* note: test intentionally uses fentry->name instead of q */
+            /* permits serendipitous inserts */
             while (tentry && tentry->name == fentry->name)
             {
-        /* if tentry is earlier, skip it */
+                /* if tentry is earlier, skip it */
                 if (!fentry->tight && tentry->tight)
                 {
                     tentry = *(prev = &tentry->next);
@@ -652,7 +652,7 @@ MergeValues(LTable ftable, NTable *pprev, Bool override)
                 }
                 if (fentry->tight != tentry->tight)
                 {
-            /* no match, chain in fentry */
+                    /* no match, chain in fentry */
                     *prev  = fentry;
                     prev   = &fentry->next;
                     fentry = *prev;

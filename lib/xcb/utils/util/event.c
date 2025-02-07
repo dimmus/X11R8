@@ -27,7 +27,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include <assert.h>
@@ -38,33 +38,17 @@
 
 #include <sys/types.h>
 
-#define ssizeof(foo)            (ssize_t)sizeof(foo)
-#define countof(foo)            (ssizeof(foo) / ssizeof(foo[0]))
+#define ssizeof(foo) (ssize_t)sizeof(foo)
+#define countof(foo) (ssizeof(foo) / ssizeof(foo[0]))
 
-static const char *labelError[] =
-{
-    "Success",
-    "BadRequest",
-    "BadValue",
-    "BadWindow",
-    "BadPixmap",
-    "BadAtom",
-    "BadCursor",
-    "BadFont",
-    "BadMatch",
-    "BadDrawable",
-    "BadAccess",
-    "BadAlloc",
-    "BadColor",
-    "BadGC",
-    "BadIDChoice",
-    "BadName",
-    "BadLength",
-    "BadImplementation",
+static const char *labelError[] = {
+    "Success",   "BadRequest", "BadValue",          "BadWindow", "BadPixmap",
+    "BadAtom",   "BadCursor",  "BadFont",           "BadMatch",  "BadDrawable",
+    "BadAccess", "BadAlloc",   "BadColor",          "BadGC",     "BadIDChoice",
+    "BadName",   "BadLength",  "BadImplementation",
 };
 
-static const char *labelRequest[] =
-{
+static const char *labelRequest[] = {
     "no request",
     "CreateWindow",
     "ChangeWindowAttributes",
@@ -195,65 +179,35 @@ static const char *labelRequest[] =
     "NoOperation",
 };
 
-static const char *labelEvent[] =
-{
-    "error",
-    "reply",
-    "KeyPress",
-    "KeyRelease",
-    "ButtonPress",
-    "ButtonRelease",
-    "MotionNotify",
-    "EnterNotify",
-    "LeaveNotify",
-    "FocusIn",
-    "FocusOut",
-    "KeymapNotify",
-    "Expose",
-    "GraphicsExpose",
-    "NoExpose",
-    "VisibilityNotify",
-    "CreateNotify",
-    "DestroyNotify",
-    "UnmapNotify",
-    "MapNotify",
-    "MapRequest",
-    "ReparentNotify",
-    "ConfigureNotify",
-    "ConfigureRequest",
-    "GravityNotify",
-    "ResizeRequest",
-    "CirculateNotify",
-    "CirculateRequest",
-    "PropertyNotify",
-    "SelectionClear",
-    "SelectionRequest",
-    "SelectionNotify",
-    "ColormapNotify",
-    "ClientMessage",
-    "MappingNotify",
+static const char *labelEvent[] = {
+    "error",          "reply",          "KeyPress",         "KeyRelease",
+    "ButtonPress",    "ButtonRelease",  "MotionNotify",     "EnterNotify",
+    "LeaveNotify",    "FocusIn",        "FocusOut",         "KeymapNotify",
+    "Expose",         "GraphicsExpose", "NoExpose",         "VisibilityNotify",
+    "CreateNotify",   "DestroyNotify",  "UnmapNotify",      "MapNotify",
+    "MapRequest",     "ReparentNotify", "ConfigureNotify",  "ConfigureRequest",
+    "GravityNotify",  "ResizeRequest",  "CirculateNotify",  "CirculateRequest",
+    "PropertyNotify", "SelectionClear", "SelectionRequest", "SelectionNotify",
+    "ColormapNotify", "ClientMessage",  "MappingNotify",
 };
 
 const char *
 xcb_event_get_label(uint8_t type)
 {
-    if(type < countof(labelEvent))
-        return labelEvent[type];
+    if (type < countof(labelEvent)) return labelEvent[type];
     return NULL;
 }
 
 const char *
 xcb_event_get_error_label(uint8_t type)
 {
-    if(type < countof(labelError))
-        return labelError[type];
+    if (type < countof(labelError)) return labelError[type];
     return NULL;
 }
 
 const char *
 xcb_event_get_request_label(uint8_t type)
 {
-    if(type < countof(labelRequest))
-        return labelRequest[type];
+    if (type < countof(labelRequest)) return labelRequest[type];
     return NULL;
 }

@@ -412,7 +412,7 @@ XrmQuarkToString(register XrmQuark quark)
     else
     {
 #ifdef PERMQ
-    /* We have to mark the quark as permanent, since the caller might hold
+        /* We have to mark the quark as permanent, since the caller might hold
 	 * onto the string pointer forever.
 	 */
         SETPERM(quark);

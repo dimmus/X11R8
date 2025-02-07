@@ -30,11 +30,11 @@ SOFTWARE.
 #include <X11/extensions/extutil.h>
 
 #ifndef XETrapNumberErrors
-#define XETrapNumberErrors 0
+#  define XETrapNumberErrors 0
 #endif
 
 #ifdef UWS40
-#define _XSetLastRequestRead _SetLastRequestRead
+#  define _XSetLastRequestRead _SetLastRequestRead
 #endif
 #ifndef vms
 extern unsigned long _XSetLastRequestRead(Display *dpy, xGenericReply *rep);
@@ -42,16 +42,16 @@ extern unsigned long _XSetLastRequestRead(Display *dpy, xGenericReply *rep);
 static unsigned long _XSetLastRequestRead(Display *dpy, xGenericReply *rep);
 #endif
 
-static XExtensionInfo *xtrap_info = NULL;
+static XExtensionInfo   *xtrap_info           = NULL;
 static /* const */ char *xtrap_extension_name = XTrapExtName;
 
-#define XTrapCheckExtension(dpy,i,val) \
+#define XTrapCheckExtension(dpy, i, val) \
     XextCheckExtension(dpy, i, xtrap_extension_name, val)
-#define XTrapSimpleCheckExtension(dpy,i) \
+#define XTrapSimpleCheckExtension(dpy, i) \
     XextSimpleCheckExtension(dpy, i, xtrap_extension_name)
 
 static XEXT_CLOSE_DISPLAY_PROTO(close_display);
-static Bool wire_to_event(Display *dpy, XEvent *event, xEvent *wire_ev);
+static Bool   wire_to_event(Display *dpy, XEvent *event, xEvent *wire_ev);
 static Status event_to_wire(Display *dpy, XEvent *event, xEvent *wire_ev);
 
 #ifdef X11R3
@@ -85,74 +85,83 @@ static /* const */ char *xtrap_error_list[] = {
     "BadSwapReq (Cannot trap extension requests for swapped client)",
 };
 
-static XEXT_GENERATE_FIND_DISPLAY (find_display, xtrap_info,
-                                   xtrap_extension_name,
-                                   &xtrap_extension_hooks,
-                                   XETrapNumberEvents, NULL)
+static XEXT_GENERATE_FIND_DISPLAY(find_display,
+                                  xtrap_info,
+                                  xtrap_extension_name,
+                                  &xtrap_extension_hooks,
+                                  XETrapNumberEvents,
+                                  NULL)
 
-static XEXT_GENERATE_CLOSE_DISPLAY (close_display, xtrap_info)
+    static XEXT_GENERATE_CLOSE_DISPLAY(close_display, xtrap_info)
 
-static XEXT_GENERATE_ERROR_STRING (error_string, xtrap_extension_name,
-                                   XETrapNumErrors, xtrap_error_list)
+        static XEXT_GENERATE_ERROR_STRING(error_string,
+                                          xtrap_extension_name,
+                                          XETrapNumErrors,
+                                          xtrap_error_list)
 
-static Bool event_to_wire(Display *dpy, XEvent *libevent, xEvent *netevent)
+            static Bool
+    event_to_wire(Display *dpy, XEvent *libevent, xEvent *netevent)
 {
-    Bool status = False;
-    XExtDisplayInfo *info = find_display(dpy);
+    Bool             status = False;
+    XExtDisplayInfo *info   = find_display(dpy);
 
-    XTrapCheckExtension(dpy,info,False);
+    XTrapCheckExtension(dpy, info, False);
 
     /* If we had more then one event */
 #if XETrapNumberErrors > 1
-    switch((netevent->u.u.type & 0x7f) - info->codes->first_event)
-    {   case XETrapData:
+    switch ((netevent->u.u.type & 0x7f) - info->codes->first_event)
+    {
+        case XETrapData:
 #endif
-        {
-            XETrapDataEvent *ev    = (XETrapDataEvent *) libevent;
-            xETrapDataEvent *event = (xETrapDataEvent *) netevent;
+            {
+                XETrapDataEvent *ev    = (XETrapDataEvent *)libevent;
+                xETrapDataEvent *event = (xETrapDataEvent *)netevent;
 
-            event->type           = ev->type;
-            event->detail         = ev->detail;
-            event->sequenceNumber = (ev->serial & 0xFFFF);
-            event->idx            = ev->idx;
-            (void)memcpy(event->data,ev->data,sizeof(event->data));
-            status = True;
-        }
+                event->type           = ev->type;
+                event->detail         = ev->detail;
+                event->sequenceNumber = (ev->serial & 0xFFFF);
+                event->idx            = ev->idx;
+                (void)memcpy(event->data, ev->data, sizeof(event->data));
+                status = True;
+            }
 #if XETrapNumberErrors > 1
     }
 #endif
-    return(status);
+    return (status);
 }
 
-static Bool wire_to_event(Display *dpy, XEvent *libevent, xEvent *netevent)
+static Bool
+wire_to_event(Display *dpy, XEvent *libevent, xEvent *netevent)
 {
-    Bool status = False;
-    XExtDisplayInfo *info = find_display(dpy);
+    Bool             status = False;
+    XExtDisplayInfo *info   = find_display(dpy);
 
-    XTrapCheckExtension(dpy,info,False);
+    XTrapCheckExtension(dpy, info, False);
 
     /* If we had more then one event */
 #if XETrapNumberErrors > 1
-    switch((netevent->u.u.type & 0x7f) - info->codes->first_event)
-    {   case XETrapData:
+    switch ((netevent->u.u.type & 0x7f) - info->codes->first_event)
+    {
+        case XETrapData:
 #endif
-        {
-            XETrapDataEvent *ev    = (XETrapDataEvent *) libevent;
-            xETrapDataEvent *event = (xETrapDataEvent *) netevent;
+            {
+                XETrapDataEvent *ev    = (XETrapDataEvent *)libevent;
+                xETrapDataEvent *event = (xETrapDataEvent *)netevent;
 
-            ev->type      = event->type & 0x7F;
-            ev->detail    = event->detail;
-            ev->serial    = _XSetLastRequestRead(dpy,(xGenericReply *)netevent);
-            ev->synthetic = ((event->type & 0x80) != 0);
-            ev->display   = dpy;
-            ev->idx       = event->idx;
-            (void)memcpy(ev->data,event->data,sizeof(ev->data));
-            status = True;
-        }
+                ev->type   = event->type & 0x7F;
+                ev->detail = event->detail;
+                ev->serial =
+                    _XSetLastRequestRead(dpy, (xGenericReply *)netevent);
+                ev->synthetic = ((event->type & 0x80) != 0);
+                ev->display   = dpy;
+                ev->idx       = event->idx;
+                (void)memcpy(ev->data, event->data, sizeof(ev->data));
+                status = True;
+            }
 #if XETrapNumberErrors > 1
     }
 #endif
-    return(status);
+    return (status);
 }
 
 /*
@@ -162,57 +171,63 @@ static Bool wire_to_event(Display *dpy, XEvent *libevent, xEvent *netevent)
  *      first event code is stored into event_base and the value of the first
  *      error code is stored into error_base.
  */
-Bool XETrapQueryExtension(Display *dpy,INT32 *event_base_return,
-    INT32 *error_base_return, INT32 *opcode_return)
+Bool
+XETrapQueryExtension(Display *dpy,
+                     INT32   *event_base_return,
+                     INT32   *error_base_return,
+                     INT32   *opcode_return)
 {
-    Bool status = True;
-    XExtDisplayInfo *info = find_display (dpy);
+    Bool             status = True;
+    XExtDisplayInfo *info   = find_display(dpy);
 
-    if (XextHasExtension (info))
+    if (XextHasExtension(info))
     {
         *event_base_return = (INT32)(info->codes->first_event);
         *error_base_return = (INT32)(info->codes->first_error);
-	*opcode_return     = (INT32)(info->codes->major_opcode);
+        *opcode_return     = (INT32)(info->codes->major_opcode);
     }
     else
     {
         status = False;
     }
-    return(status);
+    return (status);
 }
 
 #ifdef vms
 /* Hard-coded since this didn't make it into XLibShr's xfer vector */
 /* From [.XLIBEL.SRC]XLibInt.c in VMS Source Pool */
-unsigned long _XSetLastRequestRead(Display *dpy, xGenericReply *rep)
+unsigned long
+_XSetLastRequestRead(Display *dpy, xGenericReply *rep)
 {
-    register unsigned long      newseq, lastseq;
+    register unsigned long newseq, lastseq;
 
     /*
      * KeymapNotify has no sequence number, but is always guaranteed
      * to immediately follow another event, except when generated via
      * SendEvent (hmmm).
      */
-    if ((rep->type & 0x7f) == KeymapNotify)
-        return(dpy->last_request_read);
+    if ((rep->type & 0x7f) == KeymapNotify) return (dpy->last_request_read);
 
     newseq = (dpy->last_request_read & ~((unsigned long)0xffff)) |
              rep->sequenceNumber;
     lastseq = dpy->last_request_read;
-    while (newseq < lastseq) {
+    while (newseq < lastseq)
+    {
         newseq += 0x10000;
-        if (newseq > dpy->request) {
-            (void) fprintf (stderr,
-            "Xlib:  sequence lost (0x%lx > 0x%lx) in reply type 0x%x!\n",
-                                    newseq, dpy->request,
-                                   (unsigned int) rep->type);
+        if (newseq > dpy->request)
+        {
+            (void)fprintf(
+                stderr,
+                "Xlib:  sequence lost (0x%lx > 0x%lx) in reply type 0x%x!\n",
+                newseq,
+                dpy->request,
+                (unsigned int)rep->type);
             newseq -= 0x10000;
-           break;
+            break;
         }
     }
 
     dpy->last_request_read = newseq;
-    return(newseq);
+    return (newseq);
 }
 #endif
-

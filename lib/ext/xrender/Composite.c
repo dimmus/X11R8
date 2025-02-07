@@ -23,45 +23,45 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "Xrenderint.h"
 
 void
-XRenderComposite (Display   *dpy,
-		  int	    op,
-		  Picture   src,
-		  Picture   mask,
-		  Picture   dst,
-		  int	    src_x,
-		  int	    src_y,
-		  int	    mask_x,
-		  int	    mask_y,
-		  int	    dst_x,
-		  int	    dst_y,
-		  unsigned int	width,
-		  unsigned int	height)
+XRenderComposite(Display     *dpy,
+                 int          op,
+                 Picture      src,
+                 Picture      mask,
+                 Picture      dst,
+                 int          src_x,
+                 int          src_y,
+                 int          mask_x,
+                 int          mask_y,
+                 int          dst_x,
+                 int          dst_y,
+                 unsigned int width,
+                 unsigned int height)
 {
-    XRenderExtDisplayInfo   *info = XRenderFindDisplay (dpy);
-    xRenderCompositeReq	    *req;
+    XRenderExtDisplayInfo *info = XRenderFindDisplay(dpy);
+    xRenderCompositeReq   *req;
 
-    RenderSimpleCheckExtension (dpy, info);
+    RenderSimpleCheckExtension(dpy, info);
     LockDisplay(dpy);
     GetReq(RenderComposite, req);
-    req->reqType = (CARD8) info->codes->major_opcode;
+    req->reqType       = (CARD8)info->codes->major_opcode;
     req->renderReqType = X_RenderComposite;
-    req->op     = (CARD8) op;
-    req->src    = (CARD32) src;
-    req->mask   = (CARD32) mask;
-    req->dst    = (CARD32) dst;
-    req->xSrc   = (INT16) src_x;
-    req->ySrc   = (INT16) src_y;
-    req->xMask  = (INT16) mask_x;
-    req->yMask  = (INT16) mask_y;
-    req->xDst   = (INT16) dst_x;
-    req->yDst   = (INT16) dst_y;
-    req->width  = (CARD16) width;
-    req->height = (CARD16) height;
+    req->op            = (CARD8)op;
+    req->src           = (CARD32)src;
+    req->mask          = (CARD32)mask;
+    req->dst           = (CARD32)dst;
+    req->xSrc          = (INT16)src_x;
+    req->ySrc          = (INT16)src_y;
+    req->xMask         = (INT16)mask_x;
+    req->yMask         = (INT16)mask_y;
+    req->xDst          = (INT16)dst_x;
+    req->yDst          = (INT16)dst_y;
+    req->width         = (CARD16)width;
+    req->height        = (CARD16)height;
     UnlockDisplay(dpy);
     SyncHandle();
 }

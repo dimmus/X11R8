@@ -25,7 +25,6 @@
 
 #include "TestAllFiles.h"
 
-
 /*
  * XpmCreateXpmImageFromData - parse an XPM from data strings
  *
@@ -37,13 +36,14 @@ static int
 TestCreateXpmImageFromData(const char *filepath)
 {
     char **data = NULL;
-    int status;
+    int    status;
 
     status = XpmReadFileToData(filepath, &data);
 
-    if (status == XpmSuccess) {
+    if (status == XpmSuccess)
+    {
         XpmImage image;
-        XpmInfo info;
+        XpmInfo  info;
 
         assert(data != NULL);
 
@@ -67,10 +67,11 @@ test_XpmCreateXpmImageFromData(void)
     /* XpmReadFileToData calls XpmReadFileToXpmImage so it
        supports compressed files */
     TestAllCompressedFiles("good", XpmSuccess, TestCreateXpmImageFromData);
-    TestAllCompressedFiles("invalid", XpmFileInvalid, TestCreateXpmImageFromData);
+    TestAllCompressedFiles("invalid",
+                           XpmFileInvalid,
+                           TestCreateXpmImageFromData);
     TestAllCompressedFiles("no-mem", XpmNoMemory, TestCreateXpmImageFromData);
 }
-
 
 /*
  * XpmCreateXpmImageFromBuffer - parse an XPM from data strings
@@ -82,17 +83,18 @@ test_XpmCreateXpmImageFromData(void)
 static int
 TestCreateXpmImageFromBuffer(const char *filepath)
 {
-    char *buffer = NULL;
+    char    *buffer = NULL;
     XpmImage image;
-    XpmInfo info;
-    int status;
+    XpmInfo  info;
+    int      status;
 
     status = XpmReadFileToBuffer(filepath, &buffer);
     assert(status == XpmSuccess);
 
     status = XpmCreateXpmImageFromBuffer(buffer, &image, &info);
 
-    if (status == XpmSuccess) {
+    if (status == XpmSuccess)
+    {
         XpmFreeXpmImage(&image);
         XpmFreeXpmInfo(&info);
     }
@@ -112,7 +114,7 @@ test_XpmCreateXpmImageFromBuffer(void)
 }
 
 int
-main(int argc, char** argv)
+main(int argc, char **argv)
 {
     test_XpmCreateXpmImageFromData();
     test_XpmCreateXpmImageFromBuffer();

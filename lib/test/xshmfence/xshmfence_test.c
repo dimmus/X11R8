@@ -30,8 +30,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#define NCHILD  5               /* number of child processes to fork */
-#define NCHECK  10              /* number of times to signal the fence */
+#define NCHILD 5               /* number of child processes to fork */
+#define NCHECK 10              /* number of times to signal the fence */
 
 /* Catch an alarm and bail
  */
@@ -45,117 +45,128 @@ sigalrm(int sig)
 int
 main(int argc, char **argv)
 {
-    int		        fd;
-    struct xshmfence    *x;
-    int		        i;
-    int		        c;
-    int		        pid;
-    int                 status;
-    int                 failed = 0;
+    int               fd;
+    struct xshmfence *x;
+    int               i;
+    int               c;
+    int               pid;
+    int               status;
+    int               failed = 0;
 
     /* Allocate a fence
      */
     fd = xshmfence_alloc_shm();
-    if (fd < 0) {
+    if (fd < 0)
+    {
         perror("xshmfence_alloc_shm");
         exit(1);
     }
 
     /* fork NCHILD processes to wait for the fence
      */
-    for (c = 0; c < NCHILD; c++) {
-        switch (fork()) {
-        case -1:
-            perror("fork");
-            exit(1);
-        case 0:
+    for (c = 0; c < NCHILD; c++)
+    {
+        switch (fork())
+        {
+            case -1:
+                perror("fork");
+                exit(1);
+            case 0:
 
             /* Set an alarm to limit how long
              * to wait
              */
-            signal(SIGALRM, sigalrm);
-            alarm(10);
-    
+                signal(SIGALRM, sigalrm);
+                alarm(10);
+
             /* Map the fence
              */
-            x = xshmfence_map_shm(fd);
-            if (!x) {
-                fprintf(stderr, "%6d: ", c);
-                perror("xshmfence_map_shm");
-                exit(1);
-            }
-
-            for (i = 0; i < NCHECK; i++) {
-
-                /* Verify that the fence is currently reset
-                 */
-                if (xshmfence_query(x) != 0) {
-                    fprintf(stderr, "%6d: query reset failed\n", c);
+                x = xshmfence_map_shm(fd);
+                if (!x)
+                {
+                    fprintf(stderr, "%6d: ", c);
+                    perror("xshmfence_map_shm");
                     exit(1);
                 }
+
+                for (i = 0; i < NCHECK; i++)
+                {
+                /* Verify that the fence is currently reset
+                 */
+                    if (xshmfence_query(x) != 0)
+                    {
+                        fprintf(stderr, "%6d: query reset failed\n", c);
+                        exit(1);
+                    }
 
                 /* Wait for the fence
                  */
-                fprintf(stderr, "%6d: waiting\n", c);
-                if (xshmfence_await(x) < 0) {
-                    fprintf(stderr, "%6d: ", c);
-                    perror("xshmfence_await");
-                    exit(1);
-                }
+                    fprintf(stderr, "%6d: waiting\n", c);
+                    if (xshmfence_await(x) < 0)
+                    {
+                        fprintf(stderr, "%6d: ", c);
+                        perror("xshmfence_await");
+                        exit(1);
+                    }
 
-                fprintf(stderr, "%6d: awoken\n", c);
+                    fprintf(stderr, "%6d: awoken\n", c);
 
-                /* Verify that the fence is currently triggered
+                    /* Verify that the fence is currently triggered
                  */
-                if (xshmfence_query(x) == 0) {
-                    fprintf(stderr, "%6d: query triggered failed\n", c);
-                    exit(1);
-                }
+                    if (xshmfence_query(x) == 0)
+                    {
+                        fprintf(stderr, "%6d: query triggered failed\n", c);
+                        exit(1);
+                    }
 
-                usleep(10 * 1000);
+                    usleep(10 * 1000);
 
-                /* Reset the fence
+                    /* Reset the fence
                  */
-                if (c == 0)
-                    xshmfence_reset(x);
+                    if (c == 0) xshmfence_reset(x);
 
-                usleep(10 * 1000);
-            }
-            fprintf(stderr, "%6d: done\n", c);
-            exit(0);
+                    usleep(10 * 1000);
+                }
+                fprintf(stderr, "%6d: done\n", c);
+                exit(0);
         }
     }
 
     /* Map the fence into the parent process
      */
     x = xshmfence_map_shm(fd);
-    if (!x) {
+    if (!x)
+    {
         perror("xshmfence_map_shm");
         exit(1);
     }
 
-    for (i = 0; i < NCHECK; i++) {
+    for (i = 0; i < NCHECK; i++)
+    {
         usleep(100 * 1000);
         fprintf(stderr, "trigger\n");
 
         /* Verify that the fence is reset
          */
-        if (xshmfence_query(x) != 0) {
+        if (xshmfence_query(x) != 0)
+        {
             fprintf(stderr, "query reset failed\n");
             exit(1);
         }
 
         /* Trigger the fence
          */
-        if (xshmfence_trigger(x) < 0) {
+        if (xshmfence_trigger(x) < 0)
+        {
             perror("xshmfence_trigger");
             exit(1);
         }
 
         /* Verify that the fence is triggered
          */
-        if (xshmfence_query(x) == 0) {
-            fprintf (stderr, "query triggered failed\n");
+        if (xshmfence_query(x) == 0)
+        {
+            fprintf(stderr, "query triggered failed\n");
             exit(1);
         }
 
@@ -164,15 +175,16 @@ main(int argc, char **argv)
 
     /* Reap all of the child processes
      */
-    for (c = 0; c < NCHILD; c++) {
+    for (c = 0; c < NCHILD; c++)
+    {
         pid = wait(&status);
-        if (pid < 0) {
+        if (pid < 0)
+        {
             perror("wait");
             exit(1);
         }
         fprintf(stderr, "child %d done %d\n", pid, status);
-        if (status)
-            failed++;
+        if (status) failed++;
     }
     exit(failed);
 }

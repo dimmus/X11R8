@@ -22,109 +22,106 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/Xfuncproto.h"
 #include "Xfixesint.h"
 
 XFixesExtInfo XFixesExtensionInfo;
-char XFixesExtensionName[] = XFIXES_NAME;
+char          XFixesExtensionName[] = XFIXES_NAME;
 
-static int
-XFixesCloseDisplay (Display *dpy, XExtCodes *codes);
+static int XFixesCloseDisplay(Display *dpy, XExtCodes *codes);
 
-static Bool
-XFixesWireToEvent(Display *dpy, XEvent *event, xEvent *wire);
+static Bool XFixesWireToEvent(Display *dpy, XEvent *event, xEvent *wire);
 
-static Status
-XFixesEventToWire(Display *dpy, XEvent *event, xEvent *wire);
+static Status XFixesEventToWire(Display *dpy, XEvent *event, xEvent *wire);
 
 /*
  * XFixesExtAddDisplay - add a display to this extension. (Replaces
  * XextAddDisplay)
  */
 static XFixesExtDisplayInfo *
-XFixesExtAddDisplay (XFixesExtInfo *extinfo,
-                      Display        *dpy,
-                      char           *ext_name)
+XFixesExtAddDisplay(XFixesExtInfo *extinfo, Display *dpy, char *ext_name)
 {
-    XFixesExtDisplayInfo    *info;
+    XFixesExtDisplayInfo *info;
 
-    info = Xmalloc (sizeof (XFixesExtDisplayInfo));
+    info = Xmalloc(sizeof(XFixesExtDisplayInfo));
     if (!info) return NULL;
     info->display = dpy;
 
-    info->codes = XInitExtension (dpy, ext_name);
+    info->codes = XInitExtension(dpy, ext_name);
 
     /*
      * if the server has the extension, then we can initialize the
      * appropriate function vectors
      */
-    if (info->codes) {
-	xXFixesQueryVersionReply	rep;
-	xXFixesQueryVersionReq	*req;
-        XESetCloseDisplay (dpy, info->codes->extension,
-                           XFixesCloseDisplay);
-	for (int ev = info->codes->first_event;
-	     ev < info->codes->first_event + XFixesNumberEvents;
-	     ev++)
-	{
-	    XESetWireToEvent (dpy, ev, XFixesWireToEvent);
-	    XESetEventToWire (dpy, ev, XFixesEventToWire);
-	}
-	/*
+    if (info->codes)
+    {
+        xXFixesQueryVersionReply rep;
+        xXFixesQueryVersionReq  *req;
+        XESetCloseDisplay(dpy, info->codes->extension, XFixesCloseDisplay);
+        for (int ev = info->codes->first_event;
+             ev < info->codes->first_event + XFixesNumberEvents;
+             ev++)
+        {
+            XESetWireToEvent(dpy, ev, XFixesWireToEvent);
+            XESetEventToWire(dpy, ev, XFixesEventToWire);
+        }
+    /*
 	 * Get the version info
 	 */
-	LockDisplay (dpy);
-	GetReq (XFixesQueryVersion, req);
-	req->reqType = (CARD8) info->codes->major_opcode;
-	req->xfixesReqType = X_XFixesQueryVersion;
-	req->majorVersion = XFIXES_MAJOR;
-	req->minorVersion = XFIXES_MINOR;
-	if (!_XReply (dpy, (xReply *) &rep, 0, xTrue))
-	{
-	    UnlockDisplay (dpy);
-	    SyncHandle ();
-	    Xfree(info);
-	    return NULL;
-	}
-	info->major_version = (int) rep.majorVersion;
-	info->minor_version = (int) rep.minorVersion;
-	UnlockDisplay (dpy);
-	SyncHandle ();
-    } else {
-	/* The server doesn't have this extension.
+        LockDisplay(dpy);
+        GetReq(XFixesQueryVersion, req);
+        req->reqType       = (CARD8)info->codes->major_opcode;
+        req->xfixesReqType = X_XFixesQueryVersion;
+        req->majorVersion  = XFIXES_MAJOR;
+        req->minorVersion  = XFIXES_MINOR;
+        if (!_XReply(dpy, (xReply *)&rep, 0, xTrue))
+        {
+            UnlockDisplay(dpy);
+            SyncHandle();
+            Xfree(info);
+            return NULL;
+        }
+        info->major_version = (int)rep.majorVersion;
+        info->minor_version = (int)rep.minorVersion;
+        UnlockDisplay(dpy);
+        SyncHandle();
+    }
+    else
+    {
+    /* The server doesn't have this extension.
 	 * Use a private Xlib-internal extension to hang the close_display
 	 * hook on so that the "cache" (extinfo->cur) is properly cleaned.
 	 * (XBUG 7955)
 	 */
-	XExtCodes *codes = XAddExtension(dpy);
-	if (!codes) {
-	    XFree(info);
-	    return NULL;
-	}
-        XESetCloseDisplay (dpy, codes->extension, XFixesCloseDisplay);
+        XExtCodes *codes = XAddExtension(dpy);
+        if (!codes)
+        {
+            XFree(info);
+            return NULL;
+        }
+        XESetCloseDisplay(dpy, codes->extension, XFixesCloseDisplay);
     }
 
     /*
      * now, chain it onto the list
      */
     _XLockMutex(_Xglobal_lock);
-    info->next = extinfo->head;
+    info->next    = extinfo->head;
     extinfo->head = info;
-    extinfo->cur = info;
+    extinfo->cur  = info;
     extinfo->ndisplays++;
     _XUnlockMutex(_Xglobal_lock);
     return info;
 }
-
 
 /*
  * XFixesExtRemoveDisplay - remove the indicated display from the
  * extension object. (Replaces XextRemoveDisplay.)
  */
 static int
-XFixesExtRemoveDisplay (XFixesExtInfo *extinfo, const Display *dpy)
+XFixesExtRemoveDisplay(XFixesExtInfo *extinfo, const Display *dpy)
 {
     XFixesExtDisplayInfo *info, *prev;
 
@@ -133,28 +130,28 @@ XFixesExtRemoveDisplay (XFixesExtInfo *extinfo, const Display *dpy)
      */
     _XLockMutex(_Xglobal_lock);
     prev = NULL;
-    for (info = extinfo->head; info; info = info->next) {
-	if (info->display == dpy) break;
-	prev = info;
+    for (info = extinfo->head; info; info = info->next)
+    {
+        if (info->display == dpy) break;
+        prev = info;
     }
-    if (!info) {
-	_XUnlockMutex(_Xglobal_lock);
-	return 0;		/* hmm, actually an error */
+    if (!info)
+    {
+        _XUnlockMutex(_Xglobal_lock);
+        return 0;  /* hmm, actually an error */
     }
 
     /*
      * remove the display from the list; handles going to zero
      */
-    if (prev)
-	prev->next = info->next;
-    else
-	extinfo->head = info->next;
+    if (prev) prev->next = info->next;
+    else extinfo->head = info->next;
 
     extinfo->ndisplays--;
     if (info == extinfo->cur) extinfo->cur = NULL;  /* flush cache */
     _XUnlockMutex(_Xglobal_lock);
 
-    Xfree (info);
+    Xfree(info);
     return 1;
 }
 
@@ -164,27 +161,27 @@ XFixesExtRemoveDisplay (XFixesExtInfo *extinfo, const Display *dpy)
  * XextFindDisplay.)
  */
 static XFixesExtDisplayInfo *
-XFixesExtFindDisplay (XFixesExtInfo *extinfo,
-		      const Display *dpy)
+XFixesExtFindDisplay(XFixesExtInfo *extinfo, const Display *dpy)
 {
     XFixesExtDisplayInfo *info;
 
     /*
      * see if this was the most recently accessed display
      */
-    if ((info = extinfo->cur) && info->display == dpy)
-	return info;
+    if ((info = extinfo->cur) && info->display == dpy) return info;
 
     /*
      * look for display in list
      */
     _XLockMutex(_Xglobal_lock);
-    for (info = extinfo->head; info; info = info->next) {
-	if (info->display == dpy) {
-	    extinfo->cur = info;     /* cache most recently used */
-	    _XUnlockMutex(_Xglobal_lock);
-	    return info;
-	}
+    for (info = extinfo->head; info; info = info->next)
+    {
+        if (info->display == dpy)
+        {
+            extinfo->cur = info;     /* cache most recently used */
+            _XUnlockMutex(_Xglobal_lock);
+            return info;
+        }
     }
     _XUnlockMutex(_Xglobal_lock);
 
@@ -192,21 +189,21 @@ XFixesExtFindDisplay (XFixesExtInfo *extinfo,
 }
 
 XFixesExtDisplayInfo *
-XFixesFindDisplay (Display *dpy)
+XFixesFindDisplay(Display *dpy)
 {
     XFixesExtDisplayInfo *info;
 
-    info = XFixesExtFindDisplay (&XFixesExtensionInfo, dpy);
+    info = XFixesExtFindDisplay(&XFixesExtensionInfo, dpy);
     if (!info)
-	info = XFixesExtAddDisplay (&XFixesExtensionInfo, dpy,
-				    XFixesExtensionName);
+        info =
+            XFixesExtAddDisplay(&XFixesExtensionInfo, dpy, XFixesExtensionName);
     return info;
 }
 
 static int
-XFixesCloseDisplay (Display *dpy, _X_UNUSED XExtCodes *codes)
+XFixesCloseDisplay(Display *dpy, _X_UNUSED XExtCodes *codes)
 {
-    return XFixesExtRemoveDisplay (&XFixesExtensionInfo, dpy);
+    return XFixesExtRemoveDisplay(&XFixesExtensionInfo, dpy);
 }
 
 static Bool
@@ -218,41 +215,43 @@ XFixesWireToEvent(Display *dpy, XEvent *event, xEvent *wire)
 
     switch ((wire->u.u.type & 0x7F) - info->codes->first_event)
     {
-    case XFixesSelectionNotify: {
-	XFixesSelectionNotifyEvent *aevent;
-	xXFixesSelectionNotifyEvent *awire;
-	awire = (xXFixesSelectionNotifyEvent *) wire;
-	aevent = (XFixesSelectionNotifyEvent *) event;
-	aevent->type = awire->type & 0x7F;
-	aevent->subtype = awire->subtype;
-	aevent->serial = _XSetLastRequestRead(dpy,
-					      (xGenericReply *) wire);
-	aevent->send_event = (awire->type & 0x80) != 0;
-	aevent->display = dpy;
-	aevent->window = awire->window;
-	aevent->owner = awire->owner;
-	aevent->selection = awire->selection;
-	aevent->timestamp = awire->timestamp;
-	aevent->selection_timestamp = awire->selectionTimestamp;
-	return True;
-    }
-    case XFixesCursorNotify: {
-	XFixesCursorNotifyEvent *aevent;
-	xXFixesCursorNotifyEvent *awire;
-	awire = (xXFixesCursorNotifyEvent *) wire;
-	aevent = (XFixesCursorNotifyEvent *) event;
-	aevent->type = awire->type & 0x7F;
-	aevent->subtype = awire->subtype;
-	aevent->serial = _XSetLastRequestRead(dpy,
-					      (xGenericReply *) wire);
-	aevent->send_event = (awire->type & 0x80) != 0;
-	aevent->display = dpy;
-	aevent->window = awire->window;
-	aevent->cursor_serial = awire->cursorSerial;
-	aevent->timestamp = awire->timestamp;
-	aevent->cursor_name = awire->name;
-	return True;
-    }
+        case XFixesSelectionNotify:
+            {
+                XFixesSelectionNotifyEvent  *aevent;
+                xXFixesSelectionNotifyEvent *awire;
+                awire           = (xXFixesSelectionNotifyEvent *)wire;
+                aevent          = (XFixesSelectionNotifyEvent *)event;
+                aevent->type    = awire->type & 0x7F;
+                aevent->subtype = awire->subtype;
+                aevent->serial =
+                    _XSetLastRequestRead(dpy, (xGenericReply *)wire);
+                aevent->send_event          = (awire->type & 0x80) != 0;
+                aevent->display             = dpy;
+                aevent->window              = awire->window;
+                aevent->owner               = awire->owner;
+                aevent->selection           = awire->selection;
+                aevent->timestamp           = awire->timestamp;
+                aevent->selection_timestamp = awire->selectionTimestamp;
+                return True;
+            }
+        case XFixesCursorNotify:
+            {
+                XFixesCursorNotifyEvent  *aevent;
+                xXFixesCursorNotifyEvent *awire;
+                awire           = (xXFixesCursorNotifyEvent *)wire;
+                aevent          = (XFixesCursorNotifyEvent *)event;
+                aevent->type    = awire->type & 0x7F;
+                aevent->subtype = awire->subtype;
+                aevent->serial =
+                    _XSetLastRequestRead(dpy, (xGenericReply *)wire);
+                aevent->send_event    = (awire->type & 0x80) != 0;
+                aevent->display       = dpy;
+                aevent->window        = awire->window;
+                aevent->cursor_serial = awire->cursorSerial;
+                aevent->timestamp     = awire->timestamp;
+                aevent->cursor_name   = awire->name;
+                return True;
+            }
     }
     return False;
 }
@@ -266,61 +265,64 @@ XFixesEventToWire(Display *dpy, XEvent *event, xEvent *wire)
 
     switch ((event->type & 0x7F) - info->codes->first_event)
     {
-    case XFixesSelectionNotify: {
-	XFixesSelectionNotifyEvent *aevent;
-	xXFixesSelectionNotifyEvent *awire;
-	awire = (xXFixesSelectionNotifyEvent *) wire;
-	aevent = (XFixesSelectionNotifyEvent *) event;
-	awire->type = (CARD8) (aevent->type | (aevent->send_event ? 0x80 : 0));
-	awire->subtype = (CARD8) aevent->subtype;
-	awire->window = (CARD32) aevent->window;
-	awire->owner = (CARD32) aevent->owner;
-	awire->selection = (CARD32) aevent->selection;
-	awire->timestamp = (CARD32) aevent->timestamp;
-	awire->selectionTimestamp = (CARD32) aevent->selection_timestamp;
-	return True;
-    }
-    case XFixesCursorNotify: {
-	XFixesCursorNotifyEvent *aevent;
-	xXFixesCursorNotifyEvent *awire;
-	awire = (xXFixesCursorNotifyEvent *) wire;
-	aevent = (XFixesCursorNotifyEvent *) event;
-	awire->type = (CARD8) (aevent->type | (aevent->send_event ? 0x80 : 0));
-	awire->subtype = (CARD8) aevent->subtype;
-	awire->window = (CARD32) aevent->window;
-	awire->timestamp = (CARD32) aevent->timestamp;
-	awire->cursorSerial = (CARD32) aevent->cursor_serial;
-	awire->name = (CARD32) aevent->cursor_name;
-    }
+        case XFixesSelectionNotify:
+            {
+                XFixesSelectionNotifyEvent  *aevent;
+                xXFixesSelectionNotifyEvent *awire;
+                awire  = (xXFixesSelectionNotifyEvent *)wire;
+                aevent = (XFixesSelectionNotifyEvent *)event;
+                awire->type =
+                    (CARD8)(aevent->type | (aevent->send_event ? 0x80 : 0));
+                awire->subtype            = (CARD8)aevent->subtype;
+                awire->window             = (CARD32)aevent->window;
+                awire->owner              = (CARD32)aevent->owner;
+                awire->selection          = (CARD32)aevent->selection;
+                awire->timestamp          = (CARD32)aevent->timestamp;
+                awire->selectionTimestamp = (CARD32)aevent->selection_timestamp;
+                return True;
+            }
+        case XFixesCursorNotify:
+            {
+                XFixesCursorNotifyEvent  *aevent;
+                xXFixesCursorNotifyEvent *awire;
+                awire  = (xXFixesCursorNotifyEvent *)wire;
+                aevent = (XFixesCursorNotifyEvent *)event;
+                awire->type =
+                    (CARD8)(aevent->type | (aevent->send_event ? 0x80 : 0));
+                awire->subtype      = (CARD8)aevent->subtype;
+                awire->window       = (CARD32)aevent->window;
+                awire->timestamp    = (CARD32)aevent->timestamp;
+                awire->cursorSerial = (CARD32)aevent->cursor_serial;
+                awire->name         = (CARD32)aevent->cursor_name;
+            }
     }
     return False;
 }
 
 Bool
-XFixesQueryExtension (Display *dpy,
-			int *event_base_return,
-			int *error_base_return)
+XFixesQueryExtension(Display *dpy,
+                     int     *event_base_return,
+                     int     *error_base_return)
 {
-    XFixesExtDisplayInfo *info = XFixesFindDisplay (dpy);
+    XFixesExtDisplayInfo *info = XFixesFindDisplay(dpy);
 
     if (XFixesHasExtension(info))
     {
-	*event_base_return = info->codes->first_event;
-	*error_base_return = info->codes->first_error;
-	return True;
+        *event_base_return = info->codes->first_event;
+        *error_base_return = info->codes->first_error;
+        return True;
     }
-    else
-	return False;
+    else return False;
 }
 
 Status
-XFixesQueryVersion (Display *dpy,
-		    int	    *major_version_return,
-		    int	    *minor_version_return)
+XFixesQueryVersion(Display *dpy,
+                   int     *major_version_return,
+                   int     *minor_version_return)
 {
-    XFixesExtDisplayInfo	*info = XFixesFindDisplay (dpy);
+    XFixesExtDisplayInfo *info = XFixesFindDisplay(dpy);
 
-    XFixesCheckExtension (dpy, info, 0);
+    XFixesCheckExtension(dpy, info, 0);
 
     *major_version_return = info->major_version;
     *minor_version_return = info->minor_version;
@@ -328,7 +330,7 @@ XFixesQueryVersion (Display *dpy,
 }
 
 int
-XFixesVersion (void)
+XFixesVersion(void)
 {
     return XFIXES_VERSION;
 }

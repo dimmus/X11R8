@@ -250,7 +250,7 @@ XcmsCIELabToCIEXYZ(XcmsCCC      ccc,
      */
     if (pLab_WhitePt->format != XcmsCIEXYZFormat)
     {
-    /* Make a copy of the white point because we're going to modify it */
+        /* Make a copy of the white point because we're going to modify it */
         memcpy((char *)&whitePt, (char *)pLab_WhitePt, sizeof(XcmsColor));
         if (!_XcmsDIConvertColors(ccc,
                                   &whitePt,
@@ -276,38 +276,38 @@ XcmsCIELabToCIEXYZ(XcmsCCC      ccc,
      */
     for (i = 0; i < nColors; i++, pColor++)
     {
-    /* Make sure original format is CIELab */
+        /* Make sure original format is CIELab */
         if (!XcmsCIELab_ValidSpec(pColor))
         {
             return (XcmsFailure);
         }
 
-    /* Calculate Y: assume that Yn = 1.0 */
+        /* Calculate Y: assume that Yn = 1.0 */
         tmpL         = (pColor->spec.CIELab.L_star + 16.0) / 116.0;
         XYZ_return.Y = tmpL * tmpL * tmpL;
 
         if (XYZ_return.Y < 0.008856)
         {
-        /* Calculate Y: assume that Yn = 1.0 */
+            /* Calculate Y: assume that Yn = 1.0 */
             tmpL = pColor->spec.CIELab.L_star / 9.03292;
 
-        /* Calculate X */
+            /* Calculate X */
             XYZ_return.X = pLab_WhitePt->spec.CIEXYZ.X *
                            ((pColor->spec.CIELab.a_star / 3893.5) + tmpL);
-        /* Calculate Y */
+            /* Calculate Y */
             XYZ_return.Y = tmpL;
-        /* Calculate Z */
+            /* Calculate Z */
             XYZ_return.Z = pLab_WhitePt->spec.CIEXYZ.Z *
                            (tmpL - (pColor->spec.CIELab.b_star / 1557.4));
         }
         else
         {
-        /* Calculate X */
+            /* Calculate X */
             tmpFloat = tmpL + (pColor->spec.CIELab.a_star / 5.0);
             XYZ_return.X =
                 pLab_WhitePt->spec.CIEXYZ.X * tmpFloat * tmpFloat * tmpFloat;
 
-        /* Calculate Z */
+            /* Calculate Z */
             tmpFloat = tmpL - (pColor->spec.CIELab.b_star / 2.0);
             XYZ_return.Z =
                 pLab_WhitePt->spec.CIEXYZ.Z * tmpFloat * tmpFloat * tmpFloat;
@@ -365,7 +365,7 @@ XcmsCIEXYZToCIELab(XcmsCCC      ccc,
      */
     if (pLab_WhitePt->format != XcmsCIEXYZFormat)
     {
-    /* Make a copy of the white point because we're going to modify it */
+        /* Make a copy of the white point because we're going to modify it */
         memcpy((char *)&whitePt, (char *)pLab_WhitePt, sizeof(XcmsColor));
         if (!_XcmsDIConvertColors(ccc,
                                   &whitePt,
@@ -391,27 +391,27 @@ XcmsCIEXYZToCIELab(XcmsCCC      ccc,
      */
     for (i = 0; i < nColors; i++, pColor++)
     {
-    /* Make sure original format is CIELab */
+        /* Make sure original format is CIELab */
         if (!_XcmsCIEXYZ_ValidSpec(pColor))
         {
             return (XcmsFailure);
         }
 
-    /* Calculate L*:  assume Yn = 1.0 */
+        /* Calculate L*:  assume Yn = 1.0 */
         if (pColor->spec.CIEXYZ.Y < 0.008856)
         {
             fY_Yn             = (0.07787 * pColor->spec.CIEXYZ.Y) + DIV16BY116;
-        /* note fY_Yn used to compute Lab_return.a below */
+            /* note fY_Yn used to compute Lab_return.a below */
             Lab_return.L_star = 116.0 * (fY_Yn - DIV16BY116);
         }
         else
         {
             fY_Yn             = (XcmsFloat)XCMS_CUBEROOT(pColor->spec.CIEXYZ.Y);
-        /* note fY_Yn used to compute Lab_return.a_star below */
+            /* note fY_Yn used to compute Lab_return.a_star below */
             Lab_return.L_star = (116.0 * fY_Yn) - 16.0;
         }
 
-    /* Calculate f(X/Xn) */
+        /* Calculate f(X/Xn) */
         if ((fX_Xn = pColor->spec.CIEXYZ.X / pLab_WhitePt->spec.CIEXYZ.X) <
             0.008856)
         {
@@ -422,7 +422,7 @@ XcmsCIEXYZToCIELab(XcmsCCC      ccc,
             fX_Xn = (XcmsFloat)XCMS_CUBEROOT(fX_Xn);
         }
 
-    /* Calculate f(Z/Zn) */
+        /* Calculate f(Z/Zn) */
         if ((fZ_Zn = pColor->spec.CIEXYZ.Z / pLab_WhitePt->spec.CIEXYZ.Z) <
             0.008856)
         {
