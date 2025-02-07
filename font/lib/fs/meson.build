@@ -1,5 +1,7 @@
 ver_fs = '1.0.10'
 
+inc_font += include_directories('.')
+
 lib_args = ['-DFS_t', '-DTRANS_CLIENT']
 
 f_check += ['strlcpy', 'strnlen']
@@ -37,7 +39,7 @@ src = files(
 
 lib = library('FS', src,
   c_args: lib_args,
-  include_directories: [inc_lib, include_directories('.')],
+  include_directories: [inc_lib, inc_font],
   dependencies: xproto,
   version: '6.0.0',
   install: true,
@@ -45,7 +47,7 @@ lib = library('FS', src,
 
 libfs = declare_dependency(
   link_with: lib,
-  include_directories: [inc_lib, include_directories('.')],
+  include_directories: [inc_lib, inc_font],
 )
 
 # Warning: already generated pkg-config for FS

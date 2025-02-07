@@ -1,5 +1,7 @@
 ver_fontenc = '1.1.8'
 
+inc_font += include_directories('.')
+
 # TODO: make path with $prefix defined
 conf.set_quoted('FONT_ENCODINGS_DIRECTORY', '/usr/share/fonts/X11/encodings')
 
@@ -18,7 +20,7 @@ src = files(
 )
 
 lib = library('fontenc', src,
-  include_directories: [inc_lib, include_directories('.')],
+  include_directories: [inc_lib, inc_font],
   dependencies: [dep_int_fontenc, dep_ext_fontenc],
   version: '1.0.0',
   install: true,
@@ -26,7 +28,7 @@ lib = library('fontenc', src,
 
 libfontenc = declare_dependency(
   link_with: lib,
-  include_directories: [inc_lib, include_directories('.')],
+  include_directories: [inc_lib, inc_font],
 )
 
 pkg.generate(lib,
