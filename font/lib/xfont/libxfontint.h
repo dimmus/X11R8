@@ -23,12 +23,15 @@
 #ifndef _LIBXFONTINT_H_
 #define _LIBXFONTINT_H_
 
+#include <errno.h>
+#include <limits.h>
+#include <stdint.h>
+
 #include "X11/fonts/FSproto.h"
 
 #define client_auth_generation __libxfont__client_auth_generation
 #define ClientSignal __libxfont__ClientSignal
 #define DeleteFontClientID __libxfont__DeleteFontClientID
-#define ErrorF __libxfont__ErrorF
 #define find_old_font __libxfont__find_old_font
 #define GetClientResolutions __libxfont__GetClientResolutions
 #define GetDefaultPointSize __libxfont__GetDefaultPointSize
@@ -47,18 +50,13 @@
 #define remove_fs_fd __libxfont_remove_fs_fd
 #define adjust_fs_wait_for_delay __libxfont_adjust_fs_wait_for_delay
 
-#include	"X11/fonts/FS.h"
-#include	"X11/fonts/FSproto.h"
-#include	"X11/X.h"
-#include	"X11/Xos.h"
-#include	"fontmisc.h"
-#include	"X11/fonts/fontstruct.h"
-#include	"fontutil.h"
-#include	"X11/fonts/fontproto.h"
-#include	<errno.h>
-#include	<limits.h>
-#include	<stdint.h>
-
+#include "X11/fonts/FS.h"
+#include "X11/X.h"
+#include "X11/Xos.h"
+#include "X11/fonts/fontmisc.h"
+#include "X11/fonts/fontstruct.h"
+#include "X11/fonts/fontutil.h"
+#include "X11/fonts/fontproto.h"
 #include "X11/fonts/libxfont2.h"
 
 #ifndef LIBXFONT_SKIP_ERRORF
