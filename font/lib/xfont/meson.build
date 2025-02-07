@@ -22,13 +22,12 @@ dep_int_xfont = [xproto, libfontenc]
 
 conf.set('X_GZIP_FONT_COMPRESSION',  dep_zlib.found())
 conf.set('X_BZIP2_FONT_COMPRESSION', dep_bzip2.found())
-conf.set('XFONT_BUILTINS', 1)  # Support built-in fonts
-conf.set('XFONT_PCFFORMAT', 1) # Support pcf format bitmap font files
-conf.set('XFONT_BDFFORMAT', 1) # Support bdf format bitmap font files
-conf.set('XFONT_SNFFORMAT', false) # Support snf format bitmap font files # TODO: error in linker with xfs, so set FALSE for now
-conf.set('XFONT_BITMAP', 1)    # Support bitmap font files
-conf.set('XFONT_FONTFILE', 1)  # Support fonts in files
-conf.set('XFONT_FC', 1)        # Support the X Font Services Protocol
+
+conf.set('XFONT_PCFFORMAT', true)  # Support pcf format bitmap font files
+conf.set('XFONT_BDFFORMAT', true)  # Support bdf format bitmap font files
+conf.set('XFONT_SNFFORMAT', false) # Support snf format bitmap font files # TODO: error in linker with xfs
+conf.set('XFONT_BITMAP',    true)  # Support bitmap font files
+conf.set('XFONT_FC',        true)  # Support the X Font Services Protocol
 
 src = files(
   'stubs/atom.c',
@@ -44,7 +43,6 @@ src = files(
   'util/utilbitmap.c',
 )
 
-# if XFONT_FONTFILE
 src += files(
   'fontfile/bitsource.c',
   'fontfile/bufio.c',
@@ -61,6 +59,14 @@ src += files(
   'fontfile/register.c',
   'fontfile/renderers.c',
   'fontfile/catalogue.c',
+)
+
+src += files(
+  'builtins/dir.c',
+  'builtins/file.c',
+  'builtins/fonts.c',
+  'builtins/fpe.c',
+  'builtins/render.c',
 )
 
 # if X_BZIP2_FONT_COMPRESSION
@@ -109,15 +115,6 @@ src += files(
 # if XFONT_SNFFORMAT
 src += files(
   'bitmap/snfread.c',
-)
-
-# if XFONT_BUILTINS
-src += files(
-  'builtins/dir.c',
-  'builtins/file.c',
-  'builtins/fonts.c',
-  'builtins/fpe.c',
-  'builtins/render.c',
 )
 
 # if XFONT_FC
