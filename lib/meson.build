@@ -35,7 +35,6 @@ subdir('ext' / 'xtrap')
 if WITH_TESTS
 subdir('test')
 endif
-subdir('example')
 
 summary_lib += {'XTHREADS_DBG': WITH_XTHREAD_DBG}
 summary_lib += {'XCMS': get_option('xcms')}

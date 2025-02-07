@@ -30,4 +30,5 @@ if WITH_DEMO
         subdir('xgas')
     endif
     subdir('xgetres')
+    subdir('xaw')
 endif
