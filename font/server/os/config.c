@@ -646,8 +646,8 @@ config_set_snf_format (
     ConfigOptionPtr parm,
     char	    *val)
 {
-    int	    bit, byte, glyph, scan;
-    int	    ret;
+    int	bit, byte, glyph, scan;
+    int	ret;
     
     val = config_parse_endian (parm, val, &ret, &bit);
     if (ret == -1)
