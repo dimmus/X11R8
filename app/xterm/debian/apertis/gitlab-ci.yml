@@ -1,3 +1,0 @@
-include:
-  - project: 'infrastructure/ci-package-builder'
-    file: '/ci-package-builder.yml'

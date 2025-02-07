@@ -1,3 +1,0 @@
-Test-Command: xvfb-run xterm -version
-Restrictions: superficial
-Depends: xterm, xvfb, xauth
