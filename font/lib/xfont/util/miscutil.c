@@ -35,7 +35,7 @@ from The Open Group.
 #include "fontmisc.h"
 
 #define XK_LATIN1
-#include    "X11/keysymdef.h"
+#include "X11/keysymdef.h"
 
 extern void BuiltinRegisterFpeFunctions(void);
 
