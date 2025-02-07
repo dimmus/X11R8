@@ -1,0 +1,202 @@
+dmx: 
+    Copyright 2002-2004 Red Hat Inc., Durham, North Carolina
+ice:
+    Copyright 1993, 1998  The Open Group
+    Author: Ralph Mor, X Consortium
+sm: 
+    Copyright 2002, Oracle and/or its affiliates
+    Copyright 1993, 1998  The Open Group
+xau:
+    Copyright 1988, 1993, 1994, 1998  The Open Group
+xaw:
+    Copyright 1985-1990, 1994, 1998  The Open Group
+    Copyright 2003-2004 Roland Mainz
+    Copyright 1998-1999 by The XFree86 Project, Inc
+    Copyright 1991 by OMRON Corporation
+    Copyright 1985-1998 by Digital Equipment Corporation, Maynard, Massachusetts
+    Copyright 1989 Prentice Hall
+    Copyright 1985-1989, 1991, 1994 X Consortium
+xaw3d:
+xaw3dxft:
+    Copyright (c) 1999 by The XFree86 Project, Inc
+    Copyright 1991 NCR Corporation - Dayton, Ohio, USA
+    Copyright 1990, 1991 by OMRON Corporation, NTT Software Corporation,
+                       and Nippon Telegraph and Telephone Corporation
+    Copyright 1987, 1988 by Digital Equipment Corporation, Maynard, Massachusetts
+    Copyright 1992 Kaleb Keithley
+    Copyright 1992 Mitch Trachtenberg
+    Copyright 2003 David J. Hawkey Jr
+    Copyright 1991 Massachusetts Institute of Technology
+    Copyright 1989 Prentice Hall
+    Copyright 1987, 1988, 1989, 1990, 1991, 1993, 1994 X Consortium
+    Copyright 1996 Alfredo Kojima
+    Copyright 2003 Brian V. Smith
+xclock:
+    Copyright 1987, 1988, 1994, 1998  The Open Group
+    Copyright 1987, 1988 by Digital Equipment Corporation, Maynard, Massachusetts
+    Copyright 2004, Oracle and/or its affiliates
+xcomposite:
+    Copyright 2001,2003 Keith Packard
+    Copyright 2006, 2007, Oracle and/or its affiliates
+xcursor:
+    Copyright 2002 Keith Packard
+xcvt:
+    Copyright 2005-2006 Luc Verhaegen
+    Copyright 2021 Red Hat, Inc
+    Copyright 2000 Compaq Computer Corporation
+    Copyright 2002 Hewlett Packard Company
+    Copyright 2006 Intel Corporation
+    Copyright 2008, 2021 Red Hat, Inc
+xdamage:
+    Copyright 2001, 2003 Keith Packard
+    Copyright 2007 Eric Anholt
+xdmcp:
+    Copyright 1989, 1998  The Open Group
+    Author: Keith Packard, MIT X Consortium
+xext:
+    Copyright 1986, 1987, 1988, 1989, 1994, 1998  The Open Group
+    Copyright 1996 Digital Equipment Corporation, Maynard, Massachusetts
+    Copyright 1997 by Silicon Graphics Computer Systems, Inc
+    Copyright 1992 Network Computing Devices
+    Copyright 1991, 1993 by Digital Equipment Corporation, Maynard, Massachusetts,
+        and Olivetti Research Limited, Cambridge, England
+    Copyright 1986, 1987, 1988, 1994, 1995 by Hewlett-Packard Corporation
+    Copyright 1996 Digital Equipment Corporation
+    Copyright 1999, 2005, 2006, 2013, 2015, Oracle and/or its affiliates
+    Copyright 2007-2008 Peter Hutterer
+    Copyright 1989 X Consortium, Inc. and Digital Equipment Corporation
+    Copyright 1992 X Consortium, Inc. and Intergraph Corporation
+    Copyright 1993 X Consortium, Inc. and Silicon Graphics, Inc
+    Copyright 1994, 1995 X Consortium, Inc. and Hewlett-Packard Company
+    Copyright 2008 Otto Moerbeek
+xf86dga:
+    Copyright 1995  Jon Tombs
+    Copyright 1995, 1996  The XFree86 Project, Inc
+xf86vm:
+    Copyright 1995  Kaleb S. KEITHLEY
+xfixes:
+    Copyright 2001, 2003 Keith Packard
+    Copyright 2006, Oracle and/or its affiliates
+xfs:
+    Copyright 1987, 1990, 1991, 1998  The Open Group
+    Copyright 1990, 1991 Network Computing Devices
+    Portions Copyright 1987 by Digital Equipment Corporation
+    Copyright 1987, 1988  X Consortium
+    Copyright 1999 The XFree86 Project, Inc
+    Copyright 1998 by Thomas E. Dickey
+    Copyright 2003 Keith Packard
+xft:
+    Copyright 2001,2003 Keith Packard
+xi:
+    Copyright 1989, 1998 The Open Group
+    Copyright 1989 by Hewlett-Packard Company, Palo Alto, California
+    Copyright 2008 Peter Hutterer
+    Copyright 2009 Red Hat, Inc
+xinerama:
+    Copyright 2007 Oracle and/or its affiliates
+    Copyright 2003 The Open Group
+    Copyright 1991 1997 Digital Equipment Corporation, Maynard, Massachusetts
+xinit:
+    Copyright 1986, 1988, 1993, 1998  The Open Group
+    Copyright 2008-2012 Apple Inc
+xkbfile:
+    Copyright 1994-1996 by Silicon Graphics Computer Systems, Inc
+    Copyright 1987, 1998 The Open Group
+    Copyright 1987 by Digital Equipment Corporation, Maynard, Massachusetts
+xlsfonts:
+    Copyright 1989, 1993, 1998  The Open Group
+xmodmap:
+    Copyright 1987, 2010 Oracle and/or its affiliates
+    Copyright 1988, 1989, 1990, 1998  The Open Group
+xmu:
+    Copyright 1988-1991, 1994, 1998  The Open Group
+    Copyright 1987, 1988 by Digital Equipment Corporation, Maynard, Massachusetts
+    Copyright 1998 by The XFree86 Project, Inc
+    Copyright 1999 by Thomas E. Dickey
+    Copyright 2008 Otto Moerbeek
+xpm:
+    Copyright 1989-95 GROUPE BULL
+    Copyright 1996 Lorens Younes
+    Copyright 1998 Arnaud LE HORS
+    Copyright 2023 Oracle and/or its affiliates
+xrandr:
+    Copyright 2000 Compaq Computer Corporation, Inc
+    Copyright 2002 Hewlett-Packard Company, Inc
+    Copyright 2006 Intel Corporation
+    Copyright 2006 Keith Packard
+    Copyright 2008 Red Hat, Inc.
+    Copyright 2011 Dave Airlie
+xrdb:
+    Copyright 1991 Digital Equipment Corporation
+    Copyright 1991, 1994, 1998 The Open Group
+xrender:
+    Copyright 2001, 2003 Keith Packard
+    Copyright 2000 SuSE, Inc
+xres:
+    Copyright 2002 XFree86 Inc
+xshmfence:
+    Copyright 2013 Keith Packard
+xss:
+    Copyright 1992 X Consortium
+    Copyright 2003 The XFree86 Project, Inc
+xt:
+    Copyright 2003, 2019, 2022 Thomas E. Dickey
+    Copyright 2001, 2003 Keith Packard
+    Copyright 1993, 2023, Oracle and/or its affiliates
+    Copyright 1987, 1988 by Digital Equipment Corporation, Maynard, Massachusetts
+    Copyright 1987, 1988, 1998  The Open Group
+    Copyright 1993, 1994  X Consortium
+xtrans:
+    Copyright 1993, 1994, 1998, 2002 The Open Group
+    Copyright 1993, 1994 NCR Corporation - Dayton, Ohio, USA
+    Copyright 2002, 2005, Oracle and/or its affiliates
+    Copyright 1996 by Sebastien Marineau and Holger Veit
+    Copyright 2003 Keith Packard, Noah Levitt
+xtst:
+    Copyright 1990, 1991 by UniSoft Group Limited
+    Copyright 1992, 1993, 1995, 1998  The Open Group
+    Copyright 1995 Network Computing Devices
+    Copyright 2005  Red Hat, Inc
+    Copyright 1992 by UniSoft Group Ltd
+    Copyright 1992, 1994, 1995 X Consortium
+    Copyright 1994 Network Computing Devices, Inc
+xv:
+    Copyright 1991 by Digital Equipment Corporation, Maynard, Massachusetts,
+        and the Massachusetts Institute of Technology, Cambridge, Massachusetts
+    Copyright 2005 Red Hat, Inc
+xvmc:
+    Copyright 2004 The Unichrome project
+
+All Rights Reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice (including the next
+paragraph) shall be included in all copies or substantial portions of the
+Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
+IN NO EVENT SHALL THE COPYRIGHT HOLDERS AND/OR THEIR SUPPLIERS
+BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Except as contained in this notice, the name of THE COPYRIGHT HOLDERS shall 
+not be used in advertising or otherwise to promote the sale, use or other
+dealings in this Software without prior written authorization THE COPYRIGHT HOLDERS.
+ortium.
+
+THE COPYRIGHT HOLDERS DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, 
+INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT 
+SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL
+DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.

@@ -1,0 +1,154 @@
+evdev:
+    Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany
+    Copyright 1993 by David Dawes <dawes@xfree86.org>
+    Copyright 2002 by SuSE Linux AG, Author: Egbert Eich
+    Copyright 1994-2002 by The XFree86 Project, Inc
+    Copyright 2002 by Paul Elliott
+    Copyright 2008 University of South Australia
+    Copyright 2008 by Chris Salch
+    Copyright 2008 Red Hat, Inc
+    Copyright 2005 Sun Microsystems, Inc
+    Copyright 2005 Adam Jackson
+keyboard:
+    Copyright 1992-2003 by The XFree86 Project, Inc.
+    Copyright 1997 by Metro Link, Inc.
+    Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany.
+    Copyright 1993 by David Dawes
+    Copyright 1992 by Rich Murphey
+    Copyright 1993 by David Dawes
+    Copyright 1997,1998 by UCHIYAMA Yasushi
+    Copyright 2003, 2005 by J. Kean Johnston
+    Copyright 1992 by Orest Zborowski
+    Copyright 1993 by David Dawes
+    Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany
+    Copyright 1993 by David Dawes
+    Copyright 1999 by David Holland
+    Copyright 2004-2009, Oracle and/or its affiliates
+libinput:
+    SPDX-License-Identifier: MIT
+mouse:
+    Copyright 2004, 2022, Oracle and/or its affiliates.
+    Copyright 2012 Red Hat, Inc.
+    Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany.
+    Copyright 1993 by David Dawes
+    Copyright 2002 by SuSE Linux AG, Author: Egbert Eich
+    Copyright 1994-2002 by The XFree86 Project, Inc.
+    Copyright 2002 by Paul Elliott
+    Copyright 1998 by Kazutaka YOKOTA
+    Copyright 1999-2003 by The XFree86 Project, Inc
+    Copyright 1997, 1998 by UCHIYAMA Yasushi
+    Copyright 2001 by J. Kean Johnston
+synaptics:
+    The MIT License
+    Copyright 1997 C. Scott Ananian
+    Copyright 1998-2000 Bruce Kalk
+    Copyright 1999 Henry Davies
+    Copyright 2008 Fedor P. Goncharov
+    Copyright 2001 Stefan Gmeiner
+    Copyright 2002 S. Lehner
+    Copyright 2002 Linuxcare Inc. David Kennedy
+    Copyright 2003 Fred Hucht
+    Copyright 2003 Neil Brown
+    Copyright 2003 Jörg Bösner
+    Copyright 2003 Hartwig Felger
+    Copyright 2002-2007 Peter Osterlund
+    Copyright 2004 Arne Schwabe
+    Copyright 2004 Matthias Ihmig
+    Copyright 2004 Alexei Gilchrist
+    Copyright 2006-2007 Christian Thaeter
+    Copyright 2006 Stefan Bethge
+    Copyright 2007 Joseph P. Skudlarek
+    Copyright 2007 Florian Loitsch
+    Copyright 2008-2012 Red Hat, Inc.
+void:
+    Copyright 1999 by Frederic Lepied, France
+    Copyright 2005 Adam Jackson
+    Copyright (c) 2005, Oracle and/or its affiliates
+amdgpu:
+ati:
+    Copyright 1997-2004 by Marc Aurele La France (TSI @ UQV), tsi@xfree86.org
+    Copyright 2005 Bogdan D. bogdand@users.sourceforge.net
+    Copyright 1995-2003 by The XFree86 Project, Inc.
+    Copyright 2007 Egbert Eich
+    Copyright 2007 Matthias Hopf
+    Copyright 1999-2001 Brian Paul
+    Copyright 2007 Luc Verhaegen
+    Copyright 2006-2009 Advanced Micro Devices, Inc
+    Copyright 2004,05 Eric Anholt
+    Copyright 2000,04 ATI Technologies Inc., Markham, Ontario, and
+    Copyright 2008-2009  Alexander Deucher
+    Copyright 2008 Jérôme Glisse
+    Copyright 2005 Benjamin Herrenschmidt
+    Copyright 2008 Kristian Høgsberg
+    Copyright 2008-2009  Matthias Hopf
+    Copyright 2006 Itronix Inc
+    Copyright 2000 Precision Insight, Inc., Cedar Park, Texas
+    Copyright 2007,09 Red Hat, Inc
+    Copyright 2007 George Sapountzis
+    Copyright 2002,06 Tungsten Graphics, Inc., Cedar Park, Texas
+    Copyright 2000 VA Linux Systems, Inc., Fremont, California
+    Copyright 2006 Keith Packard
+armsoc:
+    Copyright 2011 Texas Instruments, Inc
+dummy:
+    Copyright 2002, SuSE Linux AG, Author: Egbert Eich
+fbdev:
+    Copyright 1994-2003 The XFree86 Project, Inc
+intel:
+    Copyright 2002,03,05 Tungsten Graphics, Inc., Cedar Park, Texas
+    Copyright 2005 Jesse Barnes
+    Copyright 2002 David Dawes
+    Copyright 1998,99 Precision Insight, Inc., Cedar Park, Texas
+    Copyright 2000, 2006-2010 Intel Corporation
+    Copyright 2007 Red Hat, Inc
+    Copyright 2000 by Alan Hourihane, Sychdyn, North Wales, UK
+    Copyright 2001 VA Linux Systems Inc., Fremont, California
+    Copyright 2002 by David Dawes
+    Copyright 1999-2001 Keith Packard
+nouveau:
+    (TODO)
+qxl:
+    Copyright 2008,09 Red Hat, Inc.
+vbox:
+    Copyright 2005, 2024, Oracle and/or its affiliates
+    Copyright 2008 Red Hat, Inc
+    Copyright 2000 by Conectiva S.A.
+vesa:
+    Copyright 2000 by Conectiva S.A.
+    Copyright 2008 Red Hat, Inc
+vmware:
+    Copyright 2006,07,10 by VMware, Inc.
+
+All Rights Reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice (including the next
+paragraph) shall be included in all copies or substantial portions of the
+Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
+IN NO EVENT SHALL THE COPYRIGHT HOLDERS AND/OR THEIR SUPPLIERS
+BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Except as contained in this notice, the name of THE COPYRIGHT HOLDERS shall 
+not be used in advertising or otherwise to promote the sale, use or other
+dealings in this Software without prior written authorization THE COPYRIGHT HOLDERS.
+ortium.
+
+THE COPYRIGHT HOLDERS DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, 
+INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT 
+SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL
+DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.

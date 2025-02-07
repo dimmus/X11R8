@@ -1,4 +1,19 @@
-Copyright © 2013 Michael Stapelberg
+cursor:
+    Copyright 2013 Michael Stapelberg
+errors:
+    Copyright 2015 Uli Schlachter
+keysysms:
+    Copyright 2008 Ian Osgood, Jamey Sharp, Josh Triplett, Ulrich Eckhardt
+proto:
+    Copyright 2001-2006 Bart Massey, Jamey Sharp, and Josh Triplett
+renderutil:
+    Copyright 2000 Keith Packard
+util:
+    Copyright 2008 Bart Massey, Ian Osgood, Jamey Sharp, Josh Triplett
+    Copyright 2008-2009 Julien Danjou
+wm:
+    Copyright 2008-2011 Arnaud Fontaine
+    Copyright 2007-2008 Vincent Torri
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
