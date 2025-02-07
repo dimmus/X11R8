@@ -38,45 +38,57 @@ CheckErrorMessage(FSServer *srv, int code, const char *codestr)
 {
     char buf[128] = "";
 
-    if (!FSGetErrorText(srv, code, buf, sizeof(buf))) {
-	fprintf(stderr, "FSGetErrorText(srv, %s (%d), buf, %d) failed",
-		codestr, code, (int) sizeof(buf));
-	return 0;
+    if (!FSGetErrorText(srv, code, buf, sizeof(buf)))
+    {
+        fprintf(stderr,
+                "FSGetErrorText(srv, %s (%d), buf, %d) failed",
+                codestr,
+                code,
+                (int)sizeof(buf));
+        return 0;
     }
 
     printf("FSGetErrorText for code %s (%d) returned:\n|%s|\n\n",
-	   codestr, code, buf);
+           codestr,
+           code,
+           buf);
     return 1;
 }
 
-#define CheckNamedErrorMessage(s, e) \
-    CheckErrorMessage(s, e, #e)
+#define CheckNamedErrorMessage(s, e) CheckErrorMessage(s, e, #e)
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
     FSServer *srv = FSOpenServer(NULL);
 
-    if (srv == NULL) {
-	fprintf(stderr, "Failed to open fontserver connection to: %s\n"
-	"Aborting test. Make sure FONTSERVER is set to a valid xfs server.\n",
-		FSServerName(NULL));
-	exit(1);
+    if (srv == NULL)
+    {
+        fprintf(stderr,
+                "Failed to open fontserver connection to: %s\n"
+                "Aborting test. Make sure FONTSERVER is set to a valid xfs "
+                "server.\n",
+                FSServerName(NULL));
+        exit(1);
     }
 
-    if (argc > 1) {
-	int i;
+    if (argc > 1)
+    {
+        int i;
 
-	for (i = 1; i < argc; i++) {
-	    int c;
-	    errno = 0;
-	    c = strtol(argv[i], NULL, 0);
-	    if (errno != 0) {
-		perror(argv[i]);
-		exit(1);
-	    }
-	    CheckErrorMessage (srv, c, "");
-	}
-	exit (0);
+        for (i = 1; i < argc; i++)
+        {
+            int c;
+            errno = 0;
+            c     = strtol(argv[i], NULL, 0);
+            if (errno != 0)
+            {
+                perror(argv[i]);
+                exit(1);
+            }
+            CheckErrorMessage(srv, c, "");
+        }
+        exit(0);
     }
 
     /* Default list to check if no arguments specified */
@@ -93,9 +105,9 @@ int main(int argc, char **argv)
     CheckNamedErrorMessage(srv, FSBadAlloc);
     CheckNamedErrorMessage(srv, FSBadLength);
     CheckNamedErrorMessage(srv, FSBadImplementation);
-    CheckErrorMessage (srv, 12, "<out of range value>");
-    CheckErrorMessage (srv, 256, "<out of range value>");
-    CheckErrorMessage (srv, 0xffff, "<out of range value>");
+    CheckErrorMessage(srv, 12, "<out of range value>");
+    CheckErrorMessage(srv, 256, "<out of range value>");
+    CheckErrorMessage(srv, 0xffff, "<out of range value>");
 
     exit(0);
 }

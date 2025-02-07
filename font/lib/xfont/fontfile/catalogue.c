@@ -25,52 +25,51 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "libxfontint.h"
 
 #ifdef HAVE_READLINK
-#include "fntfilst.h"
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#include <unistd.h>
-#include "util/replace.h"
+#  include "fntfilst.h"
+#  include <sys/types.h>
+#  include <sys/stat.h>
+#  include <dirent.h>
+#  include <unistd.h>
+#  include "util/replace.h"
 
 static const char CataloguePrefix[] = "catalogue:";
 
-static int CatalogueFreeFPE (FontPathElementPtr fpe);
+static int CatalogueFreeFPE(FontPathElementPtr fpe);
 
 static int
-CatalogueNameCheck (const char *name)
+CatalogueNameCheck(const char *name)
 {
     return strncmp(name, CataloguePrefix, sizeof(CataloguePrefix) - 1) == 0;
 }
 
-typedef struct _CatalogueRec {
-    time_t mtime;
-    int fpeCount, fpeAlloc;
+typedef struct _CatalogueRec
+{
+    time_t              mtime;
+    int                 fpeCount, fpeAlloc;
     FontPathElementPtr *fpeList;
 } CatalogueRec, *CataloguePtr;
 
 static int
-CatalogueAddFPE (CataloguePtr cat, FontPathElementPtr fpe)
+CatalogueAddFPE(CataloguePtr cat, FontPathElementPtr fpe)
 {
     FontPathElementPtr *new;
 
     if (cat->fpeCount >= cat->fpeAlloc)
     {
-	if (cat->fpeAlloc == 0)
-	    cat->fpeAlloc = 16;
-	else
-	    cat->fpeAlloc *= 2;
+        if (cat->fpeAlloc == 0) cat->fpeAlloc = 16;
+        else cat->fpeAlloc *= 2;
 
-	new = reallocarray(cat->fpeList, cat->fpeAlloc,
-			   sizeof(FontPathElementPtr));
-	if (new == NULL)
-	    return AllocError;
+        new = reallocarray(cat->fpeList,
+                           cat->fpeAlloc,
+                           sizeof(FontPathElementPtr));
+        if (new == NULL) return AllocError;
 
-	cat->fpeList = new;
+        cat->fpeList = new;
     }
 
     cat->fpeList[cat->fpeCount++] = fpe;
@@ -83,45 +82,41 @@ static const char PriorityAttribute[] = "pri=";
 static int
 ComparePriority(const void *p1, const void *p2)
 {
-    FontDirectoryPtr dir1 = (*(FontPathElementPtr*) p1)->private;
-    FontDirectoryPtr dir2 = (*(FontPathElementPtr*) p2)->private;
-    const char *pri1 = NULL;
-    const char *pri2 = NULL;
+    FontDirectoryPtr dir1 = (*(FontPathElementPtr *)p1)->private;
+    FontDirectoryPtr dir2 = (*(FontPathElementPtr *)p2)->private;
+    const char      *pri1 = NULL;
+    const char      *pri2 = NULL;
 
     if (dir1->attributes != NULL)
-	pri1 = strstr(dir1->attributes, PriorityAttribute);
+        pri1 = strstr(dir1->attributes, PriorityAttribute);
     if (dir2->attributes != NULL)
-	pri2 = strstr(dir2->attributes, PriorityAttribute);
+        pri2 = strstr(dir2->attributes, PriorityAttribute);
 
-    if (pri1 == NULL && pri2 == NULL)
-	return 0;
-    else if (pri1 == NULL)
-	return 1;
-    else if (pri2 == NULL)
-	return -1;
+    if (pri1 == NULL && pri2 == NULL) return 0;
+    else if (pri1 == NULL) return 1;
+    else if (pri2 == NULL) return -1;
     else
-	return
-	    atoi(pri1 + strlen(PriorityAttribute)) -
-	    atoi(pri2 + strlen(PriorityAttribute));
+        return atoi(pri1 + strlen(PriorityAttribute)) -
+               atoi(pri2 + strlen(PriorityAttribute));
 }
 
 static void
-CatalogueUnrefFPEs (FontPathElementPtr fpe)
+CatalogueUnrefFPEs(FontPathElementPtr fpe)
 {
-    CataloguePtr	cat = fpe->private;
-    FontPathElementPtr	subfpe;
-    int			i;
+    CataloguePtr       cat = fpe->private;
+    FontPathElementPtr subfpe;
+    int                i;
 
     for (i = 0; i < cat->fpeCount; i++)
     {
-	subfpe = cat->fpeList[i];
-	subfpe->refcount--;
-	if (subfpe->refcount == 0)
-	{
-	    FontFileFreeFPE (subfpe);
-	    free((void *) subfpe->name);
-	    free(subfpe);
-	}
+        subfpe = cat->fpeList[i];
+        subfpe->refcount--;
+        if (subfpe->refcount == 0)
+        {
+            FontFileFreeFPE(subfpe);
+            free((void *)subfpe->name);
+            free(subfpe);
+        }
     }
 
     cat->fpeCount = 0;
@@ -130,104 +125,100 @@ CatalogueUnrefFPEs (FontPathElementPtr fpe)
 /* Rescan catalogue directory if modified timestamp has changed or
  * the forceScan argument says to do it anyway (like on first load). */
 static int
-CatalogueRescan (FontPathElementPtr fpe, Bool forceScan)
+CatalogueRescan(FontPathElementPtr fpe, Bool forceScan)
 {
-    CataloguePtr	cat = fpe->private;
-    char		link[MAXFONTFILENAMELEN];
-    char		dest[MAXFONTFILENAMELEN];
-    char		*attrib;
-    FontPathElementPtr	subfpe;
-    struct stat		statbuf;
-    const char		*path;
-    DIR			*dir;
-    struct dirent	*entry;
-    int			len;
-    int			pathlen;
+    CataloguePtr       cat = fpe->private;
+    char               link[MAXFONTFILENAMELEN];
+    char               dest[MAXFONTFILENAMELEN];
+    char              *attrib;
+    FontPathElementPtr subfpe;
+    struct stat        statbuf;
+    const char        *path;
+    DIR               *dir;
+    struct dirent     *entry;
+    int                len;
+    int                pathlen;
 
     path = fpe->name + strlen(CataloguePrefix);
     if (stat(path, &statbuf) < 0 || !S_ISDIR(statbuf.st_mode))
-	return BadFontPath;
+        return BadFontPath;
 
     if ((forceScan == FALSE) && (statbuf.st_mtime <= cat->mtime))
-	return Successful;
+        return Successful;
 
-    CatalogueUnrefFPEs (fpe);
+    CatalogueUnrefFPEs(fpe);
 
     dir = opendir(path);
-    if (dir == NULL)
-	return BadFontPath;
+    if (dir == NULL) return BadFontPath;
 
     while (entry = readdir(dir), entry != NULL)
     {
         char *name;
-	snprintf(link, sizeof link, "%s/%s", path, entry->d_name);
-	len = readlink(link, dest, sizeof dest - 1);
-	if (len < 0)
-	    continue;
+        snprintf(link, sizeof link, "%s/%s", path, entry->d_name);
+        len = readlink(link, dest, sizeof dest - 1);
+        if (len < 0) continue;
 
-	dest[len] = '\0';
+        dest[len] = '\0';
 
-	if (dest[0] != '/')
-	{
-	   pathlen = strlen(path);
-	   memmove(dest + pathlen + 1, dest, sizeof dest - pathlen - 1);
-	   memcpy(dest, path, pathlen);
-	   memcpy(dest + pathlen, "/", 1);
-	   len += pathlen + 1;
-	}
+        if (dest[0] != '/')
+        {
+            pathlen = strlen(path);
+            memmove(dest + pathlen + 1, dest, sizeof dest - pathlen - 1);
+            memcpy(dest, path, pathlen);
+            memcpy(dest + pathlen, "/", 1);
+            len += pathlen + 1;
+        }
 
-	attrib = strchr(link, ':');
-	if (attrib && len + strlen(attrib) < sizeof dest)
-	{
-	    memcpy(dest + len, attrib, strlen(attrib));
-	    len += strlen(attrib);
-	}
+        attrib = strchr(link, ':');
+        if (attrib && len + strlen(attrib) < sizeof dest)
+        {
+            memcpy(dest + len, attrib, strlen(attrib));
+            len += strlen(attrib);
+        }
 
-	subfpe = malloc(sizeof *subfpe);
-	if (subfpe == NULL)
-	    continue;
+        subfpe = malloc(sizeof *subfpe);
+        if (subfpe == NULL) continue;
 
-	/* The fonts returned by OpenFont will point back to the
+    /* The fonts returned by OpenFont will point back to the
 	 * subfpe they come from.  So set the type of the subfpe to
 	 * what the catalogue fpe was assigned, so calls to CloseFont
 	 * (which uses font->fpe->type) goes to CatalogueCloseFont. */
-	subfpe->type = fpe->type;
-	subfpe->name_length = len;
-	name = malloc (len + 1);
-	if (name == NULL)
-	{
-	    free(subfpe);
-	    continue;
-	}
+        subfpe->type        = fpe->type;
+        subfpe->name_length = len;
+        name                = malloc(len + 1);
+        if (name == NULL)
+        {
+            free(subfpe);
+            continue;
+        }
 
-	memcpy(name, dest, len);
-	name[len] = '\0';
+        memcpy(name, dest, len);
+        name[len]    = '\0';
         subfpe->name = name;
 
-	/* The X server will manipulate the subfpe ref counts
+    /* The X server will manipulate the subfpe ref counts
 	 * associated with the font in OpenFont and CloseFont, so we
 	 * have to make sure it's valid. */
-	subfpe->refcount = 1;
+        subfpe->refcount = 1;
 
-	if (FontFileInitFPE (subfpe) != Successful)
-	{
-	    free((void *) subfpe->name);
-	    free(subfpe);
-	    continue;
-	}
+        if (FontFileInitFPE(subfpe) != Successful)
+        {
+            free((void *)subfpe->name);
+            free(subfpe);
+            continue;
+        }
 
-	if (CatalogueAddFPE(cat, subfpe) != Successful)
-	{
-	    FontFileFreeFPE (subfpe);
-	    free(subfpe);
-	    continue;
-	}
+        if (CatalogueAddFPE(cat, subfpe) != Successful)
+        {
+            FontFileFreeFPE(subfpe);
+            free(subfpe);
+            continue;
+        }
     }
 
     closedir(dir);
 
-    qsort(cat->fpeList,
-	  cat->fpeCount, sizeof cat->fpeList[0], ComparePriority);
+    qsort(cat->fpeList, cat->fpeCount, sizeof cat->fpeList[0], ComparePriority);
 
     cat->mtime = statbuf.st_mtime;
 
@@ -235,34 +226,33 @@ CatalogueRescan (FontPathElementPtr fpe, Bool forceScan)
 }
 
 static int
-CatalogueInitFPE (FontPathElementPtr fpe)
+CatalogueInitFPE(FontPathElementPtr fpe)
 {
-    CataloguePtr	cat;
+    CataloguePtr cat;
 
     cat = malloc(sizeof *cat);
-    if (cat == NULL)
-	return AllocError;
+    if (cat == NULL) return AllocError;
 
-    fpe->private = (pointer) cat;
+    fpe->private  = (pointer)cat;
     cat->fpeCount = 0;
     cat->fpeAlloc = 0;
-    cat->fpeList = NULL;
-    cat->mtime = 0;
+    cat->fpeList  = NULL;
+    cat->mtime    = 0;
 
-    return CatalogueRescan (fpe, TRUE);
+    return CatalogueRescan(fpe, TRUE);
 }
 
 static int
-CatalogueResetFPE (FontPathElementPtr fpe)
+CatalogueResetFPE(FontPathElementPtr fpe)
 {
     /* Always just tell the caller to close and re-open */
     return FPEResetFailed;
 }
 
 static int
-CatalogueFreeFPE (FontPathElementPtr fpe)
+CatalogueFreeFPE(FontPathElementPtr fpe)
 {
-    CataloguePtr	cat = fpe->private;
+    CataloguePtr cat = fpe->private;
 
     /* If the catalogue is modified while the xserver has fonts open
      * from the previous subfpes, we'll unref the old subfpes when we
@@ -271,10 +261,9 @@ CatalogueFreeFPE (FontPathElementPtr fpe)
      * for the subfpe ends up here and we just forward it to
      * FontFileFreeFPE. */
 
-    if (!CatalogueNameCheck (fpe->name))
-	return FontFileFreeFPE (fpe);
+    if (!CatalogueNameCheck(fpe->name)) return FontFileFreeFPE(fpe);
 
-    CatalogueUnrefFPEs (fpe);
+    CatalogueUnrefFPEs(fpe);
     free(cat->fpeList);
     free(cat);
 
@@ -282,33 +271,46 @@ CatalogueFreeFPE (FontPathElementPtr fpe)
 }
 
 static int
-CatalogueOpenFont (pointer client, FontPathElementPtr fpe, Mask flags,
-		   const char *name, int namelen,
-		   fsBitmapFormat format, fsBitmapFormatMask fmask,
-		   XID id, FontPtr *pFont, char **aliasName,
-		   FontPtr non_cachable_font)
+CatalogueOpenFont(pointer            client,
+                  FontPathElementPtr fpe,
+                  Mask               flags,
+                  const char        *name,
+                  int                namelen,
+                  fsBitmapFormat     format,
+                  fsBitmapFormatMask fmask,
+                  XID                id,
+                  FontPtr           *pFont,
+                  char             **aliasName,
+                  FontPtr            non_cachable_font)
 {
-    CataloguePtr cat = fpe->private;
+    CataloguePtr       cat = fpe->private;
     FontPathElementPtr subfpe;
-    int i, status;
+    int                i, status;
 
-    CatalogueRescan (fpe, FALSE);
+    CatalogueRescan(fpe, FALSE);
 
     for (i = 0; i < cat->fpeCount; i++)
     {
-	subfpe = cat->fpeList[i];
-	status = FontFileOpenFont(client, subfpe, flags,
-				  name, namelen, format, fmask, id,
-				  pFont, aliasName, non_cachable_font);
-	if (status == Successful || status == FontNameAlias)
-	    return status;
+        subfpe = cat->fpeList[i];
+        status = FontFileOpenFont(client,
+                                  subfpe,
+                                  flags,
+                                  name,
+                                  namelen,
+                                  format,
+                                  fmask,
+                                  id,
+                                  pFont,
+                                  aliasName,
+                                  non_cachable_font);
+        if (status == Successful || status == FontNameAlias) return status;
     }
 
     return BadFontName;
 }
 
 static void
-CatalogueCloseFont (FontPathElementPtr fpe, FontPtr pFont)
+CatalogueCloseFont(FontPathElementPtr fpe, FontPtr pFont)
 {
     /* Note: this gets called with the actual subfpe where we found
      * the font, not the catalogue fpe. */
@@ -317,161 +319,202 @@ CatalogueCloseFont (FontPathElementPtr fpe, FontPtr pFont)
 }
 
 static int
-CatalogueListFonts (pointer client, FontPathElementPtr fpe, const char *pat,
-		    int len, int max, FontNamesPtr names)
+CatalogueListFonts(pointer            client,
+                   FontPathElementPtr fpe,
+                   const char        *pat,
+                   int                len,
+                   int                max,
+                   FontNamesPtr       names)
 {
-    CataloguePtr cat = fpe->private;
+    CataloguePtr       cat = fpe->private;
     FontPathElementPtr subfpe;
-    int i;
+    int                i;
 
-    CatalogueRescan (fpe, FALSE);
+    CatalogueRescan(fpe, FALSE);
 
     for (i = 0; i < cat->fpeCount; i++)
     {
-	subfpe = cat->fpeList[i];
-	FontFileListFonts(client, subfpe, pat, len, max, names);
+        subfpe = cat->fpeList[i];
+        FontFileListFonts(client, subfpe, pat, len, max, names);
     }
 
     return Successful;
 }
 
-typedef struct _LFWIData {
-    pointer		*privates;
-    int			current;
+typedef struct _LFWIData
+{
+    pointer *privates;
+    int      current;
 } LFWIDataRec, *LFWIDataPtr;
 
 static int
-CatalogueStartListFonts(pointer client, FontPathElementPtr fpe,
-			const char *pat, int len, int max, pointer *privatep,
-			int mark_aliases)
+CatalogueStartListFonts(pointer            client,
+                        FontPathElementPtr fpe,
+                        const char        *pat,
+                        int                len,
+                        int                max,
+                        pointer           *privatep,
+                        int                mark_aliases)
 {
-    CataloguePtr	cat = fpe->private;
-    LFWIDataPtr		data;
-    int			ret, i, j;
+    CataloguePtr cat = fpe->private;
+    LFWIDataPtr  data;
+    int          ret, i, j;
 
-    CatalogueRescan (fpe, FALSE);
+    CatalogueRescan(fpe, FALSE);
 
-    data = malloc (sizeof *data + sizeof data->privates[0] * cat->fpeCount);
-    if (!data)
-	return AllocError;
-    data->privates = (pointer *) (data + 1);
+    data = malloc(sizeof *data + sizeof data->privates[0] * cat->fpeCount);
+    if (!data) return AllocError;
+    data->privates = (pointer *)(data + 1);
 
     for (i = 0; i < cat->fpeCount; i++)
     {
-	ret = FontFileStartListFonts(client, cat->fpeList[i], pat, len,
-				     max, &data->privates[i], mark_aliases);
-	if (ret != Successful)
-	    goto bail;
+        ret = FontFileStartListFonts(client,
+                                     cat->fpeList[i],
+                                     pat,
+                                     len,
+                                     max,
+                                     &data->privates[i],
+                                     mark_aliases);
+        if (ret != Successful) goto bail;
     }
 
     data->current = 0;
-    *privatep = (pointer) data;
+    *privatep     = (pointer)data;
     return Successful;
 
- bail:
+bail:
     for (j = 0; j < i; j++)
-	/* FIXME: we have no way to free the per-fpe privates. */;
-    free (data);
+        /* FIXME: we have no way to free the per-fpe privates. */;
+    free(data);
 
     return AllocError;
 }
 
 static int
-CatalogueStartListFontsWithInfo(pointer client, FontPathElementPtr fpe,
-				const char *pat, int len, int max,
-				pointer *privatep)
+CatalogueStartListFontsWithInfo(pointer            client,
+                                FontPathElementPtr fpe,
+                                const char        *pat,
+                                int                len,
+                                int                max,
+                                pointer           *privatep)
 {
     return CatalogueStartListFonts(client, fpe, pat, len, max, privatep, 0);
 }
 
 static int
-CatalogueListNextFontWithInfo(pointer client, FontPathElementPtr fpe,
-			      char **namep, int *namelenp,
-			      FontInfoPtr *pFontInfo,
-			      int *numFonts, pointer private)
+CatalogueListNextFontWithInfo(pointer            client,
+                              FontPathElementPtr fpe,
+                              char             **namep,
+                              int               *namelenp,
+                              FontInfoPtr       *pFontInfo,
+                              int               *numFonts,
+                              pointer private)
 {
-    LFWIDataPtr		data = private;
-    CataloguePtr	cat = fpe->private;
-    int			ret;
+    LFWIDataPtr  data = private;
+    CataloguePtr cat  = fpe->private;
+    int          ret;
 
     if (data->current == cat->fpeCount)
     {
-	free(data);
-	return BadFontName;
+        free(data);
+        return BadFontName;
     }
 
-    ret = FontFileListNextFontWithInfo(client, cat->fpeList[data->current],
-				       namep, namelenp,
-				       pFontInfo, numFonts,
-				       data->privates[data->current]);
+    ret = FontFileListNextFontWithInfo(client,
+                                       cat->fpeList[data->current],
+                                       namep,
+                                       namelenp,
+                                       pFontInfo,
+                                       numFonts,
+                                       data->privates[data->current]);
     if (ret == BadFontName)
     {
-	data->current++;
-	return CatalogueListNextFontWithInfo(client, fpe, namep, namelenp,
-					     pFontInfo, numFonts, private);
+        data->current++;
+        return CatalogueListNextFontWithInfo(client,
+                                             fpe,
+                                             namep,
+                                             namelenp,
+                                             pFontInfo,
+                                             numFonts,
+                                             private);
     }
 
     return ret;
 }
 
 static int
-CatalogueStartListFontsAndAliases(pointer client, FontPathElementPtr fpe,
-				  const char *pat, int len, int max,
-				  pointer *privatep)
+CatalogueStartListFontsAndAliases(pointer            client,
+                                  FontPathElementPtr fpe,
+                                  const char        *pat,
+                                  int                len,
+                                  int                max,
+                                  pointer           *privatep)
 {
     return CatalogueStartListFonts(client, fpe, pat, len, max, privatep, 1);
 }
 
 static int
-CatalogueListNextFontOrAlias(pointer client, FontPathElementPtr fpe,
-			     char **namep, int *namelenp, char **resolvedp,
-			     int *resolvedlenp, pointer private)
+CatalogueListNextFontOrAlias(pointer            client,
+                             FontPathElementPtr fpe,
+                             char             **namep,
+                             int               *namelenp,
+                             char             **resolvedp,
+                             int               *resolvedlenp,
+                             pointer private)
 {
-    LFWIDataPtr		data = private;
-    CataloguePtr	cat = fpe->private;
-    int			ret;
+    LFWIDataPtr  data = private;
+    CataloguePtr cat  = fpe->private;
+    int          ret;
 
     if (data->current == cat->fpeCount)
     {
-	free(data);
-	return BadFontName;
+        free(data);
+        return BadFontName;
     }
 
-    ret = FontFileListNextFontOrAlias(client, cat->fpeList[data->current],
-				      namep, namelenp,
-				      resolvedp, resolvedlenp,
-				      data->privates[data->current]);
+    ret = FontFileListNextFontOrAlias(client,
+                                      cat->fpeList[data->current],
+                                      namep,
+                                      namelenp,
+                                      resolvedp,
+                                      resolvedlenp,
+                                      data->privates[data->current]);
     if (ret == BadFontName)
     {
-	data->current++;
-	return CatalogueListNextFontOrAlias(client, fpe, namep, namelenp,
-					    resolvedp, resolvedlenp, private);
+        data->current++;
+        return CatalogueListNextFontOrAlias(client,
+                                            fpe,
+                                            namep,
+                                            namelenp,
+                                            resolvedp,
+                                            resolvedlenp,
+                                            private);
     }
 
     return ret;
 }
 
 static const xfont2_fpe_funcs_rec catalogue_fpe_funcs = {
-	.version = XFONT2_FPE_FUNCS_VERSION,
-	.name_check = CatalogueNameCheck,
-	.init_fpe = CatalogueInitFPE,
-	.free_fpe = CatalogueFreeFPE,
-	.reset_fpe = CatalogueResetFPE,
-	.open_font = CatalogueOpenFont,
-	.close_font = CatalogueCloseFont,
-	.list_fonts = CatalogueListFonts,
-	.start_list_fonts_with_info = CatalogueStartListFontsWithInfo,
-	.list_next_font_with_info = CatalogueListNextFontWithInfo,
-	.wakeup_fpe = 0,
-	.client_died = 0,
-	.load_glyphs = 0,
-	.start_list_fonts_and_aliases = CatalogueStartListFontsAndAliases,
-	.list_next_font_or_alias = CatalogueListNextFontOrAlias,
-	.set_path_hook = FontFileEmptyBitmapSource,
+    .version                      = XFONT2_FPE_FUNCS_VERSION,
+    .name_check                   = CatalogueNameCheck,
+    .init_fpe                     = CatalogueInitFPE,
+    .free_fpe                     = CatalogueFreeFPE,
+    .reset_fpe                    = CatalogueResetFPE,
+    .open_font                    = CatalogueOpenFont,
+    .close_font                   = CatalogueCloseFont,
+    .list_fonts                   = CatalogueListFonts,
+    .start_list_fonts_with_info   = CatalogueStartListFontsWithInfo,
+    .list_next_font_with_info     = CatalogueListNextFontWithInfo,
+    .wakeup_fpe                   = 0,
+    .client_died                  = 0,
+    .load_glyphs                  = 0,
+    .start_list_fonts_and_aliases = CatalogueStartListFontsAndAliases,
+    .list_next_font_or_alias      = CatalogueListNextFontOrAlias,
+    .set_path_hook                = FontFileEmptyBitmapSource,
 };
 
 void
-CatalogueRegisterLocalFpeFunctions (void)
+CatalogueRegisterLocalFpeFunctions(void)
 {
     register_fpe_funcs(&catalogue_fpe_funcs);
 }

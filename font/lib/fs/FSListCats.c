@@ -50,28 +50,28 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
-#include	"FSlibint.h"
+#include "FSlibint.h"
 
-char      **
-FSListCatalogues(
-    FSServer	*svr,
-    const char	*pattern,
-    int		 maxNames,
-    int		*actualCount)
+char **
+FSListCatalogues(FSServer   *svr,
+                 const char *pattern,
+                 int         maxNames,
+                 int        *actualCount)
 {
-    int         length;
-    char      **clist;
-    char       *c;
+    int                   length;
+    char                **clist;
+    char                 *c;
     fsListCataloguesReply rep;
-    fsListCataloguesReq *req;
-    unsigned long rlen;
+    fsListCataloguesReq  *req;
+    unsigned long         rlen;
 
     GetReq(ListCatalogues, req);
-    req->maxNames = (CARD32) maxNames;
-    req->nbytes = 0;
-    if (pattern != NULL) {
+    req->maxNames = (CARD32)maxNames;
+    req->nbytes   = 0;
+    if (pattern != NULL)
+    {
         size_t nbytes;
 
 #ifdef HAVE_STRNLEN
@@ -80,61 +80,67 @@ FSListCatalogues(
         nbytes = strlen(pattern);
 #endif
 
-        if (nbytes <= (FSMaxRequestBytes(svr) - SIZEOF(fsListCataloguesReq))) {
-            req->nbytes = (CARD16) nbytes;
-            req->length += (CARD16) ((nbytes + 3) >> 2);
-            _FSSend(svr, pattern, (long) nbytes);
+        if (nbytes <= (FSMaxRequestBytes(svr) - SIZEOF(fsListCataloguesReq)))
+        {
+            req->nbytes = (CARD16)nbytes;
+            req->length += (CARD16)((nbytes + 3) >> 2);
+            _FSSend(svr, pattern, (long)nbytes);
         }
     }
 
-    if (!_FSReply(svr, (fsReply *) & rep,
-    (SIZEOF(fsListCataloguesReply) - SIZEOF(fsGenericReply)) >> 2, fsFalse))
-	return (char **) NULL;
+    if (!_FSReply(svr,
+                  (fsReply *)&rep,
+                  (SIZEOF(fsListCataloguesReply) - SIZEOF(fsGenericReply)) >> 2,
+                  fsFalse))
+        return (char **)NULL;
 
     if (rep.num_catalogues
 #if (SIZE_MAX >> 2) <= UINT_MAX
-	&& rep.num_catalogues <= SIZE_MAX/sizeof(char *)
-	&& rep.length <= (SIZE_MAX>>2)
+        && rep.num_catalogues <= SIZE_MAX / sizeof(char *) &&
+        rep.length <= (SIZE_MAX >> 2)
 #endif
-	) {
-	clist = FSmallocarray(rep.num_catalogues, sizeof(char *));
-	rlen = (rep.length << 2) - SIZEOF(fsListCataloguesReply);
-	c = FSmalloc(rlen + 1);
+    )
+    {
+        clist = FSmallocarray(rep.num_catalogues, sizeof(char *));
+        rlen  = (rep.length << 2) - SIZEOF(fsListCataloguesReply);
+        c     = FSmalloc(rlen + 1);
 
-	if ((!clist) || (!c)) {
-	    if (clist)
-		FSfree(clist);
-	    if (c)
-		FSfree(c);
-	    _FSEatData(svr, rlen);
-	    SyncHandle();
-	    return (char **) NULL;
-	}
-	_FSReadPad(svr, c, (long) rlen);
-	/* unpack */
-	length = *c;
-	for (CARD32 i = 0; i < rep.num_catalogues; i++) {
-	    clist[i] = c + 1;
-	    c += length + 1;
-	    length = *c;
-	    *c = '\0';
-	}
-    } else {
-
-	clist = (char **) NULL;
+        if ((!clist) || (!c))
+        {
+            if (clist) FSfree(clist);
+            if (c) FSfree(c);
+            _FSEatData(svr, rlen);
+            SyncHandle();
+            return (char **)NULL;
+        }
+        _FSReadPad(svr, c, (long)rlen);
+    /* unpack */
+        length = *c;
+        for (CARD32 i = 0; i < rep.num_catalogues; i++)
+        {
+            clist[i] = c + 1;
+            c += length + 1;
+            length = *c;
+            *c     = '\0';
+        }
+    }
+    else
+    {
+        clist = (char **)NULL;
     }
 
     *actualCount = rep.num_catalogues;
     SyncHandle();
     return clist;
-
 }
 
-int FSFreeCatalogues(char **list)
+int
+FSFreeCatalogues(char **list)
 {
-    if (list) {
-	FSfree(list[0] - 1);
-	FSfree(list);
+    if (list)
+    {
+        FSfree(list[0] - 1);
+        FSfree(list);
     }
     return 1;
 }

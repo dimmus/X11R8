@@ -47,10 +47,10 @@ in this Software without prior written authorization from The Open Group.
 #ifndef CLOSURE_H
 #define CLOSURE_H 1
 
-typedef struct _LFclosure	*LFclosurePtr;
-typedef struct _LFWXIclosure	*LFWXIclosurePtr;
-typedef struct _OFclosure	*OFclosurePtr;
-typedef struct _QEclosure	*QEclosurePtr;
-typedef struct _QBclosure	*QBclosurePtr;
+typedef struct _LFclosure    *LFclosurePtr;
+typedef struct _LFWXIclosure *LFWXIclosurePtr;
+typedef struct _OFclosure    *OFclosurePtr;
+typedef struct _QEclosure    *QEclosurePtr;
+typedef struct _QBclosure    *QBclosurePtr;
 
 #endif /* CLOSURE_H */

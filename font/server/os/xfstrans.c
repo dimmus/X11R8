@@ -20,10 +20,10 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
-#define FONT_t 1
+#define FONT_t       1
 #define TRANS_REOPEN 1
 #define TRANS_SERVER 1
 
@@ -33,31 +33,32 @@
 /* xfs special handling for listen socket passed from inetd */
 
 /* XXX duplicated from misc.h */
-typedef struct {		/* when cloning, need old transport info */
+typedef struct
+{  /* when cloning, need old transport info */
     int trans_id;
     int fd;
     int portnum;
 } OldListenRec;
 
 OldListenRec *
-TRANS(GetInetdListenInfo) (int fd)
+TRANS(GetInetdListenInfo)(int fd)
 {
-    const char *port = "0";
+    const char    *port = "0";
     XtransConnInfo inetdCI;
-    OldListenRec *old_listen;
-    int portnum;
+    OldListenRec  *old_listen;
+    int            portnum;
 
     /* Create a XtransConnInfo struct for this connection */
     inetdCI = TRANS(ReopenCOTSServer)(TRANS_SOCKET_TCP_INDEX, fd, port);
 
     /* Fill in correct address/portnum */
     TRANS(SocketINETGetAddr)(inetdCI);
-#ifdef AF_INET6
-    if ( ((struct sockaddr *)(inetdCI->addr))->sa_family == AF_INET6 )
-	portnum = ntohs(((struct sockaddr_in6 *)(inetdCI->addr))->sin6_port);
+#  ifdef AF_INET6
+    if (((struct sockaddr *)(inetdCI->addr))->sa_family == AF_INET6)
+        portnum = ntohs(((struct sockaddr_in6 *)(inetdCI->addr))->sin6_port);
     else
-#endif
-	portnum = ntohs(((struct sockaddr_in *)(inetdCI->addr))->sin_port);
+#  endif
+        portnum = ntohs(((struct sockaddr_in *)(inetdCI->addr))->sin_port);
     inetdCI->port = malloc(6); /* Base 10 integer <= 65535 + trailing NUL */
     snprintf(inetdCI->port, 6, "%d", portnum);
 
@@ -65,39 +66,39 @@ TRANS(GetInetdListenInfo) (int fd)
      * TRANS(SocketOpen) && TRANS(SocketCreateListener)
      */
     {
-	/*
+    /*
 	 * turn off TCP coalescence for INET sockets
 	 */
 
-	int tmp = 1;
-	setsockopt (fd, IPPROTO_TCP, TCP_NODELAY,
-		    (char *) &tmp, sizeof (int));
+        int tmp = 1;
+        setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *)&tmp, sizeof(int));
     }
-#ifdef SO_DONTLINGER
-    setsockopt (fd, SOL_SOCKET, SO_DONTLINGER, NULL, 0);
-#else
-# ifdef SO_LINGER
+#  ifdef SO_DONTLINGER
+    setsockopt(fd, SOL_SOCKET, SO_DONTLINGER, NULL, 0);
+#  else
+#    ifdef SO_LINGER
     {
-	static int linger[2] = { 0, 0 };
-	setsockopt (fd, SOL_SOCKET, SO_LINGER,
-		    (char *) linger, sizeof (linger));
+        static int linger[2] = { 0, 0 };
+        setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *)linger, sizeof(linger));
     }
-# endif
-#endif
+#    endif
+#  endif
 
-    if (listen (fd, BACKLOG) < 0)
-        return NULL;
+    if (listen(fd, BACKLOG) < 0) return NULL;
 
     /* Pass the inetd socket back through the connection setup code
      * the same way as a cloned listening port
      */
-    old_listen =  malloc (sizeof (OldListenRec));
-    if (old_listen != NULL) {
+    old_listen = malloc(sizeof(OldListenRec));
+    if (old_listen != NULL)
+    {
         char *old_port;
-	TRANS(GetReopenInfo)(inetdCI, &(old_listen->trans_id),
-			     &(old_listen->fd), &old_port);
+        TRANS(GetReopenInfo)(inetdCI,
+                             &(old_listen->trans_id),
+                             &(old_listen->fd),
+                             &old_port);
 
-	old_listen->portnum = portnum;
+        old_listen->portnum = portnum;
     }
 
     return old_listen;

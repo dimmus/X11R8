@@ -25,9 +25,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 #include "libxfontint.h"
 
@@ -35,57 +34,59 @@
 #include "bufio.h"
 #include <bzlib.h>
 
-typedef struct _xzip_buf {
-    bz_stream z;
-    int zstat;
-    BufChar b[BUFFILESIZE];
-    BufChar b_in[BUFFILESIZE];
+typedef struct _xzip_buf
+{
+    bz_stream  z;
+    int        zstat;
+    BufChar    b[BUFFILESIZE];
+    BufChar    b_in[BUFFILESIZE];
     BufFilePtr f;
 } xzip_buf;
 
-static int BufBzip2FileClose ( BufFilePtr f, int flag );
-static int BufBzip2FileFill ( BufFilePtr f );
-static int BufBzip2FileSkip ( BufFilePtr f, int c );
+static int BufBzip2FileClose(BufFilePtr f, int flag);
+static int BufBzip2FileFill(BufFilePtr f);
+static int BufBzip2FileSkip(BufFilePtr f, int c);
 
 _X_HIDDEN BufFilePtr
-BufFilePushBZIP2 (BufFilePtr f)
+BufFilePushBZIP2(BufFilePtr f)
 {
     xzip_buf *x;
 
-    x = malloc (sizeof (xzip_buf));
+    x = malloc(sizeof(xzip_buf));
     if (!x) return NULL;
 
     bzero(&(x->z), sizeof(bz_stream));
     x->f = f;
 
     x->zstat = BZ2_bzDecompressInit(&(x->z),
-				    0,	/* verbosity: 0 silent, 4 max */
-				    0);	/* 0: go faster, 1: use less memory */
-    if (x->zstat != BZ_OK) {
-	free(x);
-	return NULL;
+                                    0, /* verbosity: 0 silent, 4 max */
+                                    0); /* 0: go faster, 1: use less memory */
+    if (x->zstat != BZ_OK)
+    {
+        free(x);
+        return NULL;
     }
 
     /* now that the history buffer is allocated, we provide the data buffer */
-    x->z.next_out = (char *) x->b;
+    x->z.next_out  = (char *)x->b;
     x->z.avail_out = BUFFILESIZE;
-    x->z.next_in = (char *) x->b_in;
-    x->z.avail_in = 0;
+    x->z.next_in   = (char *)x->b_in;
+    x->z.avail_in  = 0;
 
     return BufFileCreate((char *)x,
-			 BufBzip2FileFill,
-			 NULL,
-			 BufBzip2FileSkip,
-			 BufBzip2FileClose);
+                         BufBzip2FileFill,
+                         NULL,
+                         BufBzip2FileSkip,
+                         BufBzip2FileClose);
 }
 
 static int
 BufBzip2FileClose(BufFilePtr f, int flag)
 {
     xzip_buf *x = (xzip_buf *)f->private;
-    BZ2_bzDecompressEnd (&(x->z));
-    BufFileClose (x->f, flag);
-    free (x);
+    BZ2_bzDecompressEnd(&(x->z));
+    BufFileClose(x->f, flag);
+    free(x);
     return 1;
 }
 
@@ -98,80 +99,91 @@ BufBzip2FileClose(BufFilePtr f, int flag)
    BZ_STREAM_END, we then have 4bytes CRC and 4bytes length...
 */
 static int
-BufBzip2FileFill (BufFilePtr f)
+BufBzip2FileFill(BufFilePtr f)
 {
     xzip_buf *x = (xzip_buf *)f->private;
 
     /* we only get called when left == 0... */
     /* but just in case, deal */
-    if (f->left >= 0) {
-	f->left--;
-	return *(f->bufp++);
+    if (f->left >= 0)
+    {
+        f->left--;
+        return *(f->bufp++);
     }
     /* did we run out last time? */
-    switch (x->zstat) {
-    case BZ_OK:
-	break;
-    case BZ_STREAM_END:
-    case BZ_DATA_ERROR:
-    case BZ_DATA_ERROR_MAGIC:
-	f->left = 0;
-	return BUFFILEEOF;
-    default:
-	return BUFFILEEOF;
+    switch (x->zstat)
+    {
+        case BZ_OK:
+            break;
+        case BZ_STREAM_END:
+        case BZ_DATA_ERROR:
+        case BZ_DATA_ERROR_MAGIC:
+            f->left = 0;
+            return BUFFILEEOF;
+        default:
+            return BUFFILEEOF;
     }
     /* now we work to consume what we can */
     /* let libbz2 know what we can handle */
-    x->z.next_out = (char *) x->b;
+    x->z.next_out  = (char *)x->b;
     x->z.avail_out = BUFFILESIZE;
 
     /* and try to consume all of it */
-    while (x->z.avail_out > 0) {
-	/* if we don't have anything to work from... */
-	if (x->z.avail_in == 0) {
-	    /* ... fill the z buf from underlying file */
-	    int i, c;
-	    for (i = 0; i < sizeof(x->b_in); i++) {
-		c = BufFileGet(x->f);
-		if (c == BUFFILEEOF) break;
-		x->b_in[i] = c;
-	    }
-	    x->z.avail_in += i;
-	    x->z.next_in = (char *) x->b_in;
-	}
-	/* so now we have some output space and some input data */
-	x->zstat = BZ2_bzDecompress(&(x->z));
-	/* the inflation output happens in the f buffer directly... */
-	if (x->zstat == BZ_STREAM_END) {
-	    /* deal with EOF, crc */
-	    break;
-	}
-	if (x->zstat != BZ_OK) {
-	    break;
-	}
+    while (x->z.avail_out > 0)
+    {
+        /* if we don't have anything to work from... */
+        if (x->z.avail_in == 0)
+        {
+            /* ... fill the z buf from underlying file */
+            int i, c;
+            for (i = 0; i < sizeof(x->b_in); i++)
+            {
+                c = BufFileGet(x->f);
+                if (c == BUFFILEEOF) break;
+                x->b_in[i] = c;
+            }
+            x->z.avail_in += i;
+            x->z.next_in = (char *)x->b_in;
+        }
+        /* so now we have some output space and some input data */
+        x->zstat = BZ2_bzDecompress(&(x->z));
+        /* the inflation output happens in the f buffer directly... */
+        if (x->zstat == BZ_STREAM_END)
+        {
+            /* deal with EOF, crc */
+            break;
+        }
+        if (x->zstat != BZ_OK)
+        {
+            break;
+        }
     }
     f->bufp = x->b;
     f->left = BUFFILESIZE - x->z.avail_out;
 
-    if (f->left >= 0) {
-	f->left--;
-	return *(f->bufp++);
-    } else {
-	return BUFFILEEOF;
+    if (f->left >= 0)
+    {
+        f->left--;
+        return *(f->bufp++);
+    }
+    else
+    {
+        return BUFFILEEOF;
     }
 }
 
 /* there should be a BufCommonSkip... */
 static int
-BufBzip2FileSkip (BufFilePtr f, int c)
+BufBzip2FileSkip(BufFilePtr f, int c)
 {
     /* BufFileRawSkip returns the count unchanged.
        BufCompressedSkip returns 0.
        That means it probably never gets called... */
     int retval = c;
-    while(c--) {
-	int get = BufFileGet(f);
-	if (get == BUFFILEEOF) return get;
+    while (c--)
+    {
+        int get = BufFileGet(f);
+        if (get == BUFFILEEOF) return get;
     }
     return retval;
 }

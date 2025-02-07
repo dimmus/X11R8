@@ -50,165 +50,168 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "FSlibint.h"
 
 int
-FSQueryXBitmaps8(
-    FSServer		 *svr,
-    Font		  fid,
-    FSBitmapFormat	  format,
-    Bool		  range_type,
-    const unsigned char	 *str,
-    unsigned long	  str_len,
-    FSOffset		**offsets,
-    unsigned char	**glyphdata)
+FSQueryXBitmaps8(FSServer            *svr,
+                 Font                 fid,
+                 FSBitmapFormat       format,
+                 Bool                 range_type,
+                 const unsigned char *str,
+                 unsigned long        str_len,
+                 FSOffset           **offsets,
+                 unsigned char      **glyphdata)
 {
-    fsQueryXBitmaps8Req *req;
+    fsQueryXBitmaps8Req  *req;
     fsQueryXBitmaps8Reply reply;
-    FSOffset   *offs;
-    fsOffset32 local_offs;
-    unsigned char *gd;
-    int         left;
+    FSOffset             *offs;
+    fsOffset32            local_offs;
+    unsigned char        *gd;
+    int                   left;
 
     if (str_len > (FSMaxRequestBytes(svr) - SIZEOF(fsQueryXBitmaps8Req)))
         return FSBadLength;
 
     GetReq(QueryXBitmaps8, req);
-    req->fid = fid;
-    req->range = (BOOL) range_type;
-    req->format = format;
-    req->num_ranges = (CARD32) str_len;
-    req->length += (CARD16) ((str_len + 3) >> 2);
-    _FSSend(svr, (char *) str, str_len);
+    req->fid        = fid;
+    req->range      = (BOOL)range_type;
+    req->format     = format;
+    req->num_ranges = (CARD32)str_len;
+    req->length += (CARD16)((str_len + 3) >> 2);
+    _FSSend(svr, (char *)str, str_len);
 
     /* get back the info */
-    if (!_FSReply(svr, (fsReply *) & reply,
-     (SIZEOF(fsQueryXBitmaps8Reply) - SIZEOF(fsGenericReply)) >> 2, fsFalse))
-	return FSBadAlloc;
+    if (!_FSReply(svr,
+                  (fsReply *)&reply,
+                  (SIZEOF(fsQueryXBitmaps8Reply) - SIZEOF(fsGenericReply)) >> 2,
+                  fsFalse))
+        return FSBadAlloc;
 
 #if SIZE_MAX <= UINT_MAX
-    if (reply.num_chars > SIZE_MAX / sizeof(FSOffset))
-	return FSBadAlloc;
+    if (reply.num_chars > SIZE_MAX / sizeof(FSOffset)) return FSBadAlloc;
 #endif
 
-    offs = FSmallocarray(reply.num_chars, sizeof(FSOffset));
+    offs     = FSmallocarray(reply.num_chars, sizeof(FSOffset));
     *offsets = offs;
-    if (!offs)
-	return FSBadAlloc;
+    if (!offs) return FSBadAlloc;
 #if (SIZE_MAX >> 2) <= UINT_MAX
     /* XXX This test is incomplete */
-    if (reply.length > (SIZE_MAX >> 2)) {
-	FSfree(offs);
-	return FSBadAlloc;
+    if (reply.length > (SIZE_MAX >> 2))
+    {
+        FSfree(offs);
+        return FSBadAlloc;
     }
 #endif
-    left = (reply.length << 2) - SIZEOF(fsQueryXBitmaps8Reply)
-	- (SIZEOF(fsOffset32) * reply.num_chars);
-    gd = FSmalloc(left);
+    left = (reply.length << 2) - SIZEOF(fsQueryXBitmaps8Reply) -
+           (SIZEOF(fsOffset32) * reply.num_chars);
+    gd         = FSmalloc(left);
     *glyphdata = gd;
-    if (!gd) {
-	FSfree(offs);
-	return FSBadAlloc;
+    if (!gd)
+    {
+        FSfree(offs);
+        return FSBadAlloc;
     }
     for (CARD32 i = 0; i < reply.num_chars; i++)
     {
-	_FSReadPad(svr, (char *) &local_offs, (SIZEOF(fsOffset32)));
-	offs->position = local_offs.position;
-	offs->length = local_offs.length;
-	offs++;
+        _FSReadPad(svr, (char *)&local_offs, (SIZEOF(fsOffset32)));
+        offs->position = local_offs.position;
+        offs->length   = local_offs.length;
+        offs++;
     }
-    _FSReadPad(svr, (char *) gd, left);
+    _FSReadPad(svr, (char *)gd, left);
 
     SyncHandle();
     return FSSuccess;
 }
 
 int
-FSQueryXBitmaps16(
-    FSServer		 *svr,
-    Font		  fid,
-    FSBitmapFormat	  format,
-    Bool		  range_type,
-    const FSChar2b	 *str,
-    unsigned long	  str_len,
-    FSOffset		**offsets,
-    unsigned char	**glyphdata)
+FSQueryXBitmaps16(FSServer       *svr,
+                  Font            fid,
+                  FSBitmapFormat  format,
+                  Bool            range_type,
+                  const FSChar2b *str,
+                  unsigned long   str_len,
+                  FSOffset      **offsets,
+                  unsigned char **glyphdata)
 {
-    fsQueryXBitmaps16Req *req;
+    fsQueryXBitmaps16Req  *req;
     fsQueryXBitmaps16Reply reply;
-    FSOffset   *offs;
-    fsOffset32 local_offs;
-    unsigned char *gd;
-    int         left;
+    FSOffset              *offs;
+    fsOffset32             local_offs;
+    unsigned char         *gd;
+    int                    left;
 
     /* Relies on fsChar2b & fsChar2b_version1 being the same size */
-    if (str_len > ((FSMaxRequestBytes(svr) - SIZEOF(fsQueryXBitmaps16Req))
-                    / SIZEOF(fsChar2b)))
+    if (str_len > ((FSMaxRequestBytes(svr) - SIZEOF(fsQueryXBitmaps16Req)) /
+                   SIZEOF(fsChar2b)))
         return FSBadLength;
 
     GetReq(QueryXBitmaps16, req);
-    req->fid = fid;
-    req->range = (BOOL) range_type;
-    req->format = format;
-    req->num_ranges = (CARD32) str_len;
-    req->length += (CARD16) (((str_len * SIZEOF(fsChar2b)) + 3) >> 2);
+    req->fid        = fid;
+    req->range      = (BOOL)range_type;
+    req->format     = format;
+    req->num_ranges = (CARD32)str_len;
+    req->length += (CARD16)(((str_len * SIZEOF(fsChar2b)) + 3) >> 2);
     if (FSProtocolVersion(svr) == 1)
     {
-	fsChar2b_version1 *swapped_str;
+        fsChar2b_version1 *swapped_str;
 
-	if (str_len > SIZE_MAX/SIZEOF(fsChar2b_version1))
-	    return FSBadAlloc;
-	swapped_str = FSmallocarray(str_len, SIZEOF(fsChar2b_version1));
-	if (!swapped_str)
-	    return FSBadAlloc;
-	for (unsigned long i = 0; i < str_len; i++) {
-	    swapped_str[i].low = str[i].low;
-	    swapped_str[i].high = str[i].high;
-	}
-	_FSSend(svr, (char *)swapped_str, (str_len*SIZEOF(fsChar2b_version1)));
-	FSfree(swapped_str);
-    } else
-	_FSSend(svr, (char *) str, (str_len * SIZEOF(fsChar2b)));
+        if (str_len > SIZE_MAX / SIZEOF(fsChar2b_version1)) return FSBadAlloc;
+        swapped_str = FSmallocarray(str_len, SIZEOF(fsChar2b_version1));
+        if (!swapped_str) return FSBadAlloc;
+        for (unsigned long i = 0; i < str_len; i++)
+        {
+            swapped_str[i].low  = str[i].low;
+            swapped_str[i].high = str[i].high;
+        }
+        _FSSend(svr,
+                (char *)swapped_str,
+                (str_len * SIZEOF(fsChar2b_version1)));
+        FSfree(swapped_str);
+    }
+    else _FSSend(svr, (char *)str, (str_len * SIZEOF(fsChar2b)));
 
     /* get back the info */
-    if (!_FSReply(svr, (fsReply *) & reply,
-	      (SIZEOF(fsQueryXBitmaps16Reply) - SIZEOF(fsGenericReply)) >> 2,
-		  fsFalse))
-	return FSBadAlloc;
+    if (!_FSReply(svr,
+                  (fsReply *)&reply,
+                  (SIZEOF(fsQueryXBitmaps16Reply) - SIZEOF(fsGenericReply)) >>
+                      2,
+                  fsFalse))
+        return FSBadAlloc;
 
 #if SIZE_MAX <= UINT_MAX
-    if(reply.num_chars > SIZE_MAX/sizeof(FSOffset))
-       return FSBadAlloc;
+    if (reply.num_chars > SIZE_MAX / sizeof(FSOffset)) return FSBadAlloc;
 #endif
-    offs = FSmallocarray(reply.num_chars, sizeof(FSOffset));
+    offs     = FSmallocarray(reply.num_chars, sizeof(FSOffset));
     *offsets = offs;
-    if (!offs)
-	return FSBadAlloc;
+    if (!offs) return FSBadAlloc;
 #if (SIZE_MAX >> 2) <= UINT_MAX
     /* XXX - this test is incomplete */
-    if (reply.length > (SIZE_MAX>>2)) {
-	FSfree(offs);
-	return FSBadAlloc;
+    if (reply.length > (SIZE_MAX >> 2))
+    {
+        FSfree(offs);
+        return FSBadAlloc;
     }
 #endif
-    left = (reply.length << 2) - SIZEOF(fsQueryXBitmaps16Reply)
-	- (SIZEOF(fsOffset32) * reply.num_chars);
-    gd = FSmalloc(left);
+    left = (reply.length << 2) - SIZEOF(fsQueryXBitmaps16Reply) -
+           (SIZEOF(fsOffset32) * reply.num_chars);
+    gd         = FSmalloc(left);
     *glyphdata = gd;
-    if (!gd) {
-	FSfree(offs);
-	return FSBadAlloc;
+    if (!gd)
+    {
+        FSfree(offs);
+        return FSBadAlloc;
     }
     for (CARD32 i = 0; i < reply.num_chars; i++)
     {
-	_FSReadPad(svr, (char *) &local_offs, (SIZEOF(fsOffset32)));
-	offs->position = local_offs.position;
-	offs->length = local_offs.length;
-	offs++;
+        _FSReadPad(svr, (char *)&local_offs, (SIZEOF(fsOffset32)));
+        offs->position = local_offs.position;
+        offs->length   = local_offs.length;
+        offs++;
     }
-    _FSReadPad(svr, (char *) gd, left);
+    _FSReadPad(svr, (char *)gd, left);
 
     SyncHandle();
     return FSSuccess;

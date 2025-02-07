@@ -51,13 +51,12 @@ in this Software without prior written authorization from The Open Group.
 #include <os.h>
 #include <client.h>
 
-extern int  CheckClientAuthorization(
-		ClientPtr   client,
-		AuthPtr     client_auth,
-		int        *accept,
-		int        *index,
-		int        *size,
-		char      **auth_data);
+extern int  CheckClientAuthorization(ClientPtr client,
+                                     AuthPtr   client_auth,
+                                     int      *accept,
+                                     int      *index,
+                                     int      *size,
+                                     char    **auth_data);
 extern void AccessSetConnectionLimit(int num);
 
-#endif				/* _ACCESS_H_ */
+#endif    /* _ACCESS_H_ */

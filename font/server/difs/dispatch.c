@@ -46,144 +46,147 @@ in this Software without prior written authorization from The Open Group.
  * THIS SOFTWARE.
  */
 
-#include	"config.h"
+#include "config.h"
 
-#include	<stdlib.h>
-#include	"dispatch.h"
-#include	"swapreq.h"
-#include	"swaprep.h"
+#include <stdlib.h>
+#include "dispatch.h"
+#include "swapreq.h"
+#include "swaprep.h"
 
-#include	"X11/fonts/FS.h"
-#include	"X11/fonts/FSproto.h"
-#include	"clientstr.h"
-#include	"authstr.h"
-#include	"osstruct.h"
-#include	"extentst.h"
-#include	"globals.h"
-#include	"fsresource.h"
-#include	"difsfnst.h"
-#include	"X11/fonts/fontstruct.h"
-#include	"site.h"
-#include	"fsevents.h"
-#include	"globals.h"
-#include	"difs.h"
-#include	"access.h"
+#include "X11/fonts/FS.h"
+#include "X11/fonts/FSproto.h"
+#include "clientstr.h"
+#include "authstr.h"
+#include "osstruct.h"
+#include "extentst.h"
+#include "globals.h"
+#include "fsresource.h"
+#include "difsfnst.h"
+#include "X11/fonts/fontstruct.h"
+#include "site.h"
+#include "fsevents.h"
+#include "globals.h"
+#include "difs.h"
+#include "access.h"
 
 static void kill_all_clients(void);
 
-volatile char        dispatchException = 0;
-volatile char        isItTimeToYield;
+volatile char dispatchException = 0;
+volatile char isItTimeToYield;
 
-ClientPtr   currentClient;
+ClientPtr currentClient;
 
-static int  nClients = 0;
-static int  nextFreeClientID;
+static int nClients = 0;
+static int nextFreeClientID;
 
-#define	MAJOROP	((fsReq *)client->requestBuffer)->reqType
+#define MAJOROP ((fsReq *)client->requestBuffer)->reqType
 
-#define	ALL_FORMAT_BITS	(BitmapFormatByteOrderMask | \
-			 BitmapFormatBitOrderMask | \
-			 BitmapFormatScanlineUnitMask | \
-			 BitmapFormatScanlinePadMask | \
-			 BitmapFormatImageRectMask)
+#define ALL_FORMAT_BITS                                           \
+    (BitmapFormatByteOrderMask | BitmapFormatBitOrderMask |       \
+     BitmapFormatScanlineUnitMask | BitmapFormatScanlinePadMask | \
+     BitmapFormatImageRectMask)
 
-#define	ALL_FORMAT_MASK_BITS	(BitmapFormatMaskByte | \
-				 BitmapFormatMaskBit | \
-				 BitmapFormatMaskImageRectangle | \
-				 BitmapFormatMaskScanLinePad | \
-				 BitmapFormatMaskScanLineUnit)
+#define ALL_FORMAT_MASK_BITS                                        \
+    (BitmapFormatMaskByte | BitmapFormatMaskBit |                   \
+     BitmapFormatMaskImageRectangle | BitmapFormatMaskScanLinePad | \
+     BitmapFormatMaskScanLineUnit)
 
 void
 Dispatch(void)
 {
-    int         nready,
-                result;
-    int        *clientReady;
-    ClientPtr   client;
-    int		op;
+    int       nready, result;
+    int      *clientReady;
+    ClientPtr client;
+    int       op;
 
     nextFreeClientID = MINCLIENT;
-    nClients = 0;
+    nClients         = 0;
 
-    clientReady = (int *) ALLOCATE_LOCAL(sizeof(int) * MaxClients);
-    if (!clientReady)
-	return;
+    clientReady = (int *)ALLOCATE_LOCAL(sizeof(int) * MaxClients);
+    if (!clientReady) return;
 
-    while (1) {
-	/* wait for something */
-	nready = WaitForSomething(clientReady);
+    while (1)
+    {
+    /* wait for something */
+        nready = WaitForSomething(clientReady);
 
-	while (!dispatchException && (--nready >= 0)) {
-	    client = currentClient = clients[clientReady[nready]];
+        while (!dispatchException && (--nready >= 0))
+        {
+            client = currentClient = clients[clientReady[nready]];
 
-	    /* Client can be NULL if CloseDownClient() is called during
+        /* Client can be NULL if CloseDownClient() is called during
 	       this dispatchException loop. */
-	    if (client == (ClientPtr)NULL) continue;
+            if (client == (ClientPtr)NULL) continue;
 
-	    isItTimeToYield = FALSE;
+            isItTimeToYield = FALSE;
 
-	    while (!isItTimeToYield) {
-		result = ReadRequest(client);
-		if (result <= 0) {
-		    if (result < 0)
-			CloseDownClient(client);
-		    break;
-		}
-		client->sequence++;
+            while (!isItTimeToYield)
+            {
+                result = ReadRequest(client);
+                if (result <= 0)
+                {
+                    if (result < 0) CloseDownClient(client);
+                    break;
+                }
+                client->sequence++;
 
-		if (result > (MAX_REQUEST_SIZE << 2))
-		    result = FSBadLength;
-		else
-		{
-		    op = MAJOROP;
-		    if (op >= NUM_PROC_VECTORS)
-			result = ProcBadRequest (client);
-		    else if (*client->requestVector[op] != NULL)
-			result = (*client->requestVector[op]) (client);
-		    else
-			result = FSBadRequest;
-		}
-		if (result != FSSuccess) {
-		    if (client->noClientException != FSSuccess)
-			CloseDownClient(client);
-		    break;
-		}
-	    }
-	    FlushAllOutput ();
-	}
-	/* reset if server is a drone and has run out of clients */
-	if (drone_server && nClients == 0) {
-	    dispatchException |= DE_RESET;
-	}
-	if (dispatchException) {
-	    /* re-read the config file */
-	    if (dispatchException & DE_RECONFIG) {
-		NoticeF("re-reading config file\n");
-		if (ReadConfigFile(configfilename) != FSSuccess)
-		    ErrorF("couldn't parse config file\n");
-		SetConfigValues();
-		dispatchException &= ~DE_RECONFIG;
-	    }
-	    /* flush all the caches */
-	    if (dispatchException & DE_FLUSH) {
-		NoticeF("flushing all caches\n");
-		dispatchException &= ~DE_FLUSH;
-	    }
-	    /* reset */
-	    if (dispatchException & DE_RESET) {
-		NoticeF("resetting\n");
-		break;
-	    }
-	    /* die *now* */
-	    if (dispatchException & DE_TERMINATE) {
-		NoticeF("terminating\n");
-		kill_all_clients();
-		CloseSockets();
-		CloseErrors();
-		exit(0);
-		break;
-	    }
-	}
+                if (result > (MAX_REQUEST_SIZE << 2)) result = FSBadLength;
+                else
+                {
+                    op = MAJOROP;
+                    if (op >= NUM_PROC_VECTORS) result = ProcBadRequest(client);
+                    else if (*client->requestVector[op] != NULL)
+                        result = (*client->requestVector[op])(client);
+                    else result = FSBadRequest;
+                }
+                if (result != FSSuccess)
+                {
+                    if (client->noClientException != FSSuccess)
+                        CloseDownClient(client);
+                    break;
+                }
+            }
+            FlushAllOutput();
+        }
+    /* reset if server is a drone and has run out of clients */
+        if (drone_server && nClients == 0)
+        {
+            dispatchException |= DE_RESET;
+        }
+        if (dispatchException)
+        {
+        /* re-read the config file */
+            if (dispatchException & DE_RECONFIG)
+            {
+                NoticeF("re-reading config file\n");
+                if (ReadConfigFile(configfilename) != FSSuccess)
+                    ErrorF("couldn't parse config file\n");
+                SetConfigValues();
+                dispatchException &= ~DE_RECONFIG;
+            }
+        /* flush all the caches */
+            if (dispatchException & DE_FLUSH)
+            {
+                NoticeF("flushing all caches\n");
+                dispatchException &= ~DE_FLUSH;
+            }
+        /* reset */
+            if (dispatchException & DE_RESET)
+            {
+                NoticeF("resetting\n");
+                break;
+            }
+        /* die *now* */
+            if (dispatchException & DE_TERMINATE)
+            {
+                NoticeF("terminating\n");
+                kill_all_clients();
+                CloseSockets();
+                CloseErrors();
+                exit(0);
+                break;
+            }
+        }
     }
     kill_all_clients();
     dispatchException = 0;
@@ -194,26 +197,27 @@ ProcInitialConnection(ClientPtr client)
 {
     REQUEST(fsFakeReq);
     fsConnClientPrefix *prefix;
-    int         whichbyte = 1;
+    int                 whichbyte = 1;
 
-    prefix = (fsConnClientPrefix *) stuff+1;
+    prefix = (fsConnClientPrefix *)stuff + 1;
     if ((prefix->byteOrder != 'l') && (prefix->byteOrder != 'B'))
-	return (client->noClientException = -2);
-    if (((*(char *) &whichbyte) && (prefix->byteOrder == 'B')) ||
-	    (!(*(char *) &whichbyte) && (prefix->byteOrder == 'l'))) {
-	int status;
+        return (client->noClientException = -2);
+    if (((*(char *)&whichbyte) && (prefix->byteOrder == 'B')) ||
+        (!(*(char *)&whichbyte) && (prefix->byteOrder == 'l')))
+    {
+        int status;
 
-	client->swapped = TRUE;
-	status = SwapConnClientPrefix(client, prefix);
-	if (status != FSSuccess)
-	    return (status);
+        client->swapped = TRUE;
+        status          = SwapConnClientPrefix(client, prefix);
+        if (status != FSSuccess) return (status);
     }
     client->major_version = prefix->major_version;
     client->minor_version = prefix->minor_version;
-    stuff->reqType = 2;
+    stuff->reqType        = 2;
     stuff->length += prefix->auth_len;
-    if (client->swapped) {
-	stuff->length = lswaps(stuff->length);
+    if (client->swapped)
+    {
+        stuff->length = lswaps(stuff->length);
     }
     ResetCurrentRequest(client);
     return client->noClientException;
@@ -223,162 +227,175 @@ int
 ProcEstablishConnection(ClientPtr client)
 {
     fsConnClientPrefix *prefix;
-    int         ret;
-    pointer     auth_data;
-    char       *ad;
-    char       *server_auth_data;
-    AuthPtr     client_auth;
-    int         i,
-                num_alts,
-                altlen,
-                auth_accept,
-                auth_index,
-                auth_len;
-    AlternateServerPtr altservers;
+    int                 ret;
+    pointer             auth_data;
+    char               *ad;
+    char               *server_auth_data;
+    AuthPtr             client_auth;
+    int                 i, num_alts, altlen, auth_accept, auth_index, auth_len;
+    AlternateServerPtr  altservers;
 
     REQUEST(fsFakeReq);
 
-    prefix = (fsConnClientPrefix *) stuff+1;
-    auth_data = prefix + sz_fsConnClientPrefix;
-    client_auth = (AuthPtr) ALLOCATE_LOCAL(prefix->num_auths * sizeof(AuthRec));
-    if (!client_auth) {
-	SendErrToClient(client, FSBadAlloc, (pointer) 0);
-	return FSBadAlloc;
+    prefix      = (fsConnClientPrefix *)stuff + 1;
+    auth_data   = prefix + sz_fsConnClientPrefix;
+    client_auth = (AuthPtr)ALLOCATE_LOCAL(prefix->num_auths * sizeof(AuthRec));
+    if (!client_auth)
+    {
+        SendErrToClient(client, FSBadAlloc, (pointer)0);
+        return FSBadAlloc;
     }
 /* XXXX -- this needs work for multiple auth replies */
 
     /* build up a list of the stuff */
-    for (i = 0, ad = auth_data; i < (int)prefix->num_auths; i++) {
-	if (ad - (char *)auth_data > (stuff->length << 2) - 4) {
-	    int lengthword = stuff->length;
+    for (i = 0, ad = auth_data; i < (int)prefix->num_auths; i++)
+    {
+        if (ad - (char *)auth_data > (stuff->length << 2) - 4)
+        {
+            int lengthword = stuff->length;
 
-	    SendErrToClient(client, FSBadLength, (pointer)&lengthword);
-	    DEALLOCATE_LOCAL(client_auth);
-	    return (FSBadLength);
-	}
-	/* copy carefully in case wire data is not aligned */
-	client_auth[i].namelen = (((unsigned char *)ad)[0] << 8) +
-				 ((unsigned char *)ad)[1];
-	ad += 2;
-	client_auth[i].datalen = (((unsigned char *)ad)[0] << 8) +
-				 ((unsigned char *)ad)[1];
-	ad += 2;
-	client_auth[i].name = (char *) ad;
-	ad += client_auth[i].namelen;
-	client_auth[i].data = (char *) ad;
-	ad += client_auth[i].datalen;
+            SendErrToClient(client, FSBadLength, (pointer)&lengthword);
+            DEALLOCATE_LOCAL(client_auth);
+            return (FSBadLength);
+        }
+    /* copy carefully in case wire data is not aligned */
+        client_auth[i].namelen =
+            (((unsigned char *)ad)[0] << 8) + ((unsigned char *)ad)[1];
+        ad += 2;
+        client_auth[i].datalen =
+            (((unsigned char *)ad)[0] << 8) + ((unsigned char *)ad)[1];
+        ad += 2;
+        client_auth[i].name = (char *)ad;
+        ad += client_auth[i].namelen;
+        client_auth[i].data = (char *)ad;
+        ad += client_auth[i].datalen;
     }
-    if (!(int)prefix->num_auths)
-	ad += 4;
-    if (ad - (char *)auth_data > (stuff->length << 2)) {
-	int lengthword = stuff->length;
+    if (!(int)prefix->num_auths) ad += 4;
+    if (ad - (char *)auth_data > (stuff->length << 2))
+    {
+        int lengthword = stuff->length;
 
-	SendErrToClient(client, FSBadLength, (pointer)&lengthword);
-	DEALLOCATE_LOCAL(client_auth);
-	return (FSBadLength);
+        SendErrToClient(client, FSBadLength, (pointer)&lengthword);
+        DEALLOCATE_LOCAL(client_auth);
+        return (FSBadLength);
     }
 
     num_alts = ListAlternateServers(&altservers);
-    for (i = 0, altlen = 0; i < num_alts; i++) {
-	/* subset + len + namelen + pad */
-	altlen += (2 + altservers[i].namelen + 3) >> 2;
+    for (i = 0, altlen = 0; i < num_alts; i++)
+    {
+    /* subset + len + namelen + pad */
+        altlen += (2 + altservers[i].namelen + 3) >> 2;
     }
 
-    auth_index = prefix->num_auths;
+    auth_index              = prefix->num_auths;
     client->auth_generation = 0;
-    ret = CheckClientAuthorization(client, client_auth,
-		    &auth_accept, &auth_index, &auth_len, &server_auth_data);
+    ret                     = CheckClientAuthorization(client,
+                                   client_auth,
+                                   &auth_accept,
+                                   &auth_index,
+                                   &auth_len,
+                                   &server_auth_data);
     if (auth_index > 0)
     {
-	AuthContextPtr authp;
-	authp = (AuthContextPtr) FSalloc(sizeof(AuthContextRec));
-	if (!authp) {
-	    SendErrToClient(client, FSBadAlloc, (pointer) 0);
-	    DEALLOCATE_LOCAL(client_auth);
-	    return FSBadAlloc;
-	}
-	authp->authname =
-	    (char *) FSalloc(client_auth[auth_index - 1].namelen + 1);
-	authp->authdata =
-	    (char *) FSalloc(client_auth[auth_index - 1].datalen + 1);
-	if (!authp->authname || !authp->authdata) {
-	    FSfree((char *) authp->authname);
-	    FSfree((char *) authp->authdata);
-	    FSfree((char *) authp);
-	    SendErrToClient(client, FSBadAlloc, (pointer) 0);
-	    DEALLOCATE_LOCAL(client_auth);
-	    return FSBadAlloc;
-	}
-	memcpy(authp->authname, client_auth[auth_index - 1].name,
-	      client_auth[auth_index - 1].namelen);
-	memcpy(authp->authdata, client_auth[auth_index - 1].data,
-	      client_auth[auth_index - 1].datalen);
-	/* Save it with a zero resource id...  subsequent
+        AuthContextPtr authp;
+        authp = (AuthContextPtr)FSalloc(sizeof(AuthContextRec));
+        if (!authp)
+        {
+            SendErrToClient(client, FSBadAlloc, (pointer)0);
+            DEALLOCATE_LOCAL(client_auth);
+            return FSBadAlloc;
+        }
+        authp->authname =
+            (char *)FSalloc(client_auth[auth_index - 1].namelen + 1);
+        authp->authdata =
+            (char *)FSalloc(client_auth[auth_index - 1].datalen + 1);
+        if (!authp->authname || !authp->authdata)
+        {
+            FSfree((char *)authp->authname);
+            FSfree((char *)authp->authdata);
+            FSfree((char *)authp);
+            SendErrToClient(client, FSBadAlloc, (pointer)0);
+            DEALLOCATE_LOCAL(client_auth);
+            return FSBadAlloc;
+        }
+        memcpy(authp->authname,
+               client_auth[auth_index - 1].name,
+               client_auth[auth_index - 1].namelen);
+        memcpy(authp->authdata,
+               client_auth[auth_index - 1].data,
+               client_auth[auth_index - 1].datalen);
+    /* Save it with a zero resource id...  subsequent
 	   SetAuthorizations of None will find it.  And it will be freed
 	   by FreeClientResources when the connection closes.  */
-	if (!AddResource(client->index, 0, RT_AUTHCONT,(pointer) authp)) 
-	{
-	    FSfree((char *) authp->authname);
-	    FSfree((char *) authp->authdata);
-	    FSfree((char *) authp);
-	    SendErrToClient(client, FSBadAlloc, (pointer) 0);
-	    DEALLOCATE_LOCAL(client_auth);
-	    return FSBadAlloc;
-	}
-	client->auth = client->default_auth = authp;
+        if (!AddResource(client->index, 0, RT_AUTHCONT, (pointer)authp))
+        {
+            FSfree((char *)authp->authname);
+            FSfree((char *)authp->authdata);
+            FSfree((char *)authp);
+            SendErrToClient(client, FSBadAlloc, (pointer)0);
+            DEALLOCATE_LOCAL(client_auth);
+            return FSBadAlloc;
+        }
+        client->auth = client->default_auth = authp;
     }
-    else
-	client->auth = client->default_auth = (AuthContextPtr)0;
+    else client->auth = client->default_auth = (AuthContextPtr)0;
 
     DEALLOCATE_LOCAL(client_auth);
 
-    if (ret != FSSuccess) {
-	SendErrToClient(client, FSBadAlloc, (pointer) 0);
-	return FSBadAlloc;
+    if (ret != FSSuccess)
+    {
+        SendErrToClient(client, FSBadAlloc, (pointer)0);
+        return FSBadAlloc;
     }
-    else {
-	fsConnSetup csp = {
-	    .status = auth_accept,
-	    /* we implement backwards compatibility for version 1.0 */
-	    .major_version = (client->major_version == 1) ?
-	        client->major_version : FS_PROTOCOL,
-	    .minor_version = FS_PROTOCOL_MINOR,
-	    .num_alternates = num_alts,
-	    .alternate_len = altlen,
-	    .auth_len = auth_len >> 2,
-	    .auth_index = auth_index
-	};
-	if (client->swapped) {
-	    WriteSConnSetup(client, &csp);
-	} else {
-	    (void) WriteToClient(client, SIZEOF(fsConnSetup), (char *) &csp);
-	}
+    else
+    {
+        fsConnSetup csp = {
+            .status         = auth_accept,
+        /* we implement backwards compatibility for version 1.0 */
+            .major_version  = (client->major_version == 1)
+                                  ? client->major_version
+                                  : FS_PROTOCOL,
+            .minor_version  = FS_PROTOCOL_MINOR,
+            .num_alternates = num_alts,
+            .alternate_len  = altlen,
+            .auth_len       = auth_len >> 2,
+            .auth_index     = auth_index
+        };
+        if (client->swapped)
+        {
+            WriteSConnSetup(client, &csp);
+        }
+        else
+        {
+            (void)WriteToClient(client, SIZEOF(fsConnSetup), (char *)&csp);
+        }
     }
 
     /* send the alternates info */
-    for (i = 0; i < num_alts; i++) {
-	char        tmp[258];
+    for (i = 0; i < num_alts; i++)
+    {
+        char tmp[258];
 
-	/* WriteToClient pads, so we have to fake some things */
-	tmp[0] = altservers[i].subset;
-	tmp[1] = altservers[i].namelen;
-	memcpy(&tmp[2], altservers[i].name, altservers[i].namelen);
-	(void) WriteToClient(client, altservers[i].namelen + 2, tmp);
+    /* WriteToClient pads, so we have to fake some things */
+        tmp[0] = altservers[i].subset;
+        tmp[1] = altservers[i].namelen;
+        memcpy(&tmp[2], altservers[i].name, altservers[i].namelen);
+        (void)WriteToClient(client, altservers[i].namelen + 2, tmp);
     }
 
     if (auth_len)
-	(void) WriteToClient(client, auth_len, (char *) server_auth_data);
+        (void)WriteToClient(client, auth_len, (char *)server_auth_data);
 
-    if (auth_accept != AuthSuccess) {
-	nClients--;
-	return (client->noClientException = -2);
+    if (auth_accept != AuthSuccess)
+    {
+        nClients--;
+        return (client->noClientException = -2);
     }
     client->requestVector = client->swapped ? SwappedProcVector : ProcVector;
-    client->sequence = 0;
+    client->sequence      = 0;
     if (client->swapped)
-	(void) WriteSConnectionInfo(client, ConnInfoLen, ConnectionInfo);
-    else
-	(void) WriteToClient(client, ConnInfoLen, ConnectionInfo);
+        (void)WriteSConnectionInfo(client, ConnInfoLen, ConnectionInfo);
+    else (void)WriteToClient(client, ConnInfoLen, ConnectionInfo);
 
 #ifdef DEBUG
     fprintf(stderr, "Establishing new connection\n");
@@ -392,66 +409,63 @@ ProcEstablishConnection(ClientPtr client)
  */
 
 void
-DoSendErrToClient(
-    ClientPtr   client,
-    int         error,
-    pointer     data)		/* resource id, format, resolution, etc */
+DoSendErrToClient(ClientPtr client,
+                  int       error,
+                  pointer   data)  /* resource id, format, resolution, etc */
 {
-    fsError     rep = {
-	.type = FS_Error,
-	.request = error,
-	.sequenceNumber = client->sequence,
-	.timestamp = GetTimeInMillis(),
-	.major_opcode = ((fsReq *) client->requestBuffer)->reqType,
-	.minor_opcode = 0
-    };
-    int         extralen = 0;
+    fsError rep      = { .type           = FS_Error,
+                         .request        = error,
+                         .sequenceNumber = client->sequence,
+                         .timestamp      = GetTimeInMillis(),
+                         .major_opcode   = ((fsReq *)client->requestBuffer)->reqType,
+                         .minor_opcode   = 0 };
+    int     extralen = 0;
 
-    switch (error) {
-    case FSBadFormat:
-	extralen = SIZEOF(fsBitmapFormat);
-	break;
-    case FSBadFont:
-    case FSBadAccessContext:
-    case FSBadIDChoice:
-    case FSBadEventMask:
-	if (data) {
-	    if (client->swapped)
-	        SwapLongs((long *) data, 1);
-	    extralen = 4;
-	}
-	break;
-    case FSBadRange:
-	extralen = SIZEOF(fsRange);
-	break;
-    case FSBadResolution:
-	if (data) {
-	    if (client->swapped)
-	        SwapShorts((short *) data, 1);
-	    /* note sneaky hack */
-	    rep.pad = *(CARD16 *) data;
-	    data = (char *)data + 2;
-	    extralen = 4;
-	}
-	break;
-    case FSBadLength:
-	if (data) {
-	    if (client->swapped)
-	        SwapLongs((long *) data, 1);
-	    extralen = 4;
-	}
-	break;
-    default:
-	/* nothing else to send */
-	break;
+    switch (error)
+    {
+        case FSBadFormat:
+            extralen = SIZEOF(fsBitmapFormat);
+            break;
+        case FSBadFont:
+        case FSBadAccessContext:
+        case FSBadIDChoice:
+        case FSBadEventMask:
+            if (data)
+            {
+                if (client->swapped) SwapLongs((long *)data, 1);
+                extralen = 4;
+            }
+            break;
+        case FSBadRange:
+            extralen = SIZEOF(fsRange);
+            break;
+        case FSBadResolution:
+            if (data)
+            {
+                if (client->swapped) SwapShorts((short *)data, 1);
+        /* note sneaky hack */
+                rep.pad  = *(CARD16 *)data;
+                data     = (char *)data + 2;
+                extralen = 4;
+            }
+            break;
+        case FSBadLength:
+            if (data)
+            {
+                if (client->swapped) SwapLongs((long *)data, 1);
+                extralen = 4;
+            }
+            break;
+        default:
+    /* nothing else to send */
+            break;
     }
 
     rep.length = (SIZEOF(fsError) + extralen) >> 2;
 
     WriteErrorToClient(client, &rep);
 
-    if (extralen)
-	WriteToClient(client, extralen, (char *) data);
+    if (extralen) WriteToClient(client, extralen, (char *)data);
 }
 
 /* ARGSUSED */
@@ -474,61 +488,64 @@ ProcNoop(ClientPtr client)
 int
 ProcListCatalogues(ClientPtr client)
 {
-    int         len,
-                num;
-    char       *catalogues;
-    fsListCataloguesReply rep = {
-	.type = FS_Reply,
-	.sequenceNumber = client->sequence,
-	.num_replies = 0
-    };
+    int                   len, num;
+    char                 *catalogues;
+    fsListCataloguesReply rep = { .type           = FS_Reply,
+                                  .sequenceNumber = client->sequence,
+                                  .num_replies    = 0 };
 
     REQUEST(fsListCataloguesReq);
     REQUEST_AT_LEAST_SIZE(fsListCataloguesReq);
 
     num = ListCatalogues((char *)stuff + SIZEOF(fsListCataloguesReq),
-			 stuff->nbytes, stuff->maxNames,
-			 &catalogues, &len);
+                         stuff->nbytes,
+                         stuff->maxNames,
+                         &catalogues,
+                         &len);
     rep.num_catalogues = num;
-    rep.length = (SIZEOF(fsListCataloguesReply) + len + 3) >> 2;
+    rep.length         = (SIZEOF(fsListCataloguesReply) + len + 3) >> 2;
 
     WriteReplyToClient(client, SIZEOF(fsListCataloguesReply), &rep);
-    (void) WriteToClient(client, len, (char *) catalogues);
-    FSfree((char *) catalogues);
+    (void)WriteToClient(client, len, (char *)catalogues);
+    FSfree((char *)catalogues);
     return client->noClientException;
 }
 
 int
 ProcSetCatalogues(ClientPtr client)
 {
-    char       *new_cat;
-    int         err,
-                len;
-    int         num;
+    char *new_cat;
+    int   err, len;
+    int   num;
 
     REQUEST(fsSetCataloguesReq);
     REQUEST_AT_LEAST_SIZE(fsSetCataloguesReq);
 
-    if (stuff->num_catalogues == 0) {
-	/* use the default */
-	num = ListCatalogues("*", 1, 10000, &new_cat, &len);
-    } else {
-	num = stuff->num_catalogues;
-	err = ValidateCatalogues(&num, (char *)stuff + SIZEOF(fsSetCataloguesReq));
-	if (err == FSSuccess) {
-	    len = (stuff->length << 2) - SIZEOF(fsSetCataloguesReq);
-	    new_cat = (char *) FSalloc(len);
-	    if (!new_cat)
-		return FSBadAlloc;
-	    memcpy(new_cat, (char *)stuff + SIZEOF(fsSetCataloguesReq), len);
-	} else {
-	    SendErrToClient(client, err, (pointer) &num);
-	    return err;
-	}
+    if (stuff->num_catalogues == 0)
+    {
+    /* use the default */
+        num = ListCatalogues("*", 1, 10000, &new_cat, &len);
     }
-    if (client->catalogues)
-	FSfree((char *) client->catalogues);
-    client->catalogues = new_cat;
+    else
+    {
+        num = stuff->num_catalogues;
+        err = ValidateCatalogues(&num,
+                                 (char *)stuff + SIZEOF(fsSetCataloguesReq));
+        if (err == FSSuccess)
+        {
+            len     = (stuff->length << 2) - SIZEOF(fsSetCataloguesReq);
+            new_cat = (char *)FSalloc(len);
+            if (!new_cat) return FSBadAlloc;
+            memcpy(new_cat, (char *)stuff + SIZEOF(fsSetCataloguesReq), len);
+        }
+        else
+        {
+            SendErrToClient(client, err, (pointer)&num);
+            return err;
+        }
+    }
+    if (client->catalogues) FSfree((char *)client->catalogues);
+    client->catalogues     = new_cat;
     client->num_catalogues = num;
     return client->noClientException;
 }
@@ -536,32 +553,31 @@ ProcSetCatalogues(ClientPtr client)
 int
 ProcGetCatalogues(ClientPtr client)
 {
-    int         len,
-                i,
-                size;
-    char       *cp;
+    int   len, i, size;
+    char *cp;
 
     REQUEST(fsGetCataloguesReq);
     REQUEST_AT_LEAST_SIZE(fsGetCataloguesReq);
 
-    for (i = 0, len = 0, cp = client->catalogues;
-	    i < client->num_catalogues; i++) {
-	size = *cp++;
-	len += size + 1;	/* str length + size byte */
-	cp += size;
+    for (i = 0, len = 0, cp = client->catalogues; i < client->num_catalogues;
+         i++)
+    {
+        size = *cp++;
+        len += size + 1; /* str length + size byte */
+        cp += size;
     }
 
     {
         fsGetCataloguesReply rep = {
-	    .type = FS_Reply,
-	    .num_catalogues = client->num_catalogues,
-	    .sequenceNumber = client->sequence,
-	    .length = (SIZEOF(fsGetCataloguesReply) + len + 3) >> 2
-	};
+            .type           = FS_Reply,
+            .num_catalogues = client->num_catalogues,
+            .sequenceNumber = client->sequence,
+            .length         = (SIZEOF(fsGetCataloguesReply) + len + 3) >> 2
+        };
 
-	WriteReplyToClient(client, SIZEOF(fsGetCataloguesReply), &rep);
+        WriteReplyToClient(client, SIZEOF(fsGetCataloguesReply), &rep);
     }
-    (void) WriteToClient(client, len, client->catalogues);
+    (void)WriteToClient(client, len, client->catalogues);
 
     return client->noClientException;
 }
@@ -569,137 +585,138 @@ ProcGetCatalogues(ClientPtr client)
 int
 ProcCreateAC(ClientPtr client)
 {
-    AuthPtr     acp;
+    AuthPtr        acp;
     AuthContextPtr authp;
-    int         accept,
-                i,
-                err,
-                index,
-                size;
-    char       *ad;
-    char       *auth_data;
+    int            accept, i, err, index, size;
+    char          *ad;
+    char          *auth_data;
 
     REQUEST(fsCreateACReq);
     REQUEST_AT_LEAST_SIZE(fsCreateACReq);
 
-    authp = (AuthContextPtr) LookupIDByType(client->index, stuff->acid,
-					    RT_AUTHCONT);
-    if (authp) {
-	int aligned_acid = stuff->acid;
-	SendErrToClient(client, FSBadIDChoice, (pointer) &aligned_acid);
-	return FSBadIDChoice;
+    authp =
+        (AuthContextPtr)LookupIDByType(client->index, stuff->acid, RT_AUTHCONT);
+    if (authp)
+    {
+        int aligned_acid = stuff->acid;
+        SendErrToClient(client, FSBadIDChoice, (pointer)&aligned_acid);
+        return FSBadIDChoice;
     }
     acp = NULL;
     if (stuff->num_auths)
     {
-    	acp = (AuthPtr) ALLOCATE_LOCAL(stuff->num_auths * sizeof(AuthRec));
-    	if (!acp) {
-	    SendErrToClient(client, FSBadAlloc, (pointer) NULL);
-	    return FSBadAlloc;
-    	}
+        acp = (AuthPtr)ALLOCATE_LOCAL(stuff->num_auths * sizeof(AuthRec));
+        if (!acp)
+        {
+            SendErrToClient(client, FSBadAlloc, (pointer)NULL);
+            return FSBadAlloc;
+        }
     }
     /* build up a list of the stuff */
     for (i = 0, ad = (char *)stuff + SIZEOF(fsCreateACReq);
-         i < (int)stuff->num_auths; i++) {
-	if (ad - (char *)stuff + SIZEOF(fsCreateACReq) >
-	    (stuff->length << 2) - 4) {
-	    int lengthword = stuff->length;
+         i < (int)stuff->num_auths;
+         i++)
+    {
+        if (ad - (char *)stuff + SIZEOF(fsCreateACReq) >
+            (stuff->length << 2) - 4)
+        {
+            int lengthword = stuff->length;
 
-	    SendErrToClient(client, FSBadLength, (pointer)&lengthword);
-	    DEALLOCATE_LOCAL(acp);
-	    return (FSBadLength);
-	}
-	/* copy carefully in case data is not aligned */
-	acp[i].namelen = (((unsigned char *)ad)[0] << 8) +
-			 ((unsigned char *)ad)[1];
-	ad += 2;
-	acp[i].datalen = (((unsigned char *)ad)[0] << 8) +
-			 ((unsigned char *)ad)[1];
-	ad += 2;
-	acp[i].name = (char *) ad;
-	ad += acp[i].namelen;
-	acp[i].data = (char *) ad;
-	ad += acp[i].datalen;
+            SendErrToClient(client, FSBadLength, (pointer)&lengthword);
+            DEALLOCATE_LOCAL(acp);
+            return (FSBadLength);
+        }
+    /* copy carefully in case data is not aligned */
+        acp[i].namelen =
+            (((unsigned char *)ad)[0] << 8) + ((unsigned char *)ad)[1];
+        ad += 2;
+        acp[i].datalen =
+            (((unsigned char *)ad)[0] << 8) + ((unsigned char *)ad)[1];
+        ad += 2;
+        acp[i].name = (char *)ad;
+        ad += acp[i].namelen;
+        acp[i].data = (char *)ad;
+        ad += acp[i].datalen;
     }
-    if (ad - (char *)stuff > (stuff->length << 2)) {
-	int lengthword = stuff->length;
+    if (ad - (char *)stuff > (stuff->length << 2))
+    {
+        int lengthword = stuff->length;
 
-	SendErrToClient(client, FSBadLength, (pointer)&lengthword);
-	if (acp)
-	    DEALLOCATE_LOCAL(acp);
-	return (FSBadLength);
+        SendErrToClient(client, FSBadLength, (pointer)&lengthword);
+        if (acp) DEALLOCATE_LOCAL(acp);
+        return (FSBadLength);
     }
 
 /* XXX needs work for AuthContinue */
     index = stuff->num_auths;
-    err = CheckClientAuthorization(client, acp, &accept, &index, &size,
-				   &auth_data);
+    err   = CheckClientAuthorization(client,
+                                   acp,
+                                   &accept,
+                                   &index,
+                                   &size,
+                                   &auth_data);
 
-    if (err != FSSuccess) {
-	SendErrToClient(client, err, (pointer) 0);
-	if (acp)
-	    DEALLOCATE_LOCAL(acp);
-	return err;
+    if (err != FSSuccess)
+    {
+        SendErrToClient(client, err, (pointer)0);
+        if (acp) DEALLOCATE_LOCAL(acp);
+        return err;
     }
-    authp = (AuthContextPtr) FSalloc(sizeof(AuthContextRec));
-    if (!authp) {
-	goto alloc_failure;
+    authp = (AuthContextPtr)FSalloc(sizeof(AuthContextRec));
+    if (!authp)
+    {
+        goto alloc_failure;
     }
     authp->authname = NULL;
     authp->authdata = NULL;
     if (index > 0)
     {
-	authp->authname = (char *) FSalloc(acp[index - 1].namelen + 1);
-	authp->authdata = (char *) FSalloc(acp[index - 1].datalen + 1);
-	if (!authp->authname || !authp->authdata) {
-	    FSfree((char *) authp->authname);
-	    FSfree((char *) authp->authdata);
-	    FSfree((char *) authp);
-	    goto alloc_failure;
-	}
-	memcpy(authp->authname, acp[index - 1].name, acp[index - 1].namelen);
-	memcpy(authp->authdata, acp[index - 1].data, acp[index - 1].datalen);
+        authp->authname = (char *)FSalloc(acp[index - 1].namelen + 1);
+        authp->authdata = (char *)FSalloc(acp[index - 1].datalen + 1);
+        if (!authp->authname || !authp->authdata)
+        {
+            FSfree((char *)authp->authname);
+            FSfree((char *)authp->authdata);
+            FSfree((char *)authp);
+            goto alloc_failure;
+        }
+        memcpy(authp->authname, acp[index - 1].name, acp[index - 1].namelen);
+        memcpy(authp->authdata, acp[index - 1].data, acp[index - 1].datalen);
     }
-    else
-	size = 0;
+    else size = 0;
     authp->acid = stuff->acid;
-    if (!AddResource(client->index, stuff->acid, RT_AUTHCONT,(pointer) authp)) 
+    if (!AddResource(client->index, stuff->acid, RT_AUTHCONT, (pointer)authp))
     {
 alloc_failure:
-	SendErrToClient(client, FSBadAlloc, (pointer) 0);
-	if (acp)
-	    DEALLOCATE_LOCAL(acp);
-	return FSBadAlloc;
+        SendErrToClient(client, FSBadAlloc, (pointer)0);
+        if (acp) DEALLOCATE_LOCAL(acp);
+        return FSBadAlloc;
     }
     DEALLOCATE_LOCAL(acp);
     {
-        fsCreateACReply rep = {
-	    .type = FS_Reply,
-	    .auth_index = index,
-	    .sequenceNumber = client->sequence,
-	    .status = accept,
-	    .length = (SIZEOF(fsCreateACReply) + size) >> 2
-	};
+        fsCreateACReply rep = { .type           = FS_Reply,
+                                .auth_index     = index,
+                                .sequenceNumber = client->sequence,
+                                .status         = accept,
+                                .length =
+                                    (SIZEOF(fsCreateACReply) + size) >> 2 };
 
-	WriteReplyToClient(client, SIZEOF(fsCreateACReply), &rep);
+        WriteReplyToClient(client, SIZEOF(fsCreateACReply), &rep);
     }
-    if (size)
-	(void) WriteToClient(client, size, auth_data);
+    if (size) (void)WriteToClient(client, size, auth_data);
 
     return client->noClientException;
 }
 
 /* ARGSUSED */
 int
-DeleteAuthCont (pointer value, FSID id)
+DeleteAuthCont(pointer value, FSID id)
 {
-    AuthContextPtr  authp = (AuthContextPtr) value;
+    AuthContextPtr authp = (AuthContextPtr)value;
 
-    if (authp->authname)
-	FSfree (authp->authname);
-    if (authp->authdata)
-	FSfree (authp->authdata);
-    FSfree (authp);
+    if (authp->authname) FSfree(authp->authname);
+    if (authp->authdata) FSfree(authp->authdata);
+    FSfree(authp);
     return 1;
 }
 
@@ -710,15 +727,15 @@ ProcFreeAC(ClientPtr client)
 
     REQUEST(fsFreeACReq);
     REQUEST_AT_LEAST_SIZE(fsFreeACReq);
-    authp = (AuthContextPtr) LookupIDByType(client->index, stuff->id,
-					  RT_AUTHCONT);
-    if (!authp) {
-	int aligned_id = stuff->id;
-	SendErrToClient(client, FSBadIDChoice, (pointer) &aligned_id);
-	return FSBadIDChoice;
+    authp =
+        (AuthContextPtr)LookupIDByType(client->index, stuff->id, RT_AUTHCONT);
+    if (!authp)
+    {
+        int aligned_id = stuff->id;
+        SendErrToClient(client, FSBadIDChoice, (pointer)&aligned_id);
+        return FSBadIDChoice;
     }
-    if (client->auth == authp)
-	client->auth = client->default_auth;
+    if (client->auth == authp) client->auth = client->default_auth;
     FreeResource(client->index, stuff->id, RT_NONE);
     return client->noClientException;
 }
@@ -730,14 +747,14 @@ ProcSetAuthorization(ClientPtr client)
 
     REQUEST(fsSetAuthorizationReq);
     REQUEST_AT_LEAST_SIZE(fsSetAuthorizationReq);
-    acp = (AuthContextPtr) LookupIDByType(client->index, stuff->id,
-					  RT_AUTHCONT);
-    if (!acp) {
-	int aligned_id = stuff->id;
-	SendErrToClient(client, FSBadIDChoice, (pointer) &aligned_id);
-	return FSBadIDChoice;
+    acp = (AuthContextPtr)LookupIDByType(client->index, stuff->id, RT_AUTHCONT);
+    if (!acp)
+    {
+        int aligned_id = stuff->id;
+        SendErrToClient(client, FSBadIDChoice, (pointer)&aligned_id);
+        return FSBadIDChoice;
     }
-    client->auth = acp;		/* XXX does this need a refcount? */
+    client->auth = acp;  /* XXX does this need a refcount? */
     return client->noClientException;
 }
 
@@ -750,22 +767,25 @@ ProcSetResolution(ClientPtr client)
     REQUEST_AT_LEAST_SIZE(fsSetResolutionReq);
 
     if ((stuff->length << 2) - SIZEOF(fsSetResolutionReq) <
-        stuff->num_resolutions * SIZEOF(fsResolution)) {
-	int lengthword = stuff->length;
+        stuff->num_resolutions * SIZEOF(fsResolution))
+    {
+        int lengthword = stuff->length;
 
-	SendErrToClient(client, FSBadLength, &lengthword);
-	return FSBadLength;
+        SendErrToClient(client, FSBadLength, &lengthword);
+        return FSBadLength;
     }
-    new_res = (fsResolution *)
-	FSallocarray(stuff->num_resolutions, SIZEOF(fsResolution));
-    if (!new_res) {
-	SendErrToClient(client, FSBadAlloc, NULL);
-	return FSBadAlloc;
+    new_res = (fsResolution *)FSallocarray(stuff->num_resolutions,
+                                           SIZEOF(fsResolution));
+    if (!new_res)
+    {
+        SendErrToClient(client, FSBadAlloc, NULL);
+        return FSBadAlloc;
     }
-    FSfree((char *) client->resolutions);
-    memcpy(new_res, (char *)stuff + SIZEOF(fsSetResolutionReq),
-	  (stuff->num_resolutions * SIZEOF(fsResolution)));
-    client->resolutions = new_res;
+    FSfree((char *)client->resolutions);
+    memcpy(new_res,
+           (char *)stuff + SIZEOF(fsSetResolutionReq),
+           (stuff->num_resolutions * SIZEOF(fsResolution)));
+    client->resolutions     = new_res;
     client->num_resolutions = stuff->num_resolutions;
 
     return client->noClientException;
@@ -777,29 +797,32 @@ ProcGetResolution(ClientPtr client)
     REQUEST(fsReq);
     REQUEST_AT_LEAST_SIZE(fsReq);
 
-    if ((stuff->length << 2) - SIZEOF(fsResolution) < client->num_resolutions *
-	sizeof(fsResolution)) {
-	int lengthword = stuff->length;
+    if ((stuff->length << 2) - SIZEOF(fsResolution) <
+        client->num_resolutions * sizeof(fsResolution))
+    {
+        int lengthword = stuff->length;
 
-	SendErrToClient(client, FSBadLength, &lengthword);
-	return FSBadLength;
+        SendErrToClient(client, FSBadLength, &lengthword);
+        return FSBadLength;
     }
-    else {
-	fsGetResolutionReply reply = {
-	    .type = FS_Reply,
-	    .num_resolutions = client->num_resolutions,
-	    .sequenceNumber = client->sequence,
-	    .length = (SIZEOF(fsGetResolutionReply) +
-		       client->num_resolutions * SIZEOF(fsResolution)) >> 2
-	};
+    else
+    {
+        fsGetResolutionReply reply = {
+            .type            = FS_Reply,
+            .num_resolutions = client->num_resolutions,
+            .sequenceNumber  = client->sequence,
+            .length          = (SIZEOF(fsGetResolutionReply) +
+                       client->num_resolutions * SIZEOF(fsResolution)) >>
+                      2
+        };
 
-	WriteReplyToClient(client, SIZEOF(fsGetResolutionReply), &reply);
+        WriteReplyToClient(client, SIZEOF(fsGetResolutionReply), &reply);
     }
-    if (client->swapped)
-	client->pSwapReplyFunc = CopySwap16Write;
+    if (client->swapped) client->pSwapReplyFunc = CopySwap16Write;
 
     WriteSwappedDataToClient(client,
-       (client->num_resolutions * SIZEOF(fsResolution)), (short *)client->resolutions);
+                             (client->num_resolutions * SIZEOF(fsResolution)),
+                             (short *)client->resolutions);
 
     return client->noClientException;
 }
@@ -810,9 +833,10 @@ ProcListFonts(ClientPtr client)
     REQUEST(fsListFontsReq);
     REQUEST_FIXED_SIZE(fsListFontsReq, stuff->nbytes);
 
-    return ListFonts(client, stuff->nbytes,
-		     (unsigned char *)stuff + SIZEOF(fsListFontsReq),
-		     stuff->maxNames);
+    return ListFonts(client,
+                     stuff->nbytes,
+                     (unsigned char *)stuff + SIZEOF(fsListFontsReq),
+                     stuff->maxNames);
 }
 
 int
@@ -821,72 +845,81 @@ ProcListFontsWithXInfo(ClientPtr client)
     REQUEST(fsListFontsWithXInfoReq);
     REQUEST_FIXED_SIZE(fsListFontsWithXInfoReq, stuff->nbytes);
 
-    return StartListFontsWithInfo(client, stuff->nbytes,
-				  (unsigned char *)stuff + SIZEOF(fsListFontsWithXInfoReq), stuff->maxNames);
+    return StartListFontsWithInfo(client,
+                                  stuff->nbytes,
+                                  (unsigned char *)stuff +
+                                      SIZEOF(fsListFontsWithXInfoReq),
+                                  stuff->maxNames);
 }
 
 int
 ProcOpenBitmapFont(ClientPtr client)
 {
-    FontPtr     pfont;
-    int         nbytes,
-                err;
+    FontPtr        pfont;
+    int            nbytes, err;
     unsigned char *fname;
 
     REQUEST(fsOpenBitmapFontReq);
-    fname = (unsigned char *)stuff + SIZEOF(fsOpenBitmapFontReq);
+    fname  = (unsigned char *)stuff + SIZEOF(fsOpenBitmapFontReq);
     nbytes = *fname++;
 
     REQUEST_FIXED_SIZE(fsOpenBitmapFontReq, (nbytes + 1));
 
-    pfont = (FontPtr) LookupIDByType(client->index, stuff->fid, RT_FONT);
-    if (pfont) {
-	int aligned_fid = stuff->fid;
-	SendErrToClient(client, FSBadIDChoice, (pointer) &aligned_fid);
-	return FSBadIDChoice;
+    pfont = (FontPtr)LookupIDByType(client->index, stuff->fid, RT_FONT);
+    if (pfont)
+    {
+        int aligned_fid = stuff->fid;
+        SendErrToClient(client, FSBadIDChoice, (pointer)&aligned_fid);
+        return FSBadIDChoice;
     }
-    if (stuff->format_hint != 0 &&
-	    stuff->format_hint & ~ALL_FORMAT_BITS) {
-	int aligned_format_hint = stuff->format_hint;
-	SendErrToClient(client, FSBadFormat, (pointer) &aligned_format_hint);
-	return FSBadFormat;
+    if (stuff->format_hint != 0 && stuff->format_hint & ~ALL_FORMAT_BITS)
+    {
+        int aligned_format_hint = stuff->format_hint;
+        SendErrToClient(client, FSBadFormat, (pointer)&aligned_format_hint);
+        return FSBadFormat;
     }
-    if (stuff->format_mask & ~ALL_FORMAT_MASK_BITS) {
-	int aligned_format_mask = stuff->format_mask;
-	SendErrToClient(client, FSBadFormat, (pointer) &aligned_format_mask);
-	return FSBadFormat;
+    if (stuff->format_mask & ~ALL_FORMAT_MASK_BITS)
+    {
+        int aligned_format_mask = stuff->format_mask;
+        SendErrToClient(client, FSBadFormat, (pointer)&aligned_format_mask);
+        return FSBadFormat;
     }
-    err = OpenFont(client, stuff->fid, stuff->format_hint, stuff->format_mask,
-		   nbytes, (char *) fname);
+    err = OpenFont(client,
+                   stuff->fid,
+                   stuff->format_hint,
+                   stuff->format_mask,
+                   nbytes,
+                   (char *)fname);
 
-    if (err == FSSuccess) {
-	return client->noClientException;
-    } else {
-	return err;
+    if (err == FSSuccess)
+    {
+        return client->noClientException;
+    }
+    else
+    {
+        return err;
     }
 }
 
 int
 ProcQueryXInfo(ClientPtr client)
 {
-    ClientFontPtr cfp;
-    int         err,
-                lendata;
-    fsQueryXInfoReply reply = {
-	.type = FS_Reply,
-	.sequenceNumber = client->sequence
-    };
-    fsPropInfo *prop_info;
+    ClientFontPtr     cfp;
+    int               err, lendata;
+    fsQueryXInfoReply reply = { .type           = FS_Reply,
+                                .sequenceNumber = client->sequence };
+    fsPropInfo       *prop_info;
 
     REQUEST(fsQueryXInfoReq);
 
     REQUEST_AT_LEAST_SIZE(fsQueryXInfoReq);
 
-    cfp = (ClientFontPtr) LookupIDByType(client->index, stuff->id, RT_FONT);
-    if (!cfp) {
-	int aligned_id = stuff->id;
-	SendErrToClient(client, FSBadFont, (pointer) &aligned_id);
-	return FSBadFont;
+    cfp = (ClientFontPtr)LookupIDByType(client->index, stuff->id, RT_FONT);
+    if (!cfp)
+    {
+        int aligned_id = stuff->id;
+        SendErrToClient(client, FSBadFont, (pointer)&aligned_id);
+        return FSBadFont;
     }
 
     /* get the header */
@@ -895,29 +928,29 @@ ProcQueryXInfo(ClientPtr client)
 
     switch (err)
     {
-    case Successful:
-	break;
-    case AllocError:
-	SendErrToClient(client, FSBadAlloc, (pointer) 0);
-	return err;
-    default:
-	ErrorF("ProcQueryXInfo: unexpected return val %d from convert_props\n",
-	       err);
-	SendErrToClient(client, FSBadImplementation, (pointer) 0);
-	return err;
+        case Successful:
+            break;
+        case AllocError:
+            SendErrToClient(client, FSBadAlloc, (pointer)0);
+            return err;
+        default:
+            ErrorF(
+                "ProcQueryXInfo: unexpected return val %d from convert_props\n",
+                err);
+            SendErrToClient(client, FSBadImplementation, (pointer)0);
+            return err;
     }
     lendata = SIZEOF(fsPropInfo) +
-	prop_info->num_offsets * SIZEOF(fsPropOffset) +
-	prop_info->data_len;
+              prop_info->num_offsets * SIZEOF(fsPropOffset) +
+              prop_info->data_len;
 
     reply.length = (SIZEOF(fsQueryXInfoReply) + lendata + 3) >> 2;
     WriteReplyToClient(client, SIZEOF(fsQueryXInfoReply), &reply);
 
-    if (client->swapped)
-	SwapPropInfo(prop_info);
-    (void) WriteToClient(client, lendata, (char *) prop_info);
+    if (client->swapped) SwapPropInfo(prop_info);
+    (void)WriteToClient(client, lendata, (char *)prop_info);
 
-    FSfree((char *) prop_info);
+    FSfree((char *)prop_info);
     return client->noClientException;
 }
 
@@ -925,79 +958,96 @@ int
 ProcQueryXExtents(ClientPtr client)
 {
     ClientFontPtr cfp;
-    int         err;
-    int         item_size;
+    int           err;
+    int           item_size;
 
     REQUEST(fsQueryXExtents8Req);
 
     REQUEST_AT_LEAST_SIZE(fsQueryXExtents8Req);
 
-    cfp = (ClientFontPtr) LookupIDByType(client->index, stuff->fid, RT_FONT);
-    if (!cfp) {
-	int aligned_fid = stuff->fid;
-	SendErrToClient(client, FSBadFont, (pointer) &aligned_fid);
-	return FSBadFont;
+    cfp = (ClientFontPtr)LookupIDByType(client->index, stuff->fid, RT_FONT);
+    if (!cfp)
+    {
+        int aligned_fid = stuff->fid;
+        SendErrToClient(client, FSBadFont, (pointer)&aligned_fid);
+        return FSBadFont;
     }
     item_size = (stuff->reqType == FS_QueryXExtents8) ? 1 : 2;
 
     if (stuff->num_ranges >
-	 ((stuff->length << 2) - SIZEOF(fsQueryXExtents8Req))/item_size) {
-	int num_ranges = stuff->num_ranges;
-	SendErrToClient(client, FSBadLength, (pointer)&num_ranges);
-	return FSBadLength;
+        ((stuff->length << 2) - SIZEOF(fsQueryXExtents8Req)) / item_size)
+    {
+        int num_ranges = stuff->num_ranges;
+        SendErrToClient(client, FSBadLength, (pointer)&num_ranges);
+        return FSBadLength;
     }
-		
-    /* get the extents */
-    err = QueryExtents(client, cfp, item_size,
-		       stuff->num_ranges, stuff->range,
-		       (char *)stuff + SIZEOF(fsQueryXExtents8Req));
 
-    if (err != FSSuccess) {
-	return err;
-    } else
-	return client->noClientException;
+    /* get the extents */
+    err = QueryExtents(client,
+                       cfp,
+                       item_size,
+                       stuff->num_ranges,
+                       stuff->range,
+                       (char *)stuff + SIZEOF(fsQueryXExtents8Req));
+
+    if (err != FSSuccess)
+    {
+        return err;
+    }
+    else return client->noClientException;
 }
 
 int
 ProcQueryXBitmaps(ClientPtr client)
 {
     ClientFontPtr cfp;
-    int         err;
-    int         item_size;
+    int           err;
+    int           item_size;
 
     REQUEST(fsQueryXBitmaps8Req);
 
     REQUEST_AT_LEAST_SIZE(fsQueryXBitmaps8Req);
 
-    cfp = (ClientFontPtr) LookupIDByType(client->index, stuff->fid, RT_FONT);
-    if (!cfp) {
-	int aligned_fid = stuff->fid;
-	SendErrToClient(client, FSBadFont, (pointer) &aligned_fid);
-	return FSBadFont;
+    cfp = (ClientFontPtr)LookupIDByType(client->index, stuff->fid, RT_FONT);
+    if (!cfp)
+    {
+        int aligned_fid = stuff->fid;
+        SendErrToClient(client, FSBadFont, (pointer)&aligned_fid);
+        return FSBadFont;
     }
-    if (stuff->format & ~ALL_FORMAT_BITS) {
-	int aligned_format = stuff->format;
-	SendErrToClient(client, FSBadFormat, (pointer) &aligned_format);
-	return FSBadFormat;
+    if (stuff->format & ~ALL_FORMAT_BITS)
+    {
+        int aligned_format = stuff->format;
+        SendErrToClient(client, FSBadFormat, (pointer)&aligned_format);
+        return FSBadFormat;
     }
-    assert((stuff->reqType == FS_QueryXBitmaps8) || (stuff->reqType == FS_QueryXBitmaps16));
+    assert((stuff->reqType == FS_QueryXBitmaps8) ||
+           (stuff->reqType == FS_QueryXBitmaps16));
     item_size = (stuff->reqType == FS_QueryXBitmaps8) ? 1 : 2;
 
-    if (stuff->num_ranges > 
-	((stuff->length << 2) - SIZEOF(fsQueryXBitmaps8Req))/item_size) {
-	int num_ranges = stuff->num_ranges;
-	SendErrToClient(client, FSBadLength, (pointer)&num_ranges);
-	return FSBadLength;
+    if (stuff->num_ranges >
+        ((stuff->length << 2) - SIZEOF(fsQueryXBitmaps8Req)) / item_size)
+    {
+        int num_ranges = stuff->num_ranges;
+        SendErrToClient(client, FSBadLength, (pointer)&num_ranges);
+        return FSBadLength;
     }
     /* get the glyphs */
-    err = QueryBitmaps(client, cfp, item_size, stuff->format,
-		       stuff->num_ranges, stuff->range,
-		       (char *)stuff + SIZEOF(fsQueryXBitmaps8Req));
+    err = QueryBitmaps(client,
+                       cfp,
+                       item_size,
+                       stuff->format,
+                       stuff->num_ranges,
+                       stuff->range,
+                       (char *)stuff + SIZEOF(fsQueryXBitmaps8Req));
 
-    if (err != FSSuccess) {
-	return err;
-    } else {
-	return client->noClientException;
+    if (err != FSSuccess)
+    {
+        return err;
+    }
+    else
+    {
+        return client->noClientException;
     }
 }
 
@@ -1009,139 +1059,139 @@ ProcCloseFont(ClientPtr client)
     REQUEST(fsResourceReq);
 
     REQUEST_SIZE_MATCH(fsResourceReq);
-    cfp = (ClientFontPtr) LookupIDByType(client->index, stuff->id, RT_FONT);
-    if (cfp) {
-	FreeResource(client->index, stuff->id, RT_NONE);
-	return client->noClientException;
-    } else {
-	int aligned_id = stuff->id;
-	SendErrToClient(client, FSBadFont, (pointer) &aligned_id);
-	return FSBadFont;
+    cfp = (ClientFontPtr)LookupIDByType(client->index, stuff->id, RT_FONT);
+    if (cfp)
+    {
+        FreeResource(client->index, stuff->id, RT_NONE);
+        return client->noClientException;
+    }
+    else
+    {
+        int aligned_id = stuff->id;
+        SendErrToClient(client, FSBadFont, (pointer)&aligned_id);
+        return FSBadFont;
     }
 }
 
 void
 DoCloseDownClient(ClientPtr client)
 {
-    if (client->clientGone != CLIENT_GONE) {
-	DeleteClientFontStuff(client);
-	client->clientGone = CLIENT_GONE;
-	CloseDownConnection(client);
-	--nClients;
+    if (client->clientGone != CLIENT_GONE)
+    {
+        DeleteClientFontStuff(client);
+        client->clientGone = CLIENT_GONE;
+        CloseDownConnection(client);
+        --nClients;
     }
 
-    if (ClientIsAsleep(client))
-	ClientSignal((pointer)client);
+    if (ClientIsAsleep(client)) ClientSignal((pointer)client);
     else
     {
-	FreeClientResources(client);
-	if (client->index < nextFreeClientID)
-	    nextFreeClientID = client->index;
-	clients[client->index] = NullClient;
+        FreeClientResources(client);
+        if (client->index < nextFreeClientID) nextFreeClientID = client->index;
+        clients[client->index] = NullClient;
 #ifdef DebugConnectionTranslation
-	CheckFileNumbers();
+        CheckFileNumbers();
 #endif /* DebugConnectionTranslation */
 
-
-	if (currentClient == client)
-	    currentClient = serverClient;
-	FSfree(client);
+        if (currentClient == client) currentClient = serverClient;
+        FSfree(client);
 
 #ifdef DEBUG
-	fprintf(stderr, "Shut down client\n");
+        fprintf(stderr, "Shut down client\n");
 #endif
 
-	while (!clients[currentMaxClients - 1])
-	    currentMaxClients--;
+        while (!clients[currentMaxClients - 1])
+            currentMaxClients--;
     }
 }
 
 static void
 kill_all_clients(void)
 {
-    int         i;
+    int i;
 
-    for (i = MINCLIENT; i < currentMaxClients; i++) {
-	if (clients[i])
-	    CloseDownClient(clients[i]);
+    for (i = MINCLIENT; i < currentMaxClients; i++)
+    {
+        if (clients[i]) CloseDownClient(clients[i]);
     }
 }
 
 void
 InitProcVectors(void)
 {
-    int         i;
+    int i;
 
-    for (i = 0; i < NUM_PROC_VECTORS; i++) {
-	if (!ProcVector[i]) {
-	    ProcVector[i] = SwappedProcVector[i] = ProcBadRequest;
-	    ReplySwapVector[i] = ReplySwapNotImplemented;
-	}
+    for (i = 0; i < NUM_PROC_VECTORS; i++)
+    {
+        if (!ProcVector[i])
+        {
+            ProcVector[i] = SwappedProcVector[i] = ProcBadRequest;
+            ReplySwapVector[i]                   = ReplySwapNotImplemented;
+        }
     }
 }
 
 void
-InitClient(
-    ClientPtr   client,
-    int         i,
-    pointer     ospriv)
+InitClient(ClientPtr client, int i, pointer ospriv)
 {
-    if (i != SERVER_CLIENT) {
-	nClients++;
+    if (i != SERVER_CLIENT)
+    {
+        nClients++;
     }
-    client->index = i;
-    client->sequence = 0;
+    client->index             = i;
+    client->sequence          = 0;
     client->last_request_time = GetTimeInMillis();
-    client->clientGone = CLIENT_ALIVE;
+    client->clientGone        = CLIENT_ALIVE;
     client->noClientException = FSSuccess;
-    client->requestVector = InitialVector;
-    client->osPrivate = ospriv;
-    client->swapped = FALSE;
+    client->requestVector     = InitialVector;
+    client->osPrivate         = ospriv;
+    client->swapped           = FALSE;
 
-    client->auth = (AuthContextPtr) 0;
-    client->catalogues = NULL;
-    client->num_catalogues = 0;
+    client->auth            = (AuthContextPtr)0;
+    client->catalogues      = NULL;
+    client->num_catalogues  = 0;
     client->num_resolutions = 0;
-    client->resolutions = (fsResolution *) 0;
-    client->eventmask = (Mask) 0;
+    client->resolutions     = (fsResolution *)0;
+    client->eventmask       = (Mask)0;
 }
 
 ClientPtr
 NextAvailableClient(pointer ospriv)
 {
-    int         i;
-    ClientPtr   client;
-    fsFakeReq   data;
+    int       i;
+    ClientPtr client;
+    fsFakeReq data;
 
     i = nextFreeClientID;
-    if (i == MaxClients)
-	return NullClient;
+    if (i == MaxClients) return NullClient;
 
-    clients[i] = client = (ClientPtr) FSalloc(sizeof(ClientRec));
-    if (!client)
-	return NullClient;
+    clients[i] = client = (ClientPtr)FSalloc(sizeof(ClientRec));
+    if (!client) return NullClient;
 
     InitClient(client, i, ospriv);
 
-    if (!InitClientResources(client)) {
-	FSfree(client);
-	return NullClient;
+    if (!InitClientResources(client))
+    {
+        FSfree(client);
+        return NullClient;
     }
     data.reqType = 1;
-    data.length = (sizeof(fsFakeReq) + SIZEOF(fsConnClientPrefix)) >> 2;
-    if (!InsertFakeRequest(client, (char *) &data, sizeof(fsFakeReq))) {
-	FreeClientResources(client);
-	FSfree(client);
-	return NullClient;
+    data.length  = (sizeof(fsFakeReq) + SIZEOF(fsConnClientPrefix)) >> 2;
+    if (!InsertFakeRequest(client, (char *)&data, sizeof(fsFakeReq)))
+    {
+        FreeClientResources(client);
+        FSfree(client);
+        return NullClient;
     }
-    if (i == currentMaxClients)
-	currentMaxClients++;
+    if (i == currentMaxClients) currentMaxClients++;
     while ((nextFreeClientID < MAXCLIENTS) && clients[nextFreeClientID])
-	nextFreeClientID++;
+        nextFreeClientID++;
 
     /* if we've maxed out, try to clone */
-    if (nextFreeClientID == MaxClients) {
-	CloneMyself();
+    if (nextFreeClientID == MaxClients)
+    {
+        CloneMyself();
     }
     return client;
 }

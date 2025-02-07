@@ -50,25 +50,22 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
-#include	"FSlibint.h"
+#include "FSlibint.h"
 
-int FSNextEvent(
-    FSServer	*svr,
-    FSEvent	*event)
+int
+FSNextEvent(FSServer *svr, FSEvent *event)
 {
-    _FSQEvent  *qelt;
+    _FSQEvent *qelt;
 
-    if (svr->head == NULL)
-	_FSReadEvents(svr);
-    qelt = svr->head;
+    if (svr->head == NULL) _FSReadEvents(svr);
+    qelt   = svr->head;
     *event = qelt->event;
 
-    if ((svr->head = qelt->next) == NULL)
-	svr->tail = NULL;
+    if ((svr->head = qelt->next) == NULL) svr->tail = NULL;
     qelt->next = _FSqfree;
-    _FSqfree = qelt;
+    _FSqfree   = qelt;
     svr->qlen--;
 
     return 1;

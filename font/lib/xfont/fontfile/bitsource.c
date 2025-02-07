@@ -29,59 +29,58 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "libxfontint.h"
 #include "util/replace.h"
 #include "fntfilst.h"
 
-BitmapSourcesRec	FontFileBitmapSources;
+BitmapSourcesRec FontFileBitmapSources;
 
 Bool
-FontFileRegisterBitmapSource (FontPathElementPtr fpe)
+FontFileRegisterBitmapSource(FontPathElementPtr fpe)
 {
-    FontPathElementPtr	*new;
-    int			i;
-    int			newsize;
+    FontPathElementPtr *new;
+    int i;
+    int newsize;
 
     for (i = 0; i < FontFileBitmapSources.count; i++)
-	if (FontFileBitmapSources.fpe[i] == fpe)
-	    return TRUE;
+        if (FontFileBitmapSources.fpe[i] == fpe) return TRUE;
     if (FontFileBitmapSources.count == FontFileBitmapSources.size)
     {
-	newsize = FontFileBitmapSources.size + 4;
-	new = reallocarray (FontFileBitmapSources.fpe, newsize, sizeof *new);
-	if (!new)
-	    return FALSE;
-	FontFileBitmapSources.size = newsize;
-	FontFileBitmapSources.fpe = new;
+        newsize = FontFileBitmapSources.size + 4;
+        new     = reallocarray(FontFileBitmapSources.fpe, newsize, sizeof *new);
+        if (!new) return FALSE;
+        FontFileBitmapSources.size = newsize;
+        FontFileBitmapSources.fpe  = new;
     }
     FontFileBitmapSources.fpe[FontFileBitmapSources.count++] = fpe;
     return TRUE;
 }
 
 void
-FontFileUnregisterBitmapSource (FontPathElementPtr fpe)
+FontFileUnregisterBitmapSource(FontPathElementPtr fpe)
 {
-    int	    i;
+    int i;
 
     for (i = 0; i < FontFileBitmapSources.count; i++)
-	if (FontFileBitmapSources.fpe[i] == fpe)
-	{
-	    FontFileBitmapSources.count--;
-	    if (FontFileBitmapSources.count == 0)
-	    {
-		FontFileBitmapSources.size = 0;
-		free (FontFileBitmapSources.fpe);
-		FontFileBitmapSources.fpe = 0;
-	    }
-	    else
-	    {
-	    	for (; i < FontFileBitmapSources.count; i++)
-		    FontFileBitmapSources.fpe[i] = FontFileBitmapSources.fpe[i+1];
-	    }
-	    break;
-	}
+        if (FontFileBitmapSources.fpe[i] == fpe)
+        {
+            FontFileBitmapSources.count--;
+            if (FontFileBitmapSources.count == 0)
+            {
+                FontFileBitmapSources.size = 0;
+                free(FontFileBitmapSources.fpe);
+                FontFileBitmapSources.fpe = 0;
+            }
+            else
+            {
+                for (; i < FontFileBitmapSources.count; i++)
+                    FontFileBitmapSources.fpe[i] =
+                        FontFileBitmapSources.fpe[i + 1];
+            }
+            break;
+        }
 }
 
 /*
@@ -93,32 +92,31 @@ FontFileUnregisterBitmapSource (FontPathElementPtr fpe)
 void
 FontFileEmptyBitmapSource(void)
 {
-    if (FontFileBitmapSources.count == 0)
-	return;
+    if (FontFileBitmapSources.count == 0) return;
 
     FontFileBitmapSources.count = 0;
-    FontFileBitmapSources.size = 0;
-    free (FontFileBitmapSources.fpe);
+    FontFileBitmapSources.size  = 0;
+    free(FontFileBitmapSources.fpe);
     FontFileBitmapSources.fpe = 0;
 }
 
 int
-FontFileMatchBitmapSource (FontPathElementPtr fpe,
-			   FontPtr *pFont,
-			   int flags,
-			   FontEntryPtr entry,
-			   FontNamePtr zeroPat,
-			   FontScalablePtr vals,
-			   fsBitmapFormat format,
-			   fsBitmapFormatMask fmask,
-			   Bool noSpecificSize)
+FontFileMatchBitmapSource(FontPathElementPtr fpe,
+                          FontPtr           *pFont,
+                          int                flags,
+                          FontEntryPtr       entry,
+                          FontNamePtr        zeroPat,
+                          FontScalablePtr    vals,
+                          fsBitmapFormat     format,
+                          fsBitmapFormatMask fmask,
+                          Bool               noSpecificSize)
 {
-    int			source;
-    FontEntryPtr	zero;
-    FontBitmapEntryPtr	bitmap;
-    int			ret;
-    FontDirectoryPtr	dir;
-    FontScaledPtr	scaled;
+    int                source;
+    FontEntryPtr       zero;
+    FontBitmapEntryPtr bitmap;
+    int                ret;
+    FontDirectoryPtr   dir;
+    FontScaledPtr      scaled;
 
     /*
      * Look through all the registered bitmap sources for
@@ -128,46 +126,47 @@ FontFileMatchBitmapSource (FontPathElementPtr fpe,
     ret = BadFontName;
     for (source = 0; source < FontFileBitmapSources.count; source++)
     {
-    	if (FontFileBitmapSources.fpe[source] == fpe)
-	    continue;
-	dir = (FontDirectoryPtr) FontFileBitmapSources.fpe[source]->private;
-	zero = FontFileFindNameInDir (&dir->scalable, zeroPat);
-	if (!zero)
-	    continue;
-    	scaled = FontFileFindScaledInstance (zero, vals, noSpecificSize);
-    	if (scaled)
-    	{
-	    if (scaled->pFont)
-	    {
-		*pFont = scaled->pFont;
-		(*pFont)->fpe = FontFileBitmapSources.fpe[source];
-		ret = Successful;
-	    }
-	    else if (scaled->bitmap)
-	    {
-		entry = scaled->bitmap;
-		bitmap = &entry->u.bitmap;
-		if (bitmap->pFont)
-		{
-		    *pFont = bitmap->pFont;
-		    (*pFont)->fpe = FontFileBitmapSources.fpe[source];
-		    ret = Successful;
-		}
-		else
-		{
-		    ret = FontFileOpenBitmap (
-				FontFileBitmapSources.fpe[source],
-				pFont, flags, entry, format, fmask);
-		    if (ret == Successful && *pFont)
-			(*pFont)->fpe = FontFileBitmapSources.fpe[source];
-		}
-	    }
-	    else /* "cannot" happen */
-	    {
-		ret = BadFontName;
-	    }
-	    break;
-    	}
+        if (FontFileBitmapSources.fpe[source] == fpe) continue;
+        dir  = (FontDirectoryPtr)FontFileBitmapSources.fpe[source]->private;
+        zero = FontFileFindNameInDir(&dir->scalable, zeroPat);
+        if (!zero) continue;
+        scaled = FontFileFindScaledInstance(zero, vals, noSpecificSize);
+        if (scaled)
+        {
+            if (scaled->pFont)
+            {
+                *pFont        = scaled->pFont;
+                (*pFont)->fpe = FontFileBitmapSources.fpe[source];
+                ret           = Successful;
+            }
+            else if (scaled->bitmap)
+            {
+                entry  = scaled->bitmap;
+                bitmap = &entry->u.bitmap;
+                if (bitmap->pFont)
+                {
+                    *pFont        = bitmap->pFont;
+                    (*pFont)->fpe = FontFileBitmapSources.fpe[source];
+                    ret           = Successful;
+                }
+                else
+                {
+                    ret = FontFileOpenBitmap(FontFileBitmapSources.fpe[source],
+                                             pFont,
+                                             flags,
+                                             entry,
+                                             format,
+                                             fmask);
+                    if (ret == Successful && *pFont)
+                        (*pFont)->fpe = FontFileBitmapSources.fpe[source];
+                }
+            }
+            else /* "cannot" happen */
+            {
+                ret = BadFontName;
+            }
+            break;
+        }
     }
     return ret;
 }

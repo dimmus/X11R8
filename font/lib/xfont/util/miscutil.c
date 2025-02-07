@@ -27,7 +27,7 @@ from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "libxfontint.h"
 #include "X11/Xosdefs.h"
@@ -40,7 +40,7 @@ from The Open Group.
 extern void BuiltinRegisterFpeFunctions(void);
 
 void
-register_fpe_functions (void)
+register_fpe_functions(void)
 {
     BuiltinRegisterFpeFunctions();
     FontFileRegisterFpeFunctions();

@@ -48,93 +48,99 @@ in this Software without prior written authorization from The Open Group.
 #ifndef CLOSESTR_H
 #define CLOSESTR_H
 
-#include	"X11/fonts/FSproto.h"
-#include	"closure.h"
-#include	"misc.h"
-#include	"X11/fonts/font.h"
+#include "X11/fonts/FSproto.h"
+#include "closure.h"
+#include "misc.h"
+#include "X11/fonts/font.h"
 
 /* closure structures */
 
 /* OpenFont */
 
-typedef struct _OFclosure {
-    ClientPtr   client;
-    short       current_fpe;
-    short       num_fpes;
+typedef struct _OFclosure
+{
+    ClientPtr           client;
+    short               current_fpe;
+    short               num_fpes;
     FontPathElementPtr *fpe_list;
-    Mask        flags;
-    fsBitmapFormat format;
-    fsBitmapFormatMask format_mask;
-    Bool        slept;
-    FSID        fontid;
-    char       *fontname;
-    int         fnamelen;
-    char       *orig_name;
-    int         orig_len;
-    FontPtr	non_cachable_font;
-}           OFclosureRec;
+    Mask                flags;
+    fsBitmapFormat      format;
+    fsBitmapFormatMask  format_mask;
+    Bool                slept;
+    FSID                fontid;
+    char               *fontname;
+    int                 fnamelen;
+    char               *orig_name;
+    int                 orig_len;
+    FontPtr             non_cachable_font;
+} OFclosureRec;
 
 /* QueryExtents */
 
-typedef struct _QEclosure {
-    ClientPtr   client;
-    int         nranges;
-    fsRange    *range;
-    FontPtr     pfont;
-    Mask        flags;
-    Bool        slept;
-}           QEclosureRec;
+typedef struct _QEclosure
+{
+    ClientPtr client;
+    int       nranges;
+    fsRange  *range;
+    FontPtr   pfont;
+    Mask      flags;
+    Bool      slept;
+} QEclosureRec;
 
 /* QueryBitmaps */
 
-typedef struct _QBclosure {
-    ClientPtr   client;
-    int         nranges;
-    fsRange    *range;
-    FontPtr     pfont;
+typedef struct _QBclosure
+{
+    ClientPtr      client;
+    int            nranges;
+    fsRange       *range;
+    FontPtr        pfont;
     fsBitmapFormat format;
-    Mask        flags;
-    Bool        slept;
-}           QBclosureRec;
+    Mask           flags;
+    Bool           slept;
+} QBclosureRec;
 
 /* ListFontsWithInfo */
 
-#define XLFDMAXFONTNAMELEN	256
-typedef struct _LFWIstate {
-    char        pattern[XLFDMAXFONTNAMELEN];  /* max len of font name */
-    int         patlen;
-    int         current_fpe;
-    int         max_names;
-    Bool        list_started;
-    pointer     private;
-}           LFWIstateRec, *LFWIstatePtr;
+#define XLFDMAXFONTNAMELEN 256
 
+typedef struct _LFWIstate
+{
+    char pattern[XLFDMAXFONTNAMELEN];  /* max len of font name */
+    int  patlen;
+    int  current_fpe;
+    int  max_names;
+    Bool list_started;
+    pointer private;
+} LFWIstateRec, *LFWIstatePtr;
 
-typedef struct _LFWXIclosure {
-    ClientPtr   client;
-    int         num_fpes;
-    FontPathElementPtr *fpe_list;
+typedef struct _LFWXIclosure
+{
+    ClientPtr                  client;
+    int                        num_fpes;
+    FontPathElementPtr        *fpe_list;
     fsListFontsWithXInfoReply *reply;
-    int         length;
-    LFWIstateRec current;
-    LFWIstateRec saved;
-    int         savedNumFonts;
-    Bool        haveSaved;
-    Bool        slept;
-    char       *savedName;
-}           LFWXIclosureRec;
+    int                        length;
+    LFWIstateRec               current;
+    LFWIstateRec               saved;
+    int                        savedNumFonts;
+    Bool                       haveSaved;
+    Bool                       slept;
+    char                      *savedName;
+} LFWXIclosureRec;
 
-typedef struct _LFclosure {
-    ClientPtr   client;
-    int         num_fpes;
+typedef struct _LFclosure
+{
+    ClientPtr           client;
+    int                 num_fpes;
     FontPathElementPtr *fpe_list;
-    FontNamesPtr names;
-    LFWIstateRec current;
-    LFWIstateRec saved;
-    Bool        haveSaved;
-    Bool        slept;
-    char	*savedName;
-    int		savedNameLen;
-}	LFclosureRec;
+    FontNamesPtr        names;
+    LFWIstateRec        current;
+    LFWIstateRec        saved;
+    Bool                haveSaved;
+    Bool                slept;
+    char               *savedName;
+    int                 savedNameLen;
+} LFclosureRec;
 
-#endif				/* CLOSESTR_H */
+#endif    /* CLOSESTR_H */

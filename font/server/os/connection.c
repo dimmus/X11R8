@@ -68,7 +68,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 /* include Xpoll.h early for possible FD_SETSIZE re-definition */
@@ -96,42 +96,39 @@ in this Software without prior written authorization from The Open Group.
 #include "fsevents.h"
 #include "misc.h"
 
-int         ListenPort = DEFAULT_FS_PORT;   /* port to listen on */
-int         lastfdesc;
+int ListenPort = DEFAULT_FS_PORT;   /* port to listen on */
+int lastfdesc;
 
-fd_set      WellKnownConnections;
-fd_set      AllSockets;
-fd_set      AllClients;
-fd_set      LastSelectMask;
-fd_set      ClientsWithInput;
-fd_set      ClientsWriteBlocked;
-fd_set      OutputPending;
-long        OutputBufferSize = BUFSIZE;
+fd_set WellKnownConnections;
+fd_set AllSockets;
+fd_set AllClients;
+fd_set LastSelectMask;
+fd_set ClientsWithInput;
+fd_set ClientsWriteBlocked;
+fd_set OutputPending;
+long   OutputBufferSize = BUFSIZE;
 
-Bool        NewOutputPending;
-Bool        AnyClientsWriteBlocked;
+Bool NewOutputPending;
+Bool AnyClientsWriteBlocked;
 
-int         ConnectionTranslation[MAXSOCKS];
+int ConnectionTranslation[MAXSOCKS];
 
-XtransConnInfo 	*ListenTransConns = NULL;
-int	       	*ListenTransFds = NULL;
-int		ListenTransCount;
+XtransConnInfo *ListenTransConns = NULL;
+int            *ListenTransFds   = NULL;
+int             ListenTransCount;
 
-
-extern int  xfd_ffs (fd_mask);
+extern int  xfd_ffs(fd_mask);
 static void error_conn_max(XtransConnInfo trans_conn);
 static void close_fd(OsCommPtr oc);
 
-
 static XtransConnInfo
-lookup_trans_conn (int fd)
+lookup_trans_conn(int fd)
 {
     if (ListenTransFds)
     {
-	int i;
-	for (i = 0; i < ListenTransCount; i++)
-	    if (ListenTransFds[i] == fd)
-		return ListenTransConns[i];
+        int i;
+        for (i = 0; i < ListenTransCount; i++)
+            if (ListenTransFds[i] == fd) return ListenTransConns[i];
     }
 
     return (NULL);
@@ -144,14 +141,14 @@ StopListening(void)
 
     for (i = 0; i < ListenTransCount; i++)
     {
-	FD_CLR (ListenTransFds[i], &AllSockets);
-	_FontTransCloseForCloning (ListenTransConns[i]);
+        FD_CLR(ListenTransFds[i], &AllSockets);
+        _FontTransCloseForCloning(ListenTransConns[i]);
     }
 
-    free ((char *) ListenTransFds);
-    free ((char *) ListenTransConns);
+    free((char *)ListenTransFds);
+    free((char *)ListenTransConns);
 
-    ListenTransFds = NULL;
+    ListenTransFds   = NULL;
     ListenTransConns = NULL;
     ListenTransCount = 0;
 }
@@ -164,7 +161,7 @@ StopListening(void)
 void
 CreateSockets(int old_listen_count, OldListenRec *old_listen)
 {
-    int	i;
+    int              i;
     struct sigaction act;
 
     FD_ZERO(&AllSockets);
@@ -174,79 +171,87 @@ CreateSockets(int old_listen_count, OldListenRec *old_listen)
     FD_ZERO(&WellKnownConnections);
 
     for (i = 0; i < MAXSOCKS; i++)
-	ConnectionTranslation[i] = 0;
+        ConnectionTranslation[i] = 0;
 
     lastfdesc = sysconf(_SC_OPEN_MAX) - 1;
 
-    if ((lastfdesc < 0) || (lastfdesc > MAXSOCKS)) {
-	lastfdesc = MAXSOCKS;
+    if ((lastfdesc < 0) || (lastfdesc > MAXSOCKS))
+    {
+        lastfdesc = MAXSOCKS;
     }
 
-    if (old_listen_count > 0) {
-
-	/*
+    if (old_listen_count > 0)
+    {
+    /*
 	 * The font server cloned itself.  Re-use previously opened
 	 * transports for listening.
 	 */
 
-	ListenTransConns = (XtransConnInfo *) malloc (
-	    old_listen_count * sizeof (XtransConnInfo));
+        ListenTransConns =
+            (XtransConnInfo *)malloc(old_listen_count * sizeof(XtransConnInfo));
 
-	ListenTransFds = (int *) malloc (old_listen_count * sizeof (int));
+        ListenTransFds = (int *)malloc(old_listen_count * sizeof(int));
 
-	ListenTransCount = 0;
+        ListenTransCount = 0;
 
-	for (i = 0; i < old_listen_count; i++)
-	{
-	    char portnum[10];
+        for (i = 0; i < old_listen_count; i++)
+        {
+            char portnum[10];
 
-	    if (old_listen[i].portnum != ListenPort)
-		continue;		/* this should never happen */
-	    else
-		snprintf (portnum, sizeof(portnum), "%d", old_listen[i].portnum);
+            if (old_listen[i].portnum != ListenPort)
+                continue;  /* this should never happen */
+            else
+                snprintf(portnum, sizeof(portnum), "%d", old_listen[i].portnum);
 
-	    if ((ListenTransConns[ListenTransCount] =
-		_FontTransReopenCOTSServer (old_listen[i].trans_id,
-		old_listen[i].fd, portnum)) != NULL)
-	    {
-		ListenTransFds[ListenTransCount] = old_listen[i].fd;
-		FD_SET (old_listen[i].fd, &WellKnownConnections);
+            if ((ListenTransConns[ListenTransCount] =
+                     _FontTransReopenCOTSServer(old_listen[i].trans_id,
+                                                old_listen[i].fd,
+                                                portnum)) != NULL)
+            {
+                ListenTransFds[ListenTransCount] = old_listen[i].fd;
+                FD_SET(old_listen[i].fd, &WellKnownConnections);
 
-		NoticeF("reusing existing file descriptor %d\n",
-		    old_listen[i].fd);
+                NoticeF("reusing existing file descriptor %d\n",
+                        old_listen[i].fd);
 
-		ListenTransCount++;
-	    }
-	}
-    } else {
-	char port[20];
-	int partial;
+                ListenTransCount++;
+            }
+        }
+    }
+    else
+    {
+        char port[20];
+        int  partial;
 
-	snprintf (port, sizeof(port), "%d", ListenPort);
+        snprintf(port, sizeof(port), "%d", ListenPort);
 
-	if ((_FontTransMakeAllCOTSServerListeners (port, &partial,
-	    &ListenTransCount, &ListenTransConns) >= 0) &&
-	    (ListenTransCount >= 1))
-	{
-	    ListenTransFds = (int *) malloc (ListenTransCount * sizeof (int));
+        if ((_FontTransMakeAllCOTSServerListeners(port,
+                                                  &partial,
+                                                  &ListenTransCount,
+                                                  &ListenTransConns) >= 0) &&
+            (ListenTransCount >= 1))
+        {
+            ListenTransFds = (int *)malloc(ListenTransCount * sizeof(int));
 
-	    for (i = 0; i < ListenTransCount; i++)
-	    {
-		int fd = _FontTransGetConnectionNumber (ListenTransConns[i]);
+            for (i = 0; i < ListenTransCount; i++)
+            {
+                int fd = _FontTransGetConnectionNumber(ListenTransConns[i]);
 
-		ListenTransFds[i] = fd;
-		FD_SET (fd, &WellKnownConnections);
-	    }
-	}
+                ListenTransFds[i] = fd;
+                FD_SET(fd, &WellKnownConnections);
+            }
+        }
     }
 
-    if (! XFD_ANYSET(&WellKnownConnections))
-	FatalError("cannot establish any listening sockets\n");
+    if (!XFD_ANYSET(&WellKnownConnections))
+        FatalError("cannot establish any listening sockets\n");
 
     /* set up all the signal handlers */
     sigemptyset(&act.sa_mask);
     act.sa_flags = SA_RESTART;
-#define HANDLE_SIGNAL(s, h)	act.sa_handler = h; sigaction(s, &act, NULL)
+#define HANDLE_SIGNAL(s, h) \
+    act.sa_handler = h;     \
+    sigaction(s, &act, NULL)
 
     HANDLE_SIGNAL(SIGPIPE, SIG_IGN);
     HANDLE_SIGNAL(SIGHUP, AutoResetServer);
@@ -256,7 +261,7 @@ CreateSockets(int old_listen_count, OldListenRec *old_listen)
     HANDLE_SIGNAL(SIGUSR2, ServerCacheFlush);
     HANDLE_SIGNAL(SIGCHLD, CleanupChild);
 
-    XFD_COPYSET (&WellKnownConnections, &AllSockets);
+    XFD_COPYSET(&WellKnownConnections, &AllSockets);
 }
 
 /*
@@ -264,8 +269,7 @@ CreateSockets(int old_listen_count, OldListenRec *old_listen)
  */
 void
 ResetSockets(void)
-{
-}
+{}
 
 void
 CloseSockets(void)
@@ -273,7 +277,7 @@ CloseSockets(void)
     int i;
 
     for (i = 0; i < ListenTransCount; i++)
-	_FontTransClose (ListenTransConns[i]);
+        _FontTransClose(ListenTransConns[i]);
 }
 
 /*
@@ -282,155 +286,157 @@ CloseSockets(void)
 void
 MakeNewConnections(void)
 {
-    fd_mask     readyconnections;
-    int         curconn;
-    int         newconn;
-    long        connect_time;
-    int         i;
-    ClientPtr   client;
-    OsCommPtr   oc;
-    fd_set	tmask;
+    fd_mask   readyconnections;
+    int       curconn;
+    int       newconn;
+    long      connect_time;
+    int       i;
+    ClientPtr client;
+    OsCommPtr oc;
+    fd_set    tmask;
 
-    XFD_ANDSET (&tmask, &LastSelectMask, &WellKnownConnections);
+    XFD_ANDSET(&tmask, &LastSelectMask, &WellKnownConnections);
     readyconnections = tmask.fds_bits[0];
-    if (!readyconnections)
-	return;
+    if (!readyconnections) return;
     connect_time = GetTimeInMillis();
 
     /* kill off stragglers */
-    for (i = MINCLIENT; i < currentMaxClients; i++) {
-	if ((client = clients[i]) != NullClient) {
-	    oc = (OsCommPtr) client->osPrivate;
-	    if ((oc && (oc->conn_time != 0) &&
-		    (connect_time - oc->conn_time) >= TimeOutValue) ||
-		     ((client->noClientException != FSSuccess) &&
-		      (client->clientGone != CLIENT_GONE)))
-		CloseDownClient(client);
-	}
+    for (i = MINCLIENT; i < currentMaxClients; i++)
+    {
+        if ((client = clients[i]) != NullClient)
+        {
+            oc = (OsCommPtr)client->osPrivate;
+            if ((oc && (oc->conn_time != 0) &&
+                 (connect_time - oc->conn_time) >= TimeOutValue) ||
+                ((client->noClientException != FSSuccess) &&
+                 (client->clientGone != CLIENT_GONE)))
+                CloseDownClient(client);
+        }
     }
 
-    while (readyconnections) {
-	XtransConnInfo trans_conn, new_trans_conn;
-	int status;
+    while (readyconnections)
+    {
+        XtransConnInfo trans_conn, new_trans_conn;
+        int            status;
 
-	curconn = xfd_ffs(readyconnections) - 1;
-	readyconnections &= ~(1 << curconn);
+        curconn = xfd_ffs(readyconnections) - 1;
+        readyconnections &= ~(1 << curconn);
 
-	if ((trans_conn = lookup_trans_conn (curconn)) == NULL)
-	    continue;
+        if ((trans_conn = lookup_trans_conn(curconn)) == NULL) continue;
 
-	if ((new_trans_conn = _FontTransAccept (trans_conn, &status)) == NULL)
-	    continue;
+        if ((new_trans_conn = _FontTransAccept(trans_conn, &status)) == NULL)
+            continue;
 
-	newconn = _FontTransGetConnectionNumber (new_trans_conn);
+        newconn = _FontTransGetConnectionNumber(new_trans_conn);
 
-	_FontTransSetOption(new_trans_conn, TRANS_NONBLOCKING, 1);
+        _FontTransSetOption(new_trans_conn, TRANS_NONBLOCKING, 1);
 
-	oc = (OsCommPtr) FSalloc(sizeof(OsCommRec));
-	if (!oc) {
-	    FSfree(oc);
-	    error_conn_max(new_trans_conn);
-	    _FontTransClose(new_trans_conn);
-	    continue;
-	}
-	FD_SET(newconn, &AllClients);
-	FD_SET(newconn, &AllSockets);
-	oc->fd = newconn;
-	oc->trans_conn = new_trans_conn;
-	oc->input = (ConnectionInputPtr) NULL;
-	oc->output = (ConnectionOutputPtr) NULL;
-	oc->conn_time = connect_time;
+        oc = (OsCommPtr)FSalloc(sizeof(OsCommRec));
+        if (!oc)
+        {
+            FSfree(oc);
+            error_conn_max(new_trans_conn);
+            _FontTransClose(new_trans_conn);
+            continue;
+        }
+        FD_SET(newconn, &AllClients);
+        FD_SET(newconn, &AllSockets);
+        oc->fd         = newconn;
+        oc->trans_conn = new_trans_conn;
+        oc->input      = (ConnectionInputPtr)NULL;
+        oc->output     = (ConnectionOutputPtr)NULL;
+        oc->conn_time  = connect_time;
 
-	if ((newconn < lastfdesc) &&
-		(client = NextAvailableClient((pointer) oc))) {
-	    ConnectionTranslation[newconn] = client->index;
-	} else {
-	    error_conn_max(new_trans_conn);
-	    close_fd(oc);
-	}
+        if ((newconn < lastfdesc) &&
+            (client = NextAvailableClient((pointer)oc)))
+        {
+            ConnectionTranslation[newconn] = client->index;
+        }
+        else
+        {
+            error_conn_max(new_trans_conn);
+            close_fd(oc);
+        }
     }
 }
 
-#define	NOROOM	"maximum number of clients reached"
+#define NOROOM "maximum number of clients reached"
 
 static void
 error_conn_max(XtransConnInfo trans_conn)
 {
-    int fd = _FontTransGetConnectionNumber (trans_conn);
-    fsConnSetup conn;
-    char        pad[3];
-    char        byteOrder = 0;
-    int         whichbyte = 1;
+    int            fd = _FontTransGetConnectionNumber(trans_conn);
+    fsConnSetup    conn;
+    char           pad[3];
+    char           byteOrder = 0;
+    int            whichbyte = 1;
     struct timeval waittime;
-    fd_set      mask;
-
+    fd_set         mask;
 
     waittime.tv_usec = BOTIMEOUT / MILLI_PER_SECOND;
-    waittime.tv_usec = (BOTIMEOUT % MILLI_PER_SECOND) *
-	(1000000 / MILLI_PER_SECOND);
+    waittime.tv_usec =
+        (BOTIMEOUT % MILLI_PER_SECOND) * (1000000 / MILLI_PER_SECOND);
     FD_ZERO(&mask);
     FD_SET(fd, &mask);
-    (void) Select(fd + 1, &mask, NULL, NULL, &waittime);
+    (void)Select(fd + 1, &mask, NULL, NULL, &waittime);
     /* try to read the byteorder of the connection */
-    (void) _FontTransRead(trans_conn, &byteOrder, 1);
-    if ((byteOrder == 'l') || (byteOrder == 'B')) {
-	int         num_alts;
-	AlternateServerPtr altservers,
-	            as;
-	int         i,
-	            altlen = 0;
+    (void)_FontTransRead(trans_conn, &byteOrder, 1);
+    if ((byteOrder == 'l') || (byteOrder == 'B'))
+    {
+        int                num_alts;
+        AlternateServerPtr altservers, as;
+        int                i, altlen = 0;
 
-	num_alts = ListAlternateServers(&altservers);
-	conn.status = AuthDenied;
-	conn.major_version = FS_PROTOCOL;
-	conn.minor_version = FS_PROTOCOL_MINOR;
-	conn.num_alternates = num_alts;
-	for (i = 0, as = altservers; i < num_alts; i++, as++) {
-	    altlen += (2 + as->namelen + 3) >> 2;
-	}
-	conn.alternate_len = altlen;
-	/* blow off the auth info */
-	conn.auth_index = 0;
-	conn.auth_len = 0;
+        num_alts            = ListAlternateServers(&altservers);
+        conn.status         = AuthDenied;
+        conn.major_version  = FS_PROTOCOL;
+        conn.minor_version  = FS_PROTOCOL_MINOR;
+        conn.num_alternates = num_alts;
+        for (i = 0, as = altservers; i < num_alts; i++, as++)
+        {
+            altlen += (2 + as->namelen + 3) >> 2;
+        }
+        conn.alternate_len = altlen;
+    /* blow off the auth info */
+        conn.auth_index    = 0;
+        conn.auth_len      = 0;
 
-	if (((*(char *) &whichbyte) && (byteOrder == 'B')) ||
-		(!(*(char *) &whichbyte) && (byteOrder == 'l'))) {
-	    conn.status = lswaps(conn.status);
-	    conn.major_version = lswaps(conn.major_version);
-	    conn.minor_version = lswaps(conn.minor_version);
-	    conn.alternate_len = lswaps(conn.alternate_len);
-	}
-	(void) _FontTransWrite(trans_conn,
-	    (char *) &conn, SIZEOF(fsConnSetup));
-	/* dump alternates */
-	for (i = 0, as = altservers; i < num_alts; i++, as++) {
-	    (void) _FontTransWrite(trans_conn,
-		(char *) as, 2);  /* XXX */
-	    (void) _FontTransWrite(trans_conn,
-		(char *) as->name, as->namelen);
-	    altlen = 2 + as->namelen;
-	    /* pad it */
-	    if (altlen & 3)
-		(void) _FontTransWrite(trans_conn,
-		(char *) pad, ((4 - (altlen & 3)) & 3));
-	}
+        if (((*(char *)&whichbyte) && (byteOrder == 'B')) ||
+            (!(*(char *)&whichbyte) && (byteOrder == 'l')))
+        {
+            conn.status        = lswaps(conn.status);
+            conn.major_version = lswaps(conn.major_version);
+            conn.minor_version = lswaps(conn.minor_version);
+            conn.alternate_len = lswaps(conn.alternate_len);
+        }
+        (void)_FontTransWrite(trans_conn, (char *)&conn, SIZEOF(fsConnSetup));
+    /* dump alternates */
+        for (i = 0, as = altservers; i < num_alts; i++, as++)
+        {
+            (void)_FontTransWrite(trans_conn, (char *)as, 2);  /* XXX */
+            (void)_FontTransWrite(trans_conn, (char *)as->name, as->namelen);
+            altlen = 2 + as->namelen;
+        /* pad it */
+            if (altlen & 3)
+                (void)_FontTransWrite(trans_conn,
+                                      (char *)pad,
+                                      ((4 - (altlen & 3)) & 3));
+        }
     }
 }
 
 static void
 close_fd(OsCommPtr oc)
 {
-    int         fd = oc->fd;
+    int fd = oc->fd;
 
-    if (oc->trans_conn)
-	_FontTransClose(oc->trans_conn);
+    if (oc->trans_conn) _FontTransClose(oc->trans_conn);
     FreeOsBuffers(oc);
     FD_CLR(fd, &AllSockets);
     FD_CLR(fd, &AllClients);
     FD_CLR(fd, &ClientsWithInput);
     FD_CLR(fd, &ClientsWriteBlocked);
-    if (!XFD_ANYSET(&ClientsWriteBlocked))
-	AnyClientsWriteBlocked = FALSE;
+    if (!XFD_ANYSET(&ClientsWriteBlocked)) AnyClientsWriteBlocked = FALSE;
     FD_CLR(fd, &OutputPending);
     FSfree(oc);
 }
@@ -438,45 +444,46 @@ close_fd(OsCommPtr oc)
 void
 CheckConnections(void)
 {
-    fd_set      mask;
-    fd_set      tmask;
-    int         curclient;
-    int         i;
+    fd_set         mask;
+    fd_set         tmask;
+    int            curclient;
+    int            i;
     struct timeval notime;
-    int         r;
+    int            r;
 
-    notime.tv_sec = 0;
+    notime.tv_sec  = 0;
     notime.tv_usec = 0;
 
     XFD_COPYSET(&AllClients, &mask);
-    for (i = 0; i < howmany(XFD_SETSIZE, NFDBITS); i++) {
-	while (mask.fds_bits[i]) {
-	    curclient = xfd_ffs(mask.fds_bits[i]) - 1 + (i * (sizeof(fd_mask) * 8));
-	    FD_ZERO(&tmask);
-	    FD_SET(curclient, &tmask);
-	    r = Select(curclient + 1, &tmask, NULL, NULL, &notime);
-	    if (r < 0)
-		CloseDownClient(clients[ConnectionTranslation[curclient]]);
-	    FD_CLR(curclient, &mask);
-	}
+    for (i = 0; i < howmany(XFD_SETSIZE, NFDBITS); i++)
+    {
+        while (mask.fds_bits[i])
+        {
+            curclient =
+                xfd_ffs(mask.fds_bits[i]) - 1 + (i * (sizeof(fd_mask) * 8));
+            FD_ZERO(&tmask);
+            FD_SET(curclient, &tmask);
+            r = Select(curclient + 1, &tmask, NULL, NULL, &notime);
+            if (r < 0)
+                CloseDownClient(clients[ConnectionTranslation[curclient]]);
+            FD_CLR(curclient, &mask);
+        }
     }
 }
 
 void
 CloseDownConnection(ClientPtr client)
 {
-    OsCommPtr   oc = (OsCommPtr) client->osPrivate;
+    OsCommPtr oc = (OsCommPtr)client->osPrivate;
 
-    if (oc == NULL)
-	return;
+    if (oc == NULL) return;
 
     if (oc->output && oc->output->count)
-	FlushClient(client, oc, (char *) NULL, 0, 0);
+        FlushClient(client, oc, (char *)NULL, 0, 0);
     ConnectionTranslation[oc->fd] = 0;
     close_fd(oc);
-    client->osPrivate = (pointer) NULL;
+    client->osPrivate = (pointer)NULL;
 }
-
 
 /****************
  * IgnoreClient
@@ -489,13 +496,12 @@ static fd_set IgnoredClientsWithInput;
 void
 IgnoreClient(ClientPtr client)
 {
-    OsCommPtr   oc = (OsCommPtr) client->osPrivate;
-    int         connection = oc->fd;
+    OsCommPtr oc         = (OsCommPtr)client->osPrivate;
+    int       connection = oc->fd;
 
     if (FD_ISSET(connection, &ClientsWithInput))
-	FD_SET(connection, &IgnoredClientsWithInput);
-    else
-	FD_CLR(connection, &IgnoredClientsWithInput);
+        FD_SET(connection, &IgnoredClientsWithInput);
+    else FD_CLR(connection, &IgnoredClientsWithInput);
     FD_CLR(connection, &ClientsWithInput);
     FD_CLR(connection, &AllSockets);
     FD_CLR(connection, &AllClients);
@@ -511,14 +517,14 @@ IgnoreClient(ClientPtr client)
 void
 AttendClient(ClientPtr client)
 {
-    OsCommPtr   oc = (OsCommPtr) client->osPrivate;
-    int         connection = oc->fd;
+    OsCommPtr oc         = (OsCommPtr)client->osPrivate;
+    int       connection = oc->fd;
 
     FD_SET(connection, &AllClients);
     FD_SET(connection, &AllSockets);
     FD_SET(connection, &LastSelectMask);
     if (FD_ISSET(connection, &IgnoredClientsWithInput))
-	FD_SET(connection, &ClientsWithInput);
+        FD_SET(connection, &ClientsWithInput);
 }
 
 /*
@@ -527,31 +533,37 @@ AttendClient(ClientPtr client)
 void
 ReapAnyOldClients(void)
 {
-    int         i;
-    long        cur_time = GetTimeInMillis();
-    ClientPtr   client;
+    int       i;
+    long      cur_time = GetTimeInMillis();
+    ClientPtr client;
 
 #ifdef DEBUG
     fprintf(stderr, "looking for clients to reap\n");
 #endif
 
-    for (i = MINCLIENT; i < currentMaxClients; i++) {
-	client = clients[i];
-	if (client) {
-	    if ((cur_time - client->last_request_time) >= ReapClientTime) {
-		if (client->clientGone == CLIENT_AGED) {
-		    client->clientGone = CLIENT_TIMED_OUT;
+    for (i = MINCLIENT; i < currentMaxClients; i++)
+    {
+        client = clients[i];
+        if (client)
+        {
+            if ((cur_time - client->last_request_time) >= ReapClientTime)
+            {
+                if (client->clientGone == CLIENT_AGED)
+                {
+                    client->clientGone = CLIENT_TIMED_OUT;
 
 #ifdef DEBUG
-		    fprintf(stderr, "reaping client #%d\n", i);
+                    fprintf(stderr, "reaping client #%d\n", i);
 #endif
 
-		    CloseDownClient(client);
-		} else {
-		    client->clientGone = CLIENT_AGED;
-		    SendKeepAliveEvent(client);
-		}
-	    }
-	}
+                    CloseDownClient(client);
+                }
+                else
+                {
+                    client->clientGone = CLIENT_AGED;
+                    SendKeepAliveEvent(client);
+                }
+            }
+        }
     }
 }

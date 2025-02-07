@@ -32,9 +32,9 @@ Notice===
  */
 
 #ifndef _XTTCAP_H_
-#define _XTTCAP_H_ (1)
+#  define _XTTCAP_H_ (1)
 
-#include "X11/Xdefs.h"
+#  include "X11/Xdefs.h"
 
 /*******************************************************************
   Data Types
@@ -47,36 +47,38 @@ typedef enum
     eRecTypeDouble,
     eRecTypeBool,
     eRecTypeString,
-    eRecTypeVoid=-1
+    eRecTypeVoid = -1
 } ERecType;
 
 /* Record Name vs Record Type */
 typedef struct
 {
-    char const *strRecordName;
-    ERecType const recordType;
+    const char    *strRecordName;
+    const ERecType recordType;
 } SPropertyRecord;
 
 /* Record Value Container */
 typedef struct
 {
-    SPropertyRecord const *refRecordType;
+    const SPropertyRecord *refRecordType;
+
     union {
-        int integerValue;
+        int    integerValue;
         double doubleValue;
-        Bool boolValue;
-        char *dynStringValue;
+        Bool   boolValue;
+        char  *dynStringValue;
     } uValue;
 } SPropRecValContainerEntityP, *SPropRecValContainer;
 
 /* Record Value List */
 typedef struct TagSPropRecValListNodeP SPropRecValListNode;
+
 typedef struct
 {
     SPropRecValListNode *headNode;
 } SDynPropRecValList;
-typedef SDynPropRecValList const SRefPropRecValList;
 
+typedef const SDynPropRecValList SRefPropRecValList;
 
 /*******************************************************************
   Functions
@@ -91,30 +93,28 @@ SPropRecValList_delete(SDynPropRecValList *pThisList);
 /* Read Property File */
 extern Bool /* True == Error, False == Success */
 SPropRecValList_read_prop_file(SDynPropRecValList *pThisList,
-                               char const * const strFileName);
+                               const char *const   strFileName);
 /* Search Property Record */
 extern Bool /* True == Hit, False == Miss */
-SPropRecValList_search_record(SRefPropRecValList *pThisList,
+SPropRecValList_search_record(SRefPropRecValList   *pThisList,
                               SPropRecValContainer *refContRecVal,
-                              char const * const recordName);
+                              const char *const     recordName);
 /* Add by Font Cap */
 extern Bool /* True == Error, False == Success */
 SPropRecValList_add_by_font_cap(SDynPropRecValList *pThisList,
-                                char const *strCapHead);
+                                const char         *strCapHead);
 
-#ifdef DUMP
-void
-SPropRecValList_dump(SRefPropRecValList *refList);
-#endif
+#  ifdef DUMP
+void SPropRecValList_dump(SRefPropRecValList *refList);
+#  endif
 
-#define SPropContainer_value_int(contRecVal)\
-  ((contRecVal)->uValue.integerValue)
-#define SPropContainer_value_dbl(contRecVal)\
-  ((contRecVal)->uValue.doubleValue)
-#define SPropContainer_value_bool(contRecVal)\
-  ((contRecVal)->uValue.boolValue)
-#define SPropContainer_value_str(contRecVal)\
-  ((contRecVal)->uValue.dynStringValue)
+#  define SPropContainer_value_int(contRecVal) \
+        ((contRecVal)->uValue.integerValue)
+#  define SPropContainer_value_dbl(contRecVal) \
+        ((contRecVal)->uValue.doubleValue)
+#  define SPropContainer_value_bool(contRecVal) ((contRecVal)->uValue.boolValue)
+#  define SPropContainer_value_str(contRecVal) \
+        ((contRecVal)->uValue.dynStringValue)
 
 #endif /* !def _XTTCAP_H_ */
 

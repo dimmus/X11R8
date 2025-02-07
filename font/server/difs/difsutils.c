@@ -46,28 +46,28 @@ in this Software without prior written authorization from The Open Group.
  * THIS SOFTWARE.
  */
 
-#include	"config.h"
+#include "config.h"
 
-#define	XK_LATIN1
+#define XK_LATIN1
 
-#include	<difsutils.h>
+#include <difsutils.h>
 
-#include	<stdio.h>
-#include	<ctype.h>
-#include	"misc.h"
-#include	"globals.h"
-#include	"clientstr.h"
-#include	"X11/fonts/fontstruct.h"
-#include	"X11/keysymdef.h"
+#include <stdio.h>
+#include <ctype.h>
+#include "misc.h"
+#include "globals.h"
+#include "clientstr.h"
+#include "X11/fonts/fontstruct.h"
+#include "X11/keysymdef.h"
 
-#include	"authstr.h"
-#include	"auth.h"
-#include	"client.h"
-#include	"dispatch.h"
+#include "authstr.h"
+#include "auth.h"
+#include "client.h"
+#include "dispatch.h"
 
 static FontResolutionPtr default_resolutions;
-static int  num_resolutions;
-static int  default_point_size = 120;
+static int               num_resolutions;
+static int               default_point_size = 120;
 
 AuthContextPtr
 GetClientAuthorization(void)
@@ -78,76 +78,79 @@ GetClientAuthorization(void)
 void
 SetDefaultPointSize(int ps)
 {
-    int         i;
+    int i;
 
     default_point_size = ps;
     for (i = 0; i < num_resolutions; i++)
-	default_resolutions[i].point_size = ps;
+        default_resolutions[i].point_size = ps;
 }
 
 int
 SetDefaultResolutions(char *str)
 {
-    int         num,
-                numr = 0,
-                n;
-    char       *s;
-    FontResolutionPtr new,
-                nr;
-    int         state;
+    int   num, numr = 0, n;
+    char *s;
+    FontResolutionPtr new, nr;
+    int state;
 
     s = str;
-    while (*s) {		/* count commas */
-	if (*s == ',')
-	    numr++;
-	s++;
+    while (*s)
+    {  /* count commas */
+        if (*s == ',') numr++;
+        s++;
     }
 
-    if ((numr % 2) != 1) {	/* must be multiple of 2 + 1 */
-	return FSBadResolution;
+    if ((numr % 2) != 1)
+    { /* must be multiple of 2 + 1 */
+        return FSBadResolution;
     }
     numr = (numr + 1) / 2;
-    nr = new = (FontResolutionPtr) FSallocarray(numr,
-                                                sizeof(FontResolutionRec));
-    if (!new)
-	return FSBadAlloc;
-    s = str;
-    num = 0;
+    nr = new = (FontResolutionPtr)FSallocarray(numr, sizeof(FontResolutionRec));
+    if (!new) return FSBadAlloc;
+    s     = str;
+    num   = 0;
     state = 0;
-    while (*s) {
-	if (*s == ',') {
-	    if (state == 0) {
-		nr->x_resolution = num;
-		state++;
-	    } else {
-		state = 0;
-		nr->y_resolution = num;
-		nr->point_size = default_point_size;
-		nr++;
-	    }
-	    num = 0;
-	    s++;
-	    continue;
-	}
-	if (!isdigit(*s)) {
-	    FSfree((char *) new);
-	    return FSBadResolution;
-	}
-	n = *s - '0';
-	num = num * 10 + n;
-	s++;
+    while (*s)
+    {
+        if (*s == ',')
+        {
+            if (state == 0)
+            {
+                nr->x_resolution = num;
+                state++;
+            }
+            else
+            {
+                state            = 0;
+                nr->y_resolution = num;
+                nr->point_size   = default_point_size;
+                nr++;
+            }
+            num = 0;
+            s++;
+            continue;
+        }
+        if (!isdigit(*s))
+        {
+            FSfree((char *)new);
+            return FSBadResolution;
+        }
+        n   = *s - '0';
+        num = num * 10 + n;
+        s++;
     }
 
     /* do the last one */
     assert(state == 1);
     nr->y_resolution = num;
-    nr->point_size = default_point_size;
+    nr->point_size   = default_point_size;
 
-    if (default_resolutions) {
-	FSfree((char *) default_resolutions);
+    if (default_resolutions)
+    {
+        FSfree((char *)default_resolutions);
     }
     default_resolutions = new;
-    num_resolutions = numr;
+    num_resolutions     = numr;
     return FSSuccess;
 }
 
@@ -155,12 +158,15 @@ FontResolutionPtr
 GetClientResolutions(int *num)
 {
     /* return the client's if it has them, otherwise the default values */
-    if (currentClient->num_resolutions) {
-	*num = currentClient->num_resolutions;
-	return (FontResolutionPtr) currentClient->resolutions;
-    } else {
-	*num = num_resolutions;
-	return default_resolutions;
+    if (currentClient->num_resolutions)
+    {
+        *num = currentClient->num_resolutions;
+        return (FontResolutionPtr)currentClient->resolutions;
+    }
+    else
+    {
+        *num = num_resolutions;
+        return default_resolutions;
     }
 }
 
@@ -168,119 +174,110 @@ int
 GetDefaultPointSize(void)
 {
     FontResolutionPtr res;
-    int         num;
+    int               num;
 
     res = GetClientResolutions(&num);
-    if (res)
-	return res->point_size;
-    else
-	return default_point_size;
+    if (res) return res->point_size;
+    else return default_point_size;
 }
 
 int
-strncmpnocase(
-    const char *first,
-    const char *second,
-    int         n)
+strncmpnocase(const char *first, const char *second, int n)
 {
-    register const unsigned char *ap,
-               *bp;
+    register const unsigned char *ap, *bp;
 
-    for (ap = (const unsigned char *) first,
-	    bp = (const unsigned char *) second;
+    for (ap = (const unsigned char *)first, bp = (const unsigned char *)second;
     /* SUPPRESS 112 */
-	    n > 0 && *ap && *bp; n--, ap++, bp++) {
-	register unsigned char a,
-	            b;
+         n > 0 && *ap && *bp;
+         n--, ap++, bp++)
+    {
+        register unsigned char a, b;
 
-	/* SUPPRESS 112 */
-	if ((a = *ap) != (b = *bp)) {
-	    /* try lowercasing and try again */
+    /* SUPPRESS 112 */
+        if ((a = *ap) != (b = *bp))
+        {
+        /* try lowercasing and try again */
 
-	    if ((a >= XK_A) && (a <= XK_Z))
-		a += (XK_a - XK_A);
-	    else if ((a >= XK_Agrave) && (a <= XK_Odiaeresis))
-		a += (XK_agrave - XK_Agrave);
-	    else if ((a >= XK_Ooblique) && (a <= XK_Thorn))
-		a += (XK_oslash - XK_Ooblique);
+            if ((a >= XK_A) && (a <= XK_Z)) a += (XK_a - XK_A);
+            else if ((a >= XK_Agrave) && (a <= XK_Odiaeresis))
+                a += (XK_agrave - XK_Agrave);
+            else if ((a >= XK_Ooblique) && (a <= XK_Thorn))
+                a += (XK_oslash - XK_Ooblique);
 
-	    if ((b >= XK_A) && (b <= XK_Z))
-		b += (XK_a - XK_A);
-	    else if ((b >= XK_Agrave) && (b <= XK_Odiaeresis))
-		b += (XK_agrave - XK_Agrave);
-	    else if ((b >= XK_Ooblique) && (b <= XK_Thorn))
-		b += (XK_oslash - XK_Ooblique);
+            if ((b >= XK_A) && (b <= XK_Z)) b += (XK_a - XK_A);
+            else if ((b >= XK_Agrave) && (b <= XK_Odiaeresis))
+                b += (XK_agrave - XK_Agrave);
+            else if ((b >= XK_Ooblique) && (b <= XK_Thorn))
+                b += (XK_oslash - XK_Ooblique);
 
-	    if (a != b)
-		break;
-	}
+            if (a != b) break;
+        }
     }
     /* SUPPRESS 112 */
-    return (n ? (((int) *ap) - ((int) *bp)) : 0);
+    return (n ? (((int)*ap) - ((int)*bp)) : 0);
 }
 
 /* block & wakeup handlers */
 
-typedef struct _BlockHandler {
-    FontBlockHandlerProcPtr	BlockHandler;
-    DifsWakeupFunc	WakeupHandler;
-    pointer     	blockData;
-    Bool        	deleted;
-}           BlockHandlerRec, *BlockHandlerPtr;
+typedef struct _BlockHandler
+{
+    FontBlockHandlerProcPtr BlockHandler;
+    DifsWakeupFunc          WakeupHandler;
+    pointer                 blockData;
+    Bool                    deleted;
+} BlockHandlerRec, *BlockHandlerPtr;
 
 static BlockHandlerPtr handlers;
-static int  numHandlers;
-static int  sizeHandlers;
-static Bool inHandler;
-static Bool handlerDeleted;
+static int             numHandlers;
+static int             sizeHandlers;
+static Bool            inHandler;
+static Bool            handlerDeleted;
 
 /* called from the OS layer */
 void
-BlockHandler(
-    OSTimePtr   pTimeout,	/* DIX doesn't want to know how OS represents
+BlockHandler(OSTimePtr pTimeout, /* DIX doesn't want to know how OS represents
 				 * time */
-    pointer     pReadmask)	/* nor how it represents the set of
+             pointer   pReadmask) /* nor how it represents the set of
 				 * descriptors */
 {
-    register int i,
-                j;
+    register int i, j;
 
     ++inHandler;
     for (i = 0; i < numHandlers; i++)
-	(*handlers[i].BlockHandler) (handlers[i].blockData);
-    if (handlerDeleted) {
-	for (i = 0; i < numHandlers;)
-	    if (handlers[i].deleted) {
-		for (j = i; j < numHandlers - 1; j++)
-		    handlers[j] = handlers[j + 1];
-		numHandlers--;
-	    } else
-		i++;
+        (*handlers[i].BlockHandler)(handlers[i].blockData);
+    if (handlerDeleted)
+    {
+        for (i = 0; i < numHandlers;)
+            if (handlers[i].deleted)
+            {
+                for (j = i; j < numHandlers - 1; j++)
+                    handlers[j] = handlers[j + 1];
+                numHandlers--;
+            }
+            else i++;
     }
     --inHandler;
 }
 
-
 void
-WakeupHandler(
-    int		result,		/* result from the wait */
-    unsigned long * pReadmask)	/* the resulting descriptor mask */
+WakeupHandler(int            result,  /* result from the wait */
+              unsigned long *pReadmask) /* the resulting descriptor mask */
 {
-    register int i,
-                j;
+    register int i, j;
 
     ++inHandler;
     for (i = numHandlers - 1; i >= 0; i--)
-	(*handlers[i].WakeupHandler) (handlers[i].blockData,
-				      result, pReadmask);
-    if (handlerDeleted) {
-	for (i = 0; i < numHandlers;)
-	    if (handlers[i].deleted) {
-		for (j = i; j < numHandlers - 1; j++)
-		    handlers[j] = handlers[j + 1];
-		numHandlers--;
-	    } else
-		i++;
+        (*handlers[i].WakeupHandler)(handlers[i].blockData, result, pReadmask);
+    if (handlerDeleted)
+    {
+        for (i = 0; i < numHandlers;)
+            if (handlers[i].deleted)
+            {
+                for (j = i; j < numHandlers - 1; j++)
+                    handlers[j] = handlers[j + 1];
+                numHandlers--;
+            }
+            else i++;
     }
     --inHandler;
 }
@@ -290,58 +287,61 @@ WakeupHandler(
  */
 
 Bool
-RegisterBlockAndWakeupHandlers(
-    FontBlockHandlerProcPtr blockHandler,
-    DifsWakeupFunc wakeupHandler,
-    pointer     blockData)
+RegisterBlockAndWakeupHandlers(FontBlockHandlerProcPtr blockHandler,
+                               DifsWakeupFunc          wakeupHandler,
+                               pointer                 blockData)
 {
     BlockHandlerPtr new;
 
-    if (numHandlers >= sizeHandlers) {
-	new = (BlockHandlerPtr) FSreallocarray(handlers, (numHandlers + 1),
-                                               sizeof(BlockHandlerRec));
-	if (!new)
-	    return FALSE;
-	handlers = new;
-	sizeHandlers = numHandlers + 1;
+    if (numHandlers >= sizeHandlers)
+    {
+        new = (BlockHandlerPtr)FSreallocarray(handlers,
+                                              (numHandlers + 1),
+                                              sizeof(BlockHandlerRec));
+        if (!new) return FALSE;
+        handlers     = new;
+        sizeHandlers = numHandlers + 1;
     }
-    handlers[numHandlers].BlockHandler = blockHandler;
+    handlers[numHandlers].BlockHandler  = blockHandler;
     handlers[numHandlers].WakeupHandler = wakeupHandler;
-    handlers[numHandlers].blockData = blockData;
-    numHandlers = numHandlers + 1;
+    handlers[numHandlers].blockData     = blockData;
+    numHandlers                         = numHandlers + 1;
     return TRUE;
 }
 
 void
-RemoveBlockAndWakeupHandlers(
-    FontBlockHandlerProcPtr blockHandler,
-    DifsWakeupFunc wakeupHandler,
-    pointer     blockData)
+RemoveBlockAndWakeupHandlers(FontBlockHandlerProcPtr blockHandler,
+                             DifsWakeupFunc          wakeupHandler,
+                             pointer                 blockData)
 {
-    int         i;
+    int i;
 
     for (i = 0; i < numHandlers; i++)
-	if (handlers[i].BlockHandler == blockHandler &&
-		handlers[i].WakeupHandler == wakeupHandler &&
-		handlers[i].blockData == blockData) {
-	    if (inHandler) {
-		handlerDeleted = TRUE;
-		handlers[i].deleted = TRUE;
-	    } else {
-		for (; i < numHandlers - 1; i++)
-		    handlers[i] = handlers[i + 1];
-		numHandlers--;
-	    }
-	    break;
-	}
+        if (handlers[i].BlockHandler == blockHandler &&
+            handlers[i].WakeupHandler == wakeupHandler &&
+            handlers[i].blockData == blockData)
+        {
+            if (inHandler)
+            {
+                handlerDeleted      = TRUE;
+                handlers[i].deleted = TRUE;
+            }
+            else
+            {
+                for (; i < numHandlers - 1; i++)
+                    handlers[i] = handlers[i + 1];
+                numHandlers--;
+            }
+            break;
+        }
 }
 
 void
 InitBlockAndWakeupHandlers(void)
 {
     FSfree(handlers);
-    handlers = (BlockHandlerPtr) 0;
-    numHandlers = 0;
+    handlers     = (BlockHandlerPtr)0;
+    numHandlers  = 0;
     sizeHandlers = 0;
 }
 
@@ -350,16 +350,14 @@ InitBlockAndWakeupHandlers(void)
  * sleeps for input.
  */
 
-WorkQueuePtr workQueue;
+WorkQueuePtr         workQueue;
 static WorkQueuePtr *workQueueLast = &workQueue;
 
 /* ARGSUSED */
 void
 ProcessWorkQueue(void)
 {
-    WorkQueuePtr q,
-                n,
-                p;
+    WorkQueuePtr q, n, p;
 
     p = NULL;
     /*
@@ -368,44 +366,44 @@ ProcessWorkQueue(void)
      * This must be reentrant with QueueWorkProc, hence the crufty usage of
      * variables.
      */
-    for (q = workQueue; q; q = n) {
-	if ((*q->function) (q->client, q->closure)) {
-	    /* remove q from the list */
-	    n = q->next;	/* don't fetch until after func called */
-	    if (p)
-		p->next = n;
-	    else
-		workQueue = n;
-	    FSfree(q);
-	} else {
-	    n = q->next;	/* don't fetch until after func called */
-	    p = q;
-	}
+    for (q = workQueue; q; q = n)
+    {
+        if ((*q->function)(q->client, q->closure))
+        {
+        /* remove q from the list */
+            n = q->next; /* don't fetch until after func called */
+            if (p) p->next = n;
+            else workQueue = n;
+            FSfree(q);
+        }
+        else
+        {
+            n = q->next; /* don't fetch until after func called */
+            p = q;
+        }
     }
-    if (p)
-	workQueueLast = &p->next;
-    else {
-	workQueueLast = &workQueue;
+    if (p) workQueueLast = &p->next;
+    else
+    {
+        workQueueLast = &workQueue;
     }
 }
 
 Bool
-QueueWorkProc(
-    Bool        (*function) (ClientPtr, pointer),
-    ClientPtr   client,
-    pointer     data)
+QueueWorkProc(Bool (*function)(ClientPtr, pointer),
+              ClientPtr client,
+              pointer   data)
 {
     WorkQueuePtr q;
 
-    q = (WorkQueuePtr) FSalloc(sizeof *q);
-    if (!q)
-	return FALSE;
-    q->function = function;
-    q->client = client;
-    q->closure = data;
-    q->next = NULL;
+    q = (WorkQueuePtr)FSalloc(sizeof *q);
+    if (!q) return FALSE;
+    q->function    = function;
+    q->client      = client;
+    q->closure     = data;
+    q->next        = NULL;
     *workQueueLast = q;
-    workQueueLast = &q->next;
+    workQueueLast  = &q->next;
     return TRUE;
 }
 
@@ -417,33 +415,32 @@ QueueWorkProc(
  * we'll leave that until a later time.
  */
 
-typedef struct _SleepQueue {
+typedef struct _SleepQueue
+{
     struct _SleepQueue *next;
-    ClientPtr   client;
-    Bool        (*function) (ClientPtr, pointer);
-    pointer     closure;
-}           SleepQueueRec, *SleepQueuePtr;
+    ClientPtr           client;
+    Bool (*function)(ClientPtr, pointer);
+    pointer closure;
+} SleepQueueRec, *SleepQueuePtr;
 
 static SleepQueuePtr sleepQueue = NULL;
 
 Bool
-ClientSleep(
-    ClientPtr   client,
-    Bool        (*function) (ClientPtr, pointer),
-    pointer     data)
+ClientSleep(ClientPtr client,
+            Bool (*function)(ClientPtr, pointer),
+            pointer data)
 {
     SleepQueuePtr q;
 
-    q = (SleepQueuePtr) FSalloc(sizeof *q);
-    if (!q)
-	return FALSE;
+    q = (SleepQueuePtr)FSalloc(sizeof *q);
+    if (!q) return FALSE;
 
     IgnoreClient(client);
-    q->next = sleepQueue;
-    q->client = client;
+    q->next     = sleepQueue;
+    q->client   = client;
     q->function = function;
-    q->closure = data;
-    sleepQueue = q;
+    q->closure  = data;
+    sleepQueue  = q;
     return TRUE;
 }
 
@@ -453,30 +450,30 @@ ClientSignal(ClientPtr client)
     SleepQueuePtr q;
 
     for (q = sleepQueue; q; q = q->next)
-	if (q->client == client) {
-	    return QueueWorkProc(q->function, q->client, q->closure);
-	}
+        if (q->client == client)
+        {
+            return QueueWorkProc(q->function, q->client, q->closure);
+        }
     return FALSE;
 }
 
 void
 ClientWakeup(ClientPtr client)
 {
-    SleepQueuePtr q,
-               *prev;
+    SleepQueuePtr q, *prev;
 
     prev = &sleepQueue;
-    while ((q = *prev) != (SleepQueuePtr) 0) {
-	if (q->client == client) {
-	    *prev = q->next;
-	    FSfree(q);
-	    if (client->clientGone == CLIENT_GONE)
-		CloseDownClient(client);
-	    else
-		AttendClient(client);
-	    break;
-	}
-	prev = &q->next;
+    while ((q = *prev) != (SleepQueuePtr)0)
+    {
+        if (q->client == client)
+        {
+            *prev = q->next;
+            FSfree(q);
+            if (client->clientGone == CLIENT_GONE) CloseDownClient(client);
+            else AttendClient(client);
+            break;
+        }
+        prev = &q->next;
     }
 }
 
@@ -486,8 +483,7 @@ ClientIsAsleep(ClientPtr client)
     SleepQueuePtr q;
 
     for (q = sleepQueue; q; q = q->next)
-	if (q->client == client)
-	    return TRUE;
+        if (q->client == client) return TRUE;
     return FALSE;
 }
 
@@ -521,29 +517,30 @@ set_font_authorizations(char **authorizations, int *authlen, void *_client)
     ClientPtr client = _client;
 #define AUTH1_NAME "hp-hostname-1"
 #define AUTH2_NAME "hp-printername-1"
-    static char result[1024];
-    char *p;
+    static char    result[1024];
+    char          *p;
     AuthContextPtr acp = client->auth;
-    int len1, len2;
+    int            len1, len2;
 
     if (acp != NULL && acp->authname != NULL && acp->authdata != NULL &&
-	(!strcmp(AUTH1_NAME, acp->authname) ||
-	 !strcmp(AUTH2_NAME, acp->authname)) &&
-	(len1 = strlen(acp->authname) + 1) +
-	(len2 = strlen(acp->authdata) + 1) + 2 * sizeof(short) <= 1024)
+        (!strcmp(AUTH1_NAME, acp->authname) ||
+         !strcmp(AUTH2_NAME, acp->authname)) &&
+        (len1 = strlen(acp->authname) + 1) +
+                (len2 = strlen(acp->authdata) + 1) + 2 * sizeof(short) <=
+            1024)
     {
-	p = result;
-	*p++ = len1 >> 8;
-	*p++ = len1 &0xff;
-	*p++ = len2 >> 8;
-	*p++ = len2 & 0xff;
-	memmove( p, acp->authname, len1);
-	p += len1;
-	memmove( p, acp->authdata, len2);
-	p += len2;
-	*authlen = p - result;
-	*authorizations = result;
-	return 1;
+        p    = result;
+        *p++ = len1 >> 8;
+        *p++ = len1 & 0xff;
+        *p++ = len2 >> 8;
+        *p++ = len2 & 0xff;
+        memmove(p, acp->authname, len1);
+        p += len1;
+        memmove(p, acp->authdata, len2);
+        p += len2;
+        *authlen        = p - result;
+        *authorizations = result;
+        return 1;
     }
 
     *authlen = 0;

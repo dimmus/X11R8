@@ -48,10 +48,10 @@ in this Software without prior written authorization from The Open Group.
  *
  */
 
-#include	"config.h"
+#include "config.h"
 
-#include	"os.h"
-#include	"globals.h"
+#include "os.h"
+#include "globals.h"
 
 void
 OsInit(void)

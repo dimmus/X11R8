@@ -26,45 +26,48 @@ THE SOFTWARE.
 
 #include "X11/Xfuncproto.h"
 
-#define FREETYPE_VERSION (FREETYPE_MAJOR * 1000000 + FREETYPE_MINOR * 1000 + FREETYPE_PATCH)
+#define FREETYPE_VERSION \
+    (FREETYPE_MAJOR * 1000000 + FREETYPE_MINOR * 1000 + FREETYPE_PATCH)
 
 #undef DEBUG_TRUETYPE
 
 #ifdef DEBUG_TRUETYPE
-#define MUMBLE ErrorF
+#  define MUMBLE ErrorF
 #else
-#define MUMBLE(...)
+#  define MUMBLE(...)
 #endif
 
 #undef MAX
-#define MAX(h,i) ((h) > (i) ? (h) : (i))
-#define ADJUSTMAX(m,v) if((v)>(m)) (m)=(v)
+#define MAX(h, i) ((h) > (i) ? (h) : (i))
+#define ADJUSTMAX(m, v) \
+    if ((v) > (m)) (m) = (v)
 #undef MIN
-#define MIN(l,o) ((l) < (o) ? (l) : (o))
-#define ADJUSTMIN(m,v) if ((v)<(m)) (m)=(v)
+#define MIN(l, o) ((l) < (o) ? (l) : (o))
+#define ADJUSTMIN(m, v) \
+    if ((v) < (m)) (m) = (v)
 
 /* When comparing floating point values, we want to ignore small errors. */
 #define NEGLIGIBLE ((double)0.001)
 /* Are x and y significantly different? */
-#define DIFFER(x,y) (fabs((x)-(y))>=NEGLIGIBLE*fabs(x))
+#define DIFFER(x, y) (fabs((x) - (y)) >= NEGLIGIBLE * fabs(x))
 /* Is x significantly different from 0 w.r.t. y? */
-#define DIFFER0(x,y) (fabs(x)>=NEGLIGIBLE*fabs(y))
+#define DIFFER0(x, y) (fabs(x) >= NEGLIGIBLE * fabs(y))
 
 #ifndef ABS
-#define ABS(x) ((x) >= 0 ? (x) : -(x))
+#  define ABS(x) ((x) >= 0 ? (x) : -(x))
 #endif
 
 /* Two to the sixteenth power, as a double. */
-#define TWO_SIXTEENTH ((double)(1<<16))
-#define TWO_SIXTH ((double)(1<<6))
+#define TWO_SIXTEENTH ((double)(1 << 16))
+#define TWO_SIXTH     ((double)(1 << 6))
 
 /* Data structures used across files */
 
 typedef struct _FTMapping
 {
-    int named;
-    FT_CharMap cmap;
-    int base;
+    int              named;
+    FT_CharMap       cmap;
+    int              base;
     struct _FontMap *mapping;     /* allow inclusion without fontenc.h */
 } FTMappingRec, *FTMappingPtr;
 
@@ -74,7 +77,7 @@ typedef struct _FTMapping
 
 /* ftenc.c */
 
-int FTPickMapping(char*, int, char*, FT_Face, FTMappingPtr);
+int      FTPickMapping(char *, int, char *, FT_Face, FTMappingPtr);
 unsigned FTRemap(FT_Face face, FTMappingPtr, unsigned code);
 
 /* fttools.c */

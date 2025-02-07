@@ -47,28 +47,30 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _DIFSFONTST_H_
 #define _DIFSFONTST_H_
 
-#include	"difsfn.h"
-#include	"X11/fonts/font.h"
-#include	"misc.h"
+#include "difsfn.h"
+#include "X11/fonts/font.h"
+#include "misc.h"
 
 /* has per-client info about the font */
-typedef struct _ClientFont {
-    FontPtr     font;
-    int         clientindex;
-}           ClientFontRec;
+typedef struct _ClientFont
+{
+    FontPtr font;
+    int     clientindex;
+} ClientFontRec;
 
-typedef struct _font_name_cache {
-    char       *name;
-    int         namelen;
-    FontPtr     font;
-}           FontNameCacheRec;
+typedef struct _font_name_cache
+{
+    char   *name;
+    int     namelen;
+    FontPtr font;
+} FontNameCacheRec;
 
 /* one of these per client, with as many IDs as are needed */
-typedef struct	_FontIDList {
-	Font	*client_list;
-	int	num;
-	int	size;
-}	FontIDListRec;
+typedef struct _FontIDList
+{
+    Font *client_list;
+    int   num;
+    int   size;
+} FontIDListRec;
 
-
-#endif				/* _DIFSFONTST_H_ */
+#endif    /* _DIFSFONTST_H_ */

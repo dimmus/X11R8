@@ -50,39 +50,42 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
-#include	"FSlib.h"
-#include	"FSlibint.h"
+#include "FSlib.h"
+#include "FSlibint.h"
 
 int
 FSCloseServer(FSServer *svr)
 {
     _FSExtension *ext;
     FSServer    **sv = &_FSHeadOfServerList;
-    FSServer     *s = _FSHeadOfServerList;
+    FSServer     *s  = _FSHeadOfServerList;
 
     svr->flags |= FSlibServerClosing;
-    (void) FSSync(svr, 1);	/* throw out pending events */
+    (void)FSSync(svr, 1); /* throw out pending events */
     ext = svr->ext_procs;
-    while (ext) {
-	if (ext->close_server != NULL)
-	    (*ext->close_server) (svr, &ext->codes);
-	ext = ext->next;
+    while (ext)
+    {
+        if (ext->close_server != NULL) (*ext->close_server)(svr, &ext->codes);
+        ext = ext->next;
     }
     _FSDisconnectServer(svr->trans_conn);
-    while (s != NULL) {
-	if (s == svr) {
-	    *sv = s->next;
-	    _FSFreeServerStructure(svr);
-	    break;
-	}
-	sv = &(s->next);
-	s = *sv;
+    while (s != NULL)
+    {
+        if (s == svr)
+        {
+            *sv = s->next;
+            _FSFreeServerStructure(svr);
+            break;
+        }
+        sv = &(s->next);
+        s  = *sv;
     }
-    if (_FSHeadOfServerList == NULL) {
-	_FSFreeQ();
+    if (_FSHeadOfServerList == NULL)
+    {
+        _FSFreeQ();
     }
     return 1;
 }

@@ -65,43 +65,48 @@ SOFTWARE.
 
 /* New fields for the UCSLabel widget class record */
 
-typedef struct {int foo;} UCSLabelClassPart;
+typedef struct
+{
+    int foo;
+} UCSLabelClassPart;
 
 /* Full class record declaration */
-typedef struct _UCSLabelClassRec {
-    CoreClassPart	core_class;
-    SimpleClassPart	simple_class;
-    UCSLabelClassPart	label_class;
+typedef struct _UCSLabelClassRec
+{
+    CoreClassPart     core_class;
+    SimpleClassPart   simple_class;
+    UCSLabelClassPart label_class;
 } UCSLabelClassRec;
 
 extern UCSLabelClassRec ucsLabelClassRec;
 
 /* New fields for the UCSLabel widget record */
-typedef struct {
+typedef struct
+{
     /* resources */
-    Pixel	foreground;
-    XFontStruct	*font;
-    XFontSet 	fontset;
-    String	label;
-    XtJustify	justify;
-    Dimension	internal_width;
-    Dimension	internal_height;
-    Pixmap	pixmap;
-    Boolean	resize;
+    Pixel         foreground;
+    XFontStruct  *font;
+    XFontSet      fontset;
+    String        label;
+    XtJustify     justify;
+    Dimension     internal_width;
+    Dimension     internal_height;
+    Pixmap        pixmap;
+    Boolean       resize;
     unsigned char encoding;
-    Pixmap	left_bitmap;
+    Pixmap        left_bitmap;
 
     /* private state */
-    GC		normal_GC;
-    GC          gray_GC;
-    Pixmap	stipple;
-    Position	label_x;
-    Position	label_y;
-    Dimension	label_width;
-    Dimension	label_height;
-    Dimension	label_len;
-    int		lbm_y;			/* where in label */
-    unsigned int lbm_width, lbm_height;	 /* size of pixmap */
+    GC           normal_GC;
+    GC           gray_GC;
+    Pixmap       stipple;
+    Position     label_x;
+    Position     label_y;
+    Dimension    label_width;
+    Dimension    label_height;
+    Dimension    label_len;
+    int          lbm_y;   /* where in label */
+    unsigned int lbm_width, lbm_height;  /* size of pixmap */
 } UCSLabelPart;
 
 /****************************************************************
@@ -110,14 +115,16 @@ typedef struct {
  *
  ****************************************************************/
 
-typedef struct _UCSLabelRec {
-    CorePart	core;
-    SimplePart	simple;
-    UCSLabelPart	label;
+typedef struct _UCSLabelRec
+{
+    CorePart     core;
+    SimplePart   simple;
+    UCSLabelPart label;
 } UCSLabelRec;
 
-#define LEFT_OFFSET(lw) ((lw)->label.left_bitmap \
-			 ? (lw)->label.lbm_width + (lw)->label.internal_width \
-			 : 0)
+#define LEFT_OFFSET(lw)                                       \
+    ((lw)->label.left_bitmap                                  \
+         ? (lw)->label.lbm_width + (lw)->label.internal_width \
+         : 0)
 
 #endif /* _XawUCSLabelP_h */

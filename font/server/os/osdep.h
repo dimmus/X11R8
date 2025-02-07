@@ -46,58 +46,61 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifndef _OSDEP_H_
-#define	_OSDEP_H_
+#define _OSDEP_H_
 
-#define	BOTIMEOUT	200	/* in milliseconds */
-#define	BUFSIZE		4096
-#define	BUFWATERMARK	8192
-#define	MAXBUFSIZE	(1 << 15)
+#define BOTIMEOUT    200 /* in milliseconds */
+#define BUFSIZE      4096
+#define BUFWATERMARK 8192
+#define MAXBUFSIZE   (1 << 15)
 
 #ifdef _POSIX_SOURCE
-# include <limits.h>
+#  include <limits.h>
 #else
-# define _POSIX_SOURCE
-# include <limits.h>
-# undef _POSIX_SOURCE
+#  define _POSIX_SOURCE
+#  include <limits.h>
+#  undef _POSIX_SOURCE
 #endif
 #include <sys/param.h>
 
 #ifndef PATH_MAX
-# ifndef PATH_MAX
-#  ifdef MAXPATHLEN
-#   define PATH_MAX MAXPATHLEN
-#  else
-#   define PATH_MAX 1024
+#  ifndef PATH_MAX
+#    ifdef MAXPATHLEN
+#      define PATH_MAX MAXPATHLEN
+#    else
+#      define PATH_MAX 1024
+#    endif
 #  endif
-# endif
 #endif /* PATH_MAX */
 
-#define MAXSOCKS	MAXCLIENTS
+#define MAXSOCKS MAXCLIENTS
 
 #include <stddef.h>
 
-typedef struct _connectionInput {
+typedef struct _connectionInput
+{
     struct _connectionInput *next;
-    char       *buffer;		/* contains current client input */
-    char       *bufptr;		/* pointer to current start of data */
-    int         bufcnt;		/* count of bytes in buffer */
-    int         lenLastReq;
-    int         size;
-}           ConnectionInput, *ConnectionInputPtr;
+    char                    *buffer;  /* contains current client input */
+    char                    *bufptr;  /* pointer to current start of data */
+    int                      bufcnt;  /* count of bytes in buffer */
+    int                      lenLastReq;
+    int                      size;
+} ConnectionInput, *ConnectionInputPtr;
 
-typedef struct _connectionOutput {
+typedef struct _connectionOutput
+{
     struct _connectionOutput *next;
-    int         size;
-    unsigned char *buf;
-    int         count;
-}           ConnectionOutput, *ConnectionOutputPtr;
+    int                       size;
+    unsigned char            *buf;
+    int                       count;
+} ConnectionOutput, *ConnectionOutputPtr;
 
-typedef struct _osComm {
-    int         fd;
-    ConnectionInputPtr input;
+typedef struct _osComm
+{
+    int                 fd;
+    ConnectionInputPtr  input;
     ConnectionOutputPtr output;
-    long        conn_time;	/* timestamp if not established, else 0  */
+    long                conn_time; /* timestamp if not established, else 0  */
     struct _XtransConnInfo *trans_conn; /* transport connection object */
-}           OsCommRec, *OsCommPtr;
+} OsCommRec, *OsCommPtr;
 
-#endif				/* _OSDEP_H_ */
+#endif    /* _OSDEP_H_ */

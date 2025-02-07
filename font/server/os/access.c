@@ -43,59 +43,61 @@ in this Software without prior written authorization from The Open Group.
  * THIS SOFTWARE.
  */
 
-#include	"config.h"
+#include "config.h"
 
-#include	"X11/Xos.h"
-#include        <sys/param.h>
-#include	<sys/socket.h>
-#include	<netdb.h>
-#include	<netinet/in.h>
-#include	"clientstr.h"
-#include	"misc.h"
-#include	"site.h"
-#include	"osdep.h"
-#include	"osstruct.h"
-#include	"globals.h"
-#include	"access.h"
+#include "X11/Xos.h"
+#include <sys/param.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include "clientstr.h"
+#include "misc.h"
+#include "site.h"
+#include "osdep.h"
+#include "osstruct.h"
+#include "globals.h"
+#include "access.h"
 
-long        MaxClients = DEFAULT_CLIENT_LIMIT;
+long MaxClients = DEFAULT_CLIENT_LIMIT;
 
 void
 AccessSetConnectionLimit(int num)
 {
     int newlim = num + 8; /* allow room for serverClient, logs, etc. */
-    int maxfd = sysconf(_SC_OPEN_MAX) - 1;
+    int maxfd  = sysconf(_SC_OPEN_MAX) - 1;
 
-    if ((maxfd < 0) || (maxfd > MAXSOCKS)) {
-	maxfd = MAXSOCKS;
+    if ((maxfd < 0) || (maxfd > MAXSOCKS))
+    {
+        maxfd = MAXSOCKS;
     }
-    if (newlim > maxfd) {
-	ErrorF("Client limit of %d too high; using default of %d\n",
-	       num, DEFAULT_CLIENT_LIMIT);
-	return;
+    if (newlim > maxfd)
+    {
+        ErrorF("Client limit of %d too high; using default of %d\n",
+               num,
+               DEFAULT_CLIENT_LIMIT);
+        return;
     }
     MaxClients = newlim;
 }
 
 /* ARGSUSED */
 int
-CheckClientAuthorization(
-    ClientPtr   client,
-    AuthPtr     client_auth,
-    int        *accept,
-    int        *index,
-    int        *size,
-    char      **auth_data)
+CheckClientAuthorization(ClientPtr client,
+                         AuthPtr   client_auth,
+                         int      *accept,
+                         int      *index,
+                         int      *size,
+                         char    **auth_data)
 {
-    OsCommPtr	oc;
-    int i;
+    OsCommPtr oc;
+    int       i;
 
     /* now that it's connected, zero the connect time
        so it doesn't get killed */
-    oc = (OsCommPtr)client->osPrivate;
+    oc            = (OsCommPtr)client->osPrivate;
     oc->conn_time = 0;
 
-    *size = 0;
+    *size   = 0;
     *accept = AuthSuccess;
 
     client->auth_generation++;
@@ -103,14 +105,13 @@ CheckClientAuthorization(
 #define AUTH1_NAME "hp-hostname-1"
 #define AUTH2_NAME "hp-printername-1"
     for (i = 0; i < *index; i++)
-	if ((client_auth[i].namelen == sizeof(AUTH1_NAME) &&
-	    !strcmp(client_auth[i].name, AUTH1_NAME)) ||
-	    (client_auth[i].namelen == sizeof(AUTH2_NAME) &&
-	    !strcmp(client_auth[i].name, AUTH2_NAME))) break;
-    if (i == *index)
-	i = 0;
-    else
-	i++;
+        if ((client_auth[i].namelen == sizeof(AUTH1_NAME) &&
+             !strcmp(client_auth[i].name, AUTH1_NAME)) ||
+            (client_auth[i].namelen == sizeof(AUTH2_NAME) &&
+             !strcmp(client_auth[i].name, AUTH2_NAME)))
+            break;
+    if (i == *index) i = 0;
+    else i++;
     *index = i;
     return FSSuccess;
 }

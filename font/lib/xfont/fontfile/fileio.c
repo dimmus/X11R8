@@ -29,70 +29,76 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "libxfontint.h"
 #include "fntfilio.h"
 #include "X11/Xos.h"
 #ifndef O_BINARY
-#define O_BINARY O_RDONLY
+#  define O_BINARY O_RDONLY
 #endif
 #ifndef O_CLOEXEC
-#define O_CLOEXEC 0
+#  define O_CLOEXEC 0
 #endif
 #ifndef O_NOFOLLOW
-#define O_NOFOLLOW 0
+#  define O_NOFOLLOW 0
 #endif
 
 FontFilePtr
-FontFileOpen (const char *name)
+FontFileOpen(const char *name)
 {
-    int		fd;
-    int		len;
-    BufFilePtr	raw, cooked;
+    int        fd;
+    int        len;
+    BufFilePtr raw, cooked;
 
-    fd = open (name, O_BINARY|O_CLOEXEC|O_NOFOLLOW);
-    if (fd < 0)
-	return 0;
-    raw = BufFileOpenRead (fd);
+    fd = open(name, O_BINARY | O_CLOEXEC | O_NOFOLLOW);
+    if (fd < 0) return 0;
+    raw = BufFileOpenRead(fd);
     if (!raw)
     {
-	close (fd);
-	return 0;
+        close(fd);
+        return 0;
     }
-    len = strlen (name);
-    if (len > 2 && !strcmp (name + len - 2, ".Z")) {
-	cooked = BufFilePushCompressed (raw);
-	if (!cooked) {
-	    BufFileClose (raw, TRUE);
-	    return 0;
-	}
-	raw = cooked;
+    len = strlen(name);
+    if (len > 2 && !strcmp(name + len - 2, ".Z"))
+    {
+        cooked = BufFilePushCompressed(raw);
+        if (!cooked)
+        {
+            BufFileClose(raw, TRUE);
+            return 0;
+        }
+        raw = cooked;
 #ifdef X_GZIP_FONT_COMPRESSION
-    } else if (len > 3 && !strcmp (name + len - 3, ".gz")) {
-	cooked = BufFilePushZIP (raw);
-	if (!cooked) {
-	    BufFileClose (raw, TRUE);
-	    return 0;
-	}
-	raw = cooked;
+    }
+    else if (len > 3 && !strcmp(name + len - 3, ".gz"))
+    {
+        cooked = BufFilePushZIP(raw);
+        if (!cooked)
+        {
+            BufFileClose(raw, TRUE);
+            return 0;
+        }
+        raw = cooked;
 #endif
 #ifdef X_BZIP2_FONT_COMPRESSION
-    } else if (len > 4 && !strcmp (name + len - 4, ".bz2")) {
-	cooked = BufFilePushBZIP2 (raw);
-	if (!cooked) {
-	    BufFileClose (raw, TRUE);
-	    return 0;
-	}
-	raw = cooked;
+    }
+    else if (len > 4 && !strcmp(name + len - 4, ".bz2"))
+    {
+        cooked = BufFilePushBZIP2(raw);
+        if (!cooked)
+        {
+            BufFileClose(raw, TRUE);
+            return 0;
+        }
+        raw = cooked;
 #endif
     }
-    return (FontFilePtr) raw;
+    return (FontFilePtr)raw;
 }
 
 int
-FontFileClose (FontFilePtr f)
+FontFileClose(FontFilePtr f)
 {
-    return BufFileClose ((BufFilePtr) f, TRUE);
+    return BufFileClose((BufFilePtr)f, TRUE);
 }
-

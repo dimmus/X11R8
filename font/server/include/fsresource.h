@@ -49,38 +49,37 @@ in this Software without prior written authorization from the X Consortium.
 #ifndef _RESOURCE_H_
 #define _RESOURCE_H_
 
-#include	"misc.h"
+#include "misc.h"
 
 typedef unsigned long RESTYPE;
 
-#define	RC_VANILLA	((RESTYPE)0)
-#define	RC_CACHED	((RESTYPE)1<<31)
-#define	RC_LASTPREDEF	RC_CACHED
-#define	RC_ANY		(~(RESTYPE)0)
+#define RC_VANILLA    ((RESTYPE)0)
+#define RC_CACHED     ((RESTYPE)1 << 31)
+#define RC_LASTPREDEF RC_CACHED
+#define RC_ANY        (~(RESTYPE)0)
 
-#define	RT_FONT		((RESTYPE)1)
-#define	RT_AUTHCONT	((RESTYPE)2)
-#define	RT_LASTPREDEF	RT_AUTHCONT
-#define	RT_NONE		((RESTYPE)0)
+#define RT_FONT       ((RESTYPE)1)
+#define RT_AUTHCONT   ((RESTYPE)2)
+#define RT_LASTPREDEF RT_AUTHCONT
+#define RT_NONE       ((RESTYPE)0)
 
-#define	CLIENTOFFSET		22
-#define	RESOURCE_ID_MASK	0x3FFFFF
-#define	CLIENT_BITS(id)		((id) & 0x1fc00000)
-#define	CLIENT_ID(id)		((int)(CLIENT_BITS(id) >> CLIENTOFFSET))
-#define	SERVER_BIT		0x20000000
+#define CLIENTOFFSET     22
+#define RESOURCE_ID_MASK 0x3FFFFF
+#define CLIENT_BITS(id)  ((id) & 0x1fc00000)
+#define CLIENT_ID(id)    ((int)(CLIENT_BITS(id) >> CLIENTOFFSET))
+#define SERVER_BIT       0x20000000
 
-#define	INVALID			(0)
+#define INVALID (0)
 
-#define	BAD_RESOURCE		0xe0000000
+#define BAD_RESOURCE 0xe0000000
 
-
-extern Bool AddResource(int cid, FSID id, RESTYPE type, pointer value);
-extern Bool InitClientResources(ClientPtr client);
-extern FSID FakeClientID(int client);
+extern Bool    AddResource(int cid, FSID id, RESTYPE type, pointer value);
+extern Bool    InitClientResources(ClientPtr client);
+extern FSID    FakeClientID(int client);
 extern pointer LookupIDByType(int cid, FSID id, RESTYPE rtype);
-extern void FreeAllResources(void);
-extern void FreeClientResources(ClientPtr client);
-extern void FreeResource(int cid, FSID id, RESTYPE skipDeleteFuncType);
-int NoneDeleteFunc (void *ptr, FSID id);
+extern void    FreeAllResources(void);
+extern void    FreeClientResources(ClientPtr client);
+extern void    FreeResource(int cid, FSID id, RESTYPE skipDeleteFuncType);
+int            NoneDeleteFunc(void *ptr, FSID id);
 
-#endif				/* _RESOURCE_H_ */
+#endif    /* _RESOURCE_H_ */

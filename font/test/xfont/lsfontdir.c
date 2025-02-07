@@ -31,46 +31,54 @@
 #include <stdio.h>
 #include <assert.h>
 #ifdef HAVE_ERR_H
-#include <err.h>
+#  include <err.h>
 #endif
 #include "../../xfont/util/replace.h"
 
 int
 main(int argc, char **argv)
 {
-    FontPathElementPtr *fpe_list;
-    xfont2_fpe_funcs_rec const **fpe_functions;
-    int fpe_function_count, fpe_list_count;
-    int i, n;
+    FontPathElementPtr          *fpe_list;
+    const xfont2_fpe_funcs_rec **fpe_functions;
+    int                          fpe_function_count, fpe_list_count;
+    int                          i, n;
 
     fpe_functions = init_font_handlers(&fpe_function_count);
 
     fpe_list_count = argc - 1;
-    fpe_list = init_font_paths((const char **) argv + 1, &fpe_list_count);
+    fpe_list       = init_font_paths((const char **)argv + 1, &fpe_list_count);
 
-    for (i = 0; i < fpe_list_count; i++) {
-	FontPathElementPtr fpe = fpe_list[i];
-	FontNamesPtr names;
-	const int max_names_count = 8192;
-	const char *pattern = "*";
-	int result;
+    for (i = 0; i < fpe_list_count; i++)
+    {
+        FontPathElementPtr fpe = fpe_list[i];
+        FontNamesPtr       names;
+        const int          max_names_count = 8192;
+        const char        *pattern         = "*";
+        int                result;
 
-	/* Don't allocate max size up front to allow testing expansion code */
-	names = xfont2_make_font_names_record(max_names_count / 16);
-	assert(names != NULL);
+    /* Don't allocate max size up front to allow testing expansion code */
+        names = xfont2_make_font_names_record(max_names_count / 16);
+        assert(names != NULL);
 
-	result = (*fpe_functions[fpe->type]->list_fonts)
-	    (NULL, fpe, pattern, strlen(pattern), max_names_count, names);
-	if (result != Successful)
-	    err(result, "list_font failed for font path %s: error %d",
-		fpe->name, result);
+        result = (*fpe_functions[fpe->type]->list_fonts)(NULL,
+                                                         fpe,
+                                                         pattern,
+                                                         strlen(pattern),
+                                                         max_names_count,
+                                                         names);
+        if (result != Successful)
+            err(result,
+                "list_font failed for font path %s: error %d",
+                fpe->name,
+                result);
 
-	printf("--- %s:\n", fpe->name);
-	for (n = 0 ; n < names->nnames; n++) {
-	    printf("%s\n", names->names[n]);
-	}
+        printf("--- %s:\n", fpe->name);
+        for (n = 0; n < names->nnames; n++)
+        {
+            printf("%s\n", names->names[n]);
+        }
 
-	xfont2_free_font_names(names);
+        xfont2_free_font_names(names);
     }
 
     return 0;

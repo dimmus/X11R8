@@ -48,6 +48,6 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _AUTH_H_
 #define _AUTH_H_
 
-typedef struct	_authcontext	*AuthContextPtr;
+typedef struct _authcontext *AuthContextPtr;
 
-#endif				/* _AUTH_H_ */
+#endif    /* _AUTH_H_ */

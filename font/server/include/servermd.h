@@ -50,26 +50,26 @@ in this Software without prior written authorization from The Open Group.
 #include <config.h>
 
 #ifndef VENDOR_RELEASE
-# if defined PACKAGE_VERSION_MAJOR
-#  define VENDOR_RELEASE \
-    	(((PACKAGE_VERSION_MAJOR) * 10000000) + \
-	 ((PACKAGE_VERSION_MINOR) * 100000) + \
-	 ((PACKAGE_VERSION_PATCHLEVEL) * 1000))
-# else
-#  define VENDOR_RELEASE 7000
-# endif
+#  if defined PACKAGE_VERSION_MAJOR
+#    define VENDOR_RELEASE                      \
+        (((PACKAGE_VERSION_MAJOR) * 10000000) + \
+         ((PACKAGE_VERSION_MINOR) * 100000) +   \
+         ((PACKAGE_VERSION_PATCHLEVEL) * 1000))
+#  else
+#    define VENDOR_RELEASE 7000
+#  endif
 #endif
 
 #ifndef VENDOR_STRING
-# if defined VENDORNAME
-#  define VENDOR_STRING VENDORNAME
-# else
-#  define VENDOR_STRING "X.Org Foundation"
-# endif
+#  if defined VENDORNAME
+#    define VENDOR_STRING VENDORNAME
+#  else
+#    define VENDOR_STRING "X.Org Foundation"
+#  endif
 #endif
 
 #ifndef DEFAULT_FS_PORT
-#define DEFAULT_FS_PORT 7100
+#  define DEFAULT_FS_PORT 7100
 #endif
 
 #endif /* _SERVERMD_H_ */

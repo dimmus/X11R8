@@ -24,7 +24,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#  include "config.h"
 #endif
 
 #include "X11/Xfuncproto.h"
@@ -37,7 +37,7 @@
  * handler, and puts count of entries in that array into fpe_function_count.
  * Must be called before init_font_paths().
  */
-extern xfont2_fpe_funcs_rec const **init_font_handlers(int *fpe_function_count);
+extern const xfont2_fpe_funcs_rec **init_font_handlers(int *fpe_function_count);
 
 /* Returns pointer to array of FontPathElement structs for each font path
  * entry passed in.  num_fpes must be set to the number of entries in the
@@ -45,5 +45,5 @@ extern xfont2_fpe_funcs_rec const **init_font_handlers(int *fpe_function_count);
  * the returned array.   May be called with (NULL, 0) to use default font
  * path of "catalogue:/etc/X11/fontpath.d" & "built-ins".
  */
-extern FontPathElementPtr *init_font_paths(const char * const *font_paths,
-					   int *num_fpes);
+extern FontPathElementPtr *init_font_paths(const char *const *font_paths,
+                                           int               *num_fpes);

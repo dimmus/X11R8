@@ -46,34 +46,34 @@ in this Software without prior written authorization from The Open Group.
  * THIS SOFTWARE.
  */
 
-#include	"config.h"
+#include "config.h"
 
-#include	<stdlib.h>
-#include	<sys/types.h>
-#include	<sys/stat.h>
-#include	"X11/fonts/FS.h"
-#include	"X11/fonts/FSproto.h"
-#include	"clientstr.h"
-#include	"fsresource.h"
-#include	"misc.h"
-#include	"globals.h"
-#include	"servermd.h"
-#include	"site.h"
-#include	"dispatch.h"
-#include	"extentst.h"
-#include	"difs.h"
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include "X11/fonts/FS.h"
+#include "X11/fonts/FSproto.h"
+#include "clientstr.h"
+#include "fsresource.h"
+#include "misc.h"
+#include "globals.h"
+#include "servermd.h"
+#include "site.h"
+#include "dispatch.h"
+#include "extentst.h"
+#include "difs.h"
 
-char       *ConnectionInfo;
-int         ConnInfoLen;
+char *ConnectionInfo;
+int   ConnInfoLen;
 
 static Bool create_connection_block(void);
 
-char       *configfilename;
+char *configfilename;
 
 int
 main(int argc, char *argv[])
 {
-    int         i, oldumask;
+    int i, oldumask;
 
     argcGlobal = argc;
     argvGlobal = argv;
@@ -87,70 +87,69 @@ main(int argc, char *argv[])
      * Do this first thing, to get any options that only take effect at
      * startup time.  It is read again each time the server resets.
      */
-    if (ReadConfigFile(configfilename) != FSSuccess) {
-	FatalError("couldn't read config file\n");
+    if (ReadConfigFile(configfilename) != FSSuccess)
+    {
+        FatalError("couldn't read config file\n");
     }
     InitErrors();
 
     /* make sure at least world write access is disabled */
-    if (((oldumask = umask(022)) & 002) == 002)
-	(void)umask(oldumask);
+    if (((oldumask = umask(022)) & 002) == 002) (void)umask(oldumask);
 
     SetDaemonState();
     SetUserId();
 
-    while (1) {
-	serverGeneration++;
-	OsInit();
-	if (serverGeneration == 1) {
-	    /* do first time init */
-	    CreateSockets(OldListenCount, OldListen);
-	    InitProcVectors();
-	    clients = (ClientPtr *) FSallocarray(MAXCLIENTS, sizeof(ClientPtr));
-	    if (!clients)
-		FatalError("couldn't create client array\n");
-	    for (i = MINCLIENT; i < MAXCLIENTS; i++)
-		clients[i] = NullClient;
-	    /* make serverClient */
-	    serverClient = (ClientPtr) FSalloc(sizeof(ClientRec));
-	    if (!serverClient)
-		FatalError("couldn't create server client\n");
-	}
-	ResetSockets();
+    while (1)
+    {
+        serverGeneration++;
+        OsInit();
+        if (serverGeneration == 1)
+        {
+        /* do first time init */
+            CreateSockets(OldListenCount, OldListen);
+            InitProcVectors();
+            clients = (ClientPtr *)FSallocarray(MAXCLIENTS, sizeof(ClientPtr));
+            if (!clients) FatalError("couldn't create client array\n");
+            for (i = MINCLIENT; i < MAXCLIENTS; i++)
+                clients[i] = NullClient;
+        /* make serverClient */
+            serverClient = (ClientPtr)FSalloc(sizeof(ClientRec));
+            if (!serverClient) FatalError("couldn't create server client\n");
+        }
+        ResetSockets();
 
-	/* init per-cycle stuff */
-	InitClient(serverClient, SERVER_CLIENT, (pointer) 0);
+    /* init per-cycle stuff */
+        InitClient(serverClient, SERVER_CLIENT, (pointer)0);
 
-	clients[SERVER_CLIENT] = serverClient;
-	currentMaxClients = MINCLIENT;
-	currentClient = serverClient;
+        clients[SERVER_CLIENT] = serverClient;
+        currentMaxClients      = MINCLIENT;
+        currentClient          = serverClient;
 
-	if (!InitClientResources(serverClient))
-	    FatalError("couldn't init server resources\n");
+        if (!InitClientResources(serverClient))
+            FatalError("couldn't init server resources\n");
 
-	InitAtoms();
-	InitFonts();
-	SetConfigValues();
-	if (!create_connection_block())
-	    FatalError("couldn't create connection block\n");
-
-#ifdef DEBUG
-	fprintf(stderr, "Entering Dispatch loop\n");
-#endif
-
-	Dispatch();
+        InitAtoms();
+        InitFonts();
+        SetConfigValues();
+        if (!create_connection_block())
+            FatalError("couldn't create connection block\n");
 
 #ifdef DEBUG
-	fprintf(stderr, "Leaving Dispatch loop\n");
+        fprintf(stderr, "Entering Dispatch loop\n");
 #endif
 
-	/* clean up per-cycle stuff */
-	if ((dispatchException & DE_TERMINATE) || drone_server)
-	    break;
-	FSfree(ConnectionInfo);
-	/* note that we're parsing it again, for each time the server resets */
-	if (ReadConfigFile(configfilename) != FSSuccess)
-	    FatalError("couldn't read config file\n");
+        Dispatch();
+
+#ifdef DEBUG
+        fprintf(stderr, "Leaving Dispatch loop\n");
+#endif
+
+    /* clean up per-cycle stuff */
+        if ((dispatchException & DE_TERMINATE) || drone_server) break;
+        FSfree(ConnectionInfo);
+        /* note that we're parsing it again, for each time the server resets */
+        if (ReadConfigFile(configfilename) != FSSuccess)
+            FatalError("couldn't read config file\n");
     }
 
     CloseSockets();
@@ -162,21 +161,20 @@ static Bool
 create_connection_block(void)
 {
     fsConnSetupAccept setup;
-    char       *pBuf;
+    char             *pBuf;
 
-    setup.release_number = VENDOR_RELEASE;
-    setup.vendor_len = strlen(VENDOR_STRING);
+    setup.release_number  = VENDOR_RELEASE;
+    setup.vendor_len      = strlen(VENDOR_STRING);
     setup.max_request_len = MAX_REQUEST_SIZE;
     setup.length = (SIZEOF(fsConnSetupAccept) + setup.vendor_len + 3) >> 2;
 
-    ConnInfoLen = SIZEOF(fsConnSetupAccept) + ((setup.vendor_len + 3) & ~3);
-    ConnectionInfo = (char *) FSalloc(ConnInfoLen);
-    if (!ConnectionInfo)
-	return FALSE;
+    ConnInfoLen    = SIZEOF(fsConnSetupAccept) + ((setup.vendor_len + 3) & ~3);
+    ConnectionInfo = (char *)FSalloc(ConnInfoLen);
+    if (!ConnectionInfo) return FALSE;
 
     memcpy(ConnectionInfo, &setup, SIZEOF(fsConnSetupAccept));
     pBuf = ConnectionInfo + SIZEOF(fsConnSetupAccept);
-    memcpy(pBuf, VENDOR_STRING, (int) setup.vendor_len);
+    memcpy(pBuf, VENDOR_STRING, (int)setup.vendor_len);
 
     return TRUE;
 }

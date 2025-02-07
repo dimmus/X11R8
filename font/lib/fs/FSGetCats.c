@@ -50,60 +50,61 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
-#include	"FSlibint.h"
+#include "FSlibint.h"
 
-char      **
-FSGetCatalogues(
-    FSServer	*svr,
-    int		*num)
+char **
+FSGetCatalogues(FSServer *svr, int *num)
 {
     fsGetCataloguesReply rep;
-    char      **list;
-    char       *c;
-    int         i,
-                length;
-    fsReq      *req;
-    unsigned long rlen;
+    char               **list;
+    char                *c;
+    int                  i, length;
+    fsReq               *req;
+    unsigned long        rlen;
 
     GetEmptyReq(GetCatalogues, req);
 
-    if (!_FSReply(svr, (fsReply *) & rep, 0, fsFalse)) {
-	SyncHandle();
-	return (char **) NULL;
+    if (!_FSReply(svr, (fsReply *)&rep, 0, fsFalse))
+    {
+        SyncHandle();
+        return (char **)NULL;
     }
     if (rep.num_catalogues
 #if (SIZE_MAX >> 2) <= UINT_MAX
-	&& rep.num_catalogues <= SIZE_MAX/sizeof(char *)
-	&& rep.length <= (SIZE_MAX >> 2)
+        && rep.num_catalogues <= SIZE_MAX / sizeof(char *) &&
+        rep.length <= (SIZE_MAX >> 2)
 #endif
-	) {
-	list = FSmallocarray(rep.num_catalogues, sizeof(char *));
-	rlen = (rep.length << 2) - SIZEOF(fsGetCataloguesReply);
-	c = FSmalloc(rlen + 1);
-	if ((!list) || (!c)) {
-	    if (list)
-		FSfree(list);
-	    if (c)
-		FSfree(c);
-	    _FSEatData(svr, rlen);
-	    SyncHandle();
-	    return (char **) NULL;
-	}
-	_FSReadPad(svr, c, (long) rlen);
-	/*
+    )
+    {
+        list = FSmallocarray(rep.num_catalogues, sizeof(char *));
+        rlen = (rep.length << 2) - SIZEOF(fsGetCataloguesReply);
+        c    = FSmalloc(rlen + 1);
+        if ((!list) || (!c))
+        {
+            if (list) FSfree(list);
+            if (c) FSfree(c);
+            _FSEatData(svr, rlen);
+            SyncHandle();
+            return (char **)NULL;
+        }
+        _FSReadPad(svr, c, (long)rlen);
+    /*
 	 * unpack the strings
 	 */
-	length = *c;
-	for (i = 0; i < (int)rep.num_catalogues; i++) {
-	    list[i] = c + 1;	/* skip length */
-	    c += length + 1;	/* find next length */
-	    length = *c;
-	    *c = '\0';		/* change length to NULL */
-	}
-    } else {
-	list = (char **) NULL;
+        length = *c;
+        for (i = 0; i < (int)rep.num_catalogues; i++)
+        {
+            list[i] = c + 1; /* skip length */
+            c += length + 1; /* find next length */
+            length = *c;
+            *c     = '\0';  /* change length to NULL */
+        }
+    }
+    else
+    {
+        list = (char **)NULL;
     }
     SyncHandle();
     *num = rep.num_catalogues;

@@ -21,14 +21,14 @@
  */
 
 #ifndef FS_t
-# define FS_t
+#  define FS_t
 #endif
 #ifndef TRANS_CLIENT
-# define TRANS_CLIENT
+#  define TRANS_CLIENT
 #endif
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "X11/Xtrans/transport.c"

@@ -45,8 +45,18 @@ in this Software without prior written authorization from The Open Group.
  *
  */
 #ifdef DEBUG
-#include	<stdio.h>
-#define assert(ex)	{if (!(ex)){(void)fprintf(stderr,"Assertion \"ex\" failed: file \"%s\", line %d\n", __FILE__, __LINE__);abort();}}
+#  include <stdio.h>
+#  define assert(ex)                                                           \
+      {                                                                        \
+          if (!(ex))                                                           \
+          {                                                                    \
+              (void)fprintf(stderr,                                            \
+                            "Assertion \"ex\" failed: file \"%s\", line %d\n", \
+                            __FILE__,                                          \
+                            __LINE__);                                         \
+              abort();                                                         \
+          }                                                                    \
+      }
 #else
-#define assert(ex)
+#  define assert(ex)
 #endif

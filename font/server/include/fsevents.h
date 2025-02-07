@@ -49,13 +49,13 @@ in this Software without prior written authorization from the X Consortium.
 #ifndef _EVENTS_H_
 #define _EVENTS_H_
 
-#include	<misc.h>
-#include	"X11/fonts/FS.h"
+#include <misc.h>
+#include "X11/fonts/FS.h"
 
-extern int ProcGetEventMask(ClientPtr client);
-extern int ProcSetEventMask(ClientPtr client);
+extern int  ProcGetEventMask(ClientPtr client);
+extern int  ProcSetEventMask(ClientPtr client);
 extern void SendKeepAlive(ClientPtr client);
 extern void SendKeepAliveEvent(ClientPtr client);
 extern void WriteErrorToClient(ClientPtr client, fsError *error);
 
-#endif				/* _EVENTS_H_ */
+#endif    /* _EVENTS_H_ */

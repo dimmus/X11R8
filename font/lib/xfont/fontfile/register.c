@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "libxfontint.h"
@@ -41,7 +41,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef BUILD_FREETYPE
-# define XFONT_FREETYPE 1
+#  define XFONT_FREETYPE 1
 #endif
 
 void
@@ -49,14 +49,13 @@ FontFileRegisterFpeFunctions(void)
 {
 #ifdef XFONT_BITMAP
     /* bitmap is always builtin to libXfont now */
-    BitmapRegisterFontFileFunctions ();
+    BitmapRegisterFontFileFunctions();
 #endif
 #ifdef XFONT_FREETYPE
     FreeTypeRegisterFontFileFunctions();
 #endif
-    FontFileRegisterLocalFpeFunctions ();
+    FontFileRegisterLocalFpeFunctions();
 #ifdef HAVE_READLINK
-    CatalogueRegisterLocalFpeFunctions ();
+    CatalogueRegisterLocalFpeFunctions();
 #endif
 }
-

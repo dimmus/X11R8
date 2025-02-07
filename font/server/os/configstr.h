@@ -46,13 +46,14 @@ in this Software without prior written authorization from The Open Group.
  */
 #ifndef _CONFIGSTR_H_
 #define _CONFIGSTR_H_
-#include	"config.h"
+#include "config.h"
 
 typedef struct _config_options ConfigOptionRec, *ConfigOptionPtr;
 
-struct _config_options {
+struct _config_options
+{
     const char *parm_name;
-    char       *(*set_func) (ConfigOptionPtr, char *);
+    char *(*set_func)(ConfigOptionPtr, char *);
 };
 
-#endif				/* _CONFIGSTR_H_ */
+#endif    /* _CONFIGSTR_H_ */

@@ -23,13 +23,14 @@
 #ifndef _MKS_CONSTLIST_H_
 #define _MKS_CONSTLIST_H_ 1
 
-typedef struct _ConstList {
-    const char *value;
+typedef struct _ConstList
+{
+    const char        *value;
     struct _ConstList *next;
 } ConstListRec, *ConstListPtr;
 
 ConstListPtr appendConstList(ConstListPtr first, ConstListPtr second);
 ConstListPtr makeConstList(const char **a, int n, ConstListPtr old, int begin);
-void destroyConstList(ConstListPtr old);
+void         destroyConstList(ConstListPtr old);
 
 #endif /* _MKS_CONSTLIST_H_ */

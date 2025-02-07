@@ -61,57 +61,53 @@ in this Software without prior written authorization from The Open Group.
 #include <errno.h>
 #include <stddef.h>
 
-typedef int (* FSIOErrorHandler)(FSServer *) _X_NORETURN;
-typedef int (* FSErrorHandler)(FSServer *, FSErrorEvent *);
+typedef int (*FSIOErrorHandler)(FSServer *) _X_NORETURN;
+typedef int (*FSErrorHandler)(FSServer *, FSErrorEvent *);
 
 extern FSIOErrorHandler _FSIOErrorFunction;
-extern FSErrorHandler _FSErrorFunction;
+extern FSErrorHandler   _FSErrorFunction;
 
-extern void _FSEatData ( FSServer *svr, unsigned long n );
-extern void _FSWaitForWritable ( FSServer *svr );
-extern void _FSWaitForReadable ( FSServer *svr );
-extern void _FSFlush ( FSServer *svr );
-extern void _FSRead ( FSServer *svr, char *data, long size );
-extern void _FSReadEvents ( FSServer *svr );
-extern void _FSReadPad ( FSServer *svr, char *data, long size );
-extern void _FSSend ( FSServer *svr, const char *data, long size );
-extern void _FSEnq ( FSServer *svr, fsEvent *event );
-extern void _FSFreeServerStructure ( FSServer *svr );
-extern int _FSError ( FSServer *svr, fsError *rep );
-extern int _FSReply ( FSServer *svr, fsReply *rep, int extra, int discard );
-extern XtransConnInfo _FSConnectServer ( char *server_name );
-extern void _FSDisconnectServer ( XtransConnInfo trans_conn );
-extern void _FSSendClientPrefix ( FSServer *svr, fsConnClientPrefix *client );
-extern unsigned long _FSSetLastRequestRead ( FSServer *svr,
-					     fsGenericReply *rep );
-extern int _FSUnknownWireEvent ( FSServer *svr, FSEvent *re, fsEvent *event );
-extern int _FSUnknownNativeEvent ( FSServer *svr, FSEvent *re,
-				   fsEvent *event );
-extern int _FSDefaultIOError ( FSServer *svr ) _X_NORETURN;
-extern int _FSPrintDefaultError ( FSServer *svr, FSErrorEvent *event,
-				  FILE *fp );
-extern int _FSDefaultError ( FSServer *svr, FSErrorEvent *event );
-extern void _FSFreeQ ( void );
+extern void _FSEatData(FSServer *svr, unsigned long n);
+extern void _FSWaitForWritable(FSServer *svr);
+extern void _FSWaitForReadable(FSServer *svr);
+extern void _FSFlush(FSServer *svr);
+extern void _FSRead(FSServer *svr, char *data, long size);
+extern void _FSReadEvents(FSServer *svr);
+extern void _FSReadPad(FSServer *svr, char *data, long size);
+extern void _FSSend(FSServer *svr, const char *data, long size);
+extern void _FSEnq(FSServer *svr, fsEvent *event);
+extern void _FSFreeServerStructure(FSServer *svr);
+extern int  _FSError(FSServer *svr, fsError *rep);
+extern int  _FSReply(FSServer *svr, fsReply *rep, int extra, int discard);
+extern XtransConnInfo _FSConnectServer(char *server_name);
+extern void           _FSDisconnectServer(XtransConnInfo trans_conn);
+extern void _FSSendClientPrefix(FSServer *svr, fsConnClientPrefix *client);
+extern unsigned long _FSSetLastRequestRead(FSServer *svr, fsGenericReply *rep);
+extern int  _FSUnknownWireEvent(FSServer *svr, FSEvent *re, fsEvent *event);
+extern int  _FSUnknownNativeEvent(FSServer *svr, FSEvent *re, fsEvent *event);
+extern int  _FSDefaultIOError(FSServer *svr) _X_NORETURN;
+extern int  _FSPrintDefaultError(FSServer *svr, FSErrorEvent *event, FILE *fp);
+extern int  _FSDefaultError(FSServer *svr, FSErrorEvent *event);
+extern void _FSFreeQ(void);
 
-extern FSErrorHandler  FSSetErrorHandler ( FSErrorHandler handler );
-extern FSIOErrorHandler FSSetIOErrorHandler ( FSIOErrorHandler handler );
+extern FSErrorHandler   FSSetErrorHandler(FSErrorHandler handler);
+extern FSIOErrorHandler FSSetIOErrorHandler(FSIOErrorHandler handler);
 
 extern _FSQEvent *_FSqfree;
-extern FSServer *_FSHeadOfServerList;
+extern FSServer  *_FSHeadOfServerList;
 
 #ifndef BUFSIZE
-#define BUFSIZE 2048		/* FS output buffer size. */
+#  define BUFSIZE 2048  /* FS output buffer size. */
 #endif
 
 /*
  * server flags
  */
-#define	FSlibServerIOError	(1L << 0)
-#define	FSlibServerClosing	(1L << 1)
-
+#define FSlibServerIOError (1L << 0)
+#define FSlibServerClosing (1L << 1)
 
 /* FSMaxRequestBytes - returns FSMaxRequestSize converted to bytes */
-#define FSMaxRequestBytes(svr)	((svr)->max_request_size << 2)
+#define FSMaxRequestBytes(svr) ((svr)->max_request_size << 2)
 
 /*
  * GetReq - Get the next available FS request packet in the buffer and
@@ -122,26 +118,25 @@ extern FSServer *_FSHeadOfServerList;
  *
  */
 
-#define GetReq(name, req) \
-	if ((svr->bufptr + SIZEOF(fs##name##Req)) > svr->bufmax)\
-		_FSFlush(svr);\
-	req = (fs##name##Req *)(svr->last_req = svr->bufptr);\
-	req->reqType = FS_##name;\
-	req->length = (SIZEOF(fs##name##Req))>>2;\
-	svr->bufptr += SIZEOF(fs##name##Req);\
-	svr->request++
+#define GetReq(name, req)                                                   \
+    if ((svr->bufptr + SIZEOF(fs##name##Req)) > svr->bufmax) _FSFlush(svr); \
+    req          = (fs##name##Req *)(svr->last_req = svr->bufptr);          \
+    req->reqType = FS_##name;                                               \
+    req->length  = (SIZEOF(fs##name##Req)) >> 2;                            \
+    svr->bufptr += SIZEOF(fs##name##Req);                                   \
+    svr->request++
 
 /* GetReqExtra is the same as GetReq, but allocates "n" additional
    bytes after the request. "n" must be a multiple of 4!  */
 
-#define GetReqExtra(name, n, req) \
-	if ((svr->bufptr + SIZEOF(fs##name##Req) + n) > svr->bufmax)\
-		_FSFlush(svr);\
-	req = (fs##name##Req *)(svr->last_req = svr->bufptr);\
-	req->reqType = FS_##name;\
-	req->length = (SIZEOF(fs##name##Req) + n)>>2;\
-	svr->bufptr += SIZEOF(fs##name##Req) + n;\
-	svr->request++
+#define GetReqExtra(name, n, req)                                  \
+    if ((svr->bufptr + SIZEOF(fs##name##Req) + n) > svr->bufmax)   \
+        _FSFlush(svr);                                             \
+    req          = (fs##name##Req *)(svr->last_req = svr->bufptr); \
+    req->reqType = FS_##name;                                      \
+    req->length  = (SIZEOF(fs##name##Req) + n) >> 2;               \
+    svr->bufptr += SIZEOF(fs##name##Req) + n;                      \
+    svr->request++
 
 /*
  * GetResReq is for those requests that have a resource ID
@@ -149,32 +144,30 @@ extern FSServer *_FSHeadOfServerList;
  * "rid" is the name of the resource.
  */
 
-#define GetResReq(name, rid, req) \
-	if ((svr->bufptr + SIZEOF(fsResourceReq)) > svr->bufmax)\
-	    _FSFlush(svr);\
-	req = (fsResourceReq *) (svr->last_req = svr->bufptr);\
-	req->reqType = FS_##name;\
-	req->length = 2;\
-	req->id = (CARD32) (rid);\
-	svr->bufptr += SIZEOF(fsResourceReq);\
-	svr->request++
+#define GetResReq(name, rid, req)                                           \
+    if ((svr->bufptr + SIZEOF(fsResourceReq)) > svr->bufmax) _FSFlush(svr); \
+    req          = (fsResourceReq *)(svr->last_req = svr->bufptr);          \
+    req->reqType = FS_##name;                                               \
+    req->length  = 2;                                                       \
+    req->id      = (CARD32)(rid);                                           \
+    svr->bufptr += SIZEOF(fsResourceReq);                                   \
+    svr->request++
 
 /*
  * GetEmptyReq is for those requests that have no arguments
  * at all.
  */
 
-#define GetEmptyReq(name, req) \
-	if ((svr->bufptr + SIZEOF(fsReq)) > svr->bufmax)\
-	    _FSFlush(svr);\
-	req = (fsReq *) (svr->last_req = svr->bufptr);\
-	req->reqType = FS_##name;\
-	req->length = 1;\
-	svr->bufptr += SIZEOF(fsReq);\
-	svr->request++
+#define GetEmptyReq(name, req)                                      \
+    if ((svr->bufptr + SIZEOF(fsReq)) > svr->bufmax) _FSFlush(svr); \
+    req          = (fsReq *)(svr->last_req = svr->bufptr);          \
+    req->reqType = FS_##name;                                       \
+    req->length  = 1;                                               \
+    svr->bufptr += SIZEOF(fsReq);                                   \
+    svr->request++
 
-#define	SyncHandle()	\
-	if (svr->synchandler) (*svr->synchandler)(svr)
+#define SyncHandle() \
+    if (svr->synchandler) (*svr->synchandler)(svr)
 
 /*
  * Data - Place data in the buffer and pad the end to provide
@@ -190,14 +183,14 @@ extern FSServer *_FSHeadOfServerList;
 extern void Data();
 
 #else
-#define Data(svr, data, len) \
-	if (svr->bufptr + (len) <= svr->bufmax) {\
-		memmove(svr->bufptr, data, len);\
-		svr->bufptr += ((len) + 3) & ~3;\
-	} else\
-		_FSSend(svr, data, len)
-#endif				/* DataRoutineIsProcedure */
-
+#  define Data(svr, data, len)                \
+      if (svr->bufptr + (len) <= svr->bufmax) \
+      {                                       \
+          memmove(svr->bufptr, data, len);    \
+          svr->bufptr += ((len) + 3) & ~3;    \
+      }                                       \
+      else _FSSend(svr, data, len)
+#endif    /* DataRoutineIsProcedure */
 
 /* Allocate bytes from the buffer.  No padding is done, so if
  * the length is not a multiple of 4, the caller must be
@@ -213,73 +206,90 @@ extern void Data();
  *    BufAlloc (xTextElt *, elt, nbytes)
  */
 
-#define BufAlloc(type, ptr, n) \
-    if (svr->bufptr + (n) > svr->bufmax) \
-        _FSFlush (svr); \
-    ptr = (type) svr->bufptr; \
+#define BufAlloc(type, ptr, n)                          \
+    if (svr->bufptr + (n) > svr->bufmax) _FSFlush(svr); \
+    ptr = (type)svr->bufptr;                            \
     svr->bufptr += (n);
 
 /*
  * provide emulation routines for smaller architectures
  */
-#define Data16(dpy, data, len) Data((dpy), (char *)(data), (len))
-#define Data32(dpy, data, len) Data((dpy), (char *)(data), (len))
+#define Data16(dpy, data, len)       Data((dpy), (char *)(data), (len))
+#define Data32(dpy, data, len)       Data((dpy), (char *)(data), (len))
 #define _FSRead16Pad(dpy, data, len) _FSReadPad((dpy), (char *)(data), (len))
-#define _FSRead16(dpy, data, len) _FSRead((dpy), (char *)(data), (len))
-#define _FSRead32(dpy, data, len) _FSRead((dpy), (char *)(data), (len))
+#define _FSRead16(dpy, data, len)    _FSRead((dpy), (char *)(data), (len))
+#define _FSRead32(dpy, data, len)    _FSRead((dpy), (char *)(data), (len))
 
-#define PackData16(dpy,data,len) Data16 (dpy, data, len)
-#define PackData32(dpy,data,len) Data32 (dpy, data, len)
+#define PackData16(dpy, data, len) Data16(dpy, data, len)
+#define PackData32(dpy, data, len) Data32(dpy, data, len)
 
-#define min(a,b) (((a) < (b)) ? (a) : (b))
-#define max(a,b) (((a) > (b)) ? (a) : (b))
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#define max(a, b) (((a) > (b)) ? (a) : (b))
 
 /* srcvar must be a variable for large architecture version */
-#define OneDataCard32(svr,dstaddr,srcvar) \
-  { *(unsigned long *)(dstaddr) = (srcvar); }
+#define OneDataCard32(svr, dstaddr, srcvar)     \
+    {                                           \
+        *(unsigned long *)(dstaddr) = (srcvar); \
+    }
 
-#define STARTITERATE(tpvar,type,start,endcond,decr) \
-  for (tpvar = (type *) start; endcond; tpvar++, decr) {
+#define STARTITERATE(tpvar, type, start, endcond, decr) \
+    for (tpvar = (type *)start; endcond; tpvar++, decr) \
+    {
 #define ENDITERATE }
 
-
-#define FSCat(x,y) x##_##y
+#define FSCat(x, y) x##_##y
 
 /* copy XCharInfo parts of a protocol reply into a FSXCharInfo */
 
-#define FSUnpack_XCharInfo(packet, structure) \
-    (structure)->left = FSCat(packet,left); \
-    (structure)->right = FSCat(packet,right); \
-    (structure)->width = FSCat(packet,width); \
-    (structure)->ascent = FSCat(packet,ascent); \
-    (structure)->descent = FSCat(packet,descent); \
-    (structure)->attributes = FSCat(packet,attributes)
-
+#define FSUnpack_XCharInfo(packet, structure)         \
+    (structure)->left       = FSCat(packet, left);    \
+    (structure)->right      = FSCat(packet, right);   \
+    (structure)->width      = FSCat(packet, width);   \
+    (structure)->ascent     = FSCat(packet, ascent);  \
+    (structure)->descent    = FSCat(packet, descent); \
+    (structure)->attributes = FSCat(packet, attributes)
 
 /* copy XFontInfoHeader parts of a protocol reply into a FSXFontInfoHeader */
 
-#define FSUnpack_XFontInfoHeader(packet, structure, serverversion) \
-    (structure)->flags = (packet)->font_header_flags; \
+#define FSUnpack_XFontInfoHeader(packet, structure, serverversion)      \
+    (structure)->flags          = (packet)->font_header_flags;          \
     (structure)->draw_direction = (packet)->font_header_draw_direction; \
- \
-    if (serverversion > 1) { \
-	(structure)->char_range.min_char.high = (packet)->font_hdr_char_range_min_char_high; \
-	(structure)->char_range.min_char.low = (packet)->font_hdr_char_range_min_char_low; \
-	(structure)->char_range.max_char.high = (packet)->font_hdr_char_range_max_char_high; \
-	(structure)->char_range.max_char.low = (packet)->font_hdr_char_range_max_char_low; \
-	(structure)->default_char.high = (packet)->font_header_default_char_high; \
-	(structure)->default_char.low = (packet)->font_header_default_char_low; \
-    } else { \
-	(structure)->char_range.min_char.high = (packet)->font_hdr_char_range_min_char_low; \
-	(structure)->char_range.min_char.low = (packet)->font_hdr_char_range_min_char_high; \
-	(structure)->char_range.max_char.high = (packet)->font_hdr_char_range_max_char_low; \
-	(structure)->char_range.max_char.low = (packet)->font_hdr_char_range_max_char_high; \
-	(structure)->default_char.high = (packet)->font_header_default_char_low; \
-	(structure)->default_char.low = (packet)->font_header_default_char_high; \
-	} \
- \
-    (structure)->font_ascent = (packet)->font_header_font_ascent; \
-    (structure)->font_descent = (packet)->font_header_font_descent; \
- \
-    FSUnpack_XCharInfo((packet)->font_header_min_bounds, &(structure)->min_bounds); \
-    FSUnpack_XCharInfo((packet)->font_header_max_bounds, &(structure)->max_bounds)
+                                                                        \
+    if (serverversion > 1)                                              \
+    {                                                                   \
+        (structure)->char_range.min_char.high =                         \
+            (packet)->font_hdr_char_range_min_char_high;                \
+        (structure)->char_range.min_char.low =                          \
+            (packet)->font_hdr_char_range_min_char_low;                 \
+        (structure)->char_range.max_char.high =                         \
+            (packet)->font_hdr_char_range_max_char_high;                \
+        (structure)->char_range.max_char.low =                          \
+            (packet)->font_hdr_char_range_max_char_low;                 \
+        (structure)->default_char.high =                                \
+            (packet)->font_header_default_char_high;                    \
+        (structure)->default_char.low =                                 \
+            (packet)->font_header_default_char_low;                     \
+    }                                                                   \
+    else                                                                \
+    {                                                                   \
+        (structure)->char_range.min_char.high =                         \
+            (packet)->font_hdr_char_range_min_char_low;                 \
+        (structure)->char_range.min_char.low =                          \
+            (packet)->font_hdr_char_range_min_char_high;                \
+        (structure)->char_range.max_char.high =                         \
+            (packet)->font_hdr_char_range_max_char_low;                 \
+        (structure)->char_range.max_char.low =                          \
+            (packet)->font_hdr_char_range_max_char_high;                \
+        (structure)->default_char.high =                                \
+            (packet)->font_header_default_char_low;                     \
+        (structure)->default_char.low =                                 \
+            (packet)->font_header_default_char_high;                    \
+    }                                                                   \
+                                                                        \
+    (structure)->font_ascent  = (packet)->font_header_font_ascent;      \
+    (structure)->font_descent = (packet)->font_header_font_descent;     \
+                                                                        \
+    FSUnpack_XCharInfo((packet)->font_header_min_bounds,                \
+                       &(structure)->min_bounds);                       \
+    FSUnpack_XCharInfo((packet)->font_header_max_bounds,                \
+                       &(structure)->max_bounds)

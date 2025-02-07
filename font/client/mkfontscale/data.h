@@ -26,61 +26,63 @@
 /* Order is significant.  For example, some B&H fonts are hinted by
    URW++, and both strings appear in the notice. */
 
-static const char *notice_foundries[][2] =
-    {{"Iorsh", "culmus"},
-     {"Gnat", "culmus"},
-     {"Bigelow", "b&h"},
-     {"Adobe", "adobe"},
-     {"Bitstream", "bitstream"},
-     {"Monotype", "monotype"},
-     {"Linotype", "linotype"},
-     {"LINOTYPE-HELL", "linotype"},
-     {"IBM", "ibm"},
-     {"URW", "urw"},
-     {"International Typeface Corporation", "itc"},
-     {"Tiro Typeworks", "tiro"},
-     {"XFree86", "xfree86"},
-     {"Xorg", "xorg"},
-     {"Microsoft", "microsoft"},
-     {"Omega", "omega"},
-     {"Font21", "hwan"},
-     {"HanYang System", "hanyang"}};
+static const char *notice_foundries[][2] = {
+    { "Iorsh",                              "culmus"    },
+    { "Gnat",                               "culmus"    },
+    { "Bigelow",                            "b&h"       },
+    { "Adobe",                              "adobe"     },
+    { "Bitstream",                          "bitstream" },
+    { "Monotype",                           "monotype"  },
+    { "Linotype",                           "linotype"  },
+    { "LINOTYPE-HELL",                      "linotype"  },
+    { "IBM",                                "ibm"       },
+    { "URW",                                "urw"       },
+    { "International Typeface Corporation", "itc"       },
+    { "Tiro Typeworks",                     "tiro"      },
+    { "XFree86",                            "xfree86"   },
+    { "Xorg",                               "xorg"      },
+    { "Microsoft",                          "microsoft" },
+    { "Omega",                              "omega"     },
+    { "Font21",                             "hwan"      },
+    { "HanYang System",                     "hanyang"   }
+};
 
 /* This table is partly taken from ttmkfdir by Joerg Pommnitz. */
 
 /* It should not contain useless entries (such as UNKN) nor duplicate
    entries for padding both with spaces and NULs. */
 
-static const char *vendor_foundries[][2] =
-    {{"ADBE", "adobe"},
-     {"AGFA", "agfa"},
-     {"ALTS", "altsys"},
-     {"APPL", "apple"},
-     {"ARPH", "arphic"},
-     {"ATEC", "alltype"},
-     {"B&H", "b&h"},
-     {"BITS", "bitstream"},
-     {"CANO", "cannon"},
-     {"CLM", "culmus"},
-     {"DYNA", "dynalab"},
-     {"EPSN", "epson"},
-     {"FJ",  "fujitsu"},
-     {"IBM", "ibm"},
-     {"ITC", "itc"},
-     {"IMPR", "impress"},
-     {"LARA", "larabiefonts"},
-     {"LEAF", "interleaf"},
-     {"LETR", "letraset"},
-     {"LINO", "linotype"},
-     {"MACR", "macromedia"},
-     {"MONO", "monotype"},
-     {"MS", "microsoft"},
-     {"MT", "monotype"},
-     {"NEC", "nec"},
-     {"PARA", "paratype"},
-     {"QMSI", "qms"},
-     {"RICO", "ricoh"},
-     {"URW", "urw"},
-     {"Y&Y", "y&y"}};
+static const char *vendor_foundries[][2] = {
+    { "ADBE", "adobe"        },
+    { "AGFA", "agfa"         },
+    { "ALTS", "altsys"       },
+    { "APPL", "apple"        },
+    { "ARPH", "arphic"       },
+    { "ATEC", "alltype"      },
+    { "B&H",  "b&h"          },
+    { "BITS", "bitstream"    },
+    { "CANO", "cannon"       },
+    { "CLM",  "culmus"       },
+    { "DYNA", "dynalab"      },
+    { "EPSN", "epson"        },
+    { "FJ",   "fujitsu"      },
+    { "IBM",  "ibm"          },
+    { "ITC",  "itc"          },
+    { "IMPR", "impress"      },
+    { "LARA", "larabiefonts" },
+    { "LEAF", "interleaf"    },
+    { "LETR", "letraset"     },
+    { "LINO", "linotype"     },
+    { "MACR", "macromedia"   },
+    { "MONO", "monotype"     },
+    { "MS",   "microsoft"    },
+    { "MT",   "monotype"     },
+    { "NEC",  "nec"          },
+    { "PARA", "paratype"     },
+    { "QMSI", "qms"          },
+    { "RICO", "ricoh"        },
+    { "URW",  "urw"          },
+    { "Y&Y",  "y&y"          }
+};
 
 #endif /* _MKS_DATA_H_ */

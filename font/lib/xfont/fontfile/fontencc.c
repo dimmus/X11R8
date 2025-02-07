@@ -28,14 +28,14 @@ THE SOFTWARE.
    now have different names. */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "libxfontint.h"
 #include "X11/fonts/fontenc.h"
 #include "fontencc.h"
 
 char *
-font_encoding_from_xlfd(const char * name, int length)
+font_encoding_from_xlfd(const char *name, int length)
 {
     return FontEncFromXLFD(name, length);
 }
@@ -47,10 +47,10 @@ font_encoding_find(const char *encoding_name, const char *filename)
 }
 
 unsigned
-font_encoding_recode(unsigned code,
-                     FontEncPtr encoding, FontMapPtr mapping)
+font_encoding_recode(unsigned code, FontEncPtr encoding, FontMapPtr mapping)
 {
-    if(encoding != mapping->encoding) {
+    if (encoding != mapping->encoding)
+    {
         ErrorF("Inconsistent mapping/encoding\n");
         return 0;
     }
@@ -58,10 +58,10 @@ font_encoding_recode(unsigned code,
 }
 
 char *
-font_encoding_name(unsigned code,
-                     FontEncPtr encoding, FontMapPtr mapping)
+font_encoding_name(unsigned code, FontEncPtr encoding, FontMapPtr mapping)
 {
-    if(encoding != mapping->encoding) {
+    if (encoding != mapping->encoding)
+    {
         ErrorF("Inconsistent mapping/encoding\n");
         return 0;
     }

@@ -50,27 +50,27 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "FSlibint.h"
 
 /* synchronize with errors and events */
 
-int FSSync(
-    FSServer	*svr,
-    Bool	 discard)
+int
+FSSync(FSServer *svr, Bool discard)
 {
     fsListExtensionsReply rep;
-    fsReq      *req;
+    fsReq                *req;
 
     GetEmptyReq(ListExtensions, req);
-    (void) _FSReply(svr, (fsReply *) & rep, 0, fsTrue);
+    (void)_FSReply(svr, (fsReply *)&rep, 0, fsTrue);
 
-    if (discard && svr->head) {
-	((_FSQEvent *) svr->tail)->next = _FSqfree;
-	_FSqfree = (_FSQEvent *) svr->head;
-	svr->head = svr->tail = NULL;
-	svr->qlen = 0;
+    if (discard && svr->head)
+    {
+        ((_FSQEvent *)svr->tail)->next = _FSqfree;
+        _FSqfree                       = (_FSQEvent *)svr->head;
+        svr->head = svr->tail = NULL;
+        svr->qlen             = 0;
     }
 
     return 1;

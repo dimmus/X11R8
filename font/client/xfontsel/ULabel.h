@@ -93,39 +93,39 @@ SOFTWARE.
 /*
  * The only extra resource value needed for this widget.
  */
-#define XawTextEncodingUCS	2
+#define XawTextEncodingUCS 2
 
 #if 0
 /*
  * All of this is defined by Label.h.
  */
-#define XawTextEncoding8bit	0
-#define XawTextEncodingChar2b	1
+#  define XawTextEncoding8bit   0
+#  define XawTextEncodingChar2b 1
 
-#define XtNleftBitmap "leftBitmap"
-#define XtCLeftBitmap "LeftBitmap"
-#define XtNencoding "encoding"
-#define XtCEncoding "Encoding"
+#  define XtNleftBitmap "leftBitmap"
+#  define XtCLeftBitmap "LeftBitmap"
+#  define XtNencoding   "encoding"
+#  define XtCEncoding   "Encoding"
 
-#ifndef XtNfontSet
-#define XtNfontSet "fontSet"
-#endif
+#  ifndef XtNfontSet
+#    define XtNfontSet "fontSet"
+#  endif
 
-#ifndef XtCFontSet
-#define XtCFontSet "FontSet"
-#endif
+#  ifndef XtCFontSet
+#    define XtCFontSet "FontSet"
+#  endif
 
-#ifndef _XtStringDefs_h_
-#define XtNbitmap "bitmap"
-#define XtNforeground "foreground"
-#define XtNlabel "label"
-#define XtNfont "font"
-#define XtNinternalWidth "internalWidth"
-#define XtNinternalHeight "internalHeight"
-#define XtNresize "resize"
-#define XtCResize "Resize"
-#define XtCBitmap "Bitmap"
-#endif
+#  ifndef _XtStringDefs_h_
+#    define XtNbitmap         "bitmap"
+#    define XtNforeground     "foreground"
+#    define XtNlabel          "label"
+#    define XtNfont           "font"
+#    define XtNinternalWidth  "internalWidth"
+#    define XtNinternalHeight "internalHeight"
+#    define XtNresize         "resize"
+#    define XtCResize         "Resize"
+#    define XtCBitmap         "Bitmap"
+#  endif
 #endif
 
 /* Class record constants */

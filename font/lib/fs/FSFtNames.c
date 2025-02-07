@@ -50,29 +50,25 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "FSlibint.h"
 
-char      **
-FSListFonts(
-    FSServer	*svr,
-    const char	*pattern,
-    int		 maxNames,
-    int		*actualCount)
+char **
+FSListFonts(FSServer *svr, const char *pattern, int maxNames, int *actualCount)
 {
-    unsigned int i,
-                length;
-    char      **flist;
-    char       *c;
+    unsigned int     i, length;
+    char           **flist;
+    char            *c;
     fsListFontsReply rep;
-    fsListFontsReq *req;
-    unsigned long rlen;
+    fsListFontsReq  *req;
+    unsigned long    rlen;
 
     GetReq(ListFonts, req);
-    req->maxNames = (CARD32) maxNames;
-    req->nbytes = 0;
-    if (pattern != NULL) {
+    req->maxNames = (CARD32)maxNames;
+    req->nbytes   = 0;
+    if (pattern != NULL)
+    {
         size_t nbytes;
 
 #ifdef HAVE_STRNLEN
@@ -81,61 +77,67 @@ FSListFonts(
         nbytes = strlen(pattern);
 #endif
 
-        if (nbytes <= (FSMaxRequestBytes(svr) - SIZEOF(fsListFontsReq))) {
-            req->nbytes = (CARD16) nbytes;
-            req->length += (CARD16) ((nbytes + 3) >> 2);
-            _FSSend(svr, pattern, (long) nbytes);
+        if (nbytes <= (FSMaxRequestBytes(svr) - SIZEOF(fsListFontsReq)))
+        {
+            req->nbytes = (CARD16)nbytes;
+            req->length += (CARD16)((nbytes + 3) >> 2);
+            _FSSend(svr, pattern, (long)nbytes);
         }
     }
 
-    if (!_FSReply(svr, (fsReply *) & rep,
-	  (SIZEOF(fsListFontsReply) - SIZEOF(fsGenericReply)) >> 2, fsFalse))
-	return (char **) NULL;
+    if (!_FSReply(svr,
+                  (fsReply *)&rep,
+                  (SIZEOF(fsListFontsReply) - SIZEOF(fsGenericReply)) >> 2,
+                  fsFalse))
+        return (char **)NULL;
 
     if (rep.nFonts
 #if (SIZE_MAX >> 2) <= UINT_MAX
-	&& rep.nFonts <= SIZE_MAX / sizeof(char *)
-	&& rep.length <= (SIZE_MAX >> 2)
+        && rep.nFonts <= SIZE_MAX / sizeof(char *) &&
+        rep.length <= (SIZE_MAX >> 2)
 #endif
-	) {
-	flist = FSmallocarray(rep.nFonts, sizeof(char *));
-	rlen = (rep.length << 2) - SIZEOF(fsListFontsReply);
-	c = FSmalloc(rlen + 1);
+    )
+    {
+        flist = FSmallocarray(rep.nFonts, sizeof(char *));
+        rlen  = (rep.length << 2) - SIZEOF(fsListFontsReply);
+        c     = FSmalloc(rlen + 1);
 
-	if ((!flist) || (!c)) {
-	    if (flist)
-		FSfree(flist);
-	    if (c)
-		FSfree(c);
-	    _FSEatData(svr, rlen);
-	    SyncHandle();
-	    return (char **) NULL;
-	}
-	_FSReadPad(svr, c, (long) rlen);
-	/* unpack */
-	length = *(unsigned char *)c;
-	for (i = 0; i < rep.nFonts; i++) {
-	    flist[i] = c + 1;
-	    c += length + 1;
-	    length = *(unsigned char *)c;
-	    *c = '\0';
-	}
-    } else {
-
-	flist = (char **) NULL;
+        if ((!flist) || (!c))
+        {
+            if (flist) FSfree(flist);
+            if (c) FSfree(c);
+            _FSEatData(svr, rlen);
+            SyncHandle();
+            return (char **)NULL;
+        }
+        _FSReadPad(svr, c, (long)rlen);
+    /* unpack */
+        length = *(unsigned char *)c;
+        for (i = 0; i < rep.nFonts; i++)
+        {
+            flist[i] = c + 1;
+            c += length + 1;
+            length = *(unsigned char *)c;
+            *c     = '\0';
+        }
+    }
+    else
+    {
+        flist = (char **)NULL;
     }
 
     *actualCount = rep.nFonts;
     SyncHandle();
     return flist;
-
 }
 
-int FSFreeFontNames(char **list)
+int
+FSFreeFontNames(char **list)
 {
-    if (list) {
-	FSfree(list[0] - 1);
-	FSfree(list);
+    if (list)
+    {
+        FSfree(list[0] - 1);
+        FSfree(list);
     }
     return 1;
 }

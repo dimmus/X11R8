@@ -51,21 +51,19 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
-#include	<stdio.h>
-#include	"X11/Xosdefs.h"
-#include	<stdlib.h>
-#include	"FSlib.h"
+#include <stdio.h>
+#include "X11/Xosdefs.h"
+#include <stdlib.h>
+#include "FSlib.h"
 
 const char *
 FSServerName(const char *server)
 {
     const char *s;
 
-    if (server != NULL && *server != '\0')
-	return server;
-    if ((s = getenv("FONTSERVER")) != NULL)
-	return s;
+    if (server != NULL && *server != '\0') return server;
+    if ((s = getenv("FONTSERVER")) != NULL) return s;
     return NULL;
 }

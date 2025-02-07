@@ -50,15 +50,14 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
-#include	"FSlib.h"
-#include	"FSlibint.h"
+#include "FSlib.h"
+#include "FSlibint.h"
 
 static int
 _FSSyncFunction(FSServer *svr)
 {
-
     return FSSync(svr, 0);
 }
 
@@ -68,21 +67,17 @@ FSSynchronize(FSServer *svr, int onoff)
     FSSyncHandler temp;
 
     temp = svr->synchandler;
-    if (onoff)
-	svr->synchandler = _FSSyncFunction;
-    else
-	svr->synchandler = NULL;
+    if (onoff) svr->synchandler = _FSSyncFunction;
+    else svr->synchandler = NULL;
     return temp;
 }
 
 FSSyncHandler
-FSSetAfterFunction(
-    FSServer		*svr,
-    FSSyncHandler	 func)
+FSSetAfterFunction(FSServer *svr, FSSyncHandler func)
 {
     FSSyncHandler temp;
 
-    temp = svr->synchandler;
+    temp             = svr->synchandler;
     svr->synchandler = func;
     return temp;
 }

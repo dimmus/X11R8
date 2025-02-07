@@ -58,95 +58,87 @@ in this Software without prior written authorization from The Open Group.
 #include "extentst.h"
 #include "difs.h"
 
-InitialFunc InitialVector[3] =
-{
-    NULL,
-    ProcInitialConnection,
-    ProcEstablishConnection
-};
+InitialFunc InitialVector[3] = { NULL,
+                                 ProcInitialConnection,
+                                 ProcEstablishConnection };
 
-ProcFunc ProcVector[NUM_PROC_VECTORS] =
-{
-    ProcNoop,			/* 0 */
-    ProcListExtensions,
-    ProcQueryExtension,
-    ProcListCatalogues,
-    ProcSetCatalogues,
-    ProcGetCatalogues,		/* 5 */
-    ProcSetEventMask,
-    ProcGetEventMask,
-    ProcCreateAC,
-    ProcFreeAC,
-    ProcSetAuthorization,	/* 10 */
-    ProcSetResolution,
-    ProcGetResolution,
-    ProcListFonts,
-    ProcListFontsWithXInfo,
-    ProcOpenBitmapFont,		/* 15 */
-    ProcQueryXInfo,
-    ProcQueryXExtents,
-    ProcQueryXExtents,
-    ProcQueryXBitmaps,
-    ProcQueryXBitmaps,		/* 20 */
-    ProcCloseFont,
-    NULL,
-    NULL,
-    NULL
-};
+ProcFunc ProcVector[NUM_PROC_VECTORS] = { ProcNoop,   /* 0 */
+                                          ProcListExtensions,
+                                          ProcQueryExtension,
+                                          ProcListCatalogues,
+                                          ProcSetCatalogues,
+                                          ProcGetCatalogues,  /* 5 */
+                                          ProcSetEventMask,
+                                          ProcGetEventMask,
+                                          ProcCreateAC,
+                                          ProcFreeAC,
+                                          ProcSetAuthorization, /* 10 */
+                                          ProcSetResolution,
+                                          ProcGetResolution,
+                                          ProcListFonts,
+                                          ProcListFontsWithXInfo,
+                                          ProcOpenBitmapFont,  /* 15 */
+                                          ProcQueryXInfo,
+                                          ProcQueryXExtents,
+                                          ProcQueryXExtents,
+                                          ProcQueryXBitmaps,
+                                          ProcQueryXBitmaps,  /* 20 */
+                                          ProcCloseFont,
+                                          NULL,
+                                          NULL,
+                                          NULL };
 
-SwappedProcFunc SwappedProcVector[NUM_PROC_VECTORS] =
-{
-    SProcSimpleRequest,		/* 0 */
+SwappedProcFunc SwappedProcVector[NUM_PROC_VECTORS] = {
+    SProcSimpleRequest,  /* 0 */
     SProcSimpleRequest,
     SProcQueryExtension,
     SProcListCatalogues,
-    SProcSimpleRequest,		/* SetCatalogues */
-    SProcSimpleRequest,		/* 5 */
-    SProcResourceRequest,	/* SetEventMask */
+    SProcSimpleRequest,  /* SetCatalogues */
+    SProcSimpleRequest,  /* 5 */
+    SProcResourceRequest, /* SetEventMask */
     SProcSimpleRequest,
     SProcCreateAC,
     SProcResourceRequest,
-    SProcResourceRequest,	/* 10 */
+    SProcResourceRequest, /* 10 */
     SProcSetResolution,
     SProcSimpleRequest,
     SProcListFonts,
     SProcListFontsWithXInfo,
-    SProcOpenBitmapFont,	/* 15 */
+    SProcOpenBitmapFont, /* 15 */
     SProcResourceRequest,
     SProcQueryXExtents,
     SProcQueryXExtents,
     SProcQueryXBitmaps,
-    SProcQueryXBitmaps,		/* 20 */
+    SProcQueryXBitmaps,  /* 20 */
     SProcResourceRequest,
     NULL,
     NULL,
     NULL
 };
 
-ReplySwapFunc ReplySwapVector[NUM_PROC_VECTORS] =
-{
-    ReplySwapNotImplemented,	/* NoOp */
+ReplySwapFunc ReplySwapVector[NUM_PROC_VECTORS] = {
+    ReplySwapNotImplemented, /* NoOp */
     SListExtensionsReply,
-    SQueryExtensionReply,	/* SQueryExtensionReply */
+    SQueryExtensionReply, /* SQueryExtensionReply */
     SListCataloguesReply,
-    ReplySwapNotImplemented,	/* SetCatalogues */
-    SGenericReply,		/* GetCatalogues */
-    ReplySwapNotImplemented,	/* SetEventMask */
+    ReplySwapNotImplemented, /* SetCatalogues */
+    SGenericReply,  /* GetCatalogues */
+    ReplySwapNotImplemented, /* SetEventMask */
     SGetEventMaskReply,
     SCreateACReply,
-    ReplySwapNotImplemented,	/* FreeAC */
-    ReplySwapNotImplemented,	/* SetAuthorization - 10 */
-    ReplySwapNotImplemented,	/* SetResolution */
+    ReplySwapNotImplemented, /* FreeAC */
+    ReplySwapNotImplemented, /* SetAuthorization - 10 */
+    ReplySwapNotImplemented, /* SetResolution */
     SGetResolutionReply,
     SListFontsReply,
     SListFontsWithXInfoReply,
-    SOpenBitmapFontReply,	/* 15 */
+    SOpenBitmapFontReply, /* 15 */
     SQueryXInfoReply,
     SQueryXExtentsReply,
     SQueryXExtentsReply,
     SQueryXBitmapsReply,
-    SQueryXBitmapsReply,	/* 20 */
-    ReplySwapNotImplemented,	/* Close */
+    SQueryXBitmapsReply, /* 20 */
+    ReplySwapNotImplemented, /* Close */
     ReplySwapNotImplemented,
     ReplySwapNotImplemented
 };

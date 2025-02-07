@@ -50,73 +50,78 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include <stdio.h>
 #include "FSlibint.h"
 #include "X11/Xos.h"
 
 static const char *FSErrorList[] = {
-     /* FSBadRequest	 */ "BadRequest, invalid request code or no such operation",
-     /* FSBadFormat	 */ "BadFormat, bad font format mask",
-     /* FSBadFont	 */ "BadFont, invalid Font parameter",
-     /* FSBadRange	 */ "BadRange, invalid character range attributes",
-     /* FSBadEventMask	 */ "BadEventMask, illegal event mask",
-     /* FSBadAccessContext */ "BadAccessContext, insufficient permissions for operation",
-     /* FSBadIDChoice  */ "BadIDChoice, invalid resource ID chosen for this connection",
-     /* FSBadName	 */ "BadName, named font does not exist",
-     /* FSBadResolution	 */ "BadResolution, improperly formatted resolution",
-     /* FSBadAlloc	 */ "BadAlloc, insufficient resources for operation",
-     /* FSBadLength	 */ "BadLength, request too large or internal FSlib length error",
-     /* FSBadImplementation */ "BadImplementation, request unsupported",
+    /* FSBadRequest	 */ "BadRequest, invalid request code or no such "
+                           "operation",
+    /* FSBadFormat	 */ "BadFormat, bad font format mask",
+    /* FSBadFont	 */ "BadFont, invalid Font parameter",
+    /* FSBadRange	 */ "BadRange, invalid character range attributes",
+    /* FSBadEventMask	 */ "BadEventMask, illegal event mask",
+     /* FSBadAccessContext */
+    "BadAccessContext, insufficient permissions for operation",
+     /* FSBadIDChoice  */
+    "BadIDChoice, invalid resource ID chosen for this connection",
+    /* FSBadName	 */ "BadName, named font does not exist",
+    /* FSBadResolution	 */ "BadResolution, improperly formatted resolution",
+    /* FSBadAlloc	 */ "BadAlloc, insufficient resources for operation",
+     /* FSBadLength	 */
+    "BadLength, request too large or internal FSlib length error",
+    /* FSBadImplementation */ "BadImplementation, request unsupported",
 };
 #define FSErrorListSize sizeof(FSErrorList)
 
-
 /* ARGSUSED */
-int FSGetErrorDatabaseText(
-    FSServer		*svr,
-    const char		*name,
-    const char		*type,
-    const char		*defaultp,
-    char		*buffer,
-    int			 nbytes)
+int
+FSGetErrorDatabaseText(FSServer   *svr,
+                       const char *name,
+                       const char *type,
+                       const char *defaultp,
+                       char       *buffer,
+                       int         nbytes)
 {
-    if (nbytes == 0)
-	return 0;
+    if (nbytes == 0) return 0;
 #ifdef HAVE_STRLCPY
-    if (strlcpy(buffer, defaultp, nbytes) >= nbytes)
-	return 0;
+    if (strlcpy(buffer, defaultp, nbytes) >= nbytes) return 0;
 #else
-    (void) strncpy(buffer, defaultp, nbytes);
-    if ((strlen(defaultp) + 1) > nbytes)
-	buffer[nbytes - 1] = '\0';
+    (void)strncpy(buffer, defaultp, nbytes);
+    if ((strlen(defaultp) + 1) > nbytes) buffer[nbytes - 1] = '\0';
 #endif
     return 1;
 }
 
-int FSGetErrorText(
-    register FSServer	*svr,
-    register int	 code,
-    char		*buffer,
-    int			 nbytes)
+int
+FSGetErrorText(register FSServer *svr,
+               register int       code,
+               char              *buffer,
+               int                nbytes)
 {
-    char        buf[32];
+    char                   buf[32];
     register _FSExtension *ext;
 
-    if (nbytes == 0)
-	return 0;
+    if (nbytes == 0) return 0;
     snprintf(buf, sizeof(buf), "%d", code);
-    if (code < (FSErrorListSize / sizeof(char *)) && code >= 0) {
-	const char *defaultp = FSErrorList[code];
-	FSGetErrorDatabaseText(svr, "FSProtoError", buf, defaultp, buffer, nbytes);
+    if (code < (FSErrorListSize / sizeof(char *)) && code >= 0)
+    {
+        const char *defaultp = FSErrorList[code];
+        FSGetErrorDatabaseText(svr,
+                               "FSProtoError",
+                               buf,
+                               defaultp,
+                               buffer,
+                               nbytes);
     }
     ext = svr->ext_procs;
-    while (ext) {		/* call out to any extensions interested */
-	if (ext->error_string != NULL)
-	    (*ext->error_string) (svr, code, &ext->codes, buffer, nbytes);
-	ext = ext->next;
+    while (ext)
+    {  /* call out to any extensions interested */
+        if (ext->error_string != NULL)
+            (*ext->error_string)(svr, code, &ext->codes, buffer, nbytes);
+        ext = ext->next;
     }
     return 1;
 }
-

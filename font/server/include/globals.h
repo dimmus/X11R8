@@ -48,12 +48,12 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _GLOBALS_H_
 #define _GLOBALS_H_
 
-#include "X11/fonts/FSproto.h"	/* for fsResolution */
-#include "X11/Xtrans/Xtrans.h"	/* XtransConnInfo */
-#include "X11/fonts/libxfont2.h"	/* xfont2_pattern_cache_ptr */
-#include "X11/Xpoll.h"		/* select & fd_set */
-#include "client.h"		/* WorkQueuePtr */
-#include "misc.h"		/* OldListenRec */
+#include "X11/fonts/FSproto.h" /* for fsResolution */
+#include "X11/Xtrans/Xtrans.h" /* XtransConnInfo */
+#include "X11/fonts/libxfont2.h" /* xfont2_pattern_cache_ptr */
+#include "X11/Xpoll.h"  /* select & fd_set */
+#include "client.h"  /* WorkQueuePtr */
+#include "misc.h"  /* OldListenRec */
 
 extern long TimeOutValue;
 extern long ReapClientTime;
@@ -65,7 +65,7 @@ extern int  serverGeneration;
 extern volatile char isItTimeToYield;
 extern volatile char dispatchException;
 
-extern int  argcGlobal;
+extern int    argcGlobal;
 extern char **argvGlobal;
 
 extern WorkQueuePtr workQueue;
@@ -86,32 +86,32 @@ extern int ConnectionTranslation[];
 
 extern xfont2_pattern_cache_ptr fontPatternCache;
 
-extern long LastReapTime;
-extern Bool drone_server;
+extern long  LastReapTime;
+extern Bool  drone_server;
 extern char *progname;
 extern char *configfilename;
 
 extern XtransConnInfo *ListenTransConns;
-extern int *ListenTransFds;
-extern int  ListenTransCount;
+extern int            *ListenTransFds;
+extern int             ListenTransCount;
 
 extern OldListenRec *OldListen;
-extern int OldListenCount;
+extern int           OldListenCount;
 
 extern Bool portFromCmdline;
 
 extern char *ConnectionInfo;
-extern int ConnInfoLen;
+extern int   ConnInfoLen;
 
 extern long OutputBufferSize;
 
 /* bit values for dispatchException */
-#define	DE_RESET	0x1
-#define	DE_TERMINATE	0x2
-#define	DE_RECONFIG	0x4
-#define	DE_FLUSH	0x8
+#define DE_RESET     0x1
+#define DE_TERMINATE 0x2
+#define DE_RECONFIG  0x4
+#define DE_FLUSH     0x8
 
 /* size of vector tables */
-#define	NUM_PROC_VECTORS	25
-#define	NUM_EVENT_VECTORS	8
-#endif				/* _GLOBALS_H_ */
+#define NUM_PROC_VECTORS  25
+#define NUM_EVENT_VECTORS 8
+#endif    /* _GLOBALS_H_ */

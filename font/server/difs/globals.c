@@ -48,20 +48,20 @@ in this Software without prior written authorization from The Open Group.
  *
  */
 
-#include	"config.h"
+#include "config.h"
 
-#include	"X11/fonts/FSproto.h"
-#include	"clientstr.h"
-#include	"misc.h"
-#include	"site.h"
-#include	"globals.h"
+#include "X11/fonts/FSproto.h"
+#include "clientstr.h"
+#include "misc.h"
+#include "site.h"
+#include "globals.h"
 
-ClientPtr  *clients;
-ClientPtr   serverClient;
-int         currentMaxClients;
-int         serverGeneration = 0;
-int         argcGlobal;
-char      **argvGlobal;
+ClientPtr *clients;
+ClientPtr  serverClient;
+int        currentMaxClients;
+int        serverGeneration = 0;
+int        argcGlobal;
+char     **argvGlobal;
 
-long        TimeOutValue = DEFAULT_TIMEOUT * MILLI_PER_SECOND;
-long        ReapClientTime = CLIENT_TIMEOUT * MILLI_PER_SECOND;
+long TimeOutValue   = DEFAULT_TIMEOUT * MILLI_PER_SECOND;
+long ReapClientTime = CLIENT_TIMEOUT * MILLI_PER_SECOND;

@@ -46,14 +46,14 @@ in this Software without prior written authorization from The Open Group.
  * THIS SOFTWARE.
  */
 
-#include	"config.h"
+#include "config.h"
 
-#include	"X11/fonts/FSproto.h"
-#include	"misc.h"
-#include	"clientstr.h"
-#include	"extentst.h"
-#include	"difs.h"
-#include	"dispatch.h"
+#include "X11/fonts/FSproto.h"
+#include "misc.h"
+#include "clientstr.h"
+#include "extentst.h"
+#include "difs.h"
+#include "dispatch.h"
 
 /*
  * Provides the protocol handlers for the Query & List Extensions
@@ -65,13 +65,12 @@ in this Software without prior written authorization from The Open Group.
 int
 ProcQueryExtension(ClientPtr client)
 {
-    fsQueryExtensionReply reply = {
-        .type = FS_Reply,
-        .sequenceNumber = client->sequence,
-        .length = SIZEOF(fsQueryExtensionReply) >> 2,
-        .present = fsFalse,
-        .major_opcode = 0
-    };
+    fsQueryExtensionReply reply = { .type           = FS_Reply,
+                                    .sequenceNumber = client->sequence,
+                                    .length =
+                                        SIZEOF(fsQueryExtensionReply) >> 2,
+                                    .present      = fsFalse,
+                                    .major_opcode = 0 };
 
     REQUEST(fsQueryExtensionReq);
 
@@ -85,12 +84,11 @@ ProcQueryExtension(ClientPtr client)
 int
 ProcListExtensions(ClientPtr client)
 {
-    fsListExtensionsReply reply = {
-        .type = FS_Reply,
-        .nExtensions = 0,
-        .sequenceNumber = client->sequence,
-        .length = SIZEOF(fsListExtensionsReply) >> 2
-    };
+    fsListExtensionsReply reply = { .type           = FS_Reply,
+                                    .nExtensions    = 0,
+                                    .sequenceNumber = client->sequence,
+                                    .length =
+                                        SIZEOF(fsListExtensionsReply) >> 2 };
 
     REQUEST(fsListExtensionsReq);
     REQUEST_SIZE_MATCH(fsListExtensionsReq);

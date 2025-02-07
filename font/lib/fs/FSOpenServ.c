@@ -54,7 +54,7 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include <stdio.h>
@@ -64,33 +64,27 @@ in this Software without prior written authorization from The Open Group.
 
 static int _FSdebug = 0;
 
-static fsReq _dummy_request = {
-    0, 0, 0
-};
+static fsReq _dummy_request = { 0, 0, 0 };
 
-static void OutOfMemory ( FSServer *svr );
+static void OutOfMemory(FSServer *svr);
 
-FSServer   *_FSHeadOfServerList = NULL;
+FSServer *_FSHeadOfServerList = NULL;
 
-void _FSFreeServerStructure(FSServer *svr)
+void
+_FSFreeServerStructure(FSServer *svr)
 {
-    if (svr->server_name)
-	FSfree(svr->server_name);
-    if (svr->vendor)
-	FSfree(svr->vendor);
+    if (svr->server_name) FSfree(svr->server_name);
+    if (svr->vendor) FSfree(svr->vendor);
 
-    if (svr->buffer)
-	FSfree(svr->buffer);
+    if (svr->buffer) FSfree(svr->buffer);
 
     FSfree(svr);
 }
 
-static
-void OutOfMemory(
-    FSServer	*svr)
+static void
+OutOfMemory(FSServer *svr)
 {
-    if (svr->trans_conn)
-	_FSDisconnectServer(svr->trans_conn);
+    if (svr->trans_conn) _FSDisconnectServer(svr->trans_conn);
     _FSFreeServerStructure(svr);
     errno = ENOMEM;
 }
@@ -100,169 +94,182 @@ void OutOfMemory(
  * to it
  */
 
-FSServer   *
+FSServer *
 FSOpenServer(const char *server)
 {
-    FSServer   *svr;
-    int         i;
-    int         endian;
+    FSServer          *svr;
+    int                i;
+    int                endian;
     fsConnClientPrefix client;
-    fsConnSetup prefix;
-    char       *setup = NULL;
-    fsConnSetupAccept conn;
-    char       *auth_data = NULL;
-    unsigned char *alt_data = NULL,
-               *ad;
-    AlternateServer *alts = NULL;
-    unsigned int altlen;
-    char       *vendor_string;
-    unsigned long        setuplength;
+    fsConnSetup        prefix;
+    char              *setup = NULL;
+    fsConnSetupAccept  conn;
+    char              *auth_data = NULL;
+    unsigned char     *alt_data  = NULL, *ad;
+    AlternateServer   *alts      = NULL;
+    unsigned int       altlen;
+    char              *vendor_string;
+    unsigned long      setuplength;
 
-    if (server == NULL || *server == '\0') {
-	if ((server = getenv("FONTSERVER")) == NULL) {
-	    return (FSServer *) NULL;
-	}
+    if (server == NULL || *server == '\0')
+    {
+        if ((server = getenv("FONTSERVER")) == NULL)
+        {
+            return (FSServer *)NULL;
+        }
     }
 
-    if ((svr = FScalloc(1, sizeof(FSServer))) == NULL) {
-	errno = ENOMEM;
-	return (FSServer *) NULL;
+    if ((svr = FScalloc(1, sizeof(FSServer))) == NULL)
+    {
+        errno = ENOMEM;
+        return (FSServer *)NULL;
     }
 
-    if ((svr->server_name = strdup(server)) == NULL) {
-	goto fail;
+    if ((svr->server_name = strdup(server)) == NULL)
+    {
+        goto fail;
     }
 
-    if ((svr->trans_conn = _FSConnectServer(svr->server_name)) == NULL) {
-	goto fail;
+    if ((svr->trans_conn = _FSConnectServer(svr->server_name)) == NULL)
+    {
+        goto fail;
     }
 
-    svr->fd = _FSTransGetConnectionNumber (svr->trans_conn);
+    svr->fd = _FSTransGetConnectionNumber(svr->trans_conn);
 
     endian = 1;
-    if (*(char *) &endian)
-	client.byteOrder = 'l';
-    else
-	client.byteOrder = 'B';
+    if (*(char *)&endian) client.byteOrder = 'l';
+    else client.byteOrder = 'B';
     client.major_version = FS_PROTOCOL;
     client.minor_version = FS_PROTOCOL_MINOR;
 /* XXX -- fix this when we have some auths */
-    client.num_auths = 0;
-    client.auth_len = 0;
+    client.num_auths     = 0;
+    client.auth_len      = 0;
     _FSSendClientPrefix(svr, &client);
 
 /* see if connection was accepted */
-    _FSRead(svr, (char *) &prefix, (long) SIZEOF(fsConnSetup));
+    _FSRead(svr, (char *)&prefix, (long)SIZEOF(fsConnSetup));
 
     setuplength = prefix.alternate_len << 2;
-    if (setuplength > (SIZE_MAX>>2)
-	|| (alt_data = (unsigned char *)
-	 (setup = FSmalloc(setuplength))) == NULL) {
-	goto fail;
+    if (setuplength > (SIZE_MAX >> 2) ||
+        (alt_data = (unsigned char *)(setup = FSmalloc(setuplength))) == NULL)
+    {
+        goto fail;
     }
-    _FSRead(svr, (char *) alt_data, setuplength);
+    _FSRead(svr, (char *)alt_data, setuplength);
     ad = alt_data;
 
 #if SIZE_MAX <= UINT_MAX
-    if (prefix.num_alternates > SIZE_MAX / sizeof(AlternateServer)) {
-	goto fail;
+    if (prefix.num_alternates > SIZE_MAX / sizeof(AlternateServer))
+    {
+        goto fail;
     }
 #endif
 
     alts = FSmallocarray(prefix.num_alternates, sizeof(AlternateServer));
-    if (!alts) {
-	goto fail;
+    if (!alts)
+    {
+        goto fail;
     }
-    for (i = 0; i < prefix.num_alternates; i++) {
-	alts[i].subset = (Bool) *ad++;
-	altlen = (unsigned int) *ad++;
-	alts[i].name = FSmalloc(altlen + 1);
-	if (!alts[i].name) {
-	    while (--i >= 0) {
-		FSfree(alts[i].name);
-	    }
-	    goto fail;
-	}
-	memmove(alts[i].name, ad, altlen);
-	alts[i].name[altlen] = '\0';
-	ad += altlen + ((4 - (altlen + 2)) & 3);
+    for (i = 0; i < prefix.num_alternates; i++)
+    {
+        alts[i].subset = (Bool)*ad++;
+        altlen         = (unsigned int)*ad++;
+        alts[i].name   = FSmalloc(altlen + 1);
+        if (!alts[i].name)
+        {
+            while (--i >= 0)
+            {
+                FSfree(alts[i].name);
+            }
+            goto fail;
+        }
+        memmove(alts[i].name, ad, altlen);
+        alts[i].name[altlen] = '\0';
+        ad += altlen + ((4 - (altlen + 2)) & 3);
     }
     FSfree(alt_data);
     alt_data = NULL;
 
     svr->alternate_servers = alts;
-    svr->num_alternates = prefix.num_alternates;
+    svr->num_alternates    = prefix.num_alternates;
 
     setuplength = prefix.auth_len << 2;
-    if (setuplength > (SIZE_MAX>>2)
-	|| (auth_data = (char *)
-	 (setup = FSmalloc(setuplength))) == NULL) {
-	goto fail;
+    if (setuplength > (SIZE_MAX >> 2) ||
+        (auth_data = (char *)(setup = FSmalloc(setuplength))) == NULL)
+    {
+        goto fail;
     }
-    _FSRead(svr, (char *) auth_data, setuplength);
+    _FSRead(svr, (char *)auth_data, setuplength);
 
-    if (prefix.status != AuthSuccess) {
-	fprintf(stderr, "%s: connection to \"%s\" refused by server\r\n%s: ",
-		"FSlib", server, "FSlib");
-	goto fail;
+    if (prefix.status != AuthSuccess)
+    {
+        fprintf(stderr,
+                "%s: connection to \"%s\" refused by server\r\n%s: ",
+                "FSlib",
+                server,
+                "FSlib");
+        goto fail;
     }
     /* get rest */
-    _FSRead(svr, (char *) &conn, (long) SIZEOF(fsConnSetupAccept));
+    _FSRead(svr, (char *)&conn, (long)SIZEOF(fsConnSetupAccept));
 
-    if ((vendor_string = FSmalloc(conn.vendor_len + 1)) == NULL) {
-	goto fail;
+    if ((vendor_string = FSmalloc(conn.vendor_len + 1)) == NULL)
+    {
+        goto fail;
     }
-    _FSReadPad(svr, (char *) vendor_string, conn.vendor_len);
+    _FSReadPad(svr, (char *)vendor_string, conn.vendor_len);
 
     /* move the data into the FSServer struct */
-    svr->next = (FSServer *) NULL;
-    svr->proto_version = prefix.major_version;
-    svr->release = conn.release_number;
+    svr->next             = (FSServer *)NULL;
+    svr->proto_version    = prefix.major_version;
+    svr->release          = conn.release_number;
     svr->max_request_size = conn.max_request_len;
 
     svr->event_vec[FS_Error] = _FSUnknownWireEvent;
     svr->event_vec[FS_Reply] = _FSUnknownWireEvent;
-    svr->wire_vec[FS_Error] = _FSUnknownNativeEvent;
-    svr->wire_vec[FS_Reply] = _FSUnknownNativeEvent;
-    for (i = FSLASTEvent; i < 128; i++) {
-	svr->event_vec[i] = _FSUnknownWireEvent;
-	svr->wire_vec[i] = _FSUnknownNativeEvent;
+    svr->wire_vec[FS_Error]  = _FSUnknownNativeEvent;
+    svr->wire_vec[FS_Reply]  = _FSUnknownNativeEvent;
+    for (i = FSLASTEvent; i < 128; i++)
+    {
+        svr->event_vec[i] = _FSUnknownWireEvent;
+        svr->wire_vec[i]  = _FSUnknownNativeEvent;
     }
     svr->resource_id = 1;
 
-    svr->vendor = vendor_string;
+    svr->vendor                  = vendor_string;
     svr->vendor[conn.vendor_len] = '\0';
 
-    svr->vnumber = FS_PROTOCOL;
-    svr->request = 0;
+    svr->vnumber           = FS_PROTOCOL;
+    svr->request           = 0;
     svr->last_request_read = 0;
-    svr->last_req = (char *) &_dummy_request;
+    svr->last_req          = (char *)&_dummy_request;
 
     /* setup the output buffers */
-    if ((svr->bufptr = svr->buffer = FSmalloc(BUFSIZE)) == NULL) {
-	goto fail;
+    if ((svr->bufptr = svr->buffer = FSmalloc(BUFSIZE)) == NULL)
+    {
+        goto fail;
     }
     svr->bufmax = svr->buffer + BUFSIZE;
 
     /* set up input event queue */
     svr->head = svr->tail = NULL;
-    svr->qlen = 0;
+    svr->qlen             = 0;
 
     FSfree(setup);
     setup = NULL;
 
-    (void) FSSynchronize(svr, _FSdebug);
+    (void)FSSynchronize(svr, _FSdebug);
 
-    svr->next = _FSHeadOfServerList;
+    svr->next           = _FSHeadOfServerList;
     _FSHeadOfServerList = svr;
 
     return (svr);
 
-  fail: /* Failure: clean up and return null */
+fail: /* Failure: clean up and return null */
     FSfree(alts);
     FSfree(alt_data);
     FSfree(auth_data);
     OutOfMemory(svr);
-    return (FSServer *) NULL;
-
+    return (FSServer *)NULL;
 }

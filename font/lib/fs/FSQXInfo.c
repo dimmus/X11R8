@@ -50,9 +50,9 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
-#include	"FSlibint.h"
+#include "FSlibint.h"
 
 /*
  * Note:  only the range in the first FSQuery is sent to the server.
@@ -60,65 +60,66 @@ in this Software without prior written authorization from The Open Group.
  */
 
 int
-FSQueryXInfo(
-    FSServer		 *svr,
-    Font		  fid,
-    FSXFontInfoHeader	 *info,
-    FSPropInfo		 *props,
-    FSPropOffset	**offsets,
-    unsigned char	**prop_data)
+FSQueryXInfo(FSServer          *svr,
+             Font               fid,
+             FSXFontInfoHeader *info,
+             FSPropInfo        *props,
+             FSPropOffset     **offsets,
+             unsigned char    **prop_data)
 {
-    fsQueryXInfoReq *req;
+    fsQueryXInfoReq  *req;
     fsQueryXInfoReply reply;
-    FSPropOffset *offset_data;
-    unsigned char *pdata;
-    fsPropInfo local_pi;
-    fsPropOffset local_po;
+    FSPropOffset     *offset_data;
+    unsigned char    *pdata;
+    fsPropInfo        local_pi;
+    fsPropOffset      local_po;
 
     GetReq(QueryXInfo, req);
     req->id = fid;
 
     /* get back the info */
-    if (!_FSReply(svr, (fsReply *) & reply, ((SIZEOF(fsQueryXInfoReply) -
-			    SIZEOF(fsGenericReply)) >> 2), fsFalse)) {
-	return FSBadAlloc;
+    if (!_FSReply(svr,
+                  (fsReply *)&reply,
+                  ((SIZEOF(fsQueryXInfoReply) - SIZEOF(fsGenericReply)) >> 2),
+                  fsFalse))
+    {
+        return FSBadAlloc;
     }
 
     FSUnpack_XFontInfoHeader(&reply, info, FSProtocolVersion(svr));
 
     /* get the prop header */
-    _FSReadPad(svr, (char *) &local_pi, SIZEOF(fsPropInfo));
+    _FSReadPad(svr, (char *)&local_pi, SIZEOF(fsPropInfo));
     props->num_offsets = local_pi.num_offsets;
-    props->data_len = local_pi.data_len;
+    props->data_len    = local_pi.data_len;
 
 #if SIZE_MAX <= UINT_MAX
-    if (props->num_offsets > SIZE_MAX / sizeof(FSPropOffset))
-	return FSBadAlloc;
+    if (props->num_offsets > SIZE_MAX / sizeof(FSPropOffset)) return FSBadAlloc;
 #endif
 
     /* prepare for prop data */
     offset_data = FSmallocarray(props->num_offsets, sizeof(FSPropOffset));
-    if (!offset_data)
-	return FSBadAlloc;
+    if (!offset_data) return FSBadAlloc;
     pdata = FSmalloc(props->data_len);
-    if (!pdata) {
-	FSfree(offset_data);
-	return FSBadAlloc;
+    if (!pdata)
+    {
+        FSfree(offset_data);
+        return FSBadAlloc;
     }
     /* get offsets */
     for (unsigned int j = 0; j < props->num_offsets; j++)
     {
-	_FSReadPad(svr, (char *) &local_po, SIZEOF(fsPropOffset));
-	offset_data[j].name.position = local_po.name.position;
-	offset_data[j].name.length = local_po.name.length;
-	offset_data[j].value.position = local_po.value.position;
-	offset_data[j].value.length = local_po.value.length;
-	offset_data[j].type = local_po.type;
+        _FSReadPad(svr, (char *)&local_po, SIZEOF(fsPropOffset));
+        offset_data[j].name.position  = local_po.name.position;
+        offset_data[j].name.length    = local_po.name.length;
+        offset_data[j].value.position = local_po.value.position;
+        offset_data[j].value.length   = local_po.value.length;
+        offset_data[j].type           = local_po.type;
     }
 
     /* get data */
-    _FSReadPad(svr, (char *) pdata, props->data_len);
-    *offsets = offset_data;
+    _FSReadPad(svr, (char *)pdata, props->data_len);
+    *offsets   = offset_data;
     *prop_data = pdata;
 
     SyncHandle();

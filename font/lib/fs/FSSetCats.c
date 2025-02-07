@@ -50,33 +50,32 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
-#include	"FSlibint.h"
+#include "FSlibint.h"
 
 int
-FSSetCatalogues(
-    FSServer	 *svr,
-    int		  num,
-    char	**cats)
+FSSetCatalogues(FSServer *svr, int num, char **cats)
 {
     fsSetCataloguesReq *req;
-    char        buf[256];
-    int         i, tnum;
-    size_t      len;
+    char                buf[256];
+    int                 i, tnum;
+    size_t              len;
 
-    for (i = 0, tnum = 0, len = 0; i < num; i++) {
-	size_t	tlen;
+    for (i = 0, tnum = 0, len = 0; i < num; i++)
+    {
+        size_t tlen;
 
 #ifdef HAVE_STRNLEN
-	tlen = strnlen(cats[i], 256);
+        tlen = strnlen(cats[i], 256);
 #else
-	tlen = strlen(cats[i]);
+        tlen = strlen(cats[i]);
 #endif
-	if (tlen < 256) {
-	    len += tlen;
-	    tnum++;
-	}
+        if (tlen < 256)
+        {
+            len += tlen;
+            tnum++;
+        }
     }
 
     if ((tnum > 255) ||
@@ -84,24 +83,26 @@ FSSetCatalogues(
         return FSBadLength;
 
     GetReq(SetCatalogues, req);
-    req->num_catalogues = (CARD8) tnum;
-    req->length += (CARD16) ((len + 3) >> 2);
+    req->num_catalogues = (CARD8)tnum;
+    req->length += (CARD16)((len + 3) >> 2);
 
-    for (i = 0; i < num; i++) {
-	size_t nbytes;
+    for (i = 0; i < num; i++)
+    {
+        size_t nbytes;
 
 #ifdef HAVE_STRNLEN
-	nbytes = strnlen(cats[i], 256);
+        nbytes = strnlen(cats[i], 256);
 #else
-	nbytes = strlen(cats[i]);
+        nbytes = strlen(cats[i]);
 #endif
 
-	if (nbytes < 256) {
-	    buf[0] = (CARD8) nbytes;
-	    memcpy(&buf[1], cats[i], nbytes);
-	    nbytes++;
-	    _FSSend(svr, buf, (long) nbytes);
-	}
+        if (nbytes < 256)
+        {
+            buf[0] = (CARD8)nbytes;
+            memcpy(&buf[1], cats[i], nbytes);
+            nbytes++;
+            _FSSend(svr, buf, (long)nbytes);
+        }
     }
     SyncHandle();
     return FSSuccess;

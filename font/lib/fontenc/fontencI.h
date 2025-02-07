@@ -23,22 +23,24 @@ THE SOFTWARE.
 /* Private types and functions for the encoding code. */
 /* Used by the files `fontenc.h' and `encparse.h' */
 
-typedef struct _FontEncSimpleMap {
-    unsigned len;               /* might be 0x10000 */
-    unsigned short row_size;
-    unsigned short first;
+typedef struct _FontEncSimpleMap
+{
+    unsigned              len;               /* might be 0x10000 */
+    unsigned short        row_size;
+    unsigned short        first;
     const unsigned short *map;
 } FontEncSimpleMapRec, *FontEncSimpleMapPtr;
 
-typedef struct _FontEncSimpleName {
-    unsigned len;
+typedef struct _FontEncSimpleName
+{
+    unsigned       len;
     unsigned short first;
-    char **map;
+    char         **map;
 } FontEncSimpleNameRec, *FontEncSimpleNamePtr;
 
 unsigned FontEncSimpleRecode(unsigned, void *);
 unsigned FontEncUndefinedRecode(unsigned, void *);
-char *FontEncSimpleName(unsigned, void *);
-char *FontEncUndefinedName(unsigned, void *);
+char    *FontEncSimpleName(unsigned, void *);
+char    *FontEncUndefinedName(unsigned, void *);
 
 FontEncPtr FontEncReallyLoad(const char *, const char *);

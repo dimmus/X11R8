@@ -43,71 +43,74 @@ in this Software without prior written authorization from The Open Group.
  * THIS SOFTWARE.
  */
 
-#ifndef	_CLIENT_H_
-#define	_CLIENT_H_
+#ifndef _CLIENT_H_
+#define _CLIENT_H_
 
 #ifndef _XTYPEDEF_CLIENTPTR
 typedef struct _Client *ClientPtr;
-#define _XTYPEDEF_CLIENTPTR
+#  define _XTYPEDEF_CLIENTPTR
 #endif
 
 #include <misc.h>
 
 extern ClientPtr *clients;
-extern ClientPtr serverClient;
+extern ClientPtr  serverClient;
 
-#define	NullClient	((ClientPtr) NULL)
+#define NullClient ((ClientPtr)NULL)
 
-#define	SERVER_CLIENT	0
-#define	MINCLIENT	1
+#define SERVER_CLIENT 0
+#define MINCLIENT     1
 
-#define	CLIENT_ALIVE		0
-#define	CLIENT_GONE		1
-#define	CLIENT_AGED		2
-#define	CLIENT_TIMED_OUT	4
+#define CLIENT_ALIVE     0
+#define CLIENT_GONE      1
+#define CLIENT_AGED      2
+#define CLIENT_TIMED_OUT 4
 
-#define	REQUEST(type)	\
-	type *stuff = (type *)client->requestBuffer
+#define REQUEST(type) type *stuff = (type *)client->requestBuffer
 
-#define	REQUEST_FIXED_SIZE(fs_req, n)					\
-	if (((SIZEOF(fs_req) >> 2) > stuff->length) ||			\
-		(((SIZEOF(fs_req) + (n) + 3) >> 2) != stuff->length)) {	\
-	    int lengthword = stuff->length;				\
-	    SendErrToClient(client, FSBadLength, (pointer)&lengthword); \
-	    return (FSBadLength);	\
-	}
+#define REQUEST_FIXED_SIZE(fs_req, n)                                 \
+    if (((SIZEOF(fs_req) >> 2) > stuff->length) ||                    \
+        (((SIZEOF(fs_req) + (n) + 3) >> 2) != stuff->length))         \
+    {                                                                 \
+        int lengthword = stuff->length;                               \
+        SendErrToClient(client, FSBadLength, (pointer) & lengthword); \
+        return (FSBadLength);                                         \
+    }
 
-#define	REQUEST_SIZE_MATCH(fs_req)				\
-	if ((SIZEOF(fs_req) >> 2) != stuff->length) {	\
-	    int lengthword = stuff->length;				\
-	    SendErrToClient(client, FSBadLength, (pointer)&lengthword); \
-	    return (FSBadLength);	\
-	}
+#define REQUEST_SIZE_MATCH(fs_req)                                    \
+    if ((SIZEOF(fs_req) >> 2) != stuff->length)                       \
+    {                                                                 \
+        int lengthword = stuff->length;                               \
+        SendErrToClient(client, FSBadLength, (pointer) & lengthword); \
+        return (FSBadLength);                                         \
+    }
 
-#define	REQUEST_AT_LEAST_SIZE(fs_req)					\
-	if ((SIZEOF(fs_req) >> 2) > stuff->length) {			\
-	    int lengthword = stuff->length;				\
-	    SendErrToClient(client, FSBadLength, (pointer)&lengthword); \
-	    return (FSBadLength);	\
-	}
+#define REQUEST_AT_LEAST_SIZE(fs_req)                                 \
+    if ((SIZEOF(fs_req) >> 2) > stuff->length)                        \
+    {                                                                 \
+        int lengthword = stuff->length;                               \
+        SendErrToClient(client, FSBadLength, (pointer) & lengthword); \
+        return (FSBadLength);                                         \
+    }
 
-#define	WriteReplyToClient(client, size, reply)			\
-	if ((client)->swapped)						\
-	    (*ReplySwapVector[((fsReq *)(client)->requestBuffer)->reqType]) \
-		(client, (int)(size), reply);				\
-	else	(void)WriteToClient(client, (int)(size), (char *)(reply));
+#define WriteReplyToClient(client, size, reply)                          \
+    if ((client)->swapped)                                               \
+        (*ReplySwapVector[((fsReq *)(client)->requestBuffer)->reqType])( \
+            client,                                                      \
+            (int)(size),                                                 \
+            reply);                                                      \
+    else (void)WriteToClient(client, (int)(size), (char *)(reply));
 
-#define	WriteSwappedDataToClient(client, size, pbuf)		\
-	if ((client)->swapped)						\
-	    (*(client)->pSwapReplyFunc)(client, (int)(size), pbuf);	\
-	else (void) WriteToClient(client, (int)(size), (char *)(pbuf));
+#define WriteSwappedDataToClient(client, size, pbuf)            \
+    if ((client)->swapped)                                      \
+        (*(client)->pSwapReplyFunc)(client, (int)(size), pbuf); \
+    else (void)WriteToClient(client, (int)(size), (char *)(pbuf));
 
-
-typedef struct _WorkQueue       *WorkQueuePtr;
+typedef struct _WorkQueue *WorkQueuePtr;
 
 #include "difsutils.h" /* for ProcessWorkQueue(void) */
 
-extern int  (*ProcVector[]) (ClientPtr);
-extern int  (*SwappedProcVector[]) (ClientPtr);
+extern int (*ProcVector[])(ClientPtr);
+extern int (*SwappedProcVector[])(ClientPtr);
 
-#endif				/* _CLIENT_H_ */
+#endif    /* _CLIENT_H_ */

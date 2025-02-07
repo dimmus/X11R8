@@ -50,19 +50,22 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
-#include	"FSlibint.h"
+#include "FSlibint.h"
 
 FSErrorHandler
 FSSetErrorHandler(FSErrorHandler handler)
 {
     FSErrorHandler oldhandler = _FSErrorFunction;
 
-    if (handler != NULL) {
-	_FSErrorFunction = handler;
-    } else {
-	_FSErrorFunction = _FSDefaultError;
+    if (handler != NULL)
+    {
+        _FSErrorFunction = handler;
+    }
+    else
+    {
+        _FSErrorFunction = _FSDefaultError;
     }
     return oldhandler;
 }
@@ -72,10 +75,13 @@ FSSetIOErrorHandler(FSIOErrorHandler handler)
 {
     FSIOErrorHandler oldhandler = _FSIOErrorFunction;
 
-    if (handler != NULL) {
-	_FSIOErrorFunction = handler;
-    } else {
-	_FSIOErrorFunction = _FSDefaultIOError;
+    if (handler != NULL)
+    {
+        _FSIOErrorFunction = handler;
+    }
+    else
+    {
+        _FSIOErrorFunction = _FSDefaultIOError;
     }
     return oldhandler;
 }

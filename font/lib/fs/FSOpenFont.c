@@ -50,23 +50,22 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "FSlibint.h"
 
 Font
-FSOpenBitmapFont(
-    FSServer		*svr,
-    FSBitmapFormat	 hint,
-    FSBitmapFormatMask	 fmask,
-    const char		*name,
-    Font		*otherid)
+FSOpenBitmapFont(FSServer          *svr,
+                 FSBitmapFormat     hint,
+                 FSBitmapFormatMask fmask,
+                 const char        *name,
+                 Font              *otherid)
 {
-    size_t	nbytes;
-    fsOpenBitmapFontReq *req;
+    size_t                nbytes;
+    fsOpenBitmapFontReq  *req;
     fsOpenBitmapFontReply reply;
-    Font        fid;
-    char        buf[256];
+    Font                  fid;
+    char                  buf[256];
 
 #ifdef HAVE_STRNLEN
     nbytes = strnlen(name, 256);
@@ -78,18 +77,19 @@ FSOpenBitmapFont(
         (nbytes > (FSMaxRequestBytes(svr) - SIZEOF(fsOpenBitmapFontReq))))
         return 0;
     GetReq(OpenBitmapFont, req);
-    buf[0] = (CARD8) nbytes;
+    buf[0] = (CARD8)nbytes;
     memcpy(&buf[1], name, nbytes);
     nbytes++;
-    req->fid = fid = svr->resource_id++;
+    req->fid = fid   = svr->resource_id++;
     req->format_hint = hint;
     req->format_mask = fmask;
-    req->length += (CARD16) ((nbytes + 3) >> 2);
-    _FSSend(svr, buf, (long) nbytes);
-    if (!_FSReply(svr, (fsReply *) & reply,
-		  (SIZEOF(fsOpenBitmapFontReply)-SIZEOF(fsGenericReply)) >> 2,
-		  fsFalse))
-	return 0;
+    req->length += (CARD16)((nbytes + 3) >> 2);
+    _FSSend(svr, buf, (long)nbytes);
+    if (!_FSReply(svr,
+                  (fsReply *)&reply,
+                  (SIZEOF(fsOpenBitmapFontReply) - SIZEOF(fsGenericReply)) >> 2,
+                  fsFalse))
+        return 0;
     *otherid = reply.otherid;
     SyncHandle();
     return fid;

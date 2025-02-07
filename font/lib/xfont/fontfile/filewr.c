@@ -29,37 +29,36 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "libxfontint.h"
 #include "fntfilio.h"
 #include "X11/Xos.h"
 #ifndef O_BINARY
-#define O_BINARY	0
+#  define O_BINARY 0
 #endif
 #ifndef O_CLOEXEC
-#define O_CLOEXEC	0
+#  define O_CLOEXEC 0
 #endif
 
 FontFilePtr
-FontFileOpenWrite (const char *name)
+FontFileOpenWrite(const char *name)
 {
-    int	fd;
+    int fd;
 
-    fd = open (name, O_CREAT|O_TRUNC|O_RDWR|O_BINARY|O_CLOEXEC, 0666);
-    if (fd < 0)
-	return 0;
-    return (FontFilePtr) BufFileOpenWrite (fd);
+    fd = open(name, O_CREAT | O_TRUNC | O_RDWR | O_BINARY | O_CLOEXEC, 0666);
+    if (fd < 0) return 0;
+    return (FontFilePtr)BufFileOpenWrite(fd);
 }
 
 FontFilePtr
-FontFileOpenWriteFd (int fd)
+FontFileOpenWriteFd(int fd)
 {
-    return (FontFilePtr) BufFileOpenWrite (fd);
+    return (FontFilePtr)BufFileOpenWrite(fd);
 }
 
 FontFilePtr
-FontFileOpenFd (int fd)
+FontFileOpenFd(int fd)
 {
-    return (FontFilePtr) BufFileOpenRead (fd);
+    return (FontFilePtr)BufFileOpenRead(fd);
 }

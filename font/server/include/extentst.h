@@ -48,7 +48,7 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _EXTENTST_H_
 #define _EXTENTST_H_
 
-extern int  ProcListExtensions(ClientPtr client);
-extern int  ProcQueryExtension(ClientPtr client);
+extern int ProcListExtensions(ClientPtr client);
+extern int ProcQueryExtension(ClientPtr client);
 
-#endif				/* _EXTENTST_H_ */
+#endif    /* _EXTENTST_H_ */

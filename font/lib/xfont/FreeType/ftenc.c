@@ -21,11 +21,11 @@ THE SOFTWARE.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #ifdef HAVE_UNISTD_H
-# undef HAVE_UNISTD_H
+#  undef HAVE_UNISTD_H
 #endif
 
 #include "libxfontint.h"
@@ -53,12 +53,11 @@ FTEncFontSpecific(const char *encoding)
 {
     const char *p = encoding;
 
-    if(strcasecmp(encoding, "microsoft-symbol") == 0)
-        return 1;
+    if (strcasecmp(encoding, "microsoft-symbol") == 0) return 1;
 
-    while(*p != '-') {
-        if(*p == '\0')
-            return 0;
+    while (*p != '-')
+    {
+        if (*p == '\0') return 0;
         p++;
     }
     p++;
@@ -66,22 +65,23 @@ FTEncFontSpecific(const char *encoding)
 }
 
 int
-FTPickMapping(char *xlfd, int length, char *filename, FT_Face face,
+FTPickMapping(char        *xlfd,
+              int          length,
+              char        *filename,
+              FT_Face      face,
               FTMappingPtr tm)
 {
-    FontEncPtr encoding;
-    FontMapPtr mapping;
-    FT_CharMap cmap;
-    int ftrc;
-    int symbol = 0;
+    FontEncPtr  encoding;
+    FontMapPtr  mapping;
+    FT_CharMap  cmap;
+    int         ftrc;
+    int         symbol = 0;
     const char *enc, *reg;
     const char *encoding_name = 0;
-    char buf[20];
+    char        buf[20];
 
-    if(xlfd)
-      encoding_name = FontEncFromXLFD(xlfd, length);
-    if(!encoding_name)
-        encoding_name = "iso8859-1";
+    if (xlfd) encoding_name = FontEncFromXLFD(xlfd, length);
+    if (!encoding_name) encoding_name = "iso8859-1";
 
     symbol = FTEncFontSpecific(encoding_name);
 
@@ -90,60 +90,66 @@ FTPickMapping(char *xlfd, int length, char *filename, FT_Face face,
 #else
     ftrc = -1;
 #endif
-    if(ftrc == 0) {
+    if (ftrc == 0)
+    {
         /* Disable reencoding for non-Unicode fonts.  This will
            currently only work for BDFs. */
-        if(strlen(enc) + strlen(reg) > 18)
-            goto native;
+        if (strlen(enc) + strlen(reg) > 18) goto native;
         snprintf(buf, sizeof(buf), "%s-%s", enc, reg);
         ErrorF("%s %s\n", buf, encoding_name);
-        if(strcasecmp(buf, "iso10646-1") != 0) {
-            if(strcasecmp(buf, encoding_name) == 0)
-                goto native;
+        if (strcasecmp(buf, "iso10646-1") != 0)
+        {
+            if (strcasecmp(buf, encoding_name) == 0) goto native;
             return BadFontFormat;
         }
-    } else if(symbol) {
+    }
+    else if (symbol)
+    {
         ftrc = FT_Select_Charmap(face, ft_encoding_adobe_custom);
-        if(ftrc == 0)
-            goto native;
+        if (ftrc == 0) goto native;
     }
 
     encoding = FontEncFind(encoding_name, filename);
-    if(symbol && encoding == NULL)
+    if (symbol && encoding == NULL)
         encoding = FontEncFind("microsoft-symbol", filename);
-    if(encoding == NULL) {
+    if (encoding == NULL)
+    {
         ErrorF("FreeType: couldn't find encoding '%s' for '%s'\n",
-               encoding_name, filename);
+               encoding_name,
+               filename);
         return BadFontName;
     }
 
-    if(FT_Has_PS_Glyph_Names(face)) {
-        for(mapping = encoding->mappings; mapping; mapping = mapping->next) {
-            if(mapping->type == FONT_ENCODING_POSTSCRIPT) {
-                tm->named = 1;
-                tm->base = 0;
+    if (FT_Has_PS_Glyph_Names(face))
+    {
+        for (mapping = encoding->mappings; mapping; mapping = mapping->next)
+        {
+            if (mapping->type == FONT_ENCODING_POSTSCRIPT)
+            {
+                tm->named   = 1;
+                tm->base    = 0;
                 tm->mapping = mapping;
                 return Successful;
             }
         }
     }
 
-    for(mapping = encoding->mappings; mapping; mapping = mapping->next) {
-        if(find_cmap(mapping->type, mapping->pid, mapping->eid, face,
-                     &cmap)) {
+    for (mapping = encoding->mappings; mapping; mapping = mapping->next)
+    {
+        if (find_cmap(mapping->type, mapping->pid, mapping->eid, face, &cmap))
+        {
             tm->named = 0;
-            tm->cmap = cmap;
-            if(symbol) {
+            tm->cmap  = cmap;
+            if (symbol)
+            {
                 /* deal with an undocumented ``feature'' of the
                    Microsft-Symbol cmap */
                 TT_OS2 *os2;
                 os2 = FT_Get_Sfnt_Table(face, ft_sfnt_os2);
-                if(os2)
-                    tm->base = os2->usFirstCharIndex - 0x20;
-                else
-                    tm->base = 0;
-            } else
-                tm->base = 0;
+                if (os2) tm->base = os2->usFirstCharIndex - 0x20;
+                else tm->base = 0;
+            }
+            else tm->base = 0;
             tm->mapping = mapping;
             return Successful;
         }
@@ -151,10 +157,10 @@ FTPickMapping(char *xlfd, int length, char *filename, FT_Face face,
 
     return BadFontFormat;
 
-  native:
-    tm->named = 0;
-    tm->cmap = face->charmap;
-    tm->base = 0;
+native:
+    tm->named   = 0;
+    tm->cmap    = face->charmap;
+    tm->base    = 0;
     tm->mapping = NULL;
     return Successful;
 }
@@ -162,51 +168,60 @@ FTPickMapping(char *xlfd, int length, char *filename, FT_Face face,
 static int
 find_cmap(int type, int pid, int eid, FT_Face face, FT_CharMap *cmap_return)
 {
-    int i, n;
+    int        i, n;
     FT_CharMap cmap = NULL;
 
     n = face->num_charmaps;
 
-    switch(type) {
-    case FONT_ENCODING_TRUETYPE:  /* specific cmap */
-        for(i=0; i<n; i++) {
-            cmap = face->charmaps[i];
-            if(cmap->platform_id == pid && cmap->encoding_id == eid) {
-                *cmap_return = cmap;
-                return 1;
+    switch (type)
+    {
+        case FONT_ENCODING_TRUETYPE:  /* specific cmap */
+            for (i = 0; i < n; i++)
+            {
+                cmap = face->charmaps[i];
+                if (cmap->platform_id == pid && cmap->encoding_id == eid)
+                {
+                    *cmap_return = cmap;
+                    return 1;
+                }
             }
-        }
-        break;
-    case FONT_ENCODING_UNICODE:   /* any Unicode cmap */
+            break;
+        case FONT_ENCODING_UNICODE:   /* any Unicode cmap */
         /* prefer Microsoft Unicode */
-        for(i=0; i<n; i++) {
-            cmap = face->charmaps[i];
-            if(cmap->platform_id == TT_PLATFORM_MICROSOFT &&
-               cmap->encoding_id == TT_MS_ID_UNICODE_CS) {
-                *cmap_return = cmap;
-                return 1;
+            for (i = 0; i < n; i++)
+            {
+                cmap = face->charmaps[i];
+                if (cmap->platform_id == TT_PLATFORM_MICROSOFT &&
+                    cmap->encoding_id == TT_MS_ID_UNICODE_CS)
+                {
+                    *cmap_return = cmap;
+                    return 1;
+                }
             }
-        }
-        break;
+            break;
         /* Try Apple Unicode */
-        for(i=0; i<n; i++) {
-            cmap = face->charmaps[i];
-            if(cmap->platform_id == TT_PLATFORM_APPLE_UNICODE) {
-                *cmap_return = cmap;
-                return 1;
+            for (i = 0; i < n; i++)
+            {
+                cmap = face->charmaps[i];
+                if (cmap->platform_id == TT_PLATFORM_APPLE_UNICODE)
+                {
+                    *cmap_return = cmap;
+                    return 1;
+                }
             }
-        }
         /* ISO Unicode? */
-        for(i=0; i<n; i++) {
-            cmap = face->charmaps[i];
-            if(cmap->platform_id == TT_PLATFORM_ISO) {
-                *cmap_return = cmap;
-                return 1;
+            for (i = 0; i < n; i++)
+            {
+                cmap = face->charmaps[i];
+                if (cmap->platform_id == TT_PLATFORM_ISO)
+                {
+                    *cmap_return = cmap;
+                    return 1;
+                }
             }
-        }
-        break;
-    default:
-        return 0;
+            break;
+        default:
+            return 0;
     }
     return 0;
 }
@@ -215,29 +230,35 @@ unsigned
 FTRemap(FT_Face face, FTMappingPtr tm, unsigned code)
 {
     unsigned index;
-    char *name;
+    char    *name;
     unsigned glyph_index;
 
-    if(tm->mapping) {
-        if(tm->named) {
+    if (tm->mapping)
+    {
+        if (tm->named)
+        {
             name = FontEncName(code, tm->mapping);
-            if(!name)
-                return 0;
+            if (!name) return 0;
             glyph_index = FT_Get_Name_Index(face, name);
             return glyph_index;
-        } else {
+        }
+        else
+        {
             index = FontEncRecode(code, tm->mapping) + tm->base;
             FT_Set_Charmap(face, tm->cmap);
             glyph_index = FT_Get_Char_Index(face, index);
             return glyph_index;
         }
-    } else {
-        if(code < 0x100) {
+    }
+    else
+    {
+        if (code < 0x100)
+        {
             index = code;
             FT_Set_Charmap(face, tm->cmap);
             glyph_index = FT_Get_Char_Index(face, index);
             return glyph_index;
-        } else
-            return 0;
+        }
+        else return 0;
     }
 }

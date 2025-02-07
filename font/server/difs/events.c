@@ -46,33 +46,34 @@ in this Software without prior written authorization from The Open Group.
  * THIS SOFTWARE.
  */
 
-#include	"config.h"
+#include "config.h"
 
-#include	<swaprep.h>
+#include <swaprep.h>
 
-#include	"clientstr.h"
-#include	"X11/fonts/FSproto.h"
-#include	"globals.h"
-#include	"fsevents.h"
-#include	"dispatch.h"
-#include	"difs.h"
-
+#include "clientstr.h"
+#include "X11/fonts/FSproto.h"
+#include "globals.h"
+#include "fsevents.h"
+#include "dispatch.h"
+#include "difs.h"
 
 static Mask lastEventMask = FontChangeNotifyMask;
 
-#define	AllEventMasks	(lastEventMask | (lastEventMask - 1))
+#define AllEventMasks (lastEventMask | (lastEventMask - 1))
 
 void
 WriteErrorToClient(ClientPtr client, fsError *error)
 {
-    if (client->swapped) {
-	fsError     errorTo;
+    if (client->swapped)
+    {
+        fsError errorTo;
 
-	SErrorEvent(error, &errorTo);
-	(void) WriteToClient(client, SIZEOF(fsError), (char *) &errorTo);
-    } else {
-	(void) WriteToClient(client, SIZEOF(fsError),
-			     (char *) error);
+        SErrorEvent(error, &errorTo);
+        (void)WriteToClient(client, SIZEOF(fsError), (char *)&errorTo);
+    }
+    else
+    {
+        (void)WriteToClient(client, SIZEOF(fsError), (char *)error);
     }
 }
 
@@ -82,9 +83,10 @@ ProcSetEventMask(ClientPtr client)
     REQUEST(fsSetEventMaskReq);
     REQUEST_AT_LEAST_SIZE(fsSetEventMaskReq);
 
-    if (stuff->event_mask & ~AllEventMasks) {
-	SendErrToClient(client, FSBadEventMask, (pointer) &stuff->event_mask);
-	return FSBadEventMask;
+    if (stuff->event_mask & ~AllEventMasks)
+    {
+        SendErrToClient(client, FSBadEventMask, (pointer)&stuff->event_mask);
+        return FSBadEventMask;
     }
     client->eventmask = stuff->event_mask;
     return client->noClientException;
@@ -93,12 +95,10 @@ ProcSetEventMask(ClientPtr client)
 int
 ProcGetEventMask(ClientPtr client)
 {
-    fsGetEventMaskReply rep = {
-        .type = FS_Reply,
-        .sequenceNumber = client->sequence,
-        .length = SIZEOF(fsGetEventMaskReply) >> 2,
-        .event_mask = client->eventmask
-    };
+    fsGetEventMaskReply rep = { .type           = FS_Reply,
+                                .sequenceNumber = client->sequence,
+                                .length     = SIZEOF(fsGetEventMaskReply) >> 2,
+                                .event_mask = client->eventmask };
 
     REQUEST(fsGetEventMaskReq);
     REQUEST_AT_LEAST_SIZE(fsGetEventMaskReq);
@@ -110,25 +110,26 @@ ProcGetEventMask(ClientPtr client)
 void
 SendKeepAliveEvent(ClientPtr client)
 {
-    fsKeepAliveEvent ev = {
-        .type = FS_Event,
-        .event_code = KeepAlive,
-        .sequenceNumber = client->sequence,
-        .length = SIZEOF(fsKeepAliveEvent) >> 2,
-        .timestamp = GetTimeInMillis()
-    };
+    fsKeepAliveEvent ev = { .type           = FS_Event,
+                            .event_code     = KeepAlive,
+                            .sequenceNumber = client->sequence,
+                            .length         = SIZEOF(fsKeepAliveEvent) >> 2,
+                            .timestamp      = GetTimeInMillis() };
 
 #ifdef DEBUG
     fprintf(stderr, "client #%d is getting a KeepAlive\n", client->index);
 #endif
 
-    if (client->swapped) {
-	/* SErrorEvent requires two fsError pointers */
-	fsError evTo;
-	
-	SErrorEvent((fsError *) & ev, (fsError *) &evTo);
-	(void) WriteToClient(client, SIZEOF(fsKeepAliveEvent), (char *) &evTo);
-    } else {
-	(void) WriteToClient(client, SIZEOF(fsKeepAliveEvent), (char *) &ev);
+    if (client->swapped)
+    {
+    /* SErrorEvent requires two fsError pointers */
+        fsError evTo;
+
+        SErrorEvent((fsError *)&ev, (fsError *)&evTo);
+        (void)WriteToClient(client, SIZEOF(fsKeepAliveEvent), (char *)&evTo);
+    }
+    else
+    {
+        (void)WriteToClient(client, SIZEOF(fsKeepAliveEvent), (char *)&ev);
     }
 }

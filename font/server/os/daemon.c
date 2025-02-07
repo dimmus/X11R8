@@ -39,39 +39,41 @@ from the X Consortium.
 
 /* detach */
 void
-BecomeDaemon (void)
+BecomeDaemon(void)
 {
     /* If our C library has the daemon() function, just use it. */
 #ifdef HAVE_DAEMON
-    if (daemon (0, 0) < 0) {
-	/* error */
-	FatalError("daemon() failed, %s\n", strerror(errno));
+    if (daemon(0, 0) < 0)
+    {
+    /* error */
+        FatalError("daemon() failed, %s\n", strerror(errno));
     }
 
     /* Open/reopen log file on stderr */
-#ifdef USE_SYSLOG
+#  ifdef USE_SYSLOG
     if (!UseSyslog)
-#endif
-	CloseErrors();
+#  endif
+        CloseErrors();
     InitErrors();
 #else
 
-    switch (fork()) {
-    case -1:
-	/* error */
-	FatalError("daemon fork failed, %s\n", strerror(errno));
-	break;
-    case 0:
-	/* child */
-	break;
-    default:
-	/* parent */
-	exit(0);
+    switch (fork())
+    {
+        case -1:
+    /* error */
+            FatalError("daemon fork failed, %s\n", strerror(errno));
+            break;
+        case 0:
+    /* child */
+            break;
+        default:
+    /* parent */
+            exit(0);
     }
 
     if (setsid() == -1)
-	FatalError("setting session id for daemon failed: %s\n",
-		   strerror(errno));
+        FatalError("setting session id for daemon failed: %s\n",
+                   strerror(errno));
 
     chdir("/");
 
@@ -80,39 +82,44 @@ BecomeDaemon (void)
 }
 
 void
-DetachStdio (void)
+DetachStdio(void)
 {
     int nullfd;
-    close (0);
-    close (1);
-    close (2);
+    close(0);
+    close(1);
+    close(2);
 
     /*
      * Set up the standard file descriptors.
      */
-    nullfd = open ("/dev/null", O_RDWR);
-    if (nullfd == -1) {
-	FatalError("opening /dev/null failed: %s\n", strerror(errno));
+    nullfd = open("/dev/null", O_RDWR);
+    if (nullfd == -1)
+    {
+        FatalError("opening /dev/null failed: %s\n", strerror(errno));
     }
-    if (nullfd != 0) {
-	if (dup2(nullfd, 0) == -1) {
-	    FatalError("dup2 of /dev/null to fd 0 failed: %s\n",
-		       strerror(errno));
-	}
-	close(nullfd);
+    if (nullfd != 0)
+    {
+        if (dup2(nullfd, 0) == -1)
+        {
+            FatalError("dup2 of /dev/null to fd 0 failed: %s\n",
+                       strerror(errno));
+        }
+        close(nullfd);
     }
-    if (dup2 (0, 1) == -1) {
-	FatalError("dup2 of /dev/null to fd 1 failed: %s\n",
-		   strerror(errno));
+    if (dup2(0, 1) == -1)
+    {
+        FatalError("dup2 of /dev/null to fd 1 failed: %s\n", strerror(errno));
     }
 
 #ifdef USE_SYSLOG
-    if (UseSyslog) {
-	if (dup2 (0, 2) == -1) {
-	    FatalError("dup2 of /dev/null to fd 2 failed: %s\n",
-		       strerror(errno));
-	}
-	return;
+    if (UseSyslog)
+    {
+        if (dup2(0, 2) == -1)
+        {
+            FatalError("dup2 of /dev/null to fd 2 failed: %s\n",
+                       strerror(errno));
+        }
+        return;
     }
 #endif
 

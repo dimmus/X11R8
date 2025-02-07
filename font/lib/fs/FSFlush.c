@@ -50,11 +50,12 @@ in this Software without prior written authorization from The Open Group.
 
 */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
-#include	"FSlibint.h"
+#include "FSlibint.h"
 
-int FSFlush(FSServer *svr)
+int
+FSFlush(FSServer *svr)
 {
     _FSFlush(svr);
     return 1;

@@ -47,12 +47,13 @@ in this Software without prior written authorization from The Open Group.
 
 #ifndef _AUTHSTR_H_
 #define _AUTHSTR_H_
-#include	"auth.h"
+#include "auth.h"
 
-typedef struct _authcontext {
-    char       *authname;
-    char       *authdata;
-    FSID        acid;
-}           AuthContextRec;
+typedef struct _authcontext
+{
+    char *authname;
+    char *authdata;
+    FSID  acid;
+} AuthContextRec;
 
-#endif				/* _AUTHSTR_H_ */
+#endif    /* _AUTHSTR_H_ */

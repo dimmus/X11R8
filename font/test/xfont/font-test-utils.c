@@ -58,14 +58,14 @@ SOFTWARE.
 #include <limits.h>
 #include <assert.h>
 #ifdef HAVE_ERR_H
-#include <err.h>
+#  include <err.h>
 #endif
 #include "../../xfont/util/replace.h"
 #include "X11/X.h"
 
-static unsigned long server_generation;
-static xfont2_fpe_funcs_rec const **fpe_functions;
-static int num_fpe_types;
+static unsigned long                server_generation;
+static const xfont2_fpe_funcs_rec **fpe_functions;
+static int                          num_fpe_types;
 
 static int
 test_client_auth_generation(ClientPtr client)
@@ -85,8 +85,7 @@ test_delete_font_client_id(Font id)
     err(BadImplementation, "%s called but not yet implemented", __func__);
 }
 
-static void _X_ATTRIBUTE_PRINTF(1,0)
-test_verrorf(const char *f, va_list ap)
+static void _X_ATTRIBUTE_PRINTF(1, 0) test_verrorf(const char *f, va_list ap)
 {
     vwarn(f, ap);
 }
@@ -123,8 +122,8 @@ test_get_time_in_millis(void)
 }
 
 static int
-test_init_fs_handlers(FontPathElementPtr fpe,
-		      FontBlockHandlerProcPtr block_handler)
+test_init_fs_handlers(FontPathElementPtr      fpe,
+                      FontBlockHandlerProcPtr block_handler)
 {
     err(BadImplementation, "%s called but not yet implemented", __func__);
 }
@@ -133,12 +132,13 @@ test_init_fs_handlers(FontPathElementPtr fpe,
 static int
 test_register_fpe_funcs(const xfont2_fpe_funcs_rec *funcs)
 {
-    xfont2_fpe_funcs_rec const **new;
+    const xfont2_fpe_funcs_rec **new;
 
     /* grow the list */
-    new = reallocarray(fpe_functions, (num_fpe_types + 1),
-		       sizeof(xfont2_fpe_funcs_ptr));
-    assert (new != NULL);
+    new = reallocarray(fpe_functions,
+                       (num_fpe_types + 1),
+                       sizeof(xfont2_fpe_funcs_ptr));
+    assert(new != NULL);
     fpe_functions = new;
 
     fpe_functions[num_fpe_types] = funcs;
@@ -147,8 +147,9 @@ test_register_fpe_funcs(const xfont2_fpe_funcs_rec *funcs)
 }
 
 static void
-test_remove_fs_handlers(FontPathElementPtr fpe,
-			FontBlockHandlerProcPtr block_handler, Bool all)
+test_remove_fs_handlers(FontPathElementPtr      fpe,
+                        FontBlockHandlerProcPtr block_handler,
+                        Bool                    all)
 {
     err(BadImplementation, "%s called but not yet implemented", __func__);
 }
@@ -214,44 +215,42 @@ test_adjust_fs_wait_for_delay(void *wt, unsigned long newdelay)
 }
 
 static const xfont2_client_funcs_rec xfont2_client_funcs = {
-    .version = XFONT2_CLIENT_FUNCS_VERSION,
-    .client_auth_generation = test_client_auth_generation,
-    .client_signal = test_client_signal,
-    .delete_font_client_id = test_delete_font_client_id,
-    .verrorf = test_verrorf,
-    .find_old_font = test_find_old_font,
-    .get_client_resolutions = test_get_client_resolutions,
-    .get_default_point_size = test_get_default_point_size,
-    .get_new_font_client_id = test_get_new_font_client_id,
-    .get_time_in_millis = test_get_time_in_millis,
-    .init_fs_handlers = test_init_fs_handlers,
-    .register_fpe_funcs = test_register_fpe_funcs,
-    .remove_fs_handlers = test_remove_fs_handlers,
-    .get_server_client = test_get_server_client,
-    .set_font_authorizations = test_set_font_authorizations,
-    .store_font_client_font = test_store_font_client_font,
-    .make_atom = test_make_atom,
-    .valid_atom = test_valid_atom,
-    .name_for_atom = test_name_for_atom,
-    .get_server_generation = test_get_server_generation,
-    .add_fs_fd = test_add_fs_fd,
-    .remove_fs_fd = test_remove_fs_fd,
+    .version                  = XFONT2_CLIENT_FUNCS_VERSION,
+    .client_auth_generation   = test_client_auth_generation,
+    .client_signal            = test_client_signal,
+    .delete_font_client_id    = test_delete_font_client_id,
+    .verrorf                  = test_verrorf,
+    .find_old_font            = test_find_old_font,
+    .get_client_resolutions   = test_get_client_resolutions,
+    .get_default_point_size   = test_get_default_point_size,
+    .get_new_font_client_id   = test_get_new_font_client_id,
+    .get_time_in_millis       = test_get_time_in_millis,
+    .init_fs_handlers         = test_init_fs_handlers,
+    .register_fpe_funcs       = test_register_fpe_funcs,
+    .remove_fs_handlers       = test_remove_fs_handlers,
+    .get_server_client        = test_get_server_client,
+    .set_font_authorizations  = test_set_font_authorizations,
+    .store_font_client_font   = test_store_font_client_font,
+    .make_atom                = test_make_atom,
+    .valid_atom               = test_valid_atom,
+    .name_for_atom            = test_name_for_atom,
+    .get_server_generation    = test_get_server_generation,
+    .add_fs_fd                = test_add_fs_fd,
+    .remove_fs_fd             = test_remove_fs_fd,
     .adjust_fs_wait_for_delay = test_adjust_fs_wait_for_delay,
 };
 
-
-xfont2_fpe_funcs_rec const **
+const xfont2_fpe_funcs_rec **
 init_font_handlers(int *fpe_function_count)
 {
     server_generation++;
     xfont2_init(&xfont2_client_funcs);
     /* make sure our callbacks were called & worked */
-    assert (fpe_functions != NULL);
-    assert (num_fpe_types > 0);
+    assert(fpe_functions != NULL);
+    assert(num_fpe_types > 0);
     *fpe_function_count = num_fpe_types;
     return fpe_functions;
 }
-
 
 /* does the necessary magic to figure out the fpe type */
 static int
@@ -260,78 +259,82 @@ DetermineFPEType(const char *pathname)
     int i;
 
     /* make sure init_font_handlers was called first */
-    assert (num_fpe_types > 0);
+    assert(num_fpe_types > 0);
 
-    for (i = 0; i < num_fpe_types; i++) {
-        if ((*fpe_functions[i]->name_check) (pathname))
-            return i;
+    for (i = 0; i < num_fpe_types; i++)
+    {
+        if ((*fpe_functions[i]->name_check)(pathname)) return i;
     }
     return -1;
 }
 
-
-static const char * const default_fpes[] = {
-    "catalogue:/etc/X11/fontpath.d",
-    "built-ins"
-};
-#define num_default_fpes  (sizeof(default_fpes) / sizeof(*default_fpes))
+static const char *const default_fpes[] = { "catalogue:/etc/X11/fontpath.d",
+                                            "built-ins" };
+#define num_default_fpes (sizeof(default_fpes) / sizeof(*default_fpes))
 
 FontPathElementPtr *
-init_font_paths(const char * const *font_paths, int *num_fpes)
+init_font_paths(const char *const *font_paths, int *num_fpes)
 {
     FontPathElementPtr *fpe_list;
-    int i;
+    int                 i;
 
     /* make sure init_font_handlers was called first */
-    assert (num_fpe_types > 0);
+    assert(num_fpe_types > 0);
 
     /* Use default if caller didn't supply any */
-    if (*num_fpes == 0) {
-	font_paths = default_fpes;
-	*num_fpes = num_default_fpes;
+    if (*num_fpes == 0)
+    {
+        font_paths = default_fpes;
+        *num_fpes  = num_default_fpes;
     }
 
     fpe_list = calloc(*num_fpes, sizeof(FontPathElementPtr));
     assert(fpe_list != NULL);
 
-    for (i = 0; i < *num_fpes; i++) {
-	int result;
-	FontPathElementPtr fpe = calloc(1, sizeof(FontPathElementRec));
-	assert(fpe != NULL);
+    for (i = 0; i < *num_fpes; i++)
+    {
+        int                result;
+        FontPathElementPtr fpe = calloc(1, sizeof(FontPathElementRec));
+        assert(fpe != NULL);
 
-	fpe->name = strdup(font_paths[i]);
-	assert(fpe->name != NULL);
-	fpe->name_length = strlen(fpe->name);
-	assert(fpe->name_length > 0);
-	/* If path is to fonts.dir file, trim it off and use the full
+        fpe->name = strdup(font_paths[i]);
+        assert(fpe->name != NULL);
+        fpe->name_length = strlen(fpe->name);
+        assert(fpe->name_length > 0);
+    /* If path is to fonts.dir file, trim it off and use the full
 	   directory path instead.  Simplifies testing with afl. */
-	if (fpe->name_length > (int) sizeof("/fonts.dir")) {
-	    char *tail = fpe->name + fpe->name_length -
-		(sizeof("/fonts.dir") - 1);
+        if (fpe->name_length > (int)sizeof("/fonts.dir"))
+        {
+            char *tail =
+                fpe->name + fpe->name_length - (sizeof("/fonts.dir") - 1);
 
-	    if (strcmp(tail, "/fonts.dir") == 0) {
-		char *fullpath;
+            if (strcmp(tail, "/fonts.dir") == 0)
+            {
+                char *fullpath;
 
-		*tail = '\0';
-		fullpath = realpath(fpe->name, NULL);
-		assert(fullpath != NULL);
-		free(fpe->name);
-		fpe->name = fullpath;
-		fpe->name_length = strlen(fpe->name);
-		assert(fpe->name_length > 0);
-	    }
-	}
-	fpe->type = DetermineFPEType(fpe->name);
-	if (fpe->type == -1)
-	    err(BadFontPath, "Unable to find handler for font path %s",
-		fpe->name);
-	result = (*fpe_functions[fpe->type]->init_fpe) (fpe);
-	if (result != Successful)
-	    err(result, "init_fpe failed for font path %s: error %d",
-		fpe->name, result);
+                *tail    = '\0';
+                fullpath = realpath(fpe->name, NULL);
+                assert(fullpath != NULL);
+                free(fpe->name);
+                fpe->name        = fullpath;
+                fpe->name_length = strlen(fpe->name);
+                assert(fpe->name_length > 0);
+            }
+        }
+        fpe->type = DetermineFPEType(fpe->name);
+        if (fpe->type == -1)
+            err(BadFontPath,
+                "Unable to find handler for font path %s",
+                fpe->name);
+        result = (*fpe_functions[fpe->type]->init_fpe)(fpe);
+        if (result != Successful)
+            err(result,
+                "init_fpe failed for font path %s: error %d",
+                fpe->name,
+                result);
 
-	printf("Initialized font path element #%d: %s\n", i, fpe->name);
-	fpe_list[i] = fpe;
+        printf("Initialized font path element #%d: %s\n", i, fpe->name);
+        fpe_list[i] = fpe;
     }
     printf("\n");
 

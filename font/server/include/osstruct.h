@@ -47,19 +47,21 @@ in this Software without prior written authorization from The Open Group.
 
 #ifndef _OSSTRUCT_H_
 #define _OSSTRUCT_H_
-#include	"os.h"
+#include "os.h"
 
-typedef struct _alt_server {
-    char            subset;
-    unsigned short  namelen;
-    char           *name;
-}           AlternateServerRec;
+typedef struct _alt_server
+{
+    char           subset;
+    unsigned short namelen;
+    char          *name;
+} AlternateServerRec;
 
-typedef struct _auth {
-    unsigned short  namelen;
-    unsigned short  datalen;
-    char           *name;
-    char           *data;
-}           AuthRec;
+typedef struct _auth
+{
+    unsigned short namelen;
+    unsigned short datalen;
+    char          *name;
+    char          *data;
+} AuthRec;
 
-#endif				/* _OSSTRUCT_H_ */
+#endif    /* _OSSTRUCT_H_ */

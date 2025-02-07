@@ -23,21 +23,22 @@
 #ifndef _MKS_HASH_H_
 #define _MKS_HASH_H_ 1
 
-typedef struct _HashBucket {
-    char *key;
-    char *value;
-    int prio;
+typedef struct _HashBucket
+{
+    char               *key;
+    char               *value;
+    int                 prio;
     struct _HashBucket *next;
 } HashBucketRec, *HashBucketPtr;
 
-typedef HashBucketPtr* HashTablePtr;
+typedef HashBucketPtr *HashTablePtr;
 
-HashTablePtr makeHashTable(void);
-void destroyHashTable(HashTablePtr table);
-char *getHash(HashTablePtr table, const char *key);
-int putHash(HashTablePtr table, char *key, char *value, int prio);
-int hashElements(HashTablePtr table);
+HashTablePtr   makeHashTable(void);
+void           destroyHashTable(HashTablePtr table);
+char          *getHash(HashTablePtr table, const char *key);
+int            putHash(HashTablePtr table, char *key, char *value, int prio);
+int            hashElements(HashTablePtr table);
 HashBucketPtr *hashArray(HashTablePtr table, int value_first);
-void destroyHashArray(HashBucketPtr *array);
+void           destroyHashArray(HashBucketPtr *array);
 
 #endif /* _MKS_HASH_H */

@@ -29,38 +29,38 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include <misc.h>
 extern ClientPtr currentClient;
 
-extern void Dispatch (void);
-extern int ProcInitialConnection (ClientPtr client);
-extern int ProcEstablishConnection (ClientPtr client);
+extern void Dispatch(void);
+extern int  ProcInitialConnection(ClientPtr client);
+extern int  ProcEstablishConnection(ClientPtr client);
 #ifdef DEBUG
-#define SendErrToClient(client, error, data)	\
-	fprintf(stderr, "SendErrToClient %s %d\n", __FILE__, __LINE__),\
-	DoSendErrToClient(client, error, data)
+#  define SendErrToClient(client, error, data)                        \
+      fprintf(stderr, "SendErrToClient %s %d\n", __FILE__, __LINE__), \
+          DoSendErrToClient(client, error, data)
 #else
-#define SendErrToClient DoSendErrToClient
+#  define SendErrToClient DoSendErrToClient
 #endif
-extern void DoSendErrToClient (ClientPtr client, int error, pointer data);
-extern int ProcBadRequest (ClientPtr client);
-extern int ProcNoop (ClientPtr client);
-extern int ProcListCatalogues (ClientPtr client);
-extern int ProcSetCatalogues (ClientPtr client);
-extern int ProcGetCatalogues (ClientPtr client);
-extern int ProcCreateAC (ClientPtr client);
-extern int DeleteAuthCont  (pointer value, FSID id);
-extern int ProcFreeAC (ClientPtr client);
-extern int ProcSetAuthorization (ClientPtr client);
-extern int ProcSetResolution (ClientPtr client);
-extern int ProcGetResolution (ClientPtr client);
-extern int ProcListFonts (ClientPtr client);
-extern int ProcListFontsWithXInfo (ClientPtr client);
-extern int ProcOpenBitmapFont (ClientPtr client);
-extern int ProcQueryXInfo (ClientPtr client);
-extern int ProcQueryXExtents (ClientPtr client);
-extern int ProcQueryXBitmaps (ClientPtr client);
-extern int ProcCloseFont (ClientPtr client);
-extern void InitProcVectors (void);
-extern void InitClient (ClientPtr client, int i, pointer ospriv);
-extern ClientPtr NextAvailableClient (pointer ospriv);
-extern void MarkClientException (ClientPtr client);
+extern void      DoSendErrToClient(ClientPtr client, int error, pointer data);
+extern int       ProcBadRequest(ClientPtr client);
+extern int       ProcNoop(ClientPtr client);
+extern int       ProcListCatalogues(ClientPtr client);
+extern int       ProcSetCatalogues(ClientPtr client);
+extern int       ProcGetCatalogues(ClientPtr client);
+extern int       ProcCreateAC(ClientPtr client);
+extern int       DeleteAuthCont(pointer value, FSID id);
+extern int       ProcFreeAC(ClientPtr client);
+extern int       ProcSetAuthorization(ClientPtr client);
+extern int       ProcSetResolution(ClientPtr client);
+extern int       ProcGetResolution(ClientPtr client);
+extern int       ProcListFonts(ClientPtr client);
+extern int       ProcListFontsWithXInfo(ClientPtr client);
+extern int       ProcOpenBitmapFont(ClientPtr client);
+extern int       ProcQueryXInfo(ClientPtr client);
+extern int       ProcQueryXExtents(ClientPtr client);
+extern int       ProcQueryXBitmaps(ClientPtr client);
+extern int       ProcCloseFont(ClientPtr client);
+extern void      InitProcVectors(void);
+extern void      InitClient(ClientPtr client, int i, pointer ospriv);
+extern ClientPtr NextAvailableClient(pointer ospriv);
+extern void      MarkClientException(ClientPtr client);
 
 #endif /* _DISPATCH_H_ */

@@ -44,27 +44,27 @@ in this Software without prior written authorization from The Open Group.
  * THIS SOFTWARE.
  */
 
-#include	"config.h"
+#include "config.h"
 
-#include	<stdio.h>
-#include	<stdlib.h>
-#include	<stdarg.h>
-#include	"X11/Xos.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include "X11/Xos.h"
 
 #ifdef USE_SYSLOG
-#include	<syslog.h>
+#  include <syslog.h>
 #endif
 
-#include	<errno.h>
+#include <errno.h>
 
-#include	"misc.h"
-#include	"globals.h"
-#include	"osdep.h"
+#include "misc.h"
+#include "globals.h"
+#include "osdep.h"
 
 Bool        UseSyslog;
 Bool        log_open = FALSE;
 char        ErrorFile[PATH_MAX];
-static char	CurrentErrorFile[PATH_MAX];
+static char CurrentErrorFile[PATH_MAX];
 
 static void _X_NORETURN
 abort_server(void)
@@ -77,27 +77,32 @@ abort_server(void)
 void
 InitErrors(void)
 {
-    int         i;
+    int i;
 
 #ifdef USE_SYSLOG
-    if (UseSyslog && !log_open) {
-	openlog("xfs", LOG_PID, LOG_DAEMON);
-	log_open = TRUE;
-	return;
+    if (UseSyslog && !log_open)
+    {
+        openlog("xfs", LOG_PID, LOG_DAEMON);
+        log_open = TRUE;
+        return;
     }
 #endif
 
     if (ErrorFile[0] &&
-	(!log_open || (strcmp(CurrentErrorFile, ErrorFile) != 0)) ) {
-	i = open(ErrorFile, O_WRONLY | O_APPEND | O_CREAT, 0666);
-	if (i != -1) {
-	    dup2(i, 2);
-	    close(i);
-	    log_open = TRUE;
-	} else {
-	    ErrorF("can't open error file \"%s\"\n", ErrorFile);
-	}
-	strncpy(CurrentErrorFile, ErrorFile, sizeof CurrentErrorFile);
+        (!log_open || (strcmp(CurrentErrorFile, ErrorFile) != 0)))
+    {
+        i = open(ErrorFile, O_WRONLY | O_APPEND | O_CREAT, 0666);
+        if (i != -1)
+        {
+            dup2(i, 2);
+            close(i);
+            log_open = TRUE;
+        }
+        else
+        {
+            ErrorF("can't open error file \"%s\"\n", ErrorFile);
+        }
+        strncpy(CurrentErrorFile, ErrorFile, sizeof CurrentErrorFile);
     }
 }
 
@@ -106,23 +111,24 @@ CloseErrors(void)
 {
     int nullfd;
 
-    if (!log_open)
-	return;
+    if (!log_open) return;
 
     log_open = FALSE;
 
 #ifdef USE_SYSLOG
-    if (UseSyslog) {
-	closelog();
-	return;
+    if (UseSyslog)
+    {
+        closelog();
+        return;
     }
 #endif
 
-    close (2);
-    nullfd = open ("/dev/null", O_RDWR);
-    if (nullfd != 2) {
-	dup2 (nullfd, 2);
-	close(nullfd);
+    close(2);
+    nullfd = open("/dev/null", O_RDWR);
+    if (nullfd != 2)
+    {
+        dup2(nullfd, 2);
+        close(nullfd);
     }
 }
 
@@ -130,9 +136,10 @@ void
 Error(const char *str)
 {
 #ifdef USE_SYSLOG
-    if (UseSyslog) {
-	syslog(LOG_ERR, "%s: %s", str, strerror(errno));
-	return;
+    if (UseSyslog)
+    {
+        syslog(LOG_ERR, "%s: %s", str, strerror(errno));
+        return;
     }
 #endif
     perror(str);
@@ -148,9 +155,10 @@ NoticeF(const char *f, ...)
     va_list args;
     va_start(args, f);
 #ifdef USE_SYSLOG
-    if (UseSyslog) {
-	vsyslog(LOG_NOTICE, f, args);
-	return;
+    if (UseSyslog)
+    {
+        vsyslog(LOG_NOTICE, f, args);
+        return;
     }
 #else
     fprintf(stderr, "%s notice: ", progname);
@@ -163,37 +171,39 @@ NoticeF(const char *f, ...)
  * used for non-fatal error messages
  */
 void
-ErrorF(const char * f, ...)
+ErrorF(const char *f, ...)
 {
     va_list args;
     va_start(args, f);
 #ifdef USE_SYSLOG
-    if (UseSyslog) {
-	vsyslog(LOG_WARNING, f, args);
+    if (UseSyslog)
+    {
+        vsyslog(LOG_WARNING, f, args);
     }
     else
 #endif
     {
-	fprintf(stderr, "%s error: ", progname);
-	vfprintf(stderr, f, args);
+        fprintf(stderr, "%s error: ", progname);
+        vfprintf(stderr, f, args);
     }
     va_end(args);
 }
 
 void
-FatalError(const char * f, ...)
+FatalError(const char *f, ...)
 {
     va_list args;
     va_start(args, f);
 #ifdef USE_SYSLOG
-    if (UseSyslog) {
-	vsyslog(LOG_ERR, f, args);
+    if (UseSyslog)
+    {
+        vsyslog(LOG_ERR, f, args);
     }
     else
 #endif
     {
-	fprintf(stderr, "%s fatal error: ", progname);
-	vfprintf(stderr, f, args);
+        fprintf(stderr, "%s fatal error: ", progname);
+        vfprintf(stderr, f, args);
     }
     va_end(args);
     abort_server();

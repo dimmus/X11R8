@@ -29,51 +29,52 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "libxfontint.h"
 #include "util/replace.h"
-#include    "fontmisc.h"
-#include    "X11/fonts/fontstruct.h"
+#include "fontmisc.h"
+#include "X11/fonts/fontstruct.h"
 
 static int _FontPrivateAllocateIndex = 0;
 
 int
-xfont2_allocate_font_private_index (void)
+xfont2_allocate_font_private_index(void)
 {
     return _FontPrivateAllocateIndex++;
 }
 
 FontPtr
-CreateFontRec (void)
+CreateFontRec(void)
 {
     FontPtr pFont;
-    int size;
+    int     size;
 
     size = sizeof(FontRec) + (sizeof(pointer) * _FontPrivateAllocateIndex);
 
     pFont = malloc(size);
 
-    if(pFont) {
-	bzero((char*)pFont, size);
-	pFont->maxPrivate = _FontPrivateAllocateIndex - 1;
-	if(_FontPrivateAllocateIndex)
-	    pFont->devPrivates = (pointer)(&pFont[1]);
+    if (pFont)
+    {
+        bzero((char *)pFont, size);
+        pFont->maxPrivate = _FontPrivateAllocateIndex - 1;
+        if (_FontPrivateAllocateIndex)
+            pFont->devPrivates = (pointer)(&pFont[1]);
     }
 
     return pFont;
 }
 
 void
-DestroyFontRec (FontPtr pFont)
+DestroyFontRec(FontPtr pFont)
 {
-   if (pFont->devPrivates && pFont->devPrivates != (pointer)(&pFont[1]))
-	free(pFont->devPrivates);
-   free(pFont);
+    if (pFont->devPrivates && pFont->devPrivates != (pointer)(&pFont[1]))
+        free(pFont->devPrivates);
+    free(pFont);
 }
 
 void
-ResetFontPrivateIndex (void)
+ResetFontPrivateIndex(void)
 {
     _FontPrivateAllocateIndex = 0;
 }
@@ -83,25 +84,28 @@ xfont2_font_set_private(FontPtr pFont, int n, pointer ptr)
 {
     pointer *new;
 
-    if (n > pFont->maxPrivate) {
-	if (pFont->devPrivates && pFont->devPrivates != (pointer)(&pFont[1])) {
-	    new = reallocarray (pFont->devPrivates, (n + 1), sizeof (pointer));
-	    if (!new)
-		return FALSE;
-	} else {
-	    /* omg realloc */
-	    new = reallocarray (NULL, (n + 1), sizeof (pointer));
-	    if (!new)
-		return FALSE;
-	    if (pFont->devPrivates)
-		memcpy (new, pFont->devPrivates, (pFont->maxPrivate + 1) * sizeof (pointer));
-	}
-	pFont->devPrivates = new;
-	/* zero out new, uninitialized privates */
-	while(++pFont->maxPrivate < n)
-	    pFont->devPrivates[pFont->maxPrivate] = (pointer)0;
+    if (n > pFont->maxPrivate)
+    {
+        if (pFont->devPrivates && pFont->devPrivates != (pointer)(&pFont[1]))
+        {
+            new = reallocarray(pFont->devPrivates, (n + 1), sizeof(pointer));
+            if (!new) return FALSE;
+        }
+        else
+        {
+        /* omg realloc */
+            new = reallocarray(NULL, (n + 1), sizeof(pointer));
+            if (!new) return FALSE;
+            if (pFont->devPrivates)
+                memcpy(new,
+                       pFont->devPrivates,
+                       (pFont->maxPrivate + 1) * sizeof(pointer));
+        }
+        pFont->devPrivates = new;
+    /* zero out new, uninitialized privates */
+        while (++pFont->maxPrivate < n)
+            pFont->devPrivates[pFont->maxPrivate] = (pointer)0;
     }
     pFont->devPrivates[n] = ptr;
     return TRUE;
 }
-

@@ -50,15 +50,12 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
-#include	"FSlibint.h"
-
+#include "FSlibint.h"
 
 int
-FSCloseFont(
-    FSServer	*svr,
-    Font	 fid)
+FSCloseFont(FSServer *svr, Font fid)
 {
     fsResourceReq *req;
 

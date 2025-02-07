@@ -15,7 +15,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include <sys/types.h>
@@ -32,21 +32,22 @@
 size_t
 strlcat(char *dst, const char *src, size_t siz)
 {
-    register char *d = dst;
+    register char       *d = dst;
     register const char *s = src;
-    register size_t n = siz;
-    size_t dlen;
+    register size_t      n = siz;
+    size_t               dlen;
 
     /* Find the end of dst and adjust bytes left but don't go past end */
     while (n-- != 0 && *d != '\0')
         d++;
     dlen = d - dst;
-    n = siz - dlen;
+    n    = siz - dlen;
 
-    if (n == 0)
-        return (dlen + strlen(s));
-    while (*s != '\0') {
-        if (n != 1) {
+    if (n == 0) return (dlen + strlen(s));
+    while (*s != '\0')
+    {
+        if (n != 1)
+        {
             *d++ = *s;
             n--;
         }

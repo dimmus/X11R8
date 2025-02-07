@@ -15,7 +15,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include "util/replace.h"
@@ -24,6 +24,6 @@
 char *
 realpath(const char *path, char *resolved_path)
 {
-  return _fullpath(resolved_path, path, _MAX_PATH);
+    return _fullpath(resolved_path, path, _MAX_PATH);
 }
 #endif

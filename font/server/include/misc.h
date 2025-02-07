@@ -46,135 +46,143 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _MISC_H_
 #define _MISC_H_
 
-#include	"X11/Xosdefs.h"
-#include	"X11/Xfuncs.h"
-#include	"X11/Xdefs.h"
+#include "X11/Xosdefs.h"
+#include "X11/Xfuncs.h"
+#include "X11/Xdefs.h"
 
-#include	"assert.h"	/* so its everywhere */
+#include "assert.h" /* so its everywhere */
 
 #ifndef NULL
-#include	<stddef.h>
+#  include <stddef.h>
 #endif
 
-#define	MAXCLIENTS	128
+#define MAXCLIENTS 128
 
-#define	MILLI_PER_SECOND	(1000)
-#define	MILLI_PER_MINUTE	(1000 * 60)
+#define MILLI_PER_SECOND (1000)
+#define MILLI_PER_MINUTE (1000 * 60)
 
 #ifndef TRUE
-#define	TRUE 1
-#define	FALSE 0
+#  define TRUE  1
+#  define FALSE 0
 #endif
 
-#define	min(a, b)	(((a) < (b)) ? (a) : (b))
-#define	max(a, b)	(((a) > (b)) ? (a) : (b))
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#define max(a, b) (((a) > (b)) ? (a) : (b))
 
 #include "os.h"
 
-#define	lowbit(x)	((x) & (~(x) + 1))
+#define lowbit(x) ((x) & (~(x) + 1))
 
 /* byte swapping helpers */
 
 /* byte swap a long literal */
-#define lswapl(x) ((((x) & 0xff) << 24) |\
-		   (((x) & 0xff00) << 8) |\
-		   (((x) & 0xff0000) >> 8) |\
-		   (((x) >> 24) & 0xff))
+#define lswapl(x)                                                             \
+    ((((x) & 0xff) << 24) | (((x) & 0xff00) << 8) | (((x) & 0xff0000) >> 8) | \
+     (((x) >> 24) & 0xff))
 
 /* byte swap a short literal */
 #define lswaps(x) ((((x) & 0xff) << 8) | (((x) >> 8) & 0xff))
 
-
 /* byte swap a long */
-#define swapl(x, n) n = ((char *) (x))[0];\
-		 ((char *) (x))[0] = ((char *) (x))[3];\
-		 ((char *) (x))[3] = n;\
-		 n = ((char *) (x))[1];\
-		 ((char *) (x))[1] = ((char *) (x))[2];\
-		 ((char *) (x))[2] = n;
+#define swapl(x, n)                      \
+    n                = ((char *)(x))[0]; \
+    ((char *)(x))[0] = ((char *)(x))[3]; \
+    ((char *)(x))[3] = n;                \
+    n                = ((char *)(x))[1]; \
+    ((char *)(x))[1] = ((char *)(x))[2]; \
+    ((char *)(x))[2] = n;
 
 /* byte swap a short */
-#define swaps(x, n) n = ((char *) (x))[0];\
-		 ((char *) (x))[0] = ((char *) (x))[1];\
-		 ((char *) (x))[1] = n
+#define swaps(x, n)                      \
+    n                = ((char *)(x))[0]; \
+    ((char *)(x))[0] = ((char *)(x))[1]; \
+    ((char *)(x))[1] = n
 
 /* copy long from src to dst byteswapping on the way */
-#define cpswapl(src, dst) \
-                 ((char *)&(dst))[0] = ((char *) &(src))[3];\
-                 ((char *)&(dst))[1] = ((char *) &(src))[2];\
-                 ((char *)&(dst))[2] = ((char *) &(src))[1];\
-                 ((char *)&(dst))[3] = ((char *) &(src))[0];
+#define cpswapl(src, dst)                      \
+    ((char *)&(dst))[0] = ((char *)&(src))[3]; \
+    ((char *)&(dst))[1] = ((char *)&(src))[2]; \
+    ((char *)&(dst))[2] = ((char *)&(src))[1]; \
+    ((char *)&(dst))[3] = ((char *)&(src))[0];
 
 /* copy short from src to dst byteswapping on the way */
-#define cpswaps(src, dst)\
-		 ((char *) &(dst))[0] = ((char *) &(src))[1];\
-		 ((char *) &(dst))[1] = ((char *) &(src))[0];
+#define cpswaps(src, dst)                      \
+    ((char *)&(dst))[0] = ((char *)&(src))[1]; \
+    ((char *)&(dst))[1] = ((char *)&(src))[0];
 
-
-extern int ValidAtom(Atom atom);
+extern int         ValidAtom(Atom atom);
 extern const char *NameForAtom(Atom atom);
-extern Atom MakeAtom(const char *string, unsigned int len, Bool makeit);
+extern Atom        MakeAtom(const char *string, unsigned int len, Bool makeit);
 
-#define fsCat(x,y) x##_##y
+#define fsCat(x, y) x##_##y
 
 /* copy a xCharInfo into a XCharInfo */
 
-#define fsPack_XCharInfo(structure, packet) \
-    fsCat(packet,left) = (structure)->leftSideBearing; \
-    fsCat(packet,right) = (structure)->rightSideBearing; \
-    fsCat(packet,width) = (structure)->characterWidth; \
-    fsCat(packet,ascent) = (structure)->ascent; \
-    fsCat(packet,descent) = (structure)->descent; \
-    fsCat(packet,attributes) = (structure)->attributes
-
+#define fsPack_XCharInfo(structure, packet)                    \
+    fsCat(packet, left)       = (structure)->leftSideBearing;  \
+    fsCat(packet, right)      = (structure)->rightSideBearing; \
+    fsCat(packet, width)      = (structure)->characterWidth;   \
+    fsCat(packet, ascent)     = (structure)->ascent;           \
+    fsCat(packet, descent)    = (structure)->descent;          \
+    fsCat(packet, attributes) = (structure)->attributes
 
 /* copy a FontInfoRec into a XFontInfoHeader */
 
-#define fsPack_XFontInfoHeader(structure, packet, clientversion) \
-    (packet)->font_header_flags = ((structure)->allExist) ? FontInfoAllCharsExist : 0; \
-    (packet)->font_header_draw_direction = ((structure)->drawDirection == LeftToRight) \
-               ? LeftToRightDrawDirection : RightToLeftDrawDirection; \
- \
-    if ((structure)->inkInside) \
-	(packet)->font_header_flags |= FontInfoInkInside; \
- \
-    if (clientversion > 1) { \
-	(packet)->font_hdr_char_range_min_char_high = (structure)->firstRow; \
-        (packet)->font_hdr_char_range_min_char_low = (structure)->firstCol; \
-        (packet)->font_hdr_char_range_max_char_high = (structure)->lastRow; \
-        (packet)->font_hdr_char_range_max_char_low = (structure)->lastCol; \
+#define fsPack_XFontInfoHeader(structure, packet, clientversion)               \
+    (packet)->font_header_flags =                                              \
+        ((structure)->allExist) ? FontInfoAllCharsExist : 0;                   \
+    (packet)->font_header_draw_direction =                                     \
+        ((structure)->drawDirection == LeftToRight)                            \
+            ? LeftToRightDrawDirection                                         \
+            : RightToLeftDrawDirection;                                        \
+                                                                               \
+    if ((structure)->inkInside)                                                \
+        (packet)->font_header_flags |= FontInfoInkInside;                      \
+                                                                               \
+    if (clientversion > 1)                                                     \
+    {                                                                          \
+        (packet)->font_hdr_char_range_min_char_high = (structure)->firstRow;   \
+        (packet)->font_hdr_char_range_min_char_low  = (structure)->firstCol;   \
+        (packet)->font_hdr_char_range_max_char_high = (structure)->lastRow;    \
+        (packet)->font_hdr_char_range_max_char_low  = (structure)->lastCol;    \
         (packet)->font_header_default_char_high = (structure)->defaultCh >> 8; \
-        (packet)->font_header_default_char_low = (structure)->defaultCh & 0xff; \
-    } else { \
-	(packet)->font_hdr_char_range_min_char_high = (structure)->firstCol; \
-	(packet)->font_hdr_char_range_min_char_low = (structure)->firstRow; \
-	(packet)->font_hdr_char_range_max_char_high = (structure)->lastCol; \
-	(packet)->font_hdr_char_range_max_char_low = (structure)->lastRow; \
-	(packet)->font_header_default_char_high = (structure)->defaultCh & 0xff; \
-	(packet)->font_header_default_char_low = (structure)->defaultCh >> 8; \
-    } \
- \
-    fsPack_XCharInfo(&(structure)->ink_minbounds, (packet)->font_header_min_bounds); \
-    fsPack_XCharInfo(&(structure)->ink_maxbounds, (packet)->font_header_max_bounds); \
- \
-    (packet)->font_header_font_ascent = (structure)->fontAscent; \
+        (packet)->font_header_default_char_low =                               \
+            (structure)->defaultCh & 0xff;                                     \
+    }                                                                          \
+    else                                                                       \
+    {                                                                          \
+        (packet)->font_hdr_char_range_min_char_high = (structure)->firstCol;   \
+        (packet)->font_hdr_char_range_min_char_low  = (structure)->firstRow;   \
+        (packet)->font_hdr_char_range_max_char_high = (structure)->lastCol;    \
+        (packet)->font_hdr_char_range_max_char_low  = (structure)->lastRow;    \
+        (packet)->font_header_default_char_high =                              \
+            (structure)->defaultCh & 0xff;                                     \
+        (packet)->font_header_default_char_low = (structure)->defaultCh >> 8;  \
+    }                                                                          \
+                                                                               \
+    fsPack_XCharInfo(&(structure)->ink_minbounds,                              \
+                     (packet)->font_header_min_bounds);                        \
+    fsPack_XCharInfo(&(structure)->ink_maxbounds,                              \
+                     (packet)->font_header_max_bounds);                        \
+                                                                               \
+    (packet)->font_header_font_ascent  = (structure)->fontAscent;              \
     (packet)->font_header_font_descent = (structure)->fontDescent
 
-
-typedef struct {		/* when cloning, need old transport info */
+typedef struct
+{  /* when cloning, need old transport info */
     int trans_id;
     int fd;
     int portnum;
 } OldListenRec;
 
 /* os/connection.c */
-extern	void	CreateSockets(int old_listen_count, OldListenRec *old_listen);
+extern void CreateSockets(int old_listen_count, OldListenRec *old_listen);
 
 /* os/xfstrans.c */
-extern OldListenRec *_FontTransGetInetdListenInfo (int fd);
+extern OldListenRec *_FontTransGetInetdListenInfo(int fd);
 
 extern void BitOrderInvert(unsigned char *buf, int nbytes);
 extern void TwoByteSwap(unsigned char *buf, int nbytes);
 extern void FourByteSwap(unsigned char *buf, int nbytes);
 
-#endif				/* _MISC_H_ */
+#endif    /* _MISC_H_ */

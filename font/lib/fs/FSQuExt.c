@@ -50,21 +50,20 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
-#include	"FSlibint.h"
+#include "FSlibint.h"
 
 Bool
-FSQueryExtension(
-    FSServer	*svr,
-    const char	*name,
-    int		*major_opcode,
-    int		*first_event,
-    int		*first_error)
+FSQueryExtension(FSServer   *svr,
+                 const char *name,
+                 int        *major_opcode,
+                 int        *first_event,
+                 int        *first_error)
 {
     fsQueryExtensionReply rep;
-    fsQueryExtensionReq *req;
-    size_t namelen;
+    fsQueryExtensionReq  *req;
+    size_t                namelen;
 
 #ifdef HAVE_STRNLEN
     namelen = name ? strnlen(name, 256) : 0;
@@ -77,15 +76,17 @@ FSQueryExtension(
         return False;
 
     GetReq(QueryExtension, req);
-    req->nbytes = (CARD8) namelen;
+    req->nbytes = (CARD8)namelen;
     req->length += (req->nbytes + 3) >> 2;
-    _FSSend(svr, name, (long) req->nbytes);
-    if (!_FSReply(svr, (fsReply *) & rep,
-      (SIZEOF(fsQueryExtensionReply) - SIZEOF(fsGenericReply)) >> 2, fsFalse))
-	return FSBadAlloc;
+    _FSSend(svr, name, (long)req->nbytes);
+    if (!_FSReply(svr,
+                  (fsReply *)&rep,
+                  (SIZEOF(fsQueryExtensionReply) - SIZEOF(fsGenericReply)) >> 2,
+                  fsFalse))
+        return FSBadAlloc;
     *major_opcode = rep.major_opcode;
-    *first_event = rep.first_event;
-    *first_error = rep.first_error;
+    *first_event  = rep.first_event;
+    *first_error  = rep.first_error;
     SyncHandle();
     return (rep.present);
 }

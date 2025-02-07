@@ -54,11 +54,10 @@ in this Software without prior written authorization from The Open Group.
 /* after twice this amount of time (in seconds) with no input from the
  * client, it'll be toasted
  */
-#define	CLIENT_TIMEOUT	600
+#define CLIENT_TIMEOUT 600
 
+#define DEFAULT_TIMEOUT 60
 
-#define	DEFAULT_TIMEOUT	60
-
-#define	DEFAULT_CLIENT_LIMIT	20
+#define DEFAULT_CLIENT_LIMIT 20
 
 #endif /* _SITE_H_ */
