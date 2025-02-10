@@ -45,30 +45,30 @@
 /*
  * VMMouse Input packet data structure
  */
-typedef struct _VMMOUSE_INPUT_DATA {
-   unsigned short Flags;
-   unsigned short Buttons;
-   int X;
-   int Y;
-   int Z;
+typedef struct _VMMOUSE_INPUT_DATA
+{
+    unsigned short Flags;
+    unsigned short Buttons;
+    int            X;
+    int            Y;
+    int            Z;
 } VMMOUSE_INPUT_DATA, *PVMMOUSE_INPUT_DATA;
 
 /*
  * Public Functions
  */
-Bool VMMouseClient_Enable(void);
-void VMMouseClient_Disable(void);
+Bool         VMMouseClient_Enable(void);
+void         VMMouseClient_Disable(void);
 unsigned int VMMouseClient_GetInput(PVMMOUSE_INPUT_DATA pvmmouseInput);
-void VMMouseClient_RequestRelative(void);
-void VMMouseClient_RequestAbsolute(void);
+void         VMMouseClient_RequestRelative(void);
+void         VMMouseClient_RequestAbsolute(void);
 
 #ifdef VMX86_DEVEL
-#define VMwareLog(args) ErrorF args
+#  define VMwareLog(args) ErrorF args
 #else
-#define VMwareLog(args)
+#  define VMwareLog(args)
 #endif
 
 #include "vmmouse_defs.h"
 
 #endif /* _VMMOUSE_CLIENT_H_ */
-

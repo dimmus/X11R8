@@ -30,7 +30,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include "evdev.h"
@@ -51,7 +51,8 @@ static Atom prop_3bbutton;      /* Right button target physical button      */
 static Atom prop_3bthreshold;   /* Right button move cancellation threshold */
 
 /* State machine for 3rd button emulation */
-enum EmulationState {
+enum EmulationState
+{
     EM3B_OFF,             /* no event      */
     EM3B_PENDING,         /* timer pending */
     EM3B_EMULATING        /* in emulation  */
@@ -69,14 +70,16 @@ Evdev3BEmuPostButtonEvent(InputInfoPtr pInfo, int button, enum ButtonAction act)
      * relative events, this may be a bit iffy since pointer accel may shoot
      * us back more than we moved and confuse the user.
      */
-    if (emu3B->flags & EVDEV_ABSOLUTE_EVENTS)
-        absolute = Absolute;
+    if (emu3B->flags & EVDEV_ABSOLUTE_EVENTS) absolute = Absolute;
 
-    xf86PostButtonEventP(pInfo->dev, absolute, button,
-                         (act == BUTTON_PRESS) ? 1 : 0, 0,
-                         (absolute ? 2 : 0), emu3B->startpos);
+    xf86PostButtonEventP(pInfo->dev,
+                         absolute,
+                         button,
+                         (act == BUTTON_PRESS) ? 1 : 0,
+                         0,
+                         (absolute ? 2 : 0),
+                         emu3B->startpos);
 }
-
 
 /**
  * Timer function. Post a button down event to the server.
@@ -86,9 +89,9 @@ Evdev3BEmuPostButtonEvent(InputInfoPtr pInfo, int button, enum ButtonAction act)
 CARD32
 Evdev3BEmuTimer(OsTimerPtr timer, CARD32 time, pointer arg)
 {
-    InputInfoPtr      pInfo    = (InputInfoPtr)arg;
-    EvdevPtr          pEvdev   = pInfo->private;
-    struct emulate3B *emu3B    = &pEvdev->emulate3B;
+    InputInfoPtr      pInfo  = (InputInfoPtr)arg;
+    EvdevPtr          pEvdev = pInfo->private;
+    struct emulate3B *emu3B  = &pEvdev->emulate3B;
 
 #if HAVE_THREADED_INPUT
     input_lock();
@@ -104,7 +107,6 @@ Evdev3BEmuTimer(OsTimerPtr timer, CARD32 time, pointer arg)
 #endif
     return 0;
 }
-
 
 /**
  * Cancel all emulation, reset the timer and reset deltas.
@@ -139,13 +141,10 @@ Evdev3BEmuFilterEvent(InputInfoPtr pInfo, int button, BOOL press)
     struct emulate3B *emu3B  = &pEvdev->emulate3B;
     int               ret    = FALSE;
 
-    if (!emu3B->enabled)
-        goto out;
+    if (!emu3B->enabled) goto out;
 
-    if (press)
-        emu3B->buttonstate |= button;
-    else
-        emu3B->buttonstate &= ~button;
+    if (press) emu3B->buttonstate |= button;
+    else emu3B->buttonstate &= ~button;
 
     /* Any other button pressed? Cancel timer */
     if (button != 1)
@@ -170,13 +169,12 @@ Evdev3BEmuFilterEvent(InputInfoPtr pInfo, int button, BOOL press)
     }
 
     /* Don't emulate if any other button is down */
-    if ((emu3B->buttonstate & ~0x1) != 0)
-        goto out;
+    if ((emu3B->buttonstate & ~0x1) != 0) goto out;
 
     /* Release event → cancel, send press and release now. */
     if (!press)
     {
-        switch(emu3B->state)
+        switch (emu3B->state)
         {
             case EM3B_PENDING:
                 Evdev3BEmuPostButtonEvent(pInfo, 1, BUTTON_PRESS);
@@ -197,8 +195,8 @@ Evdev3BEmuFilterEvent(InputInfoPtr pInfo, int button, BOOL press)
     if (press && emu3B->state == EM3B_OFF)
     {
         emu3B->state = EM3B_PENDING;
-        emu3B->timer = TimerSet(emu3B->timer, 0, emu3B->timeout,
-                                Evdev3BEmuTimer, pInfo);
+        emu3B->timer =
+            TimerSet(emu3B->timer, 0, emu3B->timeout, Evdev3BEmuTimer, pInfo);
         ret = TRUE;
         goto out;
     }
@@ -236,9 +234,9 @@ Evdev3BEmuProcessAbsMotion(InputInfoPtr pInfo, ValuatorMask *vals)
     {
         if (valuator_mask_isset(vals, axis))
         {
-            double delta = valuator_mask_get_double(vals, axis) - emu3B->startpos[axis];
-            if (fabs(delta) > emu3B->threshold)
-                cancel = TRUE;
+            double delta =
+                valuator_mask_get_double(vals, axis) - emu3B->startpos[axis];
+            if (fabs(delta) > emu3B->threshold) cancel = TRUE;
         }
         axis++;
     }
@@ -260,8 +258,7 @@ Evdev3BEmuProcessRelMotion(InputInfoPtr pInfo, double dx, double dy)
     EvdevPtr          pEvdev = pInfo->private;
     struct emulate3B *emu3B  = &pEvdev->emulate3B;
 
-    if (emu3B->state != EM3B_PENDING)
-        return;
+    if (emu3B->state != EM3B_PENDING) return;
 
     emu3B->delta[0] += dx;
     emu3B->delta[1] += dy;
@@ -281,21 +278,18 @@ Evdev3BEmuPreInit(InputInfoPtr pInfo)
     EvdevPtr          pEvdev = pInfo->private;
     struct emulate3B *emu3B  = &pEvdev->emulate3B;
 
-    emu3B->enabled = xf86SetBoolOption(pInfo->options,
-                                       "EmulateThirdButton",
-                                       FALSE);
-    emu3B->timeout = xf86SetIntOption(pInfo->options,
-                                      "EmulateThirdButtonTimeout",
-                                      1000);
-    emu3B->button = xf86SetIntOption(pInfo->options,
-                                      "EmulateThirdButtonButton",
-                                      3);
+    emu3B->enabled =
+        xf86SetBoolOption(pInfo->options, "EmulateThirdButton", FALSE);
+    emu3B->timeout =
+        xf86SetIntOption(pInfo->options, "EmulateThirdButtonTimeout", 1000);
+    emu3B->button =
+        xf86SetIntOption(pInfo->options, "EmulateThirdButtonButton", 3);
     /* FIXME: this should be auto-configured based on axis ranges */
     emu3B->threshold = xf86SetIntOption(pInfo->options,
-                                         "EmulateThirdButtonMoveThreshold",
-                                         DEFAULT_MOVE_THRESHOLD);
+                                        "EmulateThirdButtonMoveThreshold",
+                                        DEFAULT_MOVE_THRESHOLD);
     /* allocate now so we don't allocate in the signal handler */
-    emu3B->timer = TimerSet(NULL, 0, 0, NULL, NULL);
+    emu3B->timer     = TimerSet(NULL, 0, 0, NULL, NULL);
 }
 
 void
@@ -315,8 +309,10 @@ Evdev3BEmuFinalize(InputInfoPtr pInfo)
 }
 
 static int
-Evdev3BEmuSetProperty(DeviceIntPtr dev, Atom atom, XIPropertyValuePtr val,
-                      BOOL checkonly)
+Evdev3BEmuSetProperty(DeviceIntPtr       dev,
+                      Atom               atom,
+                      XIPropertyValuePtr val,
+                      BOOL               checkonly)
 {
     InputInfoPtr      pInfo  = dev->public.devicePrivate;
     EvdevPtr          pEvdev = pInfo->private;
@@ -327,33 +323,29 @@ Evdev3BEmuSetProperty(DeviceIntPtr dev, Atom atom, XIPropertyValuePtr val,
         if (val->format != 8 || val->size != 1 || val->type != XA_INTEGER)
             return BadMatch;
 
-        if (!checkonly)
-            emu3B->enabled = *((BOOL*)val->data);
-
-    } else if (atom == prop_3btimeout)
+        if (!checkonly) emu3B->enabled = *((BOOL *)val->data);
+    }
+    else if (atom == prop_3btimeout)
     {
         if (val->format != 32 || val->size != 1 || val->type != XA_INTEGER)
             return BadMatch;
 
-        if (!checkonly)
-            emu3B->timeout = *((CARD32*)val->data);
-
-    } else if (atom == prop_3bbutton)
+        if (!checkonly) emu3B->timeout = *((CARD32 *)val->data);
+    }
+    else if (atom == prop_3bbutton)
     {
         if (val->format != 8 || val->size != 1 || val->type != XA_INTEGER)
             return BadMatch;
 
-        if (!checkonly)
-            emu3B->button = *((CARD8*)val->data);
-    } else if (atom == prop_3bthreshold)
+        if (!checkonly) emu3B->button = *((CARD8 *)val->data);
+    }
+    else if (atom == prop_3bthreshold)
     {
         if (val->format != 32 || val->size != 1 || val->type != XA_INTEGER)
             return BadMatch;
 
-        if (!checkonly)
-            emu3B->threshold = *((CARD32*)val->data);
+        if (!checkonly) emu3B->threshold = *((CARD32 *)val->data);
     }
-
 
     return Success;
 }
@@ -373,13 +365,17 @@ Evdev3BEmuInitProperty(DeviceIntPtr dev)
         return;
 
     /* third button emulation on/off */
-    prop_3bemu = MakeAtom(EVDEV_PROP_THIRDBUTTON, strlen(EVDEV_PROP_THIRDBUTTON), TRUE);
-    rc = XIChangeDeviceProperty(dev, prop_3bemu, XA_INTEGER, 8,
-                                PropModeReplace, 1,
+    prop_3bemu =
+        MakeAtom(EVDEV_PROP_THIRDBUTTON, strlen(EVDEV_PROP_THIRDBUTTON), TRUE);
+    rc = XIChangeDeviceProperty(dev,
+                                prop_3bemu,
+                                XA_INTEGER,
+                                8,
+                                PropModeReplace,
+                                1,
                                 &emu3B->enabled,
                                 FALSE);
-    if (rc != Success)
-        return;
+    if (rc != Success) return;
 
     XISetDevicePropertyDeletable(dev, prop_3bemu, FALSE);
 
@@ -387,11 +383,16 @@ Evdev3BEmuInitProperty(DeviceIntPtr dev)
     prop_3btimeout = MakeAtom(EVDEV_PROP_THIRDBUTTON_TIMEOUT,
                               strlen(EVDEV_PROP_THIRDBUTTON_TIMEOUT),
                               TRUE);
-    rc = XIChangeDeviceProperty(dev, prop_3btimeout, XA_INTEGER, 32, PropModeReplace, 1,
-                                &emu3B->timeout, FALSE);
+    rc             = XIChangeDeviceProperty(dev,
+                                prop_3btimeout,
+                                XA_INTEGER,
+                                32,
+                                PropModeReplace,
+                                1,
+                                &emu3B->timeout,
+                                FALSE);
 
-    if (rc != Success)
-        return;
+    if (rc != Success) return;
 
     XISetDevicePropertyDeletable(dev, prop_3btimeout, FALSE);
 
@@ -399,11 +400,16 @@ Evdev3BEmuInitProperty(DeviceIntPtr dev)
     prop_3bbutton = MakeAtom(EVDEV_PROP_THIRDBUTTON_BUTTON,
                              strlen(EVDEV_PROP_THIRDBUTTON_BUTTON),
                              TRUE);
-    rc = XIChangeDeviceProperty(dev, prop_3bbutton, XA_INTEGER, 8, PropModeReplace, 1,
-                                &emu3B->button, FALSE);
+    rc            = XIChangeDeviceProperty(dev,
+                                prop_3bbutton,
+                                XA_INTEGER,
+                                8,
+                                PropModeReplace,
+                                1,
+                                &emu3B->button,
+                                FALSE);
 
-    if (rc != Success)
-        return;
+    if (rc != Success) return;
 
     XISetDevicePropertyDeletable(dev, prop_3bbutton, FALSE);
 
@@ -411,11 +417,16 @@ Evdev3BEmuInitProperty(DeviceIntPtr dev)
     prop_3bthreshold = MakeAtom(EVDEV_PROP_THIRDBUTTON_THRESHOLD,
                                 strlen(EVDEV_PROP_THIRDBUTTON_THRESHOLD),
                                 TRUE);
-    rc = XIChangeDeviceProperty(dev, prop_3bthreshold, XA_INTEGER, 32, PropModeReplace, 1,
-                                &emu3B->threshold, FALSE);
+    rc               = XIChangeDeviceProperty(dev,
+                                prop_3bthreshold,
+                                XA_INTEGER,
+                                32,
+                                PropModeReplace,
+                                1,
+                                &emu3B->threshold,
+                                FALSE);
 
-    if (rc != Success)
-        return;
+    if (rc != Success) return;
 
     XISetDevicePropertyDeletable(dev, prop_3bthreshold, FALSE);
 

@@ -31,7 +31,7 @@
 
 /* Mouse wheel emulation code. */
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 #include "evdev.h"
 
@@ -44,37 +44,39 @@
 
 #define WHEEL_NOT_CONFIGURED 0
 
-static Atom prop_wheel_emu      = 0;
-static Atom prop_wheel_axismap  = 0;
-static Atom prop_wheel_inertia  = 0;
-static Atom prop_wheel_timeout  = 0;
-static Atom prop_wheel_button   = 0;
+static Atom prop_wheel_emu     = 0;
+static Atom prop_wheel_axismap = 0;
+static Atom prop_wheel_inertia = 0;
+static Atom prop_wheel_timeout = 0;
+static Atom prop_wheel_button  = 0;
 
 /* Local Function Prototypes */
-static int EvdevWheelEmuInertia(InputInfoPtr pInfo, WheelAxisPtr axis, int value);
+static int
+EvdevWheelEmuInertia(InputInfoPtr pInfo, WheelAxisPtr axis, int value);
 
 /* Filter mouse button events */
 BOOL
 EvdevWheelEmuFilterButton(InputInfoPtr pInfo, unsigned int button, int value)
 {
     EvdevPtr pEvdev = (EvdevPtr)pInfo->private;
-    int ms;
+    int      ms;
 
     /* Has wheel emulation been configured to be enabled? */
-    if (!pEvdev->emulateWheel.enabled)
-	return FALSE;
+    if (!pEvdev->emulateWheel.enabled) return FALSE;
 
     /* Check for EmulateWheelButton */
-    if (pEvdev->emulateWheel.button == button) {
-	pEvdev->emulateWheel.button_state = value;
+    if (pEvdev->emulateWheel.button == button)
+    {
+        pEvdev->emulateWheel.button_state = value;
 
-        if (value)
-            /* Start the timer when the button is pressed */
-            pEvdev->emulateWheel.expires = pEvdev->emulateWheel.timeout +
-                                           GetTimeInMillis();
-        else {
+        if (value)            /* Start the timer when the button is pressed */
+            pEvdev->emulateWheel.expires =
+                pEvdev->emulateWheel.timeout + GetTimeInMillis();
+        else
+        {
             ms = pEvdev->emulateWheel.expires - GetTimeInMillis();
-            if (ms > 0) {
+            if (ms > 0)
+            {
                 /*
                  * If the button is released early enough emit the button
                  * press/release events
@@ -83,7 +85,7 @@ EvdevWheelEmuFilterButton(InputInfoPtr pInfo, unsigned int button, int value)
             }
         }
 
-	return TRUE;
+        return TRUE;
     }
 
     /* Don't care about this event */
@@ -94,61 +96,63 @@ EvdevWheelEmuFilterButton(InputInfoPtr pInfo, unsigned int button, int value)
 BOOL
 EvdevWheelEmuFilterMotion(InputInfoPtr pInfo, struct input_event *pEv)
 {
-    EvdevPtr pEvdev = (EvdevPtr)pInfo->private;
-    WheelAxisPtr pAxis = NULL;
-    int value = pEv->value;
+    EvdevPtr     pEvdev = (EvdevPtr)pInfo->private;
+    WheelAxisPtr pAxis  = NULL;
+    int          value  = pEv->value;
 
     /* Has wheel emulation been configured to be enabled? */
-    if (!pEvdev->emulateWheel.enabled)
-	return FALSE;
+    if (!pEvdev->emulateWheel.enabled) return FALSE;
 
     /* Handle our motion events if the emuWheel button is pressed
      * wheel button of 0 means always emulate wheel.
      */
-    if (pEvdev->emulateWheel.button_state || !pEvdev->emulateWheel.button) {
+    if (pEvdev->emulateWheel.button_state || !pEvdev->emulateWheel.button)
+    {
         /* Just return if the timeout hasn't expired yet */
         if (pEvdev->emulateWheel.button)
         {
             int ms = pEvdev->emulateWheel.expires - GetTimeInMillis();
-            if (ms > 0)
-                return TRUE;
+            if (ms > 0) return TRUE;
         }
 
-	if(pEv->type == EV_ABS) {
-	    int axis = pEvdev->abs_axis_map[pEv->code];
-	    int oldValue;
+        if (pEv->type == EV_ABS)
+        {
+            int axis = pEvdev->abs_axis_map[pEv->code];
+            int oldValue;
 
-	    if (axis > -1 && valuator_mask_fetch(pEvdev->old_vals, axis, &oldValue)) {
-		valuator_mask_set(pEvdev->abs_vals, axis, value);
-		value -= oldValue; /* make value into a differential measurement */
-	    } else
-                value = 0; /* avoid a jump on the first touch */
-	}
+            if (axis > -1 &&
+                valuator_mask_fetch(pEvdev->old_vals, axis, &oldValue))
+            {
+                valuator_mask_set(pEvdev->abs_vals, axis, value);
+                value -=
+                    oldValue; /* make value into a differential measurement */
+            }
+            else value = 0; /* avoid a jump on the first touch */
+        }
 
-	switch(pEv->code) {
+        switch (pEv->code)
+        {
+    /* ABS_X has the same value as REL_X, so this case catches both */
+            case REL_X:
+                pAxis = &(pEvdev->emulateWheel.X);
+                break;
 
-	/* ABS_X has the same value as REL_X, so this case catches both */
-	case REL_X:
-	    pAxis = &(pEvdev->emulateWheel.X);
-	    break;
+    /* ABS_Y has the same value as REL_Y, so this case catches both */
+            case REL_Y:
+                pAxis = &(pEvdev->emulateWheel.Y);
+                break;
 
-	/* ABS_Y has the same value as REL_Y, so this case catches both */
-	case REL_Y:
-	    pAxis = &(pEvdev->emulateWheel.Y);
-	    break;
+            default:
+                break;
+        }
 
-	default:
-	    break;
-	}
-
-	/* If we found REL_X, REL_Y, ABS_X or ABS_Y then emulate a mouse
+    /* If we found REL_X, REL_Y, ABS_X or ABS_Y then emulate a mouse
 	   wheel.
 	 */
-	if (pAxis)
-	    EvdevWheelEmuInertia(pInfo, pAxis, value);
+        if (pAxis) EvdevWheelEmuInertia(pInfo, pAxis, value);
 
-	/* Eat motion events while emulateWheel button pressed. */
-	return TRUE;
+    /* Eat motion events while emulateWheel button pressed. */
+        return TRUE;
     }
 
     return FALSE;
@@ -161,29 +165,32 @@ static int
 EvdevWheelEmuInertia(InputInfoPtr pInfo, WheelAxisPtr axis, int value)
 {
     EvdevPtr pEvdev = (EvdevPtr)pInfo->private;
-    int button;
-    int inertia;
-    int rc = 0;
+    int      button;
+    int      inertia;
+    int      rc = 0;
 
     /* if this axis has not been configured, just eat the motion */
-    if (!axis->up_button)
-	return rc;
+    if (!axis->up_button) return rc;
 
     axis->traveled_distance += value;
 
-    if (axis->traveled_distance < 0) {
-	button = axis->up_button;
-	inertia = -pEvdev->emulateWheel.inertia;
-    } else {
-	button = axis->down_button;
-	inertia = pEvdev->emulateWheel.inertia;
+    if (axis->traveled_distance < 0)
+    {
+        button  = axis->up_button;
+        inertia = -pEvdev->emulateWheel.inertia;
+    }
+    else
+    {
+        button  = axis->down_button;
+        inertia = pEvdev->emulateWheel.inertia;
     }
 
     /* Produce button press events for wheel motion */
-    while(abs(axis->traveled_distance) > pEvdev->emulateWheel.inertia) {
-	axis->traveled_distance -= inertia;
-	EvdevQueueButtonClicks(pInfo, button, 1);
-	rc++;
+    while (abs(axis->traveled_distance) > pEvdev->emulateWheel.inertia)
+    {
+        axis->traveled_distance -= inertia;
+        EvdevQueueButtonClicks(pInfo, button, 1);
+        rc++;
     }
     return rc;
 }
@@ -191,50 +198,58 @@ EvdevWheelEmuInertia(InputInfoPtr pInfo, WheelAxisPtr axis, int value)
 /* Handle button mapping here to avoid code duplication,
 returns true if a button mapping was found. */
 static BOOL
-EvdevWheelEmuHandleButtonMap(InputInfoPtr pInfo, WheelAxisPtr pAxis,
-                             const char *axis_name)
+EvdevWheelEmuHandleButtonMap(InputInfoPtr pInfo,
+                             WheelAxisPtr pAxis,
+                             const char  *axis_name)
 {
     EvdevPtr pEvdev = (EvdevPtr)pInfo->private;
-    char *option_string;
+    char    *option_string;
 
     pAxis->up_button = WHEEL_NOT_CONFIGURED;
 
     /* Check to see if there is configuration for this axis */
     option_string = xf86SetStrOption(pInfo->options, axis_name, NULL);
-    if (option_string) {
-	int up_button = 0;
-	int down_button = 0;
-	char *msg = NULL;
+    if (option_string)
+    {
+        int   up_button   = 0;
+        int   down_button = 0;
+        char *msg         = NULL;
 
-	if ((sscanf(option_string, "%d %d", &up_button, &down_button) == 2) &&
-	    ((up_button > 0) && (up_button <= EVDEV_MAXBUTTONS)) &&
-	    ((down_button > 0) && (down_button <= EVDEV_MAXBUTTONS))) {
+        if ((sscanf(option_string, "%d %d", &up_button, &down_button) == 2) &&
+            ((up_button > 0) && (up_button <= EVDEV_MAXBUTTONS)) &&
+            ((down_button > 0) && (down_button <= EVDEV_MAXBUTTONS)))
+        {
+        /* Use xstrdup to allocate a string for us */
+            msg = xstrdup("buttons XX and YY");
 
-	    /* Use xstrdup to allocate a string for us */
-	    msg = xstrdup("buttons XX and YY");
+            if (msg) sprintf(msg, "buttons %d and %d", up_button, down_button);
 
-	    if (msg)
-		sprintf(msg, "buttons %d and %d", up_button, down_button);
+            pAxis->up_button   = up_button;
+            pAxis->down_button = down_button;
 
-	    pAxis->up_button = up_button;
-	    pAxis->down_button = down_button;
+        /* Update the number of buttons if needed */
+            if (up_button > pEvdev->num_buttons)
+                pEvdev->num_buttons = up_button;
+            if (down_button > pEvdev->num_buttons)
+                pEvdev->num_buttons = down_button;
+        }
+        else
+        {
+            xf86IDrvMsg(pInfo,
+                        X_WARNING,
+                        "Invalid %s value:\"%s\"\n",
+                        axis_name,
+                        option_string);
+        }
+        free(option_string);
 
-	    /* Update the number of buttons if needed */
-	    if (up_button > pEvdev->num_buttons) pEvdev->num_buttons = up_button;
-	    if (down_button > pEvdev->num_buttons) pEvdev->num_buttons = down_button;
-
-	} else {
-	    xf86IDrvMsg(pInfo, X_WARNING, "Invalid %s value:\"%s\"\n",
-		        axis_name, option_string);
-	}
-	free(option_string);
-
-	/* Clean up and log what happened */
-	if (msg) {
-	    xf86IDrvMsg(pInfo, X_CONFIG, "%s: %s\n", axis_name, msg);
-	    free(msg);
-	    return TRUE;
-	}
+    /* Clean up and log what happened */
+        if (msg)
+        {
+            xf86IDrvMsg(pInfo, X_CONFIG, "%s: %s\n", axis_name, msg);
+            free(msg);
+            return TRUE;
+        }
     }
     return FALSE;
 }
@@ -244,19 +259,23 @@ void
 EvdevWheelEmuPreInit(InputInfoPtr pInfo)
 {
     EvdevPtr pEvdev = (EvdevPtr)pInfo->private;
-    int wheelButton;
-    int inertia;
-    int timeout;
+    int      wheelButton;
+    int      inertia;
+    int      timeout;
 
-    if (xf86SetBoolOption(pInfo->options, "EmulateWheel", FALSE)) {
-	pEvdev->emulateWheel.enabled = TRUE;
-    } else
-        pEvdev->emulateWheel.enabled = FALSE;
+    if (xf86SetBoolOption(pInfo->options, "EmulateWheel", FALSE))
+    {
+        pEvdev->emulateWheel.enabled = TRUE;
+    }
+    else pEvdev->emulateWheel.enabled = FALSE;
 
     wheelButton = xf86SetIntOption(pInfo->options, "EmulateWheelButton", 4);
 
-    if ((wheelButton < 0) || (wheelButton > EVDEV_MAXBUTTONS)) {
-        xf86IDrvMsg(pInfo, X_WARNING, "Invalid EmulateWheelButton value: %d\n",
+    if ((wheelButton < 0) || (wheelButton > EVDEV_MAXBUTTONS))
+    {
+        xf86IDrvMsg(pInfo,
+                    X_WARNING,
+                    "Invalid EmulateWheelButton value: %d\n",
                     wheelButton);
         xf86IDrvMsg(pInfo, X_WARNING, "Wheel emulation disabled.\n");
 
@@ -267,8 +286,11 @@ EvdevWheelEmuPreInit(InputInfoPtr pInfo)
 
     inertia = xf86SetIntOption(pInfo->options, "EmulateWheelInertia", 10);
 
-    if (inertia <= 0) {
-        xf86IDrvMsg(pInfo, X_WARNING, "Invalid EmulateWheelInertia value: %d\n",
+    if (inertia <= 0)
+    {
+        xf86IDrvMsg(pInfo,
+                    X_WARNING,
+                    "Invalid EmulateWheelInertia value: %d\n",
                     inertia);
         xf86IDrvMsg(pInfo, X_WARNING, "Using built-in inertia value.\n");
 
@@ -279,8 +301,11 @@ EvdevWheelEmuPreInit(InputInfoPtr pInfo)
 
     timeout = xf86SetIntOption(pInfo->options, "EmulateWheelTimeout", 200);
 
-    if (timeout < 0) {
-        xf86IDrvMsg(pInfo, X_WARNING, "Invalid EmulateWheelTimeout value: %d\n",
+    if (timeout < 0)
+    {
+        xf86IDrvMsg(pInfo,
+                    X_WARNING,
+                    "Invalid EmulateWheelTimeout value: %d\n",
                     timeout);
         xf86IDrvMsg(pInfo, X_WARNING, "Using built-in timeout value.\n");
 
@@ -290,43 +315,51 @@ EvdevWheelEmuPreInit(InputInfoPtr pInfo)
     pEvdev->emulateWheel.timeout = timeout;
 
     /* Configure the Y axis or default it */
-    if (!EvdevWheelEmuHandleButtonMap(pInfo, &(pEvdev->emulateWheel.Y),
-                "YAxisMapping")) {
+    if (!EvdevWheelEmuHandleButtonMap(pInfo,
+                                      &(pEvdev->emulateWheel.Y),
+                                      "YAxisMapping"))
+    {
         /* Default the Y axis to sane values */
-        pEvdev->emulateWheel.Y.up_button = 4;
+        pEvdev->emulateWheel.Y.up_button   = 4;
         pEvdev->emulateWheel.Y.down_button = 5;
 
         /* Simpler to check just the largest value in this case */
         /* XXX: we should post this to the server */
-        if (5 > pEvdev->num_buttons)
-            pEvdev->num_buttons = 5;
+        if (5 > pEvdev->num_buttons) pEvdev->num_buttons = 5;
 
         /* Display default Configuration */
-        xf86IDrvMsg(pInfo, X_CONFIG, "YAxisMapping: buttons %d and %d\n",
+        xf86IDrvMsg(pInfo,
+                    X_CONFIG,
+                    "YAxisMapping: buttons %d and %d\n",
                     pEvdev->emulateWheel.Y.up_button,
                     pEvdev->emulateWheel.Y.down_button);
     }
 
-
     /* This axis should default to an unconfigured state as most people
        are not going to expect a Horizontal wheel. */
-    EvdevWheelEmuHandleButtonMap(pInfo, &(pEvdev->emulateWheel.X),
-            "XAxisMapping");
+    EvdevWheelEmuHandleButtonMap(pInfo,
+                                 &(pEvdev->emulateWheel.X),
+                                 "XAxisMapping");
 
     /* Used by the inertia code */
     pEvdev->emulateWheel.X.traveled_distance = 0;
     pEvdev->emulateWheel.Y.traveled_distance = 0;
 
-    xf86IDrvMsg(pInfo, X_CONFIG,
+    xf86IDrvMsg(pInfo,
+                X_CONFIG,
                 "EmulateWheelButton: %d, "
                 "EmulateWheelInertia: %d, "
                 "EmulateWheelTimeout: %d\n",
-                pEvdev->emulateWheel.button, inertia, timeout);
+                pEvdev->emulateWheel.button,
+                inertia,
+                timeout);
 }
 
 static int
-EvdevWheelEmuSetProperty(DeviceIntPtr dev, Atom atom, XIPropertyValuePtr val,
-                         BOOL checkonly)
+EvdevWheelEmuSetProperty(DeviceIntPtr       dev,
+                         Atom               atom,
+                         XIPropertyValuePtr val,
+                         BOOL               checkonly)
 {
     InputInfoPtr pInfo  = dev->public.devicePrivate;
     EvdevPtr     pEvdev = pInfo->private;
@@ -338,7 +371,7 @@ EvdevWheelEmuSetProperty(DeviceIntPtr dev, Atom atom, XIPropertyValuePtr val,
 
         if (!checkonly)
         {
-            pEvdev->emulateWheel.enabled = *((BOOL*)val->data);
+            pEvdev->emulateWheel.enabled = *((BOOL *)val->data);
             /* Don't enable with zero inertia, otherwise we may get stuck in an
              * infinite loop */
             if (pEvdev->emulateWheel.inertia <= 0)
@@ -346,9 +379,14 @@ EvdevWheelEmuSetProperty(DeviceIntPtr dev, Atom atom, XIPropertyValuePtr val,
                 pEvdev->emulateWheel.inertia = 10;
                 /* We may get here before the property is actually enabled */
                 if (prop_wheel_inertia)
-                    XIChangeDeviceProperty(dev, prop_wheel_inertia, XA_INTEGER,
-                            16, PropModeReplace, 1,
-                            &pEvdev->emulateWheel.inertia, TRUE);
+                    XIChangeDeviceProperty(dev,
+                                           prop_wheel_inertia,
+                                           XA_INTEGER,
+                                           16,
+                                           PropModeReplace,
+                                           1,
+                                           &pEvdev->emulateWheel.inertia,
+                                           TRUE);
             }
         }
     }
@@ -359,53 +397,50 @@ EvdevWheelEmuSetProperty(DeviceIntPtr dev, Atom atom, XIPropertyValuePtr val,
         if (val->format != 8 || val->size != 1 || val->type != XA_INTEGER)
             return BadMatch;
 
-        bt = *((CARD8*)val->data);
+        bt = *((CARD8 *)val->data);
 
-        if (bt < 0 || bt >= EVDEV_MAXBUTTONS)
-            return BadValue;
+        if (bt < 0 || bt >= EVDEV_MAXBUTTONS) return BadValue;
 
-        if (!checkonly)
-            pEvdev->emulateWheel.button = bt;
-    } else if (atom == prop_wheel_axismap)
+        if (!checkonly) pEvdev->emulateWheel.button = bt;
+    }
+    else if (atom == prop_wheel_axismap)
     {
         if (val->format != 8 || val->size != 4 || val->type != XA_INTEGER)
             return BadMatch;
 
         if (!checkonly)
         {
-            pEvdev->emulateWheel.X.up_button = *((CARD8*)val->data);
-            pEvdev->emulateWheel.X.down_button = *(((CARD8*)val->data) + 1);
-            pEvdev->emulateWheel.Y.up_button = *(((CARD8*)val->data) + 2);
-            pEvdev->emulateWheel.Y.down_button = *(((CARD8*)val->data) + 3);
+            pEvdev->emulateWheel.X.up_button   = *((CARD8 *)val->data);
+            pEvdev->emulateWheel.X.down_button = *(((CARD8 *)val->data) + 1);
+            pEvdev->emulateWheel.Y.up_button   = *(((CARD8 *)val->data) + 2);
+            pEvdev->emulateWheel.Y.down_button = *(((CARD8 *)val->data) + 3);
         }
-    } else if (atom == prop_wheel_inertia)
+    }
+    else if (atom == prop_wheel_inertia)
     {
         int inertia;
 
         if (val->format != 16 || val->size != 1 || val->type != XA_INTEGER)
             return BadMatch;
 
-        inertia = *((CARD16*)val->data);
+        inertia = *((CARD16 *)val->data);
 
-        if (inertia <= 0)
-            return BadValue;
+        if (inertia <= 0) return BadValue;
 
-        if (!checkonly)
-            pEvdev->emulateWheel.inertia = inertia;
-    } else if (atom == prop_wheel_timeout)
+        if (!checkonly) pEvdev->emulateWheel.inertia = inertia;
+    }
+    else if (atom == prop_wheel_timeout)
     {
         int timeout;
 
         if (val->format != 16 || val->size != 1 || val->type != XA_INTEGER)
             return BadMatch;
 
-        timeout = *((CARD16*)val->data);
+        timeout = *((CARD16 *)val->data);
 
-        if (timeout < 0)
-            return BadValue;
+        if (timeout < 0) return BadValue;
 
-        if (!checkonly)
-            pEvdev->emulateWheel.timeout = timeout;
+        if (!checkonly) pEvdev->emulateWheel.timeout = timeout;
     }
     return Success;
 }
@@ -422,11 +457,15 @@ EvdevWheelEmuInitProperty(DeviceIntPtr dev)
         return;
 
     prop_wheel_emu = MakeAtom(EVDEV_PROP_WHEEL, strlen(EVDEV_PROP_WHEEL), TRUE);
-    rc = XIChangeDeviceProperty(dev, prop_wheel_emu, XA_INTEGER, 8,
-                                PropModeReplace, 1,
-                                &pEvdev->emulateWheel.enabled, FALSE);
-    if (rc != Success)
-        return;
+    rc             = XIChangeDeviceProperty(dev,
+                                prop_wheel_emu,
+                                XA_INTEGER,
+                                8,
+                                PropModeReplace,
+                                1,
+                                &pEvdev->emulateWheel.enabled,
+                                FALSE);
+    if (rc != Success) return;
 
     XISetDevicePropertyDeletable(dev, prop_wheel_emu, FALSE);
 
@@ -435,39 +474,63 @@ EvdevWheelEmuInitProperty(DeviceIntPtr dev)
     vals[2] = pEvdev->emulateWheel.Y.up_button;
     vals[3] = pEvdev->emulateWheel.Y.down_button;
 
-    prop_wheel_axismap = MakeAtom(EVDEV_PROP_WHEEL_AXES, strlen(EVDEV_PROP_WHEEL_AXES), TRUE);
-    rc = XIChangeDeviceProperty(dev, prop_wheel_axismap, XA_INTEGER, 8,
-                                PropModeReplace, 4, vals, FALSE);
+    prop_wheel_axismap =
+        MakeAtom(EVDEV_PROP_WHEEL_AXES, strlen(EVDEV_PROP_WHEEL_AXES), TRUE);
+    rc = XIChangeDeviceProperty(dev,
+                                prop_wheel_axismap,
+                                XA_INTEGER,
+                                8,
+                                PropModeReplace,
+                                4,
+                                vals,
+                                FALSE);
 
-    if (rc != Success)
-        return;
+    if (rc != Success) return;
 
     XISetDevicePropertyDeletable(dev, prop_wheel_axismap, FALSE);
 
-    prop_wheel_inertia = MakeAtom(EVDEV_PROP_WHEEL_INERTIA, strlen(EVDEV_PROP_WHEEL_INERTIA), TRUE);
-    rc = XIChangeDeviceProperty(dev, prop_wheel_inertia, XA_INTEGER, 16,
-                                PropModeReplace, 1,
-                                &pEvdev->emulateWheel.inertia, FALSE);
-    if (rc != Success)
-        return;
+    prop_wheel_inertia = MakeAtom(EVDEV_PROP_WHEEL_INERTIA,
+                                  strlen(EVDEV_PROP_WHEEL_INERTIA),
+                                  TRUE);
+    rc                 = XIChangeDeviceProperty(dev,
+                                prop_wheel_inertia,
+                                XA_INTEGER,
+                                16,
+                                PropModeReplace,
+                                1,
+                                &pEvdev->emulateWheel.inertia,
+                                FALSE);
+    if (rc != Success) return;
 
     XISetDevicePropertyDeletable(dev, prop_wheel_inertia, FALSE);
 
-    prop_wheel_timeout = MakeAtom(EVDEV_PROP_WHEEL_TIMEOUT, strlen(EVDEV_PROP_WHEEL_TIMEOUT), TRUE);
-    rc = XIChangeDeviceProperty(dev, prop_wheel_timeout, XA_INTEGER, 16,
-                                PropModeReplace, 1,
-                                &pEvdev->emulateWheel.timeout, FALSE);
-    if (rc != Success)
-        return;
+    prop_wheel_timeout = MakeAtom(EVDEV_PROP_WHEEL_TIMEOUT,
+                                  strlen(EVDEV_PROP_WHEEL_TIMEOUT),
+                                  TRUE);
+    rc                 = XIChangeDeviceProperty(dev,
+                                prop_wheel_timeout,
+                                XA_INTEGER,
+                                16,
+                                PropModeReplace,
+                                1,
+                                &pEvdev->emulateWheel.timeout,
+                                FALSE);
+    if (rc != Success) return;
 
     XISetDevicePropertyDeletable(dev, prop_wheel_timeout, FALSE);
 
-    prop_wheel_button = MakeAtom(EVDEV_PROP_WHEEL_BUTTON, strlen(EVDEV_PROP_WHEEL_BUTTON), TRUE);
-    rc = XIChangeDeviceProperty(dev, prop_wheel_button, XA_INTEGER, 8,
-                                PropModeReplace, 1,
-                                &pEvdev->emulateWheel.button, FALSE);
-    if (rc != Success)
-        return;
+    prop_wheel_button = MakeAtom(EVDEV_PROP_WHEEL_BUTTON,
+                                 strlen(EVDEV_PROP_WHEEL_BUTTON),
+                                 TRUE);
+    rc                = XIChangeDeviceProperty(dev,
+                                prop_wheel_button,
+                                XA_INTEGER,
+                                8,
+                                PropModeReplace,
+                                1,
+                                &pEvdev->emulateWheel.button,
+                                FALSE);
+    if (rc != Success) return;
 
     XISetDevicePropertyDeletable(dev, prop_wheel_button, FALSE);
 

@@ -25,9 +25,8 @@
  * authorization from the copyright holder(s) and author(s).
  */
 
-
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include <stdlib.h>
@@ -40,35 +39,36 @@ void
 segvCB(int sig)
 {
 #if defined HAVE_XORG_SERVER_1_1_0
-   exit(1);
+    exit(1);
 #endif
 }
-
 
 int
 main(void)
 {
-   if (vmmouse_uses_kernel_driver())
-      return 1;
+    if (vmmouse_uses_kernel_driver()) return 1;
 
    /*
     * If the vmmouse test is not run in a VMware virtual machine, it
     * will segfault instead of successfully accessing the port.
     */
-   signal(SIGSEGV, segvCB);
+    signal(SIGSEGV, segvCB);
 
-#if defined __i386__ || defined __x86_64__ 
-   (void) xf86EnableIO();
-   if (VMMouseClient_Enable()) {
-      VMMouseClient_Disable();
-      return 0;
-   } else {
+#if defined __i386__ || defined __x86_64__
+    (void)xf86EnableIO();
+    if (VMMouseClient_Enable())
+    {
+        VMMouseClient_Disable();
+        return 0;
+    }
+    else
+    {
       /*
        * We get here if we are running in a VM and the vmmouse
        * device is disabled.
        */
-      return 1;
-   }
+        return 1;
+    }
 #endif
-   return 1;
+    return 1;
 }

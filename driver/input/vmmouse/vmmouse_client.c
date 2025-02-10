@@ -36,7 +36,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include "vmmouse_client.h"
@@ -59,23 +59,23 @@
 static Bool
 VMMouseClientVMCheck(void)
 {
-   VMMouseProtoCmd vmpc;
+    VMMouseProtoCmd vmpc;
 
-   vmpc.in.vEbx = ~VMMOUSE_PROTO_MAGIC;
-   vmpc.in.command = VMMOUSE_PROTO_CMD_GETVERSION;
-   VMMouseProto_SendCmd(&vmpc);
+    vmpc.in.vEbx    = ~VMMOUSE_PROTO_MAGIC;
+    vmpc.in.command = VMMOUSE_PROTO_CMD_GETVERSION;
+    VMMouseProto_SendCmd(&vmpc);
 
    /*
     * ebx should contain VMMOUSE_PROTO_MAGIC
     * eax should contain version
     */
-   if (vmpc.out.vEbx != VMMOUSE_PROTO_MAGIC || vmpc.out.vEax == 0xffffffff) {
-      return FALSE;
-   }
+    if (vmpc.out.vEbx != VMMOUSE_PROTO_MAGIC || vmpc.out.vEax == 0xffffffff)
+    {
+        return FALSE;
+    }
 
-   return TRUE;
+    return TRUE;
 }
-
 
 /*
  *----------------------------------------------------------------------
@@ -99,25 +99,25 @@ VMMouseClientVMCheck(void)
 void
 VMMouseClient_Disable(void)
 {
-   uint32_t status;
-   VMMouseProtoCmd vmpc;
+    uint32_t        status;
+    VMMouseProtoCmd vmpc;
 
-   VMwareLog(("VMMouseClient_Disable: writing disable command to port\n"));
-   vmpc.in.vEbx = VMMOUSE_CMD_DISABLE;
-   vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_COMMAND;
-   VMMouseProto_SendCmd(&vmpc);
+    VMwareLog(("VMMouseClient_Disable: writing disable command to port\n"));
+    vmpc.in.vEbx    = VMMOUSE_CMD_DISABLE;
+    vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_COMMAND;
+    VMMouseProto_SendCmd(&vmpc);
    /*
     * We should get 0xffff in the flags now.
     */
-   vmpc.in.vEbx = 0;
-   vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_STATUS;
-   VMMouseProto_SendCmd(&vmpc);
-   status = vmpc.out.vEax;
-   if ((status & VMMOUSE_ERROR) != VMMOUSE_ERROR) {
-      VMwareLog(("VMMouseClient_Disable: wrong status returned\n"));
-   }
+    vmpc.in.vEbx    = 0;
+    vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_STATUS;
+    VMMouseProto_SendCmd(&vmpc);
+    status = vmpc.out.vEax;
+    if ((status & VMMOUSE_ERROR) != VMMOUSE_ERROR)
+    {
+        VMwareLog(("VMMouseClient_Disable: wrong status returned\n"));
+    }
 }
-
 
 /*
  *----------------------------------------------------------------------
@@ -138,74 +138,77 @@ VMMouseClient_Disable(void)
  */
 
 Bool
-VMMouseClient_Enable(void) {
-
-   uint32_t status;
-   uint32_t data;
-   VMMouseProtoCmd vmpc;
+VMMouseClient_Enable(void)
+{
+    uint32_t        status;
+    uint32_t        data;
+    VMMouseProtoCmd vmpc;
 
    /*
     * First, make sure we're in a VM; i.e. in dualboot configurations we might
     * find ourselves running on real hardware.
     */
 
-   if (!VMMouseClientVMCheck()) {
-      return FALSE;
-   }
+    if (!VMMouseClientVMCheck())
+    {
+        return FALSE;
+    }
 
-   VMwareLog(("VMMouseClientVMCheck succeeded, checking VMMOUSE version\n"));
-   VMwareLog(("VMMouseClient_Enable: READ_ID 0x%08x, VERSION_ID 0x%08x\n",
-       VMMOUSE_CMD_READ_ID, VMMOUSE_VERSION_ID));
+    VMwareLog(("VMMouseClientVMCheck succeeded, checking VMMOUSE version\n"));
+    VMwareLog(("VMMouseClient_Enable: READ_ID 0x%08x, VERSION_ID 0x%08x\n",
+               VMMOUSE_CMD_READ_ID,
+               VMMOUSE_VERSION_ID));
 
    /*
     * We probe for the VMMouse backend by sending the ENABLE
     * command to the mouse. We should get back the VERSION_ID on
     * the data port.
     */
-   vmpc.in.vEbx = VMMOUSE_CMD_READ_ID;
-   vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_COMMAND;
-   VMMouseProto_SendCmd(&vmpc);
+    vmpc.in.vEbx    = VMMOUSE_CMD_READ_ID;
+    vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_COMMAND;
+    VMMouseProto_SendCmd(&vmpc);
 
    /*
     * Check whether the VMMOUSE_VERSION_ID is available to read
     */
-   vmpc.in.vEbx = 0;
-   vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_STATUS;
-   VMMouseProto_SendCmd(&vmpc);
-   status = vmpc.out.vEax;
-   if ((status & 0x0000ffff) == 0) {
-      VMwareLog(("VMMouseClient_Enable: no data on port."));
-      return FALSE;
-   }
+    vmpc.in.vEbx    = 0;
+    vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_STATUS;
+    VMMouseProto_SendCmd(&vmpc);
+    status = vmpc.out.vEax;
+    if ((status & 0x0000ffff) == 0)
+    {
+        VMwareLog(("VMMouseClient_Enable: no data on port."));
+        return FALSE;
+    }
 
    /*
     * Get the VMMOUSE_VERSION_ID then
     */
    /* Get just one item */
-   vmpc.in.vEbx = 1;
-   vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_DATA;
-   VMMouseProto_SendCmd(&vmpc);
-   data = vmpc.out.vEax;
-   if (data!= VMMOUSE_VERSION_ID) {
-      VMwareLog(("VMMouseClient_Enable: data was not VERSION_ID"));
-      return FALSE;
-   }
+    vmpc.in.vEbx    = 1;
+    vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_DATA;
+    VMMouseProto_SendCmd(&vmpc);
+    data = vmpc.out.vEax;
+    if (data != VMMOUSE_VERSION_ID)
+    {
+        VMwareLog(("VMMouseClient_Enable: data was not VERSION_ID"));
+        return FALSE;
+    }
 
    /*
     * Restrict access to the VMMouse backdoor handler.
     */
-   vmpc.in.vEbx = VMMOUSE_RESTRICT_IOPL;
-   vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_RESTRICT;
-   VMMouseProto_SendCmd(&vmpc);
+    vmpc.in.vEbx    = VMMOUSE_RESTRICT_IOPL;
+    vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_RESTRICT;
+    VMMouseProto_SendCmd(&vmpc);
 
    /*
     * To quote Jeremy, "Go Go Go!"
     */
 
-   VMwareLog(("VMMouseClient_Enable: go go go!\n"));
-   return TRUE;
+    VMwareLog(("VMMouseClient_Enable: go go go!\n"));
+    return TRUE;
 }
-
 
 /*
  *----------------------------------------------------------------------
@@ -226,12 +229,12 @@ VMMouseClient_Enable(void) {
  */
 
 unsigned int
-VMMouseClient_GetInput (PVMMOUSE_INPUT_DATA pvmmouseInput) {
-
-   uint32_t status;
-   uint16_t numWords;
-   uint32_t packetInfo;
-   VMMouseProtoCmd vmpc;
+VMMouseClient_GetInput(PVMMOUSE_INPUT_DATA pvmmouseInput)
+{
+    uint32_t        status;
+    uint16_t        numWords;
+    uint32_t        packetInfo;
+    VMMouseProtoCmd vmpc;
 
    /*
     * The status dword has two parts: the high 16 bits are
@@ -240,28 +243,32 @@ VMMouseClient_GetInput (PVMMOUSE_INPUT_DATA pvmmouseInput) {
     * case that indicates there's something wrong on the
     * host end, e.g. the VMMouse was disabled on the host-side.
     */
-   vmpc.in.vEbx = 0;
-   vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_STATUS;
-   VMMouseProto_SendCmd(&vmpc);
-   status = vmpc.out.vEax;
-   if ((status & VMMOUSE_ERROR) == VMMOUSE_ERROR) {
-      VMwareLog(("VMMouseClient_GetInput: VMMOUSE_ERROR status, abort!\n"));
-      return VMMOUSE_ERROR;
-   }
+    vmpc.in.vEbx    = 0;
+    vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_STATUS;
+    VMMouseProto_SendCmd(&vmpc);
+    status = vmpc.out.vEax;
+    if ((status & VMMOUSE_ERROR) == VMMOUSE_ERROR)
+    {
+        VMwareLog(("VMMouseClient_GetInput: VMMOUSE_ERROR status, abort!\n"));
+        return VMMOUSE_ERROR;
+    }
 
    /*
     * We don't use the status flags, just get the words
     */
-   numWords = status & 0x0000ffff;
+    numWords = status & 0x0000ffff;
 
-   if ((numWords % 4) != 0) {
-      VMwareLog(("VMMouseClient_GetInput: invalid status numWords, abort!\n"));
-      return (0);
-   }
+    if ((numWords % 4) != 0)
+    {
+        VMwareLog(
+            ("VMMouseClient_GetInput: invalid status numWords, abort!\n"));
+        return (0);
+    }
 
-   if (numWords == 0) {
-      return (0);
-   }
+    if (numWords == 0)
+    {
+        return (0);
+    }
 
    /*
     * The VMMouse uses a 4-dword packet protocol:
@@ -271,24 +278,23 @@ VMMouseClient_GetInput (PVMMOUSE_INPUT_DATA pvmmouseInput) {
     *	DWORD 3: Z position (relative)
     */
    /* Get 4 items at once */
-   vmpc.in.vEbx = 4;
-   vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_DATA;
-   VMMouseProto_SendCmd(&vmpc);
-   packetInfo = vmpc.out.vEax;
-   pvmmouseInput->Flags = (packetInfo & 0xffff0000) >> 16;
-   pvmmouseInput->Buttons = (packetInfo & 0x0000ffff);
+    vmpc.in.vEbx    = 4;
+    vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_DATA;
+    VMMouseProto_SendCmd(&vmpc);
+    packetInfo             = vmpc.out.vEax;
+    pvmmouseInput->Flags   = (packetInfo & 0xffff0000) >> 16;
+    pvmmouseInput->Buttons = (packetInfo & 0x0000ffff);
 
    /* Note that Z is always signed, and X/Y are signed in relative mode. */
-   pvmmouseInput->X = (int)vmpc.out.vEbx;
-   pvmmouseInput->Y = (int)vmpc.out.vEcx;
-   pvmmouseInput->Z = (int)vmpc.out.vEdx;
+    pvmmouseInput->X = (int)vmpc.out.vEbx;
+    pvmmouseInput->Y = (int)vmpc.out.vEcx;
+    pvmmouseInput->Z = (int)vmpc.out.vEdx;
 
    /*
     * Return number of packets (including this one) in queue.
     */
-   return (numWords >> 2);
+    return (numWords >> 2);
 }
-
 
 /*
  *----------------------------------------------------------------------------
@@ -311,14 +317,13 @@ VMMouseClient_GetInput (PVMMOUSE_INPUT_DATA pvmmouseInput) {
 void
 VMMouseClient_RequestRelative(void)
 {
-   VMMouseProtoCmd vmpc;
+    VMMouseProtoCmd vmpc;
 
-   VMwareLog(("VMMouseClient: requesting relative mode\n"));
-   vmpc.in.vEbx = VMMOUSE_CMD_REQUEST_RELATIVE;
-   vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_COMMAND;
-   VMMouseProto_SendCmd(&vmpc);
+    VMwareLog(("VMMouseClient: requesting relative mode\n"));
+    vmpc.in.vEbx    = VMMOUSE_CMD_REQUEST_RELATIVE;
+    vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_COMMAND;
+    VMMouseProto_SendCmd(&vmpc);
 }
-
 
 /*
  *----------------------------------------------------------------------------
@@ -341,10 +346,10 @@ VMMouseClient_RequestRelative(void)
 void
 VMMouseClient_RequestAbsolute(void)
 {
-   VMMouseProtoCmd vmpc;
+    VMMouseProtoCmd vmpc;
 
-   VMwareLog(("VMMouseClient: requesting absolute mode\n"));
-   vmpc.in.vEbx = VMMOUSE_CMD_REQUEST_ABSOLUTE;
-   vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_COMMAND;
-   VMMouseProto_SendCmd(&vmpc);
+    VMwareLog(("VMMouseClient: requesting absolute mode\n"));
+    vmpc.in.vEbx    = VMMOUSE_CMD_REQUEST_ABSOLUTE;
+    vmpc.in.command = VMMOUSE_PROTO_CMD_ABSPOINTER_COMMAND;
+    VMMouseProto_SendCmd(&vmpc);
 }

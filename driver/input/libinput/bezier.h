@@ -24,17 +24,18 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #ifndef BEZIER_H
-#define BEZIER_H
+#  define BEZIER_H
 
-#include <stdlib.h>
-#include <stdbool.h>
+#  include <stdlib.h>
+#  include <stdbool.h>
 
-struct bezier_control_point {
-	double x, y;
+struct bezier_control_point
+{
+    double x, y;
 };
 
 extern const struct bezier_control_point bezier_defaults[4];
@@ -64,8 +65,7 @@ extern const struct bezier_control_point bezier_defaults[4];
  *
  * @return true on success, false otherwise
  */
-bool
-cubic_bezier(const struct bezier_control_point controls[4],
-	     int *bezier,
-	     size_t bezier_sz);
+bool cubic_bezier(const struct bezier_control_point controls[4],
+                  int                              *bezier,
+                  size_t                            bezier_sz);
 #endif

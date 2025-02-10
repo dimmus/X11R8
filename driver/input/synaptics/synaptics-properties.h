@@ -79,7 +79,8 @@
 #define SYNAPTICS_PROP_BUTTONSCROLLING "Synaptics Button Scrolling"
 
 /* 8 bit (BOOL), 2 values, updown, leftright */
-#define SYNAPTICS_PROP_BUTTONSCROLLING_REPEAT "Synaptics Button Scrolling Repeat"
+#define SYNAPTICS_PROP_BUTTONSCROLLING_REPEAT \
+    "Synaptics Button Scrolling Repeat"
 
 /* 32 bit */
 #define SYNAPTICS_PROP_BUTTONSCROLLING_TIME "Synaptics Button Scrolling Time"
@@ -108,12 +109,14 @@
 #define SYNAPTICS_PROP_CIRCULAR_SCROLLING "Synaptics Circular Scrolling"
 
 /* FLOAT */
-#define SYNAPTICS_PROP_CIRCULAR_SCROLLING_DIST "Synaptics Circular Scrolling Distance"
+#define SYNAPTICS_PROP_CIRCULAR_SCROLLING_DIST \
+    "Synaptics Circular Scrolling Distance"
 
 /* 8 bit, valid values 0..8 (inclusive)
  * order: any edge, top, top + right, right, right + bottom, bottom, bottom +
  * left, left, left  + top */
-#define SYNAPTICS_PROP_CIRCULAR_SCROLLING_TRIGGER "Synaptics Circular Scrolling Trigger"
+#define SYNAPTICS_PROP_CIRCULAR_SCROLLING_TRIGGER \
+    "Synaptics Circular Scrolling Trigger"
 
 /* 8 bit (BOOL) */
 #define SYNAPTICS_PROP_CIRCULAR_PAD "Synaptics Circular Pad"
@@ -153,7 +156,8 @@
 #define SYNAPTICS_PROP_SOFTBUTTON_AREAS "Synaptics Soft Button Areas"
 
 /* 32 bit, 4 values, left, right, top, bottom */
-#define SYNAPTICS_PROP_SECONDARY_SOFTBUTTON_AREAS "Synaptics Secondary Soft Button Areas"
+#define SYNAPTICS_PROP_SECONDARY_SOFTBUTTON_AREAS \
+    "Synaptics Secondary Soft Button Areas"
 
 /* 32 Bit Integer, 2 values, horizontal hysteresis, vertical hysteresis */
 #define SYNAPTICS_PROP_NOISE_CANCELLATION "Synaptics Noise Cancellation"

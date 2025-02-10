@@ -24,7 +24,6 @@
  *	Peter Hutterer (peter.hutterer@redhat.com)
  */
 
-
 #ifndef _EVDEV_PROPERTIES_H_
 #define _EVDEV_PROPERTIES_H_
 
@@ -75,7 +74,8 @@
 /* CARD8 */
 #define EVDEV_PROP_THIRDBUTTON_BUTTON "Evdev Third Button Emulation Button"
 /* CARD32 */
-#define EVDEV_PROP_THIRDBUTTON_THRESHOLD "Evdev Third Button Emulation Threshold"
+#define EVDEV_PROP_THIRDBUTTON_THRESHOLD \
+    "Evdev Third Button Emulation Threshold"
 
 /* CARD8, 1 value,
    This property is initialized on devices that have multimedia keys on the

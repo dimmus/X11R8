@@ -26,18 +26,18 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include <misc.h>
 #include <xf86.h>
 #define NEED_XF86_TYPES 1
 #if !defined(DGUX)
-#include <xisb.h>
+#  include <xisb.h>
 #endif
 #include <xf86_OSproc.h>
 #include <xf86Xinput.h>
-#include <exevents.h>		/* Needed for InitValuator/Proximity stuff */
+#include <exevents.h>  /* Needed for InitValuator/Proximity stuff */
 #include "X11/keysym.h"
 #include <mipointer.h>
 
@@ -49,34 +49,26 @@
 #define MAXBUTTONS 3
 
 #if GET_ABI_MAJOR(ABI_XINPUT_VERSION) < 12
-#error "XINPUT ABI 12 required."
+#  error "XINPUT ABI 12 required."
 #endif
 /******************************************************************************
  * Function/Macro keys variables
  *****************************************************************************/
 
 static void
-BellProc(
-    int percent,
-    DeviceIntPtr pDev,
-    pointer ctrl,
-    int unused)
+BellProc(int percent, DeviceIntPtr pDev, pointer ctrl, int unused)
 {
     return;
 }
 
 static void
-KeyControlProc(
-    DeviceIntPtr pDev,
-    KeybdCtrl *ctrl)
+KeyControlProc(DeviceIntPtr pDev, KeybdCtrl *ctrl)
 {
     return;
 }
 
 static void
-PointerControlProc(
-    DeviceIntPtr dev,
-    PtrCtrl *ctrl)
+PointerControlProc(DeviceIntPtr dev, PtrCtrl *ctrl)
 {
     return;
 }
@@ -89,12 +81,12 @@ PointerControlProc(
 static int
 xf86VoidControlProc(DeviceIntPtr device, int what)
 {
-    InputInfoPtr pInfo;
+    InputInfoPtr  pInfo;
     unsigned char map[MAXBUTTONS + 1];
     unsigned char i;
-    Bool result;
-    Atom btn_labels[MAXBUTTONS] = {0};
-    Atom axes_labels[2] = {0};
+    Bool          result;
+    Atom          btn_labels[MAXBUTTONS] = { 0 };
+    Atom          axes_labels[2]         = { 0 };
 
     axes_labels[0] = XIGetKnownProperty(AXIS_LABEL_PROP_ABS_X);
     axes_labels[1] = XIGetKnownProperty(AXIS_LABEL_PROP_ABS_Y);
@@ -104,78 +96,87 @@ xf86VoidControlProc(DeviceIntPtr device, int what)
     btn_labels[2] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_RIGHT);
 
     pInfo = device->public.devicePrivate;
-    
+
     switch (what)
     {
-    case DEVICE_INIT:
-	device->public.on = FALSE;
+        case DEVICE_INIT:
+            device->public.on = FALSE;
 
-	for (i = 0; i < MAXBUTTONS; i++) {
-	    map[i + 1] = i + 1;
-	}
-	
-	if (InitButtonClassDeviceStruct(device,
-					MAXBUTTONS,
-					btn_labels,
-					map) == FALSE) {
-	  ErrorF("unable to allocate Button class device\n");
-	  return !Success;
-	}
+            for (i = 0; i < MAXBUTTONS; i++)
+            {
+                map[i + 1] = i + 1;
+            }
 
-	result = InitKeyboardDeviceStruct(device, NULL,
-					  BellProc, KeyControlProc);
-	if (!result) {
-	  ErrorF("unable to init keyboard device\n");
-	  return !Success;
-	}
+            if (InitButtonClassDeviceStruct(device,
+                                            MAXBUTTONS,
+                                            btn_labels,
+                                            map) == FALSE)
+            {
+                ErrorF("unable to allocate Button class device\n");
+                return !Success;
+            }
 
-	if (InitValuatorClassDeviceStruct(device,
-					  2,
-					  axes_labels,
-					  0,
-					  Absolute) == FALSE) {
-	  InitValuatorAxisStruct(device,
-				 0,
-				 axes_labels[0],
-				 0, /* min val */
-				 1, /* max val */
-				 1, /* resolution */
-				 0, /* min_res */
-				 1, /* max_res */
-				 Absolute);
-	  InitValuatorAxisStruct(device,
-				 1,
-				 axes_labels[1],
-				 0, /* min val */
-				 1, /* max val */
-				 1, /* resolution */
-				 0, /* min_res */
-				 1, /* max_res */
-				 Absolute);
-	  ErrorF("unable to allocate Valuator class device\n"); 
-	  return !Success;
-	}
-	else {
-	  /* allocate the motion history buffer if needed */
-	  xf86MotionHistoryAllocate(pInfo);
-	}
-	if (InitPtrFeedbackClassDeviceStruct(device, PointerControlProc) == FALSE) {
-	  ErrorF("unable to init pointer feedback class device\n"); 
-	  return !Success;
-	}
-	break;
+            result = InitKeyboardDeviceStruct(device,
+                                              NULL,
+                                              BellProc,
+                                              KeyControlProc);
+            if (!result)
+            {
+                ErrorF("unable to init keyboard device\n");
+                return !Success;
+            }
 
-    case DEVICE_ON:
-	device->public.on = TRUE;
-	break;
+            if (InitValuatorClassDeviceStruct(device,
+                                              2,
+                                              axes_labels,
+                                              0,
+                                              Absolute) == FALSE)
+            {
+                InitValuatorAxisStruct(device,
+                                       0,
+                                       axes_labels[0],
+                                       0, /* min val */
+                                       1, /* max val */
+                                       1, /* resolution */
+                                       0, /* min_res */
+                                       1, /* max_res */
+                                       Absolute);
+                InitValuatorAxisStruct(device,
+                                       1,
+                                       axes_labels[1],
+                                       0, /* min val */
+                                       1, /* max val */
+                                       1, /* resolution */
+                                       0, /* min_res */
+                                       1, /* max_res */
+                                       Absolute);
+                ErrorF("unable to allocate Valuator class device\n");
+                return !Success;
+            }
+            else
+            {
+      /* allocate the motion history buffer if needed */
+                xf86MotionHistoryAllocate(pInfo);
+            }
+            if (InitPtrFeedbackClassDeviceStruct(device, PointerControlProc) ==
+                FALSE)
+            {
+                ErrorF("unable to init pointer feedback class device\n");
+                return !Success;
+            }
+            break;
 
-    case DEVICE_OFF:
-    case DEVICE_CLOSE:
-	device->public.on = FALSE;
-	break;
+        case DEVICE_ON:
+            device->public.on = TRUE;
+            break;
 
-    default:
-	return BadValue;
+        case DEVICE_OFF:
+        case DEVICE_CLOSE:
+            device->public.on = FALSE;
+            break;
+
+        default:
+            return BadValue;
     }
     return Success;
 }
@@ -186,9 +187,7 @@ xf86VoidControlProc(DeviceIntPtr device, int what)
  * called when the driver is unloaded.
  */
 static void
-xf86VoidUninit(InputDriverPtr	drv,
-	       InputInfoPtr	pInfo,
-	       int		flags)
+xf86VoidUninit(InputDriverPtr drv, InputInfoPtr pInfo, int flags)
 {
     xf86VoidControlProc(pInfo->dev, DEVICE_OFF);
 }
@@ -199,31 +198,28 @@ xf86VoidUninit(InputDriverPtr	drv,
  * called when the module subsection is found in XF86Config
  */
 static int
-xf86VoidInit(InputDriverPtr	drv,
-	     InputInfoPtr	pInfo,
-	     int		flags)
+xf86VoidInit(InputDriverPtr drv, InputInfoPtr pInfo, int flags)
 {
     /* Initialise the InputInfoRec. */
-    pInfo->type_name = "Void";
+    pInfo->type_name      = "Void";
     pInfo->device_control = xf86VoidControlProc;
-    pInfo->read_input = NULL;
-    pInfo->control_proc = NULL;
-    pInfo->switch_mode = NULL;
-    pInfo->fd = -1;
+    pInfo->read_input     = NULL;
+    pInfo->control_proc   = NULL;
+    pInfo->switch_mode    = NULL;
+    pInfo->fd             = -1;
 
     return Success;
 }
 
-_X_EXPORT InputDriverRec VOID = {
-    .driverVersion		= 1,
-    .driverName			= "void",
-    .Identify			= NULL,
-    .PreInit			= xf86VoidInit,
-    .UnInit			= xf86VoidUninit,
-    .module			= NULL,
-    .default_options		= NULL,
+_X_EXPORT InputDriverRec VOID = { .driverVersion   = 1,
+                                  .driverName      = "void",
+                                  .Identify        = NULL,
+                                  .PreInit         = xf86VoidInit,
+                                  .UnInit          = xf86VoidUninit,
+                                  .module          = NULL,
+                                  .default_options = NULL,
 #if GET_ABI_MAJOR(ABI_XINPUT_VERSION) >= 21
-    .capabilities		= 0
+                                  .capabilities = 0
 #endif
 };
 
@@ -240,9 +236,8 @@ _X_EXPORT InputDriverRec VOID = {
  * called when the module subsection is found in XF86Config
  */
 static void
-xf86VoidUnplug(pointer	p)
-{
-}
+xf86VoidUnplug(pointer p)
+{}
 
 /*
  * xf86VoidPlug --
@@ -250,34 +245,29 @@ xf86VoidUnplug(pointer	p)
  * called when the module subsection is found in XF86Config
  */
 static pointer
-xf86VoidPlug(pointer	module,
-	    pointer	options,
-	    int		*errmaj,
-	    int		*errmin)
+xf86VoidPlug(pointer module, pointer options, int *errmaj, int *errmin)
 {
     xf86AddInputDriver(&VOID, module, 0);
 
     return module;
 }
 
-static XF86ModuleVersionInfo xf86VoidVersionRec =
-{
+static XF86ModuleVersionInfo xf86VoidVersionRec = {
     "void",
     MODULEVENDORSTRING,
     MODINFOSTRING1,
     MODINFOSTRING2,
     XORG_VERSION_CURRENT,
-    VOID_VERSION_MAJOR, VOID_VERSION_MINOR, VOID_VERSION_PATCHLEVEL,
+    VOID_VERSION_MAJOR,
+    VOID_VERSION_MINOR,
+    VOID_VERSION_PATCHLEVEL,
     ABI_CLASS_XINPUT,
     ABI_XINPUT_VERSION,
     MOD_CLASS_XINPUT,
-    {0, 0, 0, 0}		/* signature, to be patched into the file by */
-				/* a tool */
+    { 0, 0, 0, 0 }  /* signature, to be patched into the file by */
+                /* a tool */
 };
 
-_X_EXPORT XF86ModuleData voidModuleData = {
-    &xf86VoidVersionRec,
-    xf86VoidPlug,
-    xf86VoidUnplug
-};
-
+_X_EXPORT XF86ModuleData voidModuleData = { &xf86VoidVersionRec,
+                                            xf86VoidPlug,
+                                            xf86VoidUnplug };

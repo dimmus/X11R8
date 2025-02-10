@@ -22,18 +22,18 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include <xserver-properties.h>
 
 #ifndef AXIS_LABELS
-#define AXIS_LABELS
+#  define AXIS_LABELS
 
 /* Aligned with linux/input.h.
    Note that there are holes in the ABS_ range, these are simply replaced with
    MISC here */
-static const char* abs_labels[] = {
+static const char *abs_labels[] = {
     AXIS_LABEL_PROP_ABS_X,              /* 0x00 */
     AXIS_LABEL_PROP_ABS_Y,              /* 0x01 */
     AXIS_LABEL_PROP_ABS_Z,              /* 0x02 */
@@ -67,7 +67,7 @@ static const char* abs_labels[] = {
     AXIS_LABEL_PROP_ABS_MISC,           /* undefined */
     AXIS_LABEL_PROP_ABS_MISC,           /* undefined */
     AXIS_LABEL_PROP_ABS_VOLUME          /* 0x20 */
-    AXIS_LABEL_PROP_ABS_MISC,           /* undefined */
+        AXIS_LABEL_PROP_ABS_MISC,           /* undefined */
     AXIS_LABEL_PROP_ABS_MISC,           /* undefined */
     AXIS_LABEL_PROP_ABS_MISC,           /* undefined */
     AXIS_LABEL_PROP_ABS_MISC,           /* undefined */
@@ -94,28 +94,24 @@ static const char* abs_labels[] = {
     AXIS_LABEL_PROP_ABS_MT_BLOB_ID,     /* 0x38 */
     AXIS_LABEL_PROP_ABS_MT_TRACKING_ID, /* 0x39 */
     AXIS_LABEL_PROP_ABS_MT_PRESSURE,    /* 0x3a */
-#ifdef AXIS_LABEL_PROP_ABS_MT_DISTANCE
+#  ifdef AXIS_LABEL_PROP_ABS_MT_DISTANCE
     AXIS_LABEL_PROP_ABS_MT_DISTANCE,    /* 0x3b */
     AXIS_LABEL_PROP_ABS_MT_TOOL_X,      /* 0x3c */
     AXIS_LABEL_PROP_ABS_MT_TOOL_Y,      /* 0x3d */
-#endif /* AXIS_LABEL_PROP_ABS_MT_DISTANCE */
+#  endif /* AXIS_LABEL_PROP_ABS_MT_DISTANCE */
 };
 
-static const char* rel_labels[] = {
-    AXIS_LABEL_PROP_REL_X,
-    AXIS_LABEL_PROP_REL_Y,
-    AXIS_LABEL_PROP_REL_Z,
-    AXIS_LABEL_PROP_REL_RX,
-    AXIS_LABEL_PROP_REL_RY,
-    AXIS_LABEL_PROP_REL_RZ,
-    AXIS_LABEL_PROP_REL_HWHEEL,
-    AXIS_LABEL_PROP_REL_DIAL,
-    AXIS_LABEL_PROP_REL_WHEEL,
-    AXIS_LABEL_PROP_REL_MISC
+static const char *rel_labels[] = {
+    AXIS_LABEL_PROP_REL_X,      AXIS_LABEL_PROP_REL_Y,
+    AXIS_LABEL_PROP_REL_Z,      AXIS_LABEL_PROP_REL_RX,
+    AXIS_LABEL_PROP_REL_RY,     AXIS_LABEL_PROP_REL_RZ,
+    AXIS_LABEL_PROP_REL_HWHEEL, AXIS_LABEL_PROP_REL_DIAL,
+    AXIS_LABEL_PROP_REL_WHEEL,  AXIS_LABEL_PROP_REL_MISC
 };
 
-static const char* btn_labels[][16] = {
-    { /* BTN_MISC group                 offset 0x100*/
+static const char *btn_labels[][16] = {
+    {
+     /* BTN_MISC group                 offset 0x100*/
         BTN_LABEL_PROP_BTN_0,           /* 0x00 */
         BTN_LABEL_PROP_BTN_1,           /* 0x01 */
         BTN_LABEL_PROP_BTN_2,           /* 0x02 */
@@ -127,7 +123,8 @@ static const char* btn_labels[][16] = {
         BTN_LABEL_PROP_BTN_8,           /* 0x08 */
         BTN_LABEL_PROP_BTN_9            /* 0x09 */
     },
-    { /* BTN_MOUSE group                offset 0x110 */
+    {
+     /* BTN_MOUSE group                offset 0x110 */
         BTN_LABEL_PROP_BTN_LEFT,        /* 0x00 */
         BTN_LABEL_PROP_BTN_RIGHT,       /* 0x01 */
         BTN_LABEL_PROP_BTN_MIDDLE,      /* 0x02 */
@@ -137,7 +134,8 @@ static const char* btn_labels[][16] = {
         BTN_LABEL_PROP_BTN_BACK,        /* 0x06 */
         BTN_LABEL_PROP_BTN_TASK         /* 0x07 */
     },
-    { /* BTN_JOYSTICK group             offset 0x120 */
+    {
+     /* BTN_JOYSTICK group             offset 0x120 */
         BTN_LABEL_PROP_BTN_TRIGGER,     /* 0x00 */
         BTN_LABEL_PROP_BTN_THUMB,       /* 0x01 */
         BTN_LABEL_PROP_BTN_THUMB2,      /* 0x02 */
@@ -150,12 +148,11 @@ static const char* btn_labels[][16] = {
         BTN_LABEL_PROP_BTN_BASE4,       /* 0x09 */
         BTN_LABEL_PROP_BTN_BASE5,       /* 0x0a */
         BTN_LABEL_PROP_BTN_BASE6,       /* 0x0b */
-        NULL,
-        NULL,
-        NULL,
-        BTN_LABEL_PROP_BTN_DEAD         /* 0x0f */
+        NULL, NULL,
+     NULL, BTN_LABEL_PROP_BTN_DEAD         /* 0x0f */
     },
-    { /* BTN_GAMEPAD group              offset 0x130 */
+    {
+     /* BTN_GAMEPAD group              offset 0x130 */
         BTN_LABEL_PROP_BTN_A,           /* 0x00 */
         BTN_LABEL_PROP_BTN_B,           /* 0x01 */
         BTN_LABEL_PROP_BTN_C,           /* 0x02 */
@@ -172,7 +169,8 @@ static const char* btn_labels[][16] = {
         BTN_LABEL_PROP_BTN_THUMBL,      /* 0x0d */
         BTN_LABEL_PROP_BTN_THUMBR       /* 0x0e */
     },
-    { /* BTN_DIGI group                         offset 0x140 */
+    {
+     /* BTN_DIGI group                         offset 0x140 */
         BTN_LABEL_PROP_BTN_TOOL_PEN,            /* 0x00 */
         BTN_LABEL_PROP_BTN_TOOL_RUBBER,         /* 0x01 */
         BTN_LABEL_PROP_BTN_TOOL_BRUSH,          /* 0x02 */
@@ -181,15 +179,15 @@ static const char* btn_labels[][16] = {
         BTN_LABEL_PROP_BTN_TOOL_FINGER,         /* 0x05 */
         BTN_LABEL_PROP_BTN_TOOL_MOUSE,          /* 0x06 */
         BTN_LABEL_PROP_BTN_TOOL_LENS,           /* 0x07 */
-        NULL,
-        NULL,
-        BTN_LABEL_PROP_BTN_TOUCH,               /* 0x0a */
+        NULL, NULL,
+     BTN_LABEL_PROP_BTN_TOUCH,               /* 0x0a */
         BTN_LABEL_PROP_BTN_STYLUS,              /* 0x0b */
         BTN_LABEL_PROP_BTN_STYLUS2,             /* 0x0c */
         BTN_LABEL_PROP_BTN_TOOL_DOUBLETAP,      /* 0x0d */
         BTN_LABEL_PROP_BTN_TOOL_TRIPLETAP       /* 0x0e */
     },
-    { /* BTN_WHEEL group                        offset 0x150 */
+    {
+     /* BTN_WHEEL group                        offset 0x150 */
         BTN_LABEL_PROP_BTN_GEAR_DOWN,           /* 0x00 */
         BTN_LABEL_PROP_BTN_GEAR_UP              /* 0x01 */
     }

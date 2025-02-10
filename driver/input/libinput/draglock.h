@@ -24,43 +24,45 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #ifndef DRAGLOCK_H
-#define DRAGLOCK_H 1
+#  define DRAGLOCK_H 1
 
-#include <stdbool.h>
-#include <stdlib.h>
+#  include <stdbool.h>
+#  include <stdlib.h>
 
 /* 32 buttons are enough for everybody™
  * Note that this is the limit of physical buttons as well as the highest
  * allowed target button.
  */
-#define DRAGLOCK_MAX_BUTTONS 32
+#  define DRAGLOCK_MAX_BUTTONS 32
 
 enum draglock_mode
 {
-	DRAGLOCK_DISABLED,
-	DRAGLOCK_META,
-	DRAGLOCK_PAIRS
+    DRAGLOCK_DISABLED,
+    DRAGLOCK_META,
+    DRAGLOCK_PAIRS
 };
 
 enum draglock_button_state
 {
-	DRAGLOCK_BUTTON_STATE_NONE,
-	DRAGLOCK_BUTTON_STATE_DOWN_1,
-	DRAGLOCK_BUTTON_STATE_UP_1,
-	DRAGLOCK_BUTTON_STATE_DOWN_2,
+    DRAGLOCK_BUTTON_STATE_NONE,
+    DRAGLOCK_BUTTON_STATE_DOWN_1,
+    DRAGLOCK_BUTTON_STATE_UP_1,
+    DRAGLOCK_BUTTON_STATE_DOWN_2,
 };
 
 struct draglock
 {
-	enum draglock_mode mode;
-	int meta_button;			/* meta key to lock any button */
-	bool meta_state;			/* meta_button state */
-	unsigned int lock_pair[DRAGLOCK_MAX_BUTTONS + 1];/* specify a meta/lock pair */
-	enum draglock_button_state lock_state[DRAGLOCK_MAX_BUTTONS + 1];	/* state of any locked buttons */
+    enum draglock_mode mode;
+    int                meta_button;   /* meta key to lock any button */
+    bool               meta_state;   /* meta_button state */
+    unsigned int
+        lock_pair[DRAGLOCK_MAX_BUTTONS + 1];/* specify a meta/lock pair */
+    enum draglock_button_state
+        lock_state[DRAGLOCK_MAX_BUTTONS + 1]; /* state of any locked buttons */
 };
 
 /**
@@ -74,8 +76,7 @@ struct draglock
  *
  * @return 0 on success or nonzero on error
  */
-int
-draglock_init_from_string(struct draglock *dl, const char *config);
+int draglock_init_from_string(struct draglock *dl, const char *config);
 
 /**
  * Get the current drag lock mode.
@@ -89,15 +90,13 @@ draglock_init_from_string(struct draglock *dl, const char *config);
  * 'target' button number. A click of that button causes the target button
  * to be held logically down until the release of the second button click.
  */
-enum draglock_mode
-draglock_get_mode(const struct draglock *dl);
+enum draglock_mode draglock_get_mode(const struct draglock *dl);
 
 /**
  * @return the meta button number or 0 if the current mode is not
  * DRAGLOCK_META.
  */
-int
-draglock_get_meta(const struct draglock *dl);
+int draglock_get_meta(const struct draglock *dl);
 
 /**
  * Get the drag lock button mapping pairs. The array is filled with the
@@ -114,8 +113,7 @@ draglock_get_meta(const struct draglock *dl);
  * @return The number of valid elements in array or 0 if the current mode is
  * not DRAGLOCK_PAIRS
  */
-size_t
-draglock_get_pairs(const struct draglock *dl, int *array, size_t nelem);
+size_t draglock_get_pairs(const struct draglock *dl, int *array, size_t nelem);
 
 /**
  * Set the drag lock config to the DRAGLOCK_META mode, with the given
@@ -125,8 +123,7 @@ draglock_get_pairs(const struct draglock *dl, int *array, size_t nelem);
  *
  * @return 0 on success, nonzero otherwise
  */
-int
-draglock_set_meta(struct draglock *dl, int meta_button);
+int draglock_set_meta(struct draglock *dl, int meta_button);
 
 /**
  * Set the drag lock config to the DRAGLOCK_PAIRS mode. The array
@@ -141,8 +138,7 @@ draglock_set_meta(struct draglock *dl, int meta_button);
  *
  * @return 0 on successor nonzero otherwise
  */
-int
-draglock_set_pairs(struct draglock *dl, const int *array, size_t nelem);
+int draglock_set_pairs(struct draglock *dl, const int *array, size_t nelem);
 
 /**
  * Process the given button event through the drag lock state machine.
@@ -155,7 +151,6 @@ draglock_set_pairs(struct draglock *dl, const int *array, size_t nelem);
  *
  * @return 0 on success or 1 on error
  */
-int
-draglock_filter_button(struct draglock *dl, int *button, int *is_press);
+int draglock_filter_button(struct draglock *dl, int *button, int *is_press);
 
 #endif /* DRAGLOCK_H */

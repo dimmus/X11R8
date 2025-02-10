@@ -35,21 +35,23 @@
 typedef void *pointer;
 
 /* Mouse interface classes */
-#define MSE_NONE	0x00
-#define MSE_SERIAL	0x01		/* serial port */
-#define MSE_BUS		0x02		/* old bus mouse */
-#define MSE_PS2		0x04		/* standard read-only PS/2 */
-#define MSE_XPS2	0x08		/* extended PS/2 */
-#define MSE_AUTO	0x10		/* auto-detect (PnP) */
-#define MSE_MISC	0x20		/* The OS layer will identify the
+#define MSE_NONE   0x00
+#define MSE_SERIAL 0x01  /* serial port */
+#define MSE_BUS    0x02  /* old bus mouse */
+#define MSE_PS2    0x04  /* standard read-only PS/2 */
+#define MSE_XPS2   0x08  /* extended PS/2 */
+#define MSE_AUTO   0x10  /* auto-detect (PnP) */
+#define MSE_MISC \
+    0x20  /* The OS layer will identify the
 					 * specific protocol names that are
 					 * supported for this class. */
 
 /* Mouse Protocol IDs. */
-typedef enum {
+typedef enum
+{
     PROT_UNKNOWN = -2,
-    PROT_UNSUP = -1,		/* protocol is not supported */
-    PROT_MS = 0,
+    PROT_UNSUP   = -1,  /* protocol is not supported */
+    PROT_MS      = 0,
     PROT_MSC,
     PROT_MM,
     PROT_LOGI,
@@ -72,7 +74,7 @@ typedef enum {
     PROT_BM,
     PROT_AUTO,
     PROT_SYSMOUSE,
-    PROT_NUMPROTOS	/* This must always be last. */
+    PROT_NUMPROTOS /* This must always be last. */
 } MouseProtocolID;
 
 struct _MouseDevRec;
@@ -80,32 +82,37 @@ struct _MouseDevRec;
 typedef int (*GetInterfaceTypesProc)(void);
 typedef const char **(*BuiltinNamesProc)(void);
 typedef Bool (*CheckProtocolProc)(const char *protocol);
-typedef Bool (*BuiltinPreInitProc)(InputInfoPtr pInfo, const char *protocol,
-				   int flags);
+typedef Bool (*BuiltinPreInitProc)(InputInfoPtr pInfo,
+                                   const char  *protocol,
+                                   int          flags);
 typedef const char *(*DefaultProtocolProc)(void);
 typedef const char *(*SetupAutoProc)(InputInfoPtr pInfo, int *protoPara);
-typedef void (*SetResProc)(InputInfoPtr pInfo, const char* protocol, int rate,
-			   int res);
-typedef const char *(*FindDeviceProc)(InputInfoPtr pInfo, const char *protocol,
-				      int flags);
+typedef void (*SetResProc)(InputInfoPtr pInfo,
+                           const char  *protocol,
+                           int          rate,
+                           int          res);
+typedef const char *(*FindDeviceProc)(InputInfoPtr pInfo,
+                                      const char  *protocol,
+                                      int          flags);
 typedef const char *(*GuessProtocolProc)(InputInfoPtr pInfo, int flags);
 
 /*
  * OSMouseInfoRec is used to pass information from the OSMouse layer to the
  * OS-independent mouse driver.
  */
-typedef struct {
-	GetInterfaceTypesProc	SupportedInterfaces;
-	BuiltinNamesProc	BuiltinNames;
-	CheckProtocolProc	CheckProtocol;
-	BuiltinPreInitProc	PreInit;
-	DefaultProtocolProc	DefaultProtocol;
-	SetupAutoProc		SetupAuto;
-	SetResProc		SetPS2Res;
-	SetResProc		SetBMRes;
-	SetResProc		SetMiscRes;
-	FindDeviceProc		FindDevice;
-	GuessProtocolProc	GuessProtocol;
+typedef struct
+{
+    GetInterfaceTypesProc SupportedInterfaces;
+    BuiltinNamesProc      BuiltinNames;
+    CheckProtocolProc     CheckProtocol;
+    BuiltinPreInitProc    PreInit;
+    DefaultProtocolProc   DefaultProtocol;
+    SetupAutoProc         SetupAuto;
+    SetResProc            SetPS2Res;
+    SetResProc            SetBMRes;
+    SetResProc            SetMiscRes;
+    FindDeviceProc        FindDevice;
+    GuessProtocolProc     GuessProtocol;
 } OSMouseInfoRec, *OSMouseInfoPtr;
 
 /*
@@ -175,105 +182,110 @@ extern OSMouseInfoPtr xf86OSMouseInit(int flags);
  */
 
 /* Z axis mapping */
-#define MSE_NOZMAP	0
-#define MSE_MAPTOX	-1
-#define MSE_MAPTOY	-2
-#define MSE_MAPTOZ	-3
-#define MSE_MAPTOW	-4
+#define MSE_NOZMAP 0
+#define MSE_MAPTOX -1
+#define MSE_MAPTOY -2
+#define MSE_MAPTOZ -3
+#define MSE_MAPTOW -4
 
 /* Generalize for other axes. */
-#define MSE_NOAXISMAP	MSE_NOZMAP
+#define MSE_NOAXISMAP MSE_NOZMAP
 
-#define MSE_MAXBUTTONS	24
-#define MSE_DFLTBUTTONS	 3
+#define MSE_MAXBUTTONS  24
+#define MSE_DFLTBUTTONS 3
 
 /*
  * Mouse device record.  This is shared by the mouse driver and the OSMouse
  * layer.
  */
 
-typedef void (*checkMovementsProc)(InputInfoPtr,int, int);
+typedef void (*checkMovementsProc)(InputInfoPtr, int, int);
 typedef void (*autoProbeProc)(InputInfoPtr, Bool, Bool);
 typedef Bool (*collectDataProc)(struct _MouseDevRec *, unsigned char);
 typedef Bool (*dataGoodProc)(struct _MouseDevRec *);
 
-typedef void (*PostMseEventProc)(InputInfoPtr pInfo, int buttons,
-			      int dx, int dy, int dz, int dw);
+typedef void (*PostMseEventProc)(InputInfoPtr pInfo,
+                                 int          buttons,
+                                 int          dx,
+                                 int          dy,
+                                 int          dz,
+                                 int          dw);
 typedef void (*MouseCommonOptProc)(InputInfoPtr pInfo);
 
-typedef struct _MouseDevRec {
-    PtrCtrlProcPtr	Ctrl;
-    PostMseEventProc	PostEvent;
-    MouseCommonOptProc	CommonOptions;
-    DeviceIntPtr	device;
-    const char *	mseDevice;
-    const char *	protocol;
-    MouseProtocolID	protocolID;
-    MouseProtocolID	oldProtocolID; /* hack */
-    int			class;
-    int			mseModel;
-    int			baudRate;
-    int			oldBaudRate;
-    int			sampleRate;
-    int			lastButtons;
-    int			threshold;	/* acceleration */
-    int			num;
-    int			den;
-    int			buttons;	/* # of buttons */
-    int			emulateState;	/* automata state for 2 button mode */
-    Bool		emulate3Buttons;
-    Bool		emulate3ButtonsSoft;
-    int			emulate3Timeout;/* Timeout for 3 button emulation */
-    Bool		chordMiddle;
-    Bool                flipXY;
-    int                 invX;
-    int                 invY;
-    int			mouseFlags;	/* Flags to Clear after opening
+typedef struct _MouseDevRec
+{
+    PtrCtrlProcPtr     Ctrl;
+    PostMseEventProc   PostEvent;
+    MouseCommonOptProc CommonOptions;
+    DeviceIntPtr       device;
+    const char        *mseDevice;
+    const char        *protocol;
+    MouseProtocolID    protocolID;
+    MouseProtocolID    oldProtocolID; /* hack */
+    int class;
+    int                mseModel;
+    int                baudRate;
+    int                oldBaudRate;
+    int                sampleRate;
+    int                lastButtons;
+    int                threshold; /* acceleration */
+    int                num;
+    int                den;
+    int                buttons; /* # of buttons */
+    int                emulateState; /* automata state for 2 button mode */
+    Bool               emulate3Buttons;
+    Bool               emulate3ButtonsSoft;
+    int                emulate3Timeout;/* Timeout for 3 button emulation */
+    Bool               chordMiddle;
+    Bool               flipXY;
+    int                invX;
+    int                invY;
+    int                mouseFlags; /* Flags to Clear after opening
 					 * mouse dev */
-    int			truebuttons;	/* (not used)
+    int                truebuttons; /* (not used)
 					 * Arg to maintain before
 					 * emulate3buttons timer callback */
-    int			resolution;
-    int			negativeZ;	/* button mask */
-    int			positiveZ;	/* button mask */
-    int			negativeW;	/* button mask */
-    int			positiveW;	/* button mask */
-    pointer		buffer;		/* usually an XISBuffer* */
-    int			protoBufTail;
-    unsigned char	protoBuf[8];
-    unsigned char	protoPara[8];
-    unsigned char	inSync;		/* driver in sync with datastream */
-    pointer		mousePriv;	/* private area */
-    InputInfoPtr	pInfo;
-    int			origProtocolID;
-    const char *	origProtocol;
-    Bool		emulate3Pending;/* timer waiting */
-    CARD32		emulate3Expires;/* time to fire emulation code */
-    Bool		emulateWheel;
-    int			wheelInertia;
-    int			wheelButton;
-    int			negativeX;	/* Button values.  Unlike the Z and */
-    int			positiveX;	/* W equivalents, these are button  */
-    int			negativeY;	/* values rather than button masks. */
-    int			positiveY;
-    int			wheelYDistance;
-    int			wheelXDistance;
-    Bool		autoProbe;
-    checkMovementsProc  checkMovements;
-    autoProbeProc	autoProbeMouse;
-    collectDataProc	collectData;
-    dataGoodProc	dataGood;
-    int			angleOffset;
-    pointer		pDragLock;	/* drag lock area */
-    int			xisbscale;	/* buffer size for 1 event */
-    int			wheelButtonTimeout;/* Timeout for the wheel button emulation */
-    CARD32		wheelButtonExpires;
-    int			doubleClickSourceButtonMask;
-    int			doubleClickTargetButton;
-    int			doubleClickTargetButtonMask;
-    int			doubleClickOldSourceState;
-    int			lastMappedButtons;
-    int			buttonMap[MSE_MAXBUTTONS];
+    int                resolution;
+    int                negativeZ; /* button mask */
+    int                positiveZ; /* button mask */
+    int                negativeW; /* button mask */
+    int                positiveW; /* button mask */
+    pointer            buffer;  /* usually an XISBuffer* */
+    int                protoBufTail;
+    unsigned char      protoBuf[8];
+    unsigned char      protoPara[8];
+    unsigned char      inSync;  /* driver in sync with datastream */
+    pointer            mousePriv; /* private area */
+    InputInfoPtr       pInfo;
+    int                origProtocolID;
+    const char        *origProtocol;
+    Bool               emulate3Pending;/* timer waiting */
+    CARD32             emulate3Expires;/* time to fire emulation code */
+    Bool               emulateWheel;
+    int                wheelInertia;
+    int                wheelButton;
+    int                negativeX; /* Button values.  Unlike the Z and */
+    int                positiveX; /* W equivalents, these are button  */
+    int                negativeY; /* values rather than button masks. */
+    int                positiveY;
+    int                wheelYDistance;
+    int                wheelXDistance;
+    Bool               autoProbe;
+    checkMovementsProc checkMovements;
+    autoProbeProc      autoProbeMouse;
+    collectDataProc    collectData;
+    dataGoodProc       dataGood;
+    int                angleOffset;
+    pointer            pDragLock; /* drag lock area */
+    int                xisbscale; /* buffer size for 1 event */
+    int    wheelButtonTimeout;/* Timeout for the wheel button emulation */
+    CARD32 wheelButtonExpires;
+    int    doubleClickSourceButtonMask;
+    int    doubleClickTargetButton;
+    int    doubleClickTargetButtonMask;
+    int    doubleClickOldSourceState;
+    int    lastMappedButtons;
+    int    buttonMap[MSE_MAXBUTTONS];
 } MouseDevRec, *MouseDevPtr;
 
 #endif /* _XF86OSMOUSE_H_ */

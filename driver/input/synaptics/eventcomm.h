@@ -35,23 +35,23 @@
 #include "synproto.h"
 
 #ifndef input_event_sec
-#define input_event_sec time.tv_sec
+#  define input_event_sec time.tv_sec
 #endif
 
 #ifndef input_event_usec
-#define input_event_usec time.tv_usec
+#  define input_event_usec time.tv_usec
 #endif
 
 /* for auto-dev: */
 #define DEV_INPUT_EVENT "/dev/input"
-#define EVENT_DEV_NAME "event"
+#define EVENT_DEV_NAME  "event"
 
 struct eventcomm_proto_data;
 
 extern struct eventcomm_proto_data *EventProtoDataAlloc(int fd);
 
-extern Bool
-EventReadHwState(InputInfoPtr pInfo,
-                 struct CommData *comm, struct SynapticsHwState *hwRet);
+extern Bool EventReadHwState(InputInfoPtr             pInfo,
+                             struct CommData         *comm,
+                             struct SynapticsHwState *hwRet);
 
 #endif                          /* _EVENTCOMM_H_ */

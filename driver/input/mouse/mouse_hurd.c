@@ -22,7 +22,7 @@
  */
 
 #ifdef HAVE_XORG_CONFIG_H
-#include <xorg-config.h>
+#  include <xorg-config.h>
 #endif
 
 #include <xorg-server.h>
@@ -46,22 +46,25 @@
 #include <mach.h>
 #include <sys/ioctl.h>
 
-#define DEFAULT_MOUSE_DEV       "/dev/mouse"
+#define DEFAULT_MOUSE_DEV "/dev/mouse"
 
 typedef unsigned short kev_type;                /* kd event type */
-typedef unsigned char Scancode;
+typedef unsigned char  Scancode;
 
-struct mouse_motion {
+struct mouse_motion
+{
     short mm_deltaX;            /* units? */
     short mm_deltaY;
 };
 
-typedef struct {
-    kev_type type;                      /* see below */
+typedef struct
+{
+    kev_type       type;                      /* see below */
     struct timeval time;                /* timestamp */
+
     union {                             /* value associated with event */
-        boolean_t up;           /* MOUSE_LEFT .. MOUSE_RIGHT */
-        Scancode sc;            /* KEYBD_EVENT */
+        boolean_t           up;           /* MOUSE_LEFT .. MOUSE_RIGHT */
+        Scancode            sc;            /* KEYBD_EVENT */
         struct mouse_motion mmotion;    /* MOUSE_MOTION */
     } value;
 } kd_event;
@@ -69,13 +72,13 @@ typedef struct {
 /*
  * kd_event ID's.
  */
-#define MOUSE_LEFT      1               /* mouse left button up/down */
-#define MOUSE_MIDDLE    2
-#define MOUSE_RIGHT     3
-#define MOUSE_MOTION    4               /* mouse motion */
-#define KEYBD_EVENT     5               /* key up/down */
+#define MOUSE_LEFT   1               /* mouse left button up/down */
+#define MOUSE_MIDDLE 2
+#define MOUSE_RIGHT  3
+#define MOUSE_MOTION 4               /* mouse motion */
+#define KEYBD_EVENT  5               /* key up/down */
 
-#define NUMEVENTS       64
+#define NUMEVENTS 64
 
 /*
  * OsMouseReadInput --
@@ -84,46 +87,50 @@ typedef struct {
 static void
 OsMouseReadInput(InputInfoPtr pInfo)
 {
-    MouseDevPtr pMse;
+    MouseDevPtr     pMse;
     static kd_event eventList[NUMEVENTS];
-    static int remainder = 0;
-    int n, c;
-    kd_event *event = eventList;
-    unsigned char *pBuf;
+    static int      remainder = 0;
+    int             n, c;
+    kd_event       *event = eventList;
+    unsigned char  *pBuf;
 
     pMse = pInfo->private;
 
     XisbBlockDuration(pMse->buffer, -1);
     pBuf = (unsigned char *)eventList;
-    n = remainder;
+    n    = remainder;
     while (n < sizeof(eventList) && (c = XisbRead(pMse->buffer)) >= 0)
         pBuf[n++] = (unsigned char)c;
 
-    if (n == remainder)
-        return;
+    if (n == remainder) return;
 
     remainder = n % sizeof(kd_event);
     n /= sizeof(kd_event);
-    while( n-- ) {
+    while (n--)
+    {
         int buttons = pMse->lastButtons;
         int dx = 0, dy = 0;
-        switch (event->type) {
-        case MOUSE_RIGHT:
-            buttons  = (buttons & 6) |(event->value.up ? 0 : 1);
-            break;
-        case MOUSE_MIDDLE:
-            buttons  = (buttons & 5) |(event->value.up ? 0 : 2);
-            break;
-        case MOUSE_LEFT:
-            buttons  = (buttons & 3) |(event->value.up ? 0 : 4) ;
-            break;
-        case MOUSE_MOTION:
-            dx = event->value.mmotion.mm_deltaX;
-            dy = - event->value.mmotion.mm_deltaY;
-            break;
-        default:
-            LogMessageVerbSigSafe(X_ERROR, -1, "Bad mouse event (%d)\n",event->type);
-            continue;
+        switch (event->type)
+        {
+            case MOUSE_RIGHT:
+                buttons = (buttons & 6) | (event->value.up ? 0 : 1);
+                break;
+            case MOUSE_MIDDLE:
+                buttons = (buttons & 5) | (event->value.up ? 0 : 2);
+                break;
+            case MOUSE_LEFT:
+                buttons = (buttons & 3) | (event->value.up ? 0 : 4);
+                break;
+            case MOUSE_MOTION:
+                dx = event->value.mmotion.mm_deltaX;
+                dy = -event->value.mmotion.mm_deltaY;
+                break;
+            default:
+                LogMessageVerbSigSafe(X_ERROR,
+                                      -1,
+                                      "Bad mouse event (%d)\n",
+                                      event->type);
+                continue;
         }
         pMse->PostEvent(pInfo, buttons, dx, dy, 0, 0);
         ++event;
@@ -139,7 +146,7 @@ OsMousePreInit(InputInfoPtr pInfo, const char *protocol, int flags)
 
     /* This is called when the protocol is "OSMouse". */
 
-    pMse = pInfo->private;
+    pMse           = pInfo->private;
     pMse->protocol = protocol;
     xf86Msg(X_CONFIG, "%s: Protocol: %s\n", pInfo->name, protocol);
 
@@ -149,10 +156,12 @@ OsMousePreInit(InputInfoPtr pInfo, const char *protocol, int flags)
 
     /* Check if the device can be opened. */
     pInfo->fd = xf86OpenSerial(pInfo->options);
-    if (pInfo->fd == -1) {
+    if (pInfo->fd == -1)
+    {
         if (xf86GetAllowMouseOpenFail())
             xf86Msg(X_WARNING, "%s: cannot open input device\n", pInfo->name);
-        else {
+        else
+        {
             xf86Msg(X_ERROR, "%s: cannot open input device\n", pInfo->name);
             free(pMse);
             return FALSE;
@@ -174,18 +183,15 @@ static const char *
 FindDevice(InputInfoPtr pInfo, const char *protocol, int flags)
 {
     static const char path[] = DEFAULT_MOUSE_DEV;
-    int fd;
+    int               fd;
 
-    SYSCALL (fd = open(path, O_RDWR | O_NONBLOCK | O_EXCL));
+    SYSCALL(fd = open(path, O_RDWR | O_NONBLOCK | O_EXCL));
 
-    if (fd == -1)
-        return NULL;
+    if (fd == -1) return NULL;
 
     close(fd);
-    pInfo->options =
-        xf86AddNewOption(pInfo->options, "Device", path);
-    xf86Msg(X_INFO, "%s: Setting Device option to \"%s\"\n", pInfo->name,
-            path);
+    pInfo->options = xf86AddNewOption(pInfo->options, "Device", path);
+    xf86Msg(X_INFO, "%s: Setting Device option to \"%s\"\n", pInfo->name, path);
 
     return path;
 }
@@ -197,10 +203,7 @@ SupportedInterfaces(void)
     return MSE_SERIAL | MSE_BUS | MSE_PS2 | MSE_XPS2 | MSE_AUTO;
 }
 
-static const char *internalNames[] = {
-        "OSMouse",
-        NULL
-};
+static const char *internalNames[] = { "OSMouse", NULL };
 
 static const char **
 BuiltinNames(void)
@@ -214,8 +217,7 @@ CheckProtocol(const char *protocol)
     int i;
 
     for (i = 0; internalNames[i]; i++)
-        if (xf86NameCmp(protocol, internalNames[i]) == 0)
-            return TRUE;
+        if (xf86NameCmp(protocol, internalNames[i]) == 0) return TRUE;
     return FALSE;
 }
 
@@ -231,14 +233,12 @@ OSMouseInit(int flags)
     OSMouseInfoPtr p;
 
     p = calloc(1, sizeof(OSMouseInfoRec));
-    if (!p)
-        return NULL;
+    if (!p) return NULL;
     p->SupportedInterfaces = SupportedInterfaces;
-    p->BuiltinNames = BuiltinNames;
-    p->FindDevice = FindDevice;
-    p->DefaultProtocol = DefaultProtocol;
-    p->CheckProtocol = CheckProtocol;
-    p->PreInit = OsMousePreInit;
+    p->BuiltinNames        = BuiltinNames;
+    p->FindDevice          = FindDevice;
+    p->DefaultProtocol     = DefaultProtocol;
+    p->CheckProtocol       = CheckProtocol;
+    p->PreInit             = OsMousePreInit;
     return p;
 }
-

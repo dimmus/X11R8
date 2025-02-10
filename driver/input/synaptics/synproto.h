@@ -28,7 +28,7 @@
 #define _SYNPROTO_H_
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include <xorg-server.h>
@@ -39,18 +39,19 @@
 #include <xisb.h>
 
 #ifndef XI86_SERVER_FD
-#define XI86_SERVER_FD 0x20
+#  define XI86_SERVER_FD 0x20
 #endif
 
 struct _SynapticsPrivateRec;
 typedef struct _SynapticsPrivateRec SynapticsPrivate;
 
-enum SynapticsSlotState {
+enum SynapticsSlotState
+{
     SLOTSTATE_EMPTY = 0,        /* no slot in this cycle */
     SLOTSTATE_OPEN,             /* tracking ID received */
     SLOTSTATE_CLOSE,            /* tracking ID -1 received */
-    SLOTSTATE_OPEN_EMPTY,       /* previously had tracking id, no events in this read cycle */
-    SLOTSTATE_UPDATE,           /* had tracking id, other events in this cycle */
+    SLOTSTATE_OPEN_EMPTY, /* previously had tracking id, no events in this read cycle */
+    SLOTSTATE_UPDATE, /* had tracking id, other events in this cycle */
 };
 
 /* used to mark emulated hw button state */
@@ -59,15 +60,16 @@ enum SynapticsSlotState {
 /*
  * A structure to describe the state of the touchpad hardware (buttons and pad)
  */
-struct SynapticsHwState {
-    CARD32 millis;              /* Timestamp in milliseconds */
-    int x;                      /* X position of finger */
-    int y;                      /* Y position of finger */
-    int z;                      /* Finger pressure */
-    int cumulative_dx;          /* Cumulative delta X for clickpad dragging */
-    int cumulative_dy;          /* Cumulative delta Y for clickpad dragging */
-    int numFingers;
-    int fingerWidth;
+struct SynapticsHwState
+{
+    CARD32 millis; /* Timestamp in milliseconds */
+    int    x; /* X position of finger */
+    int    y; /* Y position of finger */
+    int    z; /* Finger pressure */
+    int    cumulative_dx; /* Cumulative delta X for clickpad dragging */
+    int    cumulative_dy; /* Cumulative delta Y for clickpad dragging */
+    int    numFingers;
+    int    fingerWidth;
 
     Bool left;
     Bool right;
@@ -75,61 +77,63 @@ struct SynapticsHwState {
     Bool down;
 
     Bool multi[8];
-    Bool middle;                /* Some ALPS touchpads have a middle button */
+    Bool middle; /* Some ALPS touchpads have a middle button */
 
-    int num_mt_mask;
-    ValuatorMask **mt_mask;
+    int                      num_mt_mask;
+    ValuatorMask           **mt_mask;
     enum SynapticsSlotState *slot_state;
 };
 
-struct CommData {
-    XISBuffer *buffer;
-    unsigned char protoBuf[6];  /* Buffer for Packet */
-    unsigned char lastByte;     /* Last read byte. Use for reset sequence detection. */
-    int outOfSync;              /* How many consecutive incorrect packets we
+struct CommData
+{
+    XISBuffer    *buffer;
+    unsigned char protoBuf[6]; /* Buffer for Packet */
+    unsigned char
+        lastByte; /* Last read byte. Use for reset sequence detection. */
+    int outOfSync; /* How many consecutive incorrect packets we
                                    have received */
     int protoBufTail;
 
     /* Used for keeping track of partial HwState updates. */
     struct SynapticsHwState *hwState;
-    Bool oneFinger;
-    Bool twoFingers;
-    Bool threeFingers;
+    Bool                     oneFinger;
+    Bool                     twoFingers;
+    Bool                     threeFingers;
 };
 
 struct _SynapticsParameters;
 
-struct SynapticsProtocolOperations {
-    Bool (*DeviceOnHook) (InputInfoPtr pInfo,
-                          struct _SynapticsParameters * para);
-    Bool (*DeviceOffHook) (InputInfoPtr pInfo);
-    Bool (*QueryHardware) (InputInfoPtr pInfo);
-    Bool (*ReadHwState) (InputInfoPtr pInfo,
-                         struct CommData * comm,
-                         struct SynapticsHwState * hwRet);
-    Bool (*AutoDevProbe) (InputInfoPtr pInfo, const char *device);
-    void (*ReadDevDimensions) (InputInfoPtr pInfo);
+struct SynapticsProtocolOperations
+{
+    Bool (*DeviceOnHook)(InputInfoPtr pInfo, struct _SynapticsParameters *para);
+    Bool (*DeviceOffHook)(InputInfoPtr pInfo);
+    Bool (*QueryHardware)(InputInfoPtr pInfo);
+    Bool (*ReadHwState)(InputInfoPtr             pInfo,
+                        struct CommData         *comm,
+                        struct SynapticsHwState *hwRet);
+    Bool (*AutoDevProbe)(InputInfoPtr pInfo, const char *device);
+    void (*ReadDevDimensions)(InputInfoPtr pInfo);
 };
 
 #ifdef BUILD_PS2COMM
 extern struct SynapticsProtocolOperations psaux_proto_operations;
 extern struct SynapticsProtocolOperations alps_proto_operations;
-#endif                          /* BUILD_PS2COMM */
+#endif /* BUILD_PS2COMM */
 #ifdef BUILD_EVENTCOMM
 extern struct SynapticsProtocolOperations event_proto_operations;
-#endif                          /* BUILD_EVENTCOMM */
+#endif /* BUILD_EVENTCOMM */
 #ifdef BUILD_PSMCOMM
 extern struct SynapticsProtocolOperations psm_proto_operations;
-#endif                          /* BUILD_PSMCOMM */
+#endif /* BUILD_PSMCOMM */
 
-extern struct SynapticsHwState *SynapticsHwStateAlloc(SynapticsPrivate * priv);
+extern struct SynapticsHwState *SynapticsHwStateAlloc(SynapticsPrivate *priv);
 extern void SynapticsHwStateFree(struct SynapticsHwState **hw);
-extern void SynapticsCopyHwState(struct SynapticsHwState *dst,
+extern void SynapticsCopyHwState(struct SynapticsHwState       *dst,
                                  const struct SynapticsHwState *src);
 extern void SynapticsResetHwState(struct SynapticsHwState *hw);
 extern void SynapticsResetTouchHwState(struct SynapticsHwState *hw,
-                                       Bool set_slot_empty);
+                                       Bool                     set_slot_empty);
 
 extern Bool SynapticsIsSoftButtonAreasValid(int *values);
 
-#endif                          /* _SYNPROTO_H_ */
+#endif /* _SYNPROTO_H_ */

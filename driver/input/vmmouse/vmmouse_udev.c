@@ -26,15 +26,15 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #ifdef HAVE_LIBUDEV
-#include <libudev.h>
-#include <stdlib.h>
-#include <string.h>
+#  include <libudev.h>
+#  include <stdlib.h>
+#  include <string.h>
 
-#define KERNEL_DEVNAME "VirtualPS/2 VMware VMMouse"
+#  define KERNEL_DEVNAME "VirtualPS/2 VMware VMMouse"
 
 /**
  * vmmouse_uses_kernel_driver - Check whether there's an active
@@ -46,16 +46,16 @@
  * Scans the input subsystem for devices matching KERNEL_DEVNAME. These
  * devices are assumed to be active vmmouse drivers.
  */
-int vmmouse_uses_kernel_driver(void)
+int
+vmmouse_uses_kernel_driver(void)
 {
-    struct udev *udev;
-    struct udev_enumerate *enumerate;
+    struct udev            *udev;
+    struct udev_enumerate  *enumerate;
     struct udev_list_entry *devices, *dev_list_entry;
-    struct udev_device *dev;
+    struct udev_device     *dev;
 
     udev = udev_new();
-    if (!udev)
-	return 1;
+    if (!udev) return 1;
 
     /*
      * Udev error return codes that are not caught immediately are
@@ -63,24 +63,21 @@ int vmmouse_uses_kernel_driver(void)
      * function calls following the failing call!
      */
     enumerate = udev_enumerate_new(udev);
-    if (udev_enumerate_add_match_subsystem(enumerate, "input"))
-	goto out_err;
-    if (udev_enumerate_scan_devices(enumerate))
-	goto out_err;
+    if (udev_enumerate_add_match_subsystem(enumerate, "input")) goto out_err;
+    if (udev_enumerate_scan_devices(enumerate)) goto out_err;
 
     devices = udev_enumerate_get_list_entry(enumerate);
-    udev_list_entry_foreach(dev_list_entry, devices) {
-	const char *path, *name;
+    udev_list_entry_foreach(dev_list_entry, devices)
+    {
+        const char *path, *name;
 
-	path = udev_list_entry_get_name(dev_list_entry);
-	dev = udev_device_new_from_syspath(udev, path);
-	if (!dev)
-	    goto out_err;
-	name = udev_device_get_sysattr_value(dev, "name");
-	if (name && !strcasecmp(name, KERNEL_DEVNAME))
-	    goto out_found;
+        path = udev_list_entry_get_name(dev_list_entry);
+        dev  = udev_device_new_from_syspath(udev, path);
+        if (!dev) goto out_err;
+        name = udev_device_get_sysattr_value(dev, "name");
+        if (name && !strcasecmp(name, KERNEL_DEVNAME)) goto out_found;
 
-	udev_device_unref(dev);
+        udev_device_unref(dev);
     }
 
     udev_enumerate_unref(enumerate);
@@ -88,17 +85,18 @@ int vmmouse_uses_kernel_driver(void)
 
     return 0;
 
-  out_found:
+out_found:
     udev_device_unref(dev);
-  out_err:
+out_err:
     udev_enumerate_unref(enumerate);
     udev_unref(udev);
 
     return 1;
 }
 #else
-int vmmouse_uses_kernel_driver(void)
+int
+vmmouse_uses_kernel_driver(void)
 {
-   return 0;
+    return 0;
 }
 #endif

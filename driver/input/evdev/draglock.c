@@ -33,7 +33,7 @@
 /* Draglock code */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 #include "evdev.h"
 
@@ -44,94 +44,122 @@
 
 #include <evdev-properties.h>
 
-static Atom prop_dlock     = 0; /* Drag lock buttons. */
+static Atom prop_dlock = 0; /* Drag lock buttons. */
 
 void EvdevDragLockLockButton(InputInfoPtr pInfo, unsigned int button);
-
 
 /* Setup and configuration code */
 void
 EvdevDragLockPreInit(InputInfoPtr pInfo)
 {
-    EvdevPtr pEvdev = (EvdevPtr)pInfo->private;
-    char *option_string = NULL;
-    int meta_button = 0;
-    int lock_button = 0;
-    char *next_num = NULL;
-    char *end_str = NULL;
-    BOOL pairs = FALSE;
+    EvdevPtr pEvdev        = (EvdevPtr)pInfo->private;
+    char    *option_string = NULL;
+    int      meta_button   = 0;
+    int      lock_button   = 0;
+    char    *next_num      = NULL;
+    char    *end_str       = NULL;
+    BOOL     pairs         = FALSE;
 
-    option_string = xf86CheckStrOption(pInfo->options, "DragLockButtons",NULL);
+    option_string = xf86CheckStrOption(pInfo->options, "DragLockButtons", NULL);
 
-    if (!option_string)
-        return;
+    if (!option_string) return;
 
     next_num = option_string;
 
     /* Loop until we hit the end of our option string */
-    while (next_num != NULL) {
+    while (next_num != NULL)
+    {
         lock_button = 0;
         meta_button = strtol(next_num, &end_str, 10);
 
         /* check to see if we found anything */
-        if (next_num != end_str) {
+        if (next_num != end_str)
+        {
             /* setup for the next number */
             next_num = end_str;
-        } else {
+        }
+        else
+        {
             /* we have nothing more to parse, drop out of the loop */
             next_num = NULL;
         }
 
         /* Check for a button to lock if we have a meta button */
-        if (meta_button != 0 && next_num != NULL ) {
+        if (meta_button != 0 && next_num != NULL)
+        {
             lock_button = strtol(next_num, &end_str, 10);
 
             /* check to see if we found anything */
-            if (next_num != end_str) {
+            if (next_num != end_str)
+            {
                 /* setup for the next number */
                 next_num = end_str;
-            } else {
+            }
+            else
+            {
                 /* we have nothing more to parse, drop out of the loop */
                 next_num = NULL;
             }
         }
 
         /* Ok, let the user know what we found on this look */
-        if (meta_button != 0) {
-            if (lock_button == 0) {
-                if (!pairs) {
+        if (meta_button != 0)
+        {
+            if (lock_button == 0)
+            {
+                if (!pairs)
+                {
                     /* We only have a meta button */
                     pEvdev->dragLock.meta = meta_button;
 
-                    xf86IDrvMsg(pInfo, X_CONFIG, "DragLockButtons : "
-                                "%i as meta\n", meta_button);
-                } else {
-                    xf86IDrvMsg(pInfo, X_ERROR, "DragLockButtons : "
+                    xf86IDrvMsg(pInfo,
+                                X_CONFIG,
+                                "DragLockButtons : "
+                                "%i as meta\n",
+                                meta_button);
+                }
+                else
+                {
+                    xf86IDrvMsg(pInfo,
+                                X_ERROR,
+                                "DragLockButtons : "
                                 "Incomplete pair specifying button pairs %s\n",
                                 option_string);
                 }
-            } else {
-
+            }
+            else
+            {
                 /* Do bounds checking to make sure we don't crash */
-                if ((meta_button <= EVDEV_MAXBUTTONS) && (meta_button >= 0 ) &&
-                    (lock_button <= EVDEV_MAXBUTTONS) && (lock_button >= 0)) {
-
-                    xf86IDrvMsg(pInfo, X_CONFIG,
+                if ((meta_button <= EVDEV_MAXBUTTONS) && (meta_button >= 0) &&
+                    (lock_button <= EVDEV_MAXBUTTONS) && (lock_button >= 0))
+                {
+                    xf86IDrvMsg(pInfo,
+                                X_CONFIG,
                                 "DragLockButtons : %i -> %i\n",
-                                meta_button, lock_button);
+                                meta_button,
+                                lock_button);
 
                     pEvdev->dragLock.lock_pair[meta_button - 1] = lock_button;
-                    pairs=TRUE;
-                } else {
+                    pairs                                       = TRUE;
+                }
+                else
+                {
                     /* Let the user know something was wrong
                        with this pair of buttons */
-                    xf86IDrvMsg(pInfo, X_CONFIG,"DragLockButtons : "
+                    xf86IDrvMsg(pInfo,
+                                X_CONFIG,
+                                "DragLockButtons : "
                                 "Invalid button pair %i -> %i\n",
-                                meta_button, lock_button);
+                                meta_button,
+                                lock_button);
                 }
             }
-        } else {
-            xf86IDrvMsg(pInfo, X_ERROR, "Found DragLockButtons "
+        }
+        else
+        {
+            xf86IDrvMsg(pInfo,
+                        X_ERROR,
+                        "Found DragLockButtons "
                         "with invalid lock button string : '%s'\n",
                         option_string);
 
@@ -140,8 +168,7 @@ EvdevDragLockPreInit(InputInfoPtr pInfo)
         }
 
         /* Check for end of string, to avoid annoying error */
-        if (next_num != NULL && *next_num == '\0')
-            next_num = NULL;
+        if (next_num != NULL && *next_num == '\0') next_num = NULL;
     }
 
     free(option_string);
@@ -152,7 +179,7 @@ void
 EvdevDragLockLockButton(InputInfoPtr pInfo, unsigned int button)
 {
     EvdevPtr pEvdev = (EvdevPtr)pInfo->private;
-    BOOL state = 0;
+    BOOL     state  = 0;
 
     /* update button state */
     state = pEvdev->dragLock.lock_state[button - 1] ? FALSE : TRUE;
@@ -174,21 +201,21 @@ EvdevDragLockFilterEvent(InputInfoPtr pInfo, unsigned int button, int value)
 {
     EvdevPtr pEvdev = (EvdevPtr)pInfo->private;
 
-    if (button == 0)
-        return FALSE;
+    if (button == 0) return FALSE;
 
     /* Do we have a single meta key or
        several button pairings? */
-    if (pEvdev->dragLock.meta != 0) {
-
-        if (pEvdev->dragLock.meta == button) {
-
+    if (pEvdev->dragLock.meta != 0)
+    {
+        if (pEvdev->dragLock.meta == button)
+        {
             /* setup up for button lock */
-            if (value)
-                pEvdev->dragLock.meta_state = TRUE;
+            if (value) pEvdev->dragLock.meta_state = TRUE;
 
             return TRUE;
-        } else if (pEvdev->dragLock.meta_state) { /* waiting to lock */
+        }
+        else if (pEvdev->dragLock.meta_state)
+        { /* waiting to lock */
 
             pEvdev->dragLock.meta_state = FALSE;
 
@@ -196,15 +223,16 @@ EvdevDragLockFilterEvent(InputInfoPtr pInfo, unsigned int button, int value)
 
             return TRUE;
         }
-    } else if (pEvdev->dragLock.lock_pair[button - 1] && value) {
+    }
+    else if (pEvdev->dragLock.lock_pair[button - 1] && value)
+    {
         /* A meta button in a meta/lock pair was pressed */
         EvdevDragLockLockButton(pInfo, pEvdev->dragLock.lock_pair[button - 1]);
         return TRUE;
     }
 
     /* Eat events for buttons that are locked */
-    if (pEvdev->dragLock.lock_state[button - 1])
-        return TRUE;
+    if (pEvdev->dragLock.lock_state[button - 1]) return TRUE;
 
     return FALSE;
 }
@@ -217,8 +245,10 @@ EvdevDragLockFilterEvent(InputInfoPtr pInfo, unsigned int button, int value)
  * i.e. to set bt 3 to draglock button 1, supply 0,0,1
  */
 static int
-EvdevDragLockSetProperty(DeviceIntPtr dev, Atom atom, XIPropertyValuePtr val,
-                         BOOL checkonly)
+EvdevDragLockSetProperty(DeviceIntPtr       dev,
+                         Atom               atom,
+                         XIPropertyValuePtr val,
+                         BOOL               checkonly)
 {
     InputInfoPtr pInfo  = dev->public.devicePrivate;
     EvdevPtr     pEvdev = pInfo->private;
@@ -227,52 +257,52 @@ EvdevDragLockSetProperty(DeviceIntPtr dev, Atom atom, XIPropertyValuePtr val,
     {
         int i;
 
-        if (val->format != 8 || val->type != XA_INTEGER)
-            return BadMatch;
+        if (val->format != 8 || val->type != XA_INTEGER) return BadMatch;
 
         /* Don't allow changes while a lock is active */
         if (pEvdev->dragLock.meta)
         {
-            if (pEvdev->dragLock.meta_state)
-                return BadAccess;
-        } else
+            if (pEvdev->dragLock.meta_state) return BadAccess;
+        }
+        else
         {
             for (i = 0; i < EVDEV_MAXBUTTONS; i++)
-                if (pEvdev->dragLock.lock_state[i])
-                    return BadValue;
+                if (pEvdev->dragLock.lock_state[i]) return BadValue;
         }
 
-        if (val->size == 0)
-            return BadMatch;
+        if (val->size == 0) return BadMatch;
         else if (val->size == 1)
         {
-            int meta = *((CARD8*)val->data);
-            if (meta > EVDEV_MAXBUTTONS)
-                return BadValue;
+            int meta = *((CARD8 *)val->data);
+            if (meta > EVDEV_MAXBUTTONS) return BadValue;
 
             if (!checkonly)
             {
                 pEvdev->dragLock.meta = meta;
-                memset(pEvdev->dragLock.lock_pair, 0, sizeof(pEvdev->dragLock.lock_pair));
+                memset(pEvdev->dragLock.lock_pair,
+                       0,
+                       sizeof(pEvdev->dragLock.lock_pair));
             }
-        } else if ((val->size % 2) == 0)
+        }
+        else if ((val->size % 2) == 0)
         {
-            CARD8* vals = (CARD8*)val->data;
+            CARD8 *vals = (CARD8 *)val->data;
 
             for (i = 0; i < val->size && i < EVDEV_MAXBUTTONS; i++)
-                if (vals[i] > EVDEV_MAXBUTTONS)
-                    return BadValue;
+                if (vals[i] > EVDEV_MAXBUTTONS) return BadValue;
 
             if (!checkonly)
             {
                 pEvdev->dragLock.meta = 0;
-                memset(pEvdev->dragLock.lock_pair, 0, sizeof(pEvdev->dragLock.lock_pair));
+                memset(pEvdev->dragLock.lock_pair,
+                       0,
+                       sizeof(pEvdev->dragLock.lock_pair));
 
                 for (i = 0; i < val->size && i < EVDEV_MAXBUTTONS; i += 2)
                     pEvdev->dragLock.lock_pair[vals[i] - 1] = vals[i + 1];
             }
-        } else
-            return BadMatch;
+        }
+        else return BadMatch;
     }
 
     return Success;
@@ -290,26 +320,39 @@ EvdevDragLockInitProperty(DeviceIntPtr dev)
     if (!dev->button) /* don't init prop for keyboards */
         return;
 
-    prop_dlock = MakeAtom(EVDEV_PROP_DRAGLOCK, strlen(EVDEV_PROP_DRAGLOCK), TRUE);
+    prop_dlock =
+        MakeAtom(EVDEV_PROP_DRAGLOCK, strlen(EVDEV_PROP_DRAGLOCK), TRUE);
     if (pEvdev->dragLock.meta)
     {
-        XIChangeDeviceProperty(dev, prop_dlock, XA_INTEGER, 8,
-                               PropModeReplace, 1, &pEvdev->dragLock.meta,
+        XIChangeDeviceProperty(dev,
+                               prop_dlock,
+                               XA_INTEGER,
+                               8,
+                               PropModeReplace,
+                               1,
+                               &pEvdev->dragLock.meta,
                                FALSE);
-    } else {
-        int highest = 0;
-        int i;
-        CARD8 pair[EVDEV_MAXBUTTONS] = {0};
+    }
+    else
+    {
+        int   highest = 0;
+        int   i;
+        CARD8 pair[EVDEV_MAXBUTTONS] = { 0 };
 
         for (i = 0; i < EVDEV_MAXBUTTONS; i++)
         {
-            if (pEvdev->dragLock.lock_pair[i])
-                highest = i;
+            if (pEvdev->dragLock.lock_pair[i]) highest = i;
             pair[i] = pEvdev->dragLock.lock_pair[i];
         }
 
-        XIChangeDeviceProperty(dev, prop_dlock, XA_INTEGER, 8, PropModeReplace,
-                               highest + 1, pair, FALSE);
+        XIChangeDeviceProperty(dev,
+                               prop_dlock,
+                               XA_INTEGER,
+                               8,
+                               PropModeReplace,
+                               highest + 1,
+                               pair,
+                               FALSE);
     }
 
     XISetDevicePropertyDeletable(dev, prop_dlock, FALSE);

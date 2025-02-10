@@ -25,7 +25,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include <evdev.h>
@@ -62,23 +62,25 @@
 #define FNMODE_PATH "/sys/module/hid_apple/parameters/fnmode"
 
 /* Taken from the kernel */
-#define USB_VENDOR_ID_APPLE                             0x05ac
-#define USB_DEVICE_ID_APPLE_ALU_MINI_ANSI               0x021d
-#define USB_DEVICE_ID_APPLE_ALU_MINI_ISO                0x021e
-#define USB_DEVICE_ID_APPLE_ALU_MINI_JIS                0x021f
-#define USB_DEVICE_ID_APPLE_ALU_ANSI                    0x0220
-#define USB_DEVICE_ID_APPLE_ALU_ISO                     0x0221
-#define USB_DEVICE_ID_APPLE_ALU_JIS                     0x0222
-#define USB_DEVICE_ID_APPLE_ALU_WIRELESS_ANSI           0x022c
-#define USB_DEVICE_ID_APPLE_ALU_WIRELESS_ISO            0x022d
-#define USB_DEVICE_ID_APPLE_ALU_WIRELESS_JIS            0x022e
-#define USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ANSI      0x0239
-#define USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ISO       0x023a
-#define USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_JIS       0x023b
+#define USB_VENDOR_ID_APPLE                        0x05ac
+#define USB_DEVICE_ID_APPLE_ALU_MINI_ANSI          0x021d
+#define USB_DEVICE_ID_APPLE_ALU_MINI_ISO           0x021e
+#define USB_DEVICE_ID_APPLE_ALU_MINI_JIS           0x021f
+#define USB_DEVICE_ID_APPLE_ALU_ANSI               0x0220
+#define USB_DEVICE_ID_APPLE_ALU_ISO                0x0221
+#define USB_DEVICE_ID_APPLE_ALU_JIS                0x0222
+#define USB_DEVICE_ID_APPLE_ALU_WIRELESS_ANSI      0x022c
+#define USB_DEVICE_ID_APPLE_ALU_WIRELESS_ISO       0x022d
+#define USB_DEVICE_ID_APPLE_ALU_WIRELESS_JIS       0x022e
+#define USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ANSI 0x0239
+#define USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ISO  0x023a
+#define USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_JIS  0x023b
 
-static int EvdevAppleGetProperty (DeviceIntPtr dev, Atom property);
-static int EvdevAppleSetProperty(DeviceIntPtr dev, Atom atom,
-                      XIPropertyValuePtr val, BOOL checkonly);
+static int EvdevAppleGetProperty(DeviceIntPtr dev, Atom property);
+static int EvdevAppleSetProperty(DeviceIntPtr       dev,
+                                 Atom               atom,
+                                 XIPropertyValuePtr val,
+                                 BOOL               checkonly);
 
 static Atom prop_fkeymode;
 static Bool fnmode_readonly; /* set if we can only read fnmode */
@@ -88,31 +90,31 @@ struct product_table
     unsigned int vendor;
     unsigned int product;
 } apple_keyboard_table[] = {
-    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_MINI_ANSI},
-    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_MINI_ISO},
-    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_MINI_JIS},
-    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_ANSI},
-    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_ISO},
-    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_JIS},
-    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_ANSI},
-    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_ISO},
-    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_JIS},
-    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ANSI},
-    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ISO},
-    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_JIS},
-    { 0, 0}
+    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_MINI_ANSI          },
+    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_MINI_ISO           },
+    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_MINI_JIS           },
+    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_ANSI               },
+    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_ISO                },
+    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_JIS                },
+    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_ANSI      },
+    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_ISO       },
+    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_JIS       },
+    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ANSI },
+    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ISO  },
+    { USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_JIS  },
+    { 0,                   0                                          }
 };
 
 /**
  * @return TRUE if the device matches a product in the given product table,
  *         FALSE otherwise
  */
-static Bool product_check(const struct product_table *t, int vendor, int product)
+static Bool
+product_check(const struct product_table *t, int vendor, int product)
 {
     while (t->vendor)
     {
-        if (vendor == t->vendor && product == t->product)
-            return TRUE;
+        if (vendor == t->vendor && product == t->product) return TRUE;
         t++;
     }
 
@@ -125,9 +127,9 @@ static Bool product_check(const struct product_table *t, int vendor, int product
 static int
 set_fnmode(enum fkeymode fkeymode)
 {
-    int fd;
+    int  fd;
     char mode;
-    int bytes_written;
+    int  bytes_written;
 
     if (fkeymode == FKEYMODE_UNKNOWN)
     {
@@ -136,8 +138,7 @@ set_fnmode(enum fkeymode fkeymode)
     }
 
     fd = open(FNMODE_PATH, O_WRONLY);
-    if (fd < 0)
-        return -1;
+    if (fd < 0) return -1;
 
     mode = (fkeymode == FKEYMODE_FKEYS) ? '2' : '1';
 
@@ -157,21 +158,19 @@ set_fnmode(enum fkeymode fkeymode)
 static enum fkeymode
 get_fnmode(void)
 {
-    int fd;
+    int  fd;
     char retvalue;
 
     fd = open(FNMODE_PATH, O_RDWR);
     if (fd < 0 && errno == EACCES)
     {
         fnmode_readonly = TRUE;
-        fd = open(FNMODE_PATH, O_RDONLY);
+        fd              = open(FNMODE_PATH, O_RDONLY);
     }
 
-    if (fd < 0)
-        goto err;
+    if (fd < 0) goto err;
 
-    if (read(fd, &retvalue, 1) != 1)
-        goto err;
+    if (read(fd, &retvalue, 1) != 1) goto err;
 
     if (retvalue != '0' && retvalue != '1' && retvalue != '2')
     {
@@ -186,18 +185,16 @@ get_fnmode(void)
     if (retvalue == '0')
     {
         if (fnmode_readonly)
-            xf86Msg(X_WARNING, "fnmode is disabled and read-only. Fn key will"
+            xf86Msg(X_WARNING,
+                    "fnmode is disabled and read-only. Fn key will"
                     "not toggle to multimedia keys.\n");
-        else
-            set_fnmode(FKEYMODE_FKEYS);
+        else set_fnmode(FKEYMODE_FKEYS);
     }
-
 
     return retvalue == '1' ? FKEYMODE_MMKEYS : FKEYMODE_FKEYS;
 
 err:
-    if (fd >= 0)
-        close(fd);
+    if (fd >= 0) close(fd);
     return FKEYMODE_UNKNOWN;
 }
 
@@ -205,53 +202,73 @@ err:
  * Set the property value to fkeymode. If the property doesn't exist,
  * initialize it.
  */
-static void set_fkeymode_property(InputInfoPtr pInfo, enum fkeymode fkeymode)
+static void
+set_fkeymode_property(InputInfoPtr pInfo, enum fkeymode fkeymode)
 {
-    DeviceIntPtr dev = pInfo->dev;
-    BOOL init = FALSE;
-    char data;
+    DeviceIntPtr dev  = pInfo->dev;
+    BOOL         init = FALSE;
+    char         data;
 
-    switch(fkeymode)
+    switch (fkeymode)
     {
-        case FKEYMODE_FKEYS: data = 0; break;
-        case FKEYMODE_MMKEYS: data = 1; break;
+        case FKEYMODE_FKEYS:
+            data = 0;
+            break;
+        case FKEYMODE_MMKEYS:
+            data = 1;
+            break;
         case FKEYMODE_UNKNOWN:
-            xf86IDrvMsg(pInfo, X_ERROR, "Failed to get fnmode (%s)\n", strerror(errno));
+            xf86IDrvMsg(pInfo,
+                        X_ERROR,
+                        "Failed to get fnmode (%s)\n",
+                        strerror(errno));
             return;
     }
 
-    if (!prop_fkeymode) {
-        init = TRUE;
-        prop_fkeymode = MakeAtom(EVDEV_PROP_FUNCTION_KEYS, strlen(EVDEV_PROP_FUNCTION_KEYS), TRUE);
+    if (!prop_fkeymode)
+    {
+        init          = TRUE;
+        prop_fkeymode = MakeAtom(EVDEV_PROP_FUNCTION_KEYS,
+                                 strlen(EVDEV_PROP_FUNCTION_KEYS),
+                                 TRUE);
     }
 
     /* Don't send an event if we're initializing the property */
-    XIChangeDeviceProperty(dev, prop_fkeymode, XA_INTEGER, 8,
-                           PropModeReplace, 1, &data, !init);
+    XIChangeDeviceProperty(dev,
+                           prop_fkeymode,
+                           XA_INTEGER,
+                           8,
+                           PropModeReplace,
+                           1,
+                           &data,
+                           !init);
 
     if (init)
     {
         XISetDevicePropertyDeletable(dev, prop_fkeymode, FALSE);
-        XIRegisterPropertyHandler(dev, EvdevAppleSetProperty, EvdevAppleGetProperty, NULL);
+        XIRegisterPropertyHandler(dev,
+                                  EvdevAppleSetProperty,
+                                  EvdevAppleGetProperty,
+                                  NULL);
     }
 }
-
 
 /**
  * Called when a client reads the property state.
  * Update with current kernel state, it may have changed behind our back.
  */
 static int
-EvdevAppleGetProperty (DeviceIntPtr dev, Atom property)
+EvdevAppleGetProperty(DeviceIntPtr dev, Atom property)
 {
     if (property == prop_fkeymode)
     {
-        InputInfoPtr pInfo  = dev->public.devicePrivate;
-        EvdevPtr     pEvdev = pInfo->private;
+        InputInfoPtr  pInfo  = dev->public.devicePrivate;
+        EvdevPtr      pEvdev = pInfo->private;
         enum fkeymode fkeymode;
 
         fkeymode = get_fnmode();
-        if (fkeymode != pEvdev->fkeymode) {
+        if (fkeymode != pEvdev->fkeymode)
+        {
             /* set internal copy first, so we don't write to the file in
              * SetProperty handler */
             pEvdev->fkeymode = fkeymode;
@@ -262,24 +279,23 @@ EvdevAppleGetProperty (DeviceIntPtr dev, Atom property)
 }
 
 static int
-EvdevAppleSetProperty(DeviceIntPtr dev, Atom atom,
-                      XIPropertyValuePtr val, BOOL checkonly)
+EvdevAppleSetProperty(DeviceIntPtr       dev,
+                      Atom               atom,
+                      XIPropertyValuePtr val,
+                      BOOL               checkonly)
 {
     InputInfoPtr pInfo  = dev->public.devicePrivate;
-    EvdevPtr pEvdev = pInfo->private;
+    EvdevPtr     pEvdev = pInfo->private;
 
     if (atom == prop_fkeymode)
     {
-        CARD8 v = *(CARD8*)val->data;
+        CARD8 v = *(CARD8 *)val->data;
 
-        if (val->format != 8 || val->type != XA_INTEGER)
-            return BadMatch;
+        if (val->format != 8 || val->type != XA_INTEGER) return BadMatch;
 
-        if (fnmode_readonly)
-            return BadAccess;
+        if (fnmode_readonly) return BadAccess;
 
-        if (v > 1)
-            return BadValue;
+        if (v > 1) return BadValue;
 
         if (!checkonly)
         {
@@ -298,8 +314,8 @@ EvdevAppleSetProperty(DeviceIntPtr dev, Atom atom,
 void
 EvdevAppleInitProperty(DeviceIntPtr dev)
 {
-    InputInfoPtr pInfo  = dev->public.devicePrivate;
-    EvdevPtr     pEvdev = pInfo->private;
+    InputInfoPtr  pInfo  = dev->public.devicePrivate;
+    EvdevPtr      pEvdev = pInfo->private;
     enum fkeymode fkeymode;
 
     if (!product_check(apple_keyboard_table,
@@ -307,7 +323,7 @@ EvdevAppleInitProperty(DeviceIntPtr dev)
                        libevdev_get_id_product(pEvdev->dev)))
         return;
 
-    fkeymode = get_fnmode();
+    fkeymode         = get_fnmode();
     pEvdev->fkeymode = fkeymode;
     set_fkeymode_property(pInfo, fkeymode);
 }

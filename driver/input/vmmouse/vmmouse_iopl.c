@@ -34,26 +34,27 @@
  *
  */
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 #ifdef HAVE_XORG_CONFIG_H
-#include <xorg-config.h>
+#  include <xorg-config.h>
 #endif
 
 #include <X11/Xdefs.h>
 #include <stdbool.h>
 
 #if defined(VMMOUSE_OS_BSD)
-#include <sys/types.h>
-#if defined(USE_I386_IOPL) || defined(USE_AMD64_IOPL) || defined(USE_X86_64_IOPL)
-#include <machine/sysarch.h>
-#if defined(USE_I386_IOPL)
-#define IOPL_NAME i386_iopl
-#elif defined(USE_AMD64_IOPL)
-#define IOPL_NAME amd64_iopl
-#elif defined(USE_X86_64_IOPL)
-#define IOPL_NAME x86_64_iopl
-#endif
+#  include <sys/types.h>
+#  if defined(USE_I386_IOPL) || defined(USE_AMD64_IOPL) || \
+      defined(USE_X86_64_IOPL)
+#    include <machine/sysarch.h>
+#    if defined(USE_I386_IOPL)
+#      define IOPL_NAME i386_iopl
+#    elif defined(USE_AMD64_IOPL)
+#      define IOPL_NAME amd64_iopl
+#    elif defined(USE_X86_64_IOPL)
+#      define IOPL_NAME x86_64_iopl
+#    endif
 /***************************************************************************/
 /* I/O Permissions section                                                 */
 /***************************************************************************/
@@ -62,11 +63,9 @@ static Bool ExtendedEnabled = false;
 Bool
 xf86EnableIO()
 {
-    if (ExtendedEnabled)
-	return false;
+    if (ExtendedEnabled) return false;
 
-    if (IOPL_NAME(1) < 0)
-	return false;
+    if (IOPL_NAME(1) < 0) return false;
 
     ExtendedEnabled = true;
     return true;
@@ -75,8 +74,7 @@ xf86EnableIO()
 void
 xf86DisableIO()
 {
-    if (!ExtendedEnabled)
-	return;
+    if (!ExtendedEnabled) return;
 
     IOPL_NAME(0);
 
@@ -84,22 +82,20 @@ xf86DisableIO()
     return;
 }
 
-#endif /* defined(USE_I386_IOPL) || defined(USE_AMD64_IOPL) || defined(USE_X86_64_IOPL) */
+#  endif /* defined(USE_I386_IOPL) || defined(USE_AMD64_IOPL) || defined(USE_X86_64_IOPL) */
 
-#ifdef USE_DEV_IO
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
+#  ifdef USE_DEV_IO
+#    include <sys/stat.h>
+#    include <fcntl.h>
+#    include <unistd.h>
 static int IoFd = -1;
 
 Bool
 xf86EnableIO()
 {
-    if (IoFd >= 0)
-	return true;
+    if (IoFd >= 0) return true;
 
-    if ((IoFd = open("/dev/io", O_RDWR)) == -1)
-	return false;
+    if ((IoFd = open("/dev/io", O_RDWR)) == -1) return false;
 
     return true;
 }
@@ -107,14 +103,13 @@ xf86EnableIO()
 void
 xf86DisableIO()
 {
-    if (IoFd < 0)
-	return;
+    if (IoFd < 0) return;
 
     close(IoFd);
     IoFd = -1;
     return;
 }
-#endif
+#  endif
 
 #elif defined(VMMOUSE_OS_GENERIC)
 
@@ -123,13 +118,12 @@ static Bool ExtendedEnabled = false;
 extern int ioperm(unsigned long __from, unsigned long __num, int __turn_on);
 extern int iopl(int __level);
 
-Bool xf86EnableIO(void)
+Bool
+xf86EnableIO(void)
 {
-    if (ExtendedEnabled)
-	return true;
+    if (ExtendedEnabled) return true;
 
-    if (ioperm(0, 1024, 1) || iopl(3))
-	return false;
+    if (ioperm(0, 1024, 1) || iopl(3)) return false;
 
     ExtendedEnabled = true;
     return true;
@@ -138,8 +132,7 @@ Bool xf86EnableIO(void)
 void
 xf86DisableIO(void)
 {
-    if (!ExtendedEnabled)
-	return;
+    if (!ExtendedEnabled) return;
 
     iopl(0);
     ioperm(0, 1024, 0);
@@ -150,48 +143,48 @@ xf86DisableIO(void)
 
 #elif defined(VMMOUSE_OS_SOLARIS)
 
-#ifdef __GNUC__
-#if defined(__sun) && !defined(sun)
-#define sun 1
-#endif
-#if defined(__SVR4) && !defined(SVR4)
-#define SVR4 1
-#endif
-#endif
+#  ifdef __GNUC__
+#    if defined(__sun) && !defined(sun)
+#      define sun 1
+#    endif
+#    if defined(__SVR4) && !defined(SVR4)
+#      define SVR4 1
+#    endif
+#  endif
 /*
  * The below sequence of includes is stolen from Xserver. If it doesn't work
  * for your setup, please propose a patch to fix it.
  */
-#include <sys/types.h>
-#include <errno.h>
-#if !(defined (sun) && defined (SVR4))
-#include <sys/immu.h>
-#include <sys/region.h>
-#include <sys/proc.h>
-#endif
-#include <sys/tss.h>
-#include <sys/sysi86.h>
-#if defined(SVR4) && !defined(sun)
-#include <sys/seg.h>
-#endif                          /* SVR4 && !sun */
+#  include <sys/types.h>
+#  include <errno.h>
+#  if !(defined(sun) && defined(SVR4))
+#    include <sys/immu.h>
+#    include <sys/region.h>
+#    include <sys/proc.h>
+#  endif
+#  include <sys/tss.h>
+#  include <sys/sysi86.h>
+#  if defined(SVR4) && !defined(sun)
+#    include <sys/seg.h>
+#  endif /* SVR4 && !sun */
 /* V86SC_IOPL was moved to <sys/sysi86.h> on Solaris 7 and later */
-#if !defined(V86SC_IOPL)        /* Solaris 7 or later? */
-#include <sys/v86.h>            /* Nope */
-#endif
-#if defined(sun) && (defined (__i386__) || defined(__i386) || defined(__x86))  && defined (SVR4)
-#include <sys/psw.h>
-#endif
+#  if !defined(V86SC_IOPL) /* Solaris 7 or later? */
+#    include <sys/v86.h> /* Nope */
+#  endif
+#  if defined(sun) &&                                             \
+      (defined(__i386__) || defined(__i386) || defined(__x86)) && \
+      defined(SVR4)
+#    include <sys/psw.h>
+#  endif
 
 static Bool ExtendedEnabled = false;
 
 Bool
 xf86EnableIO(void)
 {
-    if (ExtendedEnabled)
-	return true;
+    if (ExtendedEnabled) return true;
 
-    if (sysi86(SI86V86, V86SC_IOPL, PS_IOPL) < 0)
-	return false;
+    if (sysi86(SI86V86, V86SC_IOPL, PS_IOPL) < 0) return false;
 
     ExtendedEnabled = true;
 
@@ -201,8 +194,7 @@ xf86EnableIO(void)
 void
 xf86DisableIO(void)
 {
-    if(!ExtendedEnabled)
-	return;
+    if (!ExtendedEnabled) return;
 
     sysi86(SI86V86, V86SC_IOPL, 0);
 

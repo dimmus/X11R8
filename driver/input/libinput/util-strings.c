@@ -39,23 +39,23 @@
 static const char *
 next_word(const char **state, size_t *len, const char *separators)
 {
-	const char *next = *state;
-	size_t l;
+    const char *next = *state;
+    size_t      l;
 
-	if (!*next)
-		return NULL;
+    if (!*next) return NULL;
 
-	next += strspn(next, separators);
-	if (!*next) {
-		*state = next;
-		return NULL;
-	}
+    next += strspn(next, separators);
+    if (!*next)
+    {
+        *state = next;
+        return NULL;
+    }
 
-	l = strcspn(next, separators);
-	*state = next + l;
-	*len = l;
+    l      = strcspn(next, separators);
+    *state = next + l;
+    *len   = l;
 
-	return next;
+    return next;
 }
 
 /**
@@ -66,26 +66,27 @@ next_word(const char **state, size_t *len, const char *separators)
  *
  * @return A null-terminated string array or NULL on errors
  */
-char**
+char **
 strv_from_argv(int argc, char **argv)
 {
-	char **strv = NULL;
+    char **strv = NULL;
 
-	assert(argc >= 0);
+    assert(argc >= 0);
 
-	if (argc == 0)
-		return NULL;
+    if (argc == 0) return NULL;
 
-	strv = zalloc((argc + 1) * sizeof *strv);
-	for (int i = 0; i < argc; i++) {
-		char *copy = safe_strdup(argv[i]);
-		if (!copy) {
-			strv_free(strv);
-			return NULL;
-		}
-		strv[i] = copy;
-	}
-	return strv;
+    strv = zalloc((argc + 1) * sizeof *strv);
+    for (int i = 0; i < argc; i++)
+    {
+        char *copy = safe_strdup(argv[i]);
+        if (!copy)
+        {
+            strv_free(strv);
+            return NULL;
+        }
+        strv[i] = copy;
+    }
+    return strv;
 }
 
 /**
@@ -108,38 +109,41 @@ strv_from_argv(int argc, char **argv)
 char **
 strv_from_string(const char *in, const char *separators, size_t *num_elements)
 {
-	assert(in != NULL);
+    assert(in != NULL);
 
-	const char *s = in;
-	size_t l, nelems = 0;
-	while (next_word(&s, &l, separators) != NULL)
-		nelems++;
+    const char *s = in;
+    size_t      l, nelems = 0;
+    while (next_word(&s, &l, separators) != NULL)
+        nelems++;
 
-	if (nelems == 0) {
-		*num_elements = 0;
-		return NULL;
-	}
+    if (nelems == 0)
+    {
+        *num_elements = 0;
+        return NULL;
+    }
 
-	size_t strv_len = nelems + 1; /* NULL-terminated */
-	char **strv = zalloc(strv_len * sizeof *strv);
+    size_t strv_len = nelems + 1; /* NULL-terminated */
+    char **strv     = zalloc(strv_len * sizeof *strv);
 
-	size_t idx = 0;
-	const char *word;
-	s = in;
-	while ((word = next_word(&s, &l, separators)) != NULL) {
-		char *copy = strndup(word, l);
-		if (!copy) {
-			strv_free(strv);
-			*num_elements = 0;
-			return NULL;
-		}
+    size_t      idx = 0;
+    const char *word;
+    s = in;
+    while ((word = next_word(&s, &l, separators)) != NULL)
+    {
+        char *copy = strndup(word, l);
+        if (!copy)
+        {
+            strv_free(strv);
+            *num_elements = 0;
+            return NULL;
+        }
 
-		strv[idx++] = copy;
-	}
+        strv[idx++] = copy;
+    }
 
-	*num_elements = nelems;
+    *num_elements = nelems;
 
-	return strv;
+    return strv;
 }
 
 /**
@@ -159,37 +163,36 @@ strv_from_string(const char *in, const char *separators, size_t *num_elements)
 char *
 strv_join(char **strv, const char *joiner)
 {
-	char **s;
-	char *str;
-	size_t slen = 0;
-	size_t count = 0;
+    char **s;
+    char  *str;
+    size_t slen  = 0;
+    size_t count = 0;
 
-	if (!strv || !joiner)
-		return NULL;
+    if (!strv || !joiner) return NULL;
 
-	if (strv[0] == NULL)
-		return NULL;
+    if (strv[0] == NULL) return NULL;
 
-	for (s = strv, count = 0; *s; s++, count++) {
-		slen += strlen(*s);
-	}
+    for (s = strv, count = 0; *s; s++, count++)
+    {
+        slen += strlen(*s);
+    }
 
-	assert(slen < 1000);
-	assert(strlen(joiner) < 1000);
-	assert(count > 0);
-	assert(count < 100);
+    assert(slen < 1000);
+    assert(strlen(joiner) < 1000);
+    assert(count > 0);
+    assert(count < 100);
 
-	slen += (count - 1) * strlen(joiner);
+    slen += (count - 1) * strlen(joiner);
 
-	str = zalloc(slen + 1); /* trailing \0 */
-	for (s = strv; *s; s++) {
-		strcat(str, *s);
-		--count;
-		if (count > 0)
-			strcat(str, joiner);
-	}
+    str = zalloc(slen + 1); /* trailing \0 */
+    for (s = strv; *s; s++)
+    {
+        strcat(str, *s);
+        --count;
+        if (count > 0) strcat(str, joiner);
+    }
 
-	return str;
+    return str;
 }
 
 /**
@@ -200,19 +203,16 @@ strv_join(char **strv, const char *joiner)
 const char *
 safe_basename(const char *filename)
 {
-	const char *basename;
+    const char *basename;
 
-	if (*filename == '\0')
-		return NULL;
+    if (*filename == '\0') return NULL;
 
-	basename = strrchr(filename, '/');
-	if (basename == NULL)
-		return filename;
+    basename = strrchr(filename, '/');
+    if (basename == NULL) return filename;
 
-	if (*(basename + 1) == '\0')
-		return NULL;
+    if (*(basename + 1) == '\0') return NULL;
 
-	return basename + 1;
+    return basename + 1;
 }
 
 /**
@@ -229,15 +229,12 @@ safe_basename(const char *filename)
 char *
 trunkname(const char *filename)
 {
-	const char *base = safe_basename(filename);
-	char *suffix;
+    const char *base = safe_basename(filename);
+    char       *suffix;
 
-	if (base == NULL)
-		return safe_strdup("");
+    if (base == NULL) return safe_strdup("");
 
-	suffix = rindex(base, '.');
-	if (suffix == NULL)
-		return safe_strdup(base);
-	else
-		return strndup(base, suffix-base);
+    suffix = rindex(base, '.');
+    if (suffix == NULL) return safe_strdup(base);
+    else return strndup(base, suffix - base);
 }

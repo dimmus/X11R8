@@ -31,7 +31,7 @@
 /* Middle mouse button emulation code. */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include "evdev.h"
@@ -91,102 +91,101 @@ static Atom prop_mbbuton   = 0; /* Middle button target button property */
  */
 static signed char stateTab[11][5][3] = {
 /* 0 ground */
-  {
-    {  0,  0,  0 },   /* nothing -> ground (no change) */
-    {  0,  0,  1 },   /* left -> delayed left */
-    {  0,  0,  2 },   /* right -> delayed right */
-    {  2,  0,  3 },   /* left & right (middle press) -> pressed middle */
-    {  0,  0, -1 }    /* timeout N/A */
-  },
+    {
+     { 0, 0, 0 },                                     /* nothing -> ground (no change) */
+        { 0, 0, 1 },           /* left -> delayed left */
+        { 0, 0, 2 },            /* right -> delayed right */
+        { 2, 0, 3 },            /* left & right (middle press) -> pressed middle */
+        { 0, 0, -1 }    /* timeout N/A */
+    },
 /* 1 delayed left */
-  {
-    {  1, -1,  0 },   /* nothing (left event) -> ground */
-    {  0,  0,  1 },   /* left -> delayed left (no change) */
-    {  1, -1,  2 },   /* right (left event) -> delayed right */
-    {  2,  0,  3 },   /* left & right (middle press) -> pressed middle */
-    {  1,  0,  4 },   /* timeout (left press) -> pressed left */
-  },
+    {
+     { 1, -1, 0 },                                    /* nothing (left event) -> ground */
+        { 0, 0, 1 },          /* left -> delayed left (no change) */
+        { 1, -1, 2 },          /* right (left event) -> delayed right */
+        { 2, 0, 3 },          /* left & right (middle press) -> pressed middle */
+        { 1, 0, 4 },                              /* timeout (left press) -> pressed left */
+    },
 /* 2 delayed right */
-  {
-    {  3, -3,  0 },   /* nothing (right event) -> ground */
-    {  3, -3,  1 },   /* left (right event) -> delayed left (no change) */
-    {  0,  0,  2 },   /* right -> delayed right (no change) */
-    {  2,  0,  3 },   /* left & right (middle press) -> pressed middle */
-    {  3,  0,  5 },   /* timeout (right press) -> pressed right */
-  },
+    {
+     { 3, -3, 0 },                                                /* nothing (right event) -> ground */
+        { 3, -3, 1 },                              /* left (right event) -> delayed left (no change) */
+        { 0, 0, 2 },                              /* right -> delayed right (no change) */
+        { 2, 0, 3 },                                                   /* left & right (middle press) -> pressed middle */
+        { 3, 0, 5 },                                                                       /* timeout (right press) -> pressed right */
+    },
 /* 3 pressed middle */
-  {
-    { -2,  0,  0 },   /* nothing (middle release) -> ground */
-    {  0,  0,  7 },   /* left -> released right */
-    {  0,  0,  6 },   /* right -> released left */
-    {  0,  0,  3 },   /* left & right -> pressed middle (no change) */
-    {  0,  0, -1 },   /* timeout N/A */
-  },
+    {
+     { -2, 0, 0 }, /* nothing (middle release) -> ground */
+        { 0, 0, 7 },                                          /* left -> released right */
+        { 0, 0, 6 },                                                   /* right -> released left */
+        { 0, 0, 3 },                                                                                   /* left & right -> pressed middle (no change) */
+        { 0, 0, -1 }, /* timeout N/A */
+    },
 /* 4 pressed left */
-  {
-    { -1,  0,  0 },   /* nothing (left release) -> ground */
-    {  0,  0,  4 },   /* left -> pressed left (no change) */
-    { -1,  0,  2 },   /* right (left release) -> delayed right */
-    {  3,  0, 10 },   /* left & right (right press) -> pressed both */
-    {  0,  0, -1 },   /* timeout N/A */
-  },
+    {
+     { -1, 0, 0 },                            /* nothing (left release) -> ground */
+        { 0, 0, 4 }, /* left -> pressed left (no change) */
+        { -1, 0, 2 },                                                               /* right (left release) -> delayed right */
+        { 3, 0, 10 },  /* left & right (right press) -> pressed both */
+        { 0, 0, -1 },          /* timeout N/A */
+    },
 /* 5 pressed right */
-  {
-    { -3,  0,  0 },   /* nothing (right release) -> ground */
-    { -3,  0,  1 },   /* left (right release) -> delayed left */
-    {  0,  0,  5 },   /* right -> pressed right (no change) */
-    {  1,  0, 10 },   /* left & right (left press) -> pressed both */
-    {  0,  0, -1 },   /* timeout N/A */
-  },
+    {
+     { -3, 0, 0 },                            /* nothing (right release) -> ground */
+        { -3, 0, 1 }, /* left (right release) -> delayed left */
+        { 0, 0, 5 }, /* right -> pressed right (no change) */
+        { 1, 0, 10 },                            /* left & right (left press) -> pressed both */
+        { 0, 0, -1 },                                                 /* timeout N/A */
+    },
 /* 6 released left */
-  {
-    { -2,  0,  0 },   /* nothing (middle release) -> ground */
-    { -2,  0,  1 },   /* left (middle release) -> delayed left */
-    {  0,  0,  6 },   /* right -> released left (no change) */
-    {  1,  0,  8 },   /* left & right (left press) -> repressed left */
-    {  0,  0, -1 },   /* timeout N/A */
-  },
+    {
+     { -2, 0, 0 },                             /* nothing (middle release) -> ground */
+        { -2, 0, 1 },  /* left (middle release) -> delayed left */
+        { 0, 0, 6 },  /* right -> released left (no change) */
+        { 1, 0, 8 },   /* left & right (left press) -> repressed left */
+        { 0, 0, -1 },   /* timeout N/A */
+    },
 /* 7 released right */
-  {
-    { -2,  0,  0 },   /* nothing (middle release) -> ground */
-    {  0,  0,  7 },   /* left -> released right (no change) */
-    { -2,  0,  2 },   /* right (middle release) -> delayed right */
-    {  3,  0,  9 },   /* left & right (right press) -> repressed right */
-    {  0,  0, -1 },   /* timeout N/A */
-  },
+    {
+     { -2, 0, 0 },                            /* nothing (middle release) -> ground */
+        { 0, 0, 7 },  /* left -> released right (no change) */
+        { -2, 0, 2 },   /* right (middle release) -> delayed right */
+        { 3, 0, 9 },   /* left & right (right press) -> repressed right */
+        { 0, 0, -1 },   /* timeout N/A */
+    },
 /* 8 repressed left */
-  {
-    { -2, -1,  0 },   /* nothing (middle release, left release) -> ground */
-    { -2,  0,  4 },   /* left (middle release) -> pressed left */
-    { -1,  0,  6 },   /* right (left release) -> released left */
-    {  0,  0,  8 },   /* left & right -> repressed left (no change) */
-    {  0,  0, -1 },   /* timeout N/A */
-  },
-/* 9 repressed right */
-  {
-    { -2, -3,  0 },   /* nothing (middle release, right release) -> ground */
-    { -3,  0,  7 },   /* left (right release) -> released right */
-    { -2,  0,  5 },   /* right (middle release) -> pressed right */
-    {  0,  0,  9 },   /* left & right -> repressed right (no change) */
-    {  0,  0, -1 },   /* timeout N/A */
-  },
-/* 10 pressed both */
-  {
-    { -1, -3,  0 },   /* nothing (left release, right release) -> ground */
-    { -3,  0,  4 },   /* left (right release) -> pressed left */
-    { -1,  0,  5 },   /* right (left release) -> pressed right */
-    {  0,  0, 10 },   /* left & right -> pressed both (no change) */
-    {  0,  0, -1 },   /* timeout N/A */
-  },
+    {
+     { -2, -1, 0 },                                    /* nothing (middle release, left release) -> ground */
+        { -2, 0, 4 },          /* left (middle release) -> pressed left */
+        { -1, 0, 6 },          /* right (left release) -> released left */
+        { 0, 0, 8 }, /* left & right -> repressed left (no change) */
+        { 0, 0, -1 }, /* timeout N/A */
+    },
+    /* 9 repressed right */
+    {
+     { -2, -3, 0 },                                                /* nothing (middle release, right release) -> ground */
+        { -3, 0, 7 },                             /* left (right release) -> released right */
+        { -2, 0, 5 },                             /* right (middle release) -> pressed right */
+        { 0, 0, 9 }, /* left & right -> repressed right (no change) */
+        { 0, 0, -1 }, /* timeout N/A */
+    },
+    /* 10 pressed both */
+    {
+     { -1, -3, 0 },                              /* nothing (left release, right release) -> ground */
+        { -3, 0, 4 },                                          /* left (right release) -> pressed left */
+        { -1, 0, 5 },                                                  /* right (left release) -> pressed right */
+        { 0, 0, 10 }, /* left & right -> pressed both (no change) */
+        { 0, 0, -1 }, /* timeout N/A */
+    },
 };
-
 
 int
 EvdevMBEmuTimer(InputInfoPtr pInfo)
 {
     EvdevPtr pEvdev = pInfo->private;
-    int id;
-    int mapped_id;
+    int      id;
+    int      mapped_id;
 
 #if HAVE_THREADED_INPUT
     input_lock();
@@ -195,16 +194,20 @@ EvdevMBEmuTimer(InputInfoPtr pInfo)
 #endif
 
     pEvdev->emulateMB.pending = FALSE;
-    if ((id = stateTab[pEvdev->emulateMB.state][4][0]) != 0) {
+    if ((id = stateTab[pEvdev->emulateMB.state][4][0]) != 0)
+    {
         mapped_id = abs(id);
-        if (mapped_id == 2)
-            mapped_id = pEvdev->emulateMB.button;
-        EvdevPostButtonEvent(pInfo, mapped_id,
+        if (mapped_id == 2) mapped_id = pEvdev->emulateMB.button;
+        EvdevPostButtonEvent(pInfo,
+                             mapped_id,
                              (id >= 0) ? BUTTON_PRESS : BUTTON_RELEASE);
-        pEvdev->emulateMB.state =
-            stateTab[pEvdev->emulateMB.state][4][2];
-    } else {
-        xf86IDrvMsg(pInfo, X_ERROR, "Got unexpected buttonTimer in state %d\n",
+        pEvdev->emulateMB.state = stateTab[pEvdev->emulateMB.state][4][2];
+    }
+    else
+    {
+        xf86IDrvMsg(pInfo,
+                    X_ERROR,
+                    "Got unexpected buttonTimer in state %d\n",
                     pEvdev->emulateMB.state);
     }
 
@@ -215,7 +218,6 @@ EvdevMBEmuTimer(InputInfoPtr pInfo)
 #endif
     return 0;
 }
-
 
 /**
  * Emulate a middle button on button press.
@@ -230,29 +232,24 @@ BOOL
 EvdevMBEmuFilterEvent(InputInfoPtr pInfo, int button, BOOL press)
 {
     EvdevPtr pEvdev = pInfo->private;
-    int id;
-    int mapped_id;
-    int *btstate;
-    int ret = FALSE;
+    int      id;
+    int      mapped_id;
+    int     *btstate;
+    int      ret = FALSE;
 
-    if (!pEvdev->emulateMB.enabled)
-        return ret;
+    if (!pEvdev->emulateMB.enabled) return ret;
 
     /* don't care about other buttons */
-    if (button != 1 && button != 3)
-        return ret;
+    if (button != 1 && button != 3) return ret;
 
     btstate = &pEvdev->emulateMB.buttonstate;
-    if (press)
-        *btstate |= (button == 1) ? 0x1 : 0x2;
-    else
-        *btstate &= (button == 1) ? ~0x1 : ~0x2;
+    if (press) *btstate |= (button == 1) ? 0x1 : 0x2;
+    else *btstate &= (button == 1) ? ~0x1 : ~0x2;
 
     if ((id = stateTab[pEvdev->emulateMB.state][*btstate][0]) != 0)
     {
         mapped_id = abs(id);
-        if (mapped_id == 2)
-            mapped_id = pEvdev->emulateMB.button;
+        if (mapped_id == 2) mapped_id = pEvdev->emulateMB.button;
         EvdevQueueButtonEvent(pInfo, mapped_id, (id >= 0));
         ret = TRUE;
     }
@@ -262,47 +259,49 @@ EvdevMBEmuFilterEvent(InputInfoPtr pInfo, int button, BOOL press)
         ret = TRUE;
     }
 
-    pEvdev->emulateMB.state =
-        stateTab[pEvdev->emulateMB.state][*btstate][2];
+    pEvdev->emulateMB.state = stateTab[pEvdev->emulateMB.state][*btstate][2];
 
-    if (stateTab[pEvdev->emulateMB.state][4][0] != 0) {
-        pEvdev->emulateMB.expires = GetTimeInMillis () + pEvdev->emulateMB.timeout;
+    if (stateTab[pEvdev->emulateMB.state][4][0] != 0)
+    {
+        pEvdev->emulateMB.expires =
+            GetTimeInMillis() + pEvdev->emulateMB.timeout;
         pEvdev->emulateMB.pending = TRUE;
-        ret = TRUE;
-    } else {
+        ret                       = TRUE;
+    }
+    else
+    {
         pEvdev->emulateMB.pending = FALSE;
     }
 
     return ret;
 }
 
-
-void EvdevMBEmuWakeupHandler(WAKEUP_HANDLER_ARGS)
+void
+EvdevMBEmuWakeupHandler(WAKEUP_HANDLER_ARGS)
 {
-    InputInfoPtr pInfo = (InputInfoPtr)data;
+    InputInfoPtr pInfo  = (InputInfoPtr)data;
     EvdevPtr     pEvdev = (EvdevPtr)pInfo->private;
-    int ms;
+    int          ms;
 
     if (pEvdev->emulateMB.pending)
     {
         ms = pEvdev->emulateMB.expires - GetTimeInMillis();
-        if (ms <= 0)
-            EvdevMBEmuTimer(pInfo);
+        if (ms <= 0) EvdevMBEmuTimer(pInfo);
     }
 }
 
-void EvdevMBEmuBlockHandler(BLOCK_HANDLER_ARGS)
+void
+EvdevMBEmuBlockHandler(BLOCK_HANDLER_ARGS)
 {
-    InputInfoPtr    pInfo = (InputInfoPtr) data;
-    EvdevPtr        pEvdev= (EvdevPtr) pInfo->private;
-    int             ms;
+    InputInfoPtr pInfo  = (InputInfoPtr)data;
+    EvdevPtr     pEvdev = (EvdevPtr)pInfo->private;
+    int          ms;
 
     if (pEvdev->emulateMB.pending)
     {
-        ms = pEvdev->emulateMB.expires - GetTimeInMillis ();
-        if (ms <= 0)
-            ms = 0;
-        AdjustWaitForDelay (waitTime, ms);
+        ms = pEvdev->emulateMB.expires - GetTimeInMillis();
+        if (ms <= 0) ms = 0;
+        AdjustWaitForDelay(waitTime, ms);
     }
 }
 
@@ -310,17 +309,16 @@ void
 EvdevMBEmuPreInit(InputInfoPtr pInfo)
 {
     EvdevPtr pEvdev = (EvdevPtr)pInfo->private;
-    int bt;
+    int      bt;
 
-    pEvdev->emulateMB.enabled = xf86SetBoolOption(pInfo->options,
-                                                  "Emulate3Buttons",
-                                                  FALSE);
-    pEvdev->emulateMB.timeout = xf86SetIntOption(pInfo->options,
-                                                 "Emulate3Timeout", 50);
+    pEvdev->emulateMB.enabled =
+        xf86SetBoolOption(pInfo->options, "Emulate3Buttons", FALSE);
+    pEvdev->emulateMB.timeout =
+        xf86SetIntOption(pInfo->options, "Emulate3Timeout", 50);
     bt = xf86SetIntOption(pInfo->options, "Emulate3Button", 2);
-    if (bt < 0 || bt > EVDEV_MAXBUTTONS) {
-        xf86IDrvMsg(pInfo, X_WARNING, "Invalid Emulate3Button value: %d\n",
-                    bt);
+    if (bt < 0 || bt > EVDEV_MAXBUTTONS)
+    {
+        xf86IDrvMsg(pInfo, X_WARNING, "Invalid Emulate3Button value: %d\n", bt);
         xf86IDrvMsg(pInfo, X_WARNING, "Middle button emulation disabled.\n");
 
         pEvdev->emulateMB.enabled = FALSE;
@@ -335,9 +333,9 @@ EvdevMBEmuOn(InputInfoPtr pInfo)
     if (!pInfo->dev->button) /* don't init for keyboards */
         return;
 
-    RegisterBlockAndWakeupHandlers (EvdevMBEmuBlockHandler,
-                                    EvdevMBEmuWakeupHandler,
-                                    (pointer)pInfo);
+    RegisterBlockAndWakeupHandlers(EvdevMBEmuBlockHandler,
+                                   EvdevMBEmuWakeupHandler,
+                                   (pointer)pInfo);
 }
 
 void
@@ -346,46 +344,45 @@ EvdevMBEmuFinalize(InputInfoPtr pInfo)
     if (!pInfo->dev->button) /* don't cleanup for keyboards */
         return;
 
-    RemoveBlockAndWakeupHandlers (EvdevMBEmuBlockHandler,
-                                  EvdevMBEmuWakeupHandler,
-                                  (pointer)pInfo);
-
+    RemoveBlockAndWakeupHandlers(EvdevMBEmuBlockHandler,
+                                 EvdevMBEmuWakeupHandler,
+                                 (pointer)pInfo);
 }
 
 static int
-EvdevMBEmuSetProperty(DeviceIntPtr dev, Atom atom, XIPropertyValuePtr val,
-                      BOOL checkonly)
+EvdevMBEmuSetProperty(DeviceIntPtr       dev,
+                      Atom               atom,
+                      XIPropertyValuePtr val,
+                      BOOL               checkonly)
 {
     InputInfoPtr pInfo  = dev->public.devicePrivate;
     EvdevPtr     pEvdev = pInfo->private;
-    int bt;
+    int          bt;
 
     if (atom == prop_mbemu)
     {
         if (val->format != 8 || val->size != 1 || val->type != XA_INTEGER)
             return BadMatch;
 
-        if (!checkonly)
-            pEvdev->emulateMB.enabled = *((BOOL*)val->data);
-    } else if (atom == prop_mbtimeout)
+        if (!checkonly) pEvdev->emulateMB.enabled = *((BOOL *)val->data);
+    }
+    else if (atom == prop_mbtimeout)
     {
         if (val->format != 32 || val->size != 1 || val->type != XA_INTEGER)
             return BadMatch;
 
-        if (!checkonly)
-            pEvdev->emulateMB.timeout = *((CARD32*)val->data);
-    } else if (atom == prop_mbbuton)
+        if (!checkonly) pEvdev->emulateMB.timeout = *((CARD32 *)val->data);
+    }
+    else if (atom == prop_mbbuton)
     {
         if (val->format != 8 || val->size != 1 || val->type != XA_INTEGER)
             return BadMatch;
 
-        bt = *((CARD8*)val->data);
+        bt = *((CARD8 *)val->data);
 
-        if (bt < 0 || bt > EVDEV_MAXBUTTONS)
-            return BadValue;
+        if (bt < 0 || bt > EVDEV_MAXBUTTONS) return BadValue;
 
-        if (!checkonly)
-            pEvdev->emulateMB.button = bt;
+        if (!checkonly) pEvdev->emulateMB.button = bt;
     }
 
     return Success;
@@ -404,33 +401,47 @@ EvdevMBEmuInitProperty(DeviceIntPtr dev)
     if (!dev->button) /* don't init prop for keyboards */
         return;
 
-    prop_mbemu = MakeAtom(EVDEV_PROP_MIDBUTTON, strlen(EVDEV_PROP_MIDBUTTON), TRUE);
-    rc = XIChangeDeviceProperty(dev, prop_mbemu, XA_INTEGER, 8,
-                                PropModeReplace, 1,
+    prop_mbemu =
+        MakeAtom(EVDEV_PROP_MIDBUTTON, strlen(EVDEV_PROP_MIDBUTTON), TRUE);
+    rc = XIChangeDeviceProperty(dev,
+                                prop_mbemu,
+                                XA_INTEGER,
+                                8,
+                                PropModeReplace,
+                                1,
                                 &pEvdev->emulateMB.enabled,
                                 FALSE);
-    if (rc != Success)
-        return;
+    if (rc != Success) return;
     XISetDevicePropertyDeletable(dev, prop_mbemu, FALSE);
 
     prop_mbtimeout = MakeAtom(EVDEV_PROP_MIDBUTTON_TIMEOUT,
                               strlen(EVDEV_PROP_MIDBUTTON_TIMEOUT),
                               TRUE);
-    rc = XIChangeDeviceProperty(dev, prop_mbtimeout, XA_INTEGER, 32, PropModeReplace, 1,
-                                &pEvdev->emulateMB.timeout, FALSE);
+    rc             = XIChangeDeviceProperty(dev,
+                                prop_mbtimeout,
+                                XA_INTEGER,
+                                32,
+                                PropModeReplace,
+                                1,
+                                &pEvdev->emulateMB.timeout,
+                                FALSE);
 
-    if (rc != Success)
-        return;
+    if (rc != Success) return;
     XISetDevicePropertyDeletable(dev, prop_mbtimeout, FALSE);
 
     prop_mbbuton = MakeAtom(EVDEV_PROP_MIDBUTTON_BUTTON,
-                              strlen(EVDEV_PROP_MIDBUTTON_BUTTON),
-                              TRUE);
-    rc = XIChangeDeviceProperty(dev, prop_mbbuton, XA_INTEGER, 8, PropModeReplace, 1,
-                                &pEvdev->emulateMB.button, FALSE);
+                            strlen(EVDEV_PROP_MIDBUTTON_BUTTON),
+                            TRUE);
+    rc           = XIChangeDeviceProperty(dev,
+                                prop_mbbuton,
+                                XA_INTEGER,
+                                8,
+                                PropModeReplace,
+                                1,
+                                &pEvdev->emulateMB.button,
+                                FALSE);
 
-    if (rc != Success)
-        return;
+    if (rc != Success) return;
     XISetDevicePropertyDeletable(dev, prop_mbbuton, FALSE);
 
     XIRegisterPropertyHandler(dev, EvdevMBEmuSetProperty, NULL, NULL);
