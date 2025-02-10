@@ -501,7 +501,7 @@ main(int argc, char *argv[])
             case '7':
             case '8':
             case '9':
-            /* change gamma same way as a command line option */
+                /* change gamma same way as a command line option */
                 if (UNSET_GAMMA == io->gamma) io->gamma = idisp->gamma;
 
                 switch (switchval)
@@ -509,13 +509,13 @@ main(int argc, char *argv[])
                     int    l;
                     double jump;
 
-            /* set gamma to default image gamma */
                     case '0':
+                        /* set gamma to default image gamma */
                         io->gamma = DEFAULT_DISPLAY_GAMMA;
                         break;
 
-            /* set gamma to 1.0 */
                     case '1':
+                        /* set gamma to 1.0 */
                         io->gamma = 1.0;
                         break;
 
@@ -534,7 +534,7 @@ main(int argc, char *argv[])
                 i--;
                 break;
 
-        /* rotations */
+                /* rotations */
             case 'l':
             case 'r':
                 switch (switchval)

@@ -472,7 +472,7 @@ pbmLoad(char *fullname, ImageOptions *image_ops, boolean verbose)
             image = newRGBImage(width, height, depth);
             for (y = 0; y <= maxval; y++)
             {
-            /* As in sunraster.c, use simple ramp for grey scale */
+                /* As in sunraster.c, use simple ramp for grey scale */
                 *(image->rgb.red + y)   = PM_SCALE(y, maxval, 0xffff);
                 *(image->rgb.green + y) = PM_SCALE(y, maxval, 0xffff);
                 *(image->rgb.blue + y)  = PM_SCALE(y, maxval, 0xffff);
@@ -495,7 +495,7 @@ pbmLoad(char *fullname, ImageOptions *image_ops, boolean verbose)
             break;
 
         case PPMRAWBITS:
-        /* this is nice because the bit format is exactly what we want
+            /* this is nice because the bit format is exactly what we want
 		 * except for scaling.
 		 */
 

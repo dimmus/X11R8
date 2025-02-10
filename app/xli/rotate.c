@@ -111,20 +111,18 @@ rotate(Image *iimage, int rotate, int verbose)
                 }
                 dimage->rgb.used = simage->rgb.used;
 
-            /* build array of y axis ptrs into destination image
-			 */
+                /* build array of y axis ptrs into destination image */
 
                 yptr     = (byte **)lmalloc(simage->width * sizeof(char *));
                 dlinelen = simage->height * dimage->pixlen;
                 for (y = 0; y < simage->width; y++)
                     yptr[y] = dimage->data + (y * dlinelen);
 
-            /* rotate
-			 */
+                /* rotate */
 
                 sp = simage->data;
                 if (simage->pixlen == 1 &&
-                    dimage->pixlen == 1)  /* most common */
+                    dimage->pixlen == 1) /* most common */
                     for (y = 0; y < simage->height; y++)
                         for (x = 0; x < simage->width; x++)
                         {
@@ -154,7 +152,7 @@ rotate(Image *iimage, int rotate, int verbose)
                 if (TRUEP(simage))
                     dimage = newTrueImage(simage->height, simage->width);
 
-            /* build array of y axis ptrs into destination image
+                /* build array of y axis ptrs into destination image
 			 */
 
                 yptr     = (byte **)lmalloc(simage->width * sizeof(char *));
@@ -162,12 +160,12 @@ rotate(Image *iimage, int rotate, int verbose)
                 for (y = 0; y < simage->width; y++)
                     yptr[y] = dimage->data + (y * dlinelen);
 
-            /* rotate
+                /* rotate
 			 */
 
                 sp = simage->data;
                 if (simage->pixlen == 3 &&
-                    dimage->pixlen == 3)  /* most common */
+                    dimage->pixlen == 3) /* most common */
                     for (y = 0; y < simage->height; y++)
                         for (x = 0; x < simage->width; x++)
                         {
