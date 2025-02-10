@@ -96,7 +96,6 @@ h_check += [
 # conf_xterm.set('OPT_STATUS_LINE', 1) # enable support for status-line
 # conf_xterm.set('OPT_TCAP_FKEYS', 0) # disable termcap function-keys support
 # conf_xterm.set('OPT_TCAP_QUERY', 0) # disable compiled-in termcap-query support
-# conf_xterm.set('OPT_TEK4014', 0) # disable tek4014 emulation
 # conf_xterm.set('OPT_TOOLBAR', 1) # compile-in toolbar for pulldown menus
 # conf_xterm.set('OPT_VT52_MODE', 0) # disable VT52 emulation
 # conf_xterm.set('OPT_WIDE_ATTRS', 0) # disable rarely-used SGR features

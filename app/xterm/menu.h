@@ -74,9 +74,6 @@ typedef struct _MenuEntry
 
 extern MenuEntry mainMenuEntries[], vtMenuEntries[];
 extern MenuEntry fontMenuEntries[];
-#if OPT_TEK4014
-extern MenuEntry tekMenuEntries[];
-#endif
 
 extern void Handle8BitControl              PROTO_XT_ACTIONS_ARGS;
 extern void HandleAllow132                 PROTO_XT_ACTIONS_ARGS;
@@ -273,11 +270,6 @@ typedef enum
     vtMenu_hardreset,
     vtMenu_clearsavedlines,
     vtMenu_line2,
-#if OPT_TEK4014
-    vtMenu_tekshow,
-    vtMenu_tekmode,
-    vtMenu_vthide,
-#endif
     vtMenu_altscreen,
 #if OPT_SIXEL_GRAPHICS
     vtMenu_sixelscrolling,
@@ -345,28 +337,6 @@ typedef enum
 
     fontMenu_LAST
 } fontMenuIndices;
-
-/*
- * items in tek4014 mode menu
- */
-#if OPT_TEK4014
-typedef enum
-{
-    tekMenu_tektextlarge,
-    tekMenu_tektext2,
-    tekMenu_tektext3,
-    tekMenu_tektextsmall,
-    tekMenu_line1,
-    tekMenu_tekpage,
-    tekMenu_tekreset,
-    tekMenu_tekcopy,
-    tekMenu_line2,
-    tekMenu_vtshow,
-    tekMenu_vtmode,
-    tekMenu_tekhide,
-    tekMenu_LAST
-} tekMenuIndices;
-#endif
 
 /*
  * functions for updating menus
@@ -563,20 +533,6 @@ extern void update_font_utf8_title(void);
 #  define update_font_utf8_title() /* nothing */
 #endif
 
-#if OPT_TEK4014
-extern void update_tekshow(void);
-extern void update_vttekmode(void);
-extern void update_vtshow(void);
-extern void set_vthide_sensitivity(void);
-extern void set_tekhide_sensitivity(void);
-#else
-#  define update_tekshow() /*nothing*/
-#  define update_vttekmode() /*nothing*/
-#  define update_vtshow() /*nothing*/
-#  define set_vthide_sensitivity() /*nothing*/
-#  define set_tekhide_sensitivity() /*nothing*/
-#endif
-
 #if OPT_DEC_CHRSET || OPT_BOX_CHARS || OPT_DEC_SOFTFONT
 extern void update_menu_allowBoldFonts(void);
 #else
@@ -588,12 +544,6 @@ extern void update_menu_allowBoldFonts(void);
  */
 #define FS2MI(n) (n)   /* font_size_to_menu_item */
 #define MI2FS(n) (n)   /* menu_item_to_font_size */
-
-#if OPT_TEK4014
-extern void set_tekfont_menu_item(int n, int val);
-#else
-#  define set_tekfont_menu_item(n, val) /*nothing*/
-#endif
 
 extern void set_menu_font(int val);
 

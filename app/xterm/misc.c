@@ -118,8 +118,8 @@
 #  include <wctype.h>
 #endif
 
-#  define OUR_EVENT(event, Type) \
-      (event.type == Type && (event.xcrossing.window == XtWindow(XtParent(xw))))
+#define OUR_EVENT(event, Type) \
+    (event.type == Type && (event.xcrossing.window == XtWindow(XtParent(xw))))
 
 #define VB_DELAY    screen->visualBellDelay
 #define EVENT_DELAY TScreenOf(term)->nextEventDelay
@@ -8079,10 +8079,10 @@ xtermSetWinSize(XtermWidget xw)
 
         TRACE(("xtermSetWinSize\n"));
         update_winsize(screen,
-                        MaxRows(screen),
-                        MaxCols(screen),
-                        Height(screen),
-                        Width(screen));
+                       MaxRows(screen),
+                       MaxCols(screen),
+                       Height(screen),
+                       Width(screen));
     }
 }
 

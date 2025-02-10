@@ -193,7 +193,6 @@
 /* #undef OPT_SUN_FUNC_KEYS */ /* CF_ARG_ENABLE(sun-fkeys) */
 /* #undef OPT_TCAP_FKEYS */ /* CF_ARG_ENABLE(tcap-fkeys) */
 /* #undef OPT_TCAP_QUERY */ /* CF_ARG_ENABLE(tcap-query) */
-/* #undef OPT_TEK4014 */ /* CF_ARG_DISABLE(tek4014) */
 #define OPT_TOOLBAR 1 /* CF_ARG_ENABLE(toolbar) */
 /* #undef OPT_VT52_MODE */ /* CF_ARG_DISABLE(vt52) */
 /* #undef OPT_WIDER_ICHAR */ /* CF_ARG_ENABLE(16bit-chars) */

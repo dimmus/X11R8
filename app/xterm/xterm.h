@@ -922,31 +922,6 @@ extern "C" {
 
 struct XTERM_RESOURCE;
 
-/* Tekproc.c */
-#if OPT_TEK4014
-extern TekWidget           getTekWidget(Widget /* w */);
-extern int                 TekGetFontSize(const char                 */* param */);
-extern int                 TekInit(void);
-extern void                ChangeTekColors(TekWidget /* tw */,
-                                           TScreen                */* screen */,
-                                           ScrnColors                */* pNew */);
-extern void HandleGINInput PROTO_XT_ACTIONS_ARGS;
-extern void                TCursorToggle(TekWidget /* tw */, int /* toggle */);
-extern void                TekCopy(TekWidget /* tw */);
-extern void                TekEnqMouse(TekWidget /* tw */, int /* c */);
-extern void
-TekExpose(Widget /* w */, XEvent * /* event */, Region /* region */);
-extern void TekGINoff(TekWidget /* tw */);
-extern void TekRefresh(TekWidget /* tw */);
-extern void TekRepaint(TekWidget /* xw */);
-extern void TekReverseVideo(XtermWidget /* xw */, TekWidget /* tw */);
-extern void TekRun(void);
-extern void
-TekSetFontSize(TekWidget /* tw */, Bool /* fromMenu */, int /* newitem */);
-extern void TekSetWinSize(TekWidget /* tw */);
-extern void TekSimulatePageButton(TekWidget /* tw */, Bool /* reset */);
-#endif
-
 /* button.c */
 #define MotionOff(s, t)                                                     \
     if (!(screen->hide_pointer))                                            \

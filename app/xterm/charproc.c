@@ -4973,11 +4973,11 @@ doparsing(XtermWidget xw, unsigned c, struct ParseState *sp)
 		 * On restore, the terminal does not recognize DECRQSS for
 		 * DECSCL (per vttest).
 		 */
-                    screen->vtXX_level = 1;
-                    xw->flags          = screen->vt52_save_flags;
-                    screen->curgl      = screen->vt52_save_curgl;
-                    screen->curgr      = screen->vt52_save_curgr;
-                    screen->curss      = screen->vt52_save_curss;
+                    screen->vtXX_level               = 1;
+                    xw->flags                        = screen->vt52_save_flags;
+                    screen->curgl                    = screen->vt52_save_curgl;
+                    screen->curgr                    = screen->vt52_save_curgr;
+                    screen->curss                    = screen->vt52_save_curss;
                     restoreCharsets(screen, screen->vt52_save_gsets);
                     update_vt52_vt100_settings();
                 }
@@ -9599,10 +9599,6 @@ VTRun(XtermWidget xw)
     {
         set_vt_visibility(True);
     }
-    update_vttekmode();
-    update_vtshow();
-    update_tekshow();
-    set_vthide_sensitivity();
 
     ScrnAllocBuf(xw);
 

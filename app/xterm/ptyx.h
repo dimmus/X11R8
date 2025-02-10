@@ -851,10 +851,6 @@ typedef enum
 #  define OPT_TCAP_QUERY 1 /* true for termcap query */
 #endif
 
-// #ifndef OPT_TEK4014
-// #  define OPT_TEK4014 1 /* true if we're using tek4014 emulation */
-// #endif
-
 #ifndef OPT_TOOLBAR
 #  define OPT_TOOLBAR 0 /* true if xterm supports toolbar menus */
 #endif
@@ -1004,12 +1000,7 @@ typedef enum
     gcVTcursNormal,
     gcVTcursFilled,
     gcVTcursReverse,
-    gcVTcursOutline
-#if OPT_TEK4014
-    ,
-    gcTKcurs
-#endif
-    ,
+    gcVTcursOutline,
     gcMAX
 } CgsEnum;
 
@@ -1032,19 +1023,9 @@ typedef enum
     MOUSE_FG /* mouse foreground */
     ,
     MOUSE_BG /* mouse background */
-#if OPT_TEK4014
-    ,
-    TEK_FG = 5 /* tektronix foreground */
-    ,
-    TEK_BG /* tektronix background */
-#endif
 #if OPT_HIGHLIGHT_COLOR
     ,
     HIGHLIGHT_BG = 7 /* highlight background */
-#endif
-#if OPT_TEK4014
-    ,
-    TEK_CURSOR = 8 /* tektronix cursor */
 #endif
 #if OPT_HIGHLIGHT_COLOR
     ,
@@ -1219,10 +1200,6 @@ typedef enum
 #if OPT_SHIFT_FONTS
     ,
     srm_RXVT_FONTSIZE = 35
-#endif
-#if OPT_TEK4014
-    ,
-    srm_DECTEK = 38
 #endif
     ,
     srm_132COLS     = 40,
@@ -1797,17 +1774,10 @@ extern int A2E(int);
 
 /***====================================================================***/
 
-#if OPT_TEK4014
-#  define TEK4014_ACTIVE(xw)       ((xw)->misc.TekEmu)
-#  define TEK4014_SHOWN(xw)        ((xw)->misc.Tshow)
-#  define CURRENT_EMU_VAL(tek, vt) (TEK4014_ACTIVE(term) ? tek : vt)
-#  define CURRENT_EMU()            CURRENT_EMU_VAL((Widget)tekWidget, (Widget)term)
-#else
-#  define TEK4014_ACTIVE(screen)   0
-#  define TEK4014_SHOWN(xw)        0
-#  define CURRENT_EMU_VAL(tek, vt) (vt)
-#  define CURRENT_EMU()            ((Widget)term)
-#endif
+#define TEK4014_ACTIVE(screen)   0
+#define TEK4014_SHOWN(xw)        0
+#define CURRENT_EMU_VAL(tek, vt) (vt)
+#define CURRENT_EMU()            ((Widget)term)
 
 /***====================================================================***/
 
@@ -2309,9 +2279,6 @@ typedef enum
 #if OPT_SIXEL_GRAPHICS
     DP_DECSDM,
 #endif
-#if OPT_TEK4014
-    DP_DECTEK,
-#endif
 #if OPT_TOOLBAR
     DP_TOOLBAR,
 #endif
@@ -2342,10 +2309,6 @@ typedef enum
     mainMenu,
     vtMenu,
     fontMenu
-#if OPT_TEK4014
-    ,
-    tekMenu
-#endif
 } MenuIndex;
 
 typedef enum
@@ -3466,13 +3429,7 @@ typedef struct _Misc
     Boolean   autoWrap;
     Boolean   logInhibit;
     Boolean   signalInhibit;
-#if OPT_TEK4014
-    Boolean tekInhibit;
-    Boolean tekSmall; /* start tek window in small size */
-    Boolean TekEmu; /* true if Tektronix emulation	*/
-    Boolean Tshow; /* Tek window showing		*/
-#endif
-    Boolean scrollbar;
+    Boolean   scrollbar;
 #ifdef SCROLLBAR_RIGHT
     Boolean useRight;
 #endif
@@ -3592,19 +3549,6 @@ extern WidgetClass xtermWidgetClass;
 
 #define IsXtermWidget(w) (XtClass(w) == xtermWidgetClass)
 
-#if OPT_TEK4014
-typedef struct _TekClassRec
-{
-    CoreClassPart core_class;
-    TekClassPart  tek_class;
-} TekClassRec;
-
-extern WidgetClass tekWidgetClass;
-
-#  define IsTekWidget(w) (XtClass(w) == tekWidgetClass)
-
-#endif
-
 /* define masks for keyboard.flags */
 #define MODE_KAM     xBIT(0) /* mode 2: keyboard action mode */
 #define MODE_DECKPAM xBIT(1) /* keypad application mode */
@@ -3692,18 +3636,6 @@ typedef struct _XtermWidgetRec
     SavedColors saved_colors;
 #endif
 } XtermWidgetRec, *XtermWidget;
-
-#if OPT_TEK4014
-typedef struct _TekWidgetRec
-{
-    CorePart    core;
-    XtermWidget vt; /* main widget has border, etc. */
-    TekPart     tek; /* contains resources */
-    TekScreen   screen; /* contains working data (no resources) */
-    Bool        init_menu;
-    XSizeHints  hints;
-} TekWidgetRec, *TekWidget;
-#endif /* OPT_TEK4014 */
 
 /*
  * terminal flags
@@ -4010,20 +3942,6 @@ extern Window VDrawable(TScreen * /* screen */);
 #else
 #  define ToolbarHeight(w) 0
 #endif
-
-#if OPT_TEK4014
-#  define TEK_LINK_BLOCK_SIZE 1024
-
-typedef struct Tek_Link
-{
-    struct Tek_Link *next; /* pointer to next TekLink in list
-				   NULL <=> this is last TekLink */
-    unsigned short   fontsize; /* character size, 0-3 */
-    unsigned short   count; /* number of chars in data */
-    char            *ptr; /* current pointer into data */
-    char             data[TEK_LINK_BLOCK_SIZE];
-} TekLink;
-#endif /* OPT_TEK4014 */
 
 /* flags for cursors */
 #define OFF         0

@@ -77,18 +77,6 @@ struct q_head
 extern struct q_head read_queue;
 #endif
 
-#if OPT_TEK4014
-extern Char     *Tpushb;
-extern Char     *Tpushback;
-extern TekLink  *tekRefreshList;
-extern TekWidget tekWidget;
-extern Widget    tekshellwidget;
-extern int       T_lastx;
-extern int       T_lasty;
-extern int       Ttoggled;
-extern jmp_buf   Tekend;
-#endif
-
 extern char *ptydev;
 extern char *ttydev;
 extern int   hold_screen;

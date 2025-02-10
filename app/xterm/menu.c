@@ -441,7 +441,9 @@ typedef struct
 /* This table is ordered to correspond with MenuIndex */
 #define DATA(name) { (char *)#name, name##Entries, XtNumber(name##Entries) }
 static const MenuHeader menu_names[] = {
-    DATA(mainMenu), DATA(vtMenu), DATA(fontMenu),
+    DATA(mainMenu),
+    DATA(vtMenu),
+    DATA(fontMenu),
     { NULL, 0, 0 },
 };
 #undef DATA
@@ -498,7 +500,7 @@ unusedEntries(XtermWidget xw, MenuIndex num)
 {
     static Boolean result[XtNumber(mainMenuEntries) + XtNumber(vtMenuEntries) +
                           XtNumber(fontMenuEntries)];
-    TScreen *screen = TScreenOf(xw);
+    TScreen       *screen = TScreenOf(xw);
 
     memset(result, 0, sizeof(result));
     switch (num)
@@ -2086,7 +2088,7 @@ HandleBackarrow(Widget        w,
 }
 
 #if OPT_MAXIMIZE
-#define WhichEWMH 0
+#  define WhichEWMH 0
 
 static void
 do_fullscreen(Widget gw         GCC_UNUSED,

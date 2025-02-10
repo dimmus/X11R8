@@ -128,8 +128,6 @@
 
 #define KEYSYM_FMT "0x%04lX" /* simplify matching "X11/keysymdef.h" */
 
-#define TEK4014_GIN(tw) (tw != 0 && TekScreenOf(tw)->TekGIN)
-
 typedef struct
 {
     KeySym keysym;
@@ -1517,7 +1515,7 @@ Input(XtermWidget xw, XKeyEvent *event, Bool eightbit)
     }
     unparse_end(xw);
 
-    if (key && !TEK4014_ACTIVE(xw)) AdjustAfterInput(xw);
+    if (key) AdjustAfterInput(xw);
 
     xtermShowPointer(xw, False);
     return;
@@ -1531,7 +1529,7 @@ StringInput(XtermWidget xw, const Char *string, size_t nbytes)
            (unsigned long)nbytes));
     while (nbytes-- != 0)
         unparseputc(xw, *string++);
-    if (!TEK4014_ACTIVE(xw)) AdjustAfterInput(xw);
+    AdjustAfterInput(xw);
     unparse_end(xw);
 }
 

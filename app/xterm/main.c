@@ -3971,7 +3971,6 @@ spawnXTerm(XtermWidget xw, unsigned line_speed)
     wm_delete_window = XInternAtom(XtDisplay(toplevel), "WM_DELETE_WINDOW",
 				   False);
 
-    if (!TEK4014_ACTIVE(xw))
 	VTInit(xw);		/* realize now so know window size for tty driver */
 #if defined(TIOCCONS) || defined(SRIOCSREDIR)
     if (Console) {
@@ -5490,7 +5489,7 @@ resize_termcap(XtermWidget xw)
     char *newtc = get_tcap_buffer(xw);
 
 #ifndef USE_SYSV_ENVVARS
-    if (!TEK4014_ACTIVE(xw) && *newtc) {
+    if (*newtc) {
 	TScreen *screen = TScreenOf(xw);
 	char *ptr1, *ptr2;
 	size_t i;
