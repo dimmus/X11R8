@@ -1,0 +1,148 @@
+applewmproto:
+    Copyright 2002-2009 Apple, Inc
+bigreqsproto:
+    Copyright 1992,98 The Open Group
+compositeproto:
+    Copyright 2006, Oracle and/or its affiliates
+    Copyright 2003 Keith Packard
+damageproto:
+    Copyright 2001,03 Keith Packard
+    Copyright 2007 Eric Anholt
+dmxproto:
+    Copyright 2002-2004 Red Hat Inc., Durham, North Carolina
+dri2proto:
+    Copyright 2007 Red Hat, Inc
+    Authors: Kristian Høgsberg (krh@redhat.com)
+dri3proto:
+    Copyright 2013 Keith Packard
+evieproto:
+    Copyright 2003, Oracle and/or its affiliates
+fixesproto:
+    Copyright 2006, Oracle and/or its affiliates.
+    Copyright 2010 Red Hat, Inc
+fontcacheproto:
+    Copyright 1998-1999 Shunsuke Akiyama
+    Copyright 1998-1999 X-TrueType Server Project
+fontsproto:
+    Copyright 1990,1991 Network Computing Devices
+    Portions Copyright 1987 by Digital Equipment Corporation
+    Copyright 1990,91,98  The Open Group
+    Copyright 1987 by Digital Equipment Corporation, Maynard, Massachusetts
+    Copyright 1999 The XFree86 Project Inc
+glproto:
+    Copyright 1991-2000 Silicon Graphics, Inc
+inputproto:
+    Copyright 1989,98 The Open Group
+    Copyright 1989 by Hewlett-Packard Company, Palo Alto, California
+    Copyright 2009 Red Hat, Inc
+kbproto:
+    Copyright 1993 by Silicon Graphics Computer Systems, Inc
+lg3dproto:
+    Copyright 2004, Sun Microsystems, Inc
+pmproto:
+    Copyright 1996, 1998 The Open Group
+presentproto:
+    Copyright 2013 Keith Packard
+printproto:
+    Copyright 1996 Hewlett-Packard Company
+    Copyright 1996 International Business Machines Corp
+    Copyright 1996 Oracle and/or its affiliates
+    Copyright 1996 Novell, Inc
+    Copyright 1996 Digital Equipment Corp
+    Copyright 1996 Fujitsu Limited
+    Copyright 1996 Hitachi, Ltd
+randrproto:
+    Copyright 2000 Compaq Computer Corporation
+    Copyright 2002 Hewlett-Packard Company
+    Copyright 2006 Intel Corporation
+    Copyright 2008 Red Hat, Inc
+recordproto:
+    Copyright 1995 Network Computing Devices
+renderproto:
+    Copyright 2000 SuSE, Inc
+    Author: Keith Packard, SuSE, Inc
+resourceproto:
+    Copyright 2002 XFree86 Inc
+scrnsaverproto:
+    Copyright 1992 X Consortium
+    Author: Keith Packard, MIT X Consortium
+trapproto:
+    Copyright 1987-1990,94 by Digital Equipment Corporation, Maynard, MA
+videoproto:
+    Copyright 1991 by Digital Equipment Corporation, Maynard, Massachusetts,
+        and the Massachusetts Institute of Technology, Cambridge, Massachusetts
+    Copyright 2004 The Unichrome Project
+windowswmproto:
+    Copyright 2002 Apple Computer, Inc
+x11proto:
+    Copyright 1991 Oracle and/or its affiliates
+    Copyright 1985,87,88,90,991,1993-1996,98 The Open Group
+    Copyright 1987 by Digital Equipment Corporation, Maynard, Massachusetts
+    Copyright 1987 by Apollo Computer Inc., Chelmsford, Massachusetts.
+    Copyright 1989 by Hewlett-Packard Company
+    Copyright 1999 The XFree86 Project Inc
+xcmiscproto:
+    Copyright 1993,94,98 The Open Group
+xextproto:
+    Copyright 1989,98 The Open Group
+    Copyright 1997 by Silicon Graphics Computer Systems, Inc
+    Copyright 1992 Network Computing Devices
+    Copyright 1994-1995 Hewlett-Packard Company
+    Copyright 1996 Digital Equipment Corporation, Maynard, Massachusetts
+    Copyright 1988, 1989, 1990, 1994 Network Computing Devices, Inc
+    Copyright 1991,1993 by Digital Equipment Corporation, Maynard, Massachusetts,
+        and Olivetti Research Limited, Cambridge, England.
+    Copyright 1986-1988 by Hewlett-Packard Corporation
+    Copyright 2007-2008 Peter Hutterer
+xf86bigfontproto:
+    [no info]
+xf86dgaproto:
+    [no info]
+xf86driproto:
+    Copyright 1998-1999 Precision Insight, Inc., Cedar Park, Texas
+    Copyright 2000 VA Linux Systems, Inc
+xf86miscproto:
+    [no info]
+xf86rushproto:
+    [no info]
+xf86vidmodeproto:
+    Copyright 1995 Kaleb S. KEITHLEY
+xineramaproto:
+    Copyright 2003 The Open Group
+    Copyright 1991,97 Digital Equipment Corporation, Maynard, Massachusetts
+xwaylandproto:
+    Copyright 2022 Red Hat, Inc
+
+All Rights Reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice (including the next
+paragraph) shall be included in all copies or substantial portions of the
+Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
+IN NO EVENT SHALL THE COPYRIGHT HOLDERS AND/OR THEIR SUPPLIERS
+BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Except as contained in this notice, the name of THE COPYRIGHT HOLDERS shall 
+not be used in advertising or otherwise to promote the sale, use or other
+dealings in this Software without prior written authorization THE COPYRIGHT HOLDERS.
+ortium.
+
+THE COPYRIGHT HOLDERS DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, 
+INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT 
+SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL
+DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
