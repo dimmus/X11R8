@@ -1,8 +1,8 @@
 /*
  * vim:ts=4:sw=4:expandtab
  *
- * Copyright © 2013 Michael Stapelberg
- * Copyright © 2002 Keith Packard
+ * Copyright 2013 Michael Stapelberg
+ * Copyright 2002 Keith Packard
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),

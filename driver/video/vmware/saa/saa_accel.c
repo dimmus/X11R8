@@ -1,7 +1,7 @@
 /*
- * Copyright © 2001 Keith Packard
+ * Copyright 2001 Keith Packard
  * Copyright 2011 VMWare, Inc. All Rights Reserved.
- * May partly be based on code that is Copyright Â© The XFree86 Project Inc.
+ * May partly be based on code that is Copyright ÂThe XFree86 Project Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the

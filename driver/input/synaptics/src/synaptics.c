@@ -1,20 +1,20 @@
 /*
- * Copyright © 1999 Henry Davies
- * Copyright © 2001 Stefan Gmeiner
- * Copyright © 2002 S. Lehner
- * Copyright © 2002 Peter Osterlund
- * Copyright © 2002 Linuxcare Inc. David Kennedy
- * Copyright © 2003 Hartwig Felger
- * Copyright © 2003 Jörg Bösner
- * Copyright © 2003 Fred Hucht
- * Copyright © 2004 Alexei Gilchrist
- * Copyright © 2004 Matthias Ihmig
- * Copyright © 2006 Stefan Bethge
- * Copyright © 2006 Christian Thaeter
- * Copyright © 2007 Joseph P. Skudlarek
- * Copyright © 2008 Fedor P. Goncharov
- * Copyright © 2008-2012 Red Hat, Inc.
- * Copyright © 2011 The Chromium OS Authors
+ * Copyright 1999 Henry Davies
+ * Copyright 2001 Stefan Gmeiner
+ * Copyright 2002 S. Lehner
+ * Copyright 2002 Peter Osterlund
+ * Copyright 2002 Linuxcare Inc. David Kennedy
+ * Copyright 2003 Hartwig Felger
+ * Copyright 2003 Jörg Bösner
+ * Copyright 2003 Fred Hucht
+ * Copyright 2004 Alexei Gilchrist
+ * Copyright 2004 Matthias Ihmig
+ * Copyright 2006 Stefan Bethge
+ * Copyright 2006 Christian Thaeter
+ * Copyright 2007 Joseph P. Skudlarek
+ * Copyright 2008 Fedor P. Goncharov
+ * Copyright 2008-2012 Red Hat, Inc.
+ * Copyright 2011 The Chromium OS Authors
  *
  * Permission to use, copy, modify, distribute, and sell this software
  * and its documentation for any purpose is hereby granted without

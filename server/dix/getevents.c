@@ -1,8 +1,8 @@
 /*
- * Copyright © 2006 Nokia Corporation
- * Copyright © 2006-2007 Daniel Stone
- * Copyright © 2008 Red Hat, Inc.
- * Copyright © 2011 The Chromium Authors
+ * Copyright 2006 Nokia Corporation
+ * Copyright 2006-2007 Daniel Stone
+ * Copyright 2008 Red Hat, Inc.
+ * Copyright 2011 The Chromium Authors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),

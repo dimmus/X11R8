@@ -1,6 +1,6 @@
 /*
- * Copyright © 2013-2017 Red Hat, Inc.
- * Copyright © 2020 Povilas Kanapickas <povilas@radix.lt>
+ * Copyright 2013-2017 Red Hat, Inc.
+ * Copyright 2020 Povilas Kanapickas <povilas@radix.lt>
  *
  * Permission to use, copy, modify, distribute, and sell this software
  * and its documentation for any purpose is hereby granted without

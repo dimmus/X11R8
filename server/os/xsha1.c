@@ -1,7 +1,7 @@
-/* Copyright © 2007 Carl Worth
- * Copyright © 2009 Jeremy Huddleston, Julien Cristau, and Matthieu Herrb
- * Copyright © 2009-2010 Mikhail Gusarov
- * Copyright © 2012 Yaakov Selkowitz and Keith Packard
+/* Copyright 2007 Carl Worth
+ * Copyright 2009 Jeremy Huddleston, Julien Cristau, and Matthieu Herrb
+ * Copyright 2009-2010 Mikhail Gusarov
+ * Copyright 2012 Yaakov Selkowitz and Keith Packard
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),

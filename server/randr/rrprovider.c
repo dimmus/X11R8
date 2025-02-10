@@ -1,5 +1,5 @@
 /*
- * Copyright © 2012 Red Hat Inc.
+ * Copyright 2012 Red Hat Inc.
  * Copyright 2019 DisplayLink (UK) Ltd.
  *
  * Permission to use, copy, modify, distribute, and sell this software and its

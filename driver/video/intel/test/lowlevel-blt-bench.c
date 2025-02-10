@@ -1,7 +1,7 @@
 /*
- * Copyright © 2009 Nokia Corporation
- * Copyright © 2010 Movial Creative Technologies Oy
- * Copyright © 2013 Intel Corporation
+ * Copyright 2009 Nokia Corporation
+ * Copyright 2010 Movial Creative Technologies Oy
+ * Copyright 2013 Intel Corporation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),

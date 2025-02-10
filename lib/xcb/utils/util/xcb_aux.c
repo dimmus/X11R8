@@ -1,8 +1,8 @@
 /*
- * Copyright © 2008 Bart Massey <bart@cs.pdx.edu>
- * Copyright © 2008 Ian Osgood <iano@quirkster.com>
- * Copyright © 2008 Jamey Sharp <jamey@minilop.net>
- * Copyright © 2008 Josh Triplett <josh@freedesktop.org>
+ * Copyright 2008 Bart Massey <bart@cs.pdx.edu>
+ * Copyright 2008 Ian Osgood <iano@quirkster.com>
+ * Copyright 2008 Jamey Sharp <jamey@minilop.net>
+ * Copyright 2008 Josh Triplett <josh@freedesktop.org>
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 Jon Turney.
+ * Copyright 2019 Jon Turney.
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above

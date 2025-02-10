@@ -1,7 +1,7 @@
 /*
  * Copyright 1998-1999 Precision Insight, Inc., Cedar Park, Texas.
  * All Rights Reserved.
- * Copyright © 2010 Intel Corporation
+ * Copyright 2010 Intel Corporation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),

@@ -1,5 +1,5 @@
 /*
- * Copyright © 1999 Keith Packard
+ * Copyright 1999 Keith Packard
  * Copyright 2011 VMWare, Inc. All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a

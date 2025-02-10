@@ -27,7 +27,7 @@
 /*
  * i830_video.c: i830/i845 Xv driver.
  *
- * Copyright © 2002 by Alan Hourihane and David Dawes
+ * Copyright 2002 by Alan Hourihane and David Dawes
  *
  * Authors:
  *	Alan Hourihane <alanh@tungstengraphics.com>

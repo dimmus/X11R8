@@ -1,7 +1,7 @@
 /*
- * Copyright © 2007 Red Hat, Inc.
- * Copyright © 2008 Maarten Maathuis
- * Copyright © 2011 Texas Instruments, Inc
+ * Copyright 2007 Red Hat, Inc.
+ * Copyright 2008 Maarten Maathuis
+ * Copyright 2011 Texas Instruments, Inc
  *
  *
  * Permission is hereby granted, free of charge, to any person obtaining a

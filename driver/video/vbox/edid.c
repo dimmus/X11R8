@@ -10,7 +10,7 @@
  * This code is based on drmmode_display.c from the X.Org xf86-video-intel
  * driver with the following copyright notice:
  *
- * Copyright © 2007 Red Hat, Inc.
+ * Copyright 2007 Red Hat, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),

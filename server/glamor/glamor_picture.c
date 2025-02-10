@@ -1,7 +1,7 @@
 /*
- * Copyright © 2016 Broadcom
- * Copyright © 2009 Intel Corporation
- * Copyright © 1998 Keith Packard
+ * Copyright 2016 Broadcom
+ * Copyright 2009 Intel Corporation
+ * Copyright 1998 Keith Packard
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),

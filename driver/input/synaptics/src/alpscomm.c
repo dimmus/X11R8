@@ -1,7 +1,7 @@
 /*
- * Copyright © 2001 Stefan Gmeiner
- * Copyright © 2003 Neil Brown
- * Copyright © 2003-2005,2007 Peter Osterlund
+ * Copyright 2001 Stefan Gmeiner
+ * Copyright 2003 Neil Brown
+ * Copyright 2003-2005,2007 Peter Osterlund
  *
  * Permission to use, copy, modify, distribute, and sell this software
  * and its documentation for any purpose is hereby granted without

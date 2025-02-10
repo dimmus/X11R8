@@ -1,6 +1,6 @@
 /*
- * Copyright © 2007 Keith Packard
- * Copyright © 2010-2011 Aaron Plattner
+ * Copyright 2007 Keith Packard
+ * Copyright 2010-2011 Aaron Plattner
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that

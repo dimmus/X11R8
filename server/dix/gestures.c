@@ -1,7 +1,7 @@
 /*
- * Copyright © 2011 Collabra Ltd.
- * Copyright © 2011 Red Hat, Inc.
- * Copyright © 2020 Povilas Kanapickas  <povilas@radix.lt>
+ * Copyright 2011 Collabra Ltd.
+ * Copyright 2011 Red Hat, Inc.
+ * Copyright 2020 Povilas Kanapickas  <povilas@radix.lt>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),

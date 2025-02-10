@@ -3,8 +3,8 @@
  *
  * This version is for Linux and Free/Open/NetBSD.
  *
- * Copyright © 2000 VA Linux Systems, Inc.
- * Copyright © 2001 The XFree86 Project, Inc.
+ * Copyright 2000 VA Linux Systems, Inc.
+ * Copyright 2001 The XFree86 Project, Inc.
  */
 
 #ifdef HAVE_XORG_CONFIG_H

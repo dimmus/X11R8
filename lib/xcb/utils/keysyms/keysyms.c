@@ -1,8 +1,8 @@
 /*
- * Copyright © 2008 Ian Osgood <iano@quirkster.com>
- * Copyright © 2008 Jamey Sharp <jamey@minilop.net>
- * Copyright © 2008 Josh Triplett <josh@freedesktop.org>
- * Copyright © 2008 Ulrich Eckhardt <doomster@knuut.de>
+ * Copyright 2008 Ian Osgood <iano@quirkster.com>
+ * Copyright 2008 Jamey Sharp <jamey@minilop.net>
+ * Copyright 2008 Josh Triplett <josh@freedesktop.org>
+ * Copyright 2008 Ulrich Eckhardt <doomster@knuut.de>
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation

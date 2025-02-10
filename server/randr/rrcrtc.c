@@ -1,5 +1,5 @@
 /*
- * Copyright © 2006 Keith Packard
+ * Copyright 2006 Keith Packard
  * Copyright 2010 Red Hat, Inc
  *
  * Permission to use, copy, modify, distribute, and sell this software and its

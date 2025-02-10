@@ -1,6 +1,6 @@
 /*
- * Copyright © 2007 Red Hat, Inc.
- * Copyright © 2008 Maarten Maathuis
+ * Copyright 2007 Red Hat, Inc.
+ * Copyright 2008 Maarten Maathuis
  *
  *
  * Permission is hereby granted, free of charge, to any person obtaining a

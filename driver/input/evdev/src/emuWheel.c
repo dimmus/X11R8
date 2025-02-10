@@ -6,7 +6,7 @@
 * Copyright 2002 by Paul Elliott
 * (Ported from xf86-input-mouse, above copyrights taken from there)
 * Copyright 2008 by Chris Salch
-* Copyright © 2008 Red Hat, Inc.
+* Copyright 2008 Red Hat, Inc.
 *
 * Permission to use, copy, modify, distribute, and sell this software
 * and its documentation for any purpose is hereby granted without

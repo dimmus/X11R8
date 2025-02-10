@@ -1,7 +1,7 @@
 /*
- * Copyright © 2000 Compaq Computer Corporation, Inc.
- * Copyright © 2002 Hewlett Packard Company, Inc.
- * Copyright © 2006 Keith Packard
+ * Copyright 2000 Compaq Computer Corporation, Inc.
+ * Copyright 2002 Hewlett Packard Company, Inc.
+ * Copyright 2006 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
