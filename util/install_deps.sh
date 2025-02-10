@@ -55,10 +55,11 @@ install_deps()
             # EOF
             ;;
         "Arch Linux")
-            sudo pacman -S meson libdrm libunwind libinput
+            sudo pacman -S meson libdrm libunwind libinput freetype2 fontconfig
             sudo pacman -Sdd mesa libglvnd # avoid autoinstall x11 stuff
             ;;
         "Alpine Linux")
+            # TODO: find the way not to install X11 dependency stuff
             doas apk add meson flex bison clang ccache \
                 freetype-dev fontconfig-dev pixman-dev xkbcomp-dev dbus-dev \
                 libdrm-dev mesa-dev libunwind-dev libinput-dev libevdev-dev \
