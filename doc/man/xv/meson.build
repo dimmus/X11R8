@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-# Copyright © 2022 Intel Corporation
+# Copyright 2022 Intel Corporation
 
 xorg = import('unstable-xorg')
 

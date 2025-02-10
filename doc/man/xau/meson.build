@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-# Copyright © 2023 Intel Corporation
+# Copyright 2023 Intel Corporation
 
 foreach man: [
   'Xau', 'XauDisposeAuth', 'XauFileName', 'XauGetAuthByAddr', 'XauGetBestAuthByAddr',

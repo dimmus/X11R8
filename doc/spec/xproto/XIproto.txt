@@ -10,7 +10,7 @@ X11 Input Extension Protocol Specification
                       Version 1.5
                     Peter Hutterer
 
-   Copyright © 1989, 1990, 1991 by Hewlett-Packard Company and
+   Copyright 1989, 1990, 1991 by Hewlett-Packard Company and
    Ardent Computer
 
    Permission to use, copy, modify, and distribute this
@@ -20,7 +20,7 @@ X11 Input Extension Protocol Specification
    Hewlett-Packard make no representations about the suitability
    for any purpose of the information in this document. It is
    provided "as is" without express or implied warranty. Copyright
-   © 1989, 1990, 1991, 1992 X Consortium
+   1989, 1990, 1991, 1992 X Consortium
 
    Permission is hereby granted, free of charge, to any person
    obtaining a copy of this software and associated documentation
@@ -49,7 +49,7 @@ X11 Input Extension Protocol Specification
    without prior written authorization from the X Consortium. X
    Window System is a trademark of The Open Group.
 
-   Copyright © 2008 by Peter Hutterer
+   Copyright 2008 by Peter Hutterer
 
    Permission is hereby granted, free of charge, to any person
    obtaining a copy of this software and associated documentation
