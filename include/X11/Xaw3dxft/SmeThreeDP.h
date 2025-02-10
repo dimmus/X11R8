@@ -29,48 +29,50 @@ SOFTWARE.
 #include <X11/Xaw3dxft/SmeThreeD.h>
 #include <X11/Xaw3dxft/SmeP.h>
 
-typedef struct {
-    Dimension	    shadow_width;
-    Pixel	    top_shadow_pixel;
-    Pixel	    bot_shadow_pixel;
-    Pixmap	    top_shadow_pxmap;
-    Pixmap	    bot_shadow_pxmap;
-    int		    top_shadow_contrast;
-    int		    bot_shadow_contrast;
-    GC		    top_shadow_GC;
-    GC		    bot_shadow_GC;
-    GC		    erase_GC;
-    XtPointer	    user_data;
-    Boolean	    be_nice_to_cmap;
-    Boolean	    shadowed;
-  } SmeThreeDPart;
+typedef struct
+{
+    Dimension shadow_width;
+    Pixel     top_shadow_pixel;
+    Pixel     bot_shadow_pixel;
+    Pixmap    top_shadow_pxmap;
+    Pixmap    bot_shadow_pxmap;
+    int       top_shadow_contrast;
+    int       bot_shadow_contrast;
+    GC        top_shadow_GC;
+    GC        bot_shadow_GC;
+    GC        erase_GC;
+    XtPointer user_data;
+    Boolean   be_nice_to_cmap;
+    Boolean   shadowed;
+} SmeThreeDPart;
 
 /* Full instance record declaration */
-typedef struct _SmeThreeDRec {
-    ObjectPart	    object;
-    RectObjPart	    rectangle;
-    SmePart	    sme;
-    SmeThreeDPart   sme_threeD;
-  } SmeThreeDRec;
+typedef struct _SmeThreeDRec
+{
+    ObjectPart    object;
+    RectObjPart   rectangle;
+    SmePart       sme;
+    SmeThreeDPart sme_threeD;
+} SmeThreeDRec;
 
-typedef void (*XawSme3dShadowDrawProc)(
-    Widget
-);
+typedef void (*XawSme3dShadowDrawProc)(Widget);
 
-typedef struct {
-    XawSme3dShadowDrawProc	shadowdraw;
-  } SmeThreeDClassPart;
+typedef struct
+{
+    XawSme3dShadowDrawProc shadowdraw;
+} SmeThreeDClassPart;
 
 /* Full class record declaration. */
-typedef struct _SmeThreeDClassRec {
-    RectObjClassPart	rect_class;
-    SmeClassPart	sme_class;
-    SmeThreeDClassPart	sme_threeD_class;
-  } SmeThreeDClassRec;
+typedef struct _SmeThreeDClassRec
+{
+    RectObjClassPart   rect_class;
+    SmeClassPart       sme_class;
+    SmeThreeDClassPart sme_threeD_class;
+} SmeThreeDClassRec;
 
 /* Class pointer. */
 extern SmeThreeDClassRec smeThreeDClassRec;
 
-#define XtInheritXawSme3dShadowDraw ((XawSme3dShadowDrawProc) _XtInherit)
+#define XtInheritXawSme3dShadowDraw ((XawSme3dShadowDrawProc)_XtInherit)
 
 #endif /* _XawSmeThreeDP_h */

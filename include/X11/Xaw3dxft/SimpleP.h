@@ -52,35 +52,39 @@ SOFTWARE.
 #include "Xaw3dP.h"
 #include <X11/Xaw3dxft/Simple.h>
 
-typedef struct {
-    Boolean	(*change_sensitive)(Widget);
+typedef struct
+{
+    Boolean (*change_sensitive)(Widget);
 } SimpleClassPart;
 
-#define XtInheritChangeSensitive ((Boolean (*)(Widget))_XtInherit)
+#define XtInheritChangeSensitive ((Boolean(*)(Widget))_XtInherit)
 
-typedef struct _SimpleClassRec {
-    CoreClassPart	core_class;
-    SimpleClassPart	simple_class;
+typedef struct _SimpleClassRec
+{
+    CoreClassPart   core_class;
+    SimpleClassPart simple_class;
 } SimpleClassRec;
 
 extern SimpleClassRec simpleClassRec;
 
-typedef struct {
+typedef struct
+{
     /* resources */
-    Cursor	cursor;
-    Pixmap	insensitive_border;
-    String      cursor_name;	/* cursor specified by name. */
+    Cursor cursor;
+    Pixmap insensitive_border;
+    String cursor_name; /* cursor specified by name. */
 
-    Pixel       pointer_fg, pointer_bg;	/* Pointer colors. */
+    Pixel pointer_fg, pointer_bg; /* Pointer colors. */
 #ifdef XAW_INTERNATIONALIZATION
-    Boolean     international;
+    Boolean international;
 #endif
     /* private state */
 } SimplePart;
 
-typedef struct _SimpleRec {
-    CorePart	core;
-    SimplePart	simple;
+typedef struct _SimpleRec
+{
+    CorePart   core;
+    SimplePart simple;
 } SimpleRec;
 
 #endif /* _SimpleP_h */

@@ -25,28 +25,28 @@
 
 #define LBXNAME "LBX"
 
-#define LBX_MAJOR_VERSION	1
-#define LBX_MINOR_VERSION	0
+#define LBX_MAJOR_VERSION 1
+#define LBX_MINOR_VERSION 0
 
-#define LbxNumberReqs			44
-#define LbxEvent			0
-#define LbxQuickMotionDeltaEvent	1
-#define LbxNumberEvents			2
+#define LbxNumberReqs            44
+#define LbxEvent                 0
+#define LbxQuickMotionDeltaEvent 1
+#define LbxNumberEvents          2
 
 /* This is always the master client */
-#define LbxMasterClientIndex		0
+#define LbxMasterClientIndex 0
 
 /* LbxEvent lbxType sub-fields */
-#define LbxSwitchEvent			0
-#define LbxCloseEvent			1
-#define LbxDeltaEvent			2
-#define LbxInvalidateTagEvent		3
-#define LbxSendTagDataEvent		4
-#define LbxListenToOne			5
-#define LbxListenToAll			6
-#define LbxMotionDeltaEvent		7
-#define LbxReleaseCmapEvent		8
-#define LbxFreeCellsEvent		9
+#define LbxSwitchEvent        0
+#define LbxCloseEvent         1
+#define LbxDeltaEvent         2
+#define LbxInvalidateTagEvent 3
+#define LbxSendTagDataEvent   4
+#define LbxListenToOne        5
+#define LbxListenToAll        6
+#define LbxMotionDeltaEvent   7
+#define LbxReleaseCmapEvent   8
+#define LbxFreeCellsEvent     9
 
 /*
  * Lbx image compression methods
@@ -57,17 +57,16 @@
  * at option negotiation time.
  */
 
-#define LbxImageCompressNone		0
+#define LbxImageCompressNone 0
 
-
-#define BadLbxClient			0
-#define LbxNumberErrors			(BadLbxClient + 1)
+#define BadLbxClient    0
+#define LbxNumberErrors (BadLbxClient + 1)
 
 /* tagged data types */
-#define	LbxTagTypeModmap		1
-#define	LbxTagTypeKeymap		2
-#define	LbxTagTypeProperty		3
-#define	LbxTagTypeFont			4
-#define	LbxTagTypeConnInfo		5
+#define LbxTagTypeModmap   1
+#define LbxTagTypeKeymap   2
+#define LbxTagTypeProperty 3
+#define LbxTagTypeFont     4
+#define LbxTagTypeConnInfo 5
 
 #endif

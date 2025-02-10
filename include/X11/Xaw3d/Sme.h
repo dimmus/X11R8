@@ -63,16 +63,16 @@ in this Software without prior written authorization from the X Consortium.
 */
 
 #ifdef XAW_INTERNATIONALIZATION
-#ifndef XtCInternational
-#define XtCInternational	"International"
-#endif
-#ifndef XtNinternational
-#define XtNinternational	"international"
-#endif
+#  ifndef XtCInternational
+#    define XtCInternational "International"
+#  endif
+#  ifndef XtNinternational
+#    define XtNinternational "international"
+#  endif
 #endif
 
-typedef struct _SmeClassRec*	SmeObjectClass;
-typedef struct _SmeRec*	        SmeObject;
+typedef struct _SmeClassRec *SmeObjectClass;
+typedef struct _SmeRec      *SmeObject;
 
 extern WidgetClass smeObjectClass;
 

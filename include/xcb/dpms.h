@@ -10,34 +10,36 @@
  **/
 
 #ifndef __DPMS_H
-#define __DPMS_H
+#  define __DPMS_H
 
-#include "xcb.h"
-#include "xcb/xproto.h"
+#  include "xcb.h"
+#  include "xcb/xproto.h"
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#define XCB_DPMS_MAJOR_VERSION 1
-#define XCB_DPMS_MINOR_VERSION 2
+#  define XCB_DPMS_MAJOR_VERSION 1
+#  define XCB_DPMS_MINOR_VERSION 2
 
 extern xcb_extension_t xcb_dpms_id;
 
 /**
  * @brief xcb_dpms_get_version_cookie_t
  **/
-typedef struct xcb_dpms_get_version_cookie_t {
+typedef struct xcb_dpms_get_version_cookie_t
+{
     unsigned int sequence;
 } xcb_dpms_get_version_cookie_t;
 
 /** Opcode for xcb_dpms_get_version. */
-#define XCB_DPMS_GET_VERSION 0
+#  define XCB_DPMS_GET_VERSION 0
 
 /**
  * @brief xcb_dpms_get_version_request_t
  **/
-typedef struct xcb_dpms_get_version_request_t {
+typedef struct xcb_dpms_get_version_request_t
+{
     uint8_t  major_opcode;
     uint8_t  minor_opcode;
     uint16_t length;
@@ -48,7 +50,8 @@ typedef struct xcb_dpms_get_version_request_t {
 /**
  * @brief xcb_dpms_get_version_reply_t
  **/
-typedef struct xcb_dpms_get_version_reply_t {
+typedef struct xcb_dpms_get_version_reply_t
+{
     uint8_t  response_type;
     uint8_t  pad0;
     uint16_t sequence;
@@ -60,17 +63,19 @@ typedef struct xcb_dpms_get_version_reply_t {
 /**
  * @brief xcb_dpms_capable_cookie_t
  **/
-typedef struct xcb_dpms_capable_cookie_t {
+typedef struct xcb_dpms_capable_cookie_t
+{
     unsigned int sequence;
 } xcb_dpms_capable_cookie_t;
 
 /** Opcode for xcb_dpms_capable. */
-#define XCB_DPMS_CAPABLE 1
+#  define XCB_DPMS_CAPABLE 1
 
 /**
  * @brief xcb_dpms_capable_request_t
  **/
-typedef struct xcb_dpms_capable_request_t {
+typedef struct xcb_dpms_capable_request_t
+{
     uint8_t  major_opcode;
     uint8_t  minor_opcode;
     uint16_t length;
@@ -79,7 +84,8 @@ typedef struct xcb_dpms_capable_request_t {
 /**
  * @brief xcb_dpms_capable_reply_t
  **/
-typedef struct xcb_dpms_capable_reply_t {
+typedef struct xcb_dpms_capable_reply_t
+{
     uint8_t  response_type;
     uint8_t  pad0;
     uint16_t sequence;
@@ -91,17 +97,19 @@ typedef struct xcb_dpms_capable_reply_t {
 /**
  * @brief xcb_dpms_get_timeouts_cookie_t
  **/
-typedef struct xcb_dpms_get_timeouts_cookie_t {
+typedef struct xcb_dpms_get_timeouts_cookie_t
+{
     unsigned int sequence;
 } xcb_dpms_get_timeouts_cookie_t;
 
 /** Opcode for xcb_dpms_get_timeouts. */
-#define XCB_DPMS_GET_TIMEOUTS 2
+#  define XCB_DPMS_GET_TIMEOUTS 2
 
 /**
  * @brief xcb_dpms_get_timeouts_request_t
  **/
-typedef struct xcb_dpms_get_timeouts_request_t {
+typedef struct xcb_dpms_get_timeouts_request_t
+{
     uint8_t  major_opcode;
     uint8_t  minor_opcode;
     uint16_t length;
@@ -110,7 +118,8 @@ typedef struct xcb_dpms_get_timeouts_request_t {
 /**
  * @brief xcb_dpms_get_timeouts_reply_t
  **/
-typedef struct xcb_dpms_get_timeouts_reply_t {
+typedef struct xcb_dpms_get_timeouts_reply_t
+{
     uint8_t  response_type;
     uint8_t  pad0;
     uint16_t sequence;
@@ -122,12 +131,13 @@ typedef struct xcb_dpms_get_timeouts_reply_t {
 } xcb_dpms_get_timeouts_reply_t;
 
 /** Opcode for xcb_dpms_set_timeouts. */
-#define XCB_DPMS_SET_TIMEOUTS 3
+#  define XCB_DPMS_SET_TIMEOUTS 3
 
 /**
  * @brief xcb_dpms_set_timeouts_request_t
  **/
-typedef struct xcb_dpms_set_timeouts_request_t {
+typedef struct xcb_dpms_set_timeouts_request_t
+{
     uint8_t  major_opcode;
     uint8_t  minor_opcode;
     uint16_t length;
@@ -137,43 +147,47 @@ typedef struct xcb_dpms_set_timeouts_request_t {
 } xcb_dpms_set_timeouts_request_t;
 
 /** Opcode for xcb_dpms_enable. */
-#define XCB_DPMS_ENABLE 4
+#  define XCB_DPMS_ENABLE 4
 
 /**
  * @brief xcb_dpms_enable_request_t
  **/
-typedef struct xcb_dpms_enable_request_t {
+typedef struct xcb_dpms_enable_request_t
+{
     uint8_t  major_opcode;
     uint8_t  minor_opcode;
     uint16_t length;
 } xcb_dpms_enable_request_t;
 
 /** Opcode for xcb_dpms_disable. */
-#define XCB_DPMS_DISABLE 5
+#  define XCB_DPMS_DISABLE 5
 
 /**
  * @brief xcb_dpms_disable_request_t
  **/
-typedef struct xcb_dpms_disable_request_t {
+typedef struct xcb_dpms_disable_request_t
+{
     uint8_t  major_opcode;
     uint8_t  minor_opcode;
     uint16_t length;
 } xcb_dpms_disable_request_t;
 
-typedef enum xcb_dpms_dpms_mode_t {
-    XCB_DPMS_DPMS_MODE_ON = 0,
+typedef enum xcb_dpms_dpms_mode_t
+{
+    XCB_DPMS_DPMS_MODE_ON      = 0,
     XCB_DPMS_DPMS_MODE_STANDBY = 1,
     XCB_DPMS_DPMS_MODE_SUSPEND = 2,
-    XCB_DPMS_DPMS_MODE_OFF = 3
+    XCB_DPMS_DPMS_MODE_OFF     = 3
 } xcb_dpms_dpms_mode_t;
 
 /** Opcode for xcb_dpms_force_level. */
-#define XCB_DPMS_FORCE_LEVEL 6
+#  define XCB_DPMS_FORCE_LEVEL 6
 
 /**
  * @brief xcb_dpms_force_level_request_t
  **/
-typedef struct xcb_dpms_force_level_request_t {
+typedef struct xcb_dpms_force_level_request_t
+{
     uint8_t  major_opcode;
     uint8_t  minor_opcode;
     uint16_t length;
@@ -183,17 +197,19 @@ typedef struct xcb_dpms_force_level_request_t {
 /**
  * @brief xcb_dpms_info_cookie_t
  **/
-typedef struct xcb_dpms_info_cookie_t {
+typedef struct xcb_dpms_info_cookie_t
+{
     unsigned int sequence;
 } xcb_dpms_info_cookie_t;
 
 /** Opcode for xcb_dpms_info. */
-#define XCB_DPMS_INFO 7
+#  define XCB_DPMS_INFO 7
 
 /**
  * @brief xcb_dpms_info_request_t
  **/
-typedef struct xcb_dpms_info_request_t {
+typedef struct xcb_dpms_info_request_t
+{
     uint8_t  major_opcode;
     uint8_t  minor_opcode;
     uint16_t length;
@@ -202,7 +218,8 @@ typedef struct xcb_dpms_info_request_t {
 /**
  * @brief xcb_dpms_info_reply_t
  **/
-typedef struct xcb_dpms_info_reply_t {
+typedef struct xcb_dpms_info_reply_t
+{
     uint8_t  response_type;
     uint8_t  pad0;
     uint16_t sequence;
@@ -212,17 +229,19 @@ typedef struct xcb_dpms_info_reply_t {
     uint8_t  pad1[21];
 } xcb_dpms_info_reply_t;
 
-typedef enum xcb_dpms_event_mask_t {
+typedef enum xcb_dpms_event_mask_t
+{
     XCB_DPMS_EVENT_MASK_INFO_NOTIFY = 1
 } xcb_dpms_event_mask_t;
 
 /** Opcode for xcb_dpms_select_input. */
-#define XCB_DPMS_SELECT_INPUT 8
+#  define XCB_DPMS_SELECT_INPUT 8
 
 /**
  * @brief xcb_dpms_select_input_request_t
  **/
-typedef struct xcb_dpms_select_input_request_t {
+typedef struct xcb_dpms_select_input_request_t
+{
     uint8_t  major_opcode;
     uint8_t  minor_opcode;
     uint16_t length;
@@ -230,12 +249,13 @@ typedef struct xcb_dpms_select_input_request_t {
 } xcb_dpms_select_input_request_t;
 
 /** Opcode for xcb_dpms_info_notify. */
-#define XCB_DPMS_INFO_NOTIFY 0
+#  define XCB_DPMS_INFO_NOTIFY 0
 
 /**
  * @brief xcb_dpms_info_notify_event_t
  **/
-typedef struct xcb_dpms_info_notify_event_t {
+typedef struct xcb_dpms_info_notify_event_t
+{
     uint8_t         response_type;
     uint8_t         extension;
     uint16_t        sequence;
@@ -257,9 +277,9 @@ typedef struct xcb_dpms_info_notify_event_t {
  *
  */
 xcb_dpms_get_version_cookie_t
-xcb_dpms_get_version (xcb_connection_t *c,
-                      uint16_t          client_major_version,
-                      uint16_t          client_minor_version);
+xcb_dpms_get_version(xcb_connection_t *c,
+                     uint16_t          client_major_version,
+                     uint16_t          client_minor_version);
 
 /**
  *
@@ -273,9 +293,9 @@ xcb_dpms_get_version (xcb_connection_t *c,
  * placed in the event queue.
  */
 xcb_dpms_get_version_cookie_t
-xcb_dpms_get_version_unchecked (xcb_connection_t *c,
-                                uint16_t          client_major_version,
-                                uint16_t          client_minor_version);
+xcb_dpms_get_version_unchecked(xcb_connection_t *c,
+                               uint16_t          client_major_version,
+                               uint16_t          client_minor_version);
 
 /**
  * Return the reply
@@ -292,9 +312,9 @@ xcb_dpms_get_version_unchecked (xcb_connection_t *c,
  * The returned value must be freed by the caller using free().
  */
 xcb_dpms_get_version_reply_t *
-xcb_dpms_get_version_reply (xcb_connection_t               *c,
-                            xcb_dpms_get_version_cookie_t   cookie  /**< */,
-                            xcb_generic_error_t           **e);
+xcb_dpms_get_version_reply(xcb_connection_t             *c,
+                           xcb_dpms_get_version_cookie_t cookie /**< */,
+                           xcb_generic_error_t         **e);
 
 /**
  *
@@ -304,8 +324,7 @@ xcb_dpms_get_version_reply (xcb_connection_t               *c,
  * Delivers a request to the X server.
  *
  */
-xcb_dpms_capable_cookie_t
-xcb_dpms_capable (xcb_connection_t *c);
+xcb_dpms_capable_cookie_t xcb_dpms_capable(xcb_connection_t *c);
 
 /**
  *
@@ -318,8 +337,7 @@ xcb_dpms_capable (xcb_connection_t *c);
  * a reply to be generated. Any returned error will be
  * placed in the event queue.
  */
-xcb_dpms_capable_cookie_t
-xcb_dpms_capable_unchecked (xcb_connection_t *c);
+xcb_dpms_capable_cookie_t xcb_dpms_capable_unchecked(xcb_connection_t *c);
 
 /**
  * Return the reply
@@ -336,9 +354,9 @@ xcb_dpms_capable_unchecked (xcb_connection_t *c);
  * The returned value must be freed by the caller using free().
  */
 xcb_dpms_capable_reply_t *
-xcb_dpms_capable_reply (xcb_connection_t           *c,
-                        xcb_dpms_capable_cookie_t   cookie  /**< */,
-                        xcb_generic_error_t       **e);
+xcb_dpms_capable_reply(xcb_connection_t         *c,
+                       xcb_dpms_capable_cookie_t cookie /**< */,
+                       xcb_generic_error_t     **e);
 
 /**
  *
@@ -348,8 +366,7 @@ xcb_dpms_capable_reply (xcb_connection_t           *c,
  * Delivers a request to the X server.
  *
  */
-xcb_dpms_get_timeouts_cookie_t
-xcb_dpms_get_timeouts (xcb_connection_t *c);
+xcb_dpms_get_timeouts_cookie_t xcb_dpms_get_timeouts(xcb_connection_t *c);
 
 /**
  *
@@ -363,7 +380,7 @@ xcb_dpms_get_timeouts (xcb_connection_t *c);
  * placed in the event queue.
  */
 xcb_dpms_get_timeouts_cookie_t
-xcb_dpms_get_timeouts_unchecked (xcb_connection_t *c);
+xcb_dpms_get_timeouts_unchecked(xcb_connection_t *c);
 
 /**
  * Return the reply
@@ -380,9 +397,9 @@ xcb_dpms_get_timeouts_unchecked (xcb_connection_t *c);
  * The returned value must be freed by the caller using free().
  */
 xcb_dpms_get_timeouts_reply_t *
-xcb_dpms_get_timeouts_reply (xcb_connection_t                *c,
-                             xcb_dpms_get_timeouts_cookie_t   cookie  /**< */,
-                             xcb_generic_error_t            **e);
+xcb_dpms_get_timeouts_reply(xcb_connection_t              *c,
+                            xcb_dpms_get_timeouts_cookie_t cookie /**< */,
+                            xcb_generic_error_t          **e);
 
 /**
  *
@@ -395,11 +412,10 @@ xcb_dpms_get_timeouts_reply (xcb_connection_t                *c,
  * a reply to be generated. Any returned error will be
  * saved for handling by xcb_request_check().
  */
-xcb_void_cookie_t
-xcb_dpms_set_timeouts_checked (xcb_connection_t *c,
-                               uint16_t          standby_timeout,
-                               uint16_t          suspend_timeout,
-                               uint16_t          off_timeout);
+xcb_void_cookie_t xcb_dpms_set_timeouts_checked(xcb_connection_t *c,
+                                                uint16_t standby_timeout,
+                                                uint16_t suspend_timeout,
+                                                uint16_t off_timeout);
 
 /**
  *
@@ -409,36 +425,10 @@ xcb_dpms_set_timeouts_checked (xcb_connection_t *c,
  * Delivers a request to the X server.
  *
  */
-xcb_void_cookie_t
-xcb_dpms_set_timeouts (xcb_connection_t *c,
-                       uint16_t          standby_timeout,
-                       uint16_t          suspend_timeout,
-                       uint16_t          off_timeout);
-
-/**
- *
- * @param c The connection
- * @return A cookie
- *
- * Delivers a request to the X server.
- *
- * This form can be used only if the request will not cause
- * a reply to be generated. Any returned error will be
- * saved for handling by xcb_request_check().
- */
-xcb_void_cookie_t
-xcb_dpms_enable_checked (xcb_connection_t *c);
-
-/**
- *
- * @param c The connection
- * @return A cookie
- *
- * Delivers a request to the X server.
- *
- */
-xcb_void_cookie_t
-xcb_dpms_enable (xcb_connection_t *c);
+xcb_void_cookie_t xcb_dpms_set_timeouts(xcb_connection_t *c,
+                                        uint16_t          standby_timeout,
+                                        uint16_t          suspend_timeout,
+                                        uint16_t          off_timeout);
 
 /**
  *
@@ -451,8 +441,7 @@ xcb_dpms_enable (xcb_connection_t *c);
  * a reply to be generated. Any returned error will be
  * saved for handling by xcb_request_check().
  */
-xcb_void_cookie_t
-xcb_dpms_disable_checked (xcb_connection_t *c);
+xcb_void_cookie_t xcb_dpms_enable_checked(xcb_connection_t *c);
 
 /**
  *
@@ -462,8 +451,7 @@ xcb_dpms_disable_checked (xcb_connection_t *c);
  * Delivers a request to the X server.
  *
  */
-xcb_void_cookie_t
-xcb_dpms_disable (xcb_connection_t *c);
+xcb_void_cookie_t xcb_dpms_enable(xcb_connection_t *c);
 
 /**
  *
@@ -476,9 +464,7 @@ xcb_dpms_disable (xcb_connection_t *c);
  * a reply to be generated. Any returned error will be
  * saved for handling by xcb_request_check().
  */
-xcb_void_cookie_t
-xcb_dpms_force_level_checked (xcb_connection_t *c,
-                              uint16_t          power_level);
+xcb_void_cookie_t xcb_dpms_disable_checked(xcb_connection_t *c);
 
 /**
  *
@@ -488,9 +474,21 @@ xcb_dpms_force_level_checked (xcb_connection_t *c,
  * Delivers a request to the X server.
  *
  */
-xcb_void_cookie_t
-xcb_dpms_force_level (xcb_connection_t *c,
-                      uint16_t          power_level);
+xcb_void_cookie_t xcb_dpms_disable(xcb_connection_t *c);
+
+/**
+ *
+ * @param c The connection
+ * @return A cookie
+ *
+ * Delivers a request to the X server.
+ *
+ * This form can be used only if the request will not cause
+ * a reply to be generated. Any returned error will be
+ * saved for handling by xcb_request_check().
+ */
+xcb_void_cookie_t xcb_dpms_force_level_checked(xcb_connection_t *c,
+                                               uint16_t          power_level);
 
 /**
  *
@@ -500,8 +498,18 @@ xcb_dpms_force_level (xcb_connection_t *c,
  * Delivers a request to the X server.
  *
  */
-xcb_dpms_info_cookie_t
-xcb_dpms_info (xcb_connection_t *c);
+xcb_void_cookie_t xcb_dpms_force_level(xcb_connection_t *c,
+                                       uint16_t          power_level);
+
+/**
+ *
+ * @param c The connection
+ * @return A cookie
+ *
+ * Delivers a request to the X server.
+ *
+ */
+xcb_dpms_info_cookie_t xcb_dpms_info(xcb_connection_t *c);
 
 /**
  *
@@ -514,8 +522,7 @@ xcb_dpms_info (xcb_connection_t *c);
  * a reply to be generated. Any returned error will be
  * placed in the event queue.
  */
-xcb_dpms_info_cookie_t
-xcb_dpms_info_unchecked (xcb_connection_t *c);
+xcb_dpms_info_cookie_t xcb_dpms_info_unchecked(xcb_connection_t *c);
 
 /**
  * Return the reply
@@ -532,9 +539,9 @@ xcb_dpms_info_unchecked (xcb_connection_t *c);
  * The returned value must be freed by the caller using free().
  */
 xcb_dpms_info_reply_t *
-xcb_dpms_info_reply (xcb_connection_t        *c,
-                     xcb_dpms_info_cookie_t   cookie  /**< */,
-                     xcb_generic_error_t    **e);
+xcb_dpms_info_reply(xcb_connection_t      *c,
+                    xcb_dpms_info_cookie_t cookie /**< */,
+                    xcb_generic_error_t  **e);
 
 /**
  *
@@ -547,9 +554,8 @@ xcb_dpms_info_reply (xcb_connection_t        *c,
  * a reply to be generated. Any returned error will be
  * saved for handling by xcb_request_check().
  */
-xcb_void_cookie_t
-xcb_dpms_select_input_checked (xcb_connection_t *c,
-                               uint32_t          event_mask);
+xcb_void_cookie_t xcb_dpms_select_input_checked(xcb_connection_t *c,
+                                                uint32_t          event_mask);
 
 /**
  *
@@ -559,14 +565,12 @@ xcb_dpms_select_input_checked (xcb_connection_t *c,
  * Delivers a request to the X server.
  *
  */
-xcb_void_cookie_t
-xcb_dpms_select_input (xcb_connection_t *c,
-                       uint32_t          event_mask);
+xcb_void_cookie_t xcb_dpms_select_input(xcb_connection_t *c,
+                                        uint32_t          event_mask);
 
-
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 
 #endif
 

@@ -51,19 +51,18 @@ in this Software without prior written authorization from The Open Group.
  *
  *****************************************************************************/
 
-#define XtNdecay "decay"
-#define XtCDecay "Decay"
-#define XtNinitialDelay "initialDelay"
-#define XtCDelay "Delay"
-#define XtNminimumDelay "minimumDelay"
-#define XtCMinimumDelay "MinimumDelay"
-#define XtNrepeatDelay "repeatDelay"
-#define XtNflash "flash"
+#define XtNdecay         "decay"
+#define XtCDecay         "Decay"
+#define XtNinitialDelay  "initialDelay"
+#define XtCDelay         "Delay"
+#define XtNminimumDelay  "minimumDelay"
+#define XtCMinimumDelay  "MinimumDelay"
+#define XtNrepeatDelay   "repeatDelay"
+#define XtNflash         "flash"
 #define XtNstartCallback "startCallback"
 #define XtCStartCallback "StartCallback"
-#define XtNstopCallback "stopCallback"
-#define XtCStopCallback "StopCallback"
-
+#define XtNstopCallback  "stopCallback"
+#define XtCStopCallback  "StopCallback"
 
 extern WidgetClass repeaterWidgetClass;
 

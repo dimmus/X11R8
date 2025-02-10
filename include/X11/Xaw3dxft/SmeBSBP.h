@@ -50,53 +50,56 @@ in this Software without prior written authorization from the X Consortium.
  *
  ************************************************************/
 
-typedef struct _SmeBSBClassPart {
-  XtPointer extension;
+typedef struct _SmeBSBClassPart
+{
+    XtPointer extension;
 } SmeBSBClassPart;
 
 /* Full class record declaration */
-typedef struct _SmeBSBClassRec {
-    RectObjClassPart	rect_class;
-    SmeClassPart	sme_class;
-    SmeThreeDClassPart	sme_threeD_class;
-    SmeBSBClassPart	sme_bsb_class;
+typedef struct _SmeBSBClassRec
+{
+    RectObjClassPart   rect_class;
+    SmeClassPart       sme_class;
+    SmeThreeDClassPart sme_threeD_class;
+    SmeBSBClassPart    sme_bsb_class;
 } SmeBSBClassRec;
 
 extern SmeBSBClassRec smeBSBClassRec;
 
 /* New fields for the Sme Object record */
-typedef struct {
+typedef struct
+{
     /* resources */
-    String label;		/* The entry label. */
-    int vert_space;		/* extra vert space to leave, as a percentage
+    String       label;  /* The entry label. */
+    int          vert_space;  /* extra vert space to leave, as a percentage
 				   of the font height of the label. */
-    Pixmap left_bitmap, right_bitmap; /* pixmaps to show. */
-    Dimension left_margin, right_margin; /* left and right margins. */
-    Pixel foreground;		/* foreground color. */
-    XFontStruct * font;		/* The font to show label in. */
+    Pixmap       left_bitmap, right_bitmap; /* pixmaps to show. */
+    Dimension    left_margin, right_margin; /* left and right margins. */
+    Pixel        foreground;  /* foreground color. */
+    XFontStruct *font;  /* The font to show label in. */
 #ifdef XAW_INTERNATIONALIZATION
-    XFontSet fontset;		/* or fontset */
+    XFontSet fontset;  /* or fontset */
 #endif
-    XtJustify justify;		/* Justification for the label. */
-    int underline;		/* index of letter to underline in label. */
-    char * xftfontname;
+    XtJustify justify;  /* Justification for the label. */
+    int       underline;  /* index of letter to underline in label. */
+    char     *xftfontname;
 
     /* private resources. */
-    Boolean set_values_area_cleared; /* Remember if we need to unhighlight. */
-    Boolean set_values_area_reverse; /* Remember if color is reversed. */
-    GC norm_gc;			/* normal color gc. */
-    GC rev_gc;			/* reverse color gc. */
-    GC norm_gray_gc;		/* Normal color (grayed out) gc. */
-    GC invert_gc;		/* gc for flipping colors. */
-    Pixmap left_stippled, right_stippled; /* insensitive pixmaps */
+    Boolean   set_values_area_cleared; /* Remember if we need to unhighlight. */
+    Boolean   set_values_area_reverse; /* Remember if color is reversed. */
+    GC        norm_gc; /* normal color gc. */
+    GC        rev_gc; /* reverse color gc. */
+    GC        norm_gray_gc; /* Normal color (grayed out) gc. */
+    GC        invert_gc; /* gc for flipping colors. */
+    Pixmap    left_stippled, right_stippled; /* insensitive pixmaps */
     Dimension left_bitmap_width; /* size and depth of each pixmap. */
     Dimension left_bitmap_height;
     Dimension right_bitmap_width;
     Dimension right_bitmap_height;
     unsigned int left_depth;
     unsigned int right_depth;
-    String menu_name;		/* name of nested sub-menu or NULL */
-    XftFont * xftfont;
+    String       menu_name; /* name of nested sub-menu or NULL */
+    XftFont     *xftfont;
 } SmeBSBPart;
 
 /****************************************************************
@@ -105,12 +108,13 @@ typedef struct {
  *
  ****************************************************************/
 
-typedef struct _SmeBSBRec {
-    ObjectPart		object;
-    RectObjPart		rectangle;
-    SmePart		sme;
-    SmeThreeDPart	sme_threeD;
-    SmeBSBPart		sme_bsb;
+typedef struct _SmeBSBRec
+{
+    ObjectPart    object;
+    RectObjPart   rectangle;
+    SmePart       sme;
+    SmeThreeDPart sme_threeD;
+    SmeBSBPart    sme_bsb;
 } SmeBSBRec;
 
 /************************************************************

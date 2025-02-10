@@ -31,21 +31,11 @@ in this Software without prior written authorization from The Open Group.
 
 _XFUNCPROTOBEGIN
 
-int XmuGetHostname
-(
-    char		*buf_return,
-    int			maxlen
-);
+int XmuGetHostname(char *buf_return, int maxlen);
 
 #ifndef _XMU_H_
-int XmuSnprintf
-(
- char			*str,
- int			size,
- _Xconst char		*fmt,
-    ...
- )
-_X_ATTRIBUTE_PRINTF(3,4);
+int XmuSnprintf(char *str, int size, _Xconst char *fmt, ...)
+    _X_ATTRIBUTE_PRINTF(3, 4);
 #endif
 
 _XFUNCPROTOEND

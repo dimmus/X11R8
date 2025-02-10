@@ -73,16 +73,20 @@ extern WidgetClass textSinkObjectClass;
 typedef struct _TextSinkClassRec *TextSinkObjectClass;
 typedef struct _TextSinkRec      *TextSinkObject;
 
-typedef enum {XawisOn, XawisOff} XawTextInsertState;
+typedef enum
+{
+    XawisOn,
+    XawisOff
+} XawTextInsertState;
 
 #ifndef OLDXAW
-#ifndef XtNcursorColor
-#define XtNcursorColor		"cursorColor"
-#endif
+#  ifndef XtNcursorColor
+#    define XtNcursorColor "cursorColor"
+#  endif
 
-#define XawNtextProperties	"textProperties"
-#define XawCTextProperties	"TextProperties"
-#define XawRTextProperties	"XawTextProperties"
+#  define XawNtextProperties "textProperties"
+#  define XawCTextProperties "TextProperties"
+#  define XawRTextProperties "XawTextProperties"
 #endif
 
 /*
@@ -109,24 +113,22 @@ _XFUNCPROTOBEGIN
  *	  This function doesn't actually display anything, it is only a place
  *	holder.
  */
-void XawTextSinkDisplayText
-(
- Widget			w,
+void XawTextSinkDisplayText(Widget w,
 #if NeedWidePrototypes
- int			x,
- int			y,
+                            int x,
+                            int y,
 #else
- Position		x,
- Position		y,
+                            Position x,
+                            Position y,
 #endif
- XawTextPosition	pos1,
- XawTextPosition	pos2,
+                            XawTextPosition pos1,
+                            XawTextPosition pos2,
 #if NeedWidePrototypes
- int			highlight
+                            int highlight
 #else
- Boolean		highlight
+                            Boolean highlight
 #endif
- );
+);
 
 /*
  * Function:
@@ -145,19 +147,17 @@ void XawTextSinkDisplayText
  *	  This function doesn't actually display anything, it is only a place
  *	holder.
  */
-void XawTextSinkInsertCursor
-(
- Widget			w,
+void XawTextSinkInsertCursor(Widget w,
 #if NeedWidePrototypes
- int			x,
- int			y,
- int			state
+                             int x,
+                             int y,
+                             int state
 #else
- Position		x,
- Position		y,
- XawTextInsertState	state
+                             Position           x,
+                             Position           y,
+                             XawTextInsertState state
 #endif
- );
+);
 
 /*
  * Function:
@@ -177,21 +177,19 @@ void XawTextSinkInsertCursor
  *	  This function doesn't actually display anything, it is only a place
  *	holder.
  */
-void XawTextSinkClearToBackground
-(
- Widget			w,
+void XawTextSinkClearToBackground(Widget w,
 #if NeedWidePrototypes
- int			x,
- int			y,
- unsigned int		width,
- unsigned int		height
+                                  int          x,
+                                  int          y,
+                                  unsigned int width,
+                                  unsigned int height
 #else
- Position		x,
- Position		y,
- Dimension		width,
- Dimension		height
+                                  Position  x,
+                                  Position  y,
+                                  Dimension width,
+                                  Dimension height
 #endif
- );
+);
 
 /*
  * Function:
@@ -210,21 +208,18 @@ void XawTextSinkClearToBackground
  * Description:
  *	Finds a position in the text.
  */
-void XawTextSinkFindPosition
-(
- Widget			w,
- XawTextPosition	fromPos,
- int			fromX,
- int			width,
+void XawTextSinkFindPosition(Widget          w,
+                             XawTextPosition fromPos,
+                             int             fromX,
+                             int             width,
 #if NeedWidePrototypes
- int			stopAtWordBreak,
+                             int stopAtWordBreak,
 #else
- Boolean		stopAtWordBreak,
+                             Boolean stopAtWordBreak,
 #endif
- XawTextPosition*	pos_return,
- int			*width_return,
- int			*height_return
- );
+                             XawTextPosition *pos_return,
+                             int             *width_return,
+                             int             *height_return);
 
 /*
  * Function:
@@ -242,16 +237,13 @@ void XawTextSinkFindPosition
  * Description:
  *	Find the Pixel Distance between two text Positions.
  */
-void XawTextSinkFindDistance
-(
- Widget			w,
- XawTextPosition	fromPos,
- int			fromX,
- XawTextPosition	toPos,
- int			*width_return,
- XawTextPosition	*pos_return,
- int			*height_return
- );
+void XawTextSinkFindDistance(Widget           w,
+                             XawTextPosition  fromPos,
+                             int              fromX,
+                             XawTextPosition  toPos,
+                             int             *width_return,
+                             XawTextPosition *pos_return,
+                             int             *height_return);
 
 /*
  * Function:
@@ -267,14 +259,11 @@ void XawTextSinkFindDistance
  * Description:
  *	Resolves a location to a position.
  */
-void XawTextSinkResolve
-(
- Widget			w,
- XawTextPosition	fromPos,
- int			fromX,
- int			width,
- XawTextPosition	*pos_return
- );
+void XawTextSinkResolve(Widget           w,
+                        XawTextPosition  fromPos,
+                        int              fromX,
+                        int              width,
+                        XawTextPosition *pos_return);
 
 /*
  * Function:
@@ -290,15 +279,13 @@ void XawTextSinkResolve
  * Description:
  *	Finds the Maximum number of lines that will fit in a given height.
  */
-int XawTextSinkMaxLines
-(
- Widget			w,
+int XawTextSinkMaxLines(Widget w,
 #if NeedWidePrototypes
- unsigned int		height
+                        unsigned int height
 #else
- Dimension		height
+                        Dimension height
 #endif
- );
+);
 
 /*
  * Function:
@@ -314,11 +301,7 @@ int XawTextSinkMaxLines
  * Description:
  *	Finds the Minimum height that will contain a given number lines.
  */
-int XawTextSinkMaxHeight
-(
- Widget			w,
- int			lines
-);
+int XawTextSinkMaxHeight(Widget w, int lines);
 
 /*
  * Function:
@@ -331,12 +314,7 @@ int XawTextSinkMaxHeight
  * Description:
  *	Sets the Tab stops.
  */
-void XawTextSinkSetTabs
-(
- Widget			w,
- int			tab_count,
- int			*tabs
-);
+void XawTextSinkSetTabs(Widget w, int tab_count, int *tabs);
 
 /*
  * Function:
@@ -348,11 +326,7 @@ void XawTextSinkSetTabs
  * Description:
  *	Finds the bounding box for the insert curor (caret).
  */
-void XawTextSinkGetCursorBounds
-(
- Widget			w,
- XRectangle		*rect_return
-);
+void XawTextSinkGetCursorBounds(Widget w, XRectangle *rect_return);
 
 _XFUNCPROTOEND
 

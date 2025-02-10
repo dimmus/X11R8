@@ -34,59 +34,63 @@ in this Software without prior written authorization from The Open Group.
 #include "X11/Xaw/SmeP.h"
 #include "X11/Xaw/SmeBSB.h"
 
-typedef struct _SmeBSBClassPart {
+typedef struct _SmeBSBClassPart
+{
     XtPointer extension;
 } SmeBSBClassPart;
 
 /* Full class record declaration */
-typedef struct _SmeBSBClassRec {
-    RectObjClassPart	rect_class;
-    SmeClassPart	sme_class;
-    SmeBSBClassPart	sme_bsb_class;
+typedef struct _SmeBSBClassRec
+{
+    RectObjClassPart rect_class;
+    SmeClassPart     sme_class;
+    SmeBSBClassPart  sme_bsb_class;
 } SmeBSBClassRec;
 
 extern SmeBSBClassRec smeBSBClassRec;
 
 /* New fields for the Sme Object record */
-typedef struct {
+typedef struct
+{
     /* resources */
-    String label;			/* The entry label */
-    int vert_space;			/* extra vert space to leave, as a
+    String       label;   /* The entry label */
+    int          vert_space;   /* extra vert space to leave, as a
 					   percentage of the font height of
 					   the label */
-    Pixmap left_bitmap, right_bitmap;	/* bitmaps to show */
-    Dimension left_margin, right_margin;/* left and right margins */
-    Pixel foreground;			/* foreground color */
-    XFontStruct *font;			/* The font to show label in */
-    XFontSet fontset;			/* or fontset */
-    XtJustify justify;			/* Justification for the label. */
+    Pixmap       left_bitmap, right_bitmap; /* bitmaps to show */
+    Dimension    left_margin, right_margin;/* left and right margins */
+    Pixel        foreground;   /* foreground color */
+    XFontStruct *font;   /* The font to show label in */
+    XFontSet     fontset;   /* or fontset */
+    XtJustify    justify;   /* Justification for the label. */
 
     /* private */
-    Boolean set_values_area_cleared;	/* do we need to unhighlight? */
-    GC norm_gc;				/* normal color gc */
-    GC rev_gc;				/* reverse color gc */
-    GC norm_gray_gc;			/* Normal color (grayed out) gc */
-    GC invert_gc;			/* gc for flipping colors */
-    Dimension left_bitmap_width;	/* size of each bitmap */
+    Boolean   set_values_area_cleared; /* do we need to unhighlight? */
+    GC        norm_gc;    /* normal color gc */
+    GC        rev_gc;    /* reverse color gc */
+    GC        norm_gray_gc;   /* Normal color (grayed out) gc */
+    GC        invert_gc;   /* gc for flipping colors */
+    Dimension left_bitmap_width; /* size of each bitmap */
     Dimension left_bitmap_height;
     Dimension right_bitmap_width;
     Dimension right_bitmap_height;
 
 #ifndef OLDXAW
     /* new resources */
-    char * menu_name;			/* name of nested sub menu or NULL */
-    XtPointer pad[4];	/* for future use and keep binary compatibility */
+    char     *menu_name;   /* name of nested sub menu or NULL */
+    XtPointer pad[4]; /* for future use and keep binary compatibility */
 #endif
 } SmeBSBPart;
 
 /*
  * Full instance record declaration
  */
-typedef struct _SmeBSBRec {
-    ObjectPart	object;
-    RectObjPart	rectangle;
-    SmePart	sme;
-    SmeBSBPart	sme_bsb;
+typedef struct _SmeBSBRec
+{
+    ObjectPart  object;
+    RectObjPart rectangle;
+    SmePart     sme;
+    SmeBSBPart  sme_bsb;
 } SmeBSBRec;
 
 #endif /* _XawSmeBSBP_h */

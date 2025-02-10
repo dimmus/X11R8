@@ -32,50 +32,54 @@ in this Software without prior written authorization from The Open Group.
 #include "X11/Xaw/Repeater.h"
 
 /* new fields in widget class */
-typedef struct {
+typedef struct
+{
     XtPointer extension;
 } RepeaterClassPart;
 
 /* repeater widget class */
-typedef struct _RepeaterClassRec {
-    CoreClassPart core_class;
-    SimpleClassPart simple_class;
-    LabelClassPart label_class;
-    CommandClassPart command_class;
+typedef struct _RepeaterClassRec
+{
+    CoreClassPart     core_class;
+    SimpleClassPart   simple_class;
+    LabelClassPart    label_class;
+    CommandClassPart  command_class;
     RepeaterClassPart repeater_class;
 } RepeaterClassRec;
 
-typedef struct {
+typedef struct
+{
     /* resources */
-    int initial_delay;			/* initialDelay/Delay */
-    int repeat_delay;			/* repeatDelay/Delay */
-    int minimum_delay;			/* minimumDelay/MinimumDelay */
-    int decay;				/* decay to minimum delay */
-    Boolean flash;			/* flash/Boolean */
-    XtCallbackList start_callbacks;	/* startCallback/StartCallback */
-    XtCallbackList stop_callbacks;	/* stopCallback/StopCallback */
+    int            initial_delay;   /* initialDelay/Delay */
+    int            repeat_delay;   /* repeatDelay/Delay */
+    int            minimum_delay;   /* minimumDelay/MinimumDelay */
+    int            decay;    /* decay to minimum delay */
+    Boolean        flash;   /* flash/Boolean */
+    XtCallbackList start_callbacks; /* startCallback/StartCallback */
+    XtCallbackList stop_callbacks; /* stopCallback/StopCallback */
 
     /* private */
-    int next_delay;			/* next amount for timer */
-    XtIntervalId timer;			/* timer that will fire */
+    int          next_delay;   /* next amount for timer */
+    XtIntervalId timer;   /* timer that will fire */
 #ifndef OLDXAW
-    XtPointer pad[4];	/* for future use and keep binary compatibility */
+    XtPointer pad[4]; /* for future use and keep binary compatibility */
 #endif
 } RepeaterPart;
 
-typedef struct _RepeaterRec {
-    CorePart core;
-    SimplePart simple;
-    LabelPart label;
-    CommandPart command;
+typedef struct _RepeaterRec
+{
+    CorePart     core;
+    SimplePart   simple;
+    LabelPart    label;
+    CommandPart  command;
     RepeaterPart repeater;
 } RepeaterRec;
 
-					/* milliseconds */
-#define REP_DEF_DECAY			5
-#define REP_DEF_INITIAL_DELAY		200
-#define REP_DEF_MINIMUM_DELAY		10
-#define REP_DEF_REPEAT_DELAY		50
+                    /* milliseconds */
+#define REP_DEF_DECAY         5
+#define REP_DEF_INITIAL_DELAY 200
+#define REP_DEF_MINIMUM_DELAY 10
+#define REP_DEF_REPEAT_DELAY  50
 
 extern RepeaterClassRec repeaterClassRec;
 

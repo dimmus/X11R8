@@ -25,7 +25,6 @@ in this Software without prior written authorization from the X Consortium.
 
 */
 
-
 #ifndef _TemplateP_h
 #define _TemplateP_h
 
@@ -37,26 +36,30 @@ in this Software without prior written authorization from the X Consortium.
 
 #define XtRTemplateResource "TemplateResource"
 
-typedef struct {
+typedef struct
+{
     int empty;
 } TemplateClassPart;
 
-typedef struct _TemplateClassRec {
-    CoreClassPart	core_class;
-    TemplateClassPart	template_class;
+typedef struct _TemplateClassRec
+{
+    CoreClassPart     core_class;
+    TemplateClassPart template_class;
 } TemplateClassRec;
 
 extern TemplateClassRec templateClassRec;
 
-typedef struct {
+typedef struct
+{
     /* resources */
-    char* resource;
+    char *resource;
     /* private state */
 } TemplatePart;
 
-typedef struct _TemplateRec {
-    CorePart		core;
-    TemplatePart	template;
+typedef struct _TemplateRec
+{
+    CorePart core;
+    TemplatePart template;
 } TemplateRec;
 
 #endif /* _TemplateP_h */

@@ -46,23 +46,23 @@
  * Zig-Zag Scan / Alternative Scan.
  */
 
-#define XVMC_ZIG_ZAG_SCAN         0x00000000
-#define XVMC_ALTERNATE_SCAN       0x00000100
+#define XVMC_ZIG_ZAG_SCAN   0x00000000
+#define XVMC_ALTERNATE_SCAN 0x00000100
 
 /*
  * Frame DCT and frame prediction are used. /
  * Field prediction
  */
 
-#define XVMC_PRED_DCT_FRAME       0x00000040
-#define XVMC_PRED_DCT_FIELD       0x00000000
+#define XVMC_PRED_DCT_FRAME 0x00000040
+#define XVMC_PRED_DCT_FIELD 0x00000000
 
 /*
  * Top / Bottom field first
  */
 
-#define XVMC_TOP_FIELD_FIRST      0x00000080
-#define XVMC_BOTTOM_FIELD_FIRST   0x00000000
+#define XVMC_TOP_FIELD_FIRST    0x00000080
+#define XVMC_BOTTOM_FIELD_FIRST 0x00000000
 
 /*
  * Motion vectors coded in intra macroblocks
@@ -75,14 +75,14 @@
  * and quantiser_scale shall apply.
  */
 
-#define XVMC_Q_SCALE_TYPE         0x00000400
+#define XVMC_Q_SCALE_TYPE 0x00000400
 
 /*
  * Intra VLC Format: Bit = 0,  Bit = 1
  * Intra blocks      B-14      B-15
  * Non-intra blocks  B-14      B-14
  */
-#define XVMC_INTRA_VLC_FORMAT     0x00000800
+#define XVMC_INTRA_VLC_FORMAT 0x00000800
 
 /*
  * Also XVMC_SECOND_FIELD should be set in flags if active.
@@ -92,19 +92,19 @@
 #define XVMC_P_PICTURE 2
 #define XVMC_B_PICTURE 3
 
-typedef struct _XvMCMpegControl {
-    unsigned
-     BVMV_range,                /* Backward vertical motion vector range */
-     BHMV_range,                /* Backward horizontal motion vector range */
-     FVMV_range,                /* Forward vertical motion vector range */
-     FHMV_range,                /* Forward horizontal motion vector range */
-     picture_structure,         /* XVMC_TOP_FIELD, XVMC_BOTTOM_FIELD,
+typedef struct _XvMCMpegControl
+{
+    unsigned BVMV_range, /* Backward vertical motion vector range */
+        BHMV_range, /* Backward horizontal motion vector range */
+        FVMV_range, /* Forward vertical motion vector range */
+        FHMV_range, /* Forward horizontal motion vector range */
+        picture_structure, /* XVMC_TOP_FIELD, XVMC_BOTTOM_FIELD,
                                  *  XVMC_FRAME_PICTURE
                                  */
-     intra_dc_precision,        /* 0x00 - 0x03 corresponds to 8 to 11 bits prec. */
-     picture_coding_type,       /* XVMC_X_PICTURE */
-     mpeg_coding,               /* XVMC_MPEG_2 */
-     flags;                     /* See above */
+        intra_dc_precision, /* 0x00 - 0x03 corresponds to 8 to 11 bits prec. */
+        picture_coding_type, /* XVMC_X_PICTURE */
+        mpeg_coding, /* XVMC_MPEG_2 */
+        flags; /* See above */
 } XvMCMpegControl;
 
 /*
@@ -114,11 +114,11 @@ typedef struct _XvMCMpegControl {
  * in addition to it's current functionality.
  */
 
-extern Status XvMCBeginSurface(Display *display,
-                               XvMCContext *context,
-                               XvMCSurface *target_surface,
-                               XvMCSurface *past_surface,
-                               XvMCSurface *future_surface,
+extern Status XvMCBeginSurface(Display               *display,
+                               XvMCContext           *context,
+                               XvMCSurface           *target_surface,
+                               XvMCSurface           *past_surface,
+                               XvMCSurface           *future_surface,
                                const XvMCMpegControl *control);
 
 /*
@@ -130,11 +130,12 @@ extern Status XvMCBeginSurface(Display *display,
  * intra_quantiser_matrix and the non_intra_quantiser_matrix.
  */
 
-typedef struct _XvMCQMatrix {
-    int load_intra_quantiser_matrix;
-    int load_non_intra_quantiser_matrix;
-    int load_chroma_intra_quantiser_matrix;
-    int load_chroma_non_intra_quantiser_matrix;
+typedef struct _XvMCQMatrix
+{
+    int           load_intra_quantiser_matrix;
+    int           load_non_intra_quantiser_matrix;
+    int           load_chroma_intra_quantiser_matrix;
+    int           load_chroma_non_intra_quantiser_matrix;
     unsigned char intra_quantiser_matrix[64];
     unsigned char non_intra_quantiser_matrix[64];
     unsigned char chroma_intra_quantiser_matrix[64];
@@ -146,16 +147,16 @@ typedef struct _XvMCQMatrix {
  * The hardware will start using it the next XvMCBeginSurface.
  */
 
-extern Status XvMCLoadQMatrix(Display *display, XvMCContext *context,
-                              const XvMCQMatrix *qmx);
+extern Status
+XvMCLoadQMatrix(Display *display, XvMCContext *context, const XvMCQMatrix *qmx);
 
 /*
  * Put a slice to the decoder. The hardware will start processing it
  * immediately.
  */
 
-extern Status XvMCPutSlice(Display *display, XvMCContext *context,
-                           char *slice, int nBytes);
+extern Status
+XvMCPutSlice(Display *display, XvMCContext *context, char *slice, int nBytes);
 /*
  * Put a slice without the slice start code to the decoder.
  * The hardware will start processing it
@@ -164,7 +165,10 @@ extern Status XvMCPutSlice(Display *display, XvMCContext *context,
  * XvMCPutSlice2(display,context,slice+4,nBytes-4,slice[3]);
  */
 
-extern Status XvMCPutSlice2(Display *display, XvMCContext *context,
-                            char *slice, int nBytes, int sliceCode);
+extern Status XvMCPutSlice2(Display     *display,
+                            XvMCContext *context,
+                            char        *slice,
+                            int          nBytes,
+                            int          sliceCode);
 
 #endif

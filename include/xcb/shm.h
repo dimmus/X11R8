@@ -10,17 +10,17 @@
  **/
 
 #ifndef __SHM_H
-#define __SHM_H
+#  define __SHM_H
 
-#include "xcb.h"
-#include "xcb/xproto.h"
+#  include "xcb.h"
+#  include "xcb/xproto.h"
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#define XCB_SHM_MAJOR_VERSION 1
-#define XCB_SHM_MINOR_VERSION 2
+#  define XCB_SHM_MAJOR_VERSION 1
+#  define XCB_SHM_MINOR_VERSION 2
 
 extern xcb_extension_t xcb_shm_id;
 
@@ -29,19 +29,21 @@ typedef uint32_t xcb_shm_seg_t;
 /**
  * @brief xcb_shm_seg_iterator_t
  **/
-typedef struct xcb_shm_seg_iterator_t {
+typedef struct xcb_shm_seg_iterator_t
+{
     xcb_shm_seg_t *data;
     int            rem;
     int            index;
 } xcb_shm_seg_iterator_t;
 
 /** Opcode for xcb_shm_completion. */
-#define XCB_SHM_COMPLETION 0
+#  define XCB_SHM_COMPLETION 0
 
 /**
  * @brief xcb_shm_completion_event_t
  **/
-typedef struct xcb_shm_completion_event_t {
+typedef struct xcb_shm_completion_event_t
+{
     uint8_t        response_type;
     uint8_t        pad0;
     uint16_t       sequence;
@@ -54,24 +56,26 @@ typedef struct xcb_shm_completion_event_t {
 } xcb_shm_completion_event_t;
 
 /** Opcode for xcb_shm_bad_seg. */
-#define XCB_SHM_BAD_SEG 0
+#  define XCB_SHM_BAD_SEG 0
 
 typedef xcb_value_error_t xcb_shm_bad_seg_error_t;
 
 /**
  * @brief xcb_shm_query_version_cookie_t
  **/
-typedef struct xcb_shm_query_version_cookie_t {
+typedef struct xcb_shm_query_version_cookie_t
+{
     unsigned int sequence;
 } xcb_shm_query_version_cookie_t;
 
 /** Opcode for xcb_shm_query_version. */
-#define XCB_SHM_QUERY_VERSION 0
+#  define XCB_SHM_QUERY_VERSION 0
 
 /**
  * @brief xcb_shm_query_version_request_t
  **/
-typedef struct xcb_shm_query_version_request_t {
+typedef struct xcb_shm_query_version_request_t
+{
     uint8_t  major_opcode;
     uint8_t  minor_opcode;
     uint16_t length;
@@ -80,7 +84,8 @@ typedef struct xcb_shm_query_version_request_t {
 /**
  * @brief xcb_shm_query_version_reply_t
  **/
-typedef struct xcb_shm_query_version_reply_t {
+typedef struct xcb_shm_query_version_reply_t
+{
     uint8_t  response_type;
     uint8_t  shared_pixmaps;
     uint16_t sequence;
@@ -94,12 +99,13 @@ typedef struct xcb_shm_query_version_reply_t {
 } xcb_shm_query_version_reply_t;
 
 /** Opcode for xcb_shm_attach. */
-#define XCB_SHM_ATTACH 1
+#  define XCB_SHM_ATTACH 1
 
 /**
  * @brief xcb_shm_attach_request_t
  **/
-typedef struct xcb_shm_attach_request_t {
+typedef struct xcb_shm_attach_request_t
+{
     uint8_t       major_opcode;
     uint8_t       minor_opcode;
     uint16_t      length;
@@ -110,12 +116,13 @@ typedef struct xcb_shm_attach_request_t {
 } xcb_shm_attach_request_t;
 
 /** Opcode for xcb_shm_detach. */
-#define XCB_SHM_DETACH 2
+#  define XCB_SHM_DETACH 2
 
 /**
  * @brief xcb_shm_detach_request_t
  **/
-typedef struct xcb_shm_detach_request_t {
+typedef struct xcb_shm_detach_request_t
+{
     uint8_t       major_opcode;
     uint8_t       minor_opcode;
     uint16_t      length;
@@ -123,12 +130,13 @@ typedef struct xcb_shm_detach_request_t {
 } xcb_shm_detach_request_t;
 
 /** Opcode for xcb_shm_put_image. */
-#define XCB_SHM_PUT_IMAGE 3
+#  define XCB_SHM_PUT_IMAGE 3
 
 /**
  * @brief xcb_shm_put_image_request_t
  **/
-typedef struct xcb_shm_put_image_request_t {
+typedef struct xcb_shm_put_image_request_t
+{
     uint8_t        major_opcode;
     uint8_t        minor_opcode;
     uint16_t       length;
@@ -153,17 +161,19 @@ typedef struct xcb_shm_put_image_request_t {
 /**
  * @brief xcb_shm_get_image_cookie_t
  **/
-typedef struct xcb_shm_get_image_cookie_t {
+typedef struct xcb_shm_get_image_cookie_t
+{
     unsigned int sequence;
 } xcb_shm_get_image_cookie_t;
 
 /** Opcode for xcb_shm_get_image. */
-#define XCB_SHM_GET_IMAGE 4
+#  define XCB_SHM_GET_IMAGE 4
 
 /**
  * @brief xcb_shm_get_image_request_t
  **/
-typedef struct xcb_shm_get_image_request_t {
+typedef struct xcb_shm_get_image_request_t
+{
     uint8_t        major_opcode;
     uint8_t        minor_opcode;
     uint16_t       length;
@@ -182,7 +192,8 @@ typedef struct xcb_shm_get_image_request_t {
 /**
  * @brief xcb_shm_get_image_reply_t
  **/
-typedef struct xcb_shm_get_image_reply_t {
+typedef struct xcb_shm_get_image_reply_t
+{
     uint8_t        response_type;
     uint8_t        depth;
     uint16_t       sequence;
@@ -192,12 +203,13 @@ typedef struct xcb_shm_get_image_reply_t {
 } xcb_shm_get_image_reply_t;
 
 /** Opcode for xcb_shm_create_pixmap. */
-#define XCB_SHM_CREATE_PIXMAP 5
+#  define XCB_SHM_CREATE_PIXMAP 5
 
 /**
  * @brief xcb_shm_create_pixmap_request_t
  **/
-typedef struct xcb_shm_create_pixmap_request_t {
+typedef struct xcb_shm_create_pixmap_request_t
+{
     uint8_t        major_opcode;
     uint8_t        minor_opcode;
     uint16_t       length;
@@ -212,12 +224,13 @@ typedef struct xcb_shm_create_pixmap_request_t {
 } xcb_shm_create_pixmap_request_t;
 
 /** Opcode for xcb_shm_attach_fd. */
-#define XCB_SHM_ATTACH_FD 6
+#  define XCB_SHM_ATTACH_FD 6
 
 /**
  * @brief xcb_shm_attach_fd_request_t
  **/
-typedef struct xcb_shm_attach_fd_request_t {
+typedef struct xcb_shm_attach_fd_request_t
+{
     uint8_t       major_opcode;
     uint8_t       minor_opcode;
     uint16_t      length;
@@ -229,17 +242,19 @@ typedef struct xcb_shm_attach_fd_request_t {
 /**
  * @brief xcb_shm_create_segment_cookie_t
  **/
-typedef struct xcb_shm_create_segment_cookie_t {
+typedef struct xcb_shm_create_segment_cookie_t
+{
     unsigned int sequence;
 } xcb_shm_create_segment_cookie_t;
 
 /** Opcode for xcb_shm_create_segment. */
-#define XCB_SHM_CREATE_SEGMENT 7
+#  define XCB_SHM_CREATE_SEGMENT 7
 
 /**
  * @brief xcb_shm_create_segment_request_t
  **/
-typedef struct xcb_shm_create_segment_request_t {
+typedef struct xcb_shm_create_segment_request_t
+{
     uint8_t       major_opcode;
     uint8_t       minor_opcode;
     uint16_t      length;
@@ -252,7 +267,8 @@ typedef struct xcb_shm_create_segment_request_t {
 /**
  * @brief xcb_shm_create_segment_reply_t
  **/
-typedef struct xcb_shm_create_segment_reply_t {
+typedef struct xcb_shm_create_segment_reply_t
+{
     uint8_t  response_type;
     uint8_t  nfd;
     uint16_t sequence;
@@ -268,8 +284,7 @@ typedef struct xcb_shm_create_segment_reply_t {
  * decreased by one. The member data points to the next
  * element. The member index is increased by sizeof(xcb_shm_seg_t)
  */
-void
-xcb_shm_seg_next (xcb_shm_seg_iterator_t *i);
+void xcb_shm_seg_next(xcb_shm_seg_iterator_t *i);
 
 /**
  * Return the iterator pointing to the last element
@@ -280,8 +295,7 @@ xcb_shm_seg_next (xcb_shm_seg_iterator_t *i);
  * The member rem is set to 0. The member data points to the
  * last element.
  */
-xcb_generic_iterator_t
-xcb_shm_seg_end (xcb_shm_seg_iterator_t i);
+xcb_generic_iterator_t xcb_shm_seg_end(xcb_shm_seg_iterator_t i);
 
 /**
  * @brief Query the version of the MIT-SHM extension.
@@ -294,8 +308,7 @@ xcb_shm_seg_end (xcb_shm_seg_iterator_t i);
  * to this requests indicates the X server supports them.
  *
  */
-xcb_shm_query_version_cookie_t
-xcb_shm_query_version (xcb_connection_t *c);
+xcb_shm_query_version_cookie_t xcb_shm_query_version(xcb_connection_t *c);
 
 /**
  * @brief Query the version of the MIT-SHM extension.
@@ -312,7 +325,7 @@ xcb_shm_query_version (xcb_connection_t *c);
  * placed in the event queue.
  */
 xcb_shm_query_version_cookie_t
-xcb_shm_query_version_unchecked (xcb_connection_t *c);
+xcb_shm_query_version_unchecked(xcb_connection_t *c);
 
 /**
  * Return the reply
@@ -329,9 +342,9 @@ xcb_shm_query_version_unchecked (xcb_connection_t *c);
  * The returned value must be freed by the caller using free().
  */
 xcb_shm_query_version_reply_t *
-xcb_shm_query_version_reply (xcb_connection_t                *c,
-                             xcb_shm_query_version_cookie_t   cookie  /**< */,
-                             xcb_generic_error_t            **e);
+xcb_shm_query_version_reply(xcb_connection_t              *c,
+                            xcb_shm_query_version_cookie_t cookie /**< */,
+                            xcb_generic_error_t          **e);
 
 /**
  * @brief Attach a System V shared memory segment.
@@ -351,11 +364,10 @@ xcb_shm_query_version_reply (xcb_connection_t                *c,
  * a reply to be generated. Any returned error will be
  * saved for handling by xcb_request_check().
  */
-xcb_void_cookie_t
-xcb_shm_attach_checked (xcb_connection_t *c,
-                        xcb_shm_seg_t     shmseg,
-                        uint32_t          shmid,
-                        uint8_t           read_only);
+xcb_void_cookie_t xcb_shm_attach_checked(xcb_connection_t *c,
+                                         xcb_shm_seg_t     shmseg,
+                                         uint32_t          shmid,
+                                         uint8_t           read_only);
 
 /**
  * @brief Attach a System V shared memory segment.
@@ -372,11 +384,10 @@ xcb_shm_attach_checked (xcb_connection_t *c,
  * request and with the appropriate serial number.
  *
  */
-xcb_void_cookie_t
-xcb_shm_attach (xcb_connection_t *c,
-                xcb_shm_seg_t     shmseg,
-                uint32_t          shmid,
-                uint8_t           read_only);
+xcb_void_cookie_t xcb_shm_attach(xcb_connection_t *c,
+                                 xcb_shm_seg_t     shmseg,
+                                 uint32_t          shmid,
+                                 uint8_t           read_only);
 
 /**
  * @brief Destroys the specified shared memory segment.
@@ -392,9 +403,8 @@ xcb_shm_attach (xcb_connection_t *c,
  * a reply to be generated. Any returned error will be
  * saved for handling by xcb_request_check().
  */
-xcb_void_cookie_t
-xcb_shm_detach_checked (xcb_connection_t *c,
-                        xcb_shm_seg_t     shmseg);
+xcb_void_cookie_t xcb_shm_detach_checked(xcb_connection_t *c,
+                                         xcb_shm_seg_t     shmseg);
 
 /**
  * @brief Destroys the specified shared memory segment.
@@ -407,9 +417,7 @@ xcb_shm_detach_checked (xcb_connection_t *c,
  * segment number is incorrect.
  *
  */
-xcb_void_cookie_t
-xcb_shm_detach (xcb_connection_t *c,
-                xcb_shm_seg_t     shmseg);
+xcb_void_cookie_t xcb_shm_detach(xcb_connection_t *c, xcb_shm_seg_t shmseg);
 
 /**
  * @brief Copy data from the shared memory to the specified drawable.
@@ -448,23 +456,22 @@ xcb_shm_detach (xcb_connection_t *c,
  * a reply to be generated. Any returned error will be
  * saved for handling by xcb_request_check().
  */
-xcb_void_cookie_t
-xcb_shm_put_image_checked (xcb_connection_t *c,
-                           xcb_drawable_t    drawable,
-                           xcb_gcontext_t    gc,
-                           uint16_t          total_width,
-                           uint16_t          total_height,
-                           uint16_t          src_x,
-                           uint16_t          src_y,
-                           uint16_t          src_width,
-                           uint16_t          src_height,
-                           int16_t           dst_x,
-                           int16_t           dst_y,
-                           uint8_t           depth,
-                           uint8_t           format,
-                           uint8_t           send_event,
-                           xcb_shm_seg_t     shmseg,
-                           uint32_t          offset);
+xcb_void_cookie_t xcb_shm_put_image_checked(xcb_connection_t *c,
+                                            xcb_drawable_t    drawable,
+                                            xcb_gcontext_t    gc,
+                                            uint16_t          total_width,
+                                            uint16_t          total_height,
+                                            uint16_t          src_x,
+                                            uint16_t          src_y,
+                                            uint16_t          src_width,
+                                            uint16_t          src_height,
+                                            int16_t           dst_x,
+                                            int16_t           dst_y,
+                                            uint8_t           depth,
+                                            uint8_t           format,
+                                            uint8_t           send_event,
+                                            xcb_shm_seg_t     shmseg,
+                                            uint32_t          offset);
 
 /**
  * @brief Copy data from the shared memory to the specified drawable.
@@ -500,23 +507,22 @@ xcb_shm_put_image_checked (xcb_connection_t *c,
  * from the shared memory segment.
  *
  */
-xcb_void_cookie_t
-xcb_shm_put_image (xcb_connection_t *c,
-                   xcb_drawable_t    drawable,
-                   xcb_gcontext_t    gc,
-                   uint16_t          total_width,
-                   uint16_t          total_height,
-                   uint16_t          src_x,
-                   uint16_t          src_y,
-                   uint16_t          src_width,
-                   uint16_t          src_height,
-                   int16_t           dst_x,
-                   int16_t           dst_y,
-                   uint8_t           depth,
-                   uint8_t           format,
-                   uint8_t           send_event,
-                   xcb_shm_seg_t     shmseg,
-                   uint32_t          offset);
+xcb_void_cookie_t xcb_shm_put_image(xcb_connection_t *c,
+                                    xcb_drawable_t    drawable,
+                                    xcb_gcontext_t    gc,
+                                    uint16_t          total_width,
+                                    uint16_t          total_height,
+                                    uint16_t          src_x,
+                                    uint16_t          src_y,
+                                    uint16_t          src_width,
+                                    uint16_t          src_height,
+                                    int16_t           dst_x,
+                                    int16_t           dst_y,
+                                    uint8_t           depth,
+                                    uint8_t           format,
+                                    uint8_t           send_event,
+                                    xcb_shm_seg_t     shmseg,
+                                    uint32_t          offset);
 
 /**
  * @brief Copies data from the specified drawable to the shared memory segment.
@@ -538,17 +544,16 @@ xcb_shm_put_image (xcb_connection_t *c,
  * read from the shared memory segment.
  *
  */
-xcb_shm_get_image_cookie_t
-xcb_shm_get_image (xcb_connection_t *c,
-                   xcb_drawable_t    drawable,
-                   int16_t           x,
-                   int16_t           y,
-                   uint16_t          width,
-                   uint16_t          height,
-                   uint32_t          plane_mask,
-                   uint8_t           format,
-                   xcb_shm_seg_t     shmseg,
-                   uint32_t          offset);
+xcb_shm_get_image_cookie_t xcb_shm_get_image(xcb_connection_t *c,
+                                             xcb_drawable_t    drawable,
+                                             int16_t           x,
+                                             int16_t           y,
+                                             uint16_t          width,
+                                             uint16_t          height,
+                                             uint32_t          plane_mask,
+                                             uint8_t           format,
+                                             xcb_shm_seg_t     shmseg,
+                                             uint32_t          offset);
 
 /**
  * @brief Copies data from the specified drawable to the shared memory segment.
@@ -573,17 +578,16 @@ xcb_shm_get_image (xcb_connection_t *c,
  * a reply to be generated. Any returned error will be
  * placed in the event queue.
  */
-xcb_shm_get_image_cookie_t
-xcb_shm_get_image_unchecked (xcb_connection_t *c,
-                             xcb_drawable_t    drawable,
-                             int16_t           x,
-                             int16_t           y,
-                             uint16_t          width,
-                             uint16_t          height,
-                             uint32_t          plane_mask,
-                             uint8_t           format,
-                             xcb_shm_seg_t     shmseg,
-                             uint32_t          offset);
+xcb_shm_get_image_cookie_t xcb_shm_get_image_unchecked(xcb_connection_t *c,
+                                                       xcb_drawable_t drawable,
+                                                       int16_t        x,
+                                                       int16_t        y,
+                                                       uint16_t       width,
+                                                       uint16_t       height,
+                                                       uint32_t      plane_mask,
+                                                       uint8_t       format,
+                                                       xcb_shm_seg_t shmseg,
+                                                       uint32_t      offset);
 
 /**
  * Return the reply
@@ -600,9 +604,9 @@ xcb_shm_get_image_unchecked (xcb_connection_t *c,
  * The returned value must be freed by the caller using free().
  */
 xcb_shm_get_image_reply_t *
-xcb_shm_get_image_reply (xcb_connection_t            *c,
-                         xcb_shm_get_image_cookie_t   cookie  /**< */,
-                         xcb_generic_error_t        **e);
+xcb_shm_get_image_reply(xcb_connection_t          *c,
+                        xcb_shm_get_image_cookie_t cookie /**< */,
+                        xcb_generic_error_t      **e);
 
 /**
  * @brief Create a pixmap backed by shared memory.
@@ -625,15 +629,14 @@ xcb_shm_get_image_reply (xcb_connection_t            *c,
  * a reply to be generated. Any returned error will be
  * saved for handling by xcb_request_check().
  */
-xcb_void_cookie_t
-xcb_shm_create_pixmap_checked (xcb_connection_t *c,
-                               xcb_pixmap_t      pid,
-                               xcb_drawable_t    drawable,
-                               uint16_t          width,
-                               uint16_t          height,
-                               uint8_t           depth,
-                               xcb_shm_seg_t     shmseg,
-                               uint32_t          offset);
+xcb_void_cookie_t xcb_shm_create_pixmap_checked(xcb_connection_t *c,
+                                                xcb_pixmap_t      pid,
+                                                xcb_drawable_t    drawable,
+                                                uint16_t          width,
+                                                uint16_t          height,
+                                                uint8_t           depth,
+                                                xcb_shm_seg_t     shmseg,
+                                                uint32_t          offset);
 
 /**
  * @brief Create a pixmap backed by shared memory.
@@ -653,15 +656,14 @@ xcb_shm_create_pixmap_checked (xcb_connection_t *c,
  * reflected in the contents of the shared memory.
  *
  */
-xcb_void_cookie_t
-xcb_shm_create_pixmap (xcb_connection_t *c,
-                       xcb_pixmap_t      pid,
-                       xcb_drawable_t    drawable,
-                       uint16_t          width,
-                       uint16_t          height,
-                       uint8_t           depth,
-                       xcb_shm_seg_t     shmseg,
-                       uint32_t          offset);
+xcb_void_cookie_t xcb_shm_create_pixmap(xcb_connection_t *c,
+                                        xcb_pixmap_t      pid,
+                                        xcb_drawable_t    drawable,
+                                        uint16_t          width,
+                                        uint16_t          height,
+                                        uint8_t           depth,
+                                        xcb_shm_seg_t     shmseg,
+                                        uint32_t          offset);
 
 /**
  * @brief Create a shared memory segment
@@ -680,11 +682,10 @@ xcb_shm_create_pixmap (xcb_connection_t *c,
  * a reply to be generated. Any returned error will be
  * saved for handling by xcb_request_check().
  */
-xcb_void_cookie_t
-xcb_shm_attach_fd_checked (xcb_connection_t *c,
-                           xcb_shm_seg_t     shmseg,
-                           int32_t           shm_fd,
-                           uint8_t           read_only);
+xcb_void_cookie_t xcb_shm_attach_fd_checked(xcb_connection_t *c,
+                                            xcb_shm_seg_t     shmseg,
+                                            int32_t           shm_fd,
+                                            uint8_t           read_only);
 
 /**
  * @brief Create a shared memory segment
@@ -700,11 +701,10 @@ xcb_shm_attach_fd_checked (xcb_connection_t *c,
  * Value error.
  *
  */
-xcb_void_cookie_t
-xcb_shm_attach_fd (xcb_connection_t *c,
-                   xcb_shm_seg_t     shmseg,
-                   int32_t           shm_fd,
-                   uint8_t           read_only);
+xcb_void_cookie_t xcb_shm_attach_fd(xcb_connection_t *c,
+                                    xcb_shm_seg_t     shmseg,
+                                    int32_t           shm_fd,
+                                    uint8_t           read_only);
 
 /**
  * @brief Asks the server to allocate a shared memory segment.
@@ -719,11 +719,10 @@ xcb_shm_attach_fd (xcb_connection_t *c,
  * include a file descriptor for the client to pass to mmap().
  *
  */
-xcb_shm_create_segment_cookie_t
-xcb_shm_create_segment (xcb_connection_t *c,
-                        xcb_shm_seg_t     shmseg,
-                        uint32_t          size,
-                        uint8_t           read_only);
+xcb_shm_create_segment_cookie_t xcb_shm_create_segment(xcb_connection_t *c,
+                                                       xcb_shm_seg_t     shmseg,
+                                                       uint32_t          size,
+                                                       uint8_t read_only);
 
 /**
  * @brief Asks the server to allocate a shared memory segment.
@@ -742,10 +741,10 @@ xcb_shm_create_segment (xcb_connection_t *c,
  * placed in the event queue.
  */
 xcb_shm_create_segment_cookie_t
-xcb_shm_create_segment_unchecked (xcb_connection_t *c,
-                                  xcb_shm_seg_t     shmseg,
-                                  uint32_t          size,
-                                  uint8_t           read_only);
+xcb_shm_create_segment_unchecked(xcb_connection_t *c,
+                                 xcb_shm_seg_t     shmseg,
+                                 uint32_t          size,
+                                 uint8_t           read_only);
 
 /**
  * Return the reply
@@ -762,9 +761,9 @@ xcb_shm_create_segment_unchecked (xcb_connection_t *c,
  * The returned value must be freed by the caller using free().
  */
 xcb_shm_create_segment_reply_t *
-xcb_shm_create_segment_reply (xcb_connection_t                 *c,
-                              xcb_shm_create_segment_cookie_t   cookie  /**< */,
-                              xcb_generic_error_t             **e);
+xcb_shm_create_segment_reply(xcb_connection_t               *c,
+                             xcb_shm_create_segment_cookie_t cookie /**< */,
+                             xcb_generic_error_t           **e);
 
 /**
  * Return the reply fds
@@ -776,14 +775,12 @@ xcb_shm_create_segment_reply (xcb_connection_t                 *c,
  * The returned value points into the reply and must not be free().
  * The fds are not managed by xcb. You must close() them before freeing the reply.
  */
-int *
-xcb_shm_create_segment_reply_fds (xcb_connection_t                *c  /**< */,
-                                  xcb_shm_create_segment_reply_t  *reply);
+int *xcb_shm_create_segment_reply_fds(xcb_connection_t               *c /**< */,
+                                      xcb_shm_create_segment_reply_t *reply);
 
-
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 
 #endif
 

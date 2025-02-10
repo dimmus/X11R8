@@ -66,7 +66,7 @@ SOFTWARE.
 #define XtCOutput "Output"
 
 #define XtNdisplayNonprinting "displayNonprinting"
-#define XtNecho "echo"
+#define XtNecho               "echo"
 
 /* Class record constants */
 extern WidgetClass asciiSinkObjectClass;

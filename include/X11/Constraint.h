@@ -46,7 +46,7 @@ SOFTWARE.
 ******************************************************************/
 
 #ifndef _XtConstraint_h
-#define _XtConstraint_h
+#  define _XtConstraint_h
 
 _XFUNCPROTOBEGIN
 

@@ -59,7 +59,7 @@ in this Software without prior written authorization from The Open Group.
 
 /* declare specific TemplateWidget class and instance datatypes */
 typedef struct _TemplateClassRec *TemplateWidgetClass;
-typedef struct _TemplateRec *TemplateWidget;
+typedef struct _TemplateRec      *TemplateWidget;
 
 /* declare the class constant */
 extern WidgetClass templateWidgetClass;

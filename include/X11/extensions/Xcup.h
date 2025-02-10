@@ -32,27 +32,23 @@ in this Software without prior written authorization from The Open Group.
 
 _XFUNCPROTOBEGIN
 
-Bool XcupQueryVersion(
-    Display*			/* dpy */,
-    int*			/* major_version */,
-    int*			/* minor_version */
+Bool XcupQueryVersion(Display * /* dpy */,
+                      int * /* major_version */,
+                      int *   /* minor_version */
 );
 
-Status XcupGetReservedColormapEntries(
-    Display*			/* dpy */,
-    int				/* screen */,
-    XColor**			/* colors_out */,
-    int*			/* ncolors */
+Status XcupGetReservedColormapEntries(Display * /* dpy */,
+                                      int /* screen */,
+                                      XColor ** /* colors_out */,
+                                      int *   /* ncolors */
 );
 
-Status XcupStoreColors(
-    Display*			/* dpy */,
-    Colormap			/* colormap */,
-    XColor*			/* colors */,
-    int				/* ncolors */
+Status XcupStoreColors(Display * /* dpy */,
+                       Colormap /* colormap */,
+                       XColor * /* colors */,
+                       int    /* ncolors */
 );
 
 _XFUNCPROTOEND
 
 #endif /* _XCUP_H_ */
-

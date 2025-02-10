@@ -76,11 +76,10 @@ SOFTWARE.
 
 */
 
-
 /* New fields */
 #ifndef _XtStringDefs_h_
-#define XtNhSpace "hSpace"
-#define XtNvSpace "vSpace"
+#  define XtNhSpace "hSpace"
+#  define XtNvSpace "vSpace"
 #endif
 
 /* Class record constants */

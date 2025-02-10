@@ -66,51 +66,55 @@ SOFTWARE.
 
 /* New fields for the Label widget class record */
 
-typedef struct {int foo;} LabelClassPart;
+typedef struct
+{
+    int foo;
+} LabelClassPart;
 
 /* Full class record declaration */
-typedef struct _LabelClassRec {
-    CoreClassPart	core_class;
-    SimpleClassPart	simple_class;
-    ThreeDClassPart     threeD_class;
-    LabelClassPart	label_class;
+typedef struct _LabelClassRec
+{
+    CoreClassPart   core_class;
+    SimpleClassPart simple_class;
+    ThreeDClassPart threeD_class;
+    LabelClassPart  label_class;
 } LabelClassRec;
 
 extern LabelClassRec labelClassRec;
 
 /* New fields for the Label widget record */
-typedef struct {
+typedef struct
+{
     /* resources */
-    Pixel	foreground;
-    XFontStruct	*font;
+    Pixel        foreground;
+    XFontStruct *font;
 #ifdef XAW_INTERNATIONALIZATION
-    XFontSet	fontset;
+    XFontSet fontset;
 #endif
-    char	*label;
-    XtJustify	justify;
-    Dimension	internal_width;
-    Dimension	internal_height;
-    Pixmap	pixmap;
-    Boolean	resize;
+    char         *label;
+    XtJustify     justify;
+    Dimension     internal_width;
+    Dimension     internal_height;
+    Pixmap        pixmap;
+    Boolean       resize;
     unsigned char encoding;
-    Pixmap	left_bitmap;
+    Pixmap        left_bitmap;
 
     /* private state */
-    GC		normal_GC;
-    GC          gray_GC;
-    Pixmap	stipple;
-    Pixmap	stippled;		/* insensitive pixmap */
-    Pixmap	left_stippled;		/* ditto */
-    Position	label_x;
-    Position	label_y;
-    Dimension	label_width;
-    Dimension	label_height;
-    Dimension	label_len;
-    int		lbm_y;			/* where in label */
-    unsigned int lbm_width, lbm_height;	/* size of pixmap */
-    unsigned int depth;			/* depth of pixmaps */
+    GC           normal_GC;
+    GC           gray_GC;
+    Pixmap       stipple;
+    Pixmap       stippled;  /* insensitive pixmap */
+    Pixmap       left_stippled;  /* ditto */
+    Position     label_x;
+    Position     label_y;
+    Dimension    label_width;
+    Dimension    label_height;
+    Dimension    label_len;
+    int          lbm_y;   /* where in label */
+    unsigned int lbm_width, lbm_height; /* size of pixmap */
+    unsigned int depth;   /* depth of pixmaps */
 } LabelPart;
-
 
 /****************************************************************
  *
@@ -118,15 +122,17 @@ typedef struct {
  *
  ****************************************************************/
 
-typedef struct _LabelRec {
-    CorePart	core;
-    SimplePart	simple;
-    ThreeDPart  threeD;
-    LabelPart	label;
+typedef struct _LabelRec
+{
+    CorePart   core;
+    SimplePart simple;
+    ThreeDPart threeD;
+    LabelPart  label;
 } LabelRec;
 
-#define LEFT_OFFSET(lw) ((lw)->label.left_bitmap && (lw)->label.pixmap == None \
-			 ? (lw)->label.lbm_width + (lw)->label.internal_width \
-			 : 0)
+#define LEFT_OFFSET(lw)                                       \
+    ((lw)->label.left_bitmap && (lw)->label.pixmap == None    \
+         ? (lw)->label.lbm_width + (lw)->label.internal_width \
+         : 0)
 
 #endif /* _XawLabelP_h */

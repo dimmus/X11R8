@@ -64,29 +64,33 @@ SOFTWARE.
 #include <X11/Xmu/Converters.h>
 
 /* New fields for the Box widget class record */
-typedef struct {int empty;} BoxClassPart;
+typedef struct
+{
+    int empty;
+} BoxClassPart;
 
 /* Full class record declaration */
-typedef struct _BoxClassRec {
-    CoreClassPart	core_class;
-    CompositeClassPart  composite_class;
-    BoxClassPart	box_class;
+typedef struct _BoxClassRec
+{
+    CoreClassPart      core_class;
+    CompositeClassPart composite_class;
+    BoxClassPart       box_class;
 } BoxClassRec;
 
 extern BoxClassRec boxClassRec;
 
 /* New fields for the Box widget record */
-typedef struct {
+typedef struct
+{
     /* resources */
-    Dimension   h_space, v_space;
+    Dimension     h_space, v_space;
     XtOrientation orientation;
 
     /* private state */
-    Dimension	preferred_width, preferred_height;
-    Dimension	last_query_width, last_query_height;
+    Dimension      preferred_width, preferred_height;
+    Dimension      last_query_width, last_query_height;
     XtGeometryMask last_query_mode;
 } BoxPart;
-
 
 /****************************************************************
  *
@@ -94,10 +98,11 @@ typedef struct {
  *
  ****************************************************************/
 
-typedef struct _BoxRec {
-    CorePart	    core;
-    CompositePart   composite;
-    BoxPart 	    box;
+typedef struct _BoxRec
+{
+    CorePart      core;
+    CompositePart composite;
+    BoxPart       box;
 } BoxRec;
 
 #endif /* _XawBoxP_h */

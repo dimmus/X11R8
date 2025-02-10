@@ -10,24 +10,25 @@
  **/
 
 #ifndef __XINERAMA_H
-#define __XINERAMA_H
+#  define __XINERAMA_H
 
-#include "xcb.h"
-#include "xcb/xproto.h"
+#  include "xcb.h"
+#  include "xcb/xproto.h"
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#define XCB_XINERAMA_MAJOR_VERSION 1
-#define XCB_XINERAMA_MINOR_VERSION 1
+#  define XCB_XINERAMA_MAJOR_VERSION 1
+#  define XCB_XINERAMA_MINOR_VERSION 1
 
 extern xcb_extension_t xcb_xinerama_id;
 
 /**
  * @brief xcb_xinerama_screen_info_t
  **/
-typedef struct xcb_xinerama_screen_info_t {
+typedef struct xcb_xinerama_screen_info_t
+{
     int16_t  x_org;
     int16_t  y_org;
     uint16_t width;
@@ -37,7 +38,8 @@ typedef struct xcb_xinerama_screen_info_t {
 /**
  * @brief xcb_xinerama_screen_info_iterator_t
  **/
-typedef struct xcb_xinerama_screen_info_iterator_t {
+typedef struct xcb_xinerama_screen_info_iterator_t
+{
     xcb_xinerama_screen_info_t *data;
     int                         rem;
     int                         index;
@@ -46,17 +48,19 @@ typedef struct xcb_xinerama_screen_info_iterator_t {
 /**
  * @brief xcb_xinerama_query_version_cookie_t
  **/
-typedef struct xcb_xinerama_query_version_cookie_t {
+typedef struct xcb_xinerama_query_version_cookie_t
+{
     unsigned int sequence;
 } xcb_xinerama_query_version_cookie_t;
 
 /** Opcode for xcb_xinerama_query_version. */
-#define XCB_XINERAMA_QUERY_VERSION 0
+#  define XCB_XINERAMA_QUERY_VERSION 0
 
 /**
  * @brief xcb_xinerama_query_version_request_t
  **/
-typedef struct xcb_xinerama_query_version_request_t {
+typedef struct xcb_xinerama_query_version_request_t
+{
     uint8_t  major_opcode;
     uint8_t  minor_opcode;
     uint16_t length;
@@ -67,7 +71,8 @@ typedef struct xcb_xinerama_query_version_request_t {
 /**
  * @brief xcb_xinerama_query_version_reply_t
  **/
-typedef struct xcb_xinerama_query_version_reply_t {
+typedef struct xcb_xinerama_query_version_reply_t
+{
     uint8_t  response_type;
     uint8_t  pad0;
     uint16_t sequence;
@@ -79,17 +84,19 @@ typedef struct xcb_xinerama_query_version_reply_t {
 /**
  * @brief xcb_xinerama_get_state_cookie_t
  **/
-typedef struct xcb_xinerama_get_state_cookie_t {
+typedef struct xcb_xinerama_get_state_cookie_t
+{
     unsigned int sequence;
 } xcb_xinerama_get_state_cookie_t;
 
 /** Opcode for xcb_xinerama_get_state. */
-#define XCB_XINERAMA_GET_STATE 1
+#  define XCB_XINERAMA_GET_STATE 1
 
 /**
  * @brief xcb_xinerama_get_state_request_t
  **/
-typedef struct xcb_xinerama_get_state_request_t {
+typedef struct xcb_xinerama_get_state_request_t
+{
     uint8_t      major_opcode;
     uint8_t      minor_opcode;
     uint16_t     length;
@@ -99,7 +106,8 @@ typedef struct xcb_xinerama_get_state_request_t {
 /**
  * @brief xcb_xinerama_get_state_reply_t
  **/
-typedef struct xcb_xinerama_get_state_reply_t {
+typedef struct xcb_xinerama_get_state_reply_t
+{
     uint8_t      response_type;
     uint8_t      state;
     uint16_t     sequence;
@@ -110,17 +118,19 @@ typedef struct xcb_xinerama_get_state_reply_t {
 /**
  * @brief xcb_xinerama_get_screen_count_cookie_t
  **/
-typedef struct xcb_xinerama_get_screen_count_cookie_t {
+typedef struct xcb_xinerama_get_screen_count_cookie_t
+{
     unsigned int sequence;
 } xcb_xinerama_get_screen_count_cookie_t;
 
 /** Opcode for xcb_xinerama_get_screen_count. */
-#define XCB_XINERAMA_GET_SCREEN_COUNT 2
+#  define XCB_XINERAMA_GET_SCREEN_COUNT 2
 
 /**
  * @brief xcb_xinerama_get_screen_count_request_t
  **/
-typedef struct xcb_xinerama_get_screen_count_request_t {
+typedef struct xcb_xinerama_get_screen_count_request_t
+{
     uint8_t      major_opcode;
     uint8_t      minor_opcode;
     uint16_t     length;
@@ -130,7 +140,8 @@ typedef struct xcb_xinerama_get_screen_count_request_t {
 /**
  * @brief xcb_xinerama_get_screen_count_reply_t
  **/
-typedef struct xcb_xinerama_get_screen_count_reply_t {
+typedef struct xcb_xinerama_get_screen_count_reply_t
+{
     uint8_t      response_type;
     uint8_t      screen_count;
     uint16_t     sequence;
@@ -141,17 +152,19 @@ typedef struct xcb_xinerama_get_screen_count_reply_t {
 /**
  * @brief xcb_xinerama_get_screen_size_cookie_t
  **/
-typedef struct xcb_xinerama_get_screen_size_cookie_t {
+typedef struct xcb_xinerama_get_screen_size_cookie_t
+{
     unsigned int sequence;
 } xcb_xinerama_get_screen_size_cookie_t;
 
 /** Opcode for xcb_xinerama_get_screen_size. */
-#define XCB_XINERAMA_GET_SCREEN_SIZE 3
+#  define XCB_XINERAMA_GET_SCREEN_SIZE 3
 
 /**
  * @brief xcb_xinerama_get_screen_size_request_t
  **/
-typedef struct xcb_xinerama_get_screen_size_request_t {
+typedef struct xcb_xinerama_get_screen_size_request_t
+{
     uint8_t      major_opcode;
     uint8_t      minor_opcode;
     uint16_t     length;
@@ -162,7 +175,8 @@ typedef struct xcb_xinerama_get_screen_size_request_t {
 /**
  * @brief xcb_xinerama_get_screen_size_reply_t
  **/
-typedef struct xcb_xinerama_get_screen_size_reply_t {
+typedef struct xcb_xinerama_get_screen_size_reply_t
+{
     uint8_t      response_type;
     uint8_t      pad0;
     uint16_t     sequence;
@@ -176,17 +190,19 @@ typedef struct xcb_xinerama_get_screen_size_reply_t {
 /**
  * @brief xcb_xinerama_is_active_cookie_t
  **/
-typedef struct xcb_xinerama_is_active_cookie_t {
+typedef struct xcb_xinerama_is_active_cookie_t
+{
     unsigned int sequence;
 } xcb_xinerama_is_active_cookie_t;
 
 /** Opcode for xcb_xinerama_is_active. */
-#define XCB_XINERAMA_IS_ACTIVE 4
+#  define XCB_XINERAMA_IS_ACTIVE 4
 
 /**
  * @brief xcb_xinerama_is_active_request_t
  **/
-typedef struct xcb_xinerama_is_active_request_t {
+typedef struct xcb_xinerama_is_active_request_t
+{
     uint8_t  major_opcode;
     uint8_t  minor_opcode;
     uint16_t length;
@@ -195,7 +211,8 @@ typedef struct xcb_xinerama_is_active_request_t {
 /**
  * @brief xcb_xinerama_is_active_reply_t
  **/
-typedef struct xcb_xinerama_is_active_reply_t {
+typedef struct xcb_xinerama_is_active_reply_t
+{
     uint8_t  response_type;
     uint8_t  pad0;
     uint16_t sequence;
@@ -206,17 +223,19 @@ typedef struct xcb_xinerama_is_active_reply_t {
 /**
  * @brief xcb_xinerama_query_screens_cookie_t
  **/
-typedef struct xcb_xinerama_query_screens_cookie_t {
+typedef struct xcb_xinerama_query_screens_cookie_t
+{
     unsigned int sequence;
 } xcb_xinerama_query_screens_cookie_t;
 
 /** Opcode for xcb_xinerama_query_screens. */
-#define XCB_XINERAMA_QUERY_SCREENS 5
+#  define XCB_XINERAMA_QUERY_SCREENS 5
 
 /**
  * @brief xcb_xinerama_query_screens_request_t
  **/
-typedef struct xcb_xinerama_query_screens_request_t {
+typedef struct xcb_xinerama_query_screens_request_t
+{
     uint8_t  major_opcode;
     uint8_t  minor_opcode;
     uint16_t length;
@@ -225,7 +244,8 @@ typedef struct xcb_xinerama_query_screens_request_t {
 /**
  * @brief xcb_xinerama_query_screens_reply_t
  **/
-typedef struct xcb_xinerama_query_screens_reply_t {
+typedef struct xcb_xinerama_query_screens_reply_t
+{
     uint8_t  response_type;
     uint8_t  pad0;
     uint16_t sequence;
@@ -242,8 +262,7 @@ typedef struct xcb_xinerama_query_screens_reply_t {
  * decreased by one. The member data points to the next
  * element. The member index is increased by sizeof(xcb_xinerama_screen_info_t)
  */
-void
-xcb_xinerama_screen_info_next (xcb_xinerama_screen_info_iterator_t *i);
+void xcb_xinerama_screen_info_next(xcb_xinerama_screen_info_iterator_t *i);
 
 /**
  * Return the iterator pointing to the last element
@@ -255,7 +274,7 @@ xcb_xinerama_screen_info_next (xcb_xinerama_screen_info_iterator_t *i);
  * last element.
  */
 xcb_generic_iterator_t
-xcb_xinerama_screen_info_end (xcb_xinerama_screen_info_iterator_t i);
+xcb_xinerama_screen_info_end(xcb_xinerama_screen_info_iterator_t i);
 
 /**
  *
@@ -266,9 +285,7 @@ xcb_xinerama_screen_info_end (xcb_xinerama_screen_info_iterator_t i);
  *
  */
 xcb_xinerama_query_version_cookie_t
-xcb_xinerama_query_version (xcb_connection_t *c,
-                            uint8_t           major,
-                            uint8_t           minor);
+xcb_xinerama_query_version(xcb_connection_t *c, uint8_t major, uint8_t minor);
 
 /**
  *
@@ -282,9 +299,9 @@ xcb_xinerama_query_version (xcb_connection_t *c,
  * placed in the event queue.
  */
 xcb_xinerama_query_version_cookie_t
-xcb_xinerama_query_version_unchecked (xcb_connection_t *c,
-                                      uint8_t           major,
-                                      uint8_t           minor);
+xcb_xinerama_query_version_unchecked(xcb_connection_t *c,
+                                     uint8_t           major,
+                                     uint8_t           minor);
 
 /**
  * Return the reply
@@ -300,10 +317,10 @@ xcb_xinerama_query_version_unchecked (xcb_connection_t *c,
  *
  * The returned value must be freed by the caller using free().
  */
-xcb_xinerama_query_version_reply_t *
-xcb_xinerama_query_version_reply (xcb_connection_t                     *c,
-                                  xcb_xinerama_query_version_cookie_t   cookie  /**< */,
-                                  xcb_generic_error_t                 **e);
+xcb_xinerama_query_version_reply_t *xcb_xinerama_query_version_reply(
+    xcb_connection_t                   *c,
+    xcb_xinerama_query_version_cookie_t cookie /**< */,
+    xcb_generic_error_t               **e);
 
 /**
  *
@@ -313,9 +330,8 @@ xcb_xinerama_query_version_reply (xcb_connection_t                     *c,
  * Delivers a request to the X server.
  *
  */
-xcb_xinerama_get_state_cookie_t
-xcb_xinerama_get_state (xcb_connection_t *c,
-                        xcb_window_t      window);
+xcb_xinerama_get_state_cookie_t xcb_xinerama_get_state(xcb_connection_t *c,
+                                                       xcb_window_t window);
 
 /**
  *
@@ -329,8 +345,7 @@ xcb_xinerama_get_state (xcb_connection_t *c,
  * placed in the event queue.
  */
 xcb_xinerama_get_state_cookie_t
-xcb_xinerama_get_state_unchecked (xcb_connection_t *c,
-                                  xcb_window_t      window);
+xcb_xinerama_get_state_unchecked(xcb_connection_t *c, xcb_window_t window);
 
 /**
  * Return the reply
@@ -347,9 +362,9 @@ xcb_xinerama_get_state_unchecked (xcb_connection_t *c,
  * The returned value must be freed by the caller using free().
  */
 xcb_xinerama_get_state_reply_t *
-xcb_xinerama_get_state_reply (xcb_connection_t                 *c,
-                              xcb_xinerama_get_state_cookie_t   cookie  /**< */,
-                              xcb_generic_error_t             **e);
+xcb_xinerama_get_state_reply(xcb_connection_t               *c,
+                             xcb_xinerama_get_state_cookie_t cookie /**< */,
+                             xcb_generic_error_t           **e);
 
 /**
  *
@@ -360,8 +375,7 @@ xcb_xinerama_get_state_reply (xcb_connection_t                 *c,
  *
  */
 xcb_xinerama_get_screen_count_cookie_t
-xcb_xinerama_get_screen_count (xcb_connection_t *c,
-                               xcb_window_t      window);
+xcb_xinerama_get_screen_count(xcb_connection_t *c, xcb_window_t window);
 
 /**
  *
@@ -375,8 +389,8 @@ xcb_xinerama_get_screen_count (xcb_connection_t *c,
  * placed in the event queue.
  */
 xcb_xinerama_get_screen_count_cookie_t
-xcb_xinerama_get_screen_count_unchecked (xcb_connection_t *c,
-                                         xcb_window_t      window);
+xcb_xinerama_get_screen_count_unchecked(xcb_connection_t *c,
+                                        xcb_window_t      window);
 
 /**
  * Return the reply
@@ -392,10 +406,10 @@ xcb_xinerama_get_screen_count_unchecked (xcb_connection_t *c,
  *
  * The returned value must be freed by the caller using free().
  */
-xcb_xinerama_get_screen_count_reply_t *
-xcb_xinerama_get_screen_count_reply (xcb_connection_t                        *c,
-                                     xcb_xinerama_get_screen_count_cookie_t   cookie  /**< */,
-                                     xcb_generic_error_t                    **e);
+xcb_xinerama_get_screen_count_reply_t *xcb_xinerama_get_screen_count_reply(
+    xcb_connection_t                      *c,
+    xcb_xinerama_get_screen_count_cookie_t cookie /**< */,
+    xcb_generic_error_t                  **e);
 
 /**
  *
@@ -406,9 +420,9 @@ xcb_xinerama_get_screen_count_reply (xcb_connection_t                        *c,
  *
  */
 xcb_xinerama_get_screen_size_cookie_t
-xcb_xinerama_get_screen_size (xcb_connection_t *c,
-                              xcb_window_t      window,
-                              uint32_t          screen);
+xcb_xinerama_get_screen_size(xcb_connection_t *c,
+                             xcb_window_t      window,
+                             uint32_t          screen);
 
 /**
  *
@@ -422,9 +436,9 @@ xcb_xinerama_get_screen_size (xcb_connection_t *c,
  * placed in the event queue.
  */
 xcb_xinerama_get_screen_size_cookie_t
-xcb_xinerama_get_screen_size_unchecked (xcb_connection_t *c,
-                                        xcb_window_t      window,
-                                        uint32_t          screen);
+xcb_xinerama_get_screen_size_unchecked(xcb_connection_t *c,
+                                       xcb_window_t      window,
+                                       uint32_t          screen);
 
 /**
  * Return the reply
@@ -440,10 +454,10 @@ xcb_xinerama_get_screen_size_unchecked (xcb_connection_t *c,
  *
  * The returned value must be freed by the caller using free().
  */
-xcb_xinerama_get_screen_size_reply_t *
-xcb_xinerama_get_screen_size_reply (xcb_connection_t                       *c,
-                                    xcb_xinerama_get_screen_size_cookie_t   cookie  /**< */,
-                                    xcb_generic_error_t                   **e);
+xcb_xinerama_get_screen_size_reply_t *xcb_xinerama_get_screen_size_reply(
+    xcb_connection_t                     *c,
+    xcb_xinerama_get_screen_size_cookie_t cookie /**< */,
+    xcb_generic_error_t                 **e);
 
 /**
  *
@@ -453,8 +467,7 @@ xcb_xinerama_get_screen_size_reply (xcb_connection_t                       *c,
  * Delivers a request to the X server.
  *
  */
-xcb_xinerama_is_active_cookie_t
-xcb_xinerama_is_active (xcb_connection_t *c);
+xcb_xinerama_is_active_cookie_t xcb_xinerama_is_active(xcb_connection_t *c);
 
 /**
  *
@@ -468,7 +481,7 @@ xcb_xinerama_is_active (xcb_connection_t *c);
  * placed in the event queue.
  */
 xcb_xinerama_is_active_cookie_t
-xcb_xinerama_is_active_unchecked (xcb_connection_t *c);
+xcb_xinerama_is_active_unchecked(xcb_connection_t *c);
 
 /**
  * Return the reply
@@ -485,12 +498,11 @@ xcb_xinerama_is_active_unchecked (xcb_connection_t *c);
  * The returned value must be freed by the caller using free().
  */
 xcb_xinerama_is_active_reply_t *
-xcb_xinerama_is_active_reply (xcb_connection_t                 *c,
-                              xcb_xinerama_is_active_cookie_t   cookie  /**< */,
-                              xcb_generic_error_t             **e);
+xcb_xinerama_is_active_reply(xcb_connection_t               *c,
+                             xcb_xinerama_is_active_cookie_t cookie /**< */,
+                             xcb_generic_error_t           **e);
 
-int
-xcb_xinerama_query_screens_sizeof (const void  *_buffer);
+int xcb_xinerama_query_screens_sizeof(const void *_buffer);
 
 /**
  *
@@ -501,7 +513,7 @@ xcb_xinerama_query_screens_sizeof (const void  *_buffer);
  *
  */
 xcb_xinerama_query_screens_cookie_t
-xcb_xinerama_query_screens (xcb_connection_t *c);
+xcb_xinerama_query_screens(xcb_connection_t *c);
 
 /**
  *
@@ -515,16 +527,17 @@ xcb_xinerama_query_screens (xcb_connection_t *c);
  * placed in the event queue.
  */
 xcb_xinerama_query_screens_cookie_t
-xcb_xinerama_query_screens_unchecked (xcb_connection_t *c);
+xcb_xinerama_query_screens_unchecked(xcb_connection_t *c);
 
-xcb_xinerama_screen_info_t *
-xcb_xinerama_query_screens_screen_info (const xcb_xinerama_query_screens_reply_t *R);
+xcb_xinerama_screen_info_t *xcb_xinerama_query_screens_screen_info(
+    const xcb_xinerama_query_screens_reply_t *R);
 
-int
-xcb_xinerama_query_screens_screen_info_length (const xcb_xinerama_query_screens_reply_t *R);
+int xcb_xinerama_query_screens_screen_info_length(
+    const xcb_xinerama_query_screens_reply_t *R);
 
 xcb_xinerama_screen_info_iterator_t
-xcb_xinerama_query_screens_screen_info_iterator (const xcb_xinerama_query_screens_reply_t *R);
+xcb_xinerama_query_screens_screen_info_iterator(
+    const xcb_xinerama_query_screens_reply_t *R);
 
 /**
  * Return the reply
@@ -540,15 +553,14 @@ xcb_xinerama_query_screens_screen_info_iterator (const xcb_xinerama_query_screen
  *
  * The returned value must be freed by the caller using free().
  */
-xcb_xinerama_query_screens_reply_t *
-xcb_xinerama_query_screens_reply (xcb_connection_t                     *c,
-                                  xcb_xinerama_query_screens_cookie_t   cookie  /**< */,
-                                  xcb_generic_error_t                 **e);
+xcb_xinerama_query_screens_reply_t *xcb_xinerama_query_screens_reply(
+    xcb_connection_t                   *c,
+    xcb_xinerama_query_screens_cookie_t cookie /**< */,
+    xcb_generic_error_t               **e);
 
-
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 
 #endif
 

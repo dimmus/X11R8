@@ -95,20 +95,20 @@ SOFTWARE.
 #define DEFAULT_JUMP -1
 
 #ifndef _XtStringDefs_h_
-#define XtNhighlight "highlight"
-#define XtNupdate "update"
+#  define XtNhighlight "highlight"
+#  define XtNupdate    "update"
 #endif
 
 #define XtCJumpScroll "JumpScroll"
-#define XtCScale "Scale"
+#define XtCScale      "Scale"
 
-#define XtNgetValue "getValue"
+#define XtNgetValue   "getValue"
 #define XtNjumpScroll "jumpScroll"
-#define XtNminScale "minScale"
-#define XtNscale "scale"
-#define XtNvmunix "vmunix"
+#define XtNminScale   "minScale"
+#define XtNscale      "scale"
+#define XtNvmunix     "vmunix"
 
-typedef struct _StripChartRec *StripChartWidget;
+typedef struct _StripChartRec      *StripChartWidget;
 typedef struct _StripChartClassRec *StripChartWidgetClass;
 
 extern WidgetClass stripChartWidgetClass;

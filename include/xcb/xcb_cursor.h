@@ -90,7 +90,9 @@ typedef struct xcb_cursor_context_t xcb_cursor_context_t;
  *
  * @ingroup xcb_cursor_context_t
  */
-int xcb_cursor_context_new(xcb_connection_t *conn, xcb_screen_t *screen, xcb_cursor_context_t **ctx);
+int xcb_cursor_context_new(xcb_connection_t      *conn,
+                           xcb_screen_t          *screen,
+                           xcb_cursor_context_t **ctx);
 
 /**
  * Loads the specified cursor, either from the cursor theme or by falling back
@@ -103,7 +105,8 @@ int xcb_cursor_context_new(xcb_connection_t *conn, xcb_screen_t *screen, xcb_cur
  * created cursor.
  *
  */
-xcb_cursor_t xcb_cursor_load_cursor(xcb_cursor_context_t *ctx, const char *name);
+xcb_cursor_t xcb_cursor_load_cursor(xcb_cursor_context_t *ctx,
+                                    const char           *name);
 
 /**
  * Frees the @ref xcb_cursor_context_t.

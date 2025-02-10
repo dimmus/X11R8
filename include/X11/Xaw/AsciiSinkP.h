@@ -55,41 +55,45 @@ SOFTWARE.
 #include "X11/Xaw/AsciiSink.h"
 
 /* New fields for the AsciiSink object class record */
-typedef struct _AsciiSinkClassPart {
+typedef struct _AsciiSinkClassPart
+{
     XtPointer extension;
 } AsciiSinkClassPart;
 
 /* Full class record declaration */
-typedef struct _AsciiSinkClassRec {
-    ObjectClassPart     object_class;
-    TextSinkClassPart	text_sink_class;
-    AsciiSinkClassPart	ascii_sink_class;
+typedef struct _AsciiSinkClassRec
+{
+    ObjectClassPart    object_class;
+    TextSinkClassPart  text_sink_class;
+    AsciiSinkClassPart ascii_sink_class;
 } AsciiSinkClassRec;
 
 extern AsciiSinkClassRec asciiSinkClassRec;
 
 /* New fields for the AsciiSink object record */
-typedef struct {
+typedef struct
+{
     /* resources */
     XFontStruct *font;          /* Font to draw in. */
-    Boolean echo;
-    Boolean display_nonprinting;
+    Boolean      echo;
+    Boolean      display_nonprinting;
 
     /* private */
-    GC normgc, invgc, xorgc;
-    XawTextPosition cursor_position;
+    GC                 normgc, invgc, xorgc;
+    XawTextPosition    cursor_position;
     XawTextInsertState laststate;
-    short cursor_x, cursor_y;	/* Cursor Location. */
+    short              cursor_x, cursor_y; /* Cursor Location. */
 #ifndef OLDXAW
-    XtPointer pad[4];	/* for future use and keep binary compatibility */
+    XtPointer pad[4]; /* for future use and keep binary compatibility */
 #endif
 } AsciiSinkPart;
 
 /* Full instance record declaration */
-typedef struct _AsciiSinkRec {
-    ObjectPart          object;
-    TextSinkPart	text_sink;
-    AsciiSinkPart	ascii_sink;
+typedef struct _AsciiSinkRec
+{
+    ObjectPart    object;
+    TextSinkPart  text_sink;
+    AsciiSinkPart ascii_sink;
 } AsciiSinkRec;
 
 #endif /* _XawAsciiSinkP_h */

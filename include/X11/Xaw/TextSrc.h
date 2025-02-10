@@ -67,26 +67,30 @@ extern WidgetClass textSrcObjectClass;
 typedef struct _TextSrcClassRec *TextSrcObjectClass;
 typedef struct _TextSrcRec      *TextSrcObject;
 
-typedef enum {
+typedef enum
+{
     XawstPositions,
     XawstWhiteSpace,
     XawstEOL,
     XawstParagraph,
     XawstAll,
     XawstAlphaNumeric
-  } XawTextScanType;
+} XawTextScanType;
 
-typedef enum {
+typedef enum
+{
     Normal,
     Selected
 } highlightType;
 
-typedef enum {
+typedef enum
+{
     XawsmTextSelect,
     XawsmTextExtend
 } XawTextSelectionMode;
 
-typedef enum {
+typedef enum
+{
     XawactionStart,
     XawactionAdjust,
     XawactionEnd
@@ -96,13 +100,13 @@ typedef enum {
 #define XawTextScanError -1
 
 #ifndef OLDXAW
-#define XtNenableUndo		"enableUndo"
-#define XtCUndo			"Undo"
+#  define XtNenableUndo "enableUndo"
+#  define XtCUndo       "Undo"
 
-#define XtNsourceChanged	"sourceChanged"
-#define XtCChanged		"Changed"
+#  define XtNsourceChanged "sourceChanged"
+#  define XtCChanged       "Changed"
 
-#define XtNpropertyCallback	"propertyCallback"
+#  define XtNpropertyCallback "propertyCallback"
 #endif
 
 /*
@@ -126,13 +130,10 @@ _XFUNCPROTOBEGIN
  * Returns:
  *	The number of characters read into the buffer
  */
-XawTextPosition XawTextSourceRead
-(
- Widget			w,
- XawTextPosition	pos,
- XawTextBlock		*text_return,
- int			length
- );
+XawTextPosition XawTextSourceRead(Widget          w,
+                                  XawTextPosition pos,
+                                  XawTextBlock   *text_return,
+                                  int             length);
 
 /*
  * Function:
@@ -150,13 +151,10 @@ XawTextPosition XawTextSourceRead
  * Returns:
  *	XawEditError or XawEditDone
  */
-int XawTextSourceReplace
-(
- Widget			w,
- XawTextPosition	start,
- XawTextPosition	end,
- XawTextBlock		*text
- );
+int XawTextSourceReplace(Widget          w,
+                         XawTextPosition start,
+                         XawTextPosition end,
+                         XawTextBlock   *text);
 
 /*
  * Function:
@@ -177,22 +175,20 @@ int XawTextSourceReplace
  * Returns:
  *	The position of the text
  */
-XawTextPosition XawTextSourceScan
-(
- Widget			w,
- XawTextPosition	position,
+XawTextPosition XawTextSourceScan(Widget          w,
+                                  XawTextPosition position,
 #if NeedWidePrototypes
- int			type,
- int			dir,
- int			count,
- int			include
+                                  int type,
+                                  int dir,
+                                  int count,
+                                  int include
 #else
- XawTextScanType	type,
- XawTextScanDirection	dir,
- int			count,
- Boolean		include
+                                  XawTextScanType      type,
+                                  XawTextScanDirection dir,
+                                  int                  count,
+                                  Boolean              include
 #endif
- );
+);
 
 /*
  * Function:
@@ -210,17 +206,14 @@ XawTextPosition XawTextSourceScan
  * Returns:
  *	The position of the text we are searching for or XawTextSearchError
  */
-XawTextPosition XawTextSourceSearch
-(
- Widget			w,
- XawTextPosition	position,
+XawTextPosition XawTextSourceSearch(Widget          w,
+                                    XawTextPosition position,
 #if NeedWidePrototypes
- int			dir,
+                                    int dir,
 #else
- XawTextScanDirection	dir,
+                                    XawTextScanDirection dir,
 #endif
- XawTextBlock		*text
- );
+                                    XawTextBlock *text);
 
 /*
  * Function:
@@ -238,16 +231,13 @@ XawTextPosition XawTextSourceSearch
  * Returns:
  *	True if the selection has been converted
  */
-Boolean XawTextSourceConvertSelection
-(
- Widget			w,
- Atom			*selection,
- Atom			*target,
- Atom			*type,
- XtPointer		*value_return,
- unsigned long		*length_return,
- int			*format_return
- );
+Boolean XawTextSourceConvertSelection(Widget         w,
+                                      Atom          *selection,
+                                      Atom          *target,
+                                      Atom          *type,
+                                      XtPointer     *value_return,
+                                      unsigned long *length_return,
+                                      int           *format_return);
 
 /*
  * Function:
@@ -262,13 +252,10 @@ Boolean XawTextSourceConvertSelection
  * Description:
  *	Allows special setting of the selection.
  */
-void XawTextSourceSetSelection
-(
- Widget			w,
- XawTextPosition	start,
- XawTextPosition	end,
- Atom			selection
- );
+void XawTextSourceSetSelection(Widget          w,
+                               XawTextPosition start,
+                               XawTextPosition end,
+                               Atom            selection);
 
 _XFUNCPROTOEND
 

@@ -48,7 +48,6 @@ in this Software without prior written authorization from the X Consortium.
  * as well as to support vertical trees.
  */
 
-
 #ifndef _XawTree_h
 #define _XawTree_h
 
@@ -84,24 +83,24 @@ in this Software without prior written authorization from the X Consortium.
 
                                         /* new instance field names */
 #ifndef _XtStringDefs_h_
-#define XtNhSpace "hSpace"
-#define XtNvSpace "vSpace"
-#define XtCHSpace "HSpace"
-#define XtCVSpace "VSpace"
+#  define XtNhSpace "hSpace"
+#  define XtNvSpace "vSpace"
+#  define XtCHSpace "HSpace"
+#  define XtCVSpace "VSpace"
 #endif
 
 #define XtNautoReconfigure "autoReconfigure"
-#define XtNlineWidth "lineWidth"
-#define XtNtreeGC "treeGC"
-#define XtNtreeParent "treeParent"
-#define XtNgravity "gravity"
+#define XtNlineWidth       "lineWidth"
+#define XtNtreeGC          "treeGC"
+#define XtNtreeParent      "treeParent"
+#define XtNgravity         "gravity"
 
                                         /* new class field names */
 #define XtCAutoReconfigure "AutoReconfigure"
-#define XtCLineWidth "LineWidth"
-#define XtCTreeGC "TreeGC"
-#define XtCTreeParent "TreeParent"
-#define XtCGravity "Gravity"
+#define XtCLineWidth       "LineWidth"
+#define XtCTreeGC          "TreeGC"
+#define XtCTreeParent      "TreeParent"
+#define XtCGravity         "Gravity"
 
 #define XtRGC "GC"
                                         /* external declarations */
@@ -112,8 +111,7 @@ typedef struct _TreeRec      *TreeWidget;
 
 _XFUNCPROTOBEGIN
 
-extern void XawTreeForceLayout (
-    Widget /* tree */
+extern void XawTreeForceLayout(Widget /* tree */
 );
 
 _XFUNCPROTOEND

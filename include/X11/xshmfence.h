@@ -29,25 +29,18 @@
 
 struct xshmfence;
 
-_X_EXPORT int 
-xshmfence_trigger(struct xshmfence *f);
+_X_EXPORT int xshmfence_trigger(struct xshmfence *f);
 
-_X_EXPORT int
-xshmfence_await(struct xshmfence *f);
+_X_EXPORT int xshmfence_await(struct xshmfence *f);
 
-_X_EXPORT int
-xshmfence_query(struct xshmfence *f);
+_X_EXPORT int xshmfence_query(struct xshmfence *f);
 
-_X_EXPORT void
-xshmfence_reset(struct xshmfence *f);
+_X_EXPORT void xshmfence_reset(struct xshmfence *f);
 
-_X_EXPORT int
-xshmfence_alloc_shm(void);
+_X_EXPORT int xshmfence_alloc_shm(void);
 
-_X_EXPORT struct xshmfence *
-xshmfence_map_shm(int fd);
+_X_EXPORT struct xshmfence *xshmfence_map_shm(int fd);
 
-_X_EXPORT void
-xshmfence_unmap_shm(struct xshmfence *f);
+_X_EXPORT void xshmfence_unmap_shm(struct xshmfence *f);
 
 #endif /* _XSHMFENCE_H_ */

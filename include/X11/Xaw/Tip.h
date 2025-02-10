@@ -61,26 +61,26 @@
 */
 
 typedef struct _TipClassRec *TipWidgetClass;
-typedef struct _TipRec *TipWidget;
+typedef struct _TipRec      *TipWidget;
 
 extern WidgetClass tipWidgetClass;
 
-#define XtNbottomMargin		"bottomMargin"
-#define XawNdisplayList		"displayList"
-#define XtNencoding		"encoding"
-#define XtNleftMargin		"leftMargin"
-#define XtNrightMargin		"rightMargin"
-#define XtNtimeout		"timeout"
-#define XtNtopMargin		"topMargin"
-#define XtNtip			"tip"
+#define XtNbottomMargin "bottomMargin"
+#define XawNdisplayList "displayList"
+#define XtNencoding     "encoding"
+#define XtNleftMargin   "leftMargin"
+#define XtNrightMargin  "rightMargin"
+#define XtNtimeout      "timeout"
+#define XtNtopMargin    "topMargin"
+#define XtNtip          "tip"
 
-#define XawCDisplayList		"DisplayList"
-#define XtCHorizontalMargins	"HorizontalMargins"
-#define XtCTimeout		"Timeout"
-#define XtCVerticalMargins	"VerticalMargins"
-#define XtCTip			"Tip"
+#define XawCDisplayList      "DisplayList"
+#define XtCHorizontalMargins "HorizontalMargins"
+#define XtCTimeout           "Timeout"
+#define XtCVerticalMargins   "VerticalMargins"
+#define XtCTip               "Tip"
 
-#define XawRDisplayList		"XawDisplayList"
+#define XawRDisplayList "XawDisplayList"
 
 /*
  * Public Functions
@@ -95,10 +95,7 @@ extern WidgetClass tipWidgetClass;
  * Description:
  *	Enables the tip event handler for this widget.
  */
-void XawTipEnable
-(
- Widget		w
- );
+void XawTipEnable(Widget w);
 
 /*
  * Function:
@@ -110,9 +107,6 @@ void XawTipEnable
  * Description:
  *	Disables the tip event handler for this widget.
  */
-void XawTipDisable
-(
- Widget		w
- );
+void XawTipDisable(Widget w);
 
 #endif /* _XawTip_h */

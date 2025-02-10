@@ -22,8 +22,8 @@
 
 _XFUNCPROTOBEGIN
 
-#define XDM_PROTOCOL_VERSION	1
-#define XDM_UDP_PORT		177
+#define XDM_PROTOCOL_VERSION 1
+#define XDM_UDP_PORT         177
 
 /* IANA has assigned FF0X:0:0:0:0:0:0:12B as the permanently assigned
  * multicast addresses for XDMCP, where X in the prefix may be replaced
@@ -33,30 +33,54 @@ _XFUNCPROTOBEGIN
  * Both xdm and X -query allow specifying a different address if a different
  * scope is defined.
  */
-#define XDM_DEFAULT_MCAST_ADDR6	"ff02:0:0:0:0:0:0:12b"
+#define XDM_DEFAULT_MCAST_ADDR6 "ff02:0:0:0:0:0:0:12b"
 
-#define XDM_MAX_MSGLEN		8192
-#define XDM_MIN_RTX		2
-#define XDM_MAX_RTX		32
-#define XDM_RTX_LIMIT		7
-#define XDM_KA_RTX_LIMIT	4
-#define XDM_DEF_DORMANCY	(3 * 60)	/* 3 minutes */
-#define XDM_MAX_DORMANCY	(24 * 60 * 60)	/* 24 hours */
+#define XDM_MAX_MSGLEN   8192
+#define XDM_MIN_RTX      2
+#define XDM_MAX_RTX      32
+#define XDM_RTX_LIMIT    7
+#define XDM_KA_RTX_LIMIT 4
+#define XDM_DEF_DORMANCY (3 * 60) /* 3 minutes */
+#define XDM_MAX_DORMANCY (24 * 60 * 60) /* 24 hours */
 
-typedef enum {
-    BROADCAST_QUERY = 1, QUERY, INDIRECT_QUERY, FORWARD_QUERY,
-    WILLING, UNWILLING, REQUEST, ACCEPT, DECLINE, MANAGE, REFUSE,
-    FAILED, KEEPALIVE, ALIVE
+typedef enum
+{
+    BROADCAST_QUERY = 1,
+    QUERY,
+    INDIRECT_QUERY,
+    FORWARD_QUERY,
+    WILLING,
+    UNWILLING,
+    REQUEST,
+    ACCEPT,
+    DECLINE,
+    MANAGE,
+    REFUSE,
+    FAILED,
+    KEEPALIVE,
+    ALIVE
 } xdmOpCode;
 
-typedef enum {
-    XDM_QUERY, XDM_BROADCAST, XDM_INDIRECT, XDM_COLLECT_QUERY,
-    XDM_COLLECT_BROADCAST_QUERY, XDM_COLLECT_INDIRECT_QUERY,
-    XDM_START_CONNECTION, XDM_AWAIT_REQUEST_RESPONSE,
-    XDM_AWAIT_MANAGE_RESPONSE, XDM_MANAGE, XDM_RUN_SESSION, XDM_OFF,
-    XDM_AWAIT_USER_INPUT, XDM_KEEPALIVE, XDM_AWAIT_ALIVE_RESPONSE,
+typedef enum
+{
+    XDM_QUERY,
+    XDM_BROADCAST,
+    XDM_INDIRECT,
+    XDM_COLLECT_QUERY,
+    XDM_COLLECT_BROADCAST_QUERY,
+    XDM_COLLECT_INDIRECT_QUERY,
+    XDM_START_CONNECTION,
+    XDM_AWAIT_REQUEST_RESPONSE,
+    XDM_AWAIT_MANAGE_RESPONSE,
+    XDM_MANAGE,
+    XDM_RUN_SESSION,
+    XDM_OFF,
+    XDM_AWAIT_USER_INPUT,
+    XDM_KEEPALIVE,
+    XDM_AWAIT_ALIVE_RESPONSE,
 #if defined(IPv6) && defined(AF_INET6)
-    XDM_MULTICAST, XDM_COLLECT_MULTICAST_QUERY,
+    XDM_MULTICAST,
+    XDM_COLLECT_MULTICAST_QUERY,
 #endif
     XDM_KEEP_ME_LAST
 } xdmcp_states;
@@ -64,54 +88,62 @@ typedef enum {
 #ifdef NOTDEF
 /* table of hosts */
 
-#define XDM_MAX_STR_LEN 21
-#define XDM_MAX_HOSTS 20
-struct xdm_host_table {
-  struct sockaddr_in sockaddr;
-  char name[XDM_MAX_STR_LEN];
-  char status[XDM_MAX_STR_LEN];
+#  define XDM_MAX_STR_LEN 21
+#  define XDM_MAX_HOSTS   20
+
+struct xdm_host_table
+{
+    struct sockaddr_in sockaddr;
+    char               name[XDM_MAX_STR_LEN];
+    char               status[XDM_MAX_STR_LEN];
 };
 #endif /* NOTDEF */
 
-typedef CARD8	*CARD8Ptr;
-typedef CARD16	*CARD16Ptr;
-typedef CARD32	*CARD32Ptr;
+typedef CARD8  *CARD8Ptr;
+typedef CARD16 *CARD16Ptr;
+typedef CARD32 *CARD32Ptr;
 
-typedef struct _ARRAY8 {
-    CARD16	length;
-    CARD8Ptr	data;
+typedef struct _ARRAY8
+{
+    CARD16   length;
+    CARD8Ptr data;
 } ARRAY8, *ARRAY8Ptr;
 
-typedef struct _ARRAY16 {
-    CARD8	length;
-    CARD16Ptr	data;
+typedef struct _ARRAY16
+{
+    CARD8     length;
+    CARD16Ptr data;
 } ARRAY16, *ARRAY16Ptr;
 
-typedef struct _ARRAY32 {
-    CARD8	length;
-    CARD32Ptr	data;
+typedef struct _ARRAY32
+{
+    CARD8     length;
+    CARD32Ptr data;
 } ARRAY32, *ARRAY32Ptr;
 
-typedef struct _ARRAYofARRAY8 {
-    CARD8	length;
-    ARRAY8Ptr	data;
+typedef struct _ARRAYofARRAY8
+{
+    CARD8     length;
+    ARRAY8Ptr data;
 } ARRAYofARRAY8, *ARRAYofARRAY8Ptr;
 
-typedef struct _XdmcpHeader {
-    CARD16  version, opcode, length;
+typedef struct _XdmcpHeader
+{
+    CARD16 version, opcode, length;
 } XdmcpHeader, *XdmcpHeaderPtr;
 
-typedef struct _XdmcpBuffer {
-    BYTE    *data;
-    int	    size;		/* size of buffer pointed by to data */
-    int	    pointer;		/* current index into data */
-    int	    count;		/* bytes read from network into data */
+typedef struct _XdmcpBuffer
+{
+    BYTE *data;
+    int   size;  /* size of buffer pointed by to data */
+    int   pointer;  /* current index into data */
+    int   count;  /* bytes read from network into data */
 } XdmcpBuffer, *XdmcpBufferPtr;
 
-typedef struct _XdmAuthKey {
-    BYTE    data[8];
+typedef struct _XdmAuthKey
+{
+    BYTE data[8];
 } XdmAuthKeyRec, *XdmAuthKeyPtr;
-
 
 /* implementation-independent network address structure.
    Equiv to sockaddr* for sockets. */
@@ -119,60 +151,88 @@ typedef struct _XdmAuthKey {
 typedef char *XdmcpNetaddr;
 
 #ifndef __has_attribute
-# define __has_attribute(x) 0  /* Compatibility with older compilers */
+#  define __has_attribute(x) 0  /* Compatibility with older compilers */
 #endif
 
 #if __has_attribute(access)
-# define XDM_ACCESS_ATTRIBUTE(X) __attribute__((access X))
+#  define XDM_ACCESS_ATTRIBUTE(X) __attribute__((access X))
 #else
-# define XDM_ACCESS_ATTRIBUTE(X)
+#  define XDM_ACCESS_ATTRIBUTE(X)
 #endif
 
 #if __has_attribute(pure)
-# define XDM_PURE_ATTRIBUTE __attribute__((pure))
+#  define XDM_PURE_ATTRIBUTE __attribute__((pure))
 #else
-# define XDM_PURE_ATTRIBUTE
+#  define XDM_PURE_ATTRIBUTE
 #endif
 
-XDM_ACCESS_ATTRIBUTE((read_write, 1)) XDM_ACCESS_ATTRIBUTE((read_only, 2))
-extern int XdmcpWriteARRAY16(XdmcpBufferPtr buffer, const ARRAY16Ptr array);
-XDM_ACCESS_ATTRIBUTE((read_write, 1)) XDM_ACCESS_ATTRIBUTE((read_only, 2))
-extern int XdmcpWriteARRAY32(XdmcpBufferPtr buffer, const ARRAY32Ptr array);
-XDM_ACCESS_ATTRIBUTE((read_write, 1)) XDM_ACCESS_ATTRIBUTE((read_only, 2))
-extern int XdmcpWriteARRAY8(XdmcpBufferPtr buffer, const ARRAY8Ptr array);
-XDM_ACCESS_ATTRIBUTE((read_write, 1)) XDM_ACCESS_ATTRIBUTE((read_only, 2))
-extern int XdmcpWriteARRAYofARRAY8(XdmcpBufferPtr buffer, const ARRAYofARRAY8Ptr array);
+XDM_ACCESS_ATTRIBUTE((read_write, 1))
+XDM_ACCESS_ATTRIBUTE((read_only,
+                      2)) extern int XdmcpWriteARRAY16(XdmcpBufferPtr   buffer,
+                                                       const ARRAY16Ptr array);
+XDM_ACCESS_ATTRIBUTE((read_write, 1))
+XDM_ACCESS_ATTRIBUTE((read_only,
+                      2)) extern int XdmcpWriteARRAY32(XdmcpBufferPtr   buffer,
+                                                       const ARRAY32Ptr array);
+XDM_ACCESS_ATTRIBUTE((read_write, 1))
+XDM_ACCESS_ATTRIBUTE((read_only,
+                      2)) extern int XdmcpWriteARRAY8(XdmcpBufferPtr  buffer,
+                                                      const ARRAY8Ptr array);
+XDM_ACCESS_ATTRIBUTE((read_write, 1))
+XDM_ACCESS_ATTRIBUTE((read_only, 2)) extern int XdmcpWriteARRAYofARRAY8(
+    XdmcpBufferPtr         buffer,
+    const ARRAYofARRAY8Ptr array);
 XDM_ACCESS_ATTRIBUTE((read_write, 1))
 extern int XdmcpWriteCARD16(XdmcpBufferPtr buffer, unsigned value);
 XDM_ACCESS_ATTRIBUTE((read_write, 1))
 extern int XdmcpWriteCARD32(XdmcpBufferPtr buffer, unsigned value);
 XDM_ACCESS_ATTRIBUTE((read_write, 1))
 extern int XdmcpWriteCARD8(XdmcpBufferPtr buffer, unsigned value);
-XDM_ACCESS_ATTRIBUTE((read_write, 1)) XDM_ACCESS_ATTRIBUTE((read_only, 2))
-extern int XdmcpWriteHeader(XdmcpBufferPtr  buffer, const XdmcpHeaderPtr  header);
+XDM_ACCESS_ATTRIBUTE((read_write, 1))
+XDM_ACCESS_ATTRIBUTE((read_only, 2)) extern int XdmcpWriteHeader(
+    XdmcpBufferPtr       buffer,
+    const XdmcpHeaderPtr header);
 
 XDM_ACCESS_ATTRIBUTE((read_only, 2))
-extern int XdmcpFlush(int fd, XdmcpBufferPtr buffer, XdmcpNetaddr to, int tolen);
+extern int
+XdmcpFlush(int fd, XdmcpBufferPtr buffer, XdmcpNetaddr to, int tolen);
 
-XDM_ACCESS_ATTRIBUTE((read_write, 1)) XDM_ACCESS_ATTRIBUTE((write_only, 2))
-extern int XdmcpReadARRAY16(XdmcpBufferPtr buffer, ARRAY16Ptr array);
-XDM_ACCESS_ATTRIBUTE((read_write, 1)) XDM_ACCESS_ATTRIBUTE((write_only, 2))
-extern int XdmcpReadARRAY32(XdmcpBufferPtr buffer, ARRAY32Ptr array);
-XDM_ACCESS_ATTRIBUTE((read_write, 1)) XDM_ACCESS_ATTRIBUTE((write_only, 2))
-extern int XdmcpReadARRAY8(XdmcpBufferPtr buffer, ARRAY8Ptr array);
-XDM_ACCESS_ATTRIBUTE((read_write, 1)) XDM_ACCESS_ATTRIBUTE((write_only, 2))
-extern int XdmcpReadARRAYofARRAY8(XdmcpBufferPtr buffer, ARRAYofARRAY8Ptr array);
-XDM_ACCESS_ATTRIBUTE((read_write, 1)) XDM_ACCESS_ATTRIBUTE((write_only, 2))
-extern int XdmcpReadCARD16(XdmcpBufferPtr buffer, CARD16Ptr valuep);
-XDM_ACCESS_ATTRIBUTE((read_write, 1)) XDM_ACCESS_ATTRIBUTE((write_only, 2))
-extern int XdmcpReadCARD32(XdmcpBufferPtr buffer, CARD32Ptr valuep);
-XDM_ACCESS_ATTRIBUTE((read_write, 1)) XDM_ACCESS_ATTRIBUTE((write_only, 2))
-extern int XdmcpReadCARD8(XdmcpBufferPtr buffer, CARD8Ptr valuep);
-XDM_ACCESS_ATTRIBUTE((read_write, 1)) XDM_ACCESS_ATTRIBUTE((write_only, 2))
-extern int XdmcpReadHeader(XdmcpBufferPtr buffer, XdmcpHeaderPtr header);
+XDM_ACCESS_ATTRIBUTE((read_write, 1))
+XDM_ACCESS_ATTRIBUTE((write_only,
+                      2)) extern int XdmcpReadARRAY16(XdmcpBufferPtr buffer,
+                                                      ARRAY16Ptr     array);
+XDM_ACCESS_ATTRIBUTE((read_write, 1))
+XDM_ACCESS_ATTRIBUTE((write_only,
+                      2)) extern int XdmcpReadARRAY32(XdmcpBufferPtr buffer,
+                                                      ARRAY32Ptr     array);
+XDM_ACCESS_ATTRIBUTE((read_write, 1))
+XDM_ACCESS_ATTRIBUTE((write_only,
+                      2)) extern int XdmcpReadARRAY8(XdmcpBufferPtr buffer,
+                                                     ARRAY8Ptr      array);
+XDM_ACCESS_ATTRIBUTE((read_write, 1))
+XDM_ACCESS_ATTRIBUTE((write_only, 2)) extern int XdmcpReadARRAYofARRAY8(
+    XdmcpBufferPtr   buffer,
+    ARRAYofARRAY8Ptr array);
+XDM_ACCESS_ATTRIBUTE((read_write, 1))
+XDM_ACCESS_ATTRIBUTE((write_only,
+                      2)) extern int XdmcpReadCARD16(XdmcpBufferPtr buffer,
+                                                     CARD16Ptr      valuep);
+XDM_ACCESS_ATTRIBUTE((read_write, 1))
+XDM_ACCESS_ATTRIBUTE((write_only,
+                      2)) extern int XdmcpReadCARD32(XdmcpBufferPtr buffer,
+                                                     CARD32Ptr      valuep);
+XDM_ACCESS_ATTRIBUTE((read_write, 1))
+XDM_ACCESS_ATTRIBUTE((write_only,
+                      2)) extern int XdmcpReadCARD8(XdmcpBufferPtr buffer,
+                                                    CARD8Ptr       valuep);
+XDM_ACCESS_ATTRIBUTE((read_write, 1))
+XDM_ACCESS_ATTRIBUTE((write_only,
+                      2)) extern int XdmcpReadHeader(XdmcpBufferPtr buffer,
+                                                     XdmcpHeaderPtr header);
 
 XDM_ACCESS_ATTRIBUTE((read_write, 2))
-extern int XdmcpFill(int fd, XdmcpBufferPtr buffer, XdmcpNetaddr from, int *fromlen);
+extern int
+XdmcpFill(int fd, XdmcpBufferPtr buffer, XdmcpNetaddr from, int *fromlen);
 
 XDM_ACCESS_ATTRIBUTE((read_only, 1))
 XDM_PURE_ATTRIBUTE
@@ -187,48 +247,56 @@ extern void XdmcpDisposeARRAY32(ARRAY32Ptr array);
 XDM_ACCESS_ATTRIBUTE((read_write, 1))
 extern void XdmcpDisposeARRAYofARRAY8(ARRAYofARRAY8Ptr array);
 
-XDM_ACCESS_ATTRIBUTE((read_only, 1)) XDM_ACCESS_ATTRIBUTE((write_only, 2))
-extern int XdmcpCopyARRAY8(const ARRAY8Ptr src, ARRAY8Ptr dst);
+XDM_ACCESS_ATTRIBUTE((read_only, 1))
+XDM_ACCESS_ATTRIBUTE((write_only,
+                      2)) extern int XdmcpCopyARRAY8(const ARRAY8Ptr src,
+                                                     ARRAY8Ptr       dst);
 
-XDM_ACCESS_ATTRIBUTE((read_only, 1)) XDM_ACCESS_ATTRIBUTE((read_only, 2))
-XDM_PURE_ATTRIBUTE
-extern int XdmcpARRAY8Equal(const ARRAY8Ptr array1, const ARRAY8Ptr array2);
+XDM_ACCESS_ATTRIBUTE((read_only, 1))
+XDM_ACCESS_ATTRIBUTE((read_only, 2)) XDM_PURE_ATTRIBUTE
+    extern int XdmcpARRAY8Equal(const ARRAY8Ptr array1, const ARRAY8Ptr array2);
 
 XDM_ACCESS_ATTRIBUTE((write_only, 1))
-extern void XdmcpGenerateKey (XdmAuthKeyPtr key);
-extern void XdmcpIncrementKey (XdmAuthKeyPtr key);
-extern void XdmcpDecrementKey (XdmAuthKeyPtr key);
+extern void XdmcpGenerateKey(XdmAuthKeyPtr key);
+extern void XdmcpIncrementKey(XdmAuthKeyPtr key);
+extern void XdmcpDecrementKey(XdmAuthKeyPtr key);
 #ifdef HASXDMAUTH
-extern void XdmcpWrap(unsigned char *input, unsigned char *wrapper, unsigned char *output, int bytes);
-extern void XdmcpUnwrap(unsigned char *input, unsigned char *wrapper, unsigned char *output, int bytes);
+extern void XdmcpWrap(unsigned char *input,
+                      unsigned char *wrapper,
+                      unsigned char *output,
+                      int            bytes);
+extern void XdmcpUnwrap(unsigned char *input,
+                        unsigned char *wrapper,
+                        unsigned char *output,
+                        int            bytes);
 #endif
 
 #ifndef TRUE
-#define TRUE	1
-#define FALSE	0
+#  define TRUE  1
+#  define FALSE 0
 #endif
 
-XDM_ACCESS_ATTRIBUTE((read_only, 1)) XDM_ACCESS_ATTRIBUTE((read_only, 2))
-XDM_PURE_ATTRIBUTE
-extern int XdmcpCompareKeys (const XdmAuthKeyPtr a, const XdmAuthKeyPtr b);
+XDM_ACCESS_ATTRIBUTE((read_only, 1))
+XDM_ACCESS_ATTRIBUTE((read_only, 2)) XDM_PURE_ATTRIBUTE
+    extern int XdmcpCompareKeys(const XdmAuthKeyPtr a, const XdmAuthKeyPtr b);
 
 XDM_ACCESS_ATTRIBUTE((write_only, 1))
-extern int XdmcpAllocARRAY16 (ARRAY16Ptr array, int length);
+extern int XdmcpAllocARRAY16(ARRAY16Ptr array, int length);
 XDM_ACCESS_ATTRIBUTE((write_only, 1))
-extern int XdmcpAllocARRAY32 (ARRAY32Ptr array, int length);
+extern int XdmcpAllocARRAY32(ARRAY32Ptr array, int length);
 XDM_ACCESS_ATTRIBUTE((write_only, 1))
-extern int XdmcpAllocARRAY8 (ARRAY8Ptr array, int length);
+extern int XdmcpAllocARRAY8(ARRAY8Ptr array, int length);
 XDM_ACCESS_ATTRIBUTE((write_only, 1))
-extern int XdmcpAllocARRAYofARRAY8 (ARRAYofARRAY8Ptr array, int length);
+extern int XdmcpAllocARRAYofARRAY8(ARRAYofARRAY8Ptr array, int length);
 
 XDM_ACCESS_ATTRIBUTE((read_write, 1))
-extern int XdmcpReallocARRAY16 (ARRAY16Ptr array, int length);
+extern int XdmcpReallocARRAY16(ARRAY16Ptr array, int length);
 XDM_ACCESS_ATTRIBUTE((read_write, 1))
-extern int XdmcpReallocARRAY32 (ARRAY32Ptr array, int length);
+extern int XdmcpReallocARRAY32(ARRAY32Ptr array, int length);
 XDM_ACCESS_ATTRIBUTE((read_write, 1))
-extern int XdmcpReallocARRAY8 (ARRAY8Ptr array, int length);
+extern int XdmcpReallocARRAY8(ARRAY8Ptr array, int length);
 XDM_ACCESS_ATTRIBUTE((read_write, 1))
-extern int XdmcpReallocARRAYofARRAY8 (ARRAYofARRAY8Ptr array, int length);
+extern int XdmcpReallocARRAYofARRAY8(ARRAYofARRAY8Ptr array, int length);
 
 _XFUNCPROTOEND
 

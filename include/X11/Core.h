@@ -46,16 +46,15 @@ SOFTWARE.
 ******************************************************************/
 
 #ifndef _XtCore_h
-#define _XtCore_h
+#  define _XtCore_h
 
 _XFUNCPROTOBEGIN
 
 typedef struct _WidgetClassRec *CoreWidgetClass;
-typedef struct _WidgetRec *CoreWidget;
-externalref WidgetClass coreWidgetClass;
+typedef struct _WidgetRec      *CoreWidget;
+externalref WidgetClass         coreWidgetClass;
 
 externalref WidgetClass widgetClass;
-
 
 _XFUNCPROTOEND
 

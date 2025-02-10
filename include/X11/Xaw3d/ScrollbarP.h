@@ -58,59 +58,65 @@ SOFTWARE.
 #include "X11/Xaw3d/Scrollbar.h"
 #include "X11/Xaw3d/ThreeDP.h"
 
-typedef struct {
+typedef struct
+{
      /* public */
-    Pixel	  foreground;	/* thumb foreground color */
-    XtOrientation orientation;	/* horizontal or vertical */
-    XtCallbackList scrollProc;	/* proportional scroll */
-    XtCallbackList thumbProc;	/* jump (to position) scroll */
-    XtCallbackList jumpProc;	/* same as thumbProc but pass data by ref */
-    Pixmap	  thumb;	/* thumb color */
+    Pixel          foreground; /* thumb foreground color */
+    XtOrientation  orientation; /* horizontal or vertical */
+    XtCallbackList scrollProc; /* proportional scroll */
+    XtCallbackList thumbProc; /* jump (to position) scroll */
+    XtCallbackList jumpProc; /* same as thumbProc but pass data by ref */
+    Pixmap         thumb; /* thumb color */
 #ifndef XAW_ARROW_SCROLLBARS
-    Cursor        upCursor;	/* scroll up cursor */
-    Cursor        downCursor;	/* scroll down cursor */
-    Cursor        leftCursor;	/* scroll left cursor */
-    Cursor        rightCursor;	/* scroll right cursor */
-    Cursor        verCursor;	/* scroll vertical cursor */
-    Cursor        horCursor;	/* scroll horizontal cursor */
+    Cursor upCursor; /* scroll up cursor */
+    Cursor downCursor; /* scroll down cursor */
+    Cursor leftCursor; /* scroll left cursor */
+    Cursor rightCursor; /* scroll right cursor */
+    Cursor verCursor; /* scroll vertical cursor */
+    Cursor horCursor; /* scroll horizontal cursor */
 #endif
-    float	  top;		/* What percent is above the win's top */
-    float	  shown;	/* What percent is shown in the win */
-    Dimension	  length;	/* either height or width */
-    Dimension	  thickness;	/* either width or height */
-    Dimension	  min_thumb;	/* minimum size for the thumb. */
-    float         picked;       /* How much of the thumb is picked *
+    float     top;  /* What percent is above the win's top */
+    float     shown; /* What percent is shown in the win */
+    Dimension length; /* either height or width */
+    Dimension thickness; /* either width or height */
+    Dimension min_thumb; /* minimum size for the thumb. */
+    float     picked;       /* How much of the thumb is picked *
 				 * when scrolling starts */
 
      /* private */
 #ifdef XAW_ARROW_SCROLLBARS
-    XtIntervalId  timer_id;     /* autorepeat timer; remove on destruction */
-    char	  scroll_mode;	/* 0:none 1:up/back 2:track 3:down/forward */
+    XtIntervalId timer_id;     /* autorepeat timer; remove on destruction */
+    char         scroll_mode; /* 0:none 1:up/back 2:track 3:down/forward */
 #else
-    Cursor        inactiveCursor; /* the normal cursor for scrollbar */
-    char          direction;	/* a scroll has started; which direction */
+    Cursor inactiveCursor; /* the normal cursor for scrollbar */
+    char   direction; /* a scroll has started; which direction */
 #endif
-    GC		  gc;		/* a (shared) gc */
-    Position	  topLoc;	/* Pixel that corresponds to top */
-    Dimension	  shownLength;	/* Num pixels corresponding to shown */
-    Boolean       pick_top;     /* pick thumb at top or anywhere*/
+    GC        gc;  /* a (shared) gc */
+    Position  topLoc; /* Pixel that corresponds to top */
+    Dimension shownLength; /* Num pixels corresponding to shown */
+    Boolean   pick_top;     /* pick thumb at top or anywhere*/
 
 } ScrollbarPart;
 
-typedef struct _ScrollbarRec {
-    CorePart		core;
-    SimplePart		simple;
-    ThreeDPart		threeD;
-    ScrollbarPart	scrollbar;
+typedef struct _ScrollbarRec
+{
+    CorePart      core;
+    SimplePart    simple;
+    ThreeDPart    threeD;
+    ScrollbarPart scrollbar;
 } ScrollbarRec;
 
-typedef struct {int empty;} ScrollbarClassPart;
+typedef struct
+{
+    int empty;
+} ScrollbarClassPart;
 
-typedef struct _ScrollbarClassRec {
-    CoreClassPart		core_class;
-    SimpleClassPart		simple_class;
-    ThreeDClassPart		threeD_class;
-    ScrollbarClassPart		scrollbar_class;
+typedef struct _ScrollbarClassRec
+{
+    CoreClassPart      core_class;
+    SimpleClassPart    simple_class;
+    ThreeDClassPart    threeD_class;
+    ScrollbarClassPart scrollbar_class;
 } ScrollbarClassRec;
 
 extern ScrollbarClassRec scrollbarClassRec;

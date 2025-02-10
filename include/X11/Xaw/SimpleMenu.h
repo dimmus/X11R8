@@ -81,35 +81,35 @@ in this Software without prior written authorization from The Open Group.
 
 */
 
-typedef struct _SimpleMenuClassRec*	SimpleMenuWidgetClass;
-typedef struct _SimpleMenuRec*		SimpleMenuWidget;
+typedef struct _SimpleMenuClassRec *SimpleMenuWidgetClass;
+typedef struct _SimpleMenuRec      *SimpleMenuWidget;
 
 extern WidgetClass simpleMenuWidgetClass;
 
-#define XtNcursor "cursor"
+#define XtNcursor       "cursor"
 #define XtNbottomMargin "bottomMargin"
-#define XtNcolumnWidth "columnWidth"
-#define XtNlabelClass "labelClass"
+#define XtNcolumnWidth  "columnWidth"
+#define XtNlabelClass   "labelClass"
 #define XtNmenuOnScreen "menuOnScreen"
 #define XtNpopupOnEntry "popupOnEntry"
-#define XtNrowHeight "rowHeight"
-#define XtNtopMargin "topMargin"
-#define XtNleftMargin "leftMargin"
-#define XtNrightMargin "rightMargin"
+#define XtNrowHeight    "rowHeight"
+#define XtNtopMargin    "topMargin"
+#define XtNleftMargin   "leftMargin"
+#define XtNrightMargin  "rightMargin"
 
-#define XtCColumnWidth "ColumnWidth"
-#define XtCLabelClass "LabelClass"
+#define XtCColumnWidth  "ColumnWidth"
+#define XtCLabelClass   "LabelClass"
 #define XtCMenuOnScreen "MenuOnScreen"
 #define XtCPopupOnEntry "PopupOnEntry"
-#define XtCRowHeight "RowHeight"
+#define XtCRowHeight    "RowHeight"
 
 #define XtCVerticalMargins "VerticalMargins"
 
 #ifndef OLDXAW
-#define XtCHorizontalMargins "HorizontalMargins"
-#define XawNdisplayList "displayList"
-#define XawCDisplayList "DisplayList"
-#define XawRDisplayList "XawDisplayList"
+#  define XtCHorizontalMargins "HorizontalMargins"
+#  define XawNdisplayList      "displayList"
+#  define XawCDisplayList      "DisplayList"
+#  define XawRDisplayList      "XawDisplayList"
 #endif
 
 /*
@@ -128,10 +128,7 @@ _XFUNCPROTOBEGIN
  * Description:
  *	Adds the global actions to the simple menu widget.
  */
-void XawSimpleMenuAddGlobalActions
-(
- XtAppContext		app_con
- );
+void XawSimpleMenuAddGlobalActions(XtAppContext app_con);
 
 /*
  * Function:
@@ -146,10 +143,7 @@ void XawSimpleMenuAddGlobalActions
  * Returns:
  *	The currently set entry or NULL if none is set
  */
-Widget XawSimpleMenuGetActiveEntry
-(
- Widget			w
- );
+Widget XawSimpleMenuGetActiveEntry(Widget w);
 
 /*
  * Function:
@@ -161,10 +155,7 @@ Widget XawSimpleMenuGetActiveEntry
  * Description:
  *	Unsets the currently active (set) entry.
  */
-void XawSimpleMenuClearActiveEntry
-(
- Widget			w
-);
+void XawSimpleMenuClearActiveEntry(Widget w);
 
 _XFUNCPROTOEND
 

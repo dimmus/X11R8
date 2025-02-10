@@ -42,51 +42,56 @@ in this Software without prior written authorization from The Open Group.
 /*
  * Toggle Widget Private Data
  */
-#define streq(a, b)	(strcmp((a), (b)) == 0)
+#define streq(a, b) (strcmp((a), (b)) == 0)
 
-typedef struct _RadioGroup {
+typedef struct _RadioGroup
+{
     struct _RadioGroup *prev, *next; /* Pointers to other elements in group  */
-    Widget widget;		     /* Widget corrosponding to this element */
+    Widget              widget; /* Widget corrosponding to this element */
 } RadioGroup;
 
 /* New fields for the Toggle widget class */
-typedef struct _ToggleClass  {
+typedef struct _ToggleClass
+{
     XtActionProc Set;
     XtActionProc Unset;
-    XtPointer extension;
+    XtPointer    extension;
 } ToggleClassPart;
 
 /* class record declaration */
-typedef struct _ToggleClassRec {
-    CoreClassPart	core_class;
-    SimpleClassPart	simple_class;
-    LabelClassPart	label_class;
-    CommandClassPart	command_class;
-    ToggleClassPart	toggle_class;
+typedef struct _ToggleClassRec
+{
+    CoreClassPart    core_class;
+    SimpleClassPart  simple_class;
+    LabelClassPart   label_class;
+    CommandClassPart command_class;
+    ToggleClassPart  toggle_class;
 } ToggleClassRec;
 
 extern ToggleClassRec toggleClassRec;
 
 /* New fields for the Toggle widget */
-typedef struct {
+typedef struct
+{
     /* resources */
-    Widget widget;
+    Widget    widget;
     XtPointer radio_data;
 
     /* private */
     RadioGroup *radio_group;
 #ifndef OLDXAW
-    XtPointer pad[4];	/* for future use and keep binary compatibility */
+    XtPointer pad[4]; /* for future use and keep binary compatibility */
 #endif
 } TogglePart;
 
 /* Full widget declaration */
-typedef struct _ToggleRec {
-    CorePart	core;
-    SimplePart	simple;
-    LabelPart	label;
-    CommandPart	command;
-    TogglePart	toggle;
+typedef struct _ToggleRec
+{
+    CorePart    core;
+    SimplePart  simple;
+    LabelPart   label;
+    CommandPart command;
+    TogglePart  toggle;
 } ToggleRec;
 
 #endif /* _XawToggleP_h */

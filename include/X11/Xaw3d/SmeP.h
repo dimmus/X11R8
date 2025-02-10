@@ -54,27 +54,30 @@ in this Software without prior written authorization from the X Consortium.
  *
  ************************************************************/
 
-typedef struct _SmeClassPart {
-  void (*highlight)(Widget);
-  void (*unhighlight)(Widget);
-  void (*notify)(Widget);
-  XtPointer extension;
+typedef struct _SmeClassPart
+{
+    void (*highlight)(Widget);
+    void (*unhighlight)(Widget);
+    void (*notify)(Widget);
+    XtPointer extension;
 } SmeClassPart;
 
 /* Full class record declaration */
-typedef struct _SmeClassRec {
-    RectObjClassPart    rect_class;
-    SmeClassPart	sme_class;
+typedef struct _SmeClassRec
+{
+    RectObjClassPart rect_class;
+    SmeClassPart     sme_class;
 } SmeClassRec;
 
 extern SmeClassRec smeClassRec;
 
 /* New fields for the Sme widget record */
-typedef struct {
+typedef struct
+{
     /* resources */
-    XtCallbackList callbacks;	/* The callback list */
+    XtCallbackList callbacks; /* The callback list */
 #ifdef XAW_INTERNATIONALIZATION
-    Boolean     international;
+    Boolean international;
 #endif
 } SmePart;
 
@@ -84,10 +87,11 @@ typedef struct {
  *
  ****************************************************************/
 
-typedef struct _SmeRec {
-  ObjectPart     object;
-  RectObjPart    rectangle;
-  SmePart	 sme;
+typedef struct _SmeRec
+{
+    ObjectPart  object;
+    RectObjPart rectangle;
+    SmePart     sme;
 } SmeRec;
 
 /************************************************************
@@ -98,7 +102,7 @@ typedef struct _SmeRec {
 
 typedef void (*_XawEntryVoidFunc)(Widget);
 
-#define XtInheritHighlight   ((_XawEntryVoidFunc) _XtInherit)
+#define XtInheritHighlight   ((_XawEntryVoidFunc)_XtInherit)
 #define XtInheritUnhighlight XtInheritHighlight
 #define XtInheritNotify      XtInheritHighlight
 

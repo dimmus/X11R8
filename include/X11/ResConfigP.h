@@ -65,11 +65,10 @@ _XFUNCPROTOBEGIN
 #define RCM_DATA "Custom Data"
 #define RCM_INIT "Custom Init"
 
-extern void _XtResourceConfigurationEH(
-	Widget 		/* w */,
-	XtPointer 	/* client_data */,
-	XEvent * 	/* event */,
-	Boolean *	/* continue_to_dispatch */
+extern void _XtResourceConfigurationEH(Widget /* w */,
+                                       XtPointer /* client_data */,
+                                       XEvent * /* event */,
+                                       Boolean * /* continue_to_dispatch */
 );
 
 _XFUNCPROTOEND

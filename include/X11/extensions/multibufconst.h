@@ -27,57 +27,57 @@ in this Software without prior written authorization from The Open Group.
 
 #define MULTIBUFFER_PROTOCOL_NAME "Multi-Buffering"
 
-#define MULTIBUFFER_MAJOR_VERSION	1	/* current version numbers */
-#define MULTIBUFFER_MINOR_VERSION	1	/* has ClearImageBufferArea */
+#define MULTIBUFFER_MAJOR_VERSION 1 /* current version numbers */
+#define MULTIBUFFER_MINOR_VERSION 1 /* has ClearImageBufferArea */
 
 /*
  * update_action field
  */
-#define MultibufferUpdateActionUndefined	0
-#define MultibufferUpdateActionBackground	1
-#define MultibufferUpdateActionUntouched	2
-#define MultibufferUpdateActionCopied		3
+#define MultibufferUpdateActionUndefined  0
+#define MultibufferUpdateActionBackground 1
+#define MultibufferUpdateActionUntouched  2
+#define MultibufferUpdateActionCopied     3
 
 /*
  * update_hint field
  */
-#define MultibufferUpdateHintFrequent		0
-#define MultibufferUpdateHintIntermittent	1
-#define MultibufferUpdateHintStatic		2
+#define MultibufferUpdateHintFrequent     0
+#define MultibufferUpdateHintIntermittent 1
+#define MultibufferUpdateHintStatic       2
 
 /*
  * valuemask fields
  */
-#define MultibufferWindowUpdateHint	(1L << 0)
-#define MultibufferBufferEventMask	(1L << 0)
+#define MultibufferWindowUpdateHint (1L << 0)
+#define MultibufferBufferEventMask  (1L << 0)
 
 /*
  * mono vs. stereo and left vs. right
  */
-#define MultibufferModeMono		0
-#define MultibufferModeStereo		1
-#define MultibufferSideMono		0
-#define MultibufferSideLeft	  	1
-#define MultibufferSideRight		2
+#define MultibufferModeMono   0
+#define MultibufferModeStereo 1
+#define MultibufferSideMono   0
+#define MultibufferSideLeft   1
+#define MultibufferSideRight  2
 
 /*
  * clobber state
  */
-#define MultibufferUnclobbered		0
-#define MultibufferPartiallyClobbered	1
-#define MultibufferFullyClobbered	2
+#define MultibufferUnclobbered        0
+#define MultibufferPartiallyClobbered 1
+#define MultibufferFullyClobbered     2
 
 /*
  * event stuff
  */
-#define MultibufferClobberNotifyMask	0x02000000
-#define MultibufferUpdateNotifyMask	0x04000000
+#define MultibufferClobberNotifyMask 0x02000000
+#define MultibufferUpdateNotifyMask  0x04000000
 
-#define MultibufferClobberNotify	0
-#define MultibufferUpdateNotify		1
-#define MultibufferNumberEvents		(MultibufferUpdateNotify + 1)
+#define MultibufferClobberNotify 0
+#define MultibufferUpdateNotify  1
+#define MultibufferNumberEvents  (MultibufferUpdateNotify + 1)
 
-#define MultibufferBadBuffer		0
-#define MultibufferNumberErrors		(MultibufferBadBuffer + 1)
+#define MultibufferBadBuffer    0
+#define MultibufferNumberErrors (MultibufferBadBuffer + 1)
 
 #endif /* _MULTIBUFCONST_H_ */

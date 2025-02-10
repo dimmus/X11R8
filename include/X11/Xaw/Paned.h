@@ -116,40 +116,40 @@ CONSTRAINT RESOURCES:
 #define PANED_ASK_CHILD 0
 #define PANED_GRIP_SIZE 0
 
-#define XtNallowResize "allowResize"
-#define XtNbetweenCursor "betweenCursor"
-#define XtNverticalBetweenCursor "verticalBetweenCursor"
+#define XtNallowResize             "allowResize"
+#define XtNbetweenCursor           "betweenCursor"
+#define XtNverticalBetweenCursor   "verticalBetweenCursor"
 #define XtNhorizontalBetweenCursor "horizontalBetweenCursor"
-#define XtNgripCursor "gripCursor"
-#define XtNgripIndent "gripIndent"
-#define XtNhorizontalGripCursor "horizontalGripCursor"
-#define XtNinternalBorderColor "internalBorderColor"
-#define XtNinternalBorderWidth "internalBorderWidth"
-#define XtNleftCursor "leftCursor"
-#define XtNlowerCursor "lowerCursor"
-#define XtNrefigureMode "refigureMode"
-#define XtNposition "position"
-#define XtNmin "min"
-#define XtNmax "max"
-#define XtNpreferredPaneSize "preferredPaneSize"
-#define XtNresizeToPreferred "resizeToPreferred"
-#define XtNrightCursor "rightCursor"
-#define XtNshowGrip "showGrip"
-#define XtNskipAdjust "skipAdjust"
-#define XtNupperCursor "upperCursor"
-#define XtNverticalGripCursor "verticalGripCursor"
+#define XtNgripCursor              "gripCursor"
+#define XtNgripIndent              "gripIndent"
+#define XtNhorizontalGripCursor    "horizontalGripCursor"
+#define XtNinternalBorderColor     "internalBorderColor"
+#define XtNinternalBorderWidth     "internalBorderWidth"
+#define XtNleftCursor              "leftCursor"
+#define XtNlowerCursor             "lowerCursor"
+#define XtNrefigureMode            "refigureMode"
+#define XtNposition                "position"
+#define XtNmin                     "min"
+#define XtNmax                     "max"
+#define XtNpreferredPaneSize       "preferredPaneSize"
+#define XtNresizeToPreferred       "resizeToPreferred"
+#define XtNrightCursor             "rightCursor"
+#define XtNshowGrip                "showGrip"
+#define XtNskipAdjust              "skipAdjust"
+#define XtNupperCursor             "upperCursor"
+#define XtNverticalGripCursor      "verticalGripCursor"
 
-#define XtCGripIndent "GripIndent"
-#define XtCMin "Min"
-#define XtCMax "Max"
+#define XtCGripIndent        "GripIndent"
+#define XtCMin               "Min"
+#define XtCMax               "Max"
 #define XtCPreferredPaneSize "PreferredPaneSize"
-#define XtCShowGrip "ShowGrip"
+#define XtCShowGrip          "ShowGrip"
 
 /* Class record constant */
 extern WidgetClass panedWidgetClass;
 
-typedef struct _PanedClassRec	*PanedWidgetClass;
-typedef struct _PanedRec	*PanedWidget;
+typedef struct _PanedClassRec *PanedWidgetClass;
+typedef struct _PanedRec      *PanedWidget;
 
 /*
  *  Public Procedures
@@ -169,12 +169,7 @@ _XFUNCPROTOBEGIN
  * Description:
  *	Sets the min and max size for a pane.
  */
-void XawPanedSetMinMax
-(
- Widget			w,
- int			min,
- int			max
- );
+void XawPanedSetMinMax(Widget w, int min, int max);
 
 /*
  * Function:
@@ -188,12 +183,7 @@ void XawPanedSetMinMax
  * Description:
  *	Gets the min and max size for a pane.
  */
-void XawPanedGetMinMax
-(
- Widget			w,
- int			*min_return,
- int			*max_return
- );
+void XawPanedGetMinMax(Widget w, int *min_return, int *max_return);
 
 /*
  * Function:
@@ -207,15 +197,13 @@ void XawPanedGetMinMax
  *	  Allows a flag to be set the will inhibit  the paned widgets
  *	relayout routine.
  */
-void XawPanedSetRefigureMode
-(
- Widget			w,
+void XawPanedSetRefigureMode(Widget w,
 #if NeedWidePrototypes
- int			mode
+                             int mode
 #else
- Boolean		mode
+                             Boolean mode
 #endif
- );
+);
 
 /*
  * Function:
@@ -227,10 +215,7 @@ void XawPanedSetRefigureMode
  * Returns:
  *	Number of panes in the paned widget.
  */
-int XawPanedGetNumSub
-(
- Widget			w
- );
+int XawPanedGetNumSub(Widget w);
 
 /*
  * Function:
@@ -243,15 +228,13 @@ int XawPanedGetNumSub
  *	  Allows a flag to be set that determines if the paned widget will
  *	allow geometry requests from this child
  */
-void XawPanedAllowResize
-(
- Widget			w,
+void XawPanedAllowResize(Widget w,
 #if NeedWidePrototypes
- int			allow_resize
+                         int allow_resize
 #else
- Boolean		allow_resize
+                         Boolean allow_resize
 #endif
- );
+);
 
 _XFUNCPROTOEND
 

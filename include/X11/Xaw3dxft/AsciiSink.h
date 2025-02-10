@@ -66,12 +66,12 @@ SOFTWARE.
 
 */
 
-#define XtCOutput "Output"
+#define XtCOutput  "Output"
 #define XtCXftFont "XftFont"
 
 #define XtNdisplayNonprinting "displayNonprinting"
-#define XtNecho "echo"
-#define XtNxftFont "xftFont"
+#define XtNecho               "echo"
+#define XtNxftFont            "xftFont"
 
 /* Class record constants */
 

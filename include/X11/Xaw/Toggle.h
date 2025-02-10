@@ -82,23 +82,23 @@ in this Software without prior written authorization from The Open Group.
  * These should be in StringDefs.h but aren't so we will define
  * them here if they are needed
  */
-#define XtCWidget "Widget"
-#define XtCState "State"
+#define XtCWidget     "Widget"
+#define XtCState      "State"
 #define XtCRadioGroup "RadioGroup"
-#define XtCRadioData "RadioData"
+#define XtCRadioData  "RadioData"
 
 #ifndef _XtStringDefs_h_
-#define XtRWidget "Widget"
+#  define XtRWidget "Widget"
 #endif
 
-#define XtNstate "state"
+#define XtNstate      "state"
 #define XtNradioGroup "radioGroup"
-#define XtNradioData "radioData"
+#define XtNradioData  "radioData"
 
-extern WidgetClass               toggleWidgetClass;
+extern WidgetClass toggleWidgetClass;
 
-typedef struct _ToggleClassRec   *ToggleWidgetClass;
-typedef struct _ToggleRec        *ToggleWidget;
+typedef struct _ToggleClassRec *ToggleWidgetClass;
+typedef struct _ToggleRec      *ToggleWidget;
 
 /*
  * Public Functions
@@ -117,11 +117,7 @@ _XFUNCPROTOBEGIN
  * Description:
  *	Allows a toggle widget to change radio lists.
  */
-void XawToggleChangeRadioGroup
-(
- Widget		w,
- Widget		radio_group
- );
+void XawToggleChangeRadioGroup(Widget w, Widget radio_group);
 
 /*
  * Function:
@@ -137,10 +133,7 @@ void XawToggleChangeRadioGroup
  *	The XtNradioData associated with the toggle widget
  */
 
-XtPointer XawToggleGetCurrent
-(
- Widget		radio_group
- );
+XtPointer XawToggleGetCurrent(Widget radio_group);
 
 /*
  * Function:
@@ -153,11 +146,7 @@ XtPointer XawToggleGetCurrent
  * Description:
  *	Sets the Toggle widget associated with the radio_data specified.
  */
-void XawToggleSetCurrent
-(
- Widget		radio_group,
- XtPointer	radio_data
- );
+void XawToggleSetCurrent(Widget radio_group, XtPointer radio_data);
 
 /*
  * Function:
@@ -169,10 +158,7 @@ void XawToggleSetCurrent
  * Description:
  *	Unsets all Toggles in the radio_group specified.
  */
-void XawToggleUnsetCurrent
-(
- Widget		radio_group
- );
+void XawToggleUnsetCurrent(Widget radio_group);
 
 _XFUNCPROTOEND
 

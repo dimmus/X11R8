@@ -38,18 +38,9 @@ in this Software without prior written authorization from The Open Group.
 
 _XFUNCPROTOBEGIN
 
-int XmuPrintDefaultErrorMessage
-(
- Display		*dpy,
- XErrorEvent		*event,
- FILE			*fp
- );
+int XmuPrintDefaultErrorMessage(Display *dpy, XErrorEvent *event, FILE *fp);
 
-int XmuSimpleErrorHandler
-(
- Display		*dpy,
- XErrorEvent		*errorp
- );
+int XmuSimpleErrorHandler(Display *dpy, XErrorEvent *errorp);
 
 _XFUNCPROTOEND
 

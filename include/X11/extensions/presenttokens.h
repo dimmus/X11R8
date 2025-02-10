@@ -23,87 +23,83 @@
 #ifndef _PRESENT_TOKENS_H_
 #define _PRESENT_TOKENS_H_
 
-#define PRESENT_NAME			"Present"
-#define PRESENT_MAJOR			1
-#define PRESENT_MINOR			4
+#define PRESENT_NAME  "Present"
+#define PRESENT_MAJOR 1
+#define PRESENT_MINOR 4
 
-#define PresentNumberErrors		0
-#define PresentNumberEvents		0
+#define PresentNumberErrors 0
+#define PresentNumberEvents 0
 
 /* Requests */
-#define X_PresentQueryVersion		0
-#define X_PresentPixmap			1
-#define X_PresentNotifyMSC		2
-#define X_PresentSelectInput		3
-#define X_PresentQueryCapabilities      4
-#define X_PresentPixmapSynced		5
+#define X_PresentQueryVersion      0
+#define X_PresentPixmap            1
+#define X_PresentNotifyMSC         2
+#define X_PresentSelectInput       3
+#define X_PresentQueryCapabilities 4
+#define X_PresentPixmapSynced      5
 
-#define PresentNumberRequests		6
+#define PresentNumberRequests 6
 
 /* Present operation options */
-#define PresentOptionNone               0
-#define PresentOptionAsync              (1 << 0)
-#define PresentOptionCopy               (1 << 1)
-#define PresentOptionUST                (1 << 2)
-#define PresentOptionSuboptimal         (1 << 3)
-#define PresentOptionAsyncMayTear       (1 << 4)
+#define PresentOptionNone         0
+#define PresentOptionAsync        (1 << 0)
+#define PresentOptionCopy         (1 << 1)
+#define PresentOptionUST          (1 << 2)
+#define PresentOptionSuboptimal   (1 << 3)
+#define PresentOptionAsyncMayTear (1 << 4)
 
-#define PresentAllOptions       (PresentOptionAsync | \
-                                 PresentOptionCopy | \
-                                 PresentOptionUST | \
-                                 PresentOptionSuboptimal | \
-                                 PresentOptionAsyncMayTear)
+#define PresentAllOptions                                        \
+    (PresentOptionAsync | PresentOptionCopy | PresentOptionUST | \
+     PresentOptionSuboptimal | PresentOptionAsyncMayTear)
 
 #define PresentAllAsyncOptions (PresentOptionAsync | PresentOptionAsyncMayTear)
 
 /* Present capabilities */
 
-#define PresentCapabilityNone           0
-#define PresentCapabilityAsync          1
-#define PresentCapabilityFence          2
-#define PresentCapabilityUST            4
-#define PresentCapabilityAsyncMayTear   8
-#define PresentCapabilitySyncobj        16
+#define PresentCapabilityNone         0
+#define PresentCapabilityAsync        1
+#define PresentCapabilityFence        2
+#define PresentCapabilityUST          4
+#define PresentCapabilityAsyncMayTear 8
+#define PresentCapabilitySyncobj      16
 
-#define PresentAllCapabilities  (PresentCapabilityAsync | \
-                                 PresentCapabilityFence | \
-                                 PresentCapabilityUST | \
-                                 PresentCapabilityAsyncMayTear | \
-                                 PresentCapabilitySyncobj)
+#define PresentAllCapabilities                                                \
+    (PresentCapabilityAsync | PresentCapabilityFence | PresentCapabilityUST | \
+     PresentCapabilityAsyncMayTear | PresentCapabilitySyncobj)
 
-#define PresentAllAsyncCapabilities (PresentCapabilityAsync | PresentCapabilityAsyncMayTear)
+#define PresentAllAsyncCapabilities \
+    (PresentCapabilityAsync | PresentCapabilityAsyncMayTear)
 
 /* Events */
-#define PresentConfigureNotify	0
-#define PresentCompleteNotify	1
-#define PresentIdleNotify       2
+#define PresentConfigureNotify 0
+#define PresentCompleteNotify  1
+#define PresentIdleNotify      2
 #if PRESENT_FUTURE_VERSION
-#define PresentRedirectNotify	3
+#  define PresentRedirectNotify 3
 #endif
 
 /* Event Masks */
-#define PresentConfigureNotifyMask      1
-#define PresentCompleteNotifyMask       2
-#define PresentIdleNotifyMask           4
+#define PresentConfigureNotifyMask 1
+#define PresentCompleteNotifyMask  2
+#define PresentIdleNotifyMask      4
 #if PRESENT_FUTURE_VERSION
-#define PresentRedirectNotifyMask       8
+#  define PresentRedirectNotifyMask 8
 #endif
 
 #if PRESENT_FUTURE_VERSION
-#define PRESENT_REDIRECT_NOTIFY_MASK    PresentRedirectNotifyMask
+#  define PRESENT_REDIRECT_NOTIFY_MASK PresentRedirectNotifyMask
 #else
-#define PRESENT_REDIRECT_NOTIFY_MASK    0
+#  define PRESENT_REDIRECT_NOTIFY_MASK 0
 #endif
 
-#define PresentAllEvents   (PresentConfigureNotifyMask |        \
-                            PresentCompleteNotifyMask |         \
-                            PresentIdleNotifyMask |             \
-                            PRESENT_REDIRECT_NOTIFY_MASK)
+#define PresentAllEvents                                      \
+    (PresentConfigureNotifyMask | PresentCompleteNotifyMask | \
+     PresentIdleNotifyMask | PRESENT_REDIRECT_NOTIFY_MASK)
 
 /* Complete Kinds */
 
-#define PresentCompleteKindPixmap       0
-#define PresentCompleteKindNotifyMSC    1
+#define PresentCompleteKindPixmap    0
+#define PresentCompleteKindNotifyMSC 1
 
 /* Complete Modes */
 

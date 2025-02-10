@@ -36,37 +36,15 @@ in this Software without prior written authorization from The Open Group.
 
 _XFUNCPROTOBEGIN
 
-void XmuCopyISOLatin1Lowered
-(
- char		*dst_return,
- _Xconst char	*src
- );
+void XmuCopyISOLatin1Lowered(char *dst_return, _Xconst char *src);
 
-void XmuCopyISOLatin1Uppered
-(
- char		*dst_return,
- _Xconst char	*src
- );
+void XmuCopyISOLatin1Uppered(char *dst_return, _Xconst char *src);
 
-int XmuCompareISOLatin1
-(
- _Xconst char	*first,
- _Xconst char	*second
- );
+int XmuCompareISOLatin1(_Xconst char *first, _Xconst char *second);
 
-void XmuNCopyISOLatin1Lowered
-(
- char		*dst_return,
- _Xconst char	*src,
- int		 size
- );
+void XmuNCopyISOLatin1Lowered(char *dst_return, _Xconst char *src, int size);
 
-void XmuNCopyISOLatin1Uppered
-(
- char		*dst_return,
- _Xconst char	*src,
- int		size
- );
+void XmuNCopyISOLatin1Uppered(char *dst_return, _Xconst char *src, int size);
 
 _XFUNCPROTOEND
 

@@ -35,39 +35,43 @@ in this Software without prior written authorization from The Open Group.
 #include "X11/Xaw/SmeLine.h"
 
 /* New fields for the SmeLine widget class */
-typedef struct _SmeLineClassPart {
+typedef struct _SmeLineClassPart
+{
     XtPointer extension;
 } SmeLineClassPart;
 
 /* Full class record */
-typedef struct _SmeLineClassRec {
-    RectObjClassPart    rect_class;
-    SmeClassPart	sme_class;
-    SmeLineClassPart	sme_line_class;
+typedef struct _SmeLineClassRec
+{
+    RectObjClassPart rect_class;
+    SmeClassPart     sme_class;
+    SmeLineClassPart sme_line_class;
 } SmeLineClassRec;
 
 extern SmeLineClassRec smeLineClassRec;
 
 /* New fields for the SmeLine widget */
-typedef struct {
+typedef struct
+{
     /* resources */
-    Pixel foreground;		/* Foreground color */
-    Pixmap stipple;		/* Line Stipple */
-    Dimension line_width;	/* Width of the line */
+    Pixel     foreground;  /* Foreground color */
+    Pixmap    stipple;  /* Line Stipple */
+    Dimension line_width; /* Width of the line */
 
     /* private */
-    GC gc;			/* Graphics context for drawing line */
+    GC gc;   /* Graphics context for drawing line */
 #ifndef OLDXAW
-    XtPointer pad[4];	/* for future use and keep binary compatibility */
+    XtPointer pad[4]; /* for future use and keep binary compatibility */
 #endif
 } SmeLinePart;
 
 /* Full instance record */
-typedef struct _SmeLineRec {
-    ObjectPart	object;
-    RectObjPart	rectangle;
-    SmePart	sme;
-    SmeLinePart	sme_line;
+typedef struct _SmeLineRec
+{
+    ObjectPart  object;
+    RectObjPart rectangle;
+    SmePart     sme;
+    SmeLinePart sme_line;
 } SmeLineRec;
 
 #endif /* _XawSmeLineP_h */

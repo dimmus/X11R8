@@ -36,80 +36,49 @@ in this Software without prior written authorization from The Open Group.
 
 _XFUNCPROTOBEGIN
 
-Status XmuAllStandardColormaps
-(
- Display		*dpy
- );
+Status XmuAllStandardColormaps(Display *dpy);
 
-Status XmuCreateColormap
-(
- Display		*dpy,
- XStandardColormap	*colormap
- );
+Status XmuCreateColormap(Display *dpy, XStandardColormap *colormap);
 
-void XmuDeleteStandardColormap
-(
- Display		*dpy,
- int			screen,
- Atom			property
- );
+void XmuDeleteStandardColormap(Display *dpy, int screen, Atom property);
 
-Status XmuGetColormapAllocation
-(
- XVisualInfo		*vinfo,
- Atom			property,
- unsigned long		*red_max_return,
- unsigned long		*green_max_return,
- unsigned long		*blue_max_return
- );
+Status XmuGetColormapAllocation(XVisualInfo   *vinfo,
+                                Atom           property,
+                                unsigned long *red_max_return,
+                                unsigned long *green_max_return,
+                                unsigned long *blue_max_return);
 
-Status XmuLookupStandardColormap
-(
- Display		*dpy,
- int			screen,
- VisualID		visualid,
- unsigned int		depth,
- Atom			property,
- Bool			replace,
- Bool			retain
- );
+Status XmuLookupStandardColormap(Display     *dpy,
+                                 int          screen,
+                                 VisualID     visualid,
+                                 unsigned int depth,
+                                 Atom         property,
+                                 Bool         replace,
+                                 Bool         retain);
 
-XStandardColormap *XmuStandardColormap
-(
- Display		*dpy,
- int			screen,
- VisualID		visualid,
- unsigned int		depth,
- Atom			property,
- Colormap		cmap,
- unsigned long		red_max,
- unsigned long		green_max,
- unsigned long		blue_max
- );
+XStandardColormap *XmuStandardColormap(Display      *dpy,
+                                       int           screen,
+                                       VisualID      visualid,
+                                       unsigned int  depth,
+                                       Atom          property,
+                                       Colormap      cmap,
+                                       unsigned long red_max,
+                                       unsigned long green_max,
+                                       unsigned long blue_max);
 
-Status XmuVisualStandardColormaps
-(
- Display		*dpy,
- int			screen,
- VisualID		visualid,
- unsigned int		depth,
- Bool			replace,
- Bool			retain
- );
+Status XmuVisualStandardColormaps(Display     *dpy,
+                                  int          screen,
+                                  VisualID     visualid,
+                                  unsigned int depth,
+                                  Bool         replace,
+                                  Bool         retain);
 
-Bool XmuDistinguishableColors
-(
- XColor			*colors,
- int			count
- );
+Bool XmuDistinguishableColors(XColor *colors, int count);
 
-Bool XmuDistinguishablePixels
-(
- Display		*dpy,
- Colormap		cmap,
- unsigned long		*pixels,
- int			count
- );
+Bool XmuDistinguishablePixels(Display       *dpy,
+                              Colormap       cmap,
+                              unsigned long *pixels,
+                              int            count);
 
 _XFUNCPROTOEND
 

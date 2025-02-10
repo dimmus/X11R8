@@ -42,34 +42,36 @@ SOFTWARE.
 #include <X11/Xaw3dxft/Xaw3dXft.h>
 
 #ifndef _Xaw3dXftP_h
-#define _Xaw3dXftP_h
+#  define _Xaw3dXftP_h
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-extern Xaw3dXftData * _Xaw3dXft;
+extern Xaw3dXftData *_Xaw3dXft;
 
-extern void Xaw3dXftSetDefaultHilitColor(void);
-extern void Xaw3dXftSetHilitColor(char * value);
-extern void Xaw3dXftSetDefaultFontName(char *name);
-extern void Xaw3dXftSetInsensitiveTwist(char *value);
-extern XftFont * Xaw3dXftGetFont(Display *dpy, char *name);
+extern void     Xaw3dXftSetDefaultHilitColor(void);
+extern void     Xaw3dXftSetHilitColor(char *value);
+extern void     Xaw3dXftSetDefaultFontName(char *name);
+extern void     Xaw3dXftSetInsensitiveTwist(char *value);
+extern XftFont *Xaw3dXftGetFont(Display *dpy, char *name);
 
 extern int Xaw3dXftTextWidth(Widget w, XftFont *font, char *str, int len);
-extern void Xaw3dXftDrawString(Widget w, XftFont *font, int x, int y, char *str, int len);
+extern void
+Xaw3dXftDrawString(Widget w, XftFont *font, int x, int y, char *str, int len);
 
-#ifdef XAW_ARROW_SCROLLBARS
+#  ifdef XAW_ARROW_SCROLLBARS
 extern Widget Xaw3dXftGetScrollbar(Widget w, XtPointer ptr);
-extern void Xaw3dXftHandleMouseWheel (Widget w, XtPointer ptr, XEvent *event, Boolean * flg);
+extern void
+Xaw3dXftHandleMouseWheel(Widget w, XtPointer ptr, XEvent *event, Boolean *flg);
 extern void Xaw3dXftSetMouseWheelHandler(Widget w, XtPointer ptr);
-extern void Xaw3dXftSetMouseWheelSteps (Widget w, XtPointer ptr, int n);
-#endif
+extern void Xaw3dXftSetMouseWheelSteps(Widget w, XtPointer ptr, int n);
+#  endif
 
 extern void Xaw3dXftInitialize(void);
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 
 #endif

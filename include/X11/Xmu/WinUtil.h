@@ -37,24 +37,11 @@ in this Software without prior written authorization from The Open Group.
 
 _XFUNCPROTOBEGIN
 
-Window XmuClientWindow
-(
- Display	*dpy,
- Window 	win
- );
+Window XmuClientWindow(Display *dpy, Window win);
 
-Bool XmuUpdateMapHints
-(
- Display	*dpy,
- Window		win,
- XSizeHints	*hints
- );
+Bool XmuUpdateMapHints(Display *dpy, Window win, XSizeHints *hints);
 
-Screen *XmuScreenOfWindow
-(
- Display	*dpy,
- Window 	w
-);
+Screen *XmuScreenOfWindow(Display *dpy, Window w);
 
 _XFUNCPROTOEND
 

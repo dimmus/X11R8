@@ -75,35 +75,35 @@ in this Software without prior written authorization from the X Consortium.
 
 */
 
-typedef struct _SmeBSBClassRec    *SmeBSBObjectClass;
-typedef struct _SmeBSBRec         *SmeBSBObject;
+typedef struct _SmeBSBClassRec *SmeBSBObjectClass;
+typedef struct _SmeBSBRec      *SmeBSBObject;
 
 extern WidgetClass smeBSBObjectClass;
 
-#define XtNleftBitmap "leftBitmap"
-#define XtNleftMargin "leftMargin"
-#define XtNleftWhitespace "leftWhitespace"
-#define XtNrightBitmap "rightBitmap"
-#define XtNrightMargin "rightMargin"
+#define XtNleftBitmap      "leftBitmap"
+#define XtNleftMargin      "leftMargin"
+#define XtNleftWhitespace  "leftWhitespace"
+#define XtNrightBitmap     "rightBitmap"
+#define XtNrightMargin     "rightMargin"
 #define XtNrightWhitespace "rightWhitespace"
-#define XtNvertSpace "vertSpace"
-#define XtNmenuName "menuName"
-#define XtNunderline "underline"
+#define XtNvertSpace       "vertSpace"
+#define XtNmenuName        "menuName"
+#define XtNunderline       "underline"
 
 #ifdef XAW_INTERNATIONALIZATION
-#ifndef XtNfontSet
-#define XtNfontSet		"fontSet"
-#endif
-#ifndef XtCFontSet
-#define XtCFontSet		"FontSet"
-#endif
+#  ifndef XtNfontSet
+#    define XtNfontSet "fontSet"
+#  endif
+#  ifndef XtCFontSet
+#    define XtCFontSet "FontSet"
+#  endif
 #endif
 
-#define XtCLeftBitmap "LeftBitmap"
-#define XtCRightBitmap "RightBitmap"
+#define XtCLeftBitmap        "LeftBitmap"
+#define XtCRightBitmap       "RightBitmap"
 #define XtCHorizontalMargins "HorizontalMargins"
-#define XtCVertSpace "VertSpace"
-#define XtCMenuName "MenuName"
-#define XtCUnderline "Underline"
+#define XtCVertSpace         "VertSpace"
+#define XtCMenuName          "MenuName"
+#define XtCUnderline         "Underline"
 
 #endif /* _SmeBSB_h */

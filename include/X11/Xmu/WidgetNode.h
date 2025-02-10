@@ -38,58 +38,44 @@ in this Software without prior written authorization from The Open Group.
  * This is usually initialized by setting the first two fields and letting
  * rest be implicitly nulled (by genlist.sh, for example)
  */
-typedef struct _XmuWidgetNode {
-    char *label;			/* mixed case name */
-    WidgetClass *widget_class_ptr;	/* addr of widget class */
-    struct _XmuWidgetNode *superclass;	/* superclass of widget_class */
-    struct _XmuWidgetNode *children, *siblings;	/* subclass links */
-    char *lowered_label;		/* lowercase version of label */
-    char *lowered_classname;		/* lowercase version of class_name */
-    Bool have_resources;		/* resources have been fetched */
-    XtResourceList resources;		/* extracted resource database */
-    struct _XmuWidgetNode **resourcewn;	/* where resources come from */
-    Cardinal nresources;		/* number of resources */
-    XtResourceList constraints;		/* extracted constraint resources */
+typedef struct _XmuWidgetNode
+{
+    char                  *label;   /* mixed case name */
+    WidgetClass           *widget_class_ptr; /* addr of widget class */
+    struct _XmuWidgetNode *superclass; /* superclass of widget_class */
+    struct _XmuWidgetNode *children, *siblings; /* subclass links */
+    char                  *lowered_label;  /* lowercase version of label */
+    char          *lowered_classname;  /* lowercase version of class_name */
+    Bool           have_resources;  /* resources have been fetched */
+    XtResourceList resources;  /* extracted resource database */
+    struct _XmuWidgetNode **resourcewn; /* where resources come from */
+    Cardinal                nresources;  /* number of resources */
+    XtResourceList          constraints;  /* extracted constraint resources */
     struct _XmuWidgetNode **constraintwn;  /* where constraints come from */
-    Cardinal nconstraints;		/* number of constraint resources */
-    XtPointer data;			/* extra data */
+    Cardinal                nconstraints; /* number of constraint resources */
+    XtPointer               data; /* extra data */
 } XmuWidgetNode;
 
-#define XmuWnClass(wn) ((wn)->widget_class_ptr[0])
-#define XmuWnClassname(wn) (XmuWnClass(wn)->core_class.class_name)
+#define XmuWnClass(wn)      ((wn)->widget_class_ptr[0])
+#define XmuWnClassname(wn)  (XmuWnClass(wn)->core_class.class_name)
 #define XmuWnSuperclass(wn) ((XmuWnClass(wn))->core_class.superclass)
 
-					/* external interfaces */
+/* external interfaces */
 _XFUNCPROTOBEGIN
 
-void XmuWnInitializeNodes
-(
- XmuWidgetNode		*nodearray,
- int			nnodes
- );
+void XmuWnInitializeNodes(XmuWidgetNode *nodearray, int nnodes);
 
-void XmuWnFetchResources
-(
- XmuWidgetNode		*node,
- Widget			toplevel,
- XmuWidgetNode		*topnode
- );
+void XmuWnFetchResources(XmuWidgetNode *node,
+                         Widget         toplevel,
+                         XmuWidgetNode *topnode);
 
-int XmuWnCountOwnedResources
-(
- XmuWidgetNode		*node,
- XmuWidgetNode		*ownernode,
- Bool			constraints
- );
+int XmuWnCountOwnedResources(XmuWidgetNode *node,
+                             XmuWidgetNode *ownernode,
+                             Bool           constraints);
 
-XmuWidgetNode *XmuWnNameToNode
-(
- XmuWidgetNode		*nodelist,
- int			nnodes,
- _Xconst char		*name
- );
+XmuWidgetNode *
+XmuWnNameToNode(XmuWidgetNode *nodelist, int nnodes, _Xconst char *name);
 
 _XFUNCPROTOEND
 
 #endif /* _XmuWidgetNode_h */
-

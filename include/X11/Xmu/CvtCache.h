@@ -37,19 +37,19 @@ in this Software without prior written authorization from The Open Group.
 #include "X11/Xmu/DisplayQue.h"
 #include "X11/Xfuncproto.h"
 
-typedef struct _XmuCvtCache {
-    struct {
-	char **bitmapFilePath;
+typedef struct _XmuCvtCache
+{
+    struct
+    {
+        char **bitmapFilePath;
     } string_to_bitmap;
+
     /* add other per-display data that needs to be cached */
 } XmuCvtCache;
 
 _XFUNCPROTOBEGIN
 
-XmuCvtCache *_XmuCCLookupDisplay
-(
- Display	*dpy
- );
+XmuCvtCache *_XmuCCLookupDisplay(Display *dpy);
 
 extern void _XmuStringToBitmapInitCache(XmuCvtCache *c);
 extern void _XmuStringToBitmapFreeCache(XmuCvtCache *c);

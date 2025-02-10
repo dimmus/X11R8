@@ -42,58 +42,62 @@ in this Software without prior written authorization from The Open Group.
 #include "X11/ShellP.h"
 #include "X11/Xaw/XawInit.h"
 
-typedef struct {
-    XtPointer extension;		/* For future needs */
+typedef struct
+{
+    XtPointer extension;  /* For future needs */
 } SimpleMenuClassPart;
 
-typedef struct _SimpleMenuClassRec {
-    CoreClassPart	    core_class;
-    CompositeClassPart	    composite_class;
-    ShellClassPart	    shell_class;
-    OverrideShellClassPart  override_shell_class;
-    SimpleMenuClassPart	    simpleMenu_class;
+typedef struct _SimpleMenuClassRec
+{
+    CoreClassPart          core_class;
+    CompositeClassPart     composite_class;
+    ShellClassPart         shell_class;
+    OverrideShellClassPart override_shell_class;
+    SimpleMenuClassPart    simpleMenu_class;
 } SimpleMenuClassRec;
 
 extern SimpleMenuClassRec simpleMenuClassRec;
 
-typedef struct _SimpleMenuPart {
+typedef struct _SimpleMenuPart
+{
   /* resources */
-    String	label_string;	/* The string for the label or NULL */
-    SmeObject	label;		/* If label_string is non-NULL then this is
+    String      label_string; /* The string for the label or NULL */
+    SmeObject   label;  /* If label_string is non-NULL then this is
 				   the label widget */
-    WidgetClass	label_class;	/* Widget Class of the menu label object */
-    Dimension	top_margin;	/* Top and bottom margins */
-    Dimension	bottom_margin;
-    Dimension	row_height;	/* height of each row (menu entry) */
-    Cursor	cursor;		/* The menu's cursor */
-    SmeObject	popup_entry;	/* The entry to position the cursor on for
+    WidgetClass label_class; /* Widget Class of the menu label object */
+    Dimension   top_margin; /* Top and bottom margins */
+    Dimension   bottom_margin;
+    Dimension   row_height; /* height of each row (menu entry) */
+    Cursor      cursor;  /* The menu's cursor */
+    SmeObject   popup_entry; /* The entry to position the cursor on for
 				   when using XawPositionSimpleMenu */
-    Boolean	menu_on_screen;	/* Force the menus to be fully on the screen*/
-    int		backing_store;	/* What type of backing store to use */
+    Boolean     menu_on_screen; /* Force the menus to be fully on the screen*/
+    int         backing_store; /* What type of backing store to use */
 
     /* private */
-    Boolean	recursive_set_values; /* contain a possible infinite loop */
-    Boolean	menu_width;	/* If true then force width to remain
+    Boolean   recursive_set_values; /* contain a possible infinite loop */
+    Boolean   menu_width; /* If true then force width to remain
 				   core.width */
-    Boolean	menu_height;	/* Just like menu_width, but for height */
-    SmeObject	entry_set;	/* The entry that is currently set or
+    Boolean   menu_height; /* Just like menu_width, but for height */
+    SmeObject entry_set; /* The entry that is currently set or
 				   highlighted */
 #ifndef OLDXAW
-    Dimension	left_margin;
-    Dimension	right_margin;
+    Dimension       left_margin;
+    Dimension       right_margin;
     XawDisplayList *display_list;
-    Widget	sub_menu;
-    unsigned	char state;
-    XtPointer pad[4];	/* for future use and keep binary compatibility */
+    Widget          sub_menu;
+    unsigned char   state;
+    XtPointer       pad[4]; /* for future use and keep binary compatibility */
 #endif
 } SimpleMenuPart;
 
-typedef struct _SimpleMenuRec {
-    CorePart		core;
-    CompositePart	composite;
-    ShellPart		shell;
-    OverrideShellPart	override;
-    SimpleMenuPart	simple_menu;
+typedef struct _SimpleMenuRec
+{
+    CorePart          core;
+    CompositePart     composite;
+    ShellPart         shell;
+    OverrideShellPart override;
+    SimpleMenuPart    simple_menu;
 } SimpleMenuRec;
 
 #endif /* _SimpleMenuP_h */

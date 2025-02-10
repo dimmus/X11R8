@@ -91,37 +91,38 @@ SOFTWARE.
 
 */
 
-
 #ifndef _XtStringDefs_h_
-#define XtNtop "top"
-#define XtRWidget "Widget"
+#  define XtNtop    "top"
+#  define XtRWidget "Widget"
 #endif
 
 #define XtNdefaultDistance "defaultDistance"
-#define XtNbottom "bottom"
-#define XtNleft "left"
-#define XtNright "right"
-#define XtNfromHoriz "fromHoriz"
-#define XtNfromVert "fromVert"
-#define XtNhorizDistance "horizDistance"
-#define XtNvertDistance "vertDistance"
-#define XtNresizable "resizable"
+#define XtNbottom          "bottom"
+#define XtNleft            "left"
+#define XtNright           "right"
+#define XtNfromHoriz       "fromHoriz"
+#define XtNfromVert        "fromVert"
+#define XtNhorizDistance   "horizDistance"
+#define XtNvertDistance    "vertDistance"
+#define XtNresizable       "resizable"
 
-#define XtCEdge "Edge"
+#define XtCEdge   "Edge"
 #define XtCWidget "Widget"
 
 #ifndef _XawEdgeType_e
-#define _XawEdgeType_e
-typedef enum {
-    XawChainTop,		/* Keep this edge a constant distance from
+#  define _XawEdgeType_e
+
+typedef enum
+{
+    XawChainTop,  /* Keep this edge a constant distance from
 				   the top of the form */
-    XawChainBottom,		/* Keep this edge a constant distance from
+    XawChainBottom,  /* Keep this edge a constant distance from
 				   the bottom of the form */
-    XawChainLeft,		/* Keep this edge a constant distance from
+    XawChainLeft,  /* Keep this edge a constant distance from
 				   the left of the form */
-    XawChainRight,		/* Keep this edge a constant distance from
+    XawChainRight,  /* Keep this edge a constant distance from
 				   the right of the form */
-    XawRubber			/* Keep this edge a proportional distance
+    XawRubber   /* Keep this edge a proportional distance
 				   from the edges of the form*/
 } XawEdgeType;
 #endif /* _XawEdgeType_e */
@@ -136,25 +137,24 @@ typedef enum {
 
 #define XtEdgeType XawEdgeType
 
-#define XtChainTop XawChainTop
+#define XtChainTop    XawChainTop
 #define XtChainBottom XawChainBottom
-#define XtChainLeft XawChainLeft
-#define XtChainRight XawChainRight
-#define XtRubber XawRubber
+#define XtChainLeft   XawChainLeft
+#define XtChainRight  XawChainRight
+#define XtRubber      XawRubber
 
-typedef struct _FormClassRec	*FormWidgetClass;
-typedef struct _FormRec		*FormWidget;
+typedef struct _FormClassRec *FormWidgetClass;
+typedef struct _FormRec      *FormWidget;
 
 extern WidgetClass formWidgetClass;
 
 _XFUNCPROTOBEGIN
 
-extern void XawFormDoLayout(
-    Widget		/* w */,
+extern void XawFormDoLayout(Widget /* w */,
 #if NeedWidePrototypes
-    /* Boolean */ int	/* do_layout */
+                            /* Boolean */ int /* do_layout */
 #else
-    Boolean		/* do_layout */
+                            Boolean  /* do_layout */
 #endif
 );
 

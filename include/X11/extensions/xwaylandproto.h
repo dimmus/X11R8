@@ -25,39 +25,43 @@
 
 #include "X11/Xproto.h"
 
-#define XWAYLAND_EXTENSION_NAME		"XWAYLAND"
-#define XWAYLAND_EXTENSION_MAJOR	1
-#define XWAYLAND_EXTENSION_MINOR	0
+#define XWAYLAND_EXTENSION_NAME  "XWAYLAND"
+#define XWAYLAND_EXTENSION_MAJOR 1
+#define XWAYLAND_EXTENSION_MINOR 0
 
 /* Request opcodes */
-#define X_XwlQueryVersion		0
+#define X_XwlQueryVersion 0
 
-#define XwlNumberRequests		1
-#define XwlNumberErrors			0
-#define XwlNumberEvents			0
+#define XwlNumberRequests 1
+#define XwlNumberErrors   0
+#define XwlNumberEvents   0
 
-typedef struct {
-    CARD8   reqType;
-    CARD8   xwlReqType;
-    CARD16  length;
-    CARD16  majorVersion;
-    CARD16  minorVersion;
+typedef struct
+{
+    CARD8  reqType;
+    CARD8  xwlReqType;
+    CARD16 length;
+    CARD16 majorVersion;
+    CARD16 minorVersion;
 } xXwlQueryVersionReq;
-#define sz_xXwlQueryVersionReq		8
 
-typedef struct {
-    BYTE    type;   /* X_Reply */
-    BYTE    pad1;
-    CARD16  sequenceNumber;
-    CARD32  length;
-    CARD16  majorVersion;
-    CARD16  minorVersion;
-    CARD32  pad2;
-    CARD32  pad3;
-    CARD32  pad4;
-    CARD32  pad5;
-    CARD32  pad6;
+#define sz_xXwlQueryVersionReq 8
+
+typedef struct
+{
+    BYTE   type;   /* X_Reply */
+    BYTE   pad1;
+    CARD16 sequenceNumber;
+    CARD32 length;
+    CARD16 majorVersion;
+    CARD16 minorVersion;
+    CARD32 pad2;
+    CARD32 pad3;
+    CARD32 pad4;
+    CARD32 pad5;
+    CARD32 pad6;
 } xXwlQueryVersionReply;
-#define sz_xXwlQueryVersionReply	32
+
+#define sz_xXwlQueryVersionReply 32
 
 #endif

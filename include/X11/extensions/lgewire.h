@@ -36,46 +36,49 @@ in this Software without prior written authorization from The Open Group.
 #define LGE_NAME "LGE"
 
 /* Current interface version numbers */
-#define LGE_MAJOR_VERSION   5
-#define LGE_MINOR_VERSION   0
+#define LGE_MAJOR_VERSION 5
+#define LGE_MINOR_VERSION 0
 
 /* Display Server is alive */
-#define  X_LgeQueryVersion	     0
-#define  X_LgeRegisterClient         1
-#define  X_LgeRegisterScreen         2
-#define  X_LgeControlLgMode          3
-#define  X_LgeSendEvent              4
+#define X_LgeQueryVersion   0
+#define X_LgeRegisterClient 1
+#define X_LgeRegisterScreen 2
+#define X_LgeControlLgMode  3
+#define X_LgeSendEvent      4
 
 /* Arguments to XLgeRegisterClient */
-#define LGE_CLIENT_GENERIC	     0
-#define LGE_CLIENT_PICKER            1
-#define LGE_CLIENT_EVENT_DELIVERER   2
+#define LGE_CLIENT_GENERIC         0
+#define LGE_CLIENT_PICKER          1
+#define LGE_CLIENT_EVENT_DELIVERER 2
 
-typedef struct {
-    CARD8       reqType;
-    CARD8       lgeReqType;
-    CARD16	length;
+typedef struct
+{
+    CARD8  reqType;
+    CARD8  lgeReqType;
+    CARD16 length;
 } xLgeQueryVersionReq;
 
-#define sz_xLgeQueryVersionReq	sizeof(xLgeQueryVersionReq)
+#define sz_xLgeQueryVersionReq sizeof(xLgeQueryVersionReq)
 
-typedef struct {
+typedef struct
+{
     /* Always X_Reply */
-    BYTE        type;
-    CARD8       unused;
-    CARD16	sequenceNumber;
-    CARD32	length;
-    CARD32	majorVersion;
-    CARD32	minorVersion;
-    CARD32	implementation;
-    CARD32	pad3;
-    CARD32	pad4;
-    CARD32	pad5;
+    BYTE   type;
+    CARD8  unused;
+    CARD16 sequenceNumber;
+    CARD32 length;
+    CARD32 majorVersion;
+    CARD32 minorVersion;
+    CARD32 implementation;
+    CARD32 pad3;
+    CARD32 pad4;
+    CARD32 pad5;
 } xLgeQueryVersionReply;
 
 #define sz_xLgeQueryVersionReply sizeof(xLgeQueryVersionReply)
 
-typedef struct {
+typedef struct
+{
     CARD8  reqType;
     CARD8  lgeReqType;
     CARD16 length;
@@ -86,7 +89,8 @@ typedef struct {
 
 #define sz_xLgeRegisterClientReq sizeof(xLgeRegisterClientReq)
 
-typedef struct {
+typedef struct
+{
     CARD8  reqType;
     CARD8  lgeReqType;
     CARD16 length;
@@ -96,25 +100,26 @@ typedef struct {
 
 #define sz_xLgeRegisterScreenReq sizeof(xLgeRegisterScreenReq)
 
-typedef struct {
-    CARD8     reqType;
-    CARD8     lgeReqType;
-    CARD16    length;
-    BOOL      enable;
-    CARD8     pad1;
-    CARD16    pad2;
+typedef struct
+{
+    CARD8  reqType;
+    CARD8  lgeReqType;
+    CARD16 length;
+    BOOL   enable;
+    CARD8  pad1;
+    CARD16 pad2;
 } xLgeControlLgModeReq;
 
 #define sz_xLgeControlLgModeReq sizeof(xLgeControlLgModeReq)
 
-typedef struct {
-    CARD8     reqType;
-    CARD8     lgeReqType;
-    CARD16    length;
-    xEvent    event;
+typedef struct
+{
+    CARD8  reqType;
+    CARD8  lgeReqType;
+    CARD16 length;
+    xEvent event;
 } xLgeSendEventReq;
 
 #define sz_xLgeSendEventReq sizeof(xLgeSendEventReq)
 
 #endif /* LGEWIRE_H */
-

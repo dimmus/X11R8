@@ -35,30 +35,34 @@ in this Software without prior written authorization from The Open Group.
 /* define unique representation types not found in "X11/StringDefs.h" */
 #define XtRTemplateResource "TemplateResource"
 
-typedef struct {
+typedef struct
+{
     XtPointer extension;
 } TemplateClassPart;
 
-typedef struct _TemplateClassRec {
-    CoreClassPart	core_class;
-    TemplateClassPart	template_class;
+typedef struct _TemplateClassRec
+{
+    CoreClassPart     core_class;
+    TemplateClassPart template_class;
 } TemplateClassRec;
 
 extern TemplateClassRec templateClassRec;
 
-typedef struct {
+typedef struct
+{
     /* resources */
-    char* resource;
+    char *resource;
     /* private */
     char *private;
 } TemplatePart;
 
-typedef struct _TemplateRec {
-    CorePart		core;
+typedef struct _TemplateRec
+{
+    CorePart core;
 #if defined(__cplusplus) || defined(c_plusplus)
-    TemplatePart	c_template;
+    TemplatePart c_template;
 #else
-    TemplatePart	template;
+    TemplatePart template;
 #endif
 } TemplateRec;
 

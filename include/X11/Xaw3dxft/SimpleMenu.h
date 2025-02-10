@@ -80,32 +80,32 @@ in this Software without prior written authorization from the X Consortium.
 
 */
 
-typedef struct _SimpleMenuClassRec*	SimpleMenuWidgetClass;
-typedef struct _SimpleMenuRec*		SimpleMenuWidget;
+typedef struct _SimpleMenuClassRec *SimpleMenuWidgetClass;
+typedef struct _SimpleMenuRec      *SimpleMenuWidget;
 
 extern WidgetClass simpleMenuWidgetClass;
 
-#define XtNcursor "cursor"
-#define XtNbottomMargin "bottomMargin"
-#define XtNcolumnWidth "columnWidth"
-#define XtNlabelClass "labelClass"
-#define XtNmenuOnScreen "menuOnScreen"
-#define XtNpopupOnEntry "popupOnEntry"
-#define XtNrowHeight "rowHeight"
-#define XtNtopMargin "topMargin"
-#define XtNjumpScroll "jumpScroll"
-#define XtNleftWhitespace "leftWhitespace"
+#define XtNcursor          "cursor"
+#define XtNbottomMargin    "bottomMargin"
+#define XtNcolumnWidth     "columnWidth"
+#define XtNlabelClass      "labelClass"
+#define XtNmenuOnScreen    "menuOnScreen"
+#define XtNpopupOnEntry    "popupOnEntry"
+#define XtNrowHeight       "rowHeight"
+#define XtNtopMargin       "topMargin"
+#define XtNjumpScroll      "jumpScroll"
+#define XtNleftWhitespace  "leftWhitespace"
 #define XtNrightWhitespace "rightWhitespace"
 
-#define XtCColumnWidth "ColumnWidth"
-#define XtCLabelClass "LabelClass"
-#define XtCMenuOnScreen "MenuOnScreen"
-#define XtCPopupOnEntry "PopupOnEntry"
-#define XtCRowHeight "RowHeight"
-#define XtCVerticalMargins "VerticalMargins"
-#define XtCJumpScroll "JumpScroll"
-#define XtCLeftWhitespace "LeftWhitespace"
-#define XtCRightWhitespace "RightWhitespace"
+#define XtCColumnWidth          "ColumnWidth"
+#define XtCLabelClass           "LabelClass"
+#define XtCMenuOnScreen         "MenuOnScreen"
+#define XtCPopupOnEntry         "PopupOnEntry"
+#define XtCRowHeight            "RowHeight"
+#define XtCVerticalMargins      "VerticalMargins"
+#define XtCJumpScroll           "JumpScroll"
+#define XtCLeftWhitespace       "LeftWhitespace"
+#define XtCRightWhitespace      "RightWhitespace"
 #define XtCHorizontalWhitespace "HorizontalWhitespace"
 
 /************************************************************
@@ -122,8 +122,7 @@ _XFUNCPROTOBEGIN
  *	Returns: none.
  */
 
-extern void XawSimpleMenuAddGlobalActions(
-    XtAppContext	/* app_con */
+extern void XawSimpleMenuAddGlobalActions(XtAppContext /* app_con */
 );
 
 /*	Function Name: XawSimpleMenuGetActiveEntry
@@ -132,8 +131,7 @@ extern void XawSimpleMenuAddGlobalActions(
  *	Returns: the currently set entry or NULL if none is set.
  */
 
-extern Widget XawSimpleMenuGetActiveEntry(
-    Widget		/* w */
+extern Widget XawSimpleMenuGetActiveEntry(Widget  /* w */
 );
 
 /*	Function Name: XawSimpleMenuClearActiveEntry
@@ -142,8 +140,7 @@ extern Widget XawSimpleMenuGetActiveEntry(
  *	Returns: none.
  */
 
-extern void XawSimpleMenuClearActiveEntry(
-    Widget		/* w */
+extern void XawSimpleMenuClearActiveEntry(Widget  /* w */
 );
 
 _XFUNCPROTOEND

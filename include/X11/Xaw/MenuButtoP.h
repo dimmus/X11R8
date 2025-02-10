@@ -43,37 +43,41 @@ in this Software without prior written authorization from The Open Group.
 #include "X11/Xaw/CommandP.h"
 
 /* New fields for the MenuButton widget class */
-typedef struct _MenuButtonClass {
+typedef struct _MenuButtonClass
+{
     XtPointer extension;
 } MenuButtonClassPart;
 
 /* class record declaration */
-typedef struct _MenuButtonClassRec {
-    CoreClassPart	    core_class;
-    SimpleClassPart	    simple_class;
-    LabelClassPart	    label_class;
-    CommandClassPart	    command_class;
-    MenuButtonClassPart	    menuButton_class;
+typedef struct _MenuButtonClassRec
+{
+    CoreClassPart       core_class;
+    SimpleClassPart     simple_class;
+    LabelClassPart      label_class;
+    CommandClassPart    command_class;
+    MenuButtonClassPart menuButton_class;
 } MenuButtonClassRec;
 
 extern MenuButtonClassRec menuButtonClassRec;
 
 /* New fields for the MenuButton widget */
-typedef struct {
+typedef struct
+{
     /* resources */
-    char * menu_name;
+    char *menu_name;
 #ifndef OLDXAW
-    XtPointer pad[4];	/* for future use and keep binary compatibility */
+    XtPointer pad[4]; /* for future use and keep binary compatibility */
 #endif
 } MenuButtonPart;
 
 /* widget declaration */
-typedef struct _MenuButtonRec {
-    CorePart         core;
-    SimplePart	     simple;
-    LabelPart	     label;
-    CommandPart	     command;
-    MenuButtonPart   menu_button;
+typedef struct _MenuButtonRec
+{
+    CorePart       core;
+    SimplePart     simple;
+    LabelPart      label;
+    CommandPart    command;
+    MenuButtonPart menu_button;
 } MenuButtonRec;
 
 #endif /* _XawMenuButtonP_h */

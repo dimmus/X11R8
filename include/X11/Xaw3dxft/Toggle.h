@@ -88,25 +88,23 @@ in this Software without prior written authorization from the X Consortium.
  * them here if they are needed.
  */
 
-
-#define XtCWidget "Widget"
-#define XtCState "State"
+#define XtCWidget     "Widget"
+#define XtCState      "State"
 #define XtCRadioGroup "RadioGroup"
-#define XtCRadioData "RadioData"
+#define XtCRadioData  "RadioData"
 
 #ifndef _XtStringDefs_h_
-#define XtRWidget "Widget"
+#  define XtRWidget "Widget"
 #endif
 
-#define XtNstate "state"
+#define XtNstate      "state"
 #define XtNradioGroup "radioGroup"
-#define XtNradioData "radioData"
+#define XtNradioData  "radioData"
 
-extern WidgetClass               toggleWidgetClass;
+extern WidgetClass toggleWidgetClass;
 
-typedef struct _ToggleClassRec   *ToggleWidgetClass;
-typedef struct _ToggleRec        *ToggleWidget;
-
+typedef struct _ToggleClassRec *ToggleWidgetClass;
+typedef struct _ToggleRec      *ToggleWidget;
 
 /************************************************************
  *
@@ -123,9 +121,7 @@ _XFUNCPROTOBEGIN
  *	Returns: none.
  */
 
-extern void XawToggleChangeRadioGroup(
-    Widget		/* w */,
-    Widget		/* radio_group */
+extern void XawToggleChangeRadioGroup(Widget /* w */, Widget /* radio_group */
 );
 
 /*	Function Name: XawToggleGetCurrent
@@ -135,8 +131,7 @@ extern void XawToggleChangeRadioGroup(
  *	Returns: The XtNradioData associated with the toggle widget.
  */
 
-extern XtPointer XawToggleGetCurrent(
-    Widget		/* radio_group */
+extern XtPointer XawToggleGetCurrent(Widget /* radio_group */
 );
 
 /*	Function Name: XawToggleSetCurrent
@@ -147,9 +142,8 @@ extern XtPointer XawToggleGetCurrent(
  *	Returns: none.
  */
 
-extern void XawToggleSetCurrent(
-    Widget		/* radio_group */,
-    XtPointer		/* radio_data */
+extern void XawToggleSetCurrent(Widget /* radio_group */,
+                                XtPointer /* radio_data */
 );
 
 /*	Function Name: XawToggleUnsetCurrent
@@ -158,8 +152,7 @@ extern void XawToggleSetCurrent(
  *	Returns: none.
  */
 
-extern void XawToggleUnsetCurrent(
-    Widget		/* radio_group */
+extern void XawToggleUnsetCurrent(Widget /* radio_group */
 );
 
 _XFUNCPROTOEND

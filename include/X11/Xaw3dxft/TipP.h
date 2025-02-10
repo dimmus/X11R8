@@ -34,44 +34,48 @@
 #include <X11/Xft/Xft.h>
 #include <X11/Xaw3dxft/Tip.h>
 
-typedef struct {
+typedef struct
+{
     XtPointer extension;
 } TipClassPart;
 
-typedef struct _TipClassRec {
+typedef struct _TipClassRec
+{
     CoreClassPart core_class;
-    TipClassPart tip_class;
+    TipClassPart  tip_class;
 } TipClassRec;
 
 extern TipClassRec tipClassRec;
 
-typedef struct _TipPart {
+typedef struct _TipPart
+{
     /* resources */
-    Pixel foreground;
-    XFontStruct	*font;
+    Pixel        foreground;
+    XFontStruct *font;
 #ifdef XAW_INTERNATIONALIZATION
     XFontSet fontset;
 #endif
     Dimension internal_width;
     Dimension internal_height;
-    String label;
-    int backing_store;
-    int timeout;
-    char *xftfontname;
+    String    label;
+    int       backing_store;
+    int       timeout;
+    char     *xftfontname;
 
     /* private */
-    GC gc;
+    GC           gc;
     XtIntervalId timer;
 #ifdef XAW_INTERNATIONALIZATION
     Boolean international;
 #endif
     unsigned char encoding;
-    XftFont *xftfont;
+    XftFont      *xftfont;
 } TipPart;
 
-typedef struct _TipRec {
+typedef struct _TipRec
+{
     CorePart core;
-    TipPart tip;
+    TipPart  tip;
 } TipRec;
 
 #endif /* _XawTipP_h */

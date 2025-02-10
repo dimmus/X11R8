@@ -10,18 +10,18 @@
  **/
 
 #ifndef __DAMAGE_H
-#define __DAMAGE_H
+#  define __DAMAGE_H
 
-#include "xcb/xcb.h"
-#include "xcb/xproto.h"
-#include "xcb/xfixes.h"
+#  include "xcb/xcb.h"
+#  include "xcb/xproto.h"
+#  include "xcb/xfixes.h"
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#define XCB_DAMAGE_MAJOR_VERSION 1
-#define XCB_DAMAGE_MINOR_VERSION 1
+#  define XCB_DAMAGE_MAJOR_VERSION 1
+#  define XCB_DAMAGE_MINOR_VERSION 1
 
 extern xcb_extension_t xcb_damage_id;
 
@@ -30,26 +30,29 @@ typedef uint32_t xcb_damage_damage_t;
 /**
  * @brief xcb_damage_damage_iterator_t
  **/
-typedef struct xcb_damage_damage_iterator_t {
+typedef struct xcb_damage_damage_iterator_t
+{
     xcb_damage_damage_t *data;
     int                  rem;
     int                  index;
 } xcb_damage_damage_iterator_t;
 
-typedef enum xcb_damage_report_level_t {
-    XCB_DAMAGE_REPORT_LEVEL_RAW_RECTANGLES = 0,
+typedef enum xcb_damage_report_level_t
+{
+    XCB_DAMAGE_REPORT_LEVEL_RAW_RECTANGLES   = 0,
     XCB_DAMAGE_REPORT_LEVEL_DELTA_RECTANGLES = 1,
-    XCB_DAMAGE_REPORT_LEVEL_BOUNDING_BOX = 2,
-    XCB_DAMAGE_REPORT_LEVEL_NON_EMPTY = 3
+    XCB_DAMAGE_REPORT_LEVEL_BOUNDING_BOX     = 2,
+    XCB_DAMAGE_REPORT_LEVEL_NON_EMPTY        = 3
 } xcb_damage_report_level_t;
 
 /** Opcode for xcb_damage_bad_damage. */
-#define XCB_DAMAGE_BAD_DAMAGE 0
+#  define XCB_DAMAGE_BAD_DAMAGE 0
 
 /**
  * @brief xcb_damage_bad_damage_error_t
  **/
-typedef struct xcb_damage_bad_damage_error_t {
+typedef struct xcb_damage_bad_damage_error_t
+{
     uint8_t  response_type;
     uint8_t  error_code;
     uint16_t sequence;
@@ -61,17 +64,19 @@ typedef struct xcb_damage_bad_damage_error_t {
 /**
  * @brief xcb_damage_query_version_cookie_t
  **/
-typedef struct xcb_damage_query_version_cookie_t {
+typedef struct xcb_damage_query_version_cookie_t
+{
     unsigned int sequence;
 } xcb_damage_query_version_cookie_t;
 
 /** Opcode for xcb_damage_query_version. */
-#define XCB_DAMAGE_QUERY_VERSION 0
+#  define XCB_DAMAGE_QUERY_VERSION 0
 
 /**
  * @brief xcb_damage_query_version_request_t
  **/
-typedef struct xcb_damage_query_version_request_t {
+typedef struct xcb_damage_query_version_request_t
+{
     uint8_t  major_opcode;
     uint8_t  minor_opcode;
     uint16_t length;
@@ -82,7 +87,8 @@ typedef struct xcb_damage_query_version_request_t {
 /**
  * @brief xcb_damage_query_version_reply_t
  **/
-typedef struct xcb_damage_query_version_reply_t {
+typedef struct xcb_damage_query_version_reply_t
+{
     uint8_t  response_type;
     uint8_t  pad0;
     uint16_t sequence;
@@ -93,12 +99,13 @@ typedef struct xcb_damage_query_version_reply_t {
 } xcb_damage_query_version_reply_t;
 
 /** Opcode for xcb_damage_create. */
-#define XCB_DAMAGE_CREATE 1
+#  define XCB_DAMAGE_CREATE 1
 
 /**
  * @brief xcb_damage_create_request_t
  **/
-typedef struct xcb_damage_create_request_t {
+typedef struct xcb_damage_create_request_t
+{
     uint8_t             major_opcode;
     uint8_t             minor_opcode;
     uint16_t            length;
@@ -109,12 +116,13 @@ typedef struct xcb_damage_create_request_t {
 } xcb_damage_create_request_t;
 
 /** Opcode for xcb_damage_destroy. */
-#define XCB_DAMAGE_DESTROY 2
+#  define XCB_DAMAGE_DESTROY 2
 
 /**
  * @brief xcb_damage_destroy_request_t
  **/
-typedef struct xcb_damage_destroy_request_t {
+typedef struct xcb_damage_destroy_request_t
+{
     uint8_t             major_opcode;
     uint8_t             minor_opcode;
     uint16_t            length;
@@ -122,12 +130,13 @@ typedef struct xcb_damage_destroy_request_t {
 } xcb_damage_destroy_request_t;
 
 /** Opcode for xcb_damage_subtract. */
-#define XCB_DAMAGE_SUBTRACT 3
+#  define XCB_DAMAGE_SUBTRACT 3
 
 /**
  * @brief xcb_damage_subtract_request_t
  **/
-typedef struct xcb_damage_subtract_request_t {
+typedef struct xcb_damage_subtract_request_t
+{
     uint8_t             major_opcode;
     uint8_t             minor_opcode;
     uint16_t            length;
@@ -137,12 +146,13 @@ typedef struct xcb_damage_subtract_request_t {
 } xcb_damage_subtract_request_t;
 
 /** Opcode for xcb_damage_add. */
-#define XCB_DAMAGE_ADD 4
+#  define XCB_DAMAGE_ADD 4
 
 /**
  * @brief xcb_damage_add_request_t
  **/
-typedef struct xcb_damage_add_request_t {
+typedef struct xcb_damage_add_request_t
+{
     uint8_t             major_opcode;
     uint8_t             minor_opcode;
     uint16_t            length;
@@ -151,12 +161,13 @@ typedef struct xcb_damage_add_request_t {
 } xcb_damage_add_request_t;
 
 /** Opcode for xcb_damage_notify. */
-#define XCB_DAMAGE_NOTIFY 0
+#  define XCB_DAMAGE_NOTIFY 0
 
 /**
  * @brief xcb_damage_notify_event_t
  **/
-typedef struct xcb_damage_notify_event_t {
+typedef struct xcb_damage_notify_event_t
+{
     uint8_t             response_type;
     uint8_t             level;
     uint16_t            sequence;
@@ -175,8 +186,7 @@ typedef struct xcb_damage_notify_event_t {
  * decreased by one. The member data points to the next
  * element. The member index is increased by sizeof(xcb_damage_damage_t)
  */
-void
-xcb_damage_damage_next (xcb_damage_damage_iterator_t *i);
+void xcb_damage_damage_next(xcb_damage_damage_iterator_t *i);
 
 /**
  * Return the iterator pointing to the last element
@@ -187,8 +197,7 @@ xcb_damage_damage_next (xcb_damage_damage_iterator_t *i);
  * The member rem is set to 0. The member data points to the
  * last element.
  */
-xcb_generic_iterator_t
-xcb_damage_damage_end (xcb_damage_damage_iterator_t i);
+xcb_generic_iterator_t xcb_damage_damage_end(xcb_damage_damage_iterator_t i);
 
 /**
  * @brief Negotiate the version of the DAMAGE extension
@@ -204,9 +213,9 @@ xcb_damage_damage_end (xcb_damage_damage_iterator_t i);
  *
  */
 xcb_damage_query_version_cookie_t
-xcb_damage_query_version (xcb_connection_t *c,
-                          uint32_t          client_major_version,
-                          uint32_t          client_minor_version);
+xcb_damage_query_version(xcb_connection_t *c,
+                         uint32_t          client_major_version,
+                         uint32_t          client_minor_version);
 
 /**
  * @brief Negotiate the version of the DAMAGE extension
@@ -225,9 +234,9 @@ xcb_damage_query_version (xcb_connection_t *c,
  * placed in the event queue.
  */
 xcb_damage_query_version_cookie_t
-xcb_damage_query_version_unchecked (xcb_connection_t *c,
-                                    uint32_t          client_major_version,
-                                    uint32_t          client_minor_version);
+xcb_damage_query_version_unchecked(xcb_connection_t *c,
+                                   uint32_t          client_major_version,
+                                   uint32_t          client_minor_version);
 
 /**
  * Return the reply
@@ -244,9 +253,9 @@ xcb_damage_query_version_unchecked (xcb_connection_t *c,
  * The returned value must be freed by the caller using free().
  */
 xcb_damage_query_version_reply_t *
-xcb_damage_query_version_reply (xcb_connection_t                   *c,
-                                xcb_damage_query_version_cookie_t   cookie  /**< */,
-                                xcb_generic_error_t               **e);
+xcb_damage_query_version_reply(xcb_connection_t                 *c,
+                               xcb_damage_query_version_cookie_t cookie /**< */,
+                               xcb_generic_error_t             **e);
 
 /**
  * @brief Creates a Damage object to monitor changes to a drawable.
@@ -288,11 +297,10 @@ xcb_damage_query_version_reply (xcb_connection_t                   *c,
  * a reply to be generated. Any returned error will be
  * saved for handling by xcb_request_check().
  */
-xcb_void_cookie_t
-xcb_damage_create_checked (xcb_connection_t    *c,
-                           xcb_damage_damage_t  damage,
-                           xcb_drawable_t       drawable,
-                           uint8_t              level);
+xcb_void_cookie_t xcb_damage_create_checked(xcb_connection_t   *c,
+                                            xcb_damage_damage_t damage,
+                                            xcb_drawable_t      drawable,
+                                            uint8_t             level);
 
 /**
  * @brief Creates a Damage object to monitor changes to a drawable.
@@ -331,11 +339,10 @@ xcb_damage_create_checked (xcb_connection_t    *c,
  * drawable for which damage is tracked.
  *
  */
-xcb_void_cookie_t
-xcb_damage_create (xcb_connection_t    *c,
-                   xcb_damage_damage_t  damage,
-                   xcb_drawable_t       drawable,
-                   uint8_t              level);
+xcb_void_cookie_t xcb_damage_create(xcb_connection_t   *c,
+                                    xcb_damage_damage_t damage,
+                                    xcb_drawable_t      drawable,
+                                    uint8_t             level);
 
 /**
  * @brief Destroys a previously created Damage object.
@@ -351,9 +358,8 @@ xcb_damage_create (xcb_connection_t    *c,
  * a reply to be generated. Any returned error will be
  * saved for handling by xcb_request_check().
  */
-xcb_void_cookie_t
-xcb_damage_destroy_checked (xcb_connection_t    *c,
-                            xcb_damage_damage_t  damage);
+xcb_void_cookie_t xcb_damage_destroy_checked(xcb_connection_t   *c,
+                                             xcb_damage_damage_t damage);
 
 /**
  * @brief Destroys a previously created Damage object.
@@ -366,9 +372,8 @@ xcb_damage_destroy_checked (xcb_connection_t    *c,
  * the changes it was tracking.
  *
  */
-xcb_void_cookie_t
-xcb_damage_destroy (xcb_connection_t    *c,
-                    xcb_damage_damage_t  damage);
+xcb_void_cookie_t xcb_damage_destroy(xcb_connection_t   *c,
+                                     xcb_damage_damage_t damage);
 
 /**
  * @brief Remove regions from a previously created Damage object.
@@ -385,11 +390,10 @@ xcb_damage_destroy (xcb_connection_t    *c,
  * a reply to be generated. Any returned error will be
  * saved for handling by xcb_request_check().
  */
-xcb_void_cookie_t
-xcb_damage_subtract_checked (xcb_connection_t    *c,
-                             xcb_damage_damage_t  damage,
-                             xcb_xfixes_region_t  repair,
-                             xcb_xfixes_region_t  parts);
+xcb_void_cookie_t xcb_damage_subtract_checked(xcb_connection_t   *c,
+                                              xcb_damage_damage_t damage,
+                                              xcb_xfixes_region_t repair,
+                                              xcb_xfixes_region_t parts);
 
 /**
  * @brief Remove regions from a previously created Damage object.
@@ -403,11 +407,10 @@ xcb_damage_subtract_checked (xcb_connection_t    *c,
  * for details.
  *
  */
-xcb_void_cookie_t
-xcb_damage_subtract (xcb_connection_t    *c,
-                     xcb_damage_damage_t  damage,
-                     xcb_xfixes_region_t  repair,
-                     xcb_xfixes_region_t  parts);
+xcb_void_cookie_t xcb_damage_subtract(xcb_connection_t   *c,
+                                      xcb_damage_damage_t damage,
+                                      xcb_xfixes_region_t repair,
+                                      xcb_xfixes_region_t parts);
 
 /**
  * @brief Add a region to a previously created Damage object.
@@ -423,10 +426,9 @@ xcb_damage_subtract (xcb_connection_t    *c,
  * a reply to be generated. Any returned error will be
  * saved for handling by xcb_request_check().
  */
-xcb_void_cookie_t
-xcb_damage_add_checked (xcb_connection_t    *c,
-                        xcb_drawable_t       drawable,
-                        xcb_xfixes_region_t  region);
+xcb_void_cookie_t xcb_damage_add_checked(xcb_connection_t   *c,
+                                         xcb_drawable_t      drawable,
+                                         xcb_xfixes_region_t region);
 
 /**
  * @brief Add a region to a previously created Damage object.
@@ -439,15 +441,13 @@ xcb_damage_add_checked (xcb_connection_t    *c,
  * for details.
  *
  */
-xcb_void_cookie_t
-xcb_damage_add (xcb_connection_t    *c,
-                xcb_drawable_t       drawable,
-                xcb_xfixes_region_t  region);
+xcb_void_cookie_t xcb_damage_add(xcb_connection_t   *c,
+                                 xcb_drawable_t      drawable,
+                                 xcb_xfixes_region_t region);
 
-
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 
 #endif
 

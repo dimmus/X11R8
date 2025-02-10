@@ -24,7 +24,6 @@
  *
  */
 
-
 /* XGE Client interfaces */
 
 #ifndef _XGE_H_
@@ -42,15 +41,16 @@ _XFUNCPROTOBEGIN
  * But, don't actually use the CARD{8,16,32} types.  We can't get them them
  * defined here without polluting the namespace.
  */
-typedef struct {
-    unsigned char       extension;
-    unsigned char       pad0;
-    unsigned short      pad1;
-    unsigned int      evmask;
+typedef struct
+{
+    unsigned char  extension;
+    unsigned char  pad0;
+    unsigned short pad1;
+    unsigned int   evmask;
 } XGenericEventMask;
 
-Bool XGEQueryExtension(Display* dpy, int *event_basep, int *err_basep);
-Bool XGEQueryVersion(Display* dpy, int *major, int* minor);
+Bool XGEQueryExtension(Display *dpy, int *event_basep, int *err_basep);
+Bool XGEQueryVersion(Display *dpy, int *major, int *minor);
 
 _XFUNCPROTOEND
 

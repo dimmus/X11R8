@@ -93,20 +93,20 @@ typedef struct _MultiSrcRec      *MultiSrcObject;
  * Resource Definitions.
  */
 
-#define XtCDataCompression "DataCompression"
-#define XtCPieceSize "PieceSize"
-#define XtCType "Type"
+#define XtCDataCompression  "DataCompression"
+#define XtCPieceSize        "PieceSize"
+#define XtCType             "Type"
 #define XtCUseStringInPlace "UseStringInPlace"
 
-#define XtNdataCompression "dataCompression"
-#define XtNpieceSize "pieceSize"
-#define XtNtype "type"
+#define XtNdataCompression  "dataCompression"
+#define XtNpieceSize        "pieceSize"
+#define XtNtype             "type"
 #define XtNuseStringInPlace "useStringInPlace"
 
 #define XtRMultiType "MultiType"
 
 #define XtEstring "string"
-#define XtEfile "file"
+#define XtEfile   "file"
 
 /************************************************************
  *
@@ -122,22 +122,15 @@ typedef struct _MultiSrcRec      *MultiSrcObject;
 
 _XFUNCPROTOBEGIN
 
-
-extern void XawMultiSourceFreeString(
-    Widget		/* w */
+extern void XawMultiSourceFreeString(Widget  /* w */
 );
 
-extern Boolean _XawMultiSave(
-    Widget		/* w */
+extern Boolean _XawMultiSave(Widget  /* w */
 );
 
-extern Boolean _XawMultiSaveAsFile(
-    Widget		/* w */,
-    _Xconst char*	/* name */
+extern Boolean _XawMultiSaveAsFile(Widget /* w */, _Xconst char * /* name */
 );
-
 
 _XFUNCPROTOEND
 
 #endif /* _XawMultiSrc_h  - Don't add anything after this line. */
-

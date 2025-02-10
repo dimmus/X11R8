@@ -47,7 +47,7 @@ SOFTWARE.
 ******************************************************************/
 
 #ifndef _XawTextSrc_h
-#define _XawTextSrc_h
+#  define _XawTextSrc_h
 
 /***********************************************************************
  *
@@ -55,7 +55,7 @@ SOFTWARE.
  *
  ***********************************************************************/
 
-#include "X11/Xaw3d/Text.h"
+#  include "X11/Xaw3d/Text.h"
 
 /* Resources:
 
@@ -72,19 +72,40 @@ extern WidgetClass textSrcObjectClass;
 typedef struct _TextSrcClassRec *TextSrcObjectClass;
 typedef struct _TextSrcRec      *TextSrcObject;
 
-typedef enum {XawstPositions, XawstWhiteSpace, XawstEOL, XawstParagraph,
-              XawstAll} XawTextScanType;
-typedef enum {Normal, Selected }highlightType;
-typedef enum {XawsmTextSelect, XawsmTextExtend} XawTextSelectionMode;
-typedef enum {XawactionStart, XawactionAdjust, XawactionEnd}
-    XawTextSelectionAction;
+typedef enum
+{
+    XawstPositions,
+    XawstWhiteSpace,
+    XawstEOL,
+    XawstParagraph,
+    XawstAll
+} XawTextScanType;
+
+typedef enum
+{
+    Normal,
+    Selected
+} highlightType;
+
+typedef enum
+{
+    XawsmTextSelect,
+    XawsmTextExtend
+} XawTextSelectionMode;
+
+typedef enum
+{
+    XawactionStart,
+    XawactionAdjust,
+    XawactionEnd
+} XawTextSelectionAction;
 
 /*
  * Error Conditions:
  */
 
-#define XawTextReadError -1
-#define XawTextScanError -1
+#  define XawTextReadError -1
+#  define XawTextScanError -1
 
 /************************************************************
  *
@@ -103,11 +124,10 @@ _XFUNCPROTOBEGIN
  *	Returns: The number of characters read into the buffer.
  */
 
-extern XawTextPosition XawTextSourceRead(
-    Widget		/* w */,
-    XawTextPosition	/* pos */,
-    XawTextBlock*	/* text_return */,
-    int			/* length */
+extern XawTextPosition XawTextSourceRead(Widget /* w */,
+                                         XawTextPosition /* pos */,
+                                         XawTextBlock * /* text_return */,
+                                         int   /* length */
 );
 
 /*	Function Name: XawTextSourceReplace.
@@ -118,11 +138,10 @@ extern XawTextPosition XawTextSourceRead(
  *	Returns: XawEditError or XawEditDone.
  */
 
-extern int XawTextSourceReplace (
-    Widget		/* w */,
-    XawTextPosition	/* start */,
-    XawTextPosition	/* end */,
-    XawTextBlock*	/* text */
+extern int XawTextSourceReplace(Widget /* w */,
+                                XawTextPosition /* start */,
+                                XawTextPosition /* end */,
+                                XawTextBlock * /* text */
 );
 
 /*	Function Name: XawTextSourceScan
@@ -139,22 +158,22 @@ extern int XawTextSourceReplace (
  *
  */
 
-extern XawTextPosition XawTextSourceScan(
-    Widget		/* w */,
-    XawTextPosition	/* position */,
-#if NeedWidePrototypes
-    /* XawTextScanType */ int		/* type */,
-    /* XawTextScanDirection */ int	/* dir */,
-#else
-    XawTextScanType	/* type */,
-    XawTextScanDirection /* dir */,
-#endif
-    int			/* count */,
-#if NeedWidePrototypes
-    /* Boolean */ int	/* include */
-#else
-    Boolean		/* include */
-#endif
+extern XawTextPosition
+XawTextSourceScan(Widget /* w */,
+                  XawTextPosition /* position */,
+#  if NeedWidePrototypes
+                  /* XawTextScanType */ int /* type */,
+                  /* XawTextScanDirection */ int /* dir */,
+#  else
+                  XawTextScanType /* type */,
+                  XawTextScanDirection /* dir */,
+#  endif
+                  int /* count */,
+#  if NeedWidePrototypes
+                  /* Boolean */ int /* include */
+#  else
+                  Boolean  /* include */
+#  endif
 );
 
 /*	Function Name: XawTextSourceSearch
@@ -167,15 +186,15 @@ extern XawTextPosition XawTextSourceScan(
  *               XawTextSearchError.
  */
 
-extern XawTextPosition XawTextSourceSearch(
-    Widget		/* w */,
-    XawTextPosition	/* position */,
-#if NeedWidePrototypes
-    /* XawTextScanDirection */ int	/* dir */,
-#else
-    XawTextScanDirection /* dir */,
-#endif
-    XawTextBlock*	/* text */
+extern XawTextPosition
+XawTextSourceSearch(Widget /* w */,
+                    XawTextPosition /* position */,
+#  if NeedWidePrototypes
+                    /* XawTextScanDirection */ int /* dir */,
+#  else
+                    XawTextScanDirection /* dir */,
+#  endif
+                    XawTextBlock * /* text */
 );
 
 /*	Function Name: XawTextSourceConvertSelection
@@ -190,14 +209,14 @@ extern XawTextPosition XawTextSourceSearch(
  *
  */
 
-extern Boolean XawTextSourceConvertSelection(
-    Widget		/* w */,
-    Atom*		/* selection */,
-    Atom*		/* target */,
-    Atom*		/* type */,
-    XtPointer*		/* value_return */,
-    unsigned long*	/* length_return */,
-    int*		/* format_return */
+extern Boolean
+XawTextSourceConvertSelection(Widget /* w */,
+                              Atom * /* selection */,
+                              Atom * /* target */,
+                              Atom * /* type */,
+                              XtPointer * /* value_return */,
+                              unsigned long * /* length_return */,
+                              int *  /* format_return */
 );
 
 /*	Function Name: XawTextSourceSetSelection
@@ -208,11 +227,10 @@ extern Boolean XawTextSourceConvertSelection(
  *	Returns: none
  */
 
-extern void XawTextSourceSetSelection(
-    Widget		/* w */,
-    XawTextPosition	/* start */,
-    XawTextPosition	/* end */,
-    Atom		/* selection */
+extern void XawTextSourceSetSelection(Widget /* w */,
+                                      XawTextPosition /* start */,
+                                      XawTextPosition /* end */,
+                                      Atom  /* selection */
 );
 
 _XFUNCPROTOEND

@@ -26,147 +26,165 @@
 #include "X11/extensions/presenttokens.h"
 #include "X11/extensions/dri3proto.h"
 
-#define Window CARD32
-#define Pixmap CARD32
-#define Region CARD32
+#define Window     CARD32
+#define Pixmap     CARD32
+#define Region     CARD32
 #define XSyncFence CARD32
-#define EventID CARD32
+#define EventID    CARD32
 
-typedef struct {
-    Window  window;
-    CARD32  serial;
+typedef struct
+{
+    Window window;
+    CARD32 serial;
 } xPresentNotify;
-#define sz_xPresentNotify               8
 
-typedef struct {
-    CARD8   reqType;
-    CARD8   presentReqType;
-    CARD16  length;
-    CARD32  majorVersion;
-    CARD32  minorVersion;
+#define sz_xPresentNotify 8
+
+typedef struct
+{
+    CARD8  reqType;
+    CARD8  presentReqType;
+    CARD16 length;
+    CARD32 majorVersion;
+    CARD32 minorVersion;
 } xPresentQueryVersionReq;
-#define sz_xPresentQueryVersionReq   12
 
-typedef struct {
-    BYTE    type;   /* X_Reply */
-    BYTE    pad1;
-    CARD16  sequenceNumber;
-    CARD32  length;
-    CARD32  majorVersion;
-    CARD32  minorVersion;
-    CARD32  pad2;
-    CARD32  pad3;
-    CARD32  pad4;
-    CARD32  pad5;
+#define sz_xPresentQueryVersionReq 12
+
+typedef struct
+{
+    BYTE   type;   /* X_Reply */
+    BYTE   pad1;
+    CARD16 sequenceNumber;
+    CARD32 length;
+    CARD32 majorVersion;
+    CARD32 minorVersion;
+    CARD32 pad2;
+    CARD32 pad3;
+    CARD32 pad4;
+    CARD32 pad5;
 } xPresentQueryVersionReply;
-#define sz_xPresentQueryVersionReply	32
 
-typedef struct {
-    CARD8   reqType;
-    CARD8   presentReqType;
-    CARD16  length;
-    Window  window;
+#define sz_xPresentQueryVersionReply 32
 
-    Pixmap  pixmap;
-    CARD32  serial;
+typedef struct
+{
+    CARD8  reqType;
+    CARD8  presentReqType;
+    CARD16 length;
+    Window window;
 
-    Region  valid;
-    Region  update;
+    Pixmap pixmap;
+    CARD32 serial;
 
-    INT16   x_off;
-    INT16   y_off;
-    CARD32  target_crtc;
+    Region valid;
+    Region update;
+
+    INT16  x_off;
+    INT16  y_off;
+    CARD32 target_crtc;
 
     XSyncFence wait_fence;
     XSyncFence idle_fence;
 
-    CARD32  options;
-    CARD32  pad1;
+    CARD32 options;
+    CARD32 pad1;
 
-    CARD64  target_msc;
-    CARD64  divisor;
-    CARD64  remainder;
+    CARD64 target_msc;
+    CARD64 divisor;
+    CARD64 remainder;
     /* followed by a LISTofPRESENTNOTIFY */
 } xPresentPixmapReq;
-#define sz_xPresentPixmapReq	72
 
-typedef struct {
-    CARD8   reqType;
-    CARD8   presentReqType;
-    CARD16  length;
-    Window  window;
+#define sz_xPresentPixmapReq 72
 
-    CARD32  serial;
-    CARD32  pad0;
+typedef struct
+{
+    CARD8  reqType;
+    CARD8  presentReqType;
+    CARD16 length;
+    Window window;
 
-    CARD64  target_msc;
-    CARD64  divisor;
-    CARD64  remainder;
+    CARD32 serial;
+    CARD32 pad0;
+
+    CARD64 target_msc;
+    CARD64 divisor;
+    CARD64 remainder;
 } xPresentNotifyMSCReq;
-#define sz_xPresentNotifyMSCReq	40
 
-typedef struct {
-    CARD8   reqType;
-    CARD8   presentReqType;
-    CARD16  length;
-    CARD32  eid;
-    CARD32  window;
-    CARD32  eventMask;
+#define sz_xPresentNotifyMSCReq 40
+
+typedef struct
+{
+    CARD8  reqType;
+    CARD8  presentReqType;
+    CARD16 length;
+    CARD32 eid;
+    CARD32 window;
+    CARD32 eventMask;
 } xPresentSelectInputReq;
-#define sz_xPresentSelectInputReq   16
 
-typedef struct {
-    CARD8   reqType;
-    CARD8   presentReqType;
-    CARD16  length;
-    CARD32  target;
+#define sz_xPresentSelectInputReq 16
+
+typedef struct
+{
+    CARD8  reqType;
+    CARD8  presentReqType;
+    CARD16 length;
+    CARD32 target;
 } xPresentQueryCapabilitiesReq;
-#define sz_xPresentQueryCapabilitiesReq   8
 
-typedef struct {
-    BYTE    type;   /* X_Reply */
-    BYTE    pad1;
-    CARD16  sequenceNumber;
-    CARD32  length;
-    CARD32  capabilities;
-    CARD32  pad3;
-    CARD32  pad4;
-    CARD32  pad5;
-    CARD32  pad6;
-    CARD32  pad7;
+#define sz_xPresentQueryCapabilitiesReq 8
+
+typedef struct
+{
+    BYTE   type;   /* X_Reply */
+    BYTE   pad1;
+    CARD16 sequenceNumber;
+    CARD32 length;
+    CARD32 capabilities;
+    CARD32 pad3;
+    CARD32 pad4;
+    CARD32 pad5;
+    CARD32 pad6;
+    CARD32 pad7;
 } xPresentQueryCapabilitiesReply;
-#define sz_xPresentQueryCapabilitiesReply       32
 
-typedef struct {
-    CARD8   reqType;
-    CARD8   presentReqType;
-    CARD16  length;
-    Window  window;
+#define sz_xPresentQueryCapabilitiesReply 32
 
-    Pixmap  pixmap;
-    CARD32  serial;
+typedef struct
+{
+    CARD8  reqType;
+    CARD8  presentReqType;
+    CARD16 length;
+    Window window;
 
-    Region  valid;
-    Region  update;
+    Pixmap pixmap;
+    CARD32 serial;
 
-    INT16   x_off;
-    INT16   y_off;
-    CARD32  target_crtc;
+    Region valid;
+    Region update;
+
+    INT16  x_off;
+    INT16  y_off;
+    CARD32 target_crtc;
 
     DRI3Syncobj acquire_syncobj;
     DRI3Syncobj release_syncobj;
-    CARD64 acquire_point;
-    CARD64 release_point;
+    CARD64      acquire_point;
+    CARD64      release_point;
 
-    CARD32  options;
-    CARD32  pad1;
+    CARD32 options;
+    CARD32 pad1;
 
-    CARD64  target_msc;
-    CARD64  divisor;
-    CARD64  remainder;
+    CARD64 target_msc;
+    CARD64 divisor;
+    CARD64 remainder;
     /* followed by a LISTofPRESENTNOTIFY */
 } xPresentPixmapSyncedReq;
-#define sz_xPresentPixmapSyncedReq	88
+
+#define sz_xPresentPixmapSyncedReq 88
 
 /*
  * Events
@@ -174,9 +192,10 @@ typedef struct {
  * All Present events are X Generic Events
  */
 
-typedef struct {
-    CARD8 type;
-    CARD8 extension;
+typedef struct
+{
+    CARD8  type;
+    CARD8  extension;
     CARD16 sequenceNumber;
     CARD32 length;
     CARD16 evtype;
@@ -194,11 +213,13 @@ typedef struct {
     CARD16 pixmap_height;
     CARD32 pixmap_flags;
 } xPresentConfigureNotify;
+
 #define sz_xPresentConfigureNotify 40
 
-typedef struct {
-    CARD8 type;
-    CARD8 extension;
+typedef struct
+{
+    CARD8  type;
+    CARD8  extension;
     CARD16 sequenceNumber;
     CARD32 length;
     CARD16 evtype;
@@ -211,11 +232,13 @@ typedef struct {
 
     CARD64 msc;
 } xPresentCompleteNotify;
+
 #define sz_xPresentCompleteNotify 40
 
-typedef struct {
-    CARD8 type;
-    CARD8 extension;
+typedef struct
+{
+    CARD8  type;
+    CARD8  extension;
     CARD16 sequenceNumber;
     CARD32 length;
     CARD16 evtype;
@@ -226,17 +249,19 @@ typedef struct {
     Pixmap pixmap;
     CARD32 idle_fence;
 } xPresentIdleNotify;
-#define sz_xPresentIdleNotify   32
+
+#define sz_xPresentIdleNotify 32
 
 #if PRESENT_FUTURE_VERSION
-typedef struct {
-    CARD8 type;
-    CARD8 extension;
+typedef struct
+{
+    CARD8  type;
+    CARD8  extension;
     CARD16 sequenceNumber;
     CARD32 length;
     CARD16 evtype;
-    CARD8 update_window;
-    CARD8 pad1;
+    CARD8  update_window;
+    CARD8  pad1;
     CARD32 eid;
     Window event_window;
     Window window;
@@ -252,8 +277,8 @@ typedef struct {
 
     xRectangle update_rect;
 
-    INT16 x_off;
-    INT16 y_off;
+    INT16  x_off;
+    INT16  y_off;
     CARD32 target_crtc;
 
     XSyncFence wait_fence;
@@ -268,7 +293,7 @@ typedef struct {
 
 } xPresentRedirectNotify;
 
-#define sz_xPresentRedirectNotify 104
+#  define sz_xPresentRedirectNotify 104
 #endif
 
 #undef Window

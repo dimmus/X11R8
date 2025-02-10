@@ -43,9 +43,10 @@
 
 /** Client-library screen information structure, returned by
  * #DMXGetScreenAttributes.  */
-typedef struct {
-    char         *displayName;
-    int          logicalScreen;
+typedef struct
+{
+    char *displayName;
+    int   logicalScreen;
 
     unsigned int screenWindowWidth;    /* displayName's coordinate system */
     unsigned int screenWindowHeight;   /* displayName's coordinate system */
@@ -57,21 +58,23 @@ typedef struct {
     int          rootWindowXoffset;    /* screenWindow's coordinate system */
     int          rootWindowYoffset;    /* screenWindow's coordinate system */
 
-    int          rootWindowXorigin;    /* global coordinate system */
-    int          rootWindowYorigin;    /* global coordinate system */
+    int rootWindowXorigin;    /* global coordinate system */
+    int rootWindowYorigin;    /* global coordinate system */
 } DMXScreenAttributes;
 
 /** Client-library window information structure, returned by
  * #DMXGetWindowAttributes. */
-typedef struct {
-    int          screen;
-    Window       window;
-    XRectangle   pos, vis;
+typedef struct
+{
+    int        screen;
+    Window     window;
+    XRectangle pos, vis;
 } DMXWindowAttributes;
 
 /** Client-library desktop information structure, returned by
  * #DMXGetDesktopAttributes. */
-typedef struct {
+typedef struct
+{
     unsigned int width;         /* global coordinate system */
     unsigned int height;        /* global coordinate system */
     int          shiftX;        /* global coordinate system */
@@ -80,7 +83,8 @@ typedef struct {
 
 /** Enumeration for the #inputType field in the #DMXInputAttributes
  * structure. */
-typedef enum {
+typedef enum
+{
     DMXLocalInputType,
     DMXConsoleInputType,
     DMXBackendInputType
@@ -88,43 +92,43 @@ typedef enum {
 
 /** Client-library input information structure, returned by
  * #DMXGetInputAttributes. */
-typedef struct {
+typedef struct
+{
     DMXInputEnum inputType;
     int          physicalScreen;
     int          physicalId;
     Bool         isCore;
     Bool         sendsCore;
-    const char   *name;
+    const char  *name;
     Bool         detached;
 } DMXInputAttributes;
 
 _XFUNCPROTOBEGIN
 
-extern Bool DMXQueryExtension(Display *dpy,
-                              int *event_basep, int *error_basep);
-extern Bool DMXQueryVersion(Display *dpy, int *major_version,
-                            int *minor_version, int *patch_version);
+extern Bool DMXQueryExtension(Display *dpy, int *event_basep, int *error_basep);
+extern Bool DMXQueryVersion(Display *dpy,
+                            int     *major_version,
+                            int     *minor_version,
+                            int     *patch_version);
 extern Bool DMXSync(Display *dpy);
 extern Bool DMXForceWindowCreation(Display *dpy, Window window);
 
-
 extern Bool DMXGetScreenCount(Display *dpy, int *screen_count);
-extern Bool DMXGetScreenAttributes(Display *dpy,
-                                   int screen,
-                                   DMXScreenAttributes *attr);
-extern int  DMXChangeScreensAttributes(Display *dpy,
-                                       int screen_count,
-                                       int *screens,
-                                       int mask_count,
-                                       unsigned int *masks,
-                                       DMXScreenAttributes *attr, /* vector */
-                                       int *error_screen);
+extern Bool
+DMXGetScreenAttributes(Display *dpy, int screen, DMXScreenAttributes *attr);
+extern int DMXChangeScreensAttributes(Display             *dpy,
+                                      int                  screen_count,
+                                      int                 *screens,
+                                      int                  mask_count,
+                                      unsigned int        *masks,
+                                      DMXScreenAttributes *attr, /* vector */
+                                      int                 *error_screen);
 
-extern Bool DMXAddScreen(Display *dpy,
-                         const char *displayName,
-                         unsigned int mask,
+extern Bool DMXAddScreen(Display             *dpy,
+                         const char          *displayName,
+                         unsigned int         mask,
                          DMXScreenAttributes *attr,
-                         int *screen);
+                         int                 *screen);
 extern Bool DMXRemoveScreen(Display *dpy, int screen);
 
 /* Call DMXGetScreenWindowCount and allocate info to that size.  Pass
@@ -133,30 +137,30 @@ extern Bool DMXRemoveScreen(Display *dpy, int screen);
  * just to determine the screen_count value -- use DMXGetScreenCount
  * instead.  NOTE: Also see DMX protocol specification (DMXSpec.txt) for
  * usage of DMXSync to flush pending commands. */
-extern Bool DMXGetWindowAttributes(Display *dpy, Window window,
-                                   int *screen_count, int available_count,
+extern Bool DMXGetWindowAttributes(Display             *dpy,
+                                   Window               window,
+                                   int                 *screen_count,
+                                   int                  available_count,
                                    DMXWindowAttributes *attr);
 
 extern Bool DMXGetDesktopAttributes(Display *dpy, DMXDesktopAttributes *attr);
-extern int  DMXChangeDesktopAttributes(Display *dpy,
-                                       unsigned int mask,
+extern int  DMXChangeDesktopAttributes(Display              *dpy,
+                                       unsigned int          mask,
                                        DMXDesktopAttributes *attr);
 
 extern Bool DMXGetInputCount(Display *dpy, int *input_count);
-extern Bool DMXGetInputAttributes(Display *dpy, int id,
-                                  DMXInputAttributes *attr);
+extern Bool
+DMXGetInputAttributes(Display *dpy, int id, DMXInputAttributes *attr);
 
-extern Bool DMXAddInput(Display *dpy,
-                        unsigned int mask,
-                        DMXInputAttributes *attr,
-                        int *id);
+extern Bool
+DMXAddInput(Display *dpy, unsigned int mask, DMXInputAttributes *attr, int *id);
 extern Bool DMXRemoveInput(Display *dpy, int id);
 
 /* These are helper functions that call DMXAddInput. */
-extern Bool DMXAddBackendInput(Display *dpy, int screen, int sendsCore,
-                               int *newId);
-extern Bool DMXAddConsoleInput(Display *dpy, const char *name, int sendsCore,
-                               int *newId);
+extern Bool
+DMXAddBackendInput(Display *dpy, int screen, int sendsCore, int *newId);
+extern Bool
+DMXAddConsoleInput(Display *dpy, const char *name, int sendsCore, int *newId);
 
 _XFUNCPROTOEND
 #endif

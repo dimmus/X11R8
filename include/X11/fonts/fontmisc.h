@@ -37,62 +37,39 @@ in this Software without prior written authorization from The Open Group.
 #include <unistd.h>
 #include "X11/Xdefs.h"
 
-
 #ifndef LSBFirst
-#define LSBFirst	0
-#define MSBFirst	1
+#  define LSBFirst 0
+#  define MSBFirst 1
 #endif
 
 #ifndef None
-#define None	0l
+#  define None 0l
 #endif
 
 #ifndef TRUE
-#define TRUE 1
-#define FALSE 0
+#  define TRUE  1
+#  define FALSE 0
 #endif
 
-extern Atom MakeAtom ( const char *string, unsigned len, int makeit );
-extern int ValidAtom ( Atom atom );
-extern const char *NameForAtom (Atom atom);
+extern Atom        MakeAtom(const char *string, unsigned len, int makeit);
+extern int         ValidAtom(Atom atom);
+extern const char *NameForAtom(Atom atom);
 
 #define lowbit(x) ((x) & (~(x) + 1))
 
 #undef assert
-#define assert(x)	((void)0)
+#define assert(x) ((void)0)
+
+extern void BitOrderInvert(register unsigned char *, register int);
+
+extern void TwoByteSwap(register unsigned char *, register int);
+
+extern void FourByteSwap(register unsigned char *, register int);
+
+extern int RepadBitmap(char *, char *, unsigned, unsigned, int, int);
 
 extern void
-BitOrderInvert(
-    register unsigned char *,
-    register int
-);
-
-extern void
-TwoByteSwap(
-    register unsigned char *,
-    register int
-);
-
-extern void
-FourByteSwap(
-    register unsigned char *,
-    register int
-);
-
-extern int
-RepadBitmap (
-    char*,
-    char*,
-    unsigned,
-    unsigned,
-    int,
-    int
-);
-
-extern void CopyISOLatin1Lowered(
-    char * /*dest*/,
-    const char * /*source*/,
-    int /*length*/
+CopyISOLatin1Lowered(char * /*dest*/, const char * /*source*/, int /*length*/
 );
 
 extern void register_fpe_functions(void);

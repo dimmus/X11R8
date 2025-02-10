@@ -30,17 +30,15 @@
 
 _XFUNCPROTOBEGIN
 
-Bool XLbxQueryExtension(
-    Display*		/* dpy */,
-    int*		/* requestp */,
-    int*		/* event_basep */,
-    int*		/* error_basep */
+Bool XLbxQueryExtension(Display * /* dpy */,
+                        int * /* requestp */,
+                        int * /* event_basep */,
+                        int *  /* error_basep */
 );
 
-Bool XLbxQueryVersion(
-    Display*		/* dpy */,
-    int*		/* majorVersion */,
-    int*		/* minorVersion */
+Bool XLbxQueryVersion(Display * /* dpy */,
+                      int * /* majorVersion */,
+                      int *  /* minorVersion */
 );
 
 int XLbxGetEventBase(Display *dpy);

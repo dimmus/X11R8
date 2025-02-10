@@ -48,83 +48,81 @@ in this Software without prior written authorization from the X Consortium.
  * as well as to support vertical trees.
  */
 
-
 #ifndef _XawTreeP_h
 #define _XawTreeP_h
 
 #include <X11/Xaw3dxft/Tree.h>
 
-typedef struct _TreeClassPart {
+typedef struct _TreeClassPart
+{
     int ignore;
 } TreeClassPart;
 
-typedef struct _TreeClassRec {
-    CoreClassPart core_class;
-    CompositeClassPart composite_class;
+typedef struct _TreeClassRec
+{
+    CoreClassPart       core_class;
+    CompositeClassPart  composite_class;
     ConstraintClassPart constraint_class;
-    TreeClassPart tree_class;
+    TreeClassPart       tree_class;
 } TreeClassRec;
 
 extern TreeClassRec treeClassRec;
 
-typedef struct {
+typedef struct
+{
     /* fields available through resources */
-    Dimension hpad;			/* hSpace/HSpace */
-    Dimension vpad;			/* vSpace/VSpace */
-    Dimension line_width;		/* lineWidth/LineWidth */
-    Pixel foreground;			/* foreground/Foreground */
-    XtGravity gravity;			/* gravity/Gravity */
-    Boolean auto_reconfigure;		/* autoReconfigure/AutoReconfigure */
+    Dimension hpad;   /* hSpace/HSpace */
+    Dimension vpad;   /* vSpace/VSpace */
+    Dimension line_width;  /* lineWidth/LineWidth */
+    Pixel     foreground;   /* foreground/Foreground */
+    XtGravity gravity;   /* gravity/Gravity */
+    Boolean   auto_reconfigure;  /* autoReconfigure/AutoReconfigure */
     /* private fields */
-    GC gc;				/* used to draw lines */
-    Widget tree_root;			/* hidden root off all children */
-    Dimension *largest;			/* list of largest per depth */
-    int n_largest;			/* number of elements in largest */
-    Dimension maxwidth, maxheight;	/* for shrink wrapping */
+    GC         gc;    /* used to draw lines */
+    Widget     tree_root;   /* hidden root off all children */
+    Dimension *largest;   /* list of largest per depth */
+    int        n_largest;   /* number of elements in largest */
+    Dimension  maxwidth, maxheight; /* for shrink wrapping */
 } TreePart;
 
-
-typedef struct _TreeRec {
-    CorePart core;
-    CompositePart composite;
+typedef struct _TreeRec
+{
+    CorePart       core;
+    CompositePart  composite;
     ConstraintPart constraint;
-    TreePart tree;
-}  TreeRec;
-
+    TreePart       tree;
+} TreeRec;
 
 /*
  * structure attached to all children
  */
-typedef struct _TreeConstraintsPart {
+typedef struct _TreeConstraintsPart
+{
     /* resources */
-    Widget parent;			/* treeParent/TreeParent */
-    GC gc;				/* treeGC/TreeGC */
+    Widget parent;   /* treeParent/TreeParent */
+    GC     gc;    /* treeGC/TreeGC */
     /* private data */
-    Widget *children;
-    int n_children;
-    int max_children;
-    Dimension bbsubwidth, bbsubheight;	/* bounding box of sub tree */
-    Dimension bbwidth, bbheight;	/* bounding box including node */
-    Position x, y;
+    Widget   *children;
+    int       n_children;
+    int       max_children;
+    Dimension bbsubwidth, bbsubheight; /* bounding box of sub tree */
+    Dimension bbwidth, bbheight; /* bounding box including node */
+    Position  x, y;
 } TreeConstraintsPart;
 
-typedef struct _TreeConstraintsRec {
-   TreeConstraintsPart tree;
+typedef struct _TreeConstraintsRec
+{
+    TreeConstraintsPart tree;
 } TreeConstraintsRec, *TreeConstraints;
-
 
 /*
  * useful macros
  */
 
-#define TREE_CONSTRAINT(w) \
-                   ((TreeConstraints)((w)->core.constraints))
+#define TREE_CONSTRAINT(w) ((TreeConstraints)((w)->core.constraints))
 
-#define TREE_INITIAL_DEPTH 10		/* for allocating largest array */
+#define TREE_INITIAL_DEPTH              10  /* for allocating largest array */
 #define TREE_HORIZONTAL_DEFAULT_SPACING 20
-#define TREE_VERTICAL_DEFAULT_SPACING 6
+#define TREE_VERTICAL_DEFAULT_SPACING   6
 
 #endif /* _XawTreeP_h */
-
-
-

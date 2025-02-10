@@ -75,43 +75,39 @@ SOFTWARE.
 */
 
 #ifndef _XtStringDefs_h_
-#define XtNforceBars "forceBars"
-#define XtNallowHoriz "allowHoriz"
-#define XtNallowVert "allowVert"
-#define XtNuseBottom "useBottom"
-#define XtNuseRight "useRight"
+#  define XtNforceBars  "forceBars"
+#  define XtNallowHoriz "allowHoriz"
+#  define XtNallowVert  "allowVert"
+#  define XtNuseBottom  "useBottom"
+#  define XtNuseRight   "useRight"
 #endif
 
 extern WidgetClass viewportWidgetClass;
 
 typedef struct _ViewportClassRec *ViewportWidgetClass;
-typedef struct _ViewportRec  *ViewportWidget;
+typedef struct _ViewportRec      *ViewportWidget;
 
 _XFUNCPROTOBEGIN
 
-void XawViewportSetLocation
-(
- Widget			gw,
+void XawViewportSetLocation(Widget gw,
 #if NeedWidePrototypes
- double			xoff,
- double			yoff
+                            double xoff,
+                            double yoff
 #else
- float			xoff,
- float			yoff
+                            float xoff,
+                            float yoff
 #endif
- );
+);
 
-void XawViewportSetCoordinates
-(
- Widget			gw,
+void XawViewportSetCoordinates(Widget gw,
 #if NeedWidePrototypes
- int			x,
- int			y
+                               int x,
+                               int y
 #else
- Position		x,
- Position		y
+                               Position x,
+                               Position y
 #endif
- );
+);
 
 _XFUNCPROTOEND
 

@@ -71,7 +71,7 @@ SOFTWARE.
 ******************************************************************/
 
 #ifndef _XawMultiSink_h
-#define _XawMultiSink_h
+#  define _XawMultiSink_h
 
 /***********************************************************************
  *
@@ -79,7 +79,7 @@ SOFTWARE.
  *
  ***********************************************************************/
 
-#include "X11/Xaw3d/TextSink.h"
+#  include "X11/Xaw3d/TextSink.h"
 
 /* Resources:
 
@@ -91,18 +91,18 @@ SOFTWARE.
 
 */
 
-#define XtCOutput "Output"
+#  define XtCOutput "Output"
 
-#define XtNdisplayNonprinting "displayNonprinting"
-#define XtNecho "echo"
+#  define XtNdisplayNonprinting "displayNonprinting"
+#  define XtNecho               "echo"
 
-#ifndef XtNfontSet		/*Sheeran, Omron KK, 93/03/04*/
-#define XtNfontSet		"fontSet"
-#endif
+#  ifndef XtNfontSet  /*Sheeran, Omron KK, 93/03/04*/
+#    define XtNfontSet "fontSet"
+#  endif
 
-#ifndef XtCFontSet		/*Sheeran, Omron KK, 93/03/04*/
-#define XtCFontSet		"FontSet"
-#endif
+#  ifndef XtCFontSet  /*Sheeran, Omron KK, 93/03/04*/
+#    define XtCFontSet "FontSet"
+#  endif
 
 /* Class record constants */
 
@@ -110,7 +110,6 @@ extern WidgetClass multiSinkObjectClass;
 
 typedef struct _MultiSinkClassRec *MultiSinkObjectClass;
 typedef struct _MultiSinkRec      *MultiSinkObject;
-
 
 #endif /* _XawMultiSrc_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

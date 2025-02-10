@@ -24,7 +24,6 @@ in this Software without prior written authorization from The Open Group.
 
 */
 
-
 /*
  * AsciiSrc.h - Public Header file for Ascii Text Source.
  *
@@ -38,7 +37,6 @@ in this Software without prior written authorization from The Open Group.
  *          MIT X Consortium
  *          kit@expo.lcs.mit.edu
  */
-
 
 #ifndef _XawAsciiSrc_h
 #define _XawAsciiSrc_h
@@ -69,24 +67,25 @@ typedef struct _AsciiSrcRec      *AsciiSrcObject;
 /*
  * Resource Definitions
  */
-#define XtCDataCompression "DataCompression"
-#define XtCPieceSize "PieceSize"
-#define XtCType "Type"
+#define XtCDataCompression  "DataCompression"
+#define XtCPieceSize        "PieceSize"
+#define XtCType             "Type"
 #define XtCUseStringInPlace "UseStringInPlace"
 
-#define XtNdataCompression "dataCompression"
-#define XtNpieceSize "pieceSize"
-#define XtNtype "type"
+#define XtNdataCompression  "dataCompression"
+#define XtNpieceSize        "pieceSize"
+#define XtNtype             "type"
 #define XtNuseStringInPlace "useStringInPlace"
 
 #define XtRAsciiType "AsciiType"
 
 #define XtEstring "string"
-#define XtEfile "file"
+#define XtEfile   "file"
 
-typedef enum {
-  XawAsciiFile,
-  XawAsciiString
+typedef enum
+{
+    XawAsciiFile,
+    XawAsciiString
 } XawAsciiType;
 
 /*
@@ -106,10 +105,7 @@ _XFUNCPROTOBEGIN
  *	  Frees the string returned by a get values call
  *		     on the string when the source is of type string.
  */
-void XawAsciiSourceFreeString
-(
- Widget		w
- );
+void XawAsciiSourceFreeString(Widget w);
 
 /*
  * Function:
@@ -124,10 +120,7 @@ void XawAsciiSourceFreeString
  * Returns:
  *	True if the save was successful
  */
-Bool XawAsciiSave
-(
- Widget		w
- );
+Bool XawAsciiSave(Widget w);
 
 /*
  * Function:
@@ -143,11 +136,7 @@ Bool XawAsciiSave
  * Returns:
  *	True if the save was successful
  */
-Bool XawAsciiSaveAsFile
-(
- Widget		w,
- _Xconst char	*name
- );
+Bool XawAsciiSaveAsFile(Widget w, _Xconst char *name);
 
 /*
  * Function:
@@ -162,10 +151,7 @@ Bool XawAsciiSaveAsFile
  * Returns:
  *	a Boolean (see description)
  */
-Bool XawAsciiSourceChanged
-(
- Widget		w
- );
+Bool XawAsciiSourceChanged(Widget w);
 
 _XFUNCPROTOEND
 

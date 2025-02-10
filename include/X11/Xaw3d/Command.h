@@ -97,20 +97,20 @@ SOFTWARE.
 
 #define XtNhighlightThickness "highlightThickness"
 
-#define XtNshapeStyle "shapeStyle"
-#define XtCShapeStyle "ShapeStyle"
-#define XtRShapeStyle "ShapeStyle"
+#define XtNshapeStyle         "shapeStyle"
+#define XtCShapeStyle         "ShapeStyle"
+#define XtRShapeStyle         "ShapeStyle"
 #define XtNcornerRoundPercent "cornerRoundPercent"
 #define XtCCornerRoundPercent "CornerRoundPercent"
 
-#define XawShapeRectangle XmuShapeRectangle
-#define XawShapeOval XmuShapeOval
-#define XawShapeEllipse XmuShapeEllipse
+#define XawShapeRectangle        XmuShapeRectangle
+#define XawShapeOval             XmuShapeOval
+#define XawShapeEllipse          XmuShapeEllipse
 #define XawShapeRoundedRectangle XmuShapeRoundedRectangle
 
-extern WidgetClass     commandWidgetClass;
+extern WidgetClass commandWidgetClass;
 
-typedef struct _CommandClassRec   *CommandWidgetClass;
-typedef struct _CommandRec        *CommandWidget;
+typedef struct _CommandClassRec *CommandWidgetClass;
+typedef struct _CommandRec      *CommandWidget;
 
 #endif /* _XawCommand_h */

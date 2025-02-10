@@ -10,17 +10,17 @@
  **/
 
 #ifndef __SHAPE_H
-#define __SHAPE_H
+#  define __SHAPE_H
 
-#include "xcb.h"
-#include "xcb/xproto.h"
+#  include "xcb.h"
+#  include "xcb/xproto.h"
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#define XCB_SHAPE_MAJOR_VERSION 1
-#define XCB_SHAPE_MINOR_VERSION 1
+#  define XCB_SHAPE_MAJOR_VERSION 1
+#  define XCB_SHAPE_MINOR_VERSION 1
 
 extern xcb_extension_t xcb_shape_id;
 
@@ -29,7 +29,8 @@ typedef uint8_t xcb_shape_op_t;
 /**
  * @brief xcb_shape_op_iterator_t
  **/
-typedef struct xcb_shape_op_iterator_t {
+typedef struct xcb_shape_op_iterator_t
+{
     xcb_shape_op_t *data;
     int             rem;
     int             index;
@@ -40,33 +41,37 @@ typedef uint8_t xcb_shape_kind_t;
 /**
  * @brief xcb_shape_kind_iterator_t
  **/
-typedef struct xcb_shape_kind_iterator_t {
+typedef struct xcb_shape_kind_iterator_t
+{
     xcb_shape_kind_t *data;
     int               rem;
     int               index;
 } xcb_shape_kind_iterator_t;
 
-typedef enum xcb_shape_so_t {
-    XCB_SHAPE_SO_SET = 0,
-    XCB_SHAPE_SO_UNION = 1,
+typedef enum xcb_shape_so_t
+{
+    XCB_SHAPE_SO_SET       = 0,
+    XCB_SHAPE_SO_UNION     = 1,
     XCB_SHAPE_SO_INTERSECT = 2,
-    XCB_SHAPE_SO_SUBTRACT = 3,
-    XCB_SHAPE_SO_INVERT = 4
+    XCB_SHAPE_SO_SUBTRACT  = 3,
+    XCB_SHAPE_SO_INVERT    = 4
 } xcb_shape_so_t;
 
-typedef enum xcb_shape_sk_t {
+typedef enum xcb_shape_sk_t
+{
     XCB_SHAPE_SK_BOUNDING = 0,
-    XCB_SHAPE_SK_CLIP = 1,
-    XCB_SHAPE_SK_INPUT = 2
+    XCB_SHAPE_SK_CLIP     = 1,
+    XCB_SHAPE_SK_INPUT    = 2
 } xcb_shape_sk_t;
 
 /** Opcode for xcb_shape_notify. */
-#define XCB_SHAPE_NOTIFY 0
+#  define XCB_SHAPE_NOTIFY 0
 
 /**
  * @brief xcb_shape_notify_event_t
  **/
-typedef struct xcb_shape_notify_event_t {
+typedef struct xcb_shape_notify_event_t
+{
     uint8_t          response_type;
     xcb_shape_kind_t shape_kind;
     uint16_t         sequence;
@@ -83,17 +88,19 @@ typedef struct xcb_shape_notify_event_t {
 /**
  * @brief xcb_shape_query_version_cookie_t
  **/
-typedef struct xcb_shape_query_version_cookie_t {
+typedef struct xcb_shape_query_version_cookie_t
+{
     unsigned int sequence;
 } xcb_shape_query_version_cookie_t;
 
 /** Opcode for xcb_shape_query_version. */
-#define XCB_SHAPE_QUERY_VERSION 0
+#  define XCB_SHAPE_QUERY_VERSION 0
 
 /**
  * @brief xcb_shape_query_version_request_t
  **/
-typedef struct xcb_shape_query_version_request_t {
+typedef struct xcb_shape_query_version_request_t
+{
     uint8_t  major_opcode;
     uint8_t  minor_opcode;
     uint16_t length;
@@ -102,7 +109,8 @@ typedef struct xcb_shape_query_version_request_t {
 /**
  * @brief xcb_shape_query_version_reply_t
  **/
-typedef struct xcb_shape_query_version_reply_t {
+typedef struct xcb_shape_query_version_reply_t
+{
     uint8_t  response_type;
     uint8_t  pad0;
     uint16_t sequence;
@@ -112,12 +120,13 @@ typedef struct xcb_shape_query_version_reply_t {
 } xcb_shape_query_version_reply_t;
 
 /** Opcode for xcb_shape_rectangles. */
-#define XCB_SHAPE_RECTANGLES 1
+#  define XCB_SHAPE_RECTANGLES 1
 
 /**
  * @brief xcb_shape_rectangles_request_t
  **/
-typedef struct xcb_shape_rectangles_request_t {
+typedef struct xcb_shape_rectangles_request_t
+{
     uint8_t          major_opcode;
     uint8_t          minor_opcode;
     uint16_t         length;
@@ -131,12 +140,13 @@ typedef struct xcb_shape_rectangles_request_t {
 } xcb_shape_rectangles_request_t;
 
 /** Opcode for xcb_shape_mask. */
-#define XCB_SHAPE_MASK 2
+#  define XCB_SHAPE_MASK 2
 
 /**
  * @brief xcb_shape_mask_request_t
  **/
-typedef struct xcb_shape_mask_request_t {
+typedef struct xcb_shape_mask_request_t
+{
     uint8_t          major_opcode;
     uint8_t          minor_opcode;
     uint16_t         length;
@@ -150,12 +160,13 @@ typedef struct xcb_shape_mask_request_t {
 } xcb_shape_mask_request_t;
 
 /** Opcode for xcb_shape_combine. */
-#define XCB_SHAPE_COMBINE 3
+#  define XCB_SHAPE_COMBINE 3
 
 /**
  * @brief xcb_shape_combine_request_t
  **/
-typedef struct xcb_shape_combine_request_t {
+typedef struct xcb_shape_combine_request_t
+{
     uint8_t          major_opcode;
     uint8_t          minor_opcode;
     uint16_t         length;
@@ -170,12 +181,13 @@ typedef struct xcb_shape_combine_request_t {
 } xcb_shape_combine_request_t;
 
 /** Opcode for xcb_shape_offset. */
-#define XCB_SHAPE_OFFSET 4
+#  define XCB_SHAPE_OFFSET 4
 
 /**
  * @brief xcb_shape_offset_request_t
  **/
-typedef struct xcb_shape_offset_request_t {
+typedef struct xcb_shape_offset_request_t
+{
     uint8_t          major_opcode;
     uint8_t          minor_opcode;
     uint16_t         length;
@@ -189,17 +201,19 @@ typedef struct xcb_shape_offset_request_t {
 /**
  * @brief xcb_shape_query_extents_cookie_t
  **/
-typedef struct xcb_shape_query_extents_cookie_t {
+typedef struct xcb_shape_query_extents_cookie_t
+{
     unsigned int sequence;
 } xcb_shape_query_extents_cookie_t;
 
 /** Opcode for xcb_shape_query_extents. */
-#define XCB_SHAPE_QUERY_EXTENTS 5
+#  define XCB_SHAPE_QUERY_EXTENTS 5
 
 /**
  * @brief xcb_shape_query_extents_request_t
  **/
-typedef struct xcb_shape_query_extents_request_t {
+typedef struct xcb_shape_query_extents_request_t
+{
     uint8_t      major_opcode;
     uint8_t      minor_opcode;
     uint16_t     length;
@@ -209,7 +223,8 @@ typedef struct xcb_shape_query_extents_request_t {
 /**
  * @brief xcb_shape_query_extents_reply_t
  **/
-typedef struct xcb_shape_query_extents_reply_t {
+typedef struct xcb_shape_query_extents_reply_t
+{
     uint8_t  response_type;
     uint8_t  pad0;
     uint16_t sequence;
@@ -228,12 +243,13 @@ typedef struct xcb_shape_query_extents_reply_t {
 } xcb_shape_query_extents_reply_t;
 
 /** Opcode for xcb_shape_select_input. */
-#define XCB_SHAPE_SELECT_INPUT 6
+#  define XCB_SHAPE_SELECT_INPUT 6
 
 /**
  * @brief xcb_shape_select_input_request_t
  **/
-typedef struct xcb_shape_select_input_request_t {
+typedef struct xcb_shape_select_input_request_t
+{
     uint8_t      major_opcode;
     uint8_t      minor_opcode;
     uint16_t     length;
@@ -245,17 +261,19 @@ typedef struct xcb_shape_select_input_request_t {
 /**
  * @brief xcb_shape_input_selected_cookie_t
  **/
-typedef struct xcb_shape_input_selected_cookie_t {
+typedef struct xcb_shape_input_selected_cookie_t
+{
     unsigned int sequence;
 } xcb_shape_input_selected_cookie_t;
 
 /** Opcode for xcb_shape_input_selected. */
-#define XCB_SHAPE_INPUT_SELECTED 7
+#  define XCB_SHAPE_INPUT_SELECTED 7
 
 /**
  * @brief xcb_shape_input_selected_request_t
  **/
-typedef struct xcb_shape_input_selected_request_t {
+typedef struct xcb_shape_input_selected_request_t
+{
     uint8_t      major_opcode;
     uint8_t      minor_opcode;
     uint16_t     length;
@@ -265,7 +283,8 @@ typedef struct xcb_shape_input_selected_request_t {
 /**
  * @brief xcb_shape_input_selected_reply_t
  **/
-typedef struct xcb_shape_input_selected_reply_t {
+typedef struct xcb_shape_input_selected_reply_t
+{
     uint8_t  response_type;
     uint8_t  enabled;
     uint16_t sequence;
@@ -275,17 +294,19 @@ typedef struct xcb_shape_input_selected_reply_t {
 /**
  * @brief xcb_shape_get_rectangles_cookie_t
  **/
-typedef struct xcb_shape_get_rectangles_cookie_t {
+typedef struct xcb_shape_get_rectangles_cookie_t
+{
     unsigned int sequence;
 } xcb_shape_get_rectangles_cookie_t;
 
 /** Opcode for xcb_shape_get_rectangles. */
-#define XCB_SHAPE_GET_RECTANGLES 8
+#  define XCB_SHAPE_GET_RECTANGLES 8
 
 /**
  * @brief xcb_shape_get_rectangles_request_t
  **/
-typedef struct xcb_shape_get_rectangles_request_t {
+typedef struct xcb_shape_get_rectangles_request_t
+{
     uint8_t          major_opcode;
     uint8_t          minor_opcode;
     uint16_t         length;
@@ -297,7 +318,8 @@ typedef struct xcb_shape_get_rectangles_request_t {
 /**
  * @brief xcb_shape_get_rectangles_reply_t
  **/
-typedef struct xcb_shape_get_rectangles_reply_t {
+typedef struct xcb_shape_get_rectangles_reply_t
+{
     uint8_t  response_type;
     uint8_t  ordering;
     uint16_t sequence;
@@ -314,8 +336,7 @@ typedef struct xcb_shape_get_rectangles_reply_t {
  * decreased by one. The member data points to the next
  * element. The member index is increased by sizeof(xcb_shape_op_t)
  */
-void
-xcb_shape_op_next (xcb_shape_op_iterator_t *i);
+void xcb_shape_op_next(xcb_shape_op_iterator_t *i);
 
 /**
  * Return the iterator pointing to the last element
@@ -326,8 +347,7 @@ xcb_shape_op_next (xcb_shape_op_iterator_t *i);
  * The member rem is set to 0. The member data points to the
  * last element.
  */
-xcb_generic_iterator_t
-xcb_shape_op_end (xcb_shape_op_iterator_t i);
+xcb_generic_iterator_t xcb_shape_op_end(xcb_shape_op_iterator_t i);
 
 /**
  * Get the next element of the iterator
@@ -337,8 +357,7 @@ xcb_shape_op_end (xcb_shape_op_iterator_t i);
  * decreased by one. The member data points to the next
  * element. The member index is increased by sizeof(xcb_shape_kind_t)
  */
-void
-xcb_shape_kind_next (xcb_shape_kind_iterator_t *i);
+void xcb_shape_kind_next(xcb_shape_kind_iterator_t *i);
 
 /**
  * Return the iterator pointing to the last element
@@ -349,8 +368,7 @@ xcb_shape_kind_next (xcb_shape_kind_iterator_t *i);
  * The member rem is set to 0. The member data points to the
  * last element.
  */
-xcb_generic_iterator_t
-xcb_shape_kind_end (xcb_shape_kind_iterator_t i);
+xcb_generic_iterator_t xcb_shape_kind_end(xcb_shape_kind_iterator_t i);
 
 /**
  *
@@ -360,8 +378,7 @@ xcb_shape_kind_end (xcb_shape_kind_iterator_t i);
  * Delivers a request to the X server.
  *
  */
-xcb_shape_query_version_cookie_t
-xcb_shape_query_version (xcb_connection_t *c);
+xcb_shape_query_version_cookie_t xcb_shape_query_version(xcb_connection_t *c);
 
 /**
  *
@@ -375,7 +392,7 @@ xcb_shape_query_version (xcb_connection_t *c);
  * placed in the event queue.
  */
 xcb_shape_query_version_cookie_t
-xcb_shape_query_version_unchecked (xcb_connection_t *c);
+xcb_shape_query_version_unchecked(xcb_connection_t *c);
 
 /**
  * Return the reply
@@ -392,13 +409,11 @@ xcb_shape_query_version_unchecked (xcb_connection_t *c);
  * The returned value must be freed by the caller using free().
  */
 xcb_shape_query_version_reply_t *
-xcb_shape_query_version_reply (xcb_connection_t                  *c,
-                               xcb_shape_query_version_cookie_t   cookie  /**< */,
-                               xcb_generic_error_t              **e);
+xcb_shape_query_version_reply(xcb_connection_t                *c,
+                              xcb_shape_query_version_cookie_t cookie /**< */,
+                              xcb_generic_error_t            **e);
 
-int
-xcb_shape_rectangles_sizeof (const void  *_buffer,
-                             uint32_t     rectangles_len);
+int xcb_shape_rectangles_sizeof(const void *_buffer, uint32_t rectangles_len);
 
 /**
  *
@@ -412,15 +427,15 @@ xcb_shape_rectangles_sizeof (const void  *_buffer,
  * saved for handling by xcb_request_check().
  */
 xcb_void_cookie_t
-xcb_shape_rectangles_checked (xcb_connection_t      *c,
-                              xcb_shape_op_t         operation,
-                              xcb_shape_kind_t       destination_kind,
-                              uint8_t                ordering,
-                              xcb_window_t           destination_window,
-                              int16_t                x_offset,
-                              int16_t                y_offset,
-                              uint32_t               rectangles_len,
-                              const xcb_rectangle_t *rectangles);
+xcb_shape_rectangles_checked(xcb_connection_t      *c,
+                             xcb_shape_op_t         operation,
+                             xcb_shape_kind_t       destination_kind,
+                             uint8_t                ordering,
+                             xcb_window_t           destination_window,
+                             int16_t                x_offset,
+                             int16_t                y_offset,
+                             uint32_t               rectangles_len,
+                             const xcb_rectangle_t *rectangles);
 
 /**
  *
@@ -430,62 +445,24 @@ xcb_shape_rectangles_checked (xcb_connection_t      *c,
  * Delivers a request to the X server.
  *
  */
-xcb_void_cookie_t
-xcb_shape_rectangles (xcb_connection_t      *c,
-                      xcb_shape_op_t         operation,
-                      xcb_shape_kind_t       destination_kind,
-                      uint8_t                ordering,
-                      xcb_window_t           destination_window,
-                      int16_t                x_offset,
-                      int16_t                y_offset,
-                      uint32_t               rectangles_len,
-                      const xcb_rectangle_t *rectangles);
+xcb_void_cookie_t xcb_shape_rectangles(xcb_connection_t *c,
+                                       xcb_shape_op_t    operation,
+                                       xcb_shape_kind_t  destination_kind,
+                                       uint8_t           ordering,
+                                       xcb_window_t      destination_window,
+                                       int16_t           x_offset,
+                                       int16_t           y_offset,
+                                       uint32_t          rectangles_len,
+                                       const xcb_rectangle_t *rectangles);
 
 xcb_rectangle_t *
-xcb_shape_rectangles_rectangles (const xcb_shape_rectangles_request_t *R);
+xcb_shape_rectangles_rectangles(const xcb_shape_rectangles_request_t *R);
 
 int
-xcb_shape_rectangles_rectangles_length (const xcb_shape_rectangles_request_t *R);
+xcb_shape_rectangles_rectangles_length(const xcb_shape_rectangles_request_t *R);
 
-xcb_rectangle_iterator_t
-xcb_shape_rectangles_rectangles_iterator (const xcb_shape_rectangles_request_t *R);
-
-/**
- *
- * @param c The connection
- * @return A cookie
- *
- * Delivers a request to the X server.
- *
- * This form can be used only if the request will not cause
- * a reply to be generated. Any returned error will be
- * saved for handling by xcb_request_check().
- */
-xcb_void_cookie_t
-xcb_shape_mask_checked (xcb_connection_t *c,
-                        xcb_shape_op_t    operation,
-                        xcb_shape_kind_t  destination_kind,
-                        xcb_window_t      destination_window,
-                        int16_t           x_offset,
-                        int16_t           y_offset,
-                        xcb_pixmap_t      source_bitmap);
-
-/**
- *
- * @param c The connection
- * @return A cookie
- *
- * Delivers a request to the X server.
- *
- */
-xcb_void_cookie_t
-xcb_shape_mask (xcb_connection_t *c,
-                xcb_shape_op_t    operation,
-                xcb_shape_kind_t  destination_kind,
-                xcb_window_t      destination_window,
-                int16_t           x_offset,
-                int16_t           y_offset,
-                xcb_pixmap_t      source_bitmap);
+xcb_rectangle_iterator_t xcb_shape_rectangles_rectangles_iterator(
+    const xcb_shape_rectangles_request_t *R);
 
 /**
  *
@@ -498,15 +475,13 @@ xcb_shape_mask (xcb_connection_t *c,
  * a reply to be generated. Any returned error will be
  * saved for handling by xcb_request_check().
  */
-xcb_void_cookie_t
-xcb_shape_combine_checked (xcb_connection_t *c,
-                           xcb_shape_op_t    operation,
-                           xcb_shape_kind_t  destination_kind,
-                           xcb_shape_kind_t  source_kind,
-                           xcb_window_t      destination_window,
-                           int16_t           x_offset,
-                           int16_t           y_offset,
-                           xcb_window_t      source_window);
+xcb_void_cookie_t xcb_shape_mask_checked(xcb_connection_t *c,
+                                         xcb_shape_op_t    operation,
+                                         xcb_shape_kind_t  destination_kind,
+                                         xcb_window_t      destination_window,
+                                         int16_t           x_offset,
+                                         int16_t           y_offset,
+                                         xcb_pixmap_t      source_bitmap);
 
 /**
  *
@@ -516,15 +491,13 @@ xcb_shape_combine_checked (xcb_connection_t *c,
  * Delivers a request to the X server.
  *
  */
-xcb_void_cookie_t
-xcb_shape_combine (xcb_connection_t *c,
-                   xcb_shape_op_t    operation,
-                   xcb_shape_kind_t  destination_kind,
-                   xcb_shape_kind_t  source_kind,
-                   xcb_window_t      destination_window,
-                   int16_t           x_offset,
-                   int16_t           y_offset,
-                   xcb_window_t      source_window);
+xcb_void_cookie_t xcb_shape_mask(xcb_connection_t *c,
+                                 xcb_shape_op_t    operation,
+                                 xcb_shape_kind_t  destination_kind,
+                                 xcb_window_t      destination_window,
+                                 int16_t           x_offset,
+                                 int16_t           y_offset,
+                                 xcb_pixmap_t      source_bitmap);
 
 /**
  *
@@ -537,12 +510,14 @@ xcb_shape_combine (xcb_connection_t *c,
  * a reply to be generated. Any returned error will be
  * saved for handling by xcb_request_check().
  */
-xcb_void_cookie_t
-xcb_shape_offset_checked (xcb_connection_t *c,
-                          xcb_shape_kind_t  destination_kind,
-                          xcb_window_t      destination_window,
-                          int16_t           x_offset,
-                          int16_t           y_offset);
+xcb_void_cookie_t xcb_shape_combine_checked(xcb_connection_t *c,
+                                            xcb_shape_op_t    operation,
+                                            xcb_shape_kind_t  destination_kind,
+                                            xcb_shape_kind_t  source_kind,
+                                            xcb_window_t destination_window,
+                                            int16_t      x_offset,
+                                            int16_t      y_offset,
+                                            xcb_window_t source_window);
 
 /**
  *
@@ -552,12 +527,45 @@ xcb_shape_offset_checked (xcb_connection_t *c,
  * Delivers a request to the X server.
  *
  */
-xcb_void_cookie_t
-xcb_shape_offset (xcb_connection_t *c,
-                  xcb_shape_kind_t  destination_kind,
-                  xcb_window_t      destination_window,
-                  int16_t           x_offset,
-                  int16_t           y_offset);
+xcb_void_cookie_t xcb_shape_combine(xcb_connection_t *c,
+                                    xcb_shape_op_t    operation,
+                                    xcb_shape_kind_t  destination_kind,
+                                    xcb_shape_kind_t  source_kind,
+                                    xcb_window_t      destination_window,
+                                    int16_t           x_offset,
+                                    int16_t           y_offset,
+                                    xcb_window_t      source_window);
+
+/**
+ *
+ * @param c The connection
+ * @return A cookie
+ *
+ * Delivers a request to the X server.
+ *
+ * This form can be used only if the request will not cause
+ * a reply to be generated. Any returned error will be
+ * saved for handling by xcb_request_check().
+ */
+xcb_void_cookie_t xcb_shape_offset_checked(xcb_connection_t *c,
+                                           xcb_shape_kind_t  destination_kind,
+                                           xcb_window_t      destination_window,
+                                           int16_t           x_offset,
+                                           int16_t           y_offset);
+
+/**
+ *
+ * @param c The connection
+ * @return A cookie
+ *
+ * Delivers a request to the X server.
+ *
+ */
+xcb_void_cookie_t xcb_shape_offset(xcb_connection_t *c,
+                                   xcb_shape_kind_t  destination_kind,
+                                   xcb_window_t      destination_window,
+                                   int16_t           x_offset,
+                                   int16_t           y_offset);
 
 /**
  *
@@ -568,8 +576,7 @@ xcb_shape_offset (xcb_connection_t *c,
  *
  */
 xcb_shape_query_extents_cookie_t
-xcb_shape_query_extents (xcb_connection_t *c,
-                         xcb_window_t      destination_window);
+xcb_shape_query_extents(xcb_connection_t *c, xcb_window_t destination_window);
 
 /**
  *
@@ -583,8 +590,8 @@ xcb_shape_query_extents (xcb_connection_t *c,
  * placed in the event queue.
  */
 xcb_shape_query_extents_cookie_t
-xcb_shape_query_extents_unchecked (xcb_connection_t *c,
-                                   xcb_window_t      destination_window);
+xcb_shape_query_extents_unchecked(xcb_connection_t *c,
+                                  xcb_window_t      destination_window);
 
 /**
  * Return the reply
@@ -601,9 +608,9 @@ xcb_shape_query_extents_unchecked (xcb_connection_t *c,
  * The returned value must be freed by the caller using free().
  */
 xcb_shape_query_extents_reply_t *
-xcb_shape_query_extents_reply (xcb_connection_t                  *c,
-                               xcb_shape_query_extents_cookie_t   cookie  /**< */,
-                               xcb_generic_error_t              **e);
+xcb_shape_query_extents_reply(xcb_connection_t                *c,
+                              xcb_shape_query_extents_cookie_t cookie /**< */,
+                              xcb_generic_error_t            **e);
 
 /**
  *
@@ -617,9 +624,9 @@ xcb_shape_query_extents_reply (xcb_connection_t                  *c,
  * saved for handling by xcb_request_check().
  */
 xcb_void_cookie_t
-xcb_shape_select_input_checked (xcb_connection_t *c,
-                                xcb_window_t      destination_window,
-                                uint8_t           enable);
+xcb_shape_select_input_checked(xcb_connection_t *c,
+                               xcb_window_t      destination_window,
+                               uint8_t           enable);
 
 /**
  *
@@ -629,10 +636,9 @@ xcb_shape_select_input_checked (xcb_connection_t *c,
  * Delivers a request to the X server.
  *
  */
-xcb_void_cookie_t
-xcb_shape_select_input (xcb_connection_t *c,
-                        xcb_window_t      destination_window,
-                        uint8_t           enable);
+xcb_void_cookie_t xcb_shape_select_input(xcb_connection_t *c,
+                                         xcb_window_t      destination_window,
+                                         uint8_t           enable);
 
 /**
  *
@@ -643,8 +649,7 @@ xcb_shape_select_input (xcb_connection_t *c,
  *
  */
 xcb_shape_input_selected_cookie_t
-xcb_shape_input_selected (xcb_connection_t *c,
-                          xcb_window_t      destination_window);
+xcb_shape_input_selected(xcb_connection_t *c, xcb_window_t destination_window);
 
 /**
  *
@@ -658,8 +663,8 @@ xcb_shape_input_selected (xcb_connection_t *c,
  * placed in the event queue.
  */
 xcb_shape_input_selected_cookie_t
-xcb_shape_input_selected_unchecked (xcb_connection_t *c,
-                                    xcb_window_t      destination_window);
+xcb_shape_input_selected_unchecked(xcb_connection_t *c,
+                                   xcb_window_t      destination_window);
 
 /**
  * Return the reply
@@ -676,12 +681,11 @@ xcb_shape_input_selected_unchecked (xcb_connection_t *c,
  * The returned value must be freed by the caller using free().
  */
 xcb_shape_input_selected_reply_t *
-xcb_shape_input_selected_reply (xcb_connection_t                   *c,
-                                xcb_shape_input_selected_cookie_t   cookie  /**< */,
-                                xcb_generic_error_t               **e);
+xcb_shape_input_selected_reply(xcb_connection_t                 *c,
+                               xcb_shape_input_selected_cookie_t cookie /**< */,
+                               xcb_generic_error_t             **e);
 
-int
-xcb_shape_get_rectangles_sizeof (const void  *_buffer);
+int xcb_shape_get_rectangles_sizeof(const void *_buffer);
 
 /**
  *
@@ -692,9 +696,9 @@ xcb_shape_get_rectangles_sizeof (const void  *_buffer);
  *
  */
 xcb_shape_get_rectangles_cookie_t
-xcb_shape_get_rectangles (xcb_connection_t *c,
-                          xcb_window_t      window,
-                          xcb_shape_kind_t  source_kind);
+xcb_shape_get_rectangles(xcb_connection_t *c,
+                         xcb_window_t      window,
+                         xcb_shape_kind_t  source_kind);
 
 /**
  *
@@ -708,18 +712,18 @@ xcb_shape_get_rectangles (xcb_connection_t *c,
  * placed in the event queue.
  */
 xcb_shape_get_rectangles_cookie_t
-xcb_shape_get_rectangles_unchecked (xcb_connection_t *c,
-                                    xcb_window_t      window,
-                                    xcb_shape_kind_t  source_kind);
+xcb_shape_get_rectangles_unchecked(xcb_connection_t *c,
+                                   xcb_window_t      window,
+                                   xcb_shape_kind_t  source_kind);
 
 xcb_rectangle_t *
-xcb_shape_get_rectangles_rectangles (const xcb_shape_get_rectangles_reply_t *R);
+xcb_shape_get_rectangles_rectangles(const xcb_shape_get_rectangles_reply_t *R);
 
-int
-xcb_shape_get_rectangles_rectangles_length (const xcb_shape_get_rectangles_reply_t *R);
+int xcb_shape_get_rectangles_rectangles_length(
+    const xcb_shape_get_rectangles_reply_t *R);
 
-xcb_rectangle_iterator_t
-xcb_shape_get_rectangles_rectangles_iterator (const xcb_shape_get_rectangles_reply_t *R);
+xcb_rectangle_iterator_t xcb_shape_get_rectangles_rectangles_iterator(
+    const xcb_shape_get_rectangles_reply_t *R);
 
 /**
  * Return the reply
@@ -736,14 +740,13 @@ xcb_shape_get_rectangles_rectangles_iterator (const xcb_shape_get_rectangles_rep
  * The returned value must be freed by the caller using free().
  */
 xcb_shape_get_rectangles_reply_t *
-xcb_shape_get_rectangles_reply (xcb_connection_t                   *c,
-                                xcb_shape_get_rectangles_cookie_t   cookie  /**< */,
-                                xcb_generic_error_t               **e);
+xcb_shape_get_rectangles_reply(xcb_connection_t                 *c,
+                               xcb_shape_get_rectangles_cookie_t cookie /**< */,
+                               xcb_generic_error_t             **e);
 
-
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 
 #endif
 

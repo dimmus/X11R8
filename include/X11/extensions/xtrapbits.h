@@ -42,42 +42,42 @@ SOFTWARE.
  *
  */
 typedef unsigned char *UByteP;  /* Pointer to an unsigned byte array */
-#define BitsInByte    8L        /* The number of bits in a byte */
+#define BitsInByte 8L        /* The number of bits in a byte */
 
-#define BitInByte(bit)	        /* Returns the bit mask of a byte */ \
+#define BitInByte(bit)         /* Returns the bit mask of a byte */ \
     (1L << (((bit) % BitsInByte)))
 
-#define BitInWord(bit)	        /* Returns the bit mask of a word */ \
+#define BitInWord(bit)         /* Returns the bit mask of a word */ \
     (1L << (((bit) % (BitsInByte * 2L))))
 
-#define BitInLong(bit)	        /* Returns the bit mask of a long */ \
+#define BitInLong(bit)         /* Returns the bit mask of a long */ \
     (1L << (((bit) % (BitsInByte * 4L))))
 
-#define ByteInArray(array,bit)	/* Returns the byte offset to get to a bit */ \
+#define ByteInArray(array, bit) /* Returns the byte offset to get to a bit */ \
     (((UByteP)(array))[(bit) / BitsInByte])
 
-#define BitIsTrue(array,bit)    /* Test to see if a specific bit is True */ \
-    (ByteInArray(array,bit) & BitInByte(bit))
+#define BitIsTrue(array, bit)    /* Test to see if a specific bit is True */ \
+    (ByteInArray(array, bit) & BitInByte(bit))
 
-#define BitIsFalse(array,bit)   /* Test to see if a specific bit is False */ \
-    (!(BitIsTrue(array,bit)))
+#define BitIsFalse(array, bit)   /* Test to see if a specific bit is False */ \
+    (!(BitIsTrue(array, bit)))
 
-#define BitTrue(array,bit)      /* Set a specific bit to be True */ \
-    (ByteInArray(array,bit) |= BitInByte(bit))
+#define BitTrue(array, bit)      /* Set a specific bit to be True */ \
+    (ByteInArray(array, bit) |= BitInByte(bit))
 
-#define BitFalse(array,bit)     /* Set a specific bit to be False */ \
-    (ByteInArray(array,bit) &= ~BitInByte(bit))
+#define BitFalse(array, bit)     /* Set a specific bit to be False */ \
+    (ByteInArray(array, bit) &= ~BitInByte(bit))
 
-#define BitToggle(array,bit)    /* Toggle a specific bit */ \
-    (ByteInArray(array,bit) ^= BitInByte(bit))
+#define BitToggle(array, bit)    /* Toggle a specific bit */ \
+    (ByteInArray(array, bit) ^= BitInByte(bit))
 
-#define BitCopy(dest,src,bit)   /* Copy a specific bit */ \
-    BitIsTrue((src),(bit)) ? BitTrue((dest),(bit)) : BitFalse((dest),(bit))
+#define BitCopy(dest, src, bit)   /* Copy a specific bit */ \
+    BitIsTrue((src), (bit)) ? BitTrue((dest), (bit)) : BitFalse((dest), (bit))
 
-#define BitValue(array,bit)     /* Return True or False depending on bit */ \
-    (BitIsTrue((array),(bit)) ? True : False)
+#define BitValue(array, bit)     /* Return True or False depending on bit */ \
+    (BitIsTrue((array), (bit)) ? True : False)
 
-#define BitSet(array,bit,value) /* Set bit to given value in array */ \
-    (value) ? BitTrue((array),(bit)) : BitFalse((array),(bit))
+#define BitSet(array, bit, value) /* Set bit to given value in array */ \
+    (value) ? BitTrue((array), (bit)) : BitFalse((array), (bit))
 
 #endif /* __XTRAPBITS__ */

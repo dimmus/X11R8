@@ -110,37 +110,36 @@ in this Software without prior written authorization from the X Consortium.
 
 */
 
-
 /*
  * Value returned when there are no highlighted objects.
  */
 
 #define XAW_LIST_NONE -1
 
-#define XtCList "List"
-#define XtCSpacing "Spacing"
-#define XtCColumns "Columns"
-#define XtCLongest "Longest"
+#define XtCList          "List"
+#define XtCSpacing       "Spacing"
+#define XtCColumns       "Columns"
+#define XtCLongest       "Longest"
 #define XtCNumberStrings "NumberStrings"
 
-#define XtNcursor "cursor"
-#define XtNcolumnSpacing "columnSpacing"
+#define XtNcursor         "cursor"
+#define XtNcolumnSpacing  "columnSpacing"
 #define XtNdefaultColumns "defaultColumns"
-#define XtNforceColumns "forceColumns"
-#define XtNlist "list"
-#define XtNlongest "longest"
-#define XtNnumberStrings "numberStrings"
-#define XtNpasteBuffer "pasteBuffer"
-#define XtNrowSpacing "rowSpacing"
-#define XtNverticalList "verticalList"
+#define XtNforceColumns   "forceColumns"
+#define XtNlist           "list"
+#define XtNlongest        "longest"
+#define XtNnumberStrings  "numberStrings"
+#define XtNpasteBuffer    "pasteBuffer"
+#define XtNrowSpacing     "rowSpacing"
+#define XtNverticalList   "verticalList"
 
 #ifdef XAW_INTERNATIONALIZATION
-#ifndef XtNfontSet
-#define XtNfontSet "fontSet"
-#endif
-#ifndef XtCFontSet
-#define XtCFontSet "FontSet"
-#endif
+#  ifndef XtNfontSet
+#    define XtNfontSet "fontSet"
+#  endif
+#  ifndef XtCFontSet
+#    define XtCFontSet "FontSet"
+#  endif
 #endif
 
 /* Class record constants */
@@ -152,9 +151,10 @@ typedef struct _ListRec      *ListWidget;
 
 /* The list return structure. */
 
-typedef struct _XawListReturnStruct {
-  String string;
-  int list_index;
+typedef struct _XawListReturnStruct
+{
+    String string;
+    int    list_index;
 } XawListReturnStruct;
 
 /******************************************************************
@@ -179,15 +179,14 @@ _XFUNCPROTOBEGIN
  *                 If nitems is <= 0 then the list needs to be NULL terminated.
  */
 
-extern void XawListChange(
-    Widget		/* w */,
-    char**		/* list */,
-    int			/* nitems */,
-    int			/* longest */,
+extern void XawListChange(Widget /* w */,
+                          char ** /* list */,
+                          int /* nitems */,
+                          int /* longest */,
 #if NeedWidePrototypes
-    /* Boolean */ int	/* resize */
+                          /* Boolean */ int /* resize */
 #else
-    Boolean		/* resize */
+                          Boolean  /* resize */
 #endif
 );
 
@@ -197,8 +196,7 @@ extern void XawListChange(
  *	Returns: none.
  */
 
-extern void XawListUnhighlight(
-    Widget		/* w */
+extern void XawListUnhighlight(Widget  /* w */
 );
 
 /*	Function Name: XawListHighlight
@@ -208,11 +206,8 @@ extern void XawListUnhighlight(
  *	Returns: none.
  */
 
-extern void XawListHighlight(
-    Widget		/* w */,
-    int			/* item */
+extern void XawListHighlight(Widget /* w */, int   /* item */
 );
-
 
 /*	Function Name: XawListShowCurrent
  *	Description: returns the currently highlighted object.
@@ -220,8 +215,7 @@ extern void XawListHighlight(
  *	Returns: the info about the currently highlighted object.
  */
 
-extern XawListReturnStruct * XawListShowCurrent(
-    Widget		/* w */
+extern XawListReturnStruct *XawListShowCurrent(Widget  /* w */
 );
 
 _XFUNCPROTOEND

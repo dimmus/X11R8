@@ -39,41 +39,29 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 /* arrow scrollbars */
 
 #ifndef XtX
-#define XtX(w)			(((RectObj)w)->rectangle.x)
+#  define XtX(w) (((RectObj)w)->rectangle.x)
 #endif
 #ifndef XtY
-#define XtY(w)			(((RectObj)w)->rectangle.y)
+#  define XtY(w) (((RectObj)w)->rectangle.y)
 #endif
 #ifndef XtWidth
-#define XtWidth(w)		(((RectObj)w)->rectangle.width)
+#  define XtWidth(w) (((RectObj)w)->rectangle.width)
 #endif
 #ifndef XtHeight
-#define XtHeight(w)		(((RectObj)w)->rectangle.height)
+#  define XtHeight(w) (((RectObj)w)->rectangle.height)
 #endif
 #ifndef XtBorderWidth
-#define XtBorderWidth(w)	(((RectObj)w)->rectangle.border_width)
+#  define XtBorderWidth(w) (((RectObj)w)->rectangle.border_width)
 #endif
 
 #ifdef XAW_GRAY_BLKWHT_STIPPLES
-extern unsigned long
-grayPixel(
-    unsigned long,
-    Display *,
-    Screen *
-);
+extern unsigned long grayPixel(unsigned long, Display *, Screen *);
 #else
-#define grayPixel(p, dpy, scn)	(p)
+#  define grayPixel(p, dpy, scn) (p)
 #endif
 
 #ifdef XAW_MULTIPLANE_PIXMAPS
-extern Pixmap
-stipplePixmap(
-    Widget,
-    Pixmap,
-    Colormap,
-    Pixel,
-    unsigned int
-);
+extern Pixmap stipplePixmap(Widget, Pixmap, Colormap, Pixel, unsigned int);
 #endif
 
-#endif	/* _Xaw3dP_h */
+#endif /* _Xaw3dP_h */

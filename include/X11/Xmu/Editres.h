@@ -28,12 +28,7 @@ in this Software without prior written authorization from The Open Group.
 
 _XFUNCPROTOBEGIN
 
-void _XEditResCheckMessages
-(
- Widget			w,
- XtPointer		data,
- XEvent			*event,
- Boolean		*cont
-);
+void
+_XEditResCheckMessages(Widget w, XtPointer data, XEvent *event, Boolean *cont);
 
 _XFUNCPROTOEND

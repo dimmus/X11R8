@@ -54,32 +54,36 @@ SOFTWARE.
 #define DEFAULT_GRIP_SIZE 8
 
 /* New fields for the Grip widget class */
-typedef struct {
+typedef struct
+{
     XtPointer extension;
 } GripClassPart;
 
 /* Full Class record */
-typedef struct _GripClassRec {
-    CoreClassPart    core_class;
-    SimpleClassPart  simple_class;
-    GripClassPart    grip_class;
+typedef struct _GripClassRec
+{
+    CoreClassPart   core_class;
+    SimpleClassPart simple_class;
+    GripClassPart   grip_class;
 } GripClassRec;
 
 extern GripClassRec gripClassRec;
 
 /* New fields for the Grip widget */
-typedef struct {
+typedef struct
+{
     XtCallbackList grip_action;
 #ifndef OLDXAW
-    XtPointer pad[4];	/* for future use and keep binary compatibility */
+    XtPointer pad[4]; /* for future use and keep binary compatibility */
 #endif
 } GripPart;
 
 /* Full instance record */
-typedef struct _GripRec {
-    CorePart	core;
-    SimplePart	simple;
-    GripPart	grip;
+typedef struct _GripRec
+{
+    CorePart   core;
+    SimplePart simple;
+    GripPart   grip;
 } GripRec;
 
 #endif /* _XawGripP_h */

@@ -111,29 +111,28 @@ SOFTWARE.
  */
 
 #define XtCMinimumThumb "MinimumThumb"
-#define XtCShown "Shown"
-#define XtCTopOfThumb "TopOfThumb"
-#define XtCPickTop "PickTop"
+#define XtCShown        "Shown"
+#define XtCTopOfThumb   "TopOfThumb"
+#define XtCPickTop      "PickTop"
 
 #define XtNminimumThumb "minimumThumb"
-#define XtNtopOfThumb "topOfThumb"
-#define XtNpickTop "pickTop"
+#define XtNtopOfThumb   "topOfThumb"
+#define XtNpickTop      "pickTop"
 
-typedef struct _ScrollbarRec	  *ScrollbarWidget;
+typedef struct _ScrollbarRec      *ScrollbarWidget;
 typedef struct _ScrollbarClassRec *ScrollbarWidgetClass;
 
 extern WidgetClass scrollbarWidgetClass;
 
 _XFUNCPROTOBEGIN
 
-extern void XawScrollbarSetThumb(
-    Widget		/* scrollbar */,
+extern void XawScrollbarSetThumb(Widget /* scrollbar */,
 #if NeedWidePrototypes
-    /* float */ double	/* top */,
-    /* float */	double	/* shown */
+                                 /* float */ double /* top */,
+                                 /* float */ double /* shown */
 #else
-    float		/* top */,
-    float		/* shown */
+                                 float /* top */,
+                                 float  /* shown */
 #endif
 );
 

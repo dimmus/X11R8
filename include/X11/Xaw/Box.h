@@ -75,22 +75,22 @@ SOFTWARE.
 */
 
 #ifndef _XtStringDefs_h_
-#define XtNhSpace "hSpace"
-#define XtNvSpace "vSpace"
+#  define XtNhSpace "hSpace"
+#  define XtNvSpace "vSpace"
 #endif
 
 #ifndef OLDXAW
-#ifndef XawNdisplayList
-#define XawNdisplayList "displayList"
-#endif
+#  ifndef XawNdisplayList
+#    define XawNdisplayList "displayList"
+#  endif
 
-#ifndef XawCDisplayList
-#define XawCDisplayList "DisplayList"
-#endif
+#  ifndef XawCDisplayList
+#    define XawCDisplayList "DisplayList"
+#  endif
 
-#ifndef XawRDisplayList
-#define XawRDisplayList "XawDisplayList"
-#endif
+#  ifndef XawRDisplayList
+#    define XawRDisplayList "XawDisplayList"
+#  endif
 #endif /* OLDXAW */
 
 /* Class record constants */

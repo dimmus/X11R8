@@ -22,7 +22,6 @@
  *      Author: Li Yuhong	 OMRON Corporation
  */
 
-
 /***********************************************************
 
 Copyright (c) 1987, 1988, 1991, 1994  X Consortium
@@ -109,21 +108,22 @@ SOFTWARE.
  ************************************************************/
 
 #ifdef L_tmpnam
-#define TMPSIZ L_tmpnam
+#  define TMPSIZ L_tmpnam
 #else
-#define TMPSIZ 32		/* bytes to allocate for tmpnam */
+#  define TMPSIZ 32  /* bytes to allocate for tmpnam */
 #endif
 
-#define MAGIC_VALUE ((XawTextPosition) -1) /* Magic value. */
+#define MAGIC_VALUE ((XawTextPosition) - 1) /* Magic value. */
 
-#define streq(a, b)        ( strcmp((a), (b)) == 0 )
+#define streq(a, b) (strcmp((a), (b)) == 0)
 
-typedef struct _MultiPiece {	/* Piece of the text file of BUFSIZ allocated
+typedef struct _MultiPiece
+{ /* Piece of the text file of BUFSIZ allocated
 				   characters. */
-  wchar_t* text;		/* The text in this buffer. */
-  XawTextPosition used;		/* The number of characters of this buffer
+    wchar_t            *text;  /* The text in this buffer. */
+    XawTextPosition     used;  /* The number of characters of this buffer
 				   that have been used. */
-  struct _MultiPiece *prev, *next;	/* linked list pointers. */
+    struct _MultiPiece *prev, *next; /* linked list pointers. */
 } MultiPiece;
 
 /************************************************************
@@ -132,43 +132,47 @@ typedef struct _MultiPiece {	/* Piece of the text file of BUFSIZ allocated
  *
  ************************************************************/
 
-typedef struct _MultiSrcClassPart { char foo; } MultiSrcClassPart;
+typedef struct _MultiSrcClassPart
+{
+    char foo;
+} MultiSrcClassPart;
 
 /* Full class record declaration */
-typedef struct _MultiSrcClassRec {
-    ObjectClassPart     object_class;
-    TextSrcClassPart	text_src_class;
-    MultiSrcClassPart	multi_src_class;
+typedef struct _MultiSrcClassRec
+{
+    ObjectClassPart   object_class;
+    TextSrcClassPart  text_src_class;
+    MultiSrcClassPart multi_src_class;
 } MultiSrcClassRec;
 
 extern MultiSrcClassRec multiSrcClassRec;
 
 /* New fields for the MultiSrc object record */
 
-typedef struct _MultiSrcPart {
-
+typedef struct _MultiSrcPart
+{
   /* Resources. */
 
-  XIC ic;			/* for X Input Method. */
-  XtPointer string;		/* either the string, or the file name, depend-
+    XIC             ic;   /* for X Input Method. */
+    XtPointer       string;  /* either the string, or the file name, depend-
                                  ing upon the `type'.  ALWAYS IN MB FORMAT. */
-  XawAsciiType type;		/* either string or disk. */
-  XawTextPosition piece_size;	/* Size of text buffer for each piece. */
-  Boolean data_compression;	/* compress to minimum memory automatically
+    XawAsciiType    type;  /* either string or disk. */
+    XawTextPosition piece_size; /* Size of text buffer for each piece. */
+    Boolean        data_compression; /* compress to minimum memory automatically
 				   on save? */
-  XtCallbackList callback;	/* A callback list to call when the source is
+    XtCallbackList callback; /* A callback list to call when the source is
 				   changed. */
-  Boolean use_string_in_place;	/* Use the string passed in place. */
-  int     multi_length;		/* length field for multi string emulation. */
+    Boolean        use_string_in_place; /* Use the string passed in place. */
+    int            multi_length; /* length field for multi string emulation. */
 
-/* Private data. */
+    /* Private data. */
 
-  Boolean	is_tempfile;	  /* Is this a temporary file? */
-  Boolean       changes;	  /* Has this file been edited? */
-  Boolean       allocated_string; /* Have I allocated the
+    Boolean         is_tempfile; /* Is this a temporary file? */
+    Boolean         changes; /* Has this file been edited? */
+    Boolean         allocated_string; /* Have I allocated the
 				     string in multi_src->string? */
-  XawTextPosition length; 	/* length of file - IN CHARACTERS, NOT BYTES. */
-  MultiPiece * first_piece;	/* first piece of the text. */
+    XawTextPosition length; /* length of file - IN CHARACTERS, NOT BYTES. */
+    MultiPiece     *first_piece; /* first piece of the text. */
 } MultiSrcPart;
 
 /****************************************************************
@@ -177,12 +181,13 @@ typedef struct _MultiSrcPart {
  *
  ****************************************************************/
 
-typedef struct _MultiSrcRec {
-  ObjectPart    object;
-  TextSrcPart	text_src;
-  MultiSrcPart	multi_src;
+typedef struct _MultiSrcRec
+{
+    ObjectPart   object;
+    TextSrcPart  text_src;
+    MultiSrcPart multi_src;
 } MultiSrcRec;
 
-extern void _XawMultiSourceFreeString( Widget );
+extern void _XawMultiSourceFreeString(Widget);
 
 #endif /* _XawMultiSrcP_h  --- Don't add anything after this line. */

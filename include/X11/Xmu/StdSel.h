@@ -37,17 +37,14 @@ in this Software without prior written authorization from The Open Group.
 
 _XFUNCPROTOBEGIN
 
-Boolean XmuConvertStandardSelection
-(
- Widget			w,
- Time			timev,
- Atom			*selection,
- Atom			*target,
- Atom			*type_return,
- XPointer		*value_return,
- unsigned long		*length_return,
- int			*format_return
- );
+Boolean XmuConvertStandardSelection(Widget         w,
+                                    Time           timev,
+                                    Atom          *selection,
+                                    Atom          *target,
+                                    Atom          *type_return,
+                                    XPointer      *value_return,
+                                    unsigned long *length_return,
+                                    int           *format_return);
 
 _XFUNCPROTOEND
 

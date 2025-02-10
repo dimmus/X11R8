@@ -53,15 +53,16 @@ extern "C" {
  * generated. See the X11R6 protocol specification for details.
  */
 #define XCB_EVENT_RESPONSE_TYPE_MASK (0x7f)
-#define XCB_EVENT_RESPONSE_TYPE(e)   (e->response_type &  XCB_EVENT_RESPONSE_TYPE_MASK)
-#define XCB_EVENT_SENT(e)            (e->response_type & ~XCB_EVENT_RESPONSE_TYPE_MASK)
+#define XCB_EVENT_RESPONSE_TYPE(e) \
+    (e->response_type & XCB_EVENT_RESPONSE_TYPE_MASK)
+#define XCB_EVENT_SENT(e) (e->response_type & ~XCB_EVENT_RESPONSE_TYPE_MASK)
 
 /**
  * @brief Convert an event response type to a label.
  * @param type The event type.
  * @return A string with the event name, or NULL if unknown.
  */
-const char * xcb_event_get_label(uint8_t type);
+const char *xcb_event_get_label(uint8_t type);
 
 /**
  * @brief Convert an event error type to a label.
@@ -69,7 +70,7 @@ const char * xcb_event_get_label(uint8_t type);
  * @return A string with the event name, or NULL if unknown or if the event is
  * not an error.
  */
-const char * xcb_event_get_error_label(uint8_t type);
+const char *xcb_event_get_error_label(uint8_t type);
 
 /**
  * @brief Convert an event request type to a label.
@@ -77,7 +78,7 @@ const char * xcb_event_get_error_label(uint8_t type);
  * @return A string with the event name, or NULL if unknown or if the event is
  * not an error.
  */
-const char * xcb_event_get_request_label(uint8_t type);
+const char *xcb_event_get_request_label(uint8_t type);
 
 #ifdef __cplusplus
 }

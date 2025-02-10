@@ -29,77 +29,88 @@ in this Software without prior written authorization from The Open Group.
 
 #include "X11/extensions/cup.h"
 
-#define X_XcupQueryVersion			0
-#define X_XcupGetReservedColormapEntries	1
-#define X_XcupStoreColors			2
+#define X_XcupQueryVersion               0
+#define X_XcupGetReservedColormapEntries 1
+#define X_XcupStoreColors                2
 
-typedef struct _XcupQueryVersion {
-    CARD8	reqType;	/* always XcupReqCode */
-    CARD8	xcupReqType;	/* always X_XcupQueryVersion */
-    CARD16	length;
-    CARD16	client_major_version;
-    CARD16	client_minor_version;
+typedef struct _XcupQueryVersion
+{
+    CARD8  reqType; /* always XcupReqCode */
+    CARD8  xcupReqType; /* always X_XcupQueryVersion */
+    CARD16 length;
+    CARD16 client_major_version;
+    CARD16 client_minor_version;
 } xXcupQueryVersionReq;
-#define sz_xXcupQueryVersionReq		8
 
-typedef struct {
-    BYTE	type;		/* X_Reply */
-    BOOL	pad1;
-    CARD16	sequence_number;
-    CARD32	length;
-    CARD16	server_major_version;
-    CARD16	server_minor_version;
-    CARD32	pad2;
-    CARD32	pad3;
-    CARD32	pad4;
-    CARD32	pad5;
-    CARD32	pad6;
+#define sz_xXcupQueryVersionReq 8
+
+typedef struct
+{
+    BYTE   type;  /* X_Reply */
+    BOOL   pad1;
+    CARD16 sequence_number;
+    CARD32 length;
+    CARD16 server_major_version;
+    CARD16 server_minor_version;
+    CARD32 pad2;
+    CARD32 pad3;
+    CARD32 pad4;
+    CARD32 pad5;
+    CARD32 pad6;
 } xXcupQueryVersionReply;
-#define sz_xXcupQueryVersionReply	32
 
-typedef struct _XcupGetReservedColormapEntries {
-    CARD8	reqType;	/* always XcupReqCode */
-    CARD8	xcupReqType;	/* always X_XcupGetReservedColormapEntries */
-    CARD16	length;
-    CARD32	screen;
+#define sz_xXcupQueryVersionReply 32
+
+typedef struct _XcupGetReservedColormapEntries
+{
+    CARD8  reqType; /* always XcupReqCode */
+    CARD8  xcupReqType; /* always X_XcupGetReservedColormapEntries */
+    CARD16 length;
+    CARD32 screen;
 } xXcupGetReservedColormapEntriesReq;
+
 #define sz_xXcupGetReservedColormapEntriesReq 8
 
-typedef struct {
-    BYTE	type;		/* X_Reply */
-    BOOL	pad1;
-    CARD16	sequence_number;
-    CARD32	length;
-    CARD32	pad2;
-    CARD32	pad3;
-    CARD32	pad4;
-    CARD32	pad5;
-    CARD32	pad6;
-    CARD32	pad7;
+typedef struct
+{
+    BYTE   type;  /* X_Reply */
+    BOOL   pad1;
+    CARD16 sequence_number;
+    CARD32 length;
+    CARD32 pad2;
+    CARD32 pad3;
+    CARD32 pad4;
+    CARD32 pad5;
+    CARD32 pad6;
+    CARD32 pad7;
 } xXcupGetReservedColormapEntriesReply;
-#define sz_xXcupGetReservedColormapEntriesReply		32
 
-typedef struct _XcupStoreColors {
-    CARD8	reqType;	/* always XcupReqCode */
-    CARD8	xcupReqType;	/* always X_XcupStoreColors */
-    CARD16	length;
-    CARD32	cmap;
+#define sz_xXcupGetReservedColormapEntriesReply 32
+
+typedef struct _XcupStoreColors
+{
+    CARD8  reqType; /* always XcupReqCode */
+    CARD8  xcupReqType; /* always X_XcupStoreColors */
+    CARD16 length;
+    CARD32 cmap;
 } xXcupStoreColorsReq;
-#define sz_xXcupStoreColorsReq		8
 
-typedef struct {
-    BYTE	type;		/* X_Reply */
-    BOOL	pad1;
-    CARD16	sequence_number;
-    CARD32	length;
-    CARD32	pad2;
-    CARD32	pad3;
-    CARD32	pad4;
-    CARD32	pad5;
-    CARD32	pad6;
-    CARD32	pad7;
+#define sz_xXcupStoreColorsReq 8
+
+typedef struct
+{
+    BYTE   type;  /* X_Reply */
+    BOOL   pad1;
+    CARD16 sequence_number;
+    CARD32 length;
+    CARD32 pad2;
+    CARD32 pad3;
+    CARD32 pad4;
+    CARD32 pad5;
+    CARD32 pad6;
+    CARD32 pad7;
 } xXcupStoreColorsReply;
-#define sz_xXcupStoreColorsReply	32
+
+#define sz_xXcupStoreColorsReply 32
 
 #endif /* } _XCUPPROTO_H_ */
-

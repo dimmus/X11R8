@@ -104,8 +104,8 @@ SOFTWARE.
  (see also *Src.h and *Sink.h)
 */
 
-typedef struct _AsciiTextClassRec	*AsciiTextWidgetClass;
-typedef struct _AsciiRec	        *AsciiWidget;
+typedef struct _AsciiTextClassRec *AsciiTextWidgetClass;
+typedef struct _AsciiRec          *AsciiWidget;
 
 extern WidgetClass asciiTextWidgetClass;
 

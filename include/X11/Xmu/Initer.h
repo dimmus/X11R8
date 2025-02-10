@@ -39,16 +39,9 @@ typedef void (*XmuInitializerProc)(XtAppContext app_context, XPointer data);
 
 _XFUNCPROTOBEGIN
 
-void XmuCallInitializers
-(
- XtAppContext		app_context
- );
+void XmuCallInitializers(XtAppContext app_context);
 
-void XmuAddInitializer
-(
- XmuInitializerProc	func,
- XPointer		data
- );
+void XmuAddInitializer(XmuInitializerProc func, XPointer data);
 
 _XFUNCPROTOEND
 

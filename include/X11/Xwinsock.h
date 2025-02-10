@@ -35,8 +35,8 @@ The Open Group.
 
 #undef _XFree86Server
 #ifdef XFree86Server
-# define _XFree86Server
-# undef XFree86Server
+#  define _XFree86Server
+#  undef XFree86Server
 #endif
 
 /*
@@ -45,14 +45,14 @@ The Open Group.
  * ... so try to come up with something which works with both :-)
  */
 #define _NO_BOOL_TYPEDEF
-#define BOOL WINBOOL
+#define BOOL  WINBOOL
 #define INT32 wINT32
 #undef Status
-#define Status wStatus
-#define ATOM wATOM
-#define BYTE wBYTE
+#define Status       wStatus
+#define ATOM         wATOM
+#define BYTE         wBYTE
 #define FreeResource wFreeResource
-#pragma push_macro ("ControlMask")
+#pragma push_macro("ControlMask")
 #undef ControlMask
 #include <winsock2.h>
 #undef Status
@@ -62,7 +62,7 @@ The Open Group.
 #undef INT32
 #undef ATOM
 #undef FreeResource
-#pragma pop_macro ("ControlMask")
+#pragma pop_macro("ControlMask")
 #undef CreateWindowA
 #undef RT_FONT
 #undef RT_CURSOR
@@ -74,7 +74,6 @@ The Open Group.
 #define wBOOL WINBOOL
 
 #ifdef _XFree86Server
-# define XFree86Server
-# undef _XFree86Server
+#  define XFree86Server
+#  undef _XFree86Server
 #endif
-

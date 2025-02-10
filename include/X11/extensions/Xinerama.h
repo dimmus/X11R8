@@ -29,30 +29,23 @@ in this Software without prior written authorization from The Open Group.
 
 #include "X11/Xlib.h"
 
-typedef struct {
-   int   screen_number;
-   short x_org;
-   short y_org;
-   short width;
-   short height;
+typedef struct
+{
+    int   screen_number;
+    short x_org;
+    short y_org;
+    short width;
+    short height;
 } XineramaScreenInfo;
 
 _XFUNCPROTOBEGIN
 
-Bool XineramaQueryExtension (
-   Display *dpy,
-   int     *event_base,
-   int     *error_base
-);
+Bool XineramaQueryExtension(Display *dpy, int *event_base, int *error_base);
 
-Status XineramaQueryVersion(
-   Display *dpy,
-   int     *major_versionp,
-   int     *minor_versionp
-);
+Status
+XineramaQueryVersion(Display *dpy, int *major_versionp, int *minor_versionp);
 
 Bool XineramaIsActive(Display *dpy);
-
 
 /*
    Returns the number of heads and a pointer to an array of
@@ -62,13 +55,8 @@ Bool XineramaIsActive(Display *dpy);
    Returned array should be freed with XFree().
 */
 
-XineramaScreenInfo *
-XineramaQueryScreens(
-   Display *dpy,
-   int     *number
-);
+XineramaScreenInfo *XineramaQueryScreens(Display *dpy, int *number);
 
 _XFUNCPROTOEND
 
 #endif /* _Xinerama_h */
-

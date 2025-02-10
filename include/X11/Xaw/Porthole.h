@@ -54,7 +54,7 @@ in this Software without prior written authorization from The Open Group.
  *
  *****************************************************************************/
 
-extern WidgetClass portholeWidgetClass;
+extern WidgetClass                portholeWidgetClass;
 typedef struct _PortholeClassRec *PortholeWidgetClass;
 typedef struct _PortholeRec      *PortholeWidget;
 

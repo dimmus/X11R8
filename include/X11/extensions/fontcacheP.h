@@ -33,8 +33,8 @@
 
 #include "X11/extensions/fontcache.h"
 
-int	FontCacheChangeSettings(FontCacheSettingsPtr /* cinfo */);
-void	FontCacheGetSettings(FontCacheSettingsPtr /* cinfo */);
-void	FontCacheGetStatistics(FontCacheStatisticsPtr /* cstats */);
+int  FontCacheChangeSettings(FontCacheSettingsPtr /* cinfo */);
+void FontCacheGetSettings(FontCacheSettingsPtr /* cinfo */);
+void FontCacheGetStatistics(FontCacheStatisticsPtr /* cstats */);
 
 #endif /* _FONTCACHEP_H_ */

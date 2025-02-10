@@ -29,7 +29,7 @@ authorization from The XFree86 Project Inc..
 #define _XDEFS_H
 
 #ifdef _XSERVER64
-#include "X11/Xmd.h"
+#  include "X11/Xmd.h"
 #endif
 
 #ifndef _XTYPEDEF_ATOM
@@ -43,7 +43,7 @@ typedef CARD32 Atom;
 
 #ifndef Bool
 #  ifndef _XTYPEDEF_BOOL
-#   define _XTYPEDEF_BOOL
+#    define _XTYPEDEF_BOOL
 typedef int Bool;
 #  endif
 #endif
@@ -83,7 +83,7 @@ typedef struct _Font *FontPtr; /* also in fonts/include/font.h */
 
 #ifndef _XTYPEDEF_FONT
 #  define _XTYPEDEF_FONT
-typedef XID	Font;
+typedef XID Font;
 #endif
 
 #ifndef _XTYPEDEF_FSID
@@ -100,9 +100,8 @@ typedef FSID AccContext;
    XXX Should probably go in Xos.h */
 typedef struct timeval **OSTimePtr;
 
-
-typedef void (* BlockHandlerProcPtr)(void * /* blockData */,
-				     OSTimePtr /* pTimeout */,
-				     void * /* pReadmask */);
+typedef void (*BlockHandlerProcPtr)(void * /* blockData */,
+                                    OSTimePtr /* pTimeout */,
+                                    void * /* pReadmask */);
 
 #endif

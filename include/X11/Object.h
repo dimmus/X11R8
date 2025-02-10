@@ -46,11 +46,11 @@ SOFTWARE.
 ******************************************************************/
 
 #ifndef _XtObject_h
-#define _XtObject_h
+#  define _XtObject_h
 
 _XFUNCPROTOBEGIN
 
-typedef struct _ObjectRec *Object;
+typedef struct _ObjectRec      *Object;
 typedef struct _ObjectClassRec *ObjectClass;
 
 externalref WidgetClass objectClass;

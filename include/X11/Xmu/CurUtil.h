@@ -36,10 +36,7 @@ in this Software without prior written authorization from The Open Group.
 
 _XFUNCPROTOBEGIN
 
-int XmuCursorNameToIndex
-(
- _Xconst char	*name
- );
+int XmuCursorNameToIndex(_Xconst char *name);
 
 _XFUNCPROTOEND
 

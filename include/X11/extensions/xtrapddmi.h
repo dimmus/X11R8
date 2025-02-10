@@ -47,16 +47,16 @@ SOFTWARE.
 #include "dix.h"
 
 #ifndef MIN
-# define MIN(a,b) ((a) < (b) ? (a) : (b))
+#  define MIN(a, b) ((a) < (b) ? (a) : (b))
 #endif
 #ifndef MAX
-# define MAX(a,b) ((a) > (b) ? (a) : (b))
+#  define MAX(a, b) ((a) > (b) ? (a) : (b))
 #endif
 
-#define XETrapNumEvents    1L  /* constants used for AddExtension */
+#define XETrapNumEvents 1L  /* constants used for AddExtension */
 
 /* Other constants used within the extension code */
-#define XETrapMinRepSize        32L        /* Minimum number of longs */
+#define XETrapMinRepSize 32L        /* Minimum number of longs */
 
 /* This structure will be globally declared to provide storage to hold
  * the various extension wide configuration information.  Allocated on
@@ -64,52 +64,52 @@ SOFTWARE.
  */
 typedef struct
 {
-    ClientPtr            client;  /* Multi-client support and error handling */
-    xXTrapGetCurReply    cur;    /* Struct of Miscellaneous state info */
-    xXTrapGetStatsReply  *stats; /* Pointer to stat's, malloc'd if requested */
-    CARD32 last_input_time;      /* last timestamp from input event */
-    CARD16 protocol;             /* current communication protocol */
+    ClientPtr            client; /* Multi-client support and error handling */
+    xXTrapGetCurReply    cur; /* Struct of Miscellaneous state info */
+    xXTrapGetStatsReply *stats; /* Pointer to stat's, malloc'd if requested */
+    CARD32               last_input_time; /* last timestamp from input event */
+    CARD16               protocol; /* current communication protocol */
 } XETrapEnv;
 
-#define XETrapSetHeaderEvent(phdr)      ((phdr)->type = 0x1L)
-#define XETrapSetHeaderRequest(phdr)    ((phdr)->type = 0x2L)
-#define XETrapSetHeaderSpecial(phdr)    ((phdr)->type = 0x3L)
-#define XETrapSetHeaderCursor(phdr)     ((phdr)->type = 0x4L)
-#define XETrapSetHeaderReply(phdr)      ((phdr)->type = 0x5L)
+#define XETrapSetHeaderEvent(phdr)   ((phdr)->type = 0x1L)
+#define XETrapSetHeaderRequest(phdr) ((phdr)->type = 0x2L)
+#define XETrapSetHeaderSpecial(phdr) ((phdr)->type = 0x3L)
+#define XETrapSetHeaderCursor(phdr)  ((phdr)->type = 0x4L)
+#define XETrapSetHeaderReply(phdr)   ((phdr)->type = 0x5L)
 
 #ifndef vaxc
-#define globaldef
-#define globalref extern
+#  define globaldef
+#  define globalref extern
 #endif
 
 /* Extension platform identifier (conditionally defined) */
-#if ( defined (__osf__) && defined(__alpha) )
-# define XETrapPlatform    PF_DECOSF1
+#if (defined(__osf__) && defined(__alpha))
+#  define XETrapPlatform PF_DECOSF1
 #endif
 #ifdef ultrix
-# define XETrapPlatform    PF_DECUltrix
+#  define XETrapPlatform PF_DECUltrix
 #endif
 #ifdef vms
-#ifdef VAXELN
-# define XETrapPlatform    PF_DECELN
-#else
-# define XETrapPlatform    PF_DECVMS
-#endif
+#  ifdef VAXELN
+#    define XETrapPlatform PF_DECELN
+#  else
+#    define XETrapPlatform PF_DECVMS
+#  endif
 #endif
 #ifdef VT1000
-# define XETrapPlatform    PF_DECVT1000
+#  define XETrapPlatform PF_DECVT1000
 #endif
 #ifdef VXT
-# define XETrapPlatform    PF_DECXTerm
+#  define XETrapPlatform PF_DECXTerm
 #endif
 #ifdef PC
-# define XETrapPlatform    PF_IBMAT
+#  define XETrapPlatform PF_IBMAT
 #endif
 #ifdef sun
-# define XETrapPlatform    PF_SunSparc
+#  define XETrapPlatform PF_SunSparc
 #endif
 #ifndef XETrapPlatform
-# define XETrapPlatform    PF_Other
-#endif  /* XETrapPlatform */
+#  define XETrapPlatform PF_Other
+#endif /* XETrapPlatform */
 
 #endif /* __XTRAPDDMI__ */

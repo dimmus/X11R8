@@ -55,49 +55,61 @@ extern "C" {
 #define XtN3dxftData "3dxftData"
 #define XtN3dxftProc "3dxftProc"
 
-#define GET_XAW3DXFT_DATA(x) XawInitializeWidgetSet(); \
-    x = (Xaw3dXftData *)XrmQuarkToString(XrmStringToQuark("Xaw3dXftData")+1); \
-    if (x) x = (Xaw3dXftData *) strtoul((char *)((char *)x+4), NULL, 10);
+#define GET_XAW3DXFT_DATA(x)                                                \
+    XawInitializeWidgetSet();                                               \
+    x = (Xaw3dXftData *)XrmQuarkToString(XrmStringToQuark("Xaw3dXftData") + \
+                                         1);                                \
+    if (x) x = (Xaw3dXftData *)strtoul((char *)((char *)x + 4), NULL, 10);
 
-typedef struct _Xaw3dXftProc {
-    void (* set_default_hilit_color)(void);
-    void (* set_hilit_color)(char * value);
-    void (* set_default_fontname)(char *name);
-    void (* set_insensitive_twist)(char *value);
-    XftFont * (* get_font)(Display *dpy, char *name);
-    int (* text_width)(Widget w, XftFont *font, char *str, int len);
-    void (* draw_string)(Widget w, XftFont *font, int x, int y, char *str, int len);
+typedef struct _Xaw3dXftProc
+{
+    void (*set_default_hilit_color)(void);
+    void (*set_hilit_color)(char *value);
+    void (*set_default_fontname)(char *name);
+    void (*set_insensitive_twist)(char *value);
+    XftFont *(*get_font)(Display *dpy, char *name);
+    int (*text_width)(Widget w, XftFont *font, char *str, int len);
+    void (*draw_string)(Widget   w,
+                        XftFont *font,
+                        int      x,
+                        int      y,
+                        char    *str,
+                        int      len);
 #ifdef XAW_ARROW_SCROLLBARS
-    Widget (* get_scrollbar)(Widget w, XtPointer ptr);
-    void (* handle_mousewheel)(Widget w, XtPointer ptr, XEvent *event, Boolean * flg);
-    void (* set_mousewheel_handler)(Widget w, XtPointer ptr);
-    void (* set_mousewheel_steps )(Widget w, XtPointer ptr, int n);
-#endif  
+    Widget (*get_scrollbar)(Widget w, XtPointer ptr);
+    void (*handle_mousewheel)(Widget    w,
+                              XtPointer ptr,
+                              XEvent   *event,
+                              Boolean  *flg);
+    void (*set_mousewheel_handler)(Widget w, XtPointer ptr);
+    void (*set_mousewheel_steps)(Widget w, XtPointer ptr, int n);
+#endif
 } Xaw3dXftProc;
 
-typedef struct _Xaw3dXftData {
-    char encoding;
-    char string_hilight;
-    char text_bg_hilight;
-    char string_use_pixmap;
-    char menu_spacing;
-    char show_tips;
-    char tip_do_grab;
-    char border_hack;
-    char no_hilit_reverse;
-    char button_inverse;
-    char button_dashed;
-    char multi_column_menu;
-    char edit_delete_alternative;
-    char text_sb_right;  
+typedef struct _Xaw3dXftData
+{
+    char           encoding;
+    char           string_hilight;
+    char           text_bg_hilight;
+    char           string_use_pixmap;
+    char           menu_spacing;
+    char           show_tips;
+    char           tip_do_grab;
+    char           border_hack;
+    char           no_hilit_reverse;
+    char           button_inverse;
+    char           button_dashed;
+    char           multi_column_menu;
+    char           edit_delete_alternative;
+    char           text_sb_right;
     unsigned short insensitive_twist[4];
-    Xaw3dXftProc * proc;
-    Pixel tip_background_color;
-    Pixel text_bg_hilight_color;
-    Pixel text_fg_alternate_color;
-    char * hilit_color;
-    char * default_fontname;
-    XftFont * default_font;
+    Xaw3dXftProc  *proc;
+    Pixel          tip_background_color;
+    Pixel          text_bg_hilight_color;
+    Pixel          text_fg_alternate_color;
+    char          *hilit_color;
+    char          *default_fontname;
+    XftFont       *default_font;
 } Xaw3dXftData;
 
 #ifdef __cplusplus

@@ -27,9 +27,8 @@ THE SOFTWARE.
    *not* provide source compatibility, as many of the data structures
    now have different names. */
 
-extern char *font_encoding_from_xlfd(const char*, int);
-extern unsigned font_encoding_recode(unsigned, FontEncPtr, FontMapPtr);
-extern FontEncPtr font_encoding_find(const char*, const char*);
-extern char *font_encoding_name(unsigned, FontEncPtr, FontMapPtr);
-extern char **identifyEncodingFile(const char *fileName);
-
+extern char      *font_encoding_from_xlfd(const char *, int);
+extern unsigned   font_encoding_recode(unsigned, FontEncPtr, FontMapPtr);
+extern FontEncPtr font_encoding_find(const char *, const char *);
+extern char      *font_encoding_name(unsigned, FontEncPtr, FontMapPtr);
+extern char     **identifyEncodingFile(const char *fileName);

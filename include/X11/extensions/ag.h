@@ -29,24 +29,23 @@ from The Open Group.
 
 #define XAGNAME "XC-APPGROUP"
 
-#define XAG_MAJOR_VERSION	1	/* current version numbers */
-#define XAG_MINOR_VERSION	0
+#define XAG_MAJOR_VERSION 1 /* current version numbers */
+#define XAG_MINOR_VERSION 0
 
-#define XagWindowTypeX11	0
-#define XagWindowTypeMacintosh	1
-#define XagWindowTypeWin32	2
-#define XagWindowTypeWin16	3
+#define XagWindowTypeX11       0
+#define XagWindowTypeMacintosh 1
+#define XagWindowTypeWin32     2
+#define XagWindowTypeWin16     3
 
-#define XagBadAppGroup			0
-#define XagNumberErrors			(XagBadAppGroup + 1)
+#define XagBadAppGroup  0
+#define XagNumberErrors (XagBadAppGroup + 1)
 
-#define XagNsingleScreen		7
-#define XagNdefaultRoot			1
-#define XagNrootVisual			2
-#define XagNdefaultColormap		3
-#define XagNblackPixel			4
-#define XagNwhitePixel			5
-#define XagNappGroupLeader		6
+#define XagNsingleScreen    7
+#define XagNdefaultRoot     1
+#define XagNrootVisual      2
+#define XagNdefaultColormap 3
+#define XagNblackPixel      4
+#define XagNwhitePixel      5
+#define XagNappGroupLeader  6
 
 #endif /* _AG_H_ */
-

@@ -31,30 +31,34 @@ in this Software without prior written authorization from The Open Group.
 #include "X11/Xaw/Porthole.h"
 
 /* new fields in widget class */
-typedef struct {
+typedef struct
+{
     XtPointer extension;
 } PortholeClassPart;
 
 /* widget class */
-typedef struct _PortholeClassRec {
-    CoreClassPart core_class;
+typedef struct _PortholeClassRec
+{
+    CoreClassPart      core_class;
     CompositeClassPart composite_class;
-    PortholeClassPart porthole_class;
+    PortholeClassPart  porthole_class;
 } PortholeClassRec;
 
 /* new fields in widget */
-typedef struct {
+typedef struct
+{
     /* resources */
-    XtCallbackList report_callbacks;	/* callback/Callback */
+    XtCallbackList report_callbacks; /* callback/Callback */
 #ifndef OLDXAW
-    XtPointer pad[4];	/* for future use and keep binary compatibility */
+    XtPointer pad[4]; /* for future use and keep binary compatibility */
 #endif
 } PortholePart;
 
-typedef struct _PortholeRec {
-    CorePart core;
+typedef struct _PortholeRec
+{
+    CorePart      core;
     CompositePart composite;
-    PortholePart porthole;
+    PortholePart  porthole;
 } PortholeRec;
 
 extern PortholeClassRec portholeClassRec;

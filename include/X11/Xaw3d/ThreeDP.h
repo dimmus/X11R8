@@ -31,44 +31,47 @@ SOFTWARE.
 
 #define XtRRelief "Relief"
 
-typedef struct {
-    Dimension	shadow_width;
-    Pixel	top_shadow_pixel;
-    Pixel	bot_shadow_pixel;
-    Pixmap	top_shadow_pxmap;
-    Pixmap	bot_shadow_pxmap;
-    int		top_shadow_contrast;
-    int		bot_shadow_contrast;
-    GC		top_shadow_GC;
-    GC		bot_shadow_GC;
-    XtPointer	user_data;
-    Boolean	be_nice_to_cmap;
-    XtRelief	relief;
-  } ThreeDPart;
+typedef struct
+{
+    Dimension shadow_width;
+    Pixel     top_shadow_pixel;
+    Pixel     bot_shadow_pixel;
+    Pixmap    top_shadow_pxmap;
+    Pixmap    bot_shadow_pxmap;
+    int       top_shadow_contrast;
+    int       bot_shadow_contrast;
+    GC        top_shadow_GC;
+    GC        bot_shadow_GC;
+    XtPointer user_data;
+    Boolean   be_nice_to_cmap;
+    XtRelief  relief;
+} ThreeDPart;
 
 /* Full instance record declaration */
-typedef struct _ThreeDRec {
-    CorePart	core;
-    SimplePart	simple;
-    ThreeDPart	threeD;
-  } ThreeDRec;
+typedef struct _ThreeDRec
+{
+    CorePart   core;
+    SimplePart simple;
+    ThreeDPart threeD;
+} ThreeDRec;
 
-typedef struct {
+typedef struct
+{
     void (*shadowdraw)(Widget, XEvent *, Region, XtRelief, Boolean);
-  } ThreeDClassPart;
+} ThreeDClassPart;
 
 #define XtInheritXaw3dShadowDraw \
-((void (*)(Widget, XEvent *, Region, XtRelief, Boolean))_XtInherit)
+    ((void (*)(Widget, XEvent *, Region, XtRelief, Boolean))_XtInherit)
 
 /* Full class record declaration. */
-typedef struct _ThreeDClassRec {
-    CoreClassPart	core_class;
-    SimpleClassPart	simple_class;
-    ThreeDClassPart	threeD_class;
-  } ThreeDClassRec;
+typedef struct _ThreeDClassRec
+{
+    CoreClassPart   core_class;
+    SimpleClassPart simple_class;
+    ThreeDClassPart threeD_class;
+} ThreeDClassRec;
 
 /* Class pointer. */
 extern ThreeDClassRec threeDClassRec;
-
 
 #endif /* _ThreeDP_h */

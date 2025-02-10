@@ -52,14 +52,14 @@ SOFTWARE.
 
 /* two-key compose sequence initiators, chosen to map to Latin1 characters */
 
-#define DXK_ring_accent              0x1000feb0
-#define DXK_circumflex_accent        0x1000fe5e
-#define DXK_cedilla_accent           0x1000fe2c
-#define DXK_acute_accent             0x1000fe27
-#define DXK_grave_accent             0x1000fe60
-#define DXK_tilde                    0x1000fe7e
-#define DXK_diaeresis                0x1000fe22
+#define DXK_ring_accent       0x1000feb0
+#define DXK_circumflex_accent 0x1000fe5e
+#define DXK_cedilla_accent    0x1000fe2c
+#define DXK_acute_accent      0x1000fe27
+#define DXK_grave_accent      0x1000fe60
+#define DXK_tilde             0x1000fe7e
+#define DXK_diaeresis         0x1000fe22
 
 /* special keysym for LK2** "Remove" key on editing keypad */
 
-#define DXK_Remove                   0x1000ff00  /* Remove */
+#define DXK_Remove 0x1000ff00  /* Remove */

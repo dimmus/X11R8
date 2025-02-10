@@ -86,12 +86,13 @@ SOFTWARE.
 
 #define XtNgripTranslations "gripTranslations"
 
-typedef struct _XawGripCallData {
-  XEvent *event;		/* the event causing the GripAction */
-  String *params;		/* the TranslationTable params */
-  Cardinal num_params;		/* count of params */
-} XawGripCallDataRec, *XawGripCallData,
-    GripCallDataRec, *GripCallData; /* supported for R4 compatibility */
+typedef struct _XawGripCallData
+{
+    XEvent  *event;  /* the event causing the GripAction */
+    String  *params;  /* the TranslationTable params */
+    Cardinal num_params;  /* count of params */
+} XawGripCallDataRec, *XawGripCallData, GripCallDataRec,
+    *GripCallData; /* supported for R4 compatibility */
 
 /* Class Record Constant */
 

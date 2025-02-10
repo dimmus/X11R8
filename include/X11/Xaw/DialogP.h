@@ -51,49 +51,55 @@ SOFTWARE.
 #include "X11/Xaw/Dialog.h"
 #include "X11/Xaw/FormP.h"
 
-typedef struct {
+typedef struct
+{
     XtPointer extension;
 } DialogClassPart;
 
-typedef struct _DialogClassRec {
-    CoreClassPart	core_class;
-    CompositeClassPart	composite_class;
-    ConstraintClassPart	constraint_class;
-    FormClassPart	form_class;
-    DialogClassPart	dialog_class;
+typedef struct _DialogClassRec
+{
+    CoreClassPart       core_class;
+    CompositeClassPart  composite_class;
+    ConstraintClassPart constraint_class;
+    FormClassPart       form_class;
+    DialogClassPart     dialog_class;
 } DialogClassRec;
 
 extern DialogClassRec dialogClassRec;
 
-typedef struct _DialogPart {
+typedef struct _DialogPart
+{
     /* resources */
-    String	label;		/* description of the dialog	 */
-    String	value;		/* for the user response	 */
-    Pixmap	icon;		/* icon bitmap			 */
+    String label;  /* description of the dialog	 */
+    String value;  /* for the user response	 */
+    Pixmap icon;  /* icon bitmap			 */
 
     /* private */
-    Widget	iconW;		/* widget to display the icon	 */
-    Widget	labelW;		/* widget to display description */
-    Widget	valueW;		/* user response TextWidget	 */
+    Widget iconW;  /* widget to display the icon	 */
+    Widget labelW;  /* widget to display description */
+    Widget valueW;  /* user response TextWidget	 */
 #ifndef OLDXAW
-    XtPointer pad[4];	/* for future use and keep binary compatibility */
+    XtPointer pad[4]; /* for future use and keep binary compatibility */
 #endif
 } DialogPart;
 
-typedef struct _DialogRec {
-    CorePart		core;
-    CompositePart	composite;
-    ConstraintPart	constraint;
-    FormPart		form;
-    DialogPart		dialog;
+typedef struct _DialogRec
+{
+    CorePart       core;
+    CompositePart  composite;
+    ConstraintPart constraint;
+    FormPart       form;
+    DialogPart     dialog;
 } DialogRec;
 
-typedef struct {
+typedef struct
+{
     XtPointer extension;
 } DialogConstraintsPart;
 
-typedef struct _DialogConstraintsRec {
-    FormConstraintsPart	  form;
+typedef struct _DialogConstraintsRec
+{
+    FormConstraintsPart   form;
     DialogConstraintsPart dialog;
 } DialogConstraintsRec, *DialogConstraints;
 

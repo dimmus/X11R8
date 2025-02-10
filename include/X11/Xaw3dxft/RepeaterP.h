@@ -31,46 +31,50 @@ in this Software without prior written authorization from the X Consortium.
 #include <X11/Xaw3dxft/CommandP.h>
 #include <X11/Xaw3dxft/Repeater.h>
 
-typedef struct {			/* new fields in widget class */
+typedef struct
+{   /* new fields in widget class */
     int dummy;
 } RepeaterClassPart;
 
-typedef struct _RepeaterClassRec {	/* Repeater widget class */
-    CoreClassPart core_class;
-    SimpleClassPart simple_class;
-    ThreeDClassPart threeD_class;
-    LabelClassPart label_class;
-    CommandClassPart command_class;
+typedef struct _RepeaterClassRec
+{ /* Repeater widget class */
+    CoreClassPart     core_class;
+    SimpleClassPart   simple_class;
+    ThreeDClassPart   threeD_class;
+    LabelClassPart    label_class;
+    CommandClassPart  command_class;
     RepeaterClassPart repeater_class;
 } RepeaterClassRec;
 
-typedef struct {			/* new fields in widget */
+typedef struct
+{   /* new fields in widget */
     /* resources... */
-    int initial_delay;			/* initialDelay/Delay */
-    int repeat_delay;			/* repeatDelay/Delay */
-    int minimum_delay;			/* minimumDelay/MinimumDelay */
-    int decay;				/* decay to minimum delay */
-    Boolean flash;			/* flash/Boolean */
-    XtCallbackList start_callbacks;	/* startCallback/StartCallback */
-    XtCallbackList stop_callbacks;	/* stopCallback/StopCallback */
+    int            initial_delay;   /* initialDelay/Delay */
+    int            repeat_delay;   /* repeatDelay/Delay */
+    int            minimum_delay;   /* minimumDelay/MinimumDelay */
+    int            decay;    /* decay to minimum delay */
+    Boolean        flash;   /* flash/Boolean */
+    XtCallbackList start_callbacks; /* startCallback/StartCallback */
+    XtCallbackList stop_callbacks; /* stopCallback/StopCallback */
     /* private data... */
-    int next_delay;			/* next amount for timer */
-    XtIntervalId timer;			/* timer that will fire */
+    int          next_delay;   /* next amount for timer */
+    XtIntervalId timer;   /* timer that will fire */
 } RepeaterPart;
 
-typedef struct _RepeaterRec {
-    CorePart core;
-    SimplePart simple;
-    ThreeDPart threeD;
-    LabelPart label;
-    CommandPart command;
+typedef struct _RepeaterRec
+{
+    CorePart     core;
+    SimplePart   simple;
+    ThreeDPart   threeD;
+    LabelPart    label;
+    CommandPart  command;
     RepeaterPart repeater;
 } RepeaterRec;
 
-#define REP_DEF_DECAY 5			/* milliseconds */
-#define REP_DEF_INITIAL_DELAY 200	/* milliseconds */
-#define REP_DEF_MINIMUM_DELAY 10	/* milliseconds */
-#define REP_DEF_REPEAT_DELAY 50		/* milliseconds */
+#define REP_DEF_DECAY         5   /* milliseconds */
+#define REP_DEF_INITIAL_DELAY 200 /* milliseconds */
+#define REP_DEF_MINIMUM_DELAY 10 /* milliseconds */
+#define REP_DEF_REPEAT_DELAY  50  /* milliseconds */
 
 /*
  * external declarations

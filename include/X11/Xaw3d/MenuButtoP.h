@@ -54,21 +54,21 @@ in this Software without prior written authorization from the X Consortium.
  *
  ***********************************/
 
-
    /* New fields for the MenuButton widget class record */
 typedef struct _MenuButtonClass
 {
-  int makes_compiler_happy;  /* not used */
+    int makes_compiler_happy;  /* not used */
 } MenuButtonClassPart;
 
    /* Full class record declaration */
-typedef struct _MenuButtonClassRec {
-  CoreClassPart	    core_class;
-  SimpleClassPart	    simple_class;
-  ThreeDClassPart           threeD_class;
-  LabelClassPart	    label_class;
-  CommandClassPart	    command_class;
-  MenuButtonClassPart     menuButton_class;
+typedef struct _MenuButtonClassRec
+{
+    CoreClassPart       core_class;
+    SimpleClassPart     simple_class;
+    ThreeDClassPart     threeD_class;
+    LabelClassPart      label_class;
+    CommandClassPart    command_class;
+    MenuButtonClassPart menuButton_class;
 } MenuButtonClassRec;
 
 extern MenuButtonClassRec menuButtonClassRec;
@@ -80,22 +80,22 @@ extern MenuButtonClassRec menuButtonClassRec;
  **************************************/
 
     /* New fields for the MenuButton widget record */
-typedef struct {
+typedef struct
+{
   /* resources */
-  String menu_name;
+    String menu_name;
 
 } MenuButtonPart;
 
    /* Full widget declaration */
-typedef struct _MenuButtonRec {
-    CorePart         core;
-    SimplePart	     simple;
-    ThreeDPart       threeD;
-    LabelPart	     label;
-    CommandPart	     command;
-    MenuButtonPart   menu_button;
+typedef struct _MenuButtonRec
+{
+    CorePart       core;
+    SimplePart     simple;
+    ThreeDPart     threeD;
+    LabelPart      label;
+    CommandPart    command;
+    MenuButtonPart menu_button;
 } MenuButtonRec;
 
 #endif /* _XawMenuButtonP_h */
-
-

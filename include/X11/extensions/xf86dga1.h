@@ -19,96 +19,73 @@ Copyright (c) 1995  XFree86 Inc
 
 _XFUNCPROTOBEGIN
 
-Bool XF86DGAQueryVersion(
-    Display*		/* dpy */,
-    int*		/* majorVersion */,
-    int*		/* minorVersion */
+Bool XF86DGAQueryVersion(Display * /* dpy */,
+                         int * /* majorVersion */,
+                         int *  /* minorVersion */
 );
 
-Bool XF86DGAQueryExtension(
-    Display*		/* dpy */,
-    int*		/* event_base */,
-    int*		/* error_base */
+Bool XF86DGAQueryExtension(Display * /* dpy */,
+                           int * /* event_base */,
+                           int *  /* error_base */
 );
 
-Status XF86DGAGetVideoLL(
-    Display*			/* dpy */,
-    int				/* screen */,
-    unsigned int *		/* base addr */,
-    int *			/* width */,
-    int *			/* bank_size */,
-    int *			/* ram_size */
+Status XF86DGAGetVideoLL(Display * /* dpy */,
+                         int /* screen */,
+                         unsigned int * /* base addr */,
+                         int * /* width */,
+                         int * /* bank_size */,
+                         int *   /* ram_size */
 );
 
-Status XF86DGAGetVideo(
-    Display*			/* dpy */,
-    int				/* screen */,
-    char **			/* base addr */,
-    int *			/* width */,
-    int *			/* bank_size */,
-    int *			/* ram_size */
+Status XF86DGAGetVideo(Display * /* dpy */,
+                       int /* screen */,
+                       char ** /* base addr */,
+                       int * /* width */,
+                       int * /* bank_size */,
+                       int *   /* ram_size */
 );
 
-Status XF86DGADirectVideo(
-    Display*			/* dpy */,
-    int				/* screen */,
-    int 			/* enable */
+Status
+XF86DGADirectVideo(Display * /* dpy */, int /* screen */, int    /* enable */
 );
 
-Status XF86DGADirectVideoLL(
-    Display*			/* dpy */,
-    int				/* screen */,
-    int 			/* enable */
+Status
+XF86DGADirectVideoLL(Display * /* dpy */, int /* screen */, int /* enable */
 );
 
-Status XF86DGAGetViewPortSize(
-    Display*			/* dpy */,
-    int				/* screen */,
-    int *			/* width */,
-    int *			/* height */
+Status XF86DGAGetViewPortSize(Display * /* dpy */,
+                              int /* screen */,
+                              int * /* width */,
+                              int * /* height */
 );
 
-Status XF86DGASetViewPort(
-    Display*			/* dpy */,
-    int				/* screen */,
-    int x			/* X */,
-    int y			/* Y */
+Status XF86DGASetViewPort(Display * /* dpy */,
+                          int /* screen */,
+                          int x /* X */,
+                          int y /* Y */
 );
 
-Status XF86DGAGetVidPage(
-    Display*			/* dpy */,
-    int				/* screen */,
-    int *			/* vid page */
+Status
+XF86DGAGetVidPage(Display * /* dpy */, int /* screen */, int * /* vid page */
 );
 
-Status XF86DGASetVidPage(
-    Display*			/* dpy */,
-    int				/* screen */,
-    int				/* vid page */
+Status
+XF86DGASetVidPage(Display * /* dpy */, int /* screen */, int /* vid page */
 );
 
-Status XF86DGAInstallColormap(
-    Display*			/* dpy */,
-    int				/* screen */,
-    Colormap			/*Colormap */
+Status XF86DGAInstallColormap(Display * /* dpy */,
+                              int /* screen */,
+                              Colormap /*Colormap */
 );
 
-int XF86DGAForkApp(
-    int screen
+int XF86DGAForkApp(int screen);
+
+Status
+XF86DGAQueryDirectVideo(Display * /* dpy */, int /* screen */, int * /* flags */
 );
 
-Status XF86DGAQueryDirectVideo(
-    Display *		/* dpy */,
-    int			/* screen */,
-    int *		/* flags */
+Bool XF86DGAViewPortChanged(Display * /* dpy */, int /* screen */, int /* n */
 );
-
-Bool XF86DGAViewPortChanged(
-    Display *		/* dpy */,
-    int			/* screen */,
-    int			/* n */
-);
-
 
 _XFUNCPROTOEND
 

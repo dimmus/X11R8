@@ -30,34 +30,35 @@ in this Software without prior written authorization from the X Consortium.
 
 #include "X11/Xaw3d/Porthole.h"
 
-typedef struct {			/* new fields in widget class */
+typedef struct
+{   /* new fields in widget class */
     int dummy;
 } PortholeClassPart;
 
-typedef struct _PortholeClassRec {	/* Porthole widget class */
-    CoreClassPart core_class;
+typedef struct _PortholeClassRec
+{ /* Porthole widget class */
+    CoreClassPart      core_class;
     CompositeClassPart composite_class;
-    PortholeClassPart porthole_class;
+    PortholeClassPart  porthole_class;
 } PortholeClassRec;
 
-
-typedef struct {			/* new fields in widget */
+typedef struct
+{   /* new fields in widget */
     /* resources... */
-    XtCallbackList report_callbacks;	/* callback/Callback */
+    XtCallbackList report_callbacks; /* callback/Callback */
     /* private data... */
 } PortholePart;
 
-typedef struct _PortholeRec {
-    CorePart core;
+typedef struct _PortholeRec
+{
+    CorePart      core;
     CompositePart composite;
-    PortholePart porthole;
+    PortholePart  porthole;
 } PortholeRec;
-
 
 /*
  * external declarations
  */
 extern PortholeClassRec portholeClassRec;
-
 
 #endif /* _XawPortholeP_h */

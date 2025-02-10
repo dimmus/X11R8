@@ -90,33 +90,33 @@ SOFTWARE.
 
 */
 
-#define XawTextEncoding8bit	0
-#define XawTextEncodingChar2b	1
+#define XawTextEncoding8bit   0
+#define XawTextEncodingChar2b 1
 
 #define XtNleftBitmap "leftBitmap"
 #define XtCLeftBitmap "LeftBitmap"
-#define XtNencoding "encoding"
-#define XtCEncoding "Encoding"
+#define XtNencoding   "encoding"
+#define XtCEncoding   "Encoding"
 
 #ifdef XAW_INTERNATIONALIZATION
-#ifndef XtNfontSet
-#define XtNfontSet "fontSet"
-#endif
-#ifndef XtCFontSet
-#define XtCFontSet "FontSet"
-#endif
+#  ifndef XtNfontSet
+#    define XtNfontSet "fontSet"
+#  endif
+#  ifndef XtCFontSet
+#    define XtCFontSet "FontSet"
+#  endif
 #endif
 
 #ifndef _XtStringDefs_h_
-#define XtNbitmap "bitmap"
-#define XtNforeground "foreground"
-#define XtNlabel "label"
-#define XtNfont "font"
-#define XtNinternalWidth "internalWidth"
-#define XtNinternalHeight "internalHeight"
-#define XtNresize "resize"
-#define XtCResize "Resize"
-#define XtCBitmap "Bitmap"
+#  define XtNbitmap         "bitmap"
+#  define XtNforeground     "foreground"
+#  define XtNlabel          "label"
+#  define XtNfont           "font"
+#  define XtNinternalWidth  "internalWidth"
+#  define XtNinternalHeight "internalHeight"
+#  define XtNresize         "resize"
+#  define XtCResize         "Resize"
+#  define XtCBitmap         "Bitmap"
 #endif
 
 /* Class record constants */

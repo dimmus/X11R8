@@ -24,13 +24,13 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef _EVI_H_
 #define _EVI_H_
 
-#define XEVI_TRANSPARENCY_NONE		0
-#define XEVI_TRANSPARENCY_PIXEL		1
-#define XEVI_TRANSPARENCY_MASK		2
+#define XEVI_TRANSPARENCY_NONE  0
+#define XEVI_TRANSPARENCY_PIXEL 1
+#define XEVI_TRANSPARENCY_MASK  2
 
 #define EVINAME "Extended-Visual-Information"
 
-#define XEVI_MAJOR_VERSION	1	/* current version numbers */
-#define XEVI_MINOR_VERSION	0
+#define XEVI_MAJOR_VERSION 1 /* current version numbers */
+#define XEVI_MINOR_VERSION 0
 
 #endif

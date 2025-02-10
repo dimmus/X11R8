@@ -28,8 +28,8 @@ in this Software without prior written authorization from The Open Group.
  * Author:  Keith Packard, MIT X Consortium
  */
 
-#define FONT_SHOW_INFO	    (1<<0)
-#define FONT_SHOW_PROPS	    (1<<1)
-#define FONT_SHOW_METRICS   (1<<2)
-#define FONT_SHOW_GLYPHS    (1<<3)
-#define FONT_SHOW_ALL	    (FONT_SHOW_INFO|FONT_SHOW_PROPS|FONT_SHOW_GLYPHS)
+#define FONT_SHOW_INFO    (1 << 0)
+#define FONT_SHOW_PROPS   (1 << 1)
+#define FONT_SHOW_METRICS (1 << 2)
+#define FONT_SHOW_GLYPHS  (1 << 3)
+#define FONT_SHOW_ALL     (FONT_SHOW_INFO | FONT_SHOW_PROPS | FONT_SHOW_GLYPHS)

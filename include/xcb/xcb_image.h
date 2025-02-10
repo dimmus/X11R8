@@ -29,11 +29,9 @@
 #include "xcb/xcb.h"
 #include <xcb/shm.h>
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 
 /**
  * @defgroup xcb__image_t XCB Image Functions
@@ -82,7 +80,6 @@ extern "C" {
  * @{
  */
 
-
 typedef struct xcb_image_t xcb_image_t;
 
 /**
@@ -91,30 +88,30 @@ typedef struct xcb_image_t xcb_image_t;
  */
 struct xcb_image_t
 {
-  uint16_t           width;   /**< Width in pixels, excluding pads etc. */
-  uint16_t           height;   /**< Height in pixels. */
-  xcb_image_format_t format;   /**< Format. */
-  uint8_t            scanline_pad;   /**< Right pad in bits.  Valid pads
+    uint16_t           width;   /**< Width in pixels, excluding pads etc. */
+    uint16_t           height;   /**< Height in pixels. */
+    xcb_image_format_t format;   /**< Format. */
+    uint8_t            scanline_pad;   /**< Right pad in bits.  Valid pads
 				      *   are 8, 16, 32.
 				      */
-  uint8_t            depth;   /**< Depth in bits. Valid depths
+    uint8_t            depth;   /**< Depth in bits. Valid depths
 			       *   are 1, 4, 8, 16, 24 for z format,
 			       *   1 for xy-bitmap-format, anything
 			       *   for xy-pixmap-format.
 			       */
-  uint8_t            bpp;   /**< Storage per pixel in bits.
+    uint8_t            bpp;   /**< Storage per pixel in bits.
 			     *   Must be >= depth. Valid bpp
 			     *   are 1, 4, 8, 16, 24, 32 for z
 			     *   format, 1 for xy-bitmap format,
 			     *   anything for xy-pixmap-format.
 			     */
-  uint8_t	     unit;  /**< Scanline unit in bits for
+    uint8_t            unit;  /**< Scanline unit in bits for
 			     *   xy formats and for bpp == 1,
 			     *   in which case valid scanline
 			     *   units are 8, 16, 32.  Otherwise,
 			     *   will be max(8, bpp).  Must be >= bpp.
 			     */
-  uint32_t           plane_mask;   /**< When format is
+    uint32_t           plane_mask;   /**< When format is
 				    *   xy-pixmap and depth >
 				    *   1, this says which
 				    *   planes are "valid" in
@@ -124,7 +121,7 @@ struct xcb_image_t
 				    *   and set only by
 				    *   xcb_image_get().
 				    */
-  xcb_image_order_t  byte_order;   /**< Component byte order
+    xcb_image_order_t  byte_order;   /**< Component byte order
 				    *   for z-pixmap, byte
 				    *   order of scanline unit
 				    *   for xy-bitmap and
@@ -132,26 +129,26 @@ struct xcb_image_t
 				    *   order for z-pixmap
 				    *   when bpp == 4.
 				    */
-  xcb_image_order_t  bit_order;    /**< Bit order of
+    xcb_image_order_t  bit_order;    /**< Bit order of
 				    *   scanline unit for
 				    *   xy-bitmap and
 				    *   xy-pixmap.
 				    */
-  uint32_t           stride;   /**< Bytes per image row.
+    uint32_t           stride;   /**< Bytes per image row.
 				*   Computable from other
 				*   data, but cached for
 				*   convenience/performance.
 				*/
-  uint32_t           size;   /**< Size of image data in bytes.
+    uint32_t           size;   /**< Size of image data in bytes.
 			      *   Computable from other
 			      *   data, but cached for
 			      *   convenience/performance.
 			      */
-  void *             base;   /**< Malloced block of storage that
+    void              *base;   /**< Malloced block of storage that
 			      *   will be freed by
 			      *   @ref xcb_image_destroy() if non-null.
 			      */
-  uint8_t *          data;   /**< The actual image. */
+    uint8_t           *data;   /**< The actual image. */
 };
 
 typedef struct xcb_shm_segment_info_t xcb_shm_segment_info_t;
@@ -163,11 +160,10 @@ typedef struct xcb_shm_segment_info_t xcb_shm_segment_info_t;
  */
 struct xcb_shm_segment_info_t
 {
-  xcb_shm_seg_t shmseg;
-  uint32_t    shmid;
-  uint8_t     *shmaddr;
+    xcb_shm_seg_t shmseg;
+    uint32_t      shmid;
+    uint8_t      *shmaddr;
 };
-
 
 /**
  * Update the cached data of an image.
@@ -178,8 +174,7 @@ struct xcb_shm_segment_info_t
  * cached values for the given image.
  * @ingroup xcb__image_t
  */
-void
-xcb_image_annotate (xcb_image_t *image);
+void xcb_image_annotate(xcb_image_t *image);
 
 /**
  * Create a new image.
@@ -211,20 +206,18 @@ xcb_image_annotate (xcb_image_t *image);
  * The image must be destroyed with xcb_image_destroy().
  * @ingroup xcb__image_t
  */
-xcb_image_t *
-xcb_image_create (uint16_t           width,
-		  uint16_t           height,
-		  xcb_image_format_t format,
-		  uint8_t            xpad,
-		  uint8_t            depth,
-		  uint8_t            bpp,
-		  uint8_t            unit,
-		  xcb_image_order_t  byte_order,
-		  xcb_image_order_t  bit_order,
-		  void *             base,
-		  uint32_t           bytes,
-		  uint8_t *          data);
-
+xcb_image_t *xcb_image_create(uint16_t           width,
+                              uint16_t           height,
+                              xcb_image_format_t format,
+                              uint8_t            xpad,
+                              uint8_t            depth,
+                              uint8_t            bpp,
+                              uint8_t            unit,
+                              xcb_image_order_t  byte_order,
+                              xcb_image_order_t  bit_order,
+                              void              *base,
+                              uint32_t           bytes,
+                              uint8_t           *data);
 
 /**
  * Create a new image in connection-native format.
@@ -252,16 +245,14 @@ xcb_image_create (uint16_t           width,
  * than calling xcb_image_create() directly.
  * @ingroup xcb__image_t
  */
-xcb_image_t *
-xcb_image_create_native (xcb_connection_t *  c,
-			 uint16_t            width,
-			 uint16_t            height,
-			 xcb_image_format_t  format,
-			 uint8_t             depth,
-			 void *              base,
-			 uint32_t            bytes,
-			 uint8_t *           data);
-
+xcb_image_t *xcb_image_create_native(xcb_connection_t  *c,
+                                     uint16_t           width,
+                                     uint16_t           height,
+                                     xcb_image_format_t format,
+                                     uint8_t            depth,
+                                     void              *base,
+                                     uint32_t           bytes,
+                                     uint8_t           *data);
 
 /**
  * Destroy an image.
@@ -272,9 +263,7 @@ xcb_image_create_native (xcb_connection_t *  c,
  * that also.
  * @ingroup xcb__image_t
  */
-void
-xcb_image_destroy (xcb_image_t *image);
-
+void xcb_image_destroy(xcb_image_t *image);
 
 /**
  * Get an image from the X server.
@@ -303,16 +292,14 @@ xcb_image_destroy (xcb_image_t *image);
  * If a problem occurs, the function returns null.
  * @ingroup xcb__image_t
  */
-xcb_image_t *
-xcb_image_get (xcb_connection_t *  conn,
-	       xcb_drawable_t      draw,
-	       int16_t             x,
-	       int16_t             y,
-	       uint16_t            width,
-	       uint16_t            height,
-	       uint32_t            plane_mask,
-	       xcb_image_format_t  format);
-
+xcb_image_t *xcb_image_get(xcb_connection_t  *conn,
+                           xcb_drawable_t     draw,
+                           int16_t            x,
+                           int16_t            y,
+                           uint16_t           width,
+                           uint16_t           height,
+                           uint32_t           plane_mask,
+                           xcb_image_format_t format);
 
 /**
  * Put an image onto the X server.
@@ -343,15 +330,13 @@ xcb_image_get (xcb_connection_t *  conn,
  *
  * @ingroup xcb__image_t
  */
-xcb_void_cookie_t
-xcb_image_put (xcb_connection_t *  conn,
-	       xcb_drawable_t      draw,
-	       xcb_gcontext_t      gc,
-	       xcb_image_t *       image,
-	       int16_t             x,
-	       int16_t             y,
-	       uint8_t             left_pad);
-
+xcb_void_cookie_t xcb_image_put(xcb_connection_t *conn,
+                                xcb_drawable_t    draw,
+                                xcb_gcontext_t    gc,
+                                xcb_image_t      *image,
+                                int16_t           x,
+                                int16_t           y,
+                                uint8_t           left_pad);
 
 /**
  * Check image for or convert image to native format.
@@ -376,10 +361,7 @@ xcb_image_put (xcb_connection_t *  conn,
  * @ingroup xcb__image_t
  */
 xcb_image_t *
-xcb_image_native (xcb_connection_t *  c,
-		  xcb_image_t *       image,
-		  int                 convert);
-
+xcb_image_native(xcb_connection_t *c, xcb_image_t *image, int convert);
 
 /**
  * Put a pixel to an image.
@@ -395,10 +377,7 @@ xcb_image_native (xcb_connection_t *  c,
  * @ingroup xcb__image_t
  */
 void
-xcb_image_put_pixel (xcb_image_t *image,
-		     uint32_t x,
-		     uint32_t y,
-		     uint32_t pixel);
+xcb_image_put_pixel(xcb_image_t *image, uint32_t x, uint32_t y, uint32_t pixel);
 
 /**
  * Get a pixel from an image.
@@ -413,11 +392,7 @@ xcb_image_put_pixel (xcb_image_t *image,
  * the plane-mask for xy-pixmap images.
  * @ingroup xcb__image_t
  */
-uint32_t
-xcb_image_get_pixel (xcb_image_t *image,
-		     uint32_t x,
-		     uint32_t y);
-
+uint32_t xcb_image_get_pixel(xcb_image_t *image, uint32_t x, uint32_t y);
 
 /**
  * Convert an image to a new format.
@@ -438,10 +413,7 @@ xcb_image_get_pixel (xcb_image_t *image,
  * @ref xcb_image_put_pixel() calls.
  * @ingroup xcb__image_t
  */
-xcb_image_t *
-xcb_image_convert (xcb_image_t *  src,
-		   xcb_image_t *  dst);
-
+xcb_image_t *xcb_image_convert(xcb_image_t *src, xcb_image_t *dst);
 
 /**
  * Extract a subimage of an image.
@@ -464,16 +436,14 @@ xcb_image_convert (xcb_image_t *  src,
  *
  * @ingroup xcb__image_t
  */
-xcb_image_t *
-xcb_image_subimage(xcb_image_t *  image,
-		   uint32_t       x,
-		   uint32_t       y,
-		   uint32_t       width,
-		   uint32_t       height,
-		   void *         base,
-		   uint32_t       bytes,
-		   uint8_t *      data);
-
+xcb_image_t *xcb_image_subimage(xcb_image_t *image,
+                                uint32_t     x,
+                                uint32_t     y,
+                                uint32_t     width,
+                                uint32_t     height,
+                                void        *base,
+                                uint32_t     bytes,
+                                uint8_t     *data);
 
 /*
  * Shm stuff
@@ -515,20 +485,18 @@ xcb_image_subimage(xcb_image_t *  image,
  *
  * @ingroup xcb__image_t
  */
-xcb_image_t *
-xcb_image_shm_put (xcb_connection_t *      conn,
-		   xcb_drawable_t          draw,
-		   xcb_gcontext_t          gc,
-		   xcb_image_t *           image,
-		   xcb_shm_segment_info_t  shminfo,
-		   int16_t                 src_x,
-		   int16_t                 src_y,
-		   int16_t                 dest_x,
-		   int16_t                 dest_y,
-		   uint16_t                src_width,
-		   uint16_t                src_height,
-		   uint8_t                 send_event);
-
+xcb_image_t *xcb_image_shm_put(xcb_connection_t      *conn,
+                               xcb_drawable_t         draw,
+                               xcb_gcontext_t         gc,
+                               xcb_image_t           *image,
+                               xcb_shm_segment_info_t shminfo,
+                               int16_t                src_x,
+                               int16_t                src_y,
+                               int16_t                dest_x,
+                               int16_t                dest_y,
+                               uint16_t               src_width,
+                               uint16_t               src_height,
+                               uint8_t                send_event);
 
 /**
  * Read image data into a shared memory xcb_image_t.
@@ -553,14 +521,13 @@ xcb_image_shm_put (xcb_connection_t *      conn,
  * otherwise.
  * @ingroup xcb__image_t
  */
-int xcb_image_shm_get (xcb_connection_t *      conn,
-		       xcb_drawable_t          draw,
-		       xcb_image_t *           image,
-		       xcb_shm_segment_info_t  shminfo,
-		       int16_t                 x,
-		       int16_t                 y,
-		       uint32_t                plane_mask);
-
+int xcb_image_shm_get(xcb_connection_t      *conn,
+                      xcb_drawable_t         draw,
+                      xcb_image_t           *image,
+                      xcb_shm_segment_info_t shminfo,
+                      int16_t                x,
+                      int16_t                y,
+                      uint32_t               plane_mask);
 
 /**
  * Create an image from user-supplied bitmap data.
@@ -574,10 +541,9 @@ int xcb_image_shm_get (xcb_connection_t *      conn,
  * xbm format (i.e., 8-bit scanline unit, LSB-first, 8-bit pad).
  * @ingroup xcb__image_t
  */
-xcb_image_t *
-xcb_image_create_from_bitmap_data (uint8_t *           data,
-				   uint32_t            width,
-				   uint32_t            height);
+xcb_image_t *xcb_image_create_from_bitmap_data(uint8_t *data,
+                                               uint32_t width,
+                                               uint32_t height);
 
 /**
  * Create a pixmap from user-supplied bitmap data.
@@ -603,26 +569,22 @@ xcb_image_create_from_bitmap_data (uint8_t *           data,
  * foreground and background pixels @p fg and @p bg.
  * @ingroup xcb__image_t
  */
-xcb_pixmap_t
-xcb_create_pixmap_from_bitmap_data (xcb_connection_t *  display,
-				    xcb_drawable_t      d,
-				    uint8_t *           data,
-				    uint32_t            width,
-				    uint32_t            height,
-				    uint32_t            depth,
-				    uint32_t            fg,
-				    uint32_t            bg,
-				    xcb_gcontext_t *    gcp);
-
+xcb_pixmap_t xcb_create_pixmap_from_bitmap_data(xcb_connection_t *display,
+                                                xcb_drawable_t    d,
+                                                uint8_t          *data,
+                                                uint32_t          width,
+                                                uint32_t          height,
+                                                uint32_t          depth,
+                                                uint32_t          fg,
+                                                uint32_t          bg,
+                                                xcb_gcontext_t   *gcp);
 
 /**
  * @}
  */
 
-
 #ifdef __cplusplus
 }
 #endif
-
 
 #endif /* __XCB_IMAGE_H__ */

@@ -35,8 +35,8 @@ THE SOFTWARE.
 
 /* 0 is treated specially. */
 
-#define FONT_ENCODING_UNICODE 1
-#define FONT_ENCODING_TRUETYPE 2
+#define FONT_ENCODING_UNICODE    1
+#define FONT_ENCODING_TRUETYPE   2
 #define FONT_ENCODING_POSTSCRIPT 3
 
 /* This structure represents a mapping, either from numeric codes from
@@ -46,13 +46,14 @@ THE SOFTWARE.
    be present.  However, having both fields simplifies the interface
    somewhat. */
 
-typedef struct _FontMap {
+typedef struct _FontMap
+{
     int type;                   /* the type of the mapping */
     int pid, eid;               /* the identification of the mapping */
-    unsigned (*recode) (unsigned, void *);      /* mapping function */
-    char *(*name) (unsigned, void *);   /* function returning glyph names */
-    void *client_data;          /* second parameter of the two above */
-    struct _FontMap *next;      /* link to next element in list */
+    unsigned (*recode)(unsigned, void *);      /* mapping function */
+    char *(*name)(unsigned, void *);   /* function returning glyph names */
+    void            *client_data; /* second parameter of the two above */
+    struct _FontMap *next; /* link to next element in list */
     /* The following was added for version 0.3 of the font interface. */
     /* It should be kept at the end to preserve binary compatibility. */
     struct _FontEnc *encoding;
@@ -62,24 +63,25 @@ typedef struct _FontMap {
    consists of a charset name, its size, and a linked list of mappings
    like above. */
 
-typedef struct _FontEnc {
-    char *name;                 /* the name of the encoding */
-    char **aliases;             /* its aliases, null terminated */
-    int size;                   /* its size, either in bytes or rows */
-    int row_size;               /* the size of a row, or 0 if bytes */
-    FontMapPtr mappings;        /* linked list of mappings */
-    struct _FontEnc *next;      /* link to next element */
+typedef struct _FontEnc
+{
+    char            *name; /* the name of the encoding */
+    char           **aliases; /* its aliases, null terminated */
+    int              size; /* its size, either in bytes or rows */
+    int              row_size; /* the size of a row, or 0 if bytes */
+    FontMapPtr       mappings; /* linked list of mappings */
+    struct _FontEnc *next; /* link to next element */
     /* the following two were added in version 0.2 of the font interface */
     /* they should be kept at the end to preserve binary compatibility */
-    int first;                  /* first byte or row */
-    int first_col;              /* first column in each row */
+    int first; /* first byte or row */
+    int first_col; /* first column in each row */
 } FontEncRec, *FontEncPtr;
 
-typedef struct _FontMapReverse {
-    unsigned int (*reverse) (unsigned, void *);
+typedef struct _FontMapReverse
+{
+    unsigned int (*reverse)(unsigned, void *);
     void *data;
 } FontMapReverseRec, *FontMapReversePtr;
-
 
 /* Function prototypes */
 

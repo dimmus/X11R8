@@ -22,7 +22,6 @@
  *      Author: Li Yuhong	 OMRON Corporation
  */
 
-
 /***********************************************************
 
 Copyright 1987, 1988, 1994, 1998  The Open Group
@@ -82,41 +81,45 @@ SOFTWARE.
 #include "X11/Xaw/MultiSink.h"
 
 /* new fields for the MultiSink object class */
-typedef struct _MultiSinkClassPart {
+typedef struct _MultiSinkClassPart
+{
     XtPointer extension;
 } MultiSinkClassPart;
 
 /* Full class record declaration */
-typedef struct _MultiSinkClassRec {
-    ObjectClassPart     object_class;
-    TextSinkClassPart	text_sink_class;
-    MultiSinkClassPart	multi_sink_class;
+typedef struct _MultiSinkClassRec
+{
+    ObjectClassPart    object_class;
+    TextSinkClassPart  text_sink_class;
+    MultiSinkClassPart multi_sink_class;
 } MultiSinkClassRec;
 
 extern MultiSinkClassRec multiSinkClassRec;
 
 /* New fields for the MultiSink object record */
-typedef struct {
+typedef struct
+{
     /* resources */
     Boolean echo;
     Boolean display_nonprinting;
 
     /* private */
-    GC normgc, invgc, xorgc;
-    XawTextPosition cursor_position;
+    GC                 normgc, invgc, xorgc;
+    XawTextPosition    cursor_position;
     XawTextInsertState laststate;
-    short cursor_x, cursor_y;		/* Cursor Location */
-    XFontSet fontset;			/* font set to draw */
+    short              cursor_x, cursor_y;  /* Cursor Location */
+    XFontSet           fontset;   /* font set to draw */
 #ifndef OLDXAW
-    XtPointer pad[4];	/* for future use and keep binary compatibility */
+    XtPointer pad[4]; /* for future use and keep binary compatibility */
 #endif
 } MultiSinkPart;
 
 /* Full instance record declaration */
-typedef struct _MultiSinkRec {
-    ObjectPart          object;
-    TextSinkPart	text_sink;
-    MultiSinkPart	multi_sink;
+typedef struct _MultiSinkRec
+{
+    ObjectPart    object;
+    TextSinkPart  text_sink;
+    MultiSinkPart multi_sink;
 } MultiSinkRec;
 
 /*
@@ -125,13 +128,8 @@ typedef struct _MultiSinkRec {
  */
 _XFUNCPROTOBEGIN
 
-void _XawMultiSinkPosToXY
-(
- Widget			w,
- XawTextPosition	pos,
- Position		*x,
- Position		*y
-);
+void
+_XawMultiSinkPosToXY(Widget w, XawTextPosition pos, Position *x, Position *y);
 
 _XFUNCPROTOEND
 

@@ -36,55 +36,43 @@ _XFUNCPROTOBEGIN
 
 typedef XID XAppGroup;
 
-Bool XagQueryVersion(
-    Display*			/* dpy */,
-    int*			/* major_version */,
-    int*			/* minor_version */
+Bool XagQueryVersion(Display * /* dpy */,
+                     int * /* major_version */,
+                     int *   /* minor_version */
 );
 
-Status XagCreateEmbeddedApplicationGroup(
-    Display*			/* dpy */,
-    VisualID			/* root_visual */,
-    Colormap			/* default_colormap */,
-    unsigned long		/* black_pixel */,
-    unsigned long		/* white_pixel */,
-    XAppGroup*			/* app_group_return */
+Status XagCreateEmbeddedApplicationGroup(Display * /* dpy */,
+                                         VisualID /* root_visual */,
+                                         Colormap /* default_colormap */,
+                                         unsigned long /* black_pixel */,
+                                         unsigned long /* white_pixel */,
+                                         XAppGroup *   /* app_group_return */
 );
 
-Status XagCreateNonembeddedApplicationGroup(
-    Display*			/* dpy */,
-    XAppGroup*			/* app_group_return */
+Status XagCreateNonembeddedApplicationGroup(Display * /* dpy */,
+                                            XAppGroup * /* app_group_return */
 );
 
-Status XagDestroyApplicationGroup(
-    Display*			/* dpy */,
-    XAppGroup			/* app_group */
+Status XagDestroyApplicationGroup(Display * /* dpy */, XAppGroup /* app_group */
 );
 
-Status XagGetApplicationGroupAttributes(
-    Display*			/* dpy */,
-    XAppGroup			/* app_group */,
-    ...
+Status XagGetApplicationGroupAttributes(Display * /* dpy */,
+                                        XAppGroup /* app_group */,
+                                        ...);
+
+Status XagQueryApplicationGroup(Display * /* dpy */,
+                                XID /* resource_base */,
+                                XAppGroup * /* app_group_ret */
 );
 
-Status XagQueryApplicationGroup(
-    Display*			/* dpy */,
-    XID				/* resource_base */,
-    XAppGroup*			/* app_group_ret */
+Status XagCreateAssociation(Display * /* dpy */,
+                            Window * /* window_ret */,
+                            void * /* system_window */
 );
 
-Status XagCreateAssociation(
-    Display*			/* dpy */,
-    Window*			/* window_ret */,
-    void*			/* system_window */
-);
-
-Status XagDestroyAssociation(
-    Display*			/* dpy */,
-    Window			/* window */
+Status XagDestroyAssociation(Display * /* dpy */, Window /* window */
 );
 
 _XFUNCPROTOEND
 
 #endif /* _XAG_H_ */
-

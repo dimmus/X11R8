@@ -25,7 +25,6 @@ in this Software without prior written authorization from the X Consortium.
 
 */
 
-
 /*
  * AsciiSrc.h - Public Header file for Ascii Text Source.
  *
@@ -39,7 +38,6 @@ in this Software without prior written authorization from the X Consortium.
  *          MIT X Consortium
  *          kit@expo.lcs.mit.edu
  */
-
 
 #ifndef _XawAsciiSrc_h
 #define _XawAsciiSrc_h
@@ -78,22 +76,26 @@ typedef struct _AsciiSrcRec      *AsciiSrcObject;
  * Resource Definitions.
  */
 
-#define XtCDataCompression "DataCompression"
-#define XtCPieceSize "PieceSize"
-#define XtCType "Type"
+#define XtCDataCompression  "DataCompression"
+#define XtCPieceSize        "PieceSize"
+#define XtCType             "Type"
 #define XtCUseStringInPlace "UseStringInPlace"
 
-#define XtNdataCompression "dataCompression"
-#define XtNpieceSize "pieceSize"
-#define XtNtype "type"
+#define XtNdataCompression  "dataCompression"
+#define XtNpieceSize        "pieceSize"
+#define XtNtype             "type"
 #define XtNuseStringInPlace "useStringInPlace"
 
 #define XtRAsciiType "AsciiType"
 
 #define XtEstring "string"
-#define XtEfile "file"
+#define XtEfile   "file"
 
-typedef enum {XawAsciiFile, XawAsciiString} XawAsciiType;
+typedef enum
+{
+    XawAsciiFile,
+    XawAsciiString
+} XawAsciiType;
 
 /************************************************************
  *
@@ -110,8 +112,7 @@ _XFUNCPROTOBEGIN
  *	Returns: none.
  */
 
-extern void XawAsciiSourceFreeString(
-    Widget		/* w */
+extern void XawAsciiSourceFreeString(Widget  /* w */
 );
 
 /*	Function Name: XawAsciiSave
@@ -120,8 +121,7 @@ extern void XawAsciiSourceFreeString(
  *	Returns: TRUE if the save was successful.
  */
 
-extern Boolean XawAsciiSave(
-    Widget		/* w */
+extern Boolean XawAsciiSave(Widget  /* w */
 );
 
 /*	Function Name: XawAsciiSaveAsFile
@@ -131,9 +131,7 @@ extern Boolean XawAsciiSave(
  *	Returns: True if the save was successful.
  */
 
-extern Boolean XawAsciiSaveAsFile(
-    Widget		/* w */,
-    _Xconst char*	/* name */
+extern Boolean XawAsciiSaveAsFile(Widget /* w */, _Xconst char * /* name */
 );
 
 /*	Function Name: XawAsciiSourceChanged
@@ -142,11 +140,9 @@ extern Boolean XawAsciiSaveAsFile(
  *	Returns: a Boolean (see description).
  */
 
-extern Boolean XawAsciiSourceChanged(
-    Widget		/* w */
+extern Boolean XawAsciiSourceChanged(Widget  /* w */
 );
 
 _XFUNCPROTOEND
 
 #endif /* _XawAsciiSrc_h */
-

@@ -83,39 +83,39 @@ in this Software without prior written authorization from The Open Group.
 
                                         /* new instance field names */
 #ifndef _XtStringDefs_h_
-#define XtNhSpace "hSpace"
-#define XtNvSpace "vSpace"
-#define XtCHSpace "HSpace"
-#define XtCVSpace "VSpace"
+#  define XtNhSpace "hSpace"
+#  define XtNvSpace "vSpace"
+#  define XtCHSpace "HSpace"
+#  define XtCVSpace "VSpace"
 #endif
 
 #define XtNautoReconfigure "autoReconfigure"
-#define XtNlineWidth "lineWidth"
-#define XtNtreeGC "treeGC"
-#define XtNtreeParent "treeParent"
-#define XtNgravity "gravity"
+#define XtNlineWidth       "lineWidth"
+#define XtNtreeGC          "treeGC"
+#define XtNtreeParent      "treeParent"
+#define XtNgravity         "gravity"
 
                                         /* new class field names */
 #define XtCAutoReconfigure "AutoReconfigure"
-#define XtCLineWidth "LineWidth"
-#define XtCTreeGC "TreeGC"
-#define XtCTreeParent "TreeParent"
-#define XtCGravity "Gravity"
+#define XtCLineWidth       "LineWidth"
+#define XtCTreeGC          "TreeGC"
+#define XtCTreeParent      "TreeParent"
+#define XtCGravity         "Gravity"
 
 #define XtRGC "GC"
 
 #ifndef OLDXAW
-#ifndef XawNdisplayList
-#define XawNdisplayList "displayList"
-#endif
+#  ifndef XawNdisplayList
+#    define XawNdisplayList "displayList"
+#  endif
 
-#ifndef XawCDisplayList
-#define XawCDisplayList "DisplayList"
-#endif
+#  ifndef XawCDisplayList
+#    define XawCDisplayList "DisplayList"
+#  endif
 
-#ifndef XawRDisplayList
-#define XawRDisplayList "XawDisplayList"
-#endif
+#  ifndef XawRDisplayList
+#    define XawRDisplayList "XawDisplayList"
+#  endif
 #endif
                                         /* external declarations */
 extern WidgetClass treeWidgetClass;
@@ -125,10 +125,7 @@ typedef struct _TreeRec      *TreeWidget;
 
 _XFUNCPROTOBEGIN
 
-void XawTreeForceLayout
-(
- Widget		tree
- );
+void XawTreeForceLayout(Widget tree);
 
 _XFUNCPROTOEND
 

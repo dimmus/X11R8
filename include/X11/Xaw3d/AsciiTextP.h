@@ -73,27 +73,35 @@ SOFTWARE.
 #include "X11/Xaw3d/AsciiText.h"
 #include "X11/Xaw3d/AsciiSrc.h"
 #ifdef XAW_INTERNATIONALIZATION
-#include "X11/Xaw3d/MultiSrc.h"
+#  include "X11/Xaw3d/MultiSrc.h"
 #endif
 
-typedef struct {int empty;} AsciiClassPart;
+typedef struct
+{
+    int empty;
+} AsciiClassPart;
 
-typedef struct _AsciiTextClassRec {
-    CoreClassPart	core_class;
-    SimpleClassPart	simple_class;
-    TextClassPart	text_class;
-    AsciiClassPart	ascii_class;
+typedef struct _AsciiTextClassRec
+{
+    CoreClassPart   core_class;
+    SimpleClassPart simple_class;
+    TextClassPart   text_class;
+    AsciiClassPart  ascii_class;
 } AsciiTextClassRec;
 
 extern AsciiTextClassRec asciiTextClassRec;
 
-typedef struct { char foo; /* keep compiler happy. */ } AsciiPart;
+typedef struct
+{
+    char foo; /* keep compiler happy. */
+} AsciiPart;
 
-typedef struct _AsciiRec {
-    CorePart		core;
-    SimplePart		simple;
-    TextPart		text;
-    AsciiPart		ascii;
+typedef struct _AsciiRec
+{
+    CorePart   core;
+    SimplePart simple;
+    TextPart   text;
+    AsciiPart  ascii;
 } AsciiRec;
 
 /************************************************************
@@ -104,26 +112,34 @@ typedef struct _AsciiRec {
 
 #ifdef ASCII_STRING
 
-typedef struct {int empty;} AsciiStringClassPart;
+typedef struct
+{
+    int empty;
+} AsciiStringClassPart;
 
-typedef struct _AsciiStringClassRec {
-    CoreClassPart	core_class;
-    SimpleClassPart	simple_class;
-    TextClassPart	text_class;
-    AsciiClassPart	ascii_class;
+typedef struct _AsciiStringClassRec
+{
+    CoreClassPart        core_class;
+    SimpleClassPart      simple_class;
+    TextClassPart        text_class;
+    AsciiClassPart       ascii_class;
     AsciiStringClassPart string_class;
 } AsciiStringClassRec;
 
 extern AsciiStringClassRec asciiStringClassRec;
 
-typedef struct { char foo; /* keep compiler happy. */ } AsciiStringPart;
+typedef struct
+{
+    char foo; /* keep compiler happy. */
+} AsciiStringPart;
 
-typedef struct _AsciiStringRec {
-    CorePart		core;
-    SimplePart		simple;
-    TextPart		text;
-    AsciiPart           ascii;
-    AsciiStringPart     ascii_str;
+typedef struct _AsciiStringRec
+{
+    CorePart        core;
+    SimplePart      simple;
+    TextPart        text;
+    AsciiPart       ascii;
+    AsciiStringPart ascii_str;
 } AsciiStringRec;
 
 #endif /* ASCII_STRING */
@@ -136,26 +152,34 @@ typedef struct _AsciiStringRec {
  *
  ************************************************************/
 
-typedef struct {int empty;} AsciiDiskClassPart;
+typedef struct
+{
+    int empty;
+} AsciiDiskClassPart;
 
-typedef struct _AsciiDiskClassRec {
-    CoreClassPart	core_class;
-    SimpleClassPart	simple_class;
-    TextClassPart	text_class;
-    AsciiClassPart	ascii_class;
-    AsciiDiskClassPart	disk_class;
+typedef struct _AsciiDiskClassRec
+{
+    CoreClassPart      core_class;
+    SimpleClassPart    simple_class;
+    TextClassPart      text_class;
+    AsciiClassPart     ascii_class;
+    AsciiDiskClassPart disk_class;
 } AsciiDiskClassRec;
 
 extern AsciiDiskClassRec asciiDiskClassRec;
 
-typedef struct { char foo; /* keep compiler happy. */ } AsciiDiskPart;
+typedef struct
+{
+    char foo; /* keep compiler happy. */
+} AsciiDiskPart;
 
-typedef struct _AsciiDiskRec {
-    CorePart		core;
-    SimplePart		simple;
-    TextPart		text;
-    AsciiPart           ascii;
-    AsciiDiskPart       ascii_disk;
+typedef struct _AsciiDiskRec
+{
+    CorePart      core;
+    SimplePart    simple;
+    TextPart      text;
+    AsciiPart     ascii;
+    AsciiDiskPart ascii_disk;
 } AsciiDiskRec;
 #endif /* ASCII_DISK */
 

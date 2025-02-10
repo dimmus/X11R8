@@ -42,28 +42,18 @@ typedef int (*XmuCloseHookProc)(Display *dpy, XPointer data);
 
 _XFUNCPROTOBEGIN
 
-CloseHook XmuAddCloseDisplayHook
-(
- Display		*dpy,
- XmuCloseHookProc	proc,
- XPointer		arg
- );
+CloseHook
+XmuAddCloseDisplayHook(Display *dpy, XmuCloseHookProc proc, XPointer arg);
 
-Bool XmuLookupCloseDisplayHook
-(
- Display		*dpy,
- CloseHook		handle,
- XmuCloseHookProc	proc,
- XPointer		arg
- );
+Bool XmuLookupCloseDisplayHook(Display         *dpy,
+                               CloseHook        handle,
+                               XmuCloseHookProc proc,
+                               XPointer         arg);
 
-Bool XmuRemoveCloseDisplayHook
-(
- Display		*dpy,
- CloseHook		handle,
- XmuCloseHookProc	proc,
- XPointer		arg
- );
+Bool XmuRemoveCloseDisplayHook(Display         *dpy,
+                               CloseHook        handle,
+                               XmuCloseHookProc proc,
+                               XPointer         arg);
 
 _XFUNCPROTOEND
 

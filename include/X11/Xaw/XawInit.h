@@ -26,12 +26,12 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _XawInit_h
 #define _XawInit_h
 
-#define XawVendor	XVENDORNAMESHORT
+#define XawVendor XVENDORNAMESHORT
 
 #ifdef OLDXAW
-#define XawVersion	6700002L
+#  define XawVersion 6700002L
 #else
-#define	XawVersion	7000002L
+#  define XawVersion 7000002L
 
 typedef struct _XawDL XawDisplayList;
 #endif /* OLDXAW */
@@ -46,16 +46,14 @@ void XawInitializeWidgetSet(void);
 void XawInitializeDefaultConverters(void);
 #endif
 
-extern Widget XawOpenApplication(
-    XtAppContext *app_context_return,
-    Display      *dpy,
-    Screen       *screen,
-    String        application_name,
-    String        application_class,
-    WidgetClass   widget_class,
-    int          *argc,
-    _XtString    *argv
-);
+extern Widget XawOpenApplication(XtAppContext *app_context_return,
+                                 Display      *dpy,
+                                 Screen       *screen,
+                                 String        application_name,
+                                 String        application_class,
+                                 WidgetClass   widget_class,
+                                 int          *argc,
+                                 _XtString    *argv);
 
 _XFUNCPROTOEND
 

@@ -73,25 +73,19 @@ SOFTWARE.
 #define XtCIcon "Icon"
 #define XtNicon "icon"
 
-typedef struct _DialogClassRec	*DialogWidgetClass;
-typedef struct _DialogRec	*DialogWidget;
+typedef struct _DialogClassRec *DialogWidgetClass;
+typedef struct _DialogRec      *DialogWidget;
 
 extern WidgetClass dialogWidgetClass;
 
 _XFUNCPROTOBEGIN
 
-void XawDialogAddButton
-(
- Widget			dialog,
- _Xconst char		*name,
- XtCallbackProc		function,
- XtPointer		client_data
- );
+void XawDialogAddButton(Widget         dialog,
+                        _Xconst char  *name,
+                        XtCallbackProc function,
+                        XtPointer      client_data);
 
-char *XawDialogGetValueString
-(
- Widget			w
-);
+char *XawDialogGetValueString(Widget w);
 
 _XFUNCPROTOEND
 

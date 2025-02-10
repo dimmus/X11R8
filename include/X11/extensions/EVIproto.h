@@ -26,70 +26,80 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #include "X11/extensions/EVI.h"
 
-#define X_EVIQueryVersion		0
-#define X_EVIGetVisualInfo		1
+#define X_EVIQueryVersion  0
+#define X_EVIGetVisualInfo 1
 
 #define VisualID CARD32
 
 typedef CARD32 VisualID32;
 #define sz_VisualID32 4
 
-typedef struct _xExtendedVisualInfo {
-    VisualID	core_visual_id;
-    INT8	screen;
-    INT8	level;
-    CARD8	transparency_type;
-    CARD8	pad0;
-    CARD32	transparency_value;
-    CARD8	min_hw_colormaps;
-    CARD8	max_hw_colormaps;
-    CARD16	num_colormap_conflicts;
+typedef struct _xExtendedVisualInfo
+{
+    VisualID core_visual_id;
+    INT8     screen;
+    INT8     level;
+    CARD8    transparency_type;
+    CARD8    pad0;
+    CARD32   transparency_value;
+    CARD8    min_hw_colormaps;
+    CARD8    max_hw_colormaps;
+    CARD16   num_colormap_conflicts;
 } xExtendedVisualInfo;
+
 #define sz_xExtendedVisualInfo 16
 
-typedef struct _XEVIQueryVersion {
-    CARD8	reqType;		/* always XEVIReqCode */
-    CARD8	xeviReqType;		/* always X_EVIQueryVersion */
-    CARD16	length;
+typedef struct _XEVIQueryVersion
+{
+    CARD8  reqType;  /* always XEVIReqCode */
+    CARD8  xeviReqType;  /* always X_EVIQueryVersion */
+    CARD16 length;
 } xEVIQueryVersionReq;
-#define sz_xEVIQueryVersionReq	4
 
-typedef struct {
-    BYTE	type;			/* X_Reply */
-    CARD8 	unused;
-    CARD16	sequenceNumber;
-    CARD32	length;
-    CARD16	majorVersion;		/* major version of EVI protocol */
-    CARD16	minorVersion;		/* minor version of EVI protocol */
-    CARD32	pad0;
-    CARD32	pad1;
-    CARD32	pad2;
-    CARD32	pad3;
-    CARD32	pad4;
+#define sz_xEVIQueryVersionReq 4
+
+typedef struct
+{
+    BYTE   type;   /* X_Reply */
+    CARD8  unused;
+    CARD16 sequenceNumber;
+    CARD32 length;
+    CARD16 majorVersion;  /* major version of EVI protocol */
+    CARD16 minorVersion;  /* minor version of EVI protocol */
+    CARD32 pad0;
+    CARD32 pad1;
+    CARD32 pad2;
+    CARD32 pad3;
+    CARD32 pad4;
 } xEVIQueryVersionReply;
-#define sz_xEVIQueryVersionReply	32
 
-typedef struct _XEVIGetVisualInfoReq {
-    CARD8	reqType;	/* always XEVIReqCode */
-    CARD8	xeviReqType;	/* always X_EVIGetVisualInfo */
-    CARD16	length;
-    CARD32	n_visual;
+#define sz_xEVIQueryVersionReply 32
+
+typedef struct _XEVIGetVisualInfoReq
+{
+    CARD8  reqType; /* always XEVIReqCode */
+    CARD8  xeviReqType; /* always X_EVIGetVisualInfo */
+    CARD16 length;
+    CARD32 n_visual;
 } xEVIGetVisualInfoReq;
-#define sz_xEVIGetVisualInfoReq	8
 
-typedef struct _XEVIGetVisualInfoReply {
-    BYTE	type;  /* X_Reply */
-    CARD8	unused;
-    CARD16	sequenceNumber;
-    CARD32	length;
-    CARD32	n_info;
-    CARD32	n_conflicts;
-    CARD32	pad0;
-    CARD32	pad1;
-    CARD32	pad2;
-    CARD32	pad3;
+#define sz_xEVIGetVisualInfoReq 8
+
+typedef struct _XEVIGetVisualInfoReply
+{
+    BYTE   type;  /* X_Reply */
+    CARD8  unused;
+    CARD16 sequenceNumber;
+    CARD32 length;
+    CARD32 n_info;
+    CARD32 n_conflicts;
+    CARD32 pad0;
+    CARD32 pad1;
+    CARD32 pad2;
+    CARD32 pad3;
 } xEVIGetVisualInfoReply;
-#define sz_xEVIGetVisualInfoReply	32
+
+#define sz_xEVIGetVisualInfoReply 32
 
 #undef VisualID
 

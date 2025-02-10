@@ -60,36 +60,36 @@
 */
 
 typedef struct _TipClassRec *TipWidgetClass;
-typedef struct _TipRec *TipWidget;
+typedef struct _TipRec      *TipWidget;
 
 extern WidgetClass tipWidgetClass;
 
-#define XawTextEncoding8bit	0
-#define XawTextEncodingChar2b	1
+#define XawTextEncoding8bit   0
+#define XawTextEncodingChar2b 1
 
 #define XtNencoding "encoding"
-#define XtNtimeout "timeout"
-#define XtNtip "tip"
+#define XtNtimeout  "timeout"
+#define XtNtip      "tip"
 
 #ifdef XAW_INTERNATIONALIZATION
-#ifndef XtNfontSet
-#define XtNfontSet "fontSet"
-#endif
-#ifndef XtCFontSet
-#define XtCFontSet "FontSet"
-#endif
+#  ifndef XtNfontSet
+#    define XtNfontSet "fontSet"
+#  endif
+#  ifndef XtCFontSet
+#    define XtCFontSet "FontSet"
+#  endif
 #endif
 
 #define XtCEncoding "Encoding"
-#define XtCTimeout "Timeout"
-#define XtCTip "Tip"
+#define XtCTimeout  "Timeout"
+#define XtCTip      "Tip"
 
 #ifndef _XtStringDefs_h_
-#define XtNforeground "foreground"
-#define XtNlabel "label"
-#define XtNfont "font"
-#define XtNinternalWidth "internalWidth"
-#define XtNinternalHeight "internalHeight"
+#  define XtNforeground     "foreground"
+#  define XtNlabel          "label"
+#  define XtNfont           "font"
+#  define XtNinternalWidth  "internalWidth"
+#  define XtNinternalHeight "internalHeight"
 #endif
 
 /*
@@ -107,10 +107,7 @@ extern WidgetClass tipWidgetClass;
  * Description:
  *	Enables the tip event handler for this widget.
  */
-void XawTipEnable(
- Widget,
- String
-);
+void XawTipEnable(Widget, String);
 
 /*
  * Function:
@@ -122,8 +119,6 @@ void XawTipEnable(
  * Description:
  *	Disables the tip event handler for this widget.
  */
-void XawTipDisable(
- Widget
-);
+void XawTipDisable(Widget);
 
 #endif /* _XawTip_h */

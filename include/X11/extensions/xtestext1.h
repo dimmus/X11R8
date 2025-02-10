@@ -58,16 +58,18 @@ University of California.
  */
 
 #include "X11/extensions/xtestext1const.h"
+
 /*
  * This is the definition for the input action host format event structure.
  * This is the form that a client using this extension will see when
  * it receives an input action event.
  */
-typedef struct {
-        int     type;           /* always XTestInputActionType */
-	Display *display;
-	Window  window;
-        CARD8   actions[XTestACTIONS_SIZE];
+typedef struct
+{
+    int      type;           /* always XTestInputActionType */
+    Display *display;
+    Window   window;
+    CARD8    actions[XTestACTIONS_SIZE];
 } XTestInputActionEvent;
 
 /*
@@ -75,20 +77,37 @@ typedef struct {
  * This is the form that a client using this extension will see when
  * it receives an XTestFakeAck event.
  */
-typedef struct {
-        int     type;           /* always XTestFakeAckType */
-	Display *display;
-	Window  window;
+typedef struct
+{
+    int      type;           /* always XTestFakeAckType */
+    Display *display;
+    Window   window;
 } XTestFakeAckEvent;
 
 _XFUNCPROTOBEGIN
 
-int XTestFakeInput(register Display *dpy, char *action_list_addr, int action_list_size, int ack_flag);
+int XTestFakeInput(register Display *dpy,
+                   char             *action_list_addr,
+                   int               action_list_size,
+                   int               ack_flag);
 int XTestGetInput(register Display *dpy, int action_handling);
 int XTestQueryInputSize(register Display *dpy, unsigned long *size_return);
-int XTestPressKey(Display *display, int device_id, unsigned long delay, unsigned int keycode, unsigned int key_action);
-int XTestPressButton(Display * display, int device_id, unsigned long delay, unsigned int button_number, unsigned int button_action);
-int XTestMovePointer(Display *display, int device_id, unsigned long delay[], int x[], int y[], unsigned int count);
+int XTestPressKey(Display      *display,
+                  int           device_id,
+                  unsigned long delay,
+                  unsigned int  keycode,
+                  unsigned int  key_action);
+int XTestPressButton(Display      *display,
+                     int           device_id,
+                     unsigned long delay,
+                     unsigned int  button_number,
+                     unsigned int  button_action);
+int XTestMovePointer(Display      *display,
+                     int           device_id,
+                     unsigned long delay[],
+                     int           x[],
+                     int           y[],
+                     unsigned int  count);
 int XTestFlush(Display *display);
 int XTestStopInput(register Display *dpy);
 int XTestReset(register Display *dpy);

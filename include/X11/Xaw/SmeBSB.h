@@ -66,13 +66,13 @@ in this Software without prior written authorization from The Open Group.
 
 */
 
-typedef struct _SmeBSBClassRec    *SmeBSBObjectClass;
-typedef struct _SmeBSBRec         *SmeBSBObject;
+typedef struct _SmeBSBClassRec *SmeBSBObjectClass;
+typedef struct _SmeBSBRec      *SmeBSBObject;
 
 extern WidgetClass smeBSBObjectClass;
 
-#define XtNleftBitmap "leftBitmap"
-#define XtNleftMargin "leftMargin"
+#define XtNleftBitmap  "leftBitmap"
+#define XtNleftMargin  "leftMargin"
 #define XtNrightBitmap "rightBitmap"
 #define XtNrightMargin "rightMargin"
 #define XtNvertSpace   "vertSpace"
@@ -81,16 +81,16 @@ extern WidgetClass smeBSBObjectClass;
 #define XtCMenuName "MenuName"
 
 #ifndef XtNfontSet
-#define XtNfontSet		"fontSet"
+#  define XtNfontSet "fontSet"
 #endif
 
 #ifndef XtCFontSet
-#define XtCFontSet		"FontSet"
+#  define XtCFontSet "FontSet"
 #endif
 
-#define XtCLeftBitmap "LeftBitmap"
+#define XtCLeftBitmap        "LeftBitmap"
 #define XtCHorizontalMargins "HorizontalMargins"
-#define XtCRightBitmap "RightBitmap"
-#define XtCVertSpace   "VertSpace"
+#define XtCRightBitmap       "RightBitmap"
+#define XtCVertSpace         "VertSpace"
 
 #endif /* _SmeBSB_h */

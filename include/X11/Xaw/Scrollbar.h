@@ -103,30 +103,28 @@ SOFTWARE.
 */
 
 #define XtCMinimumThumb "MinimumThumb"
-#define XtCShown "Shown"
-#define XtCTopOfThumb "TopOfThumb"
+#define XtCShown        "Shown"
+#define XtCTopOfThumb   "TopOfThumb"
 
 #define XtNminimumThumb "minimumThumb"
-#define XtNtopOfThumb "topOfThumb"
+#define XtNtopOfThumb   "topOfThumb"
 
-typedef struct _ScrollbarRec	  *ScrollbarWidget;
+typedef struct _ScrollbarRec      *ScrollbarWidget;
 typedef struct _ScrollbarClassRec *ScrollbarWidgetClass;
 
 extern WidgetClass scrollbarWidgetClass;
 
 _XFUNCPROTOBEGIN
 
-void XawScrollbarSetThumb
-(
- Widget			scrollbar,
+void XawScrollbarSetThumb(Widget scrollbar,
 #if NeedWidePrototypes
- double			top,
- double			shown
+                          double top,
+                          double shown
 #else
- float			top,
- float			shown
+                          float top,
+                          float shown
 #endif
- );
+);
 
 _XFUNCPROTOEND
 

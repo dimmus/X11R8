@@ -33,51 +33,45 @@ Equipment Corporation.
 
 #include "X11/Xfuncproto.h"
 
-typedef struct {
-    Window  window;         /* PanoramiX window - may not exist */
-    int	    screen;
-    int     State;          /* PanoramiXOff, PanoramiXOn */
-    int	    width;	    /* width of this screen */
-    int     height;	    /* height of this screen */
-    int     ScreenCount;    /* real physical number of screens */
-    XID     eventMask;      /* selected events for this client */
+typedef struct
+{
+    Window window;         /* PanoramiX window - may not exist */
+    int    screen;
+    int    State;          /* PanoramiXOff, PanoramiXOn */
+    int    width;     /* width of this screen */
+    int    height;     /* height of this screen */
+    int    ScreenCount;    /* real physical number of screens */
+    XID    eventMask;      /* selected events for this client */
 } XPanoramiXInfo;
 
 _XFUNCPROTOBEGIN
 
-extern Bool XPanoramiXQueryExtension (
-    Display *		/* dpy */,
-    int *		/* event_base_return */,
-    int *		/* error_base_return */
+extern Bool XPanoramiXQueryExtension(Display * /* dpy */,
+                                     int * /* event_base_return */,
+                                     int *  /* error_base_return */
 );
 
-extern Status XPanoramiXQueryVersion(
-    Display *		/* dpy */,
-    int *		/* major_version_return */,
-    int *		/* minor_version_return */
+extern Status XPanoramiXQueryVersion(Display * /* dpy */,
+                                     int * /* major_version_return */,
+                                     int *  /* minor_version_return */
 );
 
-extern XPanoramiXInfo *XPanoramiXAllocInfo (
-    void
+extern XPanoramiXInfo *XPanoramiXAllocInfo(void);
+
+extern Status XPanoramiXGetState(Display * /* dpy */,
+                                 Drawable /* drawable */,
+                                 XPanoramiXInfo * /* panoramiX_info */
 );
 
-extern Status XPanoramiXGetState (
-    Display *		/* dpy */,
-    Drawable		/* drawable */,
-    XPanoramiXInfo *	/* panoramiX_info */
+extern Status XPanoramiXGetScreenCount(Display * /* dpy */,
+                                       Drawable /* drawable */,
+                                       XPanoramiXInfo * /* panoramiX_info */
 );
 
-extern Status XPanoramiXGetScreenCount (
-    Display *		/* dpy */,
-    Drawable		/* drawable */,
-    XPanoramiXInfo *	/* panoramiX_info */
-);
-
-extern Status XPanoramiXGetScreenSize (
-    Display *		/* dpy */,
-    Drawable		/* drawable */,
-    int			/* screen_num */,
-    XPanoramiXInfo *	/* panoramiX_info */
+extern Status XPanoramiXGetScreenSize(Display * /* dpy */,
+                                      Drawable /* drawable */,
+                                      int /* screen_num */,
+                                      XPanoramiXInfo * /* panoramiX_info */
 );
 
 _XFUNCPROTOEND

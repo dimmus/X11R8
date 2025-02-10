@@ -55,20 +55,20 @@ from The Open Group.
 #include "Xtransint.h"
 
 #ifdef __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wformat-nonliteral"
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#  pragma clang diagnostic push
+#  pragma clang diagnostic ignored "-Wformat-nonliteral"
+#  pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
 #ifdef LOCALCONN
-#include "Xtranslcl.c"
+#  include "Xtranslcl.c"
 #endif
 #if defined(TCPCONN) || defined(UNIXCONN)
-#include "Xtranssock.c"
+#  include "Xtranssock.c"
 #endif
 #include "Xtrans.c"
 #include "Xtransutil.c"
 
 #ifdef __clang__
-#pragma clang diagnostic pop
+#  pragma clang diagnostic pop
 #endif

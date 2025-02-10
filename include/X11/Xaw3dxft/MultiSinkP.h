@@ -22,7 +22,6 @@
  *      Author: Li Yuhong	 OMRON Corporation
  */
 
-
 /***********************************************************
 
 Copyright (c) 1987, 1988, 1994  X Consortium
@@ -94,32 +93,35 @@ SOFTWARE.
  *
  ************************************************************/
 
-typedef struct _MultiSinkClassPart {
-  int foo;
+typedef struct _MultiSinkClassPart
+{
+    int foo;
 } MultiSinkClassPart;
 
 /* Full class record declaration */
 
-typedef struct _MultiSinkClassRec {
-    ObjectClassPart     object_class;
-    TextSinkClassPart	text_sink_class;
-    MultiSinkClassPart	multi_sink_class;
+typedef struct _MultiSinkClassRec
+{
+    ObjectClassPart    object_class;
+    TextSinkClassPart  text_sink_class;
+    MultiSinkClassPart multi_sink_class;
 } MultiSinkClassRec;
 
 extern MultiSinkClassRec multiSinkClassRec;
 
 /* New fields for the MultiSink object record */
-typedef struct {
+typedef struct
+{
     /* public resources */
     Boolean echo;
     Boolean display_nonprinting;
 
     /* private state */
-    GC normgc, invgc, xorgc;
-    Pixmap insertCursorOn;
+    GC                 normgc, invgc, xorgc;
+    Pixmap             insertCursorOn;
     XawTextInsertState laststate;
-    short cursor_x, cursor_y;	/* Cursor Location. */
-    XFontSet fontset; /* font set to draw */
+    short              cursor_x, cursor_y; /* Cursor Location. */
+    XFontSet           fontset; /* font set to draw */
 } MultiSinkPart;
 
 /****************************************************************
@@ -128,12 +130,12 @@ typedef struct {
  *
  ****************************************************************/
 
-typedef struct _MultiSinkRec {
-    ObjectPart          object;
-    TextSinkPart	text_sink;
-    MultiSinkPart	multi_sink;
+typedef struct _MultiSinkRec
+{
+    ObjectPart    object;
+    TextSinkPart  text_sink;
+    MultiSinkPart multi_sink;
 } MultiSinkRec;
-
 
 /********************************************
  *
@@ -142,12 +144,10 @@ typedef struct _MultiSinkRec {
  *
  *******************************************/
 
-extern void _XawMultiSinkPosToXY(
-    Widget			/* w */,
-    XawTextPosition		/* pos */,
-    Position *			/* x */,
-    Position *			/*y */
+extern void _XawMultiSinkPosToXY(Widget /* w */,
+                                 XawTextPosition /* pos */,
+                                 Position * /* x */,
+                                 Position *   /*y */
 );
 
 #endif /* _XawMultiSinkP_h */
-

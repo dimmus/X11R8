@@ -52,138 +52,163 @@ SOFTWARE.
 #include "X11/Xlib.h"
 #include "X11/extensions/XI.h"
 
-#define _deviceKeyPress		0
-#define _deviceKeyRelease	1
+#define _deviceKeyPress   0
+#define _deviceKeyRelease 1
 
-#define _deviceButtonPress	0
-#define _deviceButtonRelease	1
+#define _deviceButtonPress   0
+#define _deviceButtonRelease 1
 
-#define _deviceMotionNotify	0
+#define _deviceMotionNotify 0
 
-#define _deviceFocusIn		0
-#define _deviceFocusOut		1
+#define _deviceFocusIn  0
+#define _deviceFocusOut 1
 
-#define _proximityIn		0
-#define _proximityOut		1
+#define _proximityIn  0
+#define _proximityOut 1
 
-#define _deviceStateNotify	0
-#define _deviceMappingNotify	1
-#define _changeDeviceNotify	2
+#define _deviceStateNotify   0
+#define _deviceMappingNotify 1
+#define _changeDeviceNotify  2
 /* Space of 3 between is necessary! Reserved for DeviceKeyStateNotify,
    DeviceButtonStateNotify, DevicePresenceNotify (essentially unused). This
    code has to be in sync with FixExtensionEvents() in xserver/Xi/extinit.c */
-#define _propertyNotify		6
+#define _propertyNotify 6
 
-#define FindTypeAndClass(d,type,_class,classid,offset) \
-    { int _i; XInputClassInfo *_ip; \
-    type = 0; _class = 0; \
-    for (_i=0, _ip= ((XDevice *) d)->classes; \
-	 _i< ((XDevice *) d)->num_classes; \
-	 _i++, _ip++) \
-	if (_ip->input_class == classid) \
-	    {type =  _ip->event_type_base + offset; \
-	     _class =  ((XDevice *) d)->device_id << 8 | type;}}
+#define FindTypeAndClass(d, type, _class, classid, offset)      \
+    {                                                           \
+        int              _i;                                    \
+        XInputClassInfo *_ip;                                   \
+        type   = 0;                                             \
+        _class = 0;                                             \
+        for (_i = 0, _ip = ((XDevice *)d)->classes;             \
+             _i < ((XDevice *)d)->num_classes;                  \
+             _i++, _ip++)                                       \
+            if (_ip->input_class == classid)                    \
+            {                                                   \
+                type   = _ip->event_type_base + offset;         \
+                _class = ((XDevice *)d)->device_id << 8 | type; \
+            }                                                   \
+    }
 
-#define DeviceKeyPress(d,type,_class) \
+#define DeviceKeyPress(d, type, _class) \
     FindTypeAndClass(d, type, _class, KeyClass, _deviceKeyPress)
 
-#define DeviceKeyRelease(d,type,_class) \
+#define DeviceKeyRelease(d, type, _class) \
     FindTypeAndClass(d, type, _class, KeyClass, _deviceKeyRelease)
 
-#define DeviceButtonPress(d,type,_class) \
+#define DeviceButtonPress(d, type, _class) \
     FindTypeAndClass(d, type, _class, ButtonClass, _deviceButtonPress)
 
-#define DeviceButtonRelease(d,type,_class) \
+#define DeviceButtonRelease(d, type, _class) \
     FindTypeAndClass(d, type, _class, ButtonClass, _deviceButtonRelease)
 
-#define DeviceMotionNotify(d,type,_class) \
+#define DeviceMotionNotify(d, type, _class) \
     FindTypeAndClass(d, type, _class, ValuatorClass, _deviceMotionNotify)
 
-#define DeviceFocusIn(d,type,_class) \
+#define DeviceFocusIn(d, type, _class) \
     FindTypeAndClass(d, type, _class, FocusClass, _deviceFocusIn)
 
-#define DeviceFocusOut(d,type,_class) \
+#define DeviceFocusOut(d, type, _class) \
     FindTypeAndClass(d, type, _class, FocusClass, _deviceFocusOut)
 
-#define ProximityIn(d,type,_class) \
+#define ProximityIn(d, type, _class) \
     FindTypeAndClass(d, type, _class, ProximityClass, _proximityIn)
 
-#define ProximityOut(d,type,_class) \
+#define ProximityOut(d, type, _class) \
     FindTypeAndClass(d, type, _class, ProximityClass, _proximityOut)
 
-#define DeviceStateNotify(d,type,_class) \
+#define DeviceStateNotify(d, type, _class) \
     FindTypeAndClass(d, type, _class, OtherClass, _deviceStateNotify)
 
-#define DeviceMappingNotify(d,type,_class) \
+#define DeviceMappingNotify(d, type, _class) \
     FindTypeAndClass(d, type, _class, OtherClass, _deviceMappingNotify)
 
-#define ChangeDeviceNotify(d,type,_class) \
+#define ChangeDeviceNotify(d, type, _class) \
     FindTypeAndClass(d, type, _class, OtherClass, _changeDeviceNotify)
 
 #define DevicePropertyNotify(d, type, _class) \
     FindTypeAndClass(d, type, _class, OtherClass, _propertyNotify)
 
-#define DevicePointerMotionHint(d,type,_class) \
-    { _class =  ((XDevice *) d)->device_id << 8 | _devicePointerMotionHint;}
+#define DevicePointerMotionHint(d, type, _class)                            \
+    {                                                                       \
+        _class = ((XDevice *)d)->device_id << 8 | _devicePointerMotionHint; \
+    }
 
-#define DeviceButton1Motion(d,type,_class) \
-    { _class =  ((XDevice *) d)->device_id << 8 | _deviceButton1Motion;}
+#define DeviceButton1Motion(d, type, _class)                            \
+    {                                                                   \
+        _class = ((XDevice *)d)->device_id << 8 | _deviceButton1Motion; \
+    }
 
-#define DeviceButton2Motion(d,type,_class) \
-    { _class =  ((XDevice *) d)->device_id << 8 | _deviceButton2Motion;}
+#define DeviceButton2Motion(d, type, _class)                            \
+    {                                                                   \
+        _class = ((XDevice *)d)->device_id << 8 | _deviceButton2Motion; \
+    }
 
-#define DeviceButton3Motion(d,type,_class) \
-    { _class =  ((XDevice *) d)->device_id << 8 | _deviceButton3Motion;}
+#define DeviceButton3Motion(d, type, _class)                            \
+    {                                                                   \
+        _class = ((XDevice *)d)->device_id << 8 | _deviceButton3Motion; \
+    }
 
-#define DeviceButton4Motion(d,type, _class) \
-    { _class =  ((XDevice *) d)->device_id << 8 | _deviceButton4Motion;}
+#define DeviceButton4Motion(d, type, _class)                            \
+    {                                                                   \
+        _class = ((XDevice *)d)->device_id << 8 | _deviceButton4Motion; \
+    }
 
-#define DeviceButton5Motion(d,type,_class) \
-    { _class =  ((XDevice *) d)->device_id << 8 | _deviceButton5Motion;}
+#define DeviceButton5Motion(d, type, _class)                            \
+    {                                                                   \
+        _class = ((XDevice *)d)->device_id << 8 | _deviceButton5Motion; \
+    }
 
-#define DeviceButtonMotion(d,type, _class) \
-    { _class =  ((XDevice *) d)->device_id << 8 | _deviceButtonMotion;}
+#define DeviceButtonMotion(d, type, _class)                            \
+    {                                                                  \
+        _class = ((XDevice *)d)->device_id << 8 | _deviceButtonMotion; \
+    }
 
-#define DeviceOwnerGrabButton(d,type,_class) \
-    { _class =  ((XDevice *) d)->device_id << 8 | _deviceOwnerGrabButton;}
+#define DeviceOwnerGrabButton(d, type, _class)                            \
+    {                                                                     \
+        _class = ((XDevice *)d)->device_id << 8 | _deviceOwnerGrabButton; \
+    }
 
-#define DeviceButtonPressGrab(d,type,_class) \
-    { _class =  ((XDevice *) d)->device_id << 8 | _deviceButtonGrab;}
+#define DeviceButtonPressGrab(d, type, _class)                       \
+    {                                                                \
+        _class = ((XDevice *)d)->device_id << 8 | _deviceButtonGrab; \
+    }
 
-#define NoExtensionEvent(d,type,_class) \
-    { _class =  ((XDevice *) d)->device_id << 8 | _noExtensionEvent;}
-
+#define NoExtensionEvent(d, type, _class)                            \
+    {                                                                \
+        _class = ((XDevice *)d)->device_id << 8 | _noExtensionEvent; \
+    }
 
 /* We need the declaration for DevicePresence. */
 #if defined(__cplusplus) || defined(c_plusplus)
 extern "C" {
 #endif
-    extern int _XiGetDevicePresenceNotifyEvent(Display *);
-    extern void _xibaddevice( Display *dpy, int *error);
-    extern void _xibadclass( Display *dpy, int *error);
-    extern void _xibadevent( Display *dpy, int *error);
-    extern void _xibadmode( Display *dpy, int *error);
-    extern void _xidevicebusy( Display *dpy, int *error);
+extern int  _XiGetDevicePresenceNotifyEvent(Display *);
+extern void _xibaddevice(Display *dpy, int *error);
+extern void _xibadclass(Display *dpy, int *error);
+extern void _xibadevent(Display *dpy, int *error);
+extern void _xibadmode(Display *dpy, int *error);
+extern void _xidevicebusy(Display *dpy, int *error);
 #if defined(__cplusplus) || defined(c_plusplus)
 }
 #endif
 
-#define DevicePresence(dpy, type, _class)                       \
-    {                                                           \
-        type = _XiGetDevicePresenceNotifyEvent(dpy);            \
-        _class =  (0x10000 | _devicePresence);                  \
+#define DevicePresence(dpy, type, _class)              \
+    {                                                  \
+        type   = _XiGetDevicePresenceNotifyEvent(dpy); \
+        _class = (0x10000 | _devicePresence);          \
     }
 
 /* Errors */
-#define BadDevice(dpy,error) _xibaddevice(dpy, &error)
+#define BadDevice(dpy, error) _xibaddevice(dpy, &error)
 
-#define BadClass(dpy,error) _xibadclass(dpy, &error)
+#define BadClass(dpy, error) _xibadclass(dpy, &error)
 
-#define BadEvent(dpy,error) _xibadevent(dpy, &error)
+#define BadEvent(dpy, error) _xibadevent(dpy, &error)
 
-#define BadMode(dpy,error) _xibadmode(dpy, &error)
+#define BadMode(dpy, error) _xibadmode(dpy, &error)
 
-#define DeviceBusy(dpy,error) _xidevicebusy(dpy, &error)
+#define DeviceBusy(dpy, error) _xidevicebusy(dpy, &error)
 
 typedef struct _XAnyClassinfo *XAnyClassPtr;
 
@@ -196,28 +221,28 @@ typedef struct _XAnyClassinfo *XAnyClassPtr;
  *
  */
 
-typedef struct 
-    {
-    int            type;         /* of event */
-    unsigned long  serial;       /* # of last request processed */
-    Bool           send_event;   /* true if from SendEvent request */
-    Display        *display;     /* Display the event was read from */
-    Window         window;       /* "event" window reported relative to */
-    XID            deviceid;
-    Window         root;         /* root window event occurred on */
-    Window         subwindow;    /* child window */
-    Time           time;         /* milliseconds */
-    int            x, y;         /* x, y coordinates in event window */
-    int            x_root;       /* coordinates relative to root */
-    int            y_root;       /* coordinates relative to root */
-    unsigned int   state;        /* key or button mask */
-    unsigned int   keycode;      /* detail */
-    Bool           same_screen;  /* same screen flag */
-    unsigned int   device_state; /* device key or button mask */
-    unsigned char  axes_count;
-    unsigned char  first_axis;
-    int            axis_data[6];
-    } XDeviceKeyEvent;
+typedef struct
+{
+    int           type;         /* of event */
+    unsigned long serial;       /* # of last request processed */
+    Bool          send_event;   /* true if from SendEvent request */
+    Display      *display;     /* Display the event was read from */
+    Window        window;       /* "event" window reported relative to */
+    XID           deviceid;
+    Window        root;         /* root window event occurred on */
+    Window        subwindow;    /* child window */
+    Time          time;         /* milliseconds */
+    int           x, y;         /* x, y coordinates in event window */
+    int           x_root;       /* coordinates relative to root */
+    int           y_root;       /* coordinates relative to root */
+    unsigned int  state;        /* key or button mask */
+    unsigned int  keycode;      /* detail */
+    Bool          same_screen;  /* same screen flag */
+    unsigned int  device_state; /* device key or button mask */
+    unsigned char axes_count;
+    unsigned char first_axis;
+    int           axis_data[6];
+} XDeviceKeyEvent;
 
 typedef XDeviceKeyEvent XDeviceKeyPressedEvent;
 typedef XDeviceKeyEvent XDeviceKeyReleasedEvent;
@@ -229,11 +254,12 @@ typedef XDeviceKeyEvent XDeviceKeyReleasedEvent;
  *
  */
 
-typedef struct {
+typedef struct
+{
     int           type;         /* of event */
     unsigned long serial;       /* # of last request processed by server */
     Bool          send_event;   /* true if from a SendEvent request */
-    Display       *display;     /* Display the event was read from */
+    Display      *display;     /* Display the event was read from */
     Window        window;       /* "event" window reported relative to */
     XID           deviceid;
     Window        root;         /* root window that the event occurred on */
@@ -249,7 +275,7 @@ typedef struct {
     unsigned char axes_count;
     unsigned char first_axis;
     int           axis_data[6];
-    } XDeviceButtonEvent;
+} XDeviceButtonEvent;
 
 typedef XDeviceButtonEvent XDeviceButtonPressedEvent;
 typedef XDeviceButtonEvent XDeviceButtonReleasedEvent;
@@ -261,12 +287,12 @@ typedef XDeviceButtonEvent XDeviceButtonReleasedEvent;
  *
  */
 
-typedef struct 
-    {
+typedef struct
+{
     int           type;        /* of event */
     unsigned long serial;      /* # of last request processed by server */
     Bool          send_event;  /* true if from a SendEvent request */
-    Display       *display;    /* Display the event was read from */
+    Display      *display;    /* Display the event was read from */
     Window        window;      /* "event" window reported relative to */
     XID           deviceid;
     Window        root;        /* root window that the event occurred on */
@@ -282,7 +308,7 @@ typedef struct
     unsigned char axes_count;
     unsigned char first_axis;
     int           axis_data[6];
-    } XDeviceMotionEvent;
+} XDeviceMotionEvent;
 
 /*******************************************************************
  *
@@ -291,23 +317,23 @@ typedef struct
  *
  */
 
-typedef struct 
-    {
+typedef struct
+{
     int           type;       /* of event */
     unsigned long serial;     /* # of last request processed by server */
     Bool          send_event; /* true if from a SendEvent request */
-    Display       *display;   /* Display the event was read from */
+    Display      *display;   /* Display the event was read from */
     Window        window;     /* "event" window reported relative to */
     XID           deviceid;
     int           mode;       /* NotifyNormal, NotifyGrab, NotifyUngrab */
     int           detail;
-	/*
+    /*
 	 * NotifyAncestor, NotifyVirtual, NotifyInferior, 
 	 * NotifyNonLinear,NotifyNonLinearVirtual, NotifyPointer,
 	 * NotifyPointerRoot, NotifyDetailNone 
 	 */
-    Time                time;
-    } XDeviceFocusChangeEvent;
+    Time time;
+} XDeviceFocusChangeEvent;
 
 typedef XDeviceFocusChangeEvent XDeviceFocusInEvent;
 typedef XDeviceFocusChangeEvent XDeviceFocusOutEvent;
@@ -319,26 +345,27 @@ typedef XDeviceFocusChangeEvent XDeviceFocusOutEvent;
  *
  */
 
-typedef struct 
-    {
-    int             type;      /* ProximityIn or ProximityOut */        
-    unsigned long   serial;    /* # of last request processed by server */
-    Bool            send_event; /* true if this came from a SendEvent request */
-    Display         *display;  /* Display the event was read from */
-    Window          window;      
-    XID	            deviceid;
-    Window          root;            
-    Window          subwindow;      
-    Time            time;            
-    int             x, y;            
-    int             x_root, y_root;  
-    unsigned int    state;           
-    Bool            same_screen;     
-    unsigned int    device_state; /* device key or button mask */
-    unsigned char   axes_count;
-    unsigned char   first_axis;
-    int             axis_data[6];
-    } XProximityNotifyEvent;
+typedef struct
+{
+    int           type;      /* ProximityIn or ProximityOut */
+    unsigned long serial;    /* # of last request processed by server */
+    Bool          send_event; /* true if this came from a SendEvent request */
+    Display      *display;  /* Display the event was read from */
+    Window        window;
+    XID           deviceid;
+    Window        root;
+    Window        subwindow;
+    Time          time;
+    int           x, y;
+    int           x_root, y_root;
+    unsigned int  state;
+    Bool          same_screen;
+    unsigned int  device_state; /* device key or button mask */
+    unsigned char axes_count;
+    unsigned char first_axis;
+    int           axis_data[6];
+} XProximityNotifyEvent;
+
 typedef XProximityNotifyEvent XProximityInEvent;
 typedef XProximityNotifyEvent XProximityOutEvent;
 
@@ -350,59 +377,63 @@ typedef XProximityNotifyEvent XProximityOutEvent;
  */
 
 typedef struct
-    {
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    unsigned char	c_class;
+    unsigned char c_class;
 #else
-    unsigned char	class;
+    unsigned char class;
 #endif
-    unsigned char	length;
-    } XInputClass;
+    unsigned char length;
+} XInputClass;
 
-typedef struct {
+typedef struct
+{
     int           type;
     unsigned long serial;       /* # of last request processed by server */
-    Bool          send_event;   /* true if this came from a SendEvent request */
-    Display       *display;     /* Display the event was read from */
+    Bool          send_event; /* true if this came from a SendEvent request */
+    Display      *display; /* Display the event was read from */
     Window        window;
     XID           deviceid;
     Time          time;
     int           num_classes;
-    char	  data[64];
-} XDeviceStateNotifyEvent;	
+    char          data[64];
+} XDeviceStateNotifyEvent;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    unsigned char	c_class;
+    unsigned char c_class;
 #else
-    unsigned char	class;
+    unsigned char class;
 #endif
-    unsigned char	length;
-    unsigned char	num_valuators;
-    unsigned char	mode;
-    int        		valuators[6];
+    unsigned char length;
+    unsigned char num_valuators;
+    unsigned char mode;
+    int           valuators[6];
 } XValuatorStatus;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    unsigned char	c_class;
+    unsigned char c_class;
 #else
-    unsigned char	class;
+    unsigned char class;
 #endif
-    unsigned char	length;
-    short		num_keys;
-    char        	keys[32];
+    unsigned char length;
+    short         num_keys;
+    char          keys[32];
 } XKeyStatus;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    unsigned char	c_class;
+    unsigned char c_class;
 #else
-    unsigned char	class;
+    unsigned char class;
 #endif
-    unsigned char	length;
-    short		num_buttons;
-    char        	buttons[32];
+    unsigned char length;
+    short         num_buttons;
+    char          buttons[32];
 } XButtonStatus;
 
 /*******************************************************************
@@ -412,18 +443,19 @@ typedef struct {
  *
  */
 
-typedef struct {
+typedef struct
+{
     int           type;
-    unsigned long serial;       /* # of last request processed by server */
-    Bool          send_event;   /* true if this came from a SendEvent request */
-    Display       *display;     /* Display the event was read from */
-    Window        window;       /* unused */
+    unsigned long serial; /* # of last request processed by server */
+    Bool          send_event; /* true if this came from a SendEvent request */
+    Display      *display; /* Display the event was read from */
+    Window        window; /* unused */
     XID           deviceid;
     Time          time;
-    int           request;      /* one of MappingModifier, MappingKeyboard,
+    int           request; /* one of MappingModifier, MappingKeyboard,
                                     MappingPointer */
-    int           first_keycode;/* first keycode */
-    int           count;        /* defines range of change w. first_keycode*/
+    int           first_keycode; /* first keycode */
+    int           count; /* defines range of change w. first_keycode*/
 } XDeviceMappingEvent;
 
 /*******************************************************************
@@ -433,15 +465,16 @@ typedef struct {
  *
  */
 
-typedef struct {
+typedef struct
+{
     int           type;
-    unsigned long serial;       /* # of last request processed by server */
-    Bool          send_event;   /* true if this came from a SendEvent request */
-    Display       *display;     /* Display the event was read from */
-    Window        window;       /* unused */
+    unsigned long serial; /* # of last request processed by server */
+    Bool          send_event; /* true if this came from a SendEvent request */
+    Display      *display; /* Display the event was read from */
+    Window        window; /* unused */
     XID           deviceid;
     Time          time;
-    int           request;      /* NewPointer or NewKeyboard */
+    int           request; /* NewPointer or NewKeyboard */
 } XChangeDeviceNotifyEvent;
 
 /*******************************************************************
@@ -457,12 +490,13 @@ typedef struct {
  * then that control has changed meaningfully.
  */
 
-typedef struct {
+typedef struct
+{
     int           type;
-    unsigned long serial;       /* # of last request processed by server */
-    Bool          send_event;   /* true if this came from a SendEvent request */
-    Display       *display;     /* Display the event was read from */
-    Window        window;       /* unused */
+    unsigned long serial; /* # of last request processed by server */
+    Bool          send_event; /* true if this came from a SendEvent request */
+    Display      *display; /* Display the event was read from */
+    Window        window; /* unused */
     Time          time;
     Bool          devchange;
     XID           deviceid;
@@ -473,18 +507,18 @@ typedef struct {
  * Notifies the client that a property on a device has changed value. The
  * client is expected to query the server for updated value of the property.
  */
-typedef struct {
+typedef struct
+{
     int           type;
-    unsigned long serial;       /* # of last request processed by server */
-    Bool          send_event;   /* true if this came from a SendEvent request */
-    Display       *display;     /* Display the event was read from */
-    Window        window;       /* unused */
+    unsigned long serial; /* # of last request processed by server */
+    Bool          send_event; /* true if this came from a SendEvent request */
+    Display      *display; /* Display the event was read from */
+    Window        window; /* unused */
     Time          time;
-    XID           deviceid;     /* id of the device that changed */
-    Atom          atom;         /* the property that changed */
-    int           state;        /* PropertyNewValue or PropertyDeleted */
+    XID           deviceid; /* id of the device that changed */
+    Atom          atom; /* the property that changed */
+    int           state; /* PropertyNewValue or PropertyDeleted */
 } XDevicePropertyNotifyEvent;
-
 
 /*******************************************************************
  *
@@ -494,184 +528,198 @@ typedef struct {
  *
  */
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-     XID            c_class;
+    XID c_class;
 #else
-     XID            class;
+    XID class;
 #endif
-     int            length;
-     XID            id;
+    int length;
+    XID id;
 } XFeedbackState;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    XID     c_class;
+    XID c_class;
 #else
-    XID     class;
+    XID class;
 #endif
-    int     length;
-    XID     id;
-    int     click;
-    int     percent;
-    int     pitch;
-    int     duration;
-    int     led_mask;
-    int     global_auto_repeat;
-    char    auto_repeats[32];
+    int  length;
+    XID  id;
+    int  click;
+    int  percent;
+    int  pitch;
+    int  duration;
+    int  led_mask;
+    int  global_auto_repeat;
+    char auto_repeats[32];
 } XKbdFeedbackState;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    XID     c_class;
+    XID c_class;
 #else
-    XID     class;
+    XID class;
 #endif
-    int     length;
-    XID     id;
-    int     accelNum;
-    int     accelDenom;
-    int     threshold;
+    int length;
+    XID id;
+    int accelNum;
+    int accelDenom;
+    int threshold;
 } XPtrFeedbackState;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    XID     c_class;
+    XID c_class;
 #else
-    XID     class;
+    XID class;
 #endif
-    int     length;
-    XID     id;
-    int     resolution;
-    int     minVal;
-    int     maxVal;
+    int length;
+    XID id;
+    int resolution;
+    int minVal;
+    int maxVal;
 } XIntegerFeedbackState;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    XID     c_class;
+    XID c_class;
 #else
-    XID     class;
+    XID class;
 #endif
     int     length;
     XID     id;
     int     max_symbols;
     int     num_syms_supported;
-    KeySym  *syms_supported;
+    KeySym *syms_supported;
 } XStringFeedbackState;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    XID     c_class;
+    XID c_class;
 #else
-    XID     class;
+    XID class;
 #endif
-    int     length;
-    XID     id;
-    int     percent;
-    int     pitch;
-    int     duration;
+    int length;
+    XID id;
+    int percent;
+    int pitch;
+    int duration;
 } XBellFeedbackState;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    XID     c_class;
+    XID c_class;
 #else
-    XID     class;
+    XID class;
 #endif
-    int     length;
-    XID     id;
-    int     led_values;
-    int     led_mask;
+    int length;
+    XID id;
+    int led_values;
+    int led_mask;
 } XLedFeedbackState;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-     XID            c_class;
+    XID c_class;
 #else
-     XID            class;
+    XID class;
 #endif
-     int            length;
-     XID	    id;
+    int length;
+    XID id;
 } XFeedbackControl;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    XID     c_class;
+    XID c_class;
 #else
-    XID     class;
+    XID class;
 #endif
-    int     length;
-    XID     id;
-    int     accelNum;
-    int     accelDenom;
-    int     threshold;
+    int length;
+    XID id;
+    int accelNum;
+    int accelDenom;
+    int threshold;
 } XPtrFeedbackControl;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    XID     c_class;
+    XID c_class;
 #else
-    XID     class;
+    XID class;
 #endif
-    int     length;
-    XID     id;
-    int     click;
-    int     percent;
-    int     pitch;
-    int     duration;
-    int     led_mask;
-    int     led_value;
-    int     key;
-    int     auto_repeat_mode;
+    int length;
+    XID id;
+    int click;
+    int percent;
+    int pitch;
+    int duration;
+    int led_mask;
+    int led_value;
+    int key;
+    int auto_repeat_mode;
 } XKbdFeedbackControl;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    XID     c_class;
+    XID c_class;
 #else
-    XID     class;
+    XID class;
 #endif
     int     length;
     XID     id;
     int     num_keysyms;
-    KeySym  *syms_to_display;
+    KeySym *syms_to_display;
 } XStringFeedbackControl;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    XID     c_class;
+    XID c_class;
 #else
-    XID     class;
+    XID class;
 #endif
-    int     length;
-    XID     id;
-    int     int_to_display;
+    int length;
+    XID id;
+    int int_to_display;
 } XIntegerFeedbackControl;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    XID     c_class;
+    XID c_class;
 #else
-    XID     class;
+    XID class;
 #endif
-    int     length;
-    XID     id;
-    int     percent;
-    int     pitch;
-    int     duration;
+    int length;
+    XID id;
+    int percent;
+    int pitch;
+    int duration;
 } XBellFeedbackControl;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    XID     c_class;
+    XID c_class;
 #else
-    XID     class;
+    XID class;
 #endif
-    int     length;
-    XID     id;
-    int     led_mask;
-    int     led_values;
+    int length;
+    XID id;
+    int led_mask;
+    int led_values;
 } XLedFeedbackControl;
 
 /*******************************************************************
@@ -680,69 +728,77 @@ typedef struct {
  *
  */
 
-typedef struct {
-     XID            control;
-     int            length;
+typedef struct
+{
+    XID control;
+    int length;
 } XDeviceControl;
 
-typedef struct {
-     XID            control;
-     int            length;
-     int            first_valuator;
-     int            num_valuators;
-     int            *resolutions;
+typedef struct
+{
+    XID  control;
+    int  length;
+    int  first_valuator;
+    int  num_valuators;
+    int *resolutions;
 } XDeviceResolutionControl;
 
-typedef struct {
-     XID            control;
-     int            length;
-     int            num_valuators;
-     int            *resolutions;
-     int            *min_resolutions;
-     int            *max_resolutions;
+typedef struct
+{
+    XID  control;
+    int  length;
+    int  num_valuators;
+    int *resolutions;
+    int *min_resolutions;
+    int *max_resolutions;
 } XDeviceResolutionState;
 
-typedef struct {
-    XID             control;
-    int             length;
-    int             min_x;
-    int             max_x;
-    int             min_y;
-    int             max_y;
-    int             flip_x;
-    int             flip_y;
-    int             rotation;
-    int             button_threshold;
+typedef struct
+{
+    XID control;
+    int length;
+    int min_x;
+    int max_x;
+    int min_y;
+    int max_y;
+    int flip_x;
+    int flip_y;
+    int rotation;
+    int button_threshold;
 } XDeviceAbsCalibControl, XDeviceAbsCalibState;
 
-typedef struct {
-    XID             control;
-    int             length;
-    int             offset_x;
-    int             offset_y;
-    int             width;
-    int             height;
-    int             screen;
-    XID             following;
+typedef struct
+{
+    XID control;
+    int length;
+    int offset_x;
+    int offset_y;
+    int width;
+    int height;
+    int screen;
+    XID following;
 } XDeviceAbsAreaControl, XDeviceAbsAreaState;
 
-typedef struct {
-    XID             control;
-    int             length;
-    int             status;
+typedef struct
+{
+    XID control;
+    int length;
+    int status;
 } XDeviceCoreControl;
 
-typedef struct {
-    XID             control;
-    int             length;
-    int             status;
-    int             iscore;
+typedef struct
+{
+    XID control;
+    int length;
+    int status;
+    int iscore;
 } XDeviceCoreState;
 
-typedef struct {
-    XID             control;
-    int             length;
-    int             enable;
+typedef struct
+{
+    XID control;
+    int length;
+    int enable;
 } XDeviceEnableControl, XDeviceEnableState;
 
 /*******************************************************************
@@ -755,77 +811,80 @@ typedef struct {
  *
  */
 
-typedef struct _XAnyClassinfo {
+typedef struct _XAnyClassinfo
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    XID 	c_class;
+    XID c_class;
 #else
-    XID 	class;
+    XID class;
 #endif
-    int 	length;
-    } XAnyClassInfo;
+    int length;
+} XAnyClassInfo;
 
 typedef struct _XDeviceInfo *XDeviceInfoPtr;
 
 typedef struct _XDeviceInfo
-    {
-    XID                 id;        
-    Atom                type;
-    char                *name;
-    int                 num_classes;
-    int                 use;
-    XAnyClassPtr 	inputclassinfo;
-    } XDeviceInfo;
+{
+    XID          id;
+    Atom         type;
+    char        *name;
+    int          num_classes;
+    int          use;
+    XAnyClassPtr inputclassinfo;
+} XDeviceInfo;
 
 typedef struct _XKeyInfo *XKeyInfoPtr;
 
 typedef struct _XKeyInfo
-    {
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    XID			c_class;
+    XID c_class;
 #else
-    XID			class;
+    XID class;
 #endif
-    int			length;
-    unsigned short      min_keycode;
-    unsigned short      max_keycode;
-    unsigned short      num_keys;
-    } XKeyInfo;
+    int            length;
+    unsigned short min_keycode;
+    unsigned short max_keycode;
+    unsigned short num_keys;
+} XKeyInfo;
 
 typedef struct _XButtonInfo *XButtonInfoPtr;
 
-typedef struct _XButtonInfo {
+typedef struct _XButtonInfo
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    XID		c_class;
+    XID c_class;
 #else
-    XID		class;
+    XID class;
 #endif
-    int		length;
-    short 	num_buttons;
-    } XButtonInfo;
+    int   length;
+    short num_buttons;
+} XButtonInfo;
 
 typedef struct _XAxisInfo *XAxisInfoPtr;
 
-typedef struct _XAxisInfo {
-    int 	resolution;
-    int 	min_value;
-    int 	max_value;
-    } XAxisInfo;
+typedef struct _XAxisInfo
+{
+    int resolution;
+    int min_value;
+    int max_value;
+} XAxisInfo;
 
 typedef struct _XValuatorInfo *XValuatorInfoPtr;
 
-typedef struct	_XValuatorInfo
-    {
+typedef struct _XValuatorInfo
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    XID			c_class;
+    XID c_class;
 #else
-    XID			class;
+    XID class;
 #endif
-    int			length;
-    unsigned char       num_axes;
-    unsigned char       mode;
-    unsigned long       motion_buffer;
-    XAxisInfoPtr        axes;
-    } XValuatorInfo;
+    int           length;
+    unsigned char num_axes;
+    unsigned char mode;
+    unsigned long motion_buffer;
+    XAxisInfoPtr  axes;
+} XValuatorInfo;
 
 /*******************************************************************
  *
@@ -837,18 +896,18 @@ typedef struct	_XValuatorInfo
  *
  */
 
-
-typedef struct {
-        unsigned char   input_class;
-        unsigned char   event_type_base;
+typedef struct
+{
+    unsigned char input_class;
+    unsigned char event_type_base;
 } XInputClassInfo;
 
-typedef struct {
-        XID                    device_id;
-        int                    num_classes;
-        XInputClassInfo        *classes;
+typedef struct
+{
+    XID              device_id;
+    int              num_classes;
+    XInputClassInfo *classes;
 } XDevice;
-
 
 /*******************************************************************
  *
@@ -857,9 +916,10 @@ typedef struct {
  *
  */
 
-typedef struct {
-        XEventClass     event_type;
-        XID             device;
+typedef struct
+{
+    XEventClass event_type;
+    XID         device;
 } XEventList;
 
 /*******************************************************************
@@ -870,11 +930,11 @@ typedef struct {
  *
  */
 
-typedef struct {
-        Time   time;
-        int    *data;
+typedef struct
+{
+    Time time;
+    int *data;
 } XDeviceTimeCoord;
-
 
 /*******************************************************************
  *
@@ -883,10 +943,11 @@ typedef struct {
  *
  */
 
-typedef struct {
-        XID		device_id;
-        int		num_classes;
-        XInputClass	*data;
+typedef struct
+{
+    XID          device_id;
+    int          num_classes;
+    XInputClass *data;
 } XDeviceState;
 
 /*******************************************************************
@@ -900,41 +961,42 @@ typedef struct {
  *
  */
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    unsigned char	c_class;
+    unsigned char c_class;
 #else
-    unsigned char	class;
+    unsigned char class;
 #endif
-    unsigned char	length;
-    unsigned char	num_valuators;
-    unsigned char	mode;
-    int        		*valuators;
+    unsigned char length;
+    unsigned char num_valuators;
+    unsigned char mode;
+    int          *valuators;
 } XValuatorState;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    unsigned char	c_class;
+    unsigned char c_class;
 #else
-    unsigned char	class;
+    unsigned char class;
 #endif
-    unsigned char	length;
-    short		num_keys;
-    char        	keys[32];
+    unsigned char length;
+    short         num_keys;
+    char          keys[32];
 } XKeyState;
 
-typedef struct {
+typedef struct
+{
 #if defined(__cplusplus) || defined(c_plusplus)
-    unsigned char	c_class;
+    unsigned char c_class;
 #else
-    unsigned char	class;
+    unsigned char class;
 #endif
-    unsigned char	length;
-    short		num_buttons;
-    char        	buttons[32];
+    unsigned char length;
+    short         num_buttons;
+    char          buttons[32];
 } XButtonState;
-
-
 
 /*******************************************************************
  *
@@ -944,332 +1006,281 @@ typedef struct {
 
 _XFUNCPROTOBEGIN
 
-extern int	XChangeKeyboardDevice(
-    Display*		/* display */,
-    XDevice*		/* device */
+extern int XChangeKeyboardDevice(Display * /* display */, XDevice * /* device */
 );
 
-extern int	XChangePointerDevice(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    int			/* xaxis */,
-    int			/* yaxis */
+extern int XChangePointerDevice(Display * /* display */,
+                                XDevice * /* device */,
+                                int /* xaxis */,
+                                int /* yaxis */
 );
 
-extern int	XGrabDevice(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    Window		/* grab_window */,
-    Bool		/* ownerEvents */,
-    int			/* event count */,
-    XEventClass*	/* event_list */,
-    int			/* this_device_mode */,
-    int			/* other_devices_mode */,
-    Time		/* time */
+extern int XGrabDevice(Display * /* display */,
+                       XDevice * /* device */,
+                       Window /* grab_window */,
+                       Bool /* ownerEvents */,
+                       int /* event count */,
+                       XEventClass * /* event_list */,
+                       int /* this_device_mode */,
+                       int /* other_devices_mode */,
+                       Time /* time */
 );
 
-extern int	XUngrabDevice(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    Time 		/* time */
+extern int
+XUngrabDevice(Display * /* display */, XDevice * /* device */, Time /* time */
 );
 
-extern int	XGrabDeviceKey(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    unsigned int	/* key */,
-    unsigned int	/* modifiers */,
-    XDevice*		/* modifier_device */,
-    Window		/* grab_window */,
-    Bool		/* owner_events */,
-    unsigned int	/* event_count */,
-    XEventClass*	/* event_list */,
-    int			/* this_device_mode */,
-    int			/* other_devices_mode */
+extern int XGrabDeviceKey(Display * /* display */,
+                          XDevice * /* device */,
+                          unsigned int /* key */,
+                          unsigned int /* modifiers */,
+                          XDevice * /* modifier_device */,
+                          Window /* grab_window */,
+                          Bool /* owner_events */,
+                          unsigned int /* event_count */,
+                          XEventClass * /* event_list */,
+                          int /* this_device_mode */,
+                          int /* other_devices_mode */
 );
 
-extern int	XUngrabDeviceKey(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    unsigned int	/* key */,
-    unsigned int	/* modifiers */,
-    XDevice*		/* modifier_dev */,
-    Window		/* grab_window */
+extern int XUngrabDeviceKey(Display * /* display */,
+                            XDevice * /* device */,
+                            unsigned int /* key */,
+                            unsigned int /* modifiers */,
+                            XDevice * /* modifier_dev */,
+                            Window /* grab_window */
 );
 
-extern int	XGrabDeviceButton(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    unsigned int	/* button */,
-    unsigned int	/* modifiers */,
-    XDevice*		/* modifier_device */,
-    Window		/* grab_window */,
-    Bool		/* owner_events */,
-    unsigned int	/* event_count */,
-    XEventClass*	/* event_list */,
-    int			/* this_device_mode */,
-    int			/* other_devices_mode */
+extern int XGrabDeviceButton(Display * /* display */,
+                             XDevice * /* device */,
+                             unsigned int /* button */,
+                             unsigned int /* modifiers */,
+                             XDevice * /* modifier_device */,
+                             Window /* grab_window */,
+                             Bool /* owner_events */,
+                             unsigned int /* event_count */,
+                             XEventClass * /* event_list */,
+                             int /* this_device_mode */,
+                             int /* other_devices_mode */
 );
 
-extern int	XUngrabDeviceButton(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    unsigned int	/* button */,
-    unsigned int	/* modifiers */,
-    XDevice*		/* modifier_dev */,
-    Window		/* grab_window */
+extern int XUngrabDeviceButton(Display * /* display */,
+                               XDevice * /* device */,
+                               unsigned int /* button */,
+                               unsigned int /* modifiers */,
+                               XDevice * /* modifier_dev */,
+                               Window /* grab_window */
 );
 
-extern int	XAllowDeviceEvents(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    int			/* event_mode */,
-    Time		/* time */
+extern int XAllowDeviceEvents(Display * /* display */,
+                              XDevice * /* device */,
+                              int /* event_mode */,
+                              Time /* time */
 );
 
-extern int	XGetDeviceFocus(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    Window*		/* focus */,
-    int*		/* revert_to */,
-    Time*		/* time */
+extern int XGetDeviceFocus(Display * /* display */,
+                           XDevice * /* device */,
+                           Window * /* focus */,
+                           int * /* revert_to */,
+                           Time * /* time */
 );
 
-extern int	XSetDeviceFocus(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    Window		/* focus */,
-    int			/* revert_to */,
-    Time		/* time */
+extern int XSetDeviceFocus(Display * /* display */,
+                           XDevice * /* device */,
+                           Window /* focus */,
+                           int /* revert_to */,
+                           Time /* time */
 );
 
-extern XFeedbackState	*XGetFeedbackControl(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    int*		/* num_feedbacks */
+extern XFeedbackState *XGetFeedbackControl(Display * /* display */,
+                                           XDevice * /* device */,
+                                           int * /* num_feedbacks */
 );
 
-extern void	XFreeFeedbackList(
-    XFeedbackState*	/* list */
+extern void XFreeFeedbackList(XFeedbackState * /* list */
 );
 
-extern int	XChangeFeedbackControl(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    unsigned long	/* mask */,
-    XFeedbackControl*	/* f */
+extern int XChangeFeedbackControl(Display * /* display */,
+                                  XDevice * /* device */,
+                                  unsigned long /* mask */,
+                                  XFeedbackControl * /* f */
 );
 
-extern int	XDeviceBell(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    XID			/* feedbackclass */,
-    XID			/* feedbackid */,
-    int			/* percent */
+extern int XDeviceBell(Display * /* display */,
+                       XDevice * /* device */,
+                       XID /* feedbackclass */,
+                       XID /* feedbackid */,
+                       int /* percent */
 );
 
-extern KeySym	*XGetDeviceKeyMapping(
-    Display*		/* display */,
-    XDevice*		/* device */,
+extern KeySym *XGetDeviceKeyMapping(Display * /* display */,
+                                    XDevice * /* device */,
 #if NeedWidePrototypes
-    unsigned int	/* first */,
+                                    unsigned int /* first */,
 #else
-    KeyCode		/* first */,
+                                    KeyCode /* first */,
 #endif
-    int			/* keycount */,
-    int*		/* syms_per_code */
+                                    int /* keycount */,
+                                    int * /* syms_per_code */
 );
 
-extern int	XChangeDeviceKeyMapping(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    int			/* first */,
-    int			/* syms_per_code */,
-    KeySym*		/* keysyms */,
-    int			/* count */
+extern int XChangeDeviceKeyMapping(Display * /* display */,
+                                   XDevice * /* device */,
+                                   int /* first */,
+                                   int /* syms_per_code */,
+                                   KeySym * /* keysyms */,
+                                   int /* count */
 );
 
-extern XModifierKeymap	*XGetDeviceModifierMapping(
-    Display*		/* display */,
-    XDevice*		/* device */
+extern XModifierKeymap *XGetDeviceModifierMapping(Display * /* display */,
+                                                  XDevice * /* device */
 );
 
-extern int	XSetDeviceModifierMapping(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    XModifierKeymap*	/* modmap */
+extern int XSetDeviceModifierMapping(Display * /* display */,
+                                     XDevice * /* device */,
+                                     XModifierKeymap * /* modmap */
 );
 
-extern int	XSetDeviceButtonMapping(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    unsigned char*	/* map[] */,
-    int			/* nmap */
+extern int XSetDeviceButtonMapping(Display * /* display */,
+                                   XDevice * /* device */,
+                                   unsigned char * /* map[] */,
+                                   int /* nmap */
 );
 
-extern int	XGetDeviceButtonMapping(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    unsigned char*	/* map[] */,
-    unsigned int	/* nmap */
+extern int XGetDeviceButtonMapping(Display * /* display */,
+                                   XDevice * /* device */,
+                                   unsigned char * /* map[] */,
+                                   unsigned int /* nmap */
 );
 
-extern XDeviceState	*XQueryDeviceState(
-    Display*		/* display */,
-    XDevice*		/* device */
+extern XDeviceState *XQueryDeviceState(Display * /* display */,
+                                       XDevice * /* device */
 );
 
-extern void	XFreeDeviceState(
-    XDeviceState*	/* list */
+extern void XFreeDeviceState(XDeviceState * /* list */
 );
 
-extern XExtensionVersion	*XGetExtensionVersion(
-    Display*		/* display */,
-    _Xconst char*	/* name */
+extern XExtensionVersion *XGetExtensionVersion(Display * /* display */,
+                                               _Xconst char * /* name */
 );
 
-extern XDeviceInfo	*XListInputDevices(
-    Display*		/* display */,
-    int*		/* ndevices */
+extern XDeviceInfo *XListInputDevices(Display * /* display */,
+                                      int * /* ndevices */
 );
 
-extern void	XFreeDeviceList(
-    XDeviceInfo*	/* list */
+extern void XFreeDeviceList(XDeviceInfo * /* list */
 );
 
-extern XDevice	*XOpenDevice(
-    Display*		/* display */,
-    XID			/* id */
+extern XDevice *XOpenDevice(Display * /* display */, XID /* id */
 );
 
-extern int	XCloseDevice(
-    Display*		/* display */,
-    XDevice*		/* device */
+extern int XCloseDevice(Display * /* display */, XDevice * /* device */
 );
 
-extern int	XSetDeviceMode(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    int			/* mode */
+extern int
+XSetDeviceMode(Display * /* display */, XDevice * /* device */, int /* mode */
 );
 
-extern int	XSetDeviceValuators(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    int*		/* valuators */,
-    int			/* first_valuator */,
-    int			/* num_valuators */
+extern int XSetDeviceValuators(Display * /* display */,
+                               XDevice * /* device */,
+                               int * /* valuators */,
+                               int /* first_valuator */,
+                               int /* num_valuators */
 );
 
-extern XDeviceControl	*XGetDeviceControl(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    int			/* control */
+extern XDeviceControl *XGetDeviceControl(Display * /* display */,
+                                         XDevice * /* device */,
+                                         int /* control */
 );
 
-extern int	XChangeDeviceControl(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    int			/* control */,
-    XDeviceControl*	/* d */
+extern int XChangeDeviceControl(Display * /* display */,
+                                XDevice * /* device */,
+                                int /* control */,
+                                XDeviceControl * /* d */
 );
 
-extern int	XSelectExtensionEvent(
-    Display*		/* display */,
-    Window		/* w */,
-    XEventClass*	/* event_list */,
-    int			/* count */
+extern int XSelectExtensionEvent(Display * /* display */,
+                                 Window /* w */,
+                                 XEventClass * /* event_list */,
+                                 int /* count */
 );
 
-extern int XGetSelectedExtensionEvents(
-    Display*		/* display */,
-    Window		/* w */,
-    int*		/* this_client_count */,
-    XEventClass**	/* this_client_list */,
-    int*		/* all_clients_count */,
-    XEventClass**	/* all_clients_list */
+extern int XGetSelectedExtensionEvents(Display * /* display */,
+                                       Window /* w */,
+                                       int * /* this_client_count */,
+                                       XEventClass ** /* this_client_list */,
+                                       int * /* all_clients_count */,
+                                       XEventClass ** /* all_clients_list */
 );
 
-extern int	XChangeDeviceDontPropagateList(
-    Display*		/* display */,
-    Window		/* window */,
-    int			/* count */,
-    XEventClass*	/* events */,
-    int			/* mode */
+extern int XChangeDeviceDontPropagateList(Display * /* display */,
+                                          Window /* window */,
+                                          int /* count */,
+                                          XEventClass * /* events */,
+                                          int /* mode */
 );
 
-extern XEventClass	*XGetDeviceDontPropagateList(
-    Display*		/* display */,
-    Window		/* window */,
-    int*		/* count */
+extern XEventClass *XGetDeviceDontPropagateList(Display * /* display */,
+                                                Window /* window */,
+                                                int * /* count */
 );
 
-extern Status	XSendExtensionEvent(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    Window		/* dest */,
-    Bool		/* prop */,
-    int			/* count */,
-    XEventClass*	/* list */,
-    XEvent*		/* event */
+extern Status XSendExtensionEvent(Display * /* display */,
+                                  XDevice * /* device */,
+                                  Window /* dest */,
+                                  Bool /* prop */,
+                                  int /* count */,
+                                  XEventClass * /* list */,
+                                  XEvent * /* event */
 );
 
-extern XDeviceTimeCoord	*XGetDeviceMotionEvents(
-    Display*		/* display */,
-    XDevice*		/* device */,
-    Time		/* start */,
-    Time		/* stop */,
-    int*		/* nEvents */,
-    int*		/* mode */,
-    int*		/* axis_count */
+extern XDeviceTimeCoord *XGetDeviceMotionEvents(Display * /* display */,
+                                                XDevice * /* device */,
+                                                Time /* start */,
+                                                Time /* stop */,
+                                                int * /* nEvents */,
+                                                int * /* mode */,
+                                                int * /* axis_count */
 );
 
-extern void	XFreeDeviceMotionEvents(
-    XDeviceTimeCoord*	/* events */
+extern void XFreeDeviceMotionEvents(XDeviceTimeCoord * /* events */
 );
 
-extern void	XFreeDeviceControl(
-    XDeviceControl*	/* control */
+extern void XFreeDeviceControl(XDeviceControl * /* control */
 );
 
-extern Atom*   XListDeviceProperties(
-    Display*            /* dpy */,
-    XDevice*            /* dev */,
-    int*                /* nprops_return */
+extern Atom *XListDeviceProperties(Display * /* dpy */,
+                                   XDevice * /* dev */,
+                                   int * /* nprops_return */
 );
 
-extern void XChangeDeviceProperty(
-    Display*            /* dpy */,
-    XDevice*            /* dev */,
-    Atom                /* property */,
-    Atom                /* type */,
-    int                 /* format */,
-    int                 /* mode */,
-    _Xconst unsigned char * /*data */,
-    int                 /* nelements */
+extern void XChangeDeviceProperty(Display * /* dpy */,
+                                  XDevice * /* dev */,
+                                  Atom /* property */,
+                                  Atom /* type */,
+                                  int /* format */,
+                                  int /* mode */,
+                                  _Xconst unsigned char * /*data */,
+                                  int /* nelements */
 );
 
-extern void
-XDeleteDeviceProperty(
-    Display*            /* dpy */,
-    XDevice*            /* dev */,
-    Atom                /* property */
+extern void XDeleteDeviceProperty(Display * /* dpy */,
+                                  XDevice * /* dev */,
+                                  Atom /* property */
 );
 
-extern Status
-XGetDeviceProperty(
-     Display*           /* dpy*/,
-     XDevice*           /* dev*/,
-     Atom               /* property*/,
-     long               /* offset*/,
-     long               /* length*/,
-     Bool               /* delete*/,
-     Atom               /* req_type*/,
-     Atom*              /* actual_type*/,
-     int*               /* actual_format*/,
-     unsigned long*     /* nitems*/,
-     unsigned long*     /* bytes_after*/,
-     unsigned char**    /* prop*/
+extern Status XGetDeviceProperty(Display * /* dpy*/,
+                                 XDevice * /* dev*/,
+                                 Atom /* property*/,
+                                 long /* offset*/,
+                                 long /* length*/,
+                                 Bool /* delete*/,
+                                 Atom /* req_type*/,
+                                 Atom * /* actual_type*/,
+                                 int * /* actual_format*/,
+                                 unsigned long * /* nitems*/,
+                                 unsigned long * /* bytes_after*/,
+                                 unsigned char ** /* prop*/
 );
 
 _XFUNCPROTOEND

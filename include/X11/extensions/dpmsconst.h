@@ -29,18 +29,17 @@ Equipment Corporation.
 #ifndef _DPMSCONST_H
 #define _DPMSCONST_H 1
 
-#define DPMSMajorVersion	1
-#define DPMSMinorVersion	2
+#define DPMSMajorVersion 1
+#define DPMSMinorVersion 2
 
-#define DPMSExtensionName	"DPMS"
+#define DPMSExtensionName "DPMS"
 
-#define DPMSModeOn	0
-#define DPMSModeStandby	1
-#define DPMSModeSuspend	2
-#define DPMSModeOff	3
+#define DPMSModeOn      0
+#define DPMSModeStandby 1
+#define DPMSModeSuspend 2
+#define DPMSModeOff     3
 
-#define DPMSInfoNotifyMask	(1L << 0)
-#define DPMSInfoNotify		0
+#define DPMSInfoNotifyMask (1L << 0)
+#define DPMSInfoNotify     0
 
 #endif /* !_DPMSCONST_H */
-

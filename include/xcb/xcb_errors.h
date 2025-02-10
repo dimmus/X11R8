@@ -72,7 +72,7 @@ void xcb_errors_context_free(xcb_errors_context_t *ctx);
  * may.
  */
 const char *xcb_errors_get_name_for_major_code(xcb_errors_context_t *ctx,
-		uint8_t major_code);
+                                               uint8_t major_code);
 
 /**
  * Get the name corresponding to some minor code. When the major_code does not
@@ -86,8 +86,8 @@ const char *xcb_errors_get_name_for_major_code(xcb_errors_context_t *ctx,
  * major code or NULL for unknown codes.
  */
 const char *xcb_errors_get_name_for_minor_code(xcb_errors_context_t *ctx,
-		uint8_t major_code,
-		uint16_t minor_code);
+                                               uint8_t               major_code,
+                                               uint16_t minor_code);
 
 /**
  * Get the name corresponding to some core event code. If possible, you should
@@ -103,7 +103,8 @@ const char *xcb_errors_get_name_for_minor_code(xcb_errors_context_t *ctx,
  * may.
  */
 const char *xcb_errors_get_name_for_core_event(xcb_errors_context_t *ctx,
-		uint8_t event_code, const char **extension);
+                                               uint8_t               event_code,
+                                               const char          **extension);
 
 /**
  * Get the name corresponding to some XGE or XKB event. XKB does not actually
@@ -119,7 +120,8 @@ const char *xcb_errors_get_name_for_core_event(xcb_errors_context_t *ctx,
  * event or NULL for unknown event types.
  */
 const char *xcb_errors_get_name_for_xge_event(xcb_errors_context_t *ctx,
-		uint8_t major_code, uint16_t event_type);
+                                              uint8_t               major_code,
+                                              uint16_t              event_type);
 
 /**
  * Get a human printable name describing the type of some event.
@@ -133,7 +135,8 @@ const char *xcb_errors_get_name_for_xge_event(xcb_errors_context_t *ctx,
  * event or NULL for unknown event types.
  */
 const char *xcb_errors_get_name_for_xcb_event(xcb_errors_context_t *ctx,
-		xcb_generic_event_t *event, const char **extension);
+                                              xcb_generic_event_t  *event,
+                                              const char          **extension);
 
 /**
  * Get the name corresponding to some error.
@@ -148,7 +151,8 @@ const char *xcb_errors_get_name_for_xcb_event(xcb_errors_context_t *ctx,
  * may.
  */
 const char *xcb_errors_get_name_for_error(xcb_errors_context_t *ctx,
-		uint8_t error_code, const char **extension);
+                                          uint8_t               error_code,
+                                          const char          **extension);
 
 #ifdef __cplusplus
 }

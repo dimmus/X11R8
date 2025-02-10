@@ -80,23 +80,23 @@ SOFTWARE.
 
 */
 
-#define XtNcursor "cursor"
-#define XtNcursorName "cursorName"
+#define XtNcursor            "cursor"
+#define XtNcursorName        "cursorName"
 #define XtNinsensitiveBorder "insensitiveBorder"
 
 #define XtCInsensitive "Insensitive"
 
 #ifdef XAW_INTERNATIONALIZATION
-#ifndef XtCInternational
-#define XtCInternational "International"
-#endif
-#ifndef XtNinternational
-#define XtNinternational "international"
-#endif
+#  ifndef XtCInternational
+#    define XtCInternational "International"
+#  endif
+#  ifndef XtNinternational
+#    define XtNinternational "international"
+#  endif
 #endif
 
-typedef struct _SimpleClassRec	*SimpleWidgetClass;
-typedef struct _SimpleRec	*SimpleWidget;
+typedef struct _SimpleClassRec *SimpleWidgetClass;
+typedef struct _SimpleRec      *SimpleWidget;
 
 extern WidgetClass simpleWidgetClass;
 

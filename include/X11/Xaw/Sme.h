@@ -55,16 +55,15 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifndef XtCInternational
-#define XtCInternational	"International"
+#  define XtCInternational "International"
 #endif
 
 #ifndef XtNinternational
-#define XtNinternational	"international"
+#  define XtNinternational "international"
 #endif
 
-
 typedef struct _SmeClassRec *SmeObjectClass;
-typedef struct _SmeRec *SmeObject;
+typedef struct _SmeRec      *SmeObject;
 
 extern WidgetClass smeObjectClass;
 

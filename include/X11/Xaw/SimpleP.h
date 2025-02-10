@@ -56,41 +56,45 @@ _XFUNCPROTOBEGIN
 
 #include "X11/Xaw/XawInit.h"
 
-typedef struct {
+typedef struct
+{
     Bool (*change_sensitive)(Widget);
 #ifndef OLDXAW
     XtPointer extension;
 #endif
 } SimpleClassPart;
 
-#define XtInheritChangeSensitive	((Bool (*)(Widget))_XtInherit)
+#define XtInheritChangeSensitive ((Bool(*)(Widget))_XtInherit)
 
-typedef struct _SimpleClassRec {
-    CoreClassPart	core_class;
-    SimpleClassPart	simple_class;
+typedef struct _SimpleClassRec
+{
+    CoreClassPart   core_class;
+    SimpleClassPart simple_class;
 } SimpleClassRec;
 
 extern SimpleClassRec simpleClassRec;
 
-typedef struct {
+typedef struct
+{
     /* resources */
-    Cursor cursor;
-    Pixmap insensitive_border;
-    String cursor_name;			/* cursor specified by name */
-    Pixel pointer_fg, pointer_bg;	/* Pointer colors */
+    Cursor  cursor;
+    Pixmap  insensitive_border;
+    String  cursor_name;   /* cursor specified by name */
+    Pixel   pointer_fg, pointer_bg; /* Pointer colors */
     Boolean international;
 
     /* private */
 #ifndef OLDXAW
     XawDisplayList *display_list;
-    String tip;
-    XtPointer pad[3];	/* for future use and keep binary compatibility */
+    String          tip;
+    XtPointer       pad[3]; /* for future use and keep binary compatibility */
 #endif
 } SimplePart;
 
-typedef struct _SimpleRec {
-    CorePart	core;
-    SimplePart	simple;
+typedef struct _SimpleRec
+{
+    CorePart   core;
+    SimplePart simple;
 } SimpleRec;
 
 _XFUNCPROTOEND

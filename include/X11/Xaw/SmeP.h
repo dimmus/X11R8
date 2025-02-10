@@ -47,39 +47,43 @@ in this Software without prior written authorization from The Open Group.
 _XFUNCPROTOBEGIN
 
 /* New fields for the Sme widget class */
-typedef struct _SmeClassPart {
+typedef struct _SmeClassPart
+{
     XtWidgetProc highlight;
     XtWidgetProc unhighlight;
     XtWidgetProc notify;
-    XtPointer	 extension;
+    XtPointer    extension;
 } SmeClassPart;
 
 /* Full class record */
-typedef struct _SmeClassRec {
-    RectObjClassPart    rect_class;
-    SmeClassPart	sme_class;
+typedef struct _SmeClassRec
+{
+    RectObjClassPart rect_class;
+    SmeClassPart     sme_class;
 } SmeClassRec;
 
 extern SmeClassRec smeClassRec;
 
 /* New fields for the Sme widget */
-typedef struct {
+typedef struct
+{
     /* resources */
     XtCallbackList callbacks;
-    Boolean international;
+    Boolean        international;
 #ifndef OLDXAW
-    XtPointer pad[4];	/* for future use and keep binary compatibility */
+    XtPointer pad[4]; /* for future use and keep binary compatibility */
 #endif
 } SmePart;
 
 /* Full instance record */
-typedef struct _SmeRec {
-    ObjectPart	object;
-    RectObjPart	rectangle;
-    SmePart	sme;
+typedef struct _SmeRec
+{
+    ObjectPart  object;
+    RectObjPart rectangle;
+    SmePart     sme;
 } SmeRec;
 
-#define XtInheritHighlight	((XtWidgetProc)_XtInherit)
+#define XtInheritHighlight   ((XtWidgetProc)_XtInherit)
 #define XtInheritUnhighlight XtInheritHighlight
 #define XtInheritNotify      XtInheritHighlight
 

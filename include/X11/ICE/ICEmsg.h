@@ -35,7 +35,7 @@ Author: Ralph Mor, X Consortium
 
 #include <assert.h>
 #if !defined(__cplusplus) && !defined(static_assert)
-#define static_assert(cond, msg) /* skip for non-C11 compilers */
+#  define static_assert(cond, msg) /* skip for non-C11 compilers */
 #endif
 
 _XFUNCPROTOBEGIN
@@ -44,77 +44,63 @@ _XFUNCPROTOBEGIN
  * Function prototypes for internal ICElib functions
  */
 
-extern Status _IceRead (
-    IceConn		/* iceConn */,
-    unsigned long	/* nbytes */,
-    char *		/* ptr */
+extern Status
+_IceRead(IceConn /* iceConn */, unsigned long /* nbytes */, char *  /* ptr */
 );
 
-extern void _IceReadSkip (
-    IceConn		/* iceConn */,
-    unsigned long	/* nbytes */
+extern void _IceReadSkip(IceConn /* iceConn */, unsigned long /* nbytes */
 );
 
-extern void _IceWrite (
-    IceConn		/* iceConn */,
-    unsigned long	/* nbytes */,
-    char *		/* ptr */
+extern void
+_IceWrite(IceConn /* iceConn */, unsigned long /* nbytes */, char *  /* ptr */
 );
 
-
-extern void _IceErrorBadMinor (
-    IceConn		/* iceConn */,
-    int			/* majorOpcode */,
-    int			/* offendingMinor */,
-    int			/* severity */
+extern void _IceErrorBadMinor(IceConn /* iceConn */,
+                              int /* majorOpcode */,
+                              int /* offendingMinor */,
+                              int   /* severity */
 );
 
-extern void _IceErrorBadState (
-    IceConn		/* iceConn */,
-    int			/* majorOpcode */,
-    int			/* offendingMinor */,
-    int			/* severity */
+extern void _IceErrorBadState(IceConn /* iceConn */,
+                              int /* majorOpcode */,
+                              int /* offendingMinor */,
+                              int   /* severity */
 );
 
-extern void _IceErrorBadLength (
-    IceConn		/* iceConn */,
-    int			/* majorOpcode */,
-    int			/* offendingMinor */,
-    int			/* severity */
+extern void _IceErrorBadLength(IceConn /* iceConn */,
+                               int /* majorOpcode */,
+                               int /* offendingMinor */,
+                               int   /* severity */
 );
 
-extern void _IceErrorBadValue (
-    IceConn		/* iceConn */,
-    int			/* majorOpcode */,
-    int			/* offendingMinor */,
-    int			/* offset */,
-    int			/* length */,
-    IcePointer		/* value */
+extern void _IceErrorBadValue(IceConn /* iceConn */,
+                              int /* majorOpcode */,
+                              int /* offendingMinor */,
+                              int /* offset */,
+                              int /* length */,
+                              IcePointer  /* value */
 );
 
-extern IcePoAuthStatus _IcePoMagicCookie1Proc (
-    IceConn		/* iceConn */,
-    IcePointer *	/* authStatePtr */,
-    Bool 		/* cleanUp */,
-    Bool		/* swap */,
-    int     		/* authDataLen */,
-    IcePointer		/* authData */,
-    int *		/* replyDataLenRet */,
-    IcePointer *	/* replyDataRet */,
-    char **		/* errorStringRet */
+extern IcePoAuthStatus _IcePoMagicCookie1Proc(IceConn /* iceConn */,
+                                              IcePointer * /* authStatePtr */,
+                                              Bool /* cleanUp */,
+                                              Bool /* swap */,
+                                              int /* authDataLen */,
+                                              IcePointer /* authData */,
+                                              int * /* replyDataLenRet */,
+                                              IcePointer * /* replyDataRet */,
+                                              char **  /* errorStringRet */
 );
 
-extern IcePaAuthStatus _IcePaMagicCookie1Proc (
-    IceConn		/* iceConn */,
-    IcePointer *	/* authStatePtr */,
-    Bool		/* swap */,
-    int     		/* authDataLen */,
-    IcePointer		/* authData */,
-    int *		/* replyDataLenRet */,
-    IcePointer *	/* replyDataRet */,
-    char **		/* errorStringRet */
+extern IcePaAuthStatus _IcePaMagicCookie1Proc(IceConn /* iceConn */,
+                                              IcePointer * /* authStatePtr */,
+                                              Bool /* swap */,
+                                              int /* authDataLen */,
+                                              IcePointer /* authData */,
+                                              int * /* replyDataLenRet */,
+                                              IcePointer * /* replyDataRet */,
+                                              char **  /* errorStringRet */
 );
-
 
 /*
  * Macro to check if IO operations are valid on an ICE connection.
@@ -122,90 +108,108 @@ extern IcePaAuthStatus _IcePaMagicCookie1Proc (
 
 #define IceValidIO(_iceConn) _iceConn->io_ok
 
-
 /*
  * Macros for writing messages.
  */
 
 #define IceGetHeader(_iceConn, _major, _minor, _headerSize, _msgType, _pMsg) \
-do { \
-    static_assert(_headerSize <= 1024, \
-                  "Header size larger than ICE_OUTBUFSIZE"); \
-    if ((_iceConn->outbufptr + _headerSize) > _iceConn->outbufmax) \
-        IceFlush (_iceConn); \
-    _pMsg = (_msgType *) _iceConn->outbufptr; \
-    _pMsg->majorOpcode = _major; \
-    _pMsg->minorOpcode = _minor; \
-    _pMsg->length = (_headerSize - SIZEOF (iceMsg)) >> 3; \
-    _iceConn->outbufptr += _headerSize; \
-    _iceConn->send_sequence++; \
-} while (0)
+    do                                                                       \
+    {                                                                        \
+        static_assert(_headerSize <= 1024,                                   \
+                      "Header size larger than ICE_OUTBUFSIZE");             \
+        if ((_iceConn->outbufptr + _headerSize) > _iceConn->outbufmax)       \
+            IceFlush(_iceConn);                                              \
+        _pMsg              = (_msgType *)_iceConn->outbufptr;                \
+        _pMsg->majorOpcode = _major;                                         \
+        _pMsg->minorOpcode = _minor;                                         \
+        _pMsg->length      = (_headerSize - SIZEOF(iceMsg)) >> 3;            \
+        _iceConn->outbufptr += _headerSize;                                  \
+        _iceConn->send_sequence++;                                           \
+    }                                                                        \
+    while (0)
 
-#define IceGetHeaderExtra(_iceConn, _major, _minor, _headerSize, _extra, _msgType, _pMsg, _pData) \
-do { \
-    static_assert(_headerSize <= 1024, \
-                  "Header size larger than ICE_OUTBUFSIZE"); \
-    if ((_iceConn->outbufptr + \
-	_headerSize + ((_extra) << 3)) > _iceConn->outbufmax) \
-        IceFlush (_iceConn); \
-    _pMsg = (_msgType *) _iceConn->outbufptr; \
-    _iceConn->outbufptr += _headerSize; \
-    if ((_iceConn->outbufptr + ((_extra) << 3)) <= _iceConn->outbufmax) { \
-        _pData = _iceConn->outbufptr; \
-        _iceConn->outbufptr += ((_extra) << 3); \
-    } \
-    else \
-        _pData = NULL; \
-    _pMsg->majorOpcode = _major; \
-    _pMsg->minorOpcode = _minor; \
-    _pMsg->length = ((_headerSize - SIZEOF (iceMsg)) >> 3) + (_extra); \
-    _iceConn->send_sequence++; \
-} while (0)
+#define IceGetHeaderExtra(_iceConn,                                            \
+                          _major,                                              \
+                          _minor,                                              \
+                          _headerSize,                                         \
+                          _extra,                                              \
+                          _msgType,                                            \
+                          _pMsg,                                               \
+                          _pData)                                              \
+    do                                                                         \
+    {                                                                          \
+        static_assert(_headerSize <= 1024,                                     \
+                      "Header size larger than ICE_OUTBUFSIZE");               \
+        if ((_iceConn->outbufptr + _headerSize + ((_extra) << 3)) >            \
+            _iceConn->outbufmax)                                               \
+            IceFlush(_iceConn);                                                \
+        _pMsg = (_msgType *)_iceConn->outbufptr;                               \
+        _iceConn->outbufptr += _headerSize;                                    \
+        if ((_iceConn->outbufptr + ((_extra) << 3)) <= _iceConn->outbufmax)    \
+        {                                                                      \
+            _pData = _iceConn->outbufptr;                                      \
+            _iceConn->outbufptr += ((_extra) << 3);                            \
+        }                                                                      \
+        else _pData = NULL;                                                    \
+        _pMsg->majorOpcode = _major;                                           \
+        _pMsg->minorOpcode = _minor;                                           \
+        _pMsg->length      = ((_headerSize - SIZEOF(iceMsg)) >> 3) + (_extra); \
+        _iceConn->send_sequence++;                                             \
+    }                                                                          \
+    while (0)
 
-#define IceSimpleMessage(_iceConn, _major, _minor) \
-{ \
-    iceMsg *_pMsg; \
-    IceGetHeader (_iceConn, _major, _minor, SIZEOF (iceMsg), iceMsg, _pMsg); \
-}
+#define IceSimpleMessage(_iceConn, _major, _minor)                             \
+    {                                                                          \
+        iceMsg *_pMsg;                                                         \
+        IceGetHeader(_iceConn, _major, _minor, SIZEOF(iceMsg), iceMsg, _pMsg); \
+    }
 
-#define IceErrorHeader(_iceConn, _offendingMajorOpcode, _offendingMinorOpcode, _offendingSequenceNum, _severity, _errorClass, _dataLength) \
-{ \
-    iceErrorMsg	*_pMsg; \
-\
-    IceGetHeader (_iceConn, _offendingMajorOpcode, ICE_Error, \
-	SIZEOF (iceErrorMsg), iceErrorMsg, _pMsg); \
-    _pMsg->length += (_dataLength); \
-    _pMsg->offendingMinorOpcode = (CARD8) _offendingMinorOpcode; \
-    _pMsg->severity = (CARD8) _severity; \
-    _pMsg->offendingSequenceNum = (CARD32) _offendingSequenceNum; \
-    _pMsg->errorClass = (CARD16) _errorClass; \
-}
-
+#define IceErrorHeader(_iceConn,                                     \
+                       _offendingMajorOpcode,                        \
+                       _offendingMinorOpcode,                        \
+                       _offendingSequenceNum,                        \
+                       _severity,                                    \
+                       _errorClass,                                  \
+                       _dataLength)                                  \
+    {                                                                \
+        iceErrorMsg *_pMsg;                                          \
+                                                                     \
+        IceGetHeader(_iceConn,                                       \
+                     _offendingMajorOpcode,                          \
+                     ICE_Error,                                      \
+                     SIZEOF(iceErrorMsg),                            \
+                     iceErrorMsg,                                    \
+                     _pMsg);                                         \
+        _pMsg->length += (_dataLength);                              \
+        _pMsg->offendingMinorOpcode = (CARD8)_offendingMinorOpcode;  \
+        _pMsg->severity             = (CARD8)_severity;              \
+        _pMsg->offendingSequenceNum = (CARD32)_offendingSequenceNum; \
+        _pMsg->errorClass           = (CARD16)_errorClass;           \
+    }
 
 /*
  * Write data into the ICE output buffer.
  */
 
-#define IceWriteData(_iceConn, _bytes, _data) \
-{ \
-    if ((_iceConn->outbufptr + (_bytes)) > _iceConn->outbufmax) \
-    { \
-	IceFlush (_iceConn); \
-        _IceWrite (_iceConn, (unsigned long) (_bytes), _data); \
-    } \
-    else \
-    { \
-        memcpy (_iceConn->outbufptr, _data, _bytes); \
-        _iceConn->outbufptr += (_bytes); \
-    } \
-}
+#define IceWriteData(_iceConn, _bytes, _data)                       \
+    {                                                               \
+        if ((_iceConn->outbufptr + (_bytes)) > _iceConn->outbufmax) \
+        {                                                           \
+            IceFlush(_iceConn);                                     \
+            _IceWrite(_iceConn, (unsigned long)(_bytes), _data);    \
+        }                                                           \
+        else                                                        \
+        {                                                           \
+            memcpy(_iceConn->outbufptr, _data, _bytes);             \
+            _iceConn->outbufptr += (_bytes);                        \
+        }                                                           \
+    }
 
 #define IceWriteData16(_iceConn, _bytes, _data) \
-    IceWriteData (_iceConn, _bytes, (char *) _data)
+    IceWriteData(_iceConn, _bytes, (char *)_data)
 
 #define IceWriteData32(_iceConn, _bytes, _data) \
-    IceWriteData (_iceConn, _bytes, (char *) _data)
-
+    IceWriteData(_iceConn, _bytes, (char *)_data)
 
 /*
  * The IceSendData macro bypasses copying the data to the
@@ -213,93 +217,86 @@ do { \
  * the ICE connection buffer is first flushed.
  */
 
-#define IceSendData(_iceConn, _bytes, _data) \
-{ \
-    if (_iceConn->outbufptr > _iceConn->outbuf) \
-	IceFlush (_iceConn); \
-    _IceWrite (_iceConn, (unsigned long) (_bytes), _data); \
-}
-
+#define IceSendData(_iceConn, _bytes, _data)                            \
+    {                                                                   \
+        if (_iceConn->outbufptr > _iceConn->outbuf) IceFlush(_iceConn); \
+        _IceWrite(_iceConn, (unsigned long)(_bytes), _data);            \
+    }
 
 /*
  * Write pad bytes.  Used to force 32 or 64 bit alignment.
  * A maximum of 7 pad bytes can be specified.
  */
 
-#define IceWritePad(_iceConn, _bytes) \
-{ \
-    char _dummy[7] = { 0 }; \
-    IceWriteData (_iceConn, (_bytes), _dummy); \
-}
-
+#define IceWritePad(_iceConn, _bytes)             \
+    {                                             \
+        char _dummy[7] = { 0 };                   \
+        IceWriteData(_iceConn, (_bytes), _dummy); \
+    }
 
 /*
  * Macros for reading messages.
  */
 
-#define IceReadCompleteMessage(_iceConn, _headerSize, _msgType, _pMsg, _pData)\
-{ \
-    unsigned long _bytes; \
-    IceReadMessageHeader (_iceConn, _headerSize, _msgType, _pMsg); \
-    _bytes = (_pMsg->length << 3) - (_headerSize - SIZEOF (iceMsg)); \
-    if ((_iceConn->inbufmax - _iceConn->inbufptr) >= _bytes) \
-    { \
-	_IceRead (_iceConn, _bytes, _iceConn->inbufptr); \
-	_pData = _iceConn->inbufptr; \
-	_iceConn->inbufptr += _bytes; \
-    } \
-    else \
-    { \
-	_pData = malloc (_bytes); \
-        if (_pData) \
-	    _IceRead (_iceConn, _bytes, _pData); \
-        else \
-	    _IceReadSkip (_iceConn, _bytes); \
-    } \
-}
+#define IceReadCompleteMessage(_iceConn, _headerSize, _msgType, _pMsg, _pData) \
+    {                                                                          \
+        unsigned long _bytes;                                                  \
+        IceReadMessageHeader(_iceConn, _headerSize, _msgType, _pMsg);          \
+        _bytes = (_pMsg->length << 3) - (_headerSize - SIZEOF(iceMsg));        \
+        if ((_iceConn->inbufmax - _iceConn->inbufptr) >= _bytes)               \
+        {                                                                      \
+            _IceRead(_iceConn, _bytes, _iceConn->inbufptr);                    \
+            _pData = _iceConn->inbufptr;                                       \
+            _iceConn->inbufptr += _bytes;                                      \
+        }                                                                      \
+        else                                                                   \
+        {                                                                      \
+            _pData = malloc(_bytes);                                           \
+            if (_pData) _IceRead(_iceConn, _bytes, _pData);                    \
+            else _IceReadSkip(_iceConn, _bytes);                               \
+        }                                                                      \
+    }
 
 #define IceDisposeCompleteMessage(_iceConn, _pData) \
-    if ((char *) _pData < _iceConn->inbuf || \
-	(char *) _pData >= _iceConn->inbufmax) \
-        free (_pData);
-
+    if ((char *)_pData < _iceConn->inbuf ||         \
+        (char *)_pData >= _iceConn->inbufmax)       \
+        free(_pData);
 
 #define IceReadSimpleMessage(_iceConn, _msgType, _pMsg) \
-    _pMsg = (_msgType *) (_iceConn->inbuf);
+    _pMsg = (_msgType *)(_iceConn->inbuf);
 
 #define IceReadMessageHeader(_iceConn, _headerSize, _msgType, _pMsg) \
-{ \
-    _IceRead (_iceConn, \
-	(unsigned long) (_headerSize - SIZEOF (iceMsg)), \
-	_iceConn->inbufptr); \
-    _pMsg = (_msgType *) (_iceConn->inbuf); \
-    _iceConn->inbufptr += (_headerSize - SIZEOF (iceMsg)); \
-}
+    {                                                                \
+        _IceRead(_iceConn,                                           \
+                 (unsigned long)(_headerSize - SIZEOF(iceMsg)),      \
+                 _iceConn->inbufptr);                                \
+        _pMsg = (_msgType *)(_iceConn->inbuf);                       \
+        _iceConn->inbufptr += (_headerSize - SIZEOF(iceMsg));        \
+    }
 
 #define IceReadData(_iceConn, _bytes, _pData) \
-    _IceRead (_iceConn, (unsigned long) (_bytes), (char *) _pData); \
+    _IceRead(_iceConn, (unsigned long)(_bytes), (char *)_pData);
 
-#define IceReadData16(_iceConn, _swap, _bytes, _pData) \
-{ \
-    _IceRead (_iceConn, (unsigned long) (_bytes), (char *) _pData); \
-}
+#define IceReadData16(_iceConn, _swap, _bytes, _pData)               \
+    {                                                                \
+        _IceRead(_iceConn, (unsigned long)(_bytes), (char *)_pData); \
+    }
 
-#define IceReadData32(_iceConn, _swap, _bytes, _pData) \
-{ \
-    _IceRead (_iceConn, (unsigned long) (_bytes), (char *) _pData); \
-}
-
+#define IceReadData32(_iceConn, _swap, _bytes, _pData)               \
+    {                                                                \
+        _IceRead(_iceConn, (unsigned long)(_bytes), (char *)_pData); \
+    }
 
 /*
  * Read pad bytes (for 32 or 64 bit alignment).
  * A maximum of 7 pad bytes can be specified.
  */
 
-#define IceReadPad(_iceConn, _bytes) \
-{ \
-    char _dummy[7]; \
-    _IceRead (_iceConn, (unsigned long) (_bytes), _dummy); \
-}
+#define IceReadPad(_iceConn, _bytes)                         \
+    {                                                        \
+        char _dummy[7];                                      \
+        _IceRead(_iceConn, (unsigned long)(_bytes), _dummy); \
+    }
 
 _XFUNCPROTOEND
 

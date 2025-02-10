@@ -59,8 +59,8 @@ in this Software without prior written authorization from the X Consortium.
 
 /* declare specific TemplateWidget class and instance datatypes */
 
-typedef struct _TemplateClassRec*	TemplateWidgetClass;
-typedef struct _TemplateRec*		TemplateWidget;
+typedef struct _TemplateClassRec *TemplateWidgetClass;
+typedef struct _TemplateRec      *TemplateWidget;
 
 /* declare the class constant */
 

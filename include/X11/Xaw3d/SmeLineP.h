@@ -48,29 +48,32 @@ in this Software without prior written authorization from the X Consortium.
  *
  ************************************************************/
 
-typedef struct _SmeLineClassPart {
-  XtPointer extension;
+typedef struct _SmeLineClassPart
+{
+    XtPointer extension;
 } SmeLineClassPart;
 
 /* Full class record declaration */
-typedef struct _SmeLineClassRec {
-    RectObjClassPart    rect_class;
-    SmeClassPart	sme_class;
-    SmeLineClassPart	sme_line_class;
+typedef struct _SmeLineClassRec
+{
+    RectObjClassPart rect_class;
+    SmeClassPart     sme_class;
+    SmeLineClassPart sme_line_class;
 } SmeLineClassRec;
 
 extern SmeLineClassRec smeLineClassRec;
 
 /* New fields for the SmeLine widget record */
-typedef struct {
+typedef struct
+{
     /* resources */
-    Pixel foreground;		/* Foreground color. */
-    Pixmap stipple;		/* Line Stipple. */
-    Dimension line_width;	/* Width of the line. */
+    Pixel     foreground;  /* Foreground color. */
+    Pixmap    stipple;  /* Line Stipple. */
+    Dimension line_width; /* Width of the line. */
 
     /* private data.  */
 
-    GC gc;			/* Graphics context for drawing line. */
+    GC gc;   /* Graphics context for drawing line. */
 } SmeLinePart;
 
 /****************************************************************
@@ -79,11 +82,12 @@ typedef struct {
  *
  ****************************************************************/
 
-typedef struct _SmeLineRec {
-  ObjectPart     object;
-  RectObjPart    rectangle;
-  SmePart	 sme;
-  SmeLinePart	 sme_line;
+typedef struct _SmeLineRec
+{
+    ObjectPart  object;
+    RectObjPart rectangle;
+    SmePart     sme;
+    SmeLinePart sme_line;
 } SmeLineRec;
 
 /************************************************************

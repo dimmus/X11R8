@@ -77,46 +77,44 @@ SOFTWARE.
 
 /* fields added to Form */
 #ifndef _XtStringDefs_h_
-#define XtNforceBars "forceBars"
-#define XtNallowHoriz "allowHoriz"
-#define XtNallowVert "allowVert"
-#define XtNuseBottom "useBottom"
-#define XtNuseRight "useRight"
+#  define XtNforceBars  "forceBars"
+#  define XtNallowHoriz "allowHoriz"
+#  define XtNallowVert  "allowVert"
+#  define XtNuseBottom  "useBottom"
+#  define XtNuseRight   "useRight"
 #endif
 
 #ifndef XtNsbShiftX1
-#define XtNsbShiftX1 "sbShiftX1"
-#define XtNsbShiftX2 "sbShiftX2"
-#define XtNsbShiftY1 "sbShiftY1"
-#define XtNsbShiftY2 "sbShiftY2"
+#  define XtNsbShiftX1 "sbShiftX1"
+#  define XtNsbShiftX2 "sbShiftX2"
+#  define XtNsbShiftY1 "sbShiftY1"
+#  define XtNsbShiftY2 "sbShiftY2"
 #endif
 
 extern WidgetClass viewportWidgetClass;
 
 typedef struct _ViewportClassRec *ViewportWidgetClass;
-typedef struct _ViewportRec  *ViewportWidget;
+typedef struct _ViewportRec      *ViewportWidget;
 
 _XFUNCPROTOBEGIN
 
-extern void XawViewportSetLocation (
-    Widget		/* gw */,
+extern void XawViewportSetLocation(Widget /* gw */,
 #if NeedWidePrototypes
-    /* float */ double	/* xoff */,
-    /* float */ double	/* yoff */
+                                   /* float */ double /* xoff */,
+                                   /* float */ double /* yoff */
 #else
-    float		/* xoff */,
-    float		/* yoff */
+                                   float /* xoff */,
+                                   float  /* yoff */
 #endif
 );
 
-extern void XawViewportSetCoordinates (
-    Widget		/* gw */,
+extern void XawViewportSetCoordinates(Widget /* gw */,
 #if NeedWidePrototypes
-    /* Position */ int	/* x */,
-    /* Position */ int	/* y */
+                                      /* Position */ int /* x */,
+                                      /* Position */ int /* y */
 #else
-    Position		/* x */,
-    Position		/* y */
+                                      Position /* x */,
+                                      Position  /* y */
 #endif
 );
 

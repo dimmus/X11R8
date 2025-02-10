@@ -23,7 +23,6 @@ used in advertising or otherwise to promote the sale, use or other dealings
 in this Software without prior written authorization from the X Consortium.
 */
 
-
 /*
  * ListP.h - Private definitions for List widget
  *
@@ -48,59 +47,60 @@ in this Software without prior written authorization from the X Consortium.
 #include "X11/Xaw3d/SimpleP.h"
 #include "X11/Xaw3d/List.h"
 
-#define NO_HIGHLIGHT            XAW_LIST_NONE
-#define OUT_OF_RANGE            -1
-#define OKAY                     0
+#define NO_HIGHLIGHT XAW_LIST_NONE
+#define OUT_OF_RANGE -1
+#define OKAY         0
 
 /* New fields for the List widget class record */
 
-typedef struct {int foo;} ListClassPart;
+typedef struct
+{
+    int foo;
+} ListClassPart;
 
 /* Full class record declaration */
-typedef struct _ListClassRec {
-    CoreClassPart	core_class;
-    SimpleClassPart	simple_class;
-    ListClassPart	list_class;
+typedef struct _ListClassRec
+{
+    CoreClassPart   core_class;
+    SimpleClassPart simple_class;
+    ListClassPart   list_class;
 } ListClassRec;
 
 extern ListClassRec listClassRec;
 
 /* New fields for the List widget record */
-typedef struct {
+typedef struct
+{
     /* resources */
-    Pixel	foreground;
-    Dimension	internal_width, /* if not 3d, user sets directly. */
-        	internal_height,
-                column_space,	/* half of *_space is add on top/bot/left of*/
-                row_space;	/* each item's text bounding box. half added to longest for right */
-    int         default_cols;
-    Boolean     force_cols,
-                paste,
-                vertical_cols;
-    int         longest;	/* in pixels */
-    int         nitems;		/* number of items in the list. */
-    XFontStruct	*font;
+    Pixel     foreground;
+    Dimension internal_width, /* if not 3d, user sets directly. */
+        internal_height,
+        column_space, /* half of *_space is add on top/bot/left of*/
+        row_space; /* each item's text bounding box. half added to longest for right */
+    int          default_cols;
+    Boolean      force_cols, paste, vertical_cols;
+    int          longest; /* in pixels */
+    int          nitems; /* number of items in the list. */
+    XFontStruct *font;
 #ifdef XAW_INTERNATIONALIZATION
-    XFontSet 	fontset;	/* Sheeran, Omron KK, 93/03/05 */
+    XFontSet fontset; /* Sheeran, Omron KK, 93/03/05 */
 #endif
-    String *    list;		/* for i18n, always in multibyte format */
+    String        *list; /* for i18n, always in multibyte format */
     XtCallbackList callback;
 
     /* private state */
-    int         is_highlighted,	/* set to the item currently highlighted. */
-                highlight,	/* set to the item that should be highlighted.*/
-                col_width,	/* width of each column. */
-                row_height,	/* height of each row. */
-                nrows,		/* number of rows in the list. */
-                ncols;		/* number of columns in the list. */
-    GC		normgc,		/* a couple of GC's. */
-                revgc,
-                graygc;		/* used when inactive. */
+    int is_highlighted, /* set to the item currently highlighted. */
+        highlight, /* set to the item that should be highlighted.*/
+        col_width, /* width of each column. */
+        row_height, /* height of each row. */
+        nrows, /* number of rows in the list. */
+        ncols; /* number of columns in the list. */
+    GC normgc, /* a couple of GC's. */
+        revgc, graygc; /* used when inactive. */
 
-    int         freedoms;       /* flags for resizing height and width */
+    int freedoms; /* flags for resizing height and width */
 
 } ListPart;
-
 
 /****************************************************************
  *
@@ -108,10 +108,11 @@ typedef struct {
  *
  ****************************************************************/
 
-typedef struct _ListRec {
-    CorePart	core;
-    SimplePart	simple;
-    ListPart	list;
+typedef struct _ListRec
+{
+    CorePart   core;
+    SimplePart simple;
+    ListPart   list;
 } ListRec;
 
 #endif /* _XawListP_h */

@@ -75,10 +75,10 @@ SOFTWARE.
  ****************************************************************/
 
 #include "Xaw3dP.h"
-#include "X11/Xaw3d/Text.h"		/* AsciiText is a subclass of Text */
+#include "X11/Xaw3d/Text.h"  /* AsciiText is a subclass of Text */
 #include "X11/Xaw3d/AsciiSrc.h"
 #ifdef XAW_INTERNATIONALIZATION
-#include "X11/Xaw3d/MultiSrc.h"
+#  include "X11/Xaw3d/MultiSrc.h"
 #endif
 
 /* Resources:
@@ -125,8 +125,8 @@ SOFTWARE.
  * Everything else we need is in StringDefs.h or Text.h
  */
 
-typedef struct _AsciiTextClassRec	*AsciiTextWidgetClass;
-typedef struct _AsciiRec	        *AsciiWidget;
+typedef struct _AsciiTextClassRec *AsciiTextWidgetClass;
+typedef struct _AsciiRec          *AsciiWidget;
 
 extern WidgetClass asciiTextWidgetClass;
 

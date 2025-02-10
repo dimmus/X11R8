@@ -36,11 +36,11 @@ Equipment Corporation.
 #ifndef DPMS_SERVER
 _XFUNCPROTOBEGIN
 
-extern Bool DPMSQueryExtension(Display *, int *, int *);
+extern Bool   DPMSQueryExtension(Display *, int *, int *);
 extern Status DPMSGetVersion(Display *, int *, int *);
-extern Bool DPMSCapable(Display *);
+extern Bool   DPMSCapable(Display *);
 extern Status DPMSSetTimeouts(Display *, CARD16, CARD16, CARD16);
-extern Bool DPMSGetTimeouts(Display *, CARD16 *, CARD16 *, CARD16 *);
+extern Bool   DPMSGetTimeouts(Display *, CARD16 *, CARD16 *, CARD16 *);
 extern Status DPMSEnable(Display *);
 extern Status DPMSDisable(Display *);
 extern Status DPMSForceLevel(Display *, CARD16);
@@ -50,4 +50,3 @@ _XFUNCPROTOEND
 #endif
 
 #endif /* !_X11_EXTENSIONS_DPMS_H */
-

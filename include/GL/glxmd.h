@@ -1,7 +1,6 @@
 #ifndef _GLX_glxmd_h_
 #define _GLX_glxmd_h_
 
-
 /*
  * SGI FREE SOFTWARE LICENSE B (Version 2.0, Sept. 18, 2008)
  * Copyright (C) 1991-2000 Silicon Graphics, Inc. All Rights Reserved.
@@ -39,7 +38,7 @@
 /*
 ** Define floating point wire types.  These are in IEEE format on the wire.
 */
-typedef float FLOAT32;
+typedef float  FLOAT32;
 typedef double FLOAT64;
 
 /*

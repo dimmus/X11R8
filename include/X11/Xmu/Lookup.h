@@ -36,89 +36,77 @@ authorization.
 #include "X11/Xlib.h"
 #include "X11/Xutil.h"
 
-extern int XmuLookupString(
-		XKeyEvent *event,
-		unsigned char *buffer,
-		int nbytes,
-		KeySym *keysym,
-		XComposeStatus *status,
-		unsigned long keysymSet);
+extern int XmuLookupString(XKeyEvent      *event,
+                           unsigned char  *buffer,
+                           int             nbytes,
+                           KeySym         *keysym,
+                           XComposeStatus *status,
+                           unsigned long   keysymSet);
 
-extern int XmuLookupLatin1(
-		XKeyEvent *event,
-		unsigned char *buffer,
-		int nbytes,
-		KeySym *keysym,
-		XComposeStatus *status);
+extern int XmuLookupLatin1(XKeyEvent      *event,
+                           unsigned char  *buffer,
+                           int             nbytes,
+                           KeySym         *keysym,
+                           XComposeStatus *status);
 
-extern int XmuLookupLatin2(
-		XKeyEvent *event,
-		unsigned char *buffer,
-		int nbytes,
-		KeySym *keysym,
-		XComposeStatus *status);
+extern int XmuLookupLatin2(XKeyEvent      *event,
+                           unsigned char  *buffer,
+                           int             nbytes,
+                           KeySym         *keysym,
+                           XComposeStatus *status);
 
-extern int XmuLookupLatin3(
-		XKeyEvent *event,
-		unsigned char *buffer,
-		int nbytes,
-		KeySym *keysym,
-		XComposeStatus *status);
+extern int XmuLookupLatin3(XKeyEvent      *event,
+                           unsigned char  *buffer,
+                           int             nbytes,
+                           KeySym         *keysym,
+                           XComposeStatus *status);
 
-extern int XmuLookupLatin4(
-		XKeyEvent *event,
-		unsigned char *buffer,
-		int nbytes,
-		KeySym *keysym,
-		XComposeStatus *status);
+extern int XmuLookupLatin4(XKeyEvent      *event,
+                           unsigned char  *buffer,
+                           int             nbytes,
+                           KeySym         *keysym,
+                           XComposeStatus *status);
 
-extern int XmuLookupKana(
-		XKeyEvent *event,
-		unsigned char *buffer,
-		int nbytes,
-		KeySym *keysym,
-		XComposeStatus *status);
+extern int XmuLookupKana(XKeyEvent      *event,
+                         unsigned char  *buffer,
+                         int             nbytes,
+                         KeySym         *keysym,
+                         XComposeStatus *status);
 
-extern int XmuLookupJISX0201(
-		XKeyEvent *event,
-		unsigned char *buffer,
-		int nbytes,
-		KeySym *keysym,
-		XComposeStatus *status);
+extern int XmuLookupJISX0201(XKeyEvent      *event,
+                             unsigned char  *buffer,
+                             int             nbytes,
+                             KeySym         *keysym,
+                             XComposeStatus *status);
 
-extern int XmuLookupArabic(
-		XKeyEvent *event,
-		unsigned char *buffer,
-		int nbytes,
-		KeySym *keysym,
-		XComposeStatus *status);
+extern int XmuLookupArabic(XKeyEvent      *event,
+                           unsigned char  *buffer,
+                           int             nbytes,
+                           KeySym         *keysym,
+                           XComposeStatus *status);
 
-extern int XmuLookupCyrillic(
-		XKeyEvent *event,
-		unsigned char *buffer,
-		int nbytes,
-		KeySym *keysym,
-		XComposeStatus *status);
+extern int XmuLookupCyrillic(XKeyEvent      *event,
+                             unsigned char  *buffer,
+                             int             nbytes,
+                             KeySym         *keysym,
+                             XComposeStatus *status);
 
-extern int XmuLookupGreek(
-		XKeyEvent *event,
-		unsigned char *buffer,
-		int nbytes,
-		KeySym *keysym,
-		XComposeStatus *status);
+extern int XmuLookupGreek(XKeyEvent      *event,
+                          unsigned char  *buffer,
+                          int             nbytes,
+                          KeySym         *keysym,
+                          XComposeStatus *status);
 
-extern int XmuLookupAPL(
-		XKeyEvent *event,
-		unsigned char *buffer,
-		int nbytes,
-		KeySym *keysym,
-		XComposeStatus *status);
+extern int XmuLookupAPL(XKeyEvent      *event,
+                        unsigned char  *buffer,
+                        int             nbytes,
+                        KeySym         *keysym,
+                        XComposeStatus *status);
 
-extern int XmuLookupHebrew(
-		XKeyEvent *event,
-		unsigned char *buffer,
-		int nbytes,
-		KeySym *keysym,
-		XComposeStatus *status);
+extern int XmuLookupHebrew(XKeyEvent      *event,
+                           unsigned char  *buffer,
+                           int             nbytes,
+                           KeySym         *keysym,
+                           XComposeStatus *status);
 
 #endif /* included_xmu_lookup_h */

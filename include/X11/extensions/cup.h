@@ -29,10 +29,9 @@ in this Software without prior written authorization from The Open Group.
 
 #define XCUPNAME "TOG-CUP"
 
-#define XCUP_MAJOR_VERSION	1	/* current version numbers */
-#define XCUP_MINOR_VERSION	0
+#define XCUP_MAJOR_VERSION 1 /* current version numbers */
+#define XCUP_MINOR_VERSION 0
 
-#define XcupNumberErrors			0
+#define XcupNumberErrors 0
 
 #endif /* _CUP_H_ */
-

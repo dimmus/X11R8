@@ -86,40 +86,40 @@ SOFTWARE.
 
 */
 
-#define XawTextEncoding8bit	0
-#define XawTextEncodingChar2b	1
+#define XawTextEncoding8bit   0
+#define XawTextEncodingChar2b 1
 
 #define XtNleftBitmap "leftBitmap"
 #define XtCLeftBitmap "LeftBitmap"
-#define XtNencoding "encoding"
-#define XtCEncoding "Encoding"
+#define XtNencoding   "encoding"
+#define XtCEncoding   "Encoding"
 
 #ifndef XtNfontSet
-#define XtNfontSet "fontSet"
+#  define XtNfontSet "fontSet"
 #endif
 
 #ifndef XtCFontSet
-#define XtCFontSet "FontSet"
+#  define XtCFontSet "FontSet"
 #endif
 
 #ifndef _XtStringDefs_h_
-#define XtNbitmap "bitmap"
-#define XtNforeground "foreground"
-#define XtNlabel "label"
-#define XtNfont "font"
-#define XtNinternalWidth "internalWidth"
-#define XtNinternalHeight "internalHeight"
-#define XtNresize "resize"
-#define XtCResize "Resize"
-#define XtCBitmap "Bitmap"
+#  define XtNbitmap         "bitmap"
+#  define XtNforeground     "foreground"
+#  define XtNlabel          "label"
+#  define XtNfont           "font"
+#  define XtNinternalWidth  "internalWidth"
+#  define XtNinternalHeight "internalHeight"
+#  define XtNresize         "resize"
+#  define XtCResize         "Resize"
+#  define XtCBitmap         "Bitmap"
 #endif
 
 #ifndef XtNlabelX
-#define XtNlabelX "labelX"
+#  define XtNlabelX "labelX"
 #endif
 
 #ifndef XtNlabelY
-#define XtNlabelY "labelY"
+#  define XtNlabelY "labelY"
 #endif
 
 /* Class record constants */

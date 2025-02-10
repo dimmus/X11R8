@@ -29,13 +29,13 @@ from The Open Group.
 
 #include "X11/extensions/ag.h"
 
-#define X_XagQueryVersion		0
-#define X_XagCreate			1
-#define X_XagDestroy			2
-#define X_XagGetAttr			3
-#define X_XagQuery			4
-#define X_XagCreateAssoc		5
-#define X_XagDestroyAssoc		6
+#define X_XagQueryVersion 0
+#define X_XagCreate       1
+#define X_XagDestroy      2
+#define X_XagGetAttr      3
+#define X_XagQuery        4
+#define X_XagCreateAssoc  5
+#define X_XagDestroyAssoc 6
 
 #define XAppGroup CARD32
 
@@ -48,121 +48,141 @@ from The Open Group.
 
 #define Colormap CARD32
 #define VisualID CARD32
-#define Window CARD32
+#define Window   CARD32
 
-typedef struct _XagQueryVersion {
-    CARD8	reqType;	/* always XagReqCode */
-    CARD8	xagReqType;	/* always X_XagQueryVersion */
-    CARD16	length;
-    CARD16	client_major_version;
-    CARD16	client_minor_version;
+typedef struct _XagQueryVersion
+{
+    CARD8  reqType; /* always XagReqCode */
+    CARD8  xagReqType; /* always X_XagQueryVersion */
+    CARD16 length;
+    CARD16 client_major_version;
+    CARD16 client_minor_version;
 } xXagQueryVersionReq;
-#define sz_xXagQueryVersionReq		8
 
-typedef struct {
-    BYTE	type;		/* X_Reply */
-    BOOL	pad1;
-    CARD16	sequence_number;
-    CARD32	length;
-    CARD16	server_major_version;
-    CARD16	server_minor_version;
-    CARD32	pad2;
-    CARD32	pad3;
-    CARD32	pad4;
-    CARD32	pad5;
-    CARD32	pad6;
+#define sz_xXagQueryVersionReq 8
+
+typedef struct
+{
+    BYTE   type;  /* X_Reply */
+    BOOL   pad1;
+    CARD16 sequence_number;
+    CARD32 length;
+    CARD16 server_major_version;
+    CARD16 server_minor_version;
+    CARD32 pad2;
+    CARD32 pad3;
+    CARD32 pad4;
+    CARD32 pad5;
+    CARD32 pad6;
 } xXagQueryVersionReply;
-#define sz_xXagQueryVersionReply	32
+
+#define sz_xXagQueryVersionReply 32
 
 /* Set AppGroup Attributes masks */
-#define XagSingleScreenMask		1 << 0
-#define XagDefaultRootMask		1 << XagNdefaultRoot
-#define XagRootVisualMask		1 << XagNrootVisual
-#define XagDefaultColormapMask		1 << XagNdefaultColormap
-#define XagBlackPixelMask		1 << XagNblackPixel
-#define XagWhitePixelMask		1 << XagNwhitePixel
-#define XagAppGroupLeaderMask		1 << XagNappGroupLeader
+#define XagSingleScreenMask    1 << 0
+#define XagDefaultRootMask     1 << XagNdefaultRoot
+#define XagRootVisualMask      1 << XagNrootVisual
+#define XagDefaultColormapMask 1 << XagNdefaultColormap
+#define XagBlackPixelMask      1 << XagNblackPixel
+#define XagWhitePixelMask      1 << XagNwhitePixel
+#define XagAppGroupLeaderMask  1 << XagNappGroupLeader
 
-typedef struct _XagCreate {
-    CARD8	reqType;	/* always XagReqCode */
-    CARD8	xagReqType;	/* always X_XagCreate */
-    CARD16	length;
-    XAppGroup	app_group;
-    CARD32	attrib_mask;	/* LISTofVALUE follows */
+typedef struct _XagCreate
+{
+    CARD8     reqType; /* always XagReqCode */
+    CARD8     xagReqType; /* always X_XagCreate */
+    CARD16    length;
+    XAppGroup app_group;
+    CARD32    attrib_mask; /* LISTofVALUE follows */
 } xXagCreateReq;
-#define sz_xXagCreateReq		12
 
-typedef struct _XagDestroy {
-    CARD8	reqType;	/* always XagReqCode */
-    CARD8	xagReqType;	/* always X_XagDestroy */
-    CARD16	length;
-    XAppGroup	app_group;
+#define sz_xXagCreateReq 12
+
+typedef struct _XagDestroy
+{
+    CARD8     reqType; /* always XagReqCode */
+    CARD8     xagReqType; /* always X_XagDestroy */
+    CARD16    length;
+    XAppGroup app_group;
 } xXagDestroyReq;
-#define sz_xXagDestroyReq		8
 
-typedef struct _XagGetAttr {
-    CARD8	reqType;	/* always XagReqCode */
-    CARD8	xagReqType;	/* always X_XagGetAttr */
-    CARD16	length;
-    XAppGroup	app_group;
+#define sz_xXagDestroyReq 8
+
+typedef struct _XagGetAttr
+{
+    CARD8     reqType; /* always XagReqCode */
+    CARD8     xagReqType; /* always X_XagGetAttr */
+    CARD16    length;
+    XAppGroup app_group;
 } xXagGetAttrReq;
-#define sz_xXagGetAttrReq		8
 
-typedef struct {
-    BYTE	type;		/* X_Reply */
-    BOOL	pad1;
-    CARD16	sequence_number;
-    CARD32	length;
-    Window	default_root;
-    VisualID	root_visual;
-    Colormap	default_colormap;
-    CARD32	black_pixel;
-    CARD32	white_pixel;
-    BOOL	single_screen;
-    BOOL	app_group_leader;
-    CARD16	pad2;
+#define sz_xXagGetAttrReq 8
+
+typedef struct
+{
+    BYTE     type;  /* X_Reply */
+    BOOL     pad1;
+    CARD16   sequence_number;
+    CARD32   length;
+    Window   default_root;
+    VisualID root_visual;
+    Colormap default_colormap;
+    CARD32   black_pixel;
+    CARD32   white_pixel;
+    BOOL     single_screen;
+    BOOL     app_group_leader;
+    CARD16   pad2;
 } xXagGetAttrReply;
-#define sz_xXagGetAttrReply		32
 
-typedef struct _XagQuery {
-    CARD8	reqType;	/* always XagReqCode */
-    CARD8	xagReqType;	/* always X_XagQuery */
-    CARD16	length;
-    CARD32	resource;
+#define sz_xXagGetAttrReply 32
+
+typedef struct _XagQuery
+{
+    CARD8  reqType; /* always XagReqCode */
+    CARD8  xagReqType; /* always X_XagQuery */
+    CARD16 length;
+    CARD32 resource;
 } xXagQueryReq;
-#define sz_xXagQueryReq			8
 
-typedef struct {
-    BYTE	type;		/* X_Reply */
-    BOOL	pad1;
-    CARD16	sequence_number;
-    CARD32	length;
-    XAppGroup	app_group;
-    CARD32	pad2;
-    CARD32	pad3;
-    CARD32	pad4;
-    CARD32	pad5;
-    CARD32	pad6;
+#define sz_xXagQueryReq 8
+
+typedef struct
+{
+    BYTE      type;  /* X_Reply */
+    BOOL      pad1;
+    CARD16    sequence_number;
+    CARD32    length;
+    XAppGroup app_group;
+    CARD32    pad2;
+    CARD32    pad3;
+    CARD32    pad4;
+    CARD32    pad5;
+    CARD32    pad6;
 } xXagQueryReply;
-#define sz_xXagQueryReply		32
 
-typedef struct _XagCreateAssoc {
-    CARD8	reqType;	/* always XagReqCode */
-    CARD8	xagReqType;	/* always X_XagCreateAssoc */
-    CARD16	length;
-    Window	window;
-    CARD16	window_type;
-    CARD16	system_window_len; /* LISTofCARD8 follows */
+#define sz_xXagQueryReply 32
+
+typedef struct _XagCreateAssoc
+{
+    CARD8  reqType; /* always XagReqCode */
+    CARD8  xagReqType; /* always X_XagCreateAssoc */
+    CARD16 length;
+    Window window;
+    CARD16 window_type;
+    CARD16 system_window_len; /* LISTofCARD8 follows */
 } xXagCreateAssocReq;
-#define sz_xXagCreateAssocReq		12
 
-typedef struct _XagDestroyAssoc {
-    CARD8	reqType;	/* always XagReqCode */
-    CARD8	xagReqType;	/* always X_XagDestroyAssoc */
-    CARD16	length;
-    Window	window;
+#define sz_xXagCreateAssocReq 12
+
+typedef struct _XagDestroyAssoc
+{
+    CARD8  reqType; /* always XagReqCode */
+    CARD8  xagReqType; /* always X_XagDestroyAssoc */
+    CARD16 length;
+    Window window;
 } xXagDestroyAssocReq;
-#define sz_xXagDestroyAssocReq		8
+
+#define sz_xXagDestroyAssocReq 8
 
 #undef XAppGroup
 /*
@@ -175,4 +195,3 @@ typedef struct _XagDestroyAssoc {
 #undef VisualID
 
 #endif /* } _AGPROTO_H_ */
-

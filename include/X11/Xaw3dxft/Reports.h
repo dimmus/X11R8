@@ -32,20 +32,21 @@ in this Software without prior written authorization from the X Consortium.
  * All fields must be filled in, although the changed field may be used as
  * a hint as to which fields have been altered since the last report.
  */
-typedef struct {
-    unsigned int changed;		/* mask, see below */
-    Position slider_x, slider_y;	/* location of slider within outer */
-    Dimension slider_width, slider_height;  /* size of slider */
-    Dimension canvas_width, canvas_height;  /* size of canvas */
+typedef struct
+{
+    unsigned int changed;  /* mask, see below */
+    Position     slider_x, slider_y; /* location of slider within outer */
+    Dimension    slider_width, slider_height;  /* size of slider */
+    Dimension    canvas_width, canvas_height;  /* size of canvas */
 } XawPannerReport;
 
-#define XawPRSliderX		(1 << 0)
-#define XawPRSliderY		(1 << 1)
-#define XawPRSliderWidth	(1 << 2)
-#define XawPRSliderHeight	(1 << 3)
-#define XawPRCanvasWidth	(1 << 4)
-#define XawPRCanvasHeight	(1 << 5)
-#define XawPRAll		(63)	/* union of above */
+#define XawPRSliderX      (1 << 0)
+#define XawPRSliderY      (1 << 1)
+#define XawPRSliderWidth  (1 << 2)
+#define XawPRSliderHeight (1 << 3)
+#define XawPRCanvasWidth  (1 << 4)
+#define XawPRCanvasHeight (1 << 5)
+#define XawPRAll          (63) /* union of above */
 
 #define XtNreportCallback "reportCallback"
 #define XtCReportCallback "reportCallback"

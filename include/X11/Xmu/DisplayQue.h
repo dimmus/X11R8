@@ -88,62 +88,45 @@ in this Software without prior written authorization from The Open Group.
  *         otherwise True is returned.
  */
 
-typedef struct _XmuDisplayQueue XmuDisplayQueue;
+typedef struct _XmuDisplayQueue      XmuDisplayQueue;
 typedef struct _XmuDisplayQueueEntry XmuDisplayQueueEntry;
 
-typedef int (*XmuCloseDisplayQueueProc)(XmuDisplayQueue *queue,
-					XmuDisplayQueueEntry *entry);
+typedef int (*XmuCloseDisplayQueueProc)(XmuDisplayQueue      *queue,
+                                        XmuDisplayQueueEntry *entry);
 
 typedef int (*XmuFreeDisplayQueueProc)(XmuDisplayQueue *queue);
 
-struct _XmuDisplayQueueEntry {
+struct _XmuDisplayQueueEntry
+{
     struct _XmuDisplayQueueEntry *prev, *next;
-    Display *display;
-    CloseHook closehook;
-    XPointer data;
+    Display                      *display;
+    CloseHook                     closehook;
+    XPointer                      data;
 };
 
-struct _XmuDisplayQueue {
-    int nentries;
-    XmuDisplayQueueEntry *head, *tail;
+struct _XmuDisplayQueue
+{
+    int                      nentries;
+    XmuDisplayQueueEntry    *head, *tail;
     XmuCloseDisplayQueueProc closefunc;
-    XmuFreeDisplayQueueProc freefunc;
-    XPointer data;
+    XmuFreeDisplayQueueProc  freefunc;
+    XPointer                 data;
 };
 
 _XFUNCPROTOBEGIN
 
-XmuDisplayQueue *XmuDQCreate
-(
- XmuCloseDisplayQueueProc	closefunc,
- XmuFreeDisplayQueueProc	freefunc,
- XPointer			data
- );
+XmuDisplayQueue *XmuDQCreate(XmuCloseDisplayQueueProc closefunc,
+                             XmuFreeDisplayQueueProc  freefunc,
+                             XPointer                 data);
 
-Bool XmuDQDestroy
-(
- XmuDisplayQueue		*q,
- Bool				docallbacks
- );
+Bool XmuDQDestroy(XmuDisplayQueue *q, Bool docallbacks);
 
-XmuDisplayQueueEntry *XmuDQLookupDisplay
-(
- XmuDisplayQueue		*q,
- Display			*dpy
- );
+XmuDisplayQueueEntry *XmuDQLookupDisplay(XmuDisplayQueue *q, Display *dpy);
 
-XmuDisplayQueueEntry *XmuDQAddDisplay
-(
- XmuDisplayQueue		*q,
- Display			*dpy,
- XPointer			data
- );
+XmuDisplayQueueEntry *
+XmuDQAddDisplay(XmuDisplayQueue *q, Display *dpy, XPointer data);
 
-Bool XmuDQRemoveDisplay
-(
- XmuDisplayQueue		*q,
- Display			*dpy
- );
+Bool XmuDQRemoveDisplay(XmuDisplayQueue *q, Display *dpy);
 
 _XFUNCPROTOEND
 

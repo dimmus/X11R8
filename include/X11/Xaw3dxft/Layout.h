@@ -21,7 +21,6 @@
  * Author:  Keith Packard, MIT X Consortium
  */
 
-
 #ifndef _XawLayout_h
 #define _XawLayout_h
 
@@ -86,7 +85,7 @@
 
 extern WidgetClass layoutWidgetClass;
 
-typedef struct _LayoutClassRec	*LayoutWidgetClass;
-typedef struct _LayoutRec	*LayoutWidget;
+typedef struct _LayoutClassRec *LayoutWidgetClass;
+typedef struct _LayoutRec      *LayoutWidget;
 
 #endif /* _Layout_h */

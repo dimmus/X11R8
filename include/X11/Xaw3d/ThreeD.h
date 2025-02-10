@@ -49,26 +49,27 @@ SOFTWARE.
 
 */
 
-#define XtNshadowWidth "shadowWidth"
-#define XtCShadowWidth "ShadowWidth"
-#define XtNtopShadowPixel "topShadowPixel"
-#define XtCTopShadowPixel "TopShadowPixel"
-#define XtNbottomShadowPixel "bottomShadowPixel"
-#define XtCBottomShadowPixel "BottomShadowPixel"
-#define XtNtopShadowContrast "topShadowContrast"
-#define XtCTopShadowContrast "TopShadowContrast"
+#define XtNshadowWidth          "shadowWidth"
+#define XtCShadowWidth          "ShadowWidth"
+#define XtNtopShadowPixel       "topShadowPixel"
+#define XtCTopShadowPixel       "TopShadowPixel"
+#define XtNbottomShadowPixel    "bottomShadowPixel"
+#define XtCBottomShadowPixel    "BottomShadowPixel"
+#define XtNtopShadowContrast    "topShadowContrast"
+#define XtCTopShadowContrast    "TopShadowContrast"
 #define XtNbottomShadowContrast "bottomShadowContrast"
 #define XtCBottomShadowContrast "BottomShadowContrast"
-#define XtNbeNiceToColormap "beNiceToColormap"
-#define XtCBeNiceToColormap "BeNiceToColormap"
-#define XtNbeNiceToColourmap "beNiceToColormap"
-#define XtCBeNiceToColourmap "BeNiceToColormap"
-#define XtNuserData "userData"
-#define XtCUserData "UserData"
-#define XtNrelief "relief"
-#define XtCRelief "Relief"
+#define XtNbeNiceToColormap     "beNiceToColormap"
+#define XtCBeNiceToColormap     "BeNiceToColormap"
+#define XtNbeNiceToColourmap    "beNiceToColormap"
+#define XtCBeNiceToColourmap    "BeNiceToColormap"
+#define XtNuserData             "userData"
+#define XtCUserData             "UserData"
+#define XtNrelief               "relief"
+#define XtCRelief               "Relief"
 
-typedef enum {
+typedef enum
+{
     XtReliefNone,
     XtReliefRaised,
     XtReliefSunken,
@@ -76,33 +77,28 @@ typedef enum {
     XtReliefGroove
 } XtRelief;
 
-typedef struct _ThreeDRec *ThreeDWidget;
+typedef struct _ThreeDRec      *ThreeDWidget;
 typedef struct _ThreeDClassRec *ThreeDWidgetClass;
 
 extern WidgetClass threeDWidgetClass;
 
 _XFUNCPROTOBEGIN
 
-extern void Xaw3dComputeTopShadowRGB (
-    Widget 		/* new */,
-    XColor*		/* xcol_out */
+extern void Xaw3dComputeTopShadowRGB(Widget /* new */, XColor * /* xcol_out */
 );
 
-extern void Xaw3dComputeBottomShadowRGB (
-    Widget		/* new */,
-    XColor*		/* xcol_out */
+extern void Xaw3dComputeBottomShadowRGB(Widget /* new */,
+                                        XColor * /* xcol_out */
 );
 
-extern void _ShadowSurroundedBox (
-    Widget,
-    ThreeDWidget,
-    Position,
-    Position,
-    Position,
-    Position,
-    XtRelief,
-    Boolean
-);
+extern void _ShadowSurroundedBox(Widget,
+                                 ThreeDWidget,
+                                 Position,
+                                 Position,
+                                 Position,
+                                 Position,
+                                 XtRelief,
+                                 Boolean);
 
 _XFUNCPROTOEND
 

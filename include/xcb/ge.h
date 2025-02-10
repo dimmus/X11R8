@@ -10,33 +10,35 @@
  **/
 
 #ifndef __GE_H
-#define __GE_H
+#  define __GE_H
 
-#include "xcb.h"
+#  include "xcb.h"
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#define XCB_GENERICEVENT_MAJOR_VERSION 1
-#define XCB_GENERICEVENT_MINOR_VERSION 0
+#  define XCB_GENERICEVENT_MAJOR_VERSION 1
+#  define XCB_GENERICEVENT_MINOR_VERSION 0
 
 extern xcb_extension_t xcb_genericevent_id;
 
 /**
  * @brief xcb_genericevent_query_version_cookie_t
  **/
-typedef struct xcb_genericevent_query_version_cookie_t {
+typedef struct xcb_genericevent_query_version_cookie_t
+{
     unsigned int sequence;
 } xcb_genericevent_query_version_cookie_t;
 
 /** Opcode for xcb_genericevent_query_version. */
-#define XCB_GENERICEVENT_QUERY_VERSION 0
+#  define XCB_GENERICEVENT_QUERY_VERSION 0
 
 /**
  * @brief xcb_genericevent_query_version_request_t
  **/
-typedef struct xcb_genericevent_query_version_request_t {
+typedef struct xcb_genericevent_query_version_request_t
+{
     uint8_t  major_opcode;
     uint8_t  minor_opcode;
     uint16_t length;
@@ -47,7 +49,8 @@ typedef struct xcb_genericevent_query_version_request_t {
 /**
  * @brief xcb_genericevent_query_version_reply_t
  **/
-typedef struct xcb_genericevent_query_version_reply_t {
+typedef struct xcb_genericevent_query_version_reply_t
+{
     uint8_t  response_type;
     uint8_t  pad0;
     uint16_t sequence;
@@ -66,9 +69,9 @@ typedef struct xcb_genericevent_query_version_reply_t {
  *
  */
 xcb_genericevent_query_version_cookie_t
-xcb_genericevent_query_version (xcb_connection_t *c,
-                                uint16_t          client_major_version,
-                                uint16_t          client_minor_version);
+xcb_genericevent_query_version(xcb_connection_t *c,
+                               uint16_t          client_major_version,
+                               uint16_t          client_minor_version);
 
 /**
  *
@@ -82,9 +85,9 @@ xcb_genericevent_query_version (xcb_connection_t *c,
  * placed in the event queue.
  */
 xcb_genericevent_query_version_cookie_t
-xcb_genericevent_query_version_unchecked (xcb_connection_t *c,
-                                          uint16_t          client_major_version,
-                                          uint16_t          client_minor_version);
+xcb_genericevent_query_version_unchecked(xcb_connection_t *c,
+                                         uint16_t          client_major_version,
+                                         uint16_t client_minor_version);
 
 /**
  * Return the reply
@@ -100,15 +103,14 @@ xcb_genericevent_query_version_unchecked (xcb_connection_t *c,
  *
  * The returned value must be freed by the caller using free().
  */
-xcb_genericevent_query_version_reply_t *
-xcb_genericevent_query_version_reply (xcb_connection_t                         *c,
-                                      xcb_genericevent_query_version_cookie_t   cookie  /**< */,
-                                      xcb_generic_error_t                     **e);
+xcb_genericevent_query_version_reply_t *xcb_genericevent_query_version_reply(
+    xcb_connection_t                       *c,
+    xcb_genericevent_query_version_cookie_t cookie /**< */,
+    xcb_generic_error_t                   **e);
 
-
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 
 #endif
 

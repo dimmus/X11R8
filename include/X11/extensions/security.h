@@ -34,10 +34,9 @@ from The Open Group.
 
 _XFUNCPROTOBEGIN
 
-Status XSecurityQueryExtension (
-    Display *dpy,
-    int *major_version_return,
-    int *minor_version_return);
+Status XSecurityQueryExtension(Display *dpy,
+                               int     *major_version_return,
+                               int     *minor_version_return);
 
 Xauth *XSecurityAllocXauth(void);
 
@@ -46,31 +45,32 @@ void XSecurityFreeXauth(Xauth *auth);
 /* type for returned auth ids */
 typedef unsigned long XSecurityAuthorization;
 
-typedef struct {
+typedef struct
+{
     unsigned int timeout;
     unsigned int trust_level;
     XID          group;
-    long	 event_mask;
+    long         event_mask;
 } XSecurityAuthorizationAttributes;
 
-Xauth *XSecurityGenerateAuthorization(
-    Display *dpy,
-    Xauth *auth_in,
-    unsigned long valuemask,
-    XSecurityAuthorizationAttributes *attributes,
-    XSecurityAuthorization *auth_id_return);
+Xauth *
+XSecurityGenerateAuthorization(Display                          *dpy,
+                               Xauth                            *auth_in,
+                               unsigned long                     valuemask,
+                               XSecurityAuthorizationAttributes *attributes,
+                               XSecurityAuthorization *auth_id_return);
 
-Status XSecurityRevokeAuthorization(
-    Display *dpy,
-    XSecurityAuthorization auth_id);
+Status XSecurityRevokeAuthorization(Display               *dpy,
+                                    XSecurityAuthorization auth_id);
 
 _XFUNCPROTOEND
 
-typedef struct {
-    int type;		      /* event base + XSecurityAuthorizationRevoked */
-    unsigned long serial;     /* # of last request processed by server */
-    Bool send_event;	      /* true if this came from a SendEvent request */
-    Display *display;	      /* Display the event was read from */
+typedef struct
+{
+    int           type; /* event base + XSecurityAuthorizationRevoked */
+    unsigned long serial; /* # of last request processed by server */
+    Bool          send_event; /* true if this came from a SendEvent request */
+    Display      *display; /* Display the event was read from */
     XSecurityAuthorization auth_id; /* revoked authorization id */
 } XSecurityAuthorizationRevokedEvent;
 

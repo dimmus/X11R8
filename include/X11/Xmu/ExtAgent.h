@@ -29,13 +29,9 @@ in this Software without prior written authorization from The Open Group.
 
 _XFUNCPROTOBEGIN
 
-extern void XmuRegisterExternalAgent
-(
- Widget		w,
- XtPointer	data,
- XEvent		*event,
- Boolean	*cont
- );
+extern void XmuRegisterExternalAgent(Widget    w,
+                                     XtPointer data,
+                                     XEvent   *event,
+                                     Boolean  *cont);
 
 _XFUNCPROTOEND
-

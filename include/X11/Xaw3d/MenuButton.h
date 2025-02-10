@@ -80,9 +80,9 @@ in this Software without prior written authorization from the X Consortium.
 #define XtNmenuName "menuName"
 #define XtCMenuName "MenuName"
 
-extern WidgetClass     menuButtonWidgetClass;
+extern WidgetClass menuButtonWidgetClass;
 
-typedef struct _MenuButtonClassRec   *MenuButtonWidgetClass;
-typedef struct _MenuButtonRec        *MenuButtonWidget;
+typedef struct _MenuButtonClassRec *MenuButtonWidgetClass;
+typedef struct _MenuButtonRec      *MenuButtonWidget;
 
 #endif /* _XawMenuButton_h */

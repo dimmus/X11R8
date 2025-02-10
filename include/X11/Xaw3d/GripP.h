@@ -66,21 +66,26 @@ SOFTWARE.
 #define DEFAULT_GRIP_SIZE 8
 
 /* New fields for the Grip widget class record */
-typedef struct {int empty;} GripClassPart;
+typedef struct
+{
+    int empty;
+} GripClassPart;
 
 /* Full Class record declaration */
-typedef struct _GripClassRec {
-    CoreClassPart    core_class;
-    SimpleClassPart  simple_class;
-    ThreeDClassPart  threeD_class;
-    GripClassPart    grip_class;
+typedef struct _GripClassRec
+{
+    CoreClassPart   core_class;
+    SimpleClassPart simple_class;
+    ThreeDClassPart threeD_class;
+    GripClassPart   grip_class;
 } GripClassRec;
 
 extern GripClassRec gripClassRec;
 
 /* New fields for the Grip widget record */
-typedef struct {
-  XtCallbackList grip_action;
+typedef struct
+{
+    XtCallbackList grip_action;
 } GripPart;
 
 /*****************************************************************************
@@ -89,12 +94,12 @@ typedef struct {
  *
  ****************************************************************************/
 
-typedef struct _GripRec {
-   CorePart    core;
-   SimplePart  simple;
-   ThreeDPart  threeD;
-   GripPart    grip;
+typedef struct _GripRec
+{
+    CorePart   core;
+    SimplePart simple;
+    ThreeDPart threeD;
+    GripPart   grip;
 } GripRec;
 
 #endif /* _XawGripP_h */
-

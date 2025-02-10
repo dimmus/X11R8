@@ -31,20 +31,19 @@ in this Software without prior written authorization from The Open Group.
  */
 
 #ifndef _XOS_H_
-# define _XOS_H_
+#define _XOS_H_
 
-# include "X11/Xosdefs.h"
+#include "X11/Xosdefs.h"
 
 /*
  * Get major data types (esp. caddr_t)
  */
 
-# include <sys/types.h>
+#include <sys/types.h>
 
-# if defined(__SCO__) || defined(__UNIXWARE__)
+#if defined(__SCO__) || defined(__UNIXWARE__)
 #  include <stdint.h>
-# endif
-
+#endif
 
 /*
  * Just about everyone needs the strings routines.  We provide both forms here,
@@ -59,90 +58,94 @@ in this Software without prior written authorization from The Open Group.
  * which can be really inconvenient. :-(
  */
 
-# include <string.h>
-# if defined(__SCO__) || defined(__UNIXWARE__) || defined(__sun) || defined(__CYGWIN__) || defined(_AIX) || defined(__APPLE__) || defined(__FreeBSD__)
+#include <string.h>
+#if defined(__SCO__) || defined(__UNIXWARE__) || defined(__sun) || \
+    defined(__CYGWIN__) || defined(_AIX) || defined(__APPLE__) ||  \
+    defined(__FreeBSD__)
 #  include <strings.h>
-# else
+#else
 #  ifndef index
-#   define index(s,c) (strchr((s),(c)))
+#    define index(s, c) (strchr((s), (c)))
 #  endif
 #  ifndef rindex
-#   define rindex(s,c) (strrchr((s),(c)))
+#    define rindex(s, c) (strrchr((s), (c)))
 #  endif
-# endif
+#endif
 
 /*
  * Get open(2) constants
  */
-# if defined(X_NOT_POSIX)
+#if defined(X_NOT_POSIX)
 #  include <fcntl.h>
 #  if defined(USL) || defined(__i386__) && (defined(SYSV) || defined(SVR4))
-#   include <unistd.h>
+#    include <unistd.h>
 #  endif
 #  ifdef WIN32
-#   include "X11/Xw32defs.h"
+#    include "X11/Xw32defs.h"
 #  else
-#   include <sys/file.h>
+#    include <sys/file.h>
 #  endif
-# else /* X_NOT_POSIX */
+#else /* X_NOT_POSIX */
 #  include <fcntl.h>
 #  include <unistd.h>
-# endif /* X_NOT_POSIX else */
+#endif /* X_NOT_POSIX else */
 
 /*
  * Get struct timeval and struct tm
  */
 
-# if defined(_POSIX_SOURCE) && defined(SVR4)
+#if defined(_POSIX_SOURCE) && defined(SVR4)
 /* need to omit _POSIX_SOURCE in order to get what we want in SVR4 */
 #  undef _POSIX_SOURCE
 #  include <sys/time.h>
 #  define _POSIX_SOURCE
-# elif defined(WIN32)
+#elif defined(WIN32)
 #  include <time.h>
-#  if !defined(_WINSOCKAPI_) && !defined(_WILLWINSOCK_) && !defined(_TIMEVAL_DEFINED) && !defined(_STRUCT_TIMEVAL)
-struct timeval {
-    long    tv_sec;         /* seconds */
-    long    tv_usec;        /* and microseconds */
+#  if !defined(_WINSOCKAPI_) && !defined(_WILLWINSOCK_) && \
+      !defined(_TIMEVAL_DEFINED) && !defined(_STRUCT_TIMEVAL)
+struct timeval
+{
+    long tv_sec;         /* seconds */
+    long tv_usec;        /* and microseconds */
 };
-#   define _TIMEVAL_DEFINED
+
+#    define _TIMEVAL_DEFINED
 #  endif
 #  include <sys/timeb.h>
-#  define gettimeofday(t) \
-{ \
-    struct _timeb _gtodtmp; \
-    _ftime (&_gtodtmp); \
-    (t)->tv_sec = _gtodtmp.time; \
-    (t)->tv_usec = _gtodtmp.millitm * 1000; \
-}
-# else
+#  define gettimeofday(t)                         \
+      {                                           \
+          struct _timeb _gtodtmp;                 \
+          _ftime(&_gtodtmp);                      \
+          (t)->tv_sec  = _gtodtmp.time;           \
+          (t)->tv_usec = _gtodtmp.millitm * 1000; \
+      }
+#else
 #  include <sys/time.h>
 #  include <time.h>
-# endif /* defined(_POSIX_SOURCE) && defined(SVR4) */
+#endif /* defined(_POSIX_SOURCE) && defined(SVR4) */
 
 /* define X_GETTIMEOFDAY macro, a portable gettimeofday() */
-# if defined(_XOPEN_XPG4) || defined(_XOPEN_UNIX) /* _XOPEN_UNIX is XPG4.2 */
-#  define X_GETTIMEOFDAY(t) gettimeofday(t, (struct timezone*)0)
-# else
+#if defined(_XOPEN_XPG4) || defined(_XOPEN_UNIX) /* _XOPEN_UNIX is XPG4.2 */
+#  define X_GETTIMEOFDAY(t) gettimeofday(t, (struct timezone *)0)
+#else
 #  if defined(SVR4) || defined(__SVR4) || defined(WIN32)
-#   define X_GETTIMEOFDAY(t) gettimeofday(t)
+#    define X_GETTIMEOFDAY(t) gettimeofday(t)
 #  else
-#   define X_GETTIMEOFDAY(t) gettimeofday(t, (struct timezone*)0)
+#    define X_GETTIMEOFDAY(t) gettimeofday(t, (struct timezone *)0)
 #  endif
-# endif /* XPG4 else */
+#endif /* XPG4 else */
 
-
-# ifdef __GNU__
-#  define PATH_MAX 4096
+#ifdef __GNU__
+#  define PATH_MAX   4096
 #  define MAXPATHLEN 4096
-#  define OPEN_MAX 256 /* We define a reasonable limit.  */
-# endif
+#  define OPEN_MAX   256 /* We define a reasonable limit.  */
+#endif
 
 /* use POSIX name for signal */
-# if defined(X_NOT_POSIX) && defined(SYSV) && !defined(SIGCHLD)
+#if defined(X_NOT_POSIX) && defined(SYSV) && !defined(SIGCHLD)
 #  define SIGCHLD SIGCLD
-# endif
+#endif
 
-# include "X11/Xarch.h"
+#include "X11/Xarch.h"
 
 #endif /* _XOS_H_ */

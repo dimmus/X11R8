@@ -55,53 +55,59 @@ SOFTWARE.
 #include "X11/Xaw/Viewport.h"
 #include "X11/Xaw/FormP.h"
 
-typedef struct {
+typedef struct
+{
     XtPointer extension;
 } ViewportClassPart;
 
-typedef struct _ViewportClassRec {
-    CoreClassPart	core_class;
-    CompositeClassPart	composite_class;
-    ConstraintClassPart	constraint_class;
-    FormClassPart	form_class;
-    ViewportClassPart	viewport_class;
+typedef struct _ViewportClassRec
+{
+    CoreClassPart       core_class;
+    CompositeClassPart  composite_class;
+    ConstraintClassPart constraint_class;
+    FormClassPart       form_class;
+    ViewportClassPart   viewport_class;
 } ViewportClassRec;
 
 extern ViewportClassRec viewportClassRec;
 
-typedef struct _ViewportPart {
+typedef struct _ViewportPart
+{
     /* resources */
-    Boolean forcebars;		/* Whether we should always display
+    Boolean        forcebars;  /* Whether we should always display
 				   the selected scrollbars */
-    Boolean allowhoriz;		/* Whether we allow horizontal scrollbars */
-    Boolean allowvert;		/* Whether we allow vertical scrollbars */
-    Boolean usebottom;		/* True if horiz bars appear at bottom */
-    Boolean useright;		/* True if vert bars appear at right */
+    Boolean        allowhoriz;  /* Whether we allow horizontal scrollbars */
+    Boolean        allowvert;  /* Whether we allow vertical scrollbars */
+    Boolean        usebottom;  /* True if horiz bars appear at bottom */
+    Boolean        useright;  /* True if vert bars appear at right */
     XtCallbackList report_callbacks;/* when size/position changes */
 
     /* private */
-    Widget clip, child;		/* The clipping and (scrolled) child widgets */
-    Widget horiz_bar, vert_bar;	/* What scrollbars we currently have */
+    Widget clip, child;  /* The clipping and (scrolled) child widgets */
+    Widget horiz_bar, vert_bar; /* What scrollbars we currently have */
 #ifndef OLDXAW
-    XtPointer pad[4];	/* for future use and keep binary compatibility */
+    XtPointer pad[4]; /* for future use and keep binary compatibility */
 #endif
 } ViewportPart;
 
-typedef struct _ViewportRec {
-    CorePart		core;
-    CompositePart	composite;
-    ConstraintPart	constraint;
-    FormPart		form;
-    ViewportPart	viewport;
+typedef struct _ViewportRec
+{
+    CorePart       core;
+    CompositePart  composite;
+    ConstraintPart constraint;
+    FormPart       form;
+    ViewportPart   viewport;
 } ViewportRec;
 
-typedef struct {
-    Bool reparented;		/* True if child has been re-parented */
+typedef struct
+{
+    Bool reparented;  /* True if child has been re-parented */
 } ViewportConstraintsPart;
 
-typedef struct _ViewportConstraintsRec {
-    FormConstraintsPart		form;
-    ViewportConstraintsPart	viewport;
+typedef struct _ViewportConstraintsRec
+{
+    FormConstraintsPart     form;
+    ViewportConstraintsPart viewport;
 } ViewportConstraintsRec, *ViewportConstraints;
 
 #endif /* _ViewportP_h */

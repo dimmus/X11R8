@@ -54,7 +54,8 @@
  * * If any of redMask, greenMask or blueMask are zero, all other masks are
  *   zero.
  */
-typedef struct {
+typedef struct
+{
     /** Red component binary displacement. */
     short red;
     /** Red component bit mask. */
@@ -84,7 +85,8 @@ typedef struct {
  * * Indexed: Has a Colormap and it's DirectFormat structure is filled with
  *   zeros.
  */
-typedef struct {
+typedef struct
+{
     /** XID of this structure server instance. */
     PictFormat id;
     /** Color management type. */
@@ -127,12 +129,14 @@ typedef struct {
 
 /** Include Colormap field. @hideinitializer */
 #define PictFormatColormap (1 << 11)
+
 /** @} */
 
 /**
  * Picture rendering attributes.
  */
-typedef struct _XRenderPictureAttributes {
+typedef struct _XRenderPictureAttributes
+{
     /** How to repeat the picture. */
     int repeat;
 
@@ -170,7 +174,8 @@ typedef struct _XRenderPictureAttributes {
  *  hardware values by the server. Colors must be premultiplied by alpha by the
  *  client in all cases but gradient operations.
  */
-typedef struct {
+typedef struct
+{
     /** Red color channel. */
     unsigned short red;
     /** Green color channel. */
@@ -187,7 +192,8 @@ typedef struct {
  * A glyph is positioned by taking the requested position and substracting the
  * center offset.
  */
-typedef struct _XGlyphInfo {
+typedef struct _XGlyphInfo
+{
     /** Glyph width. */
     unsigned short width;
     /** Glyph height. */
@@ -214,7 +220,8 @@ typedef struct _XGlyphInfo {
 /**
  * 8-bit Glyph Element.
  */
-typedef struct _XGlyphElt8 {
+typedef struct _XGlyphElt8
+{
     /** Set of available glyphs. */
     GlyphSet glyphset;
 
@@ -232,7 +239,8 @@ typedef struct _XGlyphElt8 {
 /**
  * 16-bit Glyph Element.
  */
-typedef struct _XGlyphElt16 {
+typedef struct _XGlyphElt16
+{
     /** Set of available glyphs. */
     GlyphSet glyphset;
 
@@ -250,7 +258,8 @@ typedef struct _XGlyphElt16 {
 /**
  * 32-bit Glyph Element.
  */
-typedef struct _XGlyphElt32 {
+typedef struct _XGlyphElt32
+{
     /** Set of available glyphs. */
     GlyphSet glyphset;
 
@@ -264,6 +273,7 @@ typedef struct _XGlyphElt32 {
     /** Vertical offset. */
     int yOff;
 } XGlyphElt32;
+
 /**@} */
 
 /*< Utility number types.
@@ -282,29 +292,33 @@ typedef double XDouble;
 typedef int XFixed;
 
 /** Turn XDouble into XFixed. @hideinitializer */
-#define XDoubleToFixed(f) ((XFixed)((f)*65536))
+#define XDoubleToFixed(f) ((XFixed)((f) * 65536))
 /** Turn XFixed into XDouble. @hideinitializer */
 #define XFixedToDouble(f) (((XDouble)(f)) / 65536)
+
 /** @} */
 
 /**
  * Point coordinates stored as floats.
  */
-typedef struct _XPointDouble {
+typedef struct _XPointDouble
+{
     XDouble x, y;
 } XPointDouble;
 
 /**
  * Point coordinates as integers.
  */
-typedef struct _XPointFixed {
+typedef struct _XPointFixed
+{
     XFixed x, y;
 } XPointFixed;
 
 /**
  * Line described by two points.
  */
-typedef struct _XLineFixed {
+typedef struct _XLineFixed
+{
     XPointFixed p1, p2;
 } XLineFixed;
 
@@ -312,14 +326,16 @@ typedef struct _XLineFixed {
  * Triangle described by it's vertices.
  * @see XTrap
  */
-typedef struct _XTriangle {
+typedef struct _XTriangle
+{
     XPointFixed p1, p2, p3;
 } XTriangle;
 
 /**
  * Circle described by it's center point and a radius.
  */
-typedef struct _XCircle {
+typedef struct _XCircle
+{
     XFixed x;
     XFixed y;
     XFixed radius;
@@ -332,22 +348,25 @@ typedef struct _XCircle {
  *    * XTriangle
  *    * XTrap
  */
-typedef struct _XTrapezoid {
-    XFixed top, bottom;
+typedef struct _XTrapezoid
+{
+    XFixed     top, bottom;
     XLineFixed left, right;
 } XTrapezoid;
 
 /**
  * A transform matrix.
  */
-typedef struct _XTransform {
+typedef struct _XTransform
+{
     XFixed matrix[3][3];
 } XTransform;
 
 /**
  * Group filters and filter aliases.
  */
-typedef struct _XFilters {
+typedef struct _XFilters
+{
     /** Filter names count. */
     int nfilter;
     /** Filter names array. */
@@ -361,7 +380,8 @@ typedef struct _XFilters {
 /**
  * The value of an indexed color.
  */
-typedef struct _XIndexValue {
+typedef struct _XIndexValue
+{
     /** Index ID. */
     unsigned long pixel;
     /** Color components. */
@@ -371,7 +391,8 @@ typedef struct _XIndexValue {
 /**
  * A single cursor frame.
  */
-typedef struct _XAnimCursor {
+typedef struct _XAnimCursor
+{
     /** Existing cursor. */
     Cursor cursor;
     /** Animation delay. */
@@ -381,7 +402,8 @@ typedef struct _XAnimCursor {
 /**
  * An horizontal line.
  */
-typedef struct _XSpanFix {
+typedef struct _XSpanFix
+{
     XFixed left, right, y;
 } XSpanFix;
 
@@ -389,14 +411,16 @@ typedef struct _XSpanFix {
  * A trapezoid defined by two lines.
  * @see XTriangle
  */
-typedef struct _XTrap {
+typedef struct _XTrap
+{
     XSpanFix top, bottom;
 } XTrap;
 
 /**
  * Linear gradient shape.
  */
-typedef struct _XLinearGradient {
+typedef struct _XLinearGradient
+{
     XPointFixed p1;
     XPointFixed p2;
 } XLinearGradient;
@@ -404,7 +428,8 @@ typedef struct _XLinearGradient {
 /**
  * Radial gradient shape.
  */
-typedef struct _XRadialGradient {
+typedef struct _XRadialGradient
+{
     XCircle inner;
     XCircle outer;
 } XRadialGradient;
@@ -412,9 +437,10 @@ typedef struct _XRadialGradient {
 /**
  * Conical gradient shape.
  */
-typedef struct _XConicalGradient {
+typedef struct _XConicalGradient
+{
     XPointFixed center;
-    XFixed angle; /* in degrees */
+    XFixed      angle; /* in degrees */
 } XConicalGradient;
 
 _XFUNCPROTOBEGIN
@@ -441,8 +467,8 @@ Bool XRenderQueryExtension(Display *dpy, int *event_basep, int *error_basep);
  * @param[out] minor_versionp Extension's major version.
  * @return Status «1» on success.
  */
-Status XRenderQueryVersion(Display *dpy, int *major_versionp,
-                           int *minor_versionp);
+Status
+XRenderQueryVersion(Display *dpy, int *major_versionp, int *minor_versionp);
 
 /**
  * Check for and cache compatible picture formats.
@@ -479,7 +505,7 @@ Bool XRenderSetSubpixelOrder(Display *dpy, int screen, int subpixel);
  * @param[in] visual Reference Visual object.
  * @return The requested Picture format.
  */
-XRenderPictFormat *XRenderFindVisualFormat(Display *dpy,
+XRenderPictFormat *XRenderFindVisualFormat(Display        *dpy,
                                            _Xconst Visual *visual);
 
 /**
@@ -491,9 +517,10 @@ XRenderPictFormat *XRenderFindVisualFormat(Display *dpy,
  * @param[in] count Skip `count` formats.
  * @return NULL if no matching format found, else a Picture format.
  */
-XRenderPictFormat *XRenderFindFormat(Display *dpy, unsigned long mask,
+XRenderPictFormat *XRenderFindFormat(Display                   *dpy,
+                                     unsigned long              mask,
                                      _Xconst XRenderPictFormat *templ,
-                                     int count);
+                                     int                        count);
 
 /** Standard format specifiers.
  * @{
@@ -531,9 +558,9 @@ XRenderPictFormat *XRenderFindStandardFormat(Display *dpy, int format);
  * @param[out] num Size of the output array.
  * @return An array of XIndexValue.
  */
-XIndexValue *XRenderQueryPictIndexValues(Display *dpy,
+XIndexValue *XRenderQueryPictIndexValues(Display                   *dpy,
                                          _Xconst XRenderPictFormat *format,
-                                         int *num);
+                                         int                       *num);
 
 /**
  * Creates a Picture for a drawable.
@@ -545,9 +572,10 @@ XIndexValue *XRenderQueryPictIndexValues(Display *dpy,
  * @param[in] attributes Desired attributes for the Picture.
  * @return A Picture tied to the drawable.
  */
-Picture XRenderCreatePicture(Display *dpy, Drawable drawable,
-                             _Xconst XRenderPictFormat *format,
-                             unsigned long valuemask,
+Picture XRenderCreatePicture(Display                          *dpy,
+                             Drawable                          drawable,
+                             _Xconst XRenderPictFormat        *format,
+                             unsigned long                     valuemask,
                              _Xconst XRenderPictureAttributes *attributes);
 
 /**
@@ -568,8 +596,9 @@ void XRenderFreePicture(Display *dpy, Picture picture);
  * @param[in] valuemask `attributes` fields mask to use.
  * @param[in] attributes Desired attributes for the Picture.
  */
-void XRenderChangePicture(Display *dpy, Picture picture,
-                          unsigned long valuemask,
+void XRenderChangePicture(Display                          *dpy,
+                          Picture                           picture,
+                          unsigned long                     valuemask,
                           _Xconst XRenderPictureAttributes *attributes);
 
 /**
@@ -582,9 +611,12 @@ void XRenderChangePicture(Display *dpy, Picture picture,
  * @param[in] rects Array of rectangles to clip with.
  * @param[in] n `rects` array size.
  */
-void XRenderSetPictureClipRectangles(Display *dpy, Picture picture, int xOrigin,
-                                     int yOrigin, _Xconst XRectangle *rects,
-                                     int n);
+void XRenderSetPictureClipRectangles(Display            *dpy,
+                                     Picture             picture,
+                                     int                 xOrigin,
+                                     int                 yOrigin,
+                                     _Xconst XRectangle *rects,
+                                     int                 n);
 
 /**
  * Change a Picture's clip mask to the specified Region.
@@ -602,7 +634,8 @@ void XRenderSetPictureClipRegion(Display *dpy, Picture picture, Region r);
  * @param[in] picture Target Picture.
  * @param[in] transform Transform matrix to use.
  */
-void XRenderSetPictureTransform(Display *dpy, Picture picture,
+void XRenderSetPictureTransform(Display    *dpy,
+                                Picture     picture,
                                 XTransform *transform);
 
 /**
@@ -622,9 +655,18 @@ void XRenderSetPictureTransform(Display *dpy, Picture picture,
  * @param[in] width Maximum composition width.
  * @param[in] height Maximum composition height.
  */
-void XRenderComposite(Display *dpy, int op, Picture src, Picture mask,
-                      Picture dst, int src_x, int src_y, int mask_x, int mask_y,
-                      int dst_x, int dst_y, unsigned int width,
+void XRenderComposite(Display     *dpy,
+                      int          op,
+                      Picture      src,
+                      Picture      mask,
+                      Picture      dst,
+                      int          src_x,
+                      int          src_y,
+                      int          mask_x,
+                      int          mask_y,
+                      int          dst_x,
+                      int          dst_y,
+                      unsigned int width,
                       unsigned int height);
 
 /**
@@ -669,9 +711,13 @@ void XRenderFreeGlyphSet(Display *dpy, GlyphSet glyphset);
  * @param[in] images Byte array containing the Glyphs graphics.
  * @param[in] nbyte_images Size of the `images` byte array.
  */
-void XRenderAddGlyphs(Display *dpy, GlyphSet glyphset, _Xconst Glyph *gids,
-                      _Xconst XGlyphInfo *glyphs, int nglyphs,
-                      _Xconst char *images, int nbyte_images);
+void XRenderAddGlyphs(Display            *dpy,
+                      GlyphSet            glyphset,
+                      _Xconst Glyph      *gids,
+                      _Xconst XGlyphInfo *glyphs,
+                      int                 nglyphs,
+                      _Xconst char       *images,
+                      int                 nbyte_images);
 
 /**
  * Free allocated Glyphs.
@@ -681,8 +727,10 @@ void XRenderAddGlyphs(Display *dpy, GlyphSet glyphset, _Xconst Glyph *gids,
  * @param[in] gids Identifier array of the Glyphs to dellocate.
  * @param[in] nglyphs Glyph count.
  */
-void XRenderFreeGlyphs(Display *dpy, GlyphSet glyphset, _Xconst Glyph *gids,
-                       int nglyphs);
+void XRenderFreeGlyphs(Display       *dpy,
+                       GlyphSet       glyphset,
+                       _Xconst Glyph *gids,
+                       int            nglyphs);
 
 /**
  * Draw a 8-bit character string into a Picture.
@@ -700,10 +748,18 @@ void XRenderFreeGlyphs(Display *dpy, GlyphSet glyphset, _Xconst Glyph *gids,
  * @param[in] string String to clip to.
  * @param[in] nchar String length.
  */
-void XRenderCompositeString8(Display *dpy, int op, Picture src, Picture dst,
+void XRenderCompositeString8(Display                   *dpy,
+                             int                        op,
+                             Picture                    src,
+                             Picture                    dst,
                              _Xconst XRenderPictFormat *maskFormat,
-                             GlyphSet glyphset, int xSrc, int ySrc, int xDst,
-                             int yDst, _Xconst char *string, int nchar);
+                             GlyphSet                   glyphset,
+                             int                        xSrc,
+                             int                        ySrc,
+                             int                        xDst,
+                             int                        yDst,
+                             _Xconst char              *string,
+                             int                        nchar);
 
 /**
  * Draw a 16-bit character string into a Picture.
@@ -721,11 +777,18 @@ void XRenderCompositeString8(Display *dpy, int op, Picture src, Picture dst,
  * @param[in] string String to clip to.
  * @param[in] nchar String length.
  */
-void XRenderCompositeString16(Display *dpy, int op, Picture src, Picture dst,
+void XRenderCompositeString16(Display                   *dpy,
+                              int                        op,
+                              Picture                    src,
+                              Picture                    dst,
                               _Xconst XRenderPictFormat *maskFormat,
-                              GlyphSet glyphset, int xSrc, int ySrc, int xDst,
-                              int yDst, _Xconst unsigned short *string,
-                              int nchar);
+                              GlyphSet                   glyphset,
+                              int                        xSrc,
+                              int                        ySrc,
+                              int                        xDst,
+                              int                        yDst,
+                              _Xconst unsigned short    *string,
+                              int                        nchar);
 
 /**
  * Draw a 32-bit character string into a Picture.
@@ -743,11 +806,18 @@ void XRenderCompositeString16(Display *dpy, int op, Picture src, Picture dst,
  * @param[in] string String to clip to.
  * @param[in] nchar String length.
  */
-void XRenderCompositeString32(Display *dpy, int op, Picture src, Picture dst,
+void XRenderCompositeString32(Display                   *dpy,
+                              int                        op,
+                              Picture                    src,
+                              Picture                    dst,
                               _Xconst XRenderPictFormat *maskFormat,
-                              GlyphSet glyphset, int xSrc, int ySrc, int xDst,
-                              int yDst, _Xconst unsigned int *string,
-                              int nchar);
+                              GlyphSet                   glyphset,
+                              int                        xSrc,
+                              int                        ySrc,
+                              int                        xDst,
+                              int                        yDst,
+                              _Xconst unsigned int      *string,
+                              int                        nchar);
 
 /**
  * Draw several 8-bit Glyph Elements into a Picture.
@@ -764,10 +834,17 @@ void XRenderCompositeString32(Display *dpy, int op, Picture src, Picture dst,
  * @param[in] elts Glyph Elements array to clip with.
  * @param[in] nelt Glyph Elements array size.
  */
-void XRenderCompositeText8(Display *dpy, int op, Picture src, Picture dst,
-                           _Xconst XRenderPictFormat *maskFormat, int xSrc,
-                           int ySrc, int xDst, int yDst,
-                           _Xconst XGlyphElt8 *elts, int nelt);
+void XRenderCompositeText8(Display                   *dpy,
+                           int                        op,
+                           Picture                    src,
+                           Picture                    dst,
+                           _Xconst XRenderPictFormat *maskFormat,
+                           int                        xSrc,
+                           int                        ySrc,
+                           int                        xDst,
+                           int                        yDst,
+                           _Xconst XGlyphElt8        *elts,
+                           int                        nelt);
 
 /**
  * Draw several 16-bit Glyph Elements into a Picture.
@@ -784,10 +861,17 @@ void XRenderCompositeText8(Display *dpy, int op, Picture src, Picture dst,
  * @param[in] elts Glyph Elements array to clip with.
  * @param[in] nelt Glyph Elements array size.
  */
-void XRenderCompositeText16(Display *dpy, int op, Picture src, Picture dst,
-                            _Xconst XRenderPictFormat *maskFormat, int xSrc,
-                            int ySrc, int xDst, int yDst,
-                            _Xconst XGlyphElt16 *elts, int nelt);
+void XRenderCompositeText16(Display                   *dpy,
+                            int                        op,
+                            Picture                    src,
+                            Picture                    dst,
+                            _Xconst XRenderPictFormat *maskFormat,
+                            int                        xSrc,
+                            int                        ySrc,
+                            int                        xDst,
+                            int                        yDst,
+                            _Xconst XGlyphElt16       *elts,
+                            int                        nelt);
 
 /**
  * Draw several 32-bit Glyph Elements into a Picture.
@@ -804,10 +888,17 @@ void XRenderCompositeText16(Display *dpy, int op, Picture src, Picture dst,
  * @param[in] elts Glyph Elements to clip with.
  * @param[in] nelt Glyph Elements array size.
  */
-void XRenderCompositeText32(Display *dpy, int op, Picture src, Picture dst,
-                            _Xconst XRenderPictFormat *maskFormat, int xSrc,
-                            int ySrc, int xDst, int yDst,
-                            _Xconst XGlyphElt32 *elts, int nelt);
+void XRenderCompositeText32(Display                   *dpy,
+                            int                        op,
+                            Picture                    src,
+                            Picture                    dst,
+                            _Xconst XRenderPictFormat *maskFormat,
+                            int                        xSrc,
+                            int                        ySrc,
+                            int                        xDst,
+                            int                        yDst,
+                            _Xconst XGlyphElt32       *elts,
+                            int                        nelt);
 
 /**
  * Fill a Rectangle with the given color.
@@ -821,9 +912,14 @@ void XRenderCompositeText32(Display *dpy, int op, Picture src, Picture dst,
  * @param[in] width Rectangle width.
  * @param[in] height Rectangle height.
  */
-void XRenderFillRectangle(Display *dpy, int op, Picture dst,
-                          _Xconst XRenderColor *color, int x, int y,
-                          unsigned int width, unsigned int height);
+void XRenderFillRectangle(Display              *dpy,
+                          int                   op,
+                          Picture               dst,
+                          _Xconst XRenderColor *color,
+                          int                   x,
+                          int                   y,
+                          unsigned int          width,
+                          unsigned int          height);
 
 /**
  * Fill a bunch of Rectangle with the given color.
@@ -835,9 +931,12 @@ void XRenderFillRectangle(Display *dpy, int op, Picture dst,
  * @param[in] rectangles Array of Rectangles to fill.
  * @param[in] n_rects `rectangles` array size.
  */
-void XRenderFillRectangles(Display *dpy, int op, Picture dst,
+void XRenderFillRectangles(Display              *dpy,
+                           int                   op,
+                           Picture               dst,
                            _Xconst XRenderColor *color,
-                           _Xconst XRectangle *rectangles, int n_rects);
+                           _Xconst XRectangle   *rectangles,
+                           int                   n_rects);
 
 /**
  * Combine two Pictures using a bunch of Trapezoids as the mask.
@@ -852,9 +951,15 @@ void XRenderFillRectangles(Display *dpy, int op, Picture dst,
  * @param[in] traps Array of Trapezoids to clip with.
  * @param[in] ntrap `traps` Array size.
  */
-void XRenderCompositeTrapezoids(Display *dpy, int op, Picture src, Picture dst,
-                                _Xconst XRenderPictFormat *maskFormat, int xSrc,
-                                int ySrc, _Xconst XTrapezoid *traps, int ntrap);
+void XRenderCompositeTrapezoids(Display                   *dpy,
+                                int                        op,
+                                Picture                    src,
+                                Picture                    dst,
+                                _Xconst XRenderPictFormat *maskFormat,
+                                int                        xSrc,
+                                int                        ySrc,
+                                _Xconst XTrapezoid        *traps,
+                                int                        ntrap);
 
 /**
  * Combine two Pictures using a bunch of Triangles as the mask.
@@ -869,10 +974,15 @@ void XRenderCompositeTrapezoids(Display *dpy, int op, Picture src, Picture dst,
  * @param[in] triangles Array of Triangles to clip with.
  * @param[in] ntriangle `triangles` array size.
  */
-void XRenderCompositeTriangles(Display *dpy, int op, Picture src, Picture dst,
-                               _Xconst XRenderPictFormat *maskFormat, int xSrc,
-                               int ySrc, _Xconst XTriangle *triangles,
-                               int ntriangle);
+void XRenderCompositeTriangles(Display                   *dpy,
+                               int                        op,
+                               Picture                    src,
+                               Picture                    dst,
+                               _Xconst XRenderPictFormat *maskFormat,
+                               int                        xSrc,
+                               int                        ySrc,
+                               _Xconst XTriangle         *triangles,
+                               int                        ntriangle);
 
 /**
  * Combine two Pictures using a Triangle Strip as the mask.
@@ -887,10 +997,15 @@ void XRenderCompositeTriangles(Display *dpy, int op, Picture src, Picture dst,
  * @param[in] points Array of Points to create Triangles with.
  * @param[in] npoint `points` array size.
  */
-void XRenderCompositeTriStrip(Display *dpy, int op, Picture src, Picture dst,
-                              _Xconst XRenderPictFormat *maskFormat, int xSrc,
-                              int ySrc, _Xconst XPointFixed *points,
-                              int npoint);
+void XRenderCompositeTriStrip(Display                   *dpy,
+                              int                        op,
+                              Picture                    src,
+                              Picture                    dst,
+                              _Xconst XRenderPictFormat *maskFormat,
+                              int                        xSrc,
+                              int                        ySrc,
+                              _Xconst XPointFixed       *points,
+                              int                        npoint);
 
 /**
  * Combine two Pictures using a Triangle Fan as the mask.
@@ -905,9 +1020,15 @@ void XRenderCompositeTriStrip(Display *dpy, int op, Picture src, Picture dst,
  * @param[in] points Array of Points to create Triangles with.
  * @param[in] npoint `points` array size.
  */
-void XRenderCompositeTriFan(Display *dpy, int op, Picture src, Picture dst,
-                            _Xconst XRenderPictFormat *maskFormat, int xSrc,
-                            int ySrc, _Xconst XPointFixed *points, int npoint);
+void XRenderCompositeTriFan(Display                   *dpy,
+                            int                        op,
+                            Picture                    src,
+                            Picture                    dst,
+                            _Xconst XRenderPictFormat *maskFormat,
+                            int                        xSrc,
+                            int                        ySrc,
+                            _Xconst XPointFixed       *points,
+                            int                        npoint);
 
 /**
  * Combine two Pictures using a Polygon as the mask.
@@ -925,11 +1046,18 @@ void XRenderCompositeTriFan(Display *dpy, int op, Picture src, Picture dst,
  * @param[in] npoints `points` array size.
  * @param winding Unused.
  */
-void XRenderCompositeDoublePoly(Display *dpy, int op, Picture src, Picture dst,
-                                _Xconst XRenderPictFormat *maskFormat, int xSrc,
-                                int ySrc, int xDst, int yDst,
-                                _Xconst XPointDouble *fpoints, int npoints,
-                                int winding);
+void XRenderCompositeDoublePoly(Display                   *dpy,
+                                int                        op,
+                                Picture                    src,
+                                Picture                    dst,
+                                _Xconst XRenderPictFormat *maskFormat,
+                                int                        xSrc,
+                                int                        ySrc,
+                                int                        xDst,
+                                int                        yDst,
+                                _Xconst XPointDouble      *fpoints,
+                                int                        npoints,
+                                int                        winding);
 
 /**
  * Parse a color string.
@@ -950,7 +1078,9 @@ Status XRenderParseColor(Display *dpy, char *spec, XRenderColor *def);
  * @param[in] y Vertical offset.
  * @return A Cursor.
  */
-Cursor XRenderCreateCursor(Display *dpy, Picture source, unsigned int x,
+Cursor XRenderCreateCursor(Display     *dpy,
+                           Picture      source,
+                           unsigned int x,
                            unsigned int y);
 
 /**
@@ -973,8 +1103,11 @@ XFilters *XRenderQueryFilters(Display *dpy, Drawable drawable);
  * @param[in] params Filter parameters array.
  * @param[in] nparams `params` array size.
  */
-void XRenderSetPictureFilter(Display *dpy, Picture picture, const char *filter,
-                             XFixed *params, int nparams);
+void XRenderSetPictureFilter(Display    *dpy,
+                             Picture     picture,
+                             const char *filter,
+                             XFixed     *params,
+                             int         nparams);
 
 /**
  * Create an animated Cursor from the given Cursor frames.
@@ -996,8 +1129,12 @@ Cursor XRenderCreateAnimCursor(Display *dpy, int ncursor, XAnimCursor *cursors);
  * @param[in] traps Array of trapezoids.
  * @param[in] ntrap `traps` array size.
  */
-void XRenderAddTraps(Display *dpy, Picture picture, int xOff, int yOff,
-                     _Xconst XTrap *traps, int ntrap);
+void XRenderAddTraps(Display       *dpy,
+                     Picture        picture,
+                     int            xOff,
+                     int            yOff,
+                     _Xconst XTrap *traps,
+                     int            ntrap);
 
 /**
  * Create a Picture filled with a single Color.
@@ -1018,10 +1155,11 @@ Picture XRenderCreateSolidFill(Display *dpy, const XRenderColor *color);
  * @param[in] nstops Stops count.
  * @return A Picture filled with a Linear Gradient.
  */
-Picture XRenderCreateLinearGradient(Display *dpy,
+Picture XRenderCreateLinearGradient(Display               *dpy,
                                     const XLinearGradient *gradient,
-                                    const XFixed *stops,
-                                    const XRenderColor *colors, int nstops);
+                                    const XFixed          *stops,
+                                    const XRenderColor    *colors,
+                                    int                    nstops);
 
 /**
  * Create a Picture filled with a Radial Gradient.
@@ -1033,10 +1171,11 @@ Picture XRenderCreateLinearGradient(Display *dpy,
  * @param[in] nstops Stops count.
  * @return A Picture filled with a Radial Gradient.
  */
-Picture XRenderCreateRadialGradient(Display *dpy,
+Picture XRenderCreateRadialGradient(Display               *dpy,
                                     const XRadialGradient *gradient,
-                                    const XFixed *stops,
-                                    const XRenderColor *colors, int nstops);
+                                    const XFixed          *stops,
+                                    const XRenderColor    *colors,
+                                    int                    nstops);
 
 /**
  * Create a Picture filled with a Conical Gradient.
@@ -1048,10 +1187,11 @@ Picture XRenderCreateRadialGradient(Display *dpy,
  * @param[in] nstops Stops count.
  * @return A Picture filled with a Conical Gradient.
  */
-Picture XRenderCreateConicalGradient(Display *dpy,
+Picture XRenderCreateConicalGradient(Display                *dpy,
                                      const XConicalGradient *gradient,
-                                     const XFixed *stops,
-                                     const XRenderColor *colors, int nstops);
+                                     const XFixed           *stops,
+                                     const XRenderColor     *colors,
+                                     int                     nstops);
 
 _XFUNCPROTOEND
 

@@ -49,38 +49,36 @@ SOFTWARE.
 
 */
 
-#define XtNshadowWidth "shadowWidth"
-#define XtCShadowWidth "ShadowWidth"
-#define XtNtopShadowPixel "topShadowPixel"
-#define XtCTopShadowPixel "TopShadowPixel"
-#define XtNbottomShadowPixel "bottomShadowPixel"
-#define XtCBottomShadowPixel "BottomShadowPixel"
-#define XtNtopShadowContrast "topShadowContrast"
-#define XtCTopShadowContrast "TopShadowContrast"
+#define XtNshadowWidth          "shadowWidth"
+#define XtCShadowWidth          "ShadowWidth"
+#define XtNtopShadowPixel       "topShadowPixel"
+#define XtCTopShadowPixel       "TopShadowPixel"
+#define XtNbottomShadowPixel    "bottomShadowPixel"
+#define XtCBottomShadowPixel    "BottomShadowPixel"
+#define XtNtopShadowContrast    "topShadowContrast"
+#define XtCTopShadowContrast    "TopShadowContrast"
 #define XtNbottomShadowContrast "bottomShadowContrast"
 #define XtCBottomShadowContrast "BottomShadowContrast"
-#define XtNbeNiceToColormap "beNiceToColormap"
-#define XtCBeNiceToColormap "BeNiceToColormap"
-#define XtNbeNiceToColourmap "beNiceToColormap"
-#define XtCBeNiceToColourmap "BeNiceToColormap"
-#define XtNuserData "userData"
-#define XtCUserData "UserData"
+#define XtNbeNiceToColormap     "beNiceToColormap"
+#define XtCBeNiceToColormap     "BeNiceToColormap"
+#define XtNbeNiceToColourmap    "beNiceToColormap"
+#define XtCBeNiceToColourmap    "BeNiceToColormap"
+#define XtNuserData             "userData"
+#define XtCUserData             "UserData"
 
 typedef struct _SmeThreeDClassRec *SmeThreeDObjectClass;
-typedef struct _SmeThreeDRec *SmeThreeDObject;
+typedef struct _SmeThreeDRec      *SmeThreeDObject;
 
 extern WidgetClass smeThreeDObjectClass;
 
 _XFUNCPROTOBEGIN
 
-extern void XawSme3dComputeTopShadowRGB (
-    Widget	 	/* new */,
-    XColor*		/* xcol_out */
+extern void XawSme3dComputeTopShadowRGB(Widget /* new */,
+                                        XColor *  /* xcol_out */
 );
 
-extern void XawSme3dComputeBottomShadowRGB (
-    Widget		/* new */,
-    XColor*		/* xcol_out */
+extern void XawSme3dComputeBottomShadowRGB(Widget /* new */,
+                                           XColor *  /* xcol_out */
 );
 
 _XFUNCPROTOEND

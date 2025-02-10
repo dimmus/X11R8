@@ -26,34 +26,32 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "X11/Xfuncproto.h"
 #include "X11/extensions/EVI.h"
 
-typedef struct {
-    VisualID		core_visual_id;
-    int			screen;
-    int			level;
-    unsigned int	transparency_type;
-    unsigned int	transparency_value;
-    unsigned int	min_hw_colormaps;
-    unsigned int	max_hw_colormaps;
-    unsigned int	num_colormap_conflicts;
-    VisualID*		colormap_conflicts;
+typedef struct
+{
+    VisualID     core_visual_id;
+    int          screen;
+    int          level;
+    unsigned int transparency_type;
+    unsigned int transparency_value;
+    unsigned int min_hw_colormaps;
+    unsigned int max_hw_colormaps;
+    unsigned int num_colormap_conflicts;
+    VisualID    *colormap_conflicts;
 } ExtendedVisualInfo;
 
 _XFUNCPROTOBEGIN
 
-Bool XeviQueryExtension(
-    Display*            /* dpy */
+Bool   XeviQueryExtension(Display   *            /* dpy */
+  );
+Status XeviQueryVersion(Display * /* dpy */,
+                        int * /* majorVersion */,
+                        int *  /* minorVersion */
 );
-Status XeviQueryVersion(
-    Display*		/* dpy */,
-    int*		/* majorVersion */,
-    int*		/* minorVersion */
-);
-Status XeviGetVisualInfo(
-    Display*		 	/* dpy */,
-    VisualID*			/* visual_query */,
-    int				/* nVisual_query */,
-    ExtendedVisualInfo**	/* extendedVisualInfo_return */,
-    int*			/* nInfo_return */
+Status XeviGetVisualInfo(Display * /* dpy */,
+                         VisualID * /* visual_query */,
+                         int /* nVisual_query */,
+                         ExtendedVisualInfo ** /* extendedVisualInfo_return */,
+                         int *   /* nInfo_return */
 );
 
 _XFUNCPROTOEND

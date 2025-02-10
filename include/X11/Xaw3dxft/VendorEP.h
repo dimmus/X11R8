@@ -56,24 +56,28 @@ in this Software without prior written authorization from the X Consortium.
 
 #include <X11/Xaw3dxft/XawImP.h>
 
-typedef struct {
-    XtPointer	extension;
+typedef struct
+{
+    XtPointer extension;
 } XawVendorShellExtClassPart;
 
-typedef	struct _VendorShellExtClassRec {
-    ObjectClassPart	object_class;
-    XawVendorShellExtClassPart	vendor_shell_ext_class;
+typedef struct _VendorShellExtClassRec
+{
+    ObjectClassPart            object_class;
+    XawVendorShellExtClassPart vendor_shell_ext_class;
 } XawVendorShellExtClassRec;
 
-typedef struct {
-    Widget	parent;
-    XawImPart	im;
-    XawIcPart	ic;
+typedef struct
+{
+    Widget    parent;
+    XawImPart im;
+    XawIcPart ic;
 } XawVendorShellExtPart;
 
-typedef	struct XawVendorShellExtRec {
-    ObjectPart	object;
-    XawVendorShellExtPart	vendor_ext;
+typedef struct XawVendorShellExtRec
+{
+    ObjectPart            object;
+    XawVendorShellExtPart vendor_ext;
 } XawVendorShellExtRec, *XawVendorShellExtWidget;
 
-#endif	/* _VendorEP_h */
+#endif /* _VendorEP_h */

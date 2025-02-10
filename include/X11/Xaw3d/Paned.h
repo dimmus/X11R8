@@ -124,40 +124,40 @@ CONSTRAINT RESOURCES:
 #define PANED_GRIP_SIZE 0
 
 /* New Fields */
-#define XtNallowResize "allowResize"
-#define XtNbetweenCursor "betweenCursor"
-#define XtNverticalBetweenCursor "verticalBetweenCursor"
+#define XtNallowResize             "allowResize"
+#define XtNbetweenCursor           "betweenCursor"
+#define XtNverticalBetweenCursor   "verticalBetweenCursor"
 #define XtNhorizontalBetweenCursor "horizontalBetweenCursor"
-#define XtNgripCursor "gripCursor"
-#define XtNgripIndent "gripIndent"
-#define XtNhorizontalGripCursor "horizontalGripCursor"
-#define XtNinternalBorderColor "internalBorderColor"
-#define XtNinternalBorderWidth "internalBorderWidth"
-#define XtNleftCursor "leftCursor"
-#define XtNlowerCursor "lowerCursor"
-#define XtNrefigureMode "refigureMode"
-#define XtNposition "position"
-#define XtNmin "min"
-#define XtNmax "max"
-#define XtNpreferredPaneSize "preferredPaneSize"
-#define XtNresizeToPreferred "resizeToPreferred"
-#define XtNrightCursor "rightCursor"
-#define XtNshowGrip "showGrip"
-#define XtNskipAdjust "skipAdjust"
-#define XtNupperCursor "upperCursor"
-#define XtNverticalGripCursor "verticalGripCursor"
+#define XtNgripCursor              "gripCursor"
+#define XtNgripIndent              "gripIndent"
+#define XtNhorizontalGripCursor    "horizontalGripCursor"
+#define XtNinternalBorderColor     "internalBorderColor"
+#define XtNinternalBorderWidth     "internalBorderWidth"
+#define XtNleftCursor              "leftCursor"
+#define XtNlowerCursor             "lowerCursor"
+#define XtNrefigureMode            "refigureMode"
+#define XtNposition                "position"
+#define XtNmin                     "min"
+#define XtNmax                     "max"
+#define XtNpreferredPaneSize       "preferredPaneSize"
+#define XtNresizeToPreferred       "resizeToPreferred"
+#define XtNrightCursor             "rightCursor"
+#define XtNshowGrip                "showGrip"
+#define XtNskipAdjust              "skipAdjust"
+#define XtNupperCursor             "upperCursor"
+#define XtNverticalGripCursor      "verticalGripCursor"
 
-#define XtCGripIndent "GripIndent"
-#define XtCMin "Min"
-#define XtCMax "Max"
+#define XtCGripIndent        "GripIndent"
+#define XtCMin               "Min"
+#define XtCMax               "Max"
 #define XtCPreferredPaneSize "PreferredPaneSize"
-#define XtCShowGrip "ShowGrip"
+#define XtCShowGrip          "ShowGrip"
 
 /* Class record constant */
 extern WidgetClass panedWidgetClass;
 
-typedef struct _PanedClassRec	*PanedWidgetClass;
-typedef struct _PanedRec	*PanedWidget;
+typedef struct _PanedClassRec *PanedWidgetClass;
+typedef struct _PanedRec      *PanedWidget;
 
 /************************************************************
  *
@@ -174,10 +174,7 @@ _XFUNCPROTOBEGIN
  *	Returns: none.
  */
 
-extern void XawPanedSetMinMax(
-    Widget		/* w */,
-    int			/* min */,
-    int			/* max */
+extern void XawPanedSetMinMax(Widget /* w */, int /* min */, int   /* max */
 );
 
 /*	Function Name: XawPanedGetMinMax
@@ -187,10 +184,8 @@ extern void XawPanedSetMinMax(
  *	Returns: none.
  */
 
-extern void XawPanedGetMinMax(
-    Widget		/* w */,
-    int *		/* min_return */,
-    int *		/* max_return */
+extern void
+XawPanedGetMinMax(Widget /* w */, int * /* min_return */, int * /* max_return */
 );
 
 /*	Function Name: XawPanedSetRefigureMode
@@ -201,12 +196,11 @@ extern void XawPanedGetMinMax(
  *	Returns: none.
  */
 
-extern void XawPanedSetRefigureMode(
-    Widget		/* w */,
+extern void XawPanedSetRefigureMode(Widget /* w */,
 #if NeedWidePrototypes
-    /* Boolean */ int	/* mode */
+                                    /* Boolean */ int /* mode */
 #else
-    Boolean		/* mode */
+                                    Boolean  /* mode */
 #endif
 );
 
@@ -216,8 +210,7 @@ extern void XawPanedSetRefigureMode(
  *	Returns: the number of panes in the paned widget.
  */
 
-extern int XawPanedGetNumSub(
-    Widget		/* w */
+extern int XawPanedGetNumSub(Widget /* w */
 );
 
 /*	Function Name: XawPanedAllowResize
@@ -227,12 +220,11 @@ extern int XawPanedGetNumSub(
  *	Returns: none.
  */
 
-extern void XawPanedAllowResize(
-    Widget		/* w */,
+extern void XawPanedAllowResize(Widget /* w */,
 #if NeedWidePrototypes
-    /* Boolean */ int	/* allow_resize */
+                                /* Boolean */ int /* allow_resize */
 #else
-    Boolean		/* allow_resize */
+                                Boolean  /* allow_resize */
 #endif
 );
 

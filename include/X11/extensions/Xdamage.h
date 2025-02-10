@@ -31,42 +31,41 @@
 
 typedef XID Damage;
 
-typedef struct {
-    int type;			/* event base */
+typedef struct
+{
+    int           type;   /* event base */
     unsigned long serial;
-    Bool send_event;
-    Display *display;
-    Drawable drawable;
-    Damage damage;
-    int level;
-    Bool more;			/* more events will be delivered immediately */
-    Time timestamp;
-    XRectangle area;
-    XRectangle geometry;
+    Bool          send_event;
+    Display      *display;
+    Drawable      drawable;
+    Damage        damage;
+    int           level;
+    Bool          more;   /* more events will be delivered immediately */
+    Time          timestamp;
+    XRectangle    area;
+    XRectangle    geometry;
 } XDamageNotifyEvent;
 
 _XFUNCPROTOBEGIN
 
-Bool XDamageQueryExtension (Display *dpy,
-                            int *event_base_return,
-                            int *error_base_return);
+Bool XDamageQueryExtension(Display *dpy,
+                           int     *event_base_return,
+                           int     *error_base_return);
 
-Status XDamageQueryVersion (Display *dpy,
-			    int     *major_version_return,
-			    int     *minor_version_return);
+Status XDamageQueryVersion(Display *dpy,
+                           int     *major_version_return,
+                           int     *minor_version_return);
 
-Damage
-XDamageCreate (Display	*dpy, Drawable drawable, int level);
+Damage XDamageCreate(Display *dpy, Drawable drawable, int level);
 
-void
-XDamageDestroy (Display *dpy, Damage damage);
+void XDamageDestroy(Display *dpy, Damage damage);
 
-void
-XDamageSubtract (Display *dpy, Damage damage,
-		 XserverRegion repair, XserverRegion parts);
+void XDamageSubtract(Display      *dpy,
+                     Damage        damage,
+                     XserverRegion repair,
+                     XserverRegion parts);
 
-void
-XDamageAdd (Display *dpy, Drawable drawable, XserverRegion region);
+void XDamageAdd(Display *dpy, Drawable drawable, XserverRegion region);
 
 _XFUNCPROTOEND
 

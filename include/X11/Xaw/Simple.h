@@ -74,39 +74,39 @@ SOFTWARE.
 
 */
 
-#define XtNcursor "cursor"
-#define XtNcursorName "cursorName"
+#define XtNcursor            "cursor"
+#define XtNcursorName        "cursorName"
 #define XtNinsensitiveBorder "insensitiveBorder"
 
 #define XtCInsensitive "Insensitive"
 
 #ifndef XtCInternational
-#define XtCInternational "International"
+#  define XtCInternational "International"
 #endif
 
 #ifndef XtNinternational
-#define XtNinternational "international"
+#  define XtNinternational "international"
 #endif
 
 #ifndef OLDXAW
-#ifndef XawNdisplayList
-#define XawNdisplayList "displayList"
-#endif
+#  ifndef XawNdisplayList
+#    define XawNdisplayList "displayList"
+#  endif
 
-#ifndef XawCDisplayList
-#define XawCDisplayList "DisplayList"
-#endif
+#  ifndef XawCDisplayList
+#    define XawCDisplayList "DisplayList"
+#  endif
 
-#ifndef XawRDisplayList
-#define XawRDisplayList "XawDisplayList"
-#endif
+#  ifndef XawRDisplayList
+#    define XawRDisplayList "XawDisplayList"
+#  endif
 
-#define XtNtip		"tip"
-#define XtCTip		"Tip"
-#endif	/* OLDXAW */
+#  define XtNtip "tip"
+#  define XtCTip "Tip"
+#endif /* OLDXAW */
 
-typedef struct _SimpleClassRec	*SimpleWidgetClass;
-typedef struct _SimpleRec	*SimpleWidget;
+typedef struct _SimpleClassRec *SimpleWidgetClass;
+typedef struct _SimpleRec      *SimpleWidget;
 
 extern WidgetClass simpleWidgetClass;
 

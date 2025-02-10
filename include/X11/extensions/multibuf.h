@@ -30,176 +30,168 @@ in this Software without prior written authorization from The Open Group.
 
 #include "X11/extensions/multibufconst.h"
 
-#define MbufGetReq(name,req,info) GetReq (name, req); \
-	req->reqType = info->codes->major_opcode; \
-	req->mbufReqType = X_##name;
+#define MbufGetReq(name, req, info)               \
+    GetReq(name, req);                            \
+    req->reqType     = info->codes->major_opcode; \
+    req->mbufReqType = X_##name;
 
 /*
  * Extra definitions that will only be needed in the client
  */
 typedef XID Multibuffer;
 
-typedef struct {
-    int	type;		    /* of event */
+typedef struct
+{
+    int           type;      /* of event */
     unsigned long serial;   /* # of last request processed by server */
-    int send_event;	    /* true if this came from a SendEvent request */
-    Display *display;	    /* Display the event was read from */
-    Multibuffer buffer;	    /* buffer of event */
-    int	state;		    /* see Clobbered constants above */
+    int           send_event; /* true if this came from a SendEvent request */
+    Display      *display; /* Display the event was read from */
+    Multibuffer   buffer; /* buffer of event */
+    int           state; /* see Clobbered constants above */
 } XmbufClobberNotifyEvent;
 
-typedef struct {
-    int	type;		    /* of event */
-    unsigned long serial;   /* # of last request processed by server */
-    int send_event;	    /* true if this came from a SendEvent request */
-    Display *display;	    /* Display the event was read from */
-    Multibuffer buffer;	    /* buffer of event */
+typedef struct
+{
+    int           type; /* of event */
+    unsigned long serial; /* # of last request processed by server */
+    int           send_event; /* true if this came from a SendEvent request */
+    Display      *display; /* Display the event was read from */
+    Multibuffer   buffer; /* buffer of event */
 } XmbufUpdateNotifyEvent;
-
 
 /*
  * per-window attributes that can be got
  */
-typedef struct {
-    int displayed_index;	/* which buffer is being displayed */
-    int update_action;		/* Undefined, Background, Untouched, Copied */
-    int update_hint;		/* Frequent, Intermittent, Static */
-    int window_mode;		/* Mono, Stereo */
-    int nbuffers;		/* Number of buffers */
-    Multibuffer *buffers;	/* Buffers */
+typedef struct
+{
+    int          displayed_index; /* which buffer is being displayed */
+    int          update_action; /* Undefined, Background, Untouched, Copied */
+    int          update_hint; /* Frequent, Intermittent, Static */
+    int          window_mode; /* Mono, Stereo */
+    int          nbuffers; /* Number of buffers */
+    Multibuffer *buffers; /* Buffers */
 } XmbufWindowAttributes;
 
 /*
  * per-window attributes that can be set
  */
-typedef struct {
-    int update_hint;		/* Frequent, Intermittent, Static */
+typedef struct
+{
+    int update_hint; /* Frequent, Intermittent, Static */
 } XmbufSetWindowAttributes;
-
 
 /*
  * per-buffer attributes that can be got
  */
-typedef struct {
-    Window window;		/* which window this belongs to */
-    unsigned long event_mask;	/* events that have been selected */
-    int buffer_index;		/* which buffer is this */
-    int side;			/* Mono, Left, Right */
+typedef struct
+{
+    Window        window; /* which window this belongs to */
+    unsigned long event_mask; /* events that have been selected */
+    int           buffer_index; /* which buffer is this */
+    int           side; /* Mono, Left, Right */
 } XmbufBufferAttributes;
 
 /*
  * per-buffer attributes that can be set
  */
-typedef struct {
-    unsigned long event_mask;	/* events that have been selected */
+typedef struct
+{
+    unsigned long event_mask; /* events that have been selected */
 } XmbufSetBufferAttributes;
-
 
 /*
  * per-screen buffer info (there will be lists of them)
  */
-typedef struct {
-    VisualID visualid;		/* visual usable at this depth */
-    int max_buffers;		/* most buffers for this visual */
-    int depth;			/* depth of buffers to be created */
+typedef struct
+{
+    VisualID visualid; /* visual usable at this depth */
+    int      max_buffers; /* most buffers for this visual */
+    int      depth; /* depth of buffers to be created */
 } XmbufBufferInfo;
 
 _XFUNCPROTOBEGIN
 
-extern Bool XmbufQueryExtension(
-    Display*		/* dpy */,
-    int*		/* event_base_return */,
-    int*		/* error_base_return */
+extern Bool XmbufQueryExtension(Display * /* dpy */,
+                                int * /* event_base_return */,
+                                int * /* error_base_return */
 );
 
-extern Status XmbufGetVersion(
-    Display*		/* dpy */,
-    int*		/* major_version_return */,
-    int*		/* minor_version_return */
+extern Status XmbufGetVersion(Display * /* dpy */,
+                              int * /* major_version_return */,
+                              int * /* minor_version_return */
 );
 
-extern int XmbufCreateBuffers(
-    Display*		/* dpy */,
-    Window		/* w */,
-    int			/* count */,
-    int			/* update_action */,
-    int			/* update_hint */,
-    Multibuffer*	/* buffers */
+extern int XmbufCreateBuffers(Display * /* dpy */,
+                              Window /* w */,
+                              int /* count */,
+                              int /* update_action */,
+                              int /* update_hint */,
+                              Multibuffer * /* buffers */
 );
 
-extern void XmbufDestroyBuffers(
-    Display*		/* dpy */,
-    Window		/* window */
+extern void XmbufDestroyBuffers(Display * /* dpy */, Window /* window */
 );
 
-extern void XmbufDisplayBuffers(
-    Display*		/* dpy */,
-    int			/* count */,
-    Multibuffer*	/* buffers */,
-    int			/* min_delay */,
-    int			/* max_delay */
+extern void XmbufDisplayBuffers(Display * /* dpy */,
+                                int /* count */,
+                                Multibuffer * /* buffers */,
+                                int /* min_delay */,
+                                int /* max_delay */
 );
 
-extern Status XmbufGetWindowAttributes(
-    Display*			/* dpy */,
-    Window			/* w */,
-    XmbufWindowAttributes*	/* attr */
+extern Status XmbufGetWindowAttributes(Display * /* dpy */,
+                                       Window /* w */,
+                                       XmbufWindowAttributes * /* attr */
 );
 
-extern void XmbufChangeWindowAttributes(
-    Display*			/* dpy */,
-    Window			/* w */,
-    unsigned long		/* valuemask */,
-    XmbufSetWindowAttributes*	/* attr */
+extern void XmbufChangeWindowAttributes(Display * /* dpy */,
+                                        Window /* w */,
+                                        unsigned long /* valuemask */,
+                                        XmbufSetWindowAttributes * /* attr */
 );
 
-extern Status XmbufGetBufferAttributes(
-    Display*			/* dpy */,
-    Multibuffer			/* b */,
-    XmbufBufferAttributes*	/* attr */
+extern Status XmbufGetBufferAttributes(Display * /* dpy */,
+                                       Multibuffer /* b */,
+                                       XmbufBufferAttributes * /* attr */
 );
 
-extern void XmbufChangeBufferAttributes(
-    Display*			/* dpy */,
-    Multibuffer			/* b */,
-    unsigned long		/* valuemask */,
-    XmbufSetBufferAttributes*	/* attr */
+extern void XmbufChangeBufferAttributes(Display * /* dpy */,
+                                        Multibuffer /* b */,
+                                        unsigned long /* valuemask */,
+                                        XmbufSetBufferAttributes * /* attr */
 );
 
-extern Status XmbufGetScreenInfo(
-    Display*			/* dpy */,
-    Drawable			/* d */,
-    int*			/* nmono_return */,
-    XmbufBufferInfo**		/* mono_info_return */,
-    int*			/* nstereo_return */,
-    XmbufBufferInfo**		/* stereo_info_return */
+extern Status XmbufGetScreenInfo(Display * /* dpy */,
+                                 Drawable /* d */,
+                                 int * /* nmono_return */,
+                                 XmbufBufferInfo ** /* mono_info_return */,
+                                 int * /* nstereo_return */,
+                                 XmbufBufferInfo ** /* stereo_info_return */
 );
 
-extern Window XmbufCreateStereoWindow(
-    Display*			/* dpy */,
-    Window			/* parent */,
-    int				/* x */,
-    int				/* y */,
-    unsigned int		/* width */,
-    unsigned int		/* height */,
-    unsigned int		/* border_width */,
-    int				/* depth */,
-    unsigned int		/* class */,
-    Visual*			/* visual */,
-    unsigned long		/* valuemask */,
-    XSetWindowAttributes*	/* attr */,
-    Multibuffer*		/* leftp */,
-    Multibuffer*		/* rightp */
+extern Window XmbufCreateStereoWindow(Display * /* dpy */,
+                                      Window /* parent */,
+                                      int /* x */,
+                                      int /* y */,
+                                      unsigned int /* width */,
+                                      unsigned int /* height */,
+                                      unsigned int /* border_width */,
+                                      int /* depth */,
+                                      unsigned int /* class */,
+                                      Visual * /* visual */,
+                                      unsigned long /* valuemask */,
+                                      XSetWindowAttributes * /* attr */,
+                                      Multibuffer * /* leftp */,
+                                      Multibuffer * /* rightp */
 );
 
-extern void XmbufClearBufferArea(
-    Display*			/* dpy */,
-    Multibuffer			/* buffer */,
-    int				/* x */,
-    int				/* y */,
-    unsigned int		/* width */,
-    unsigned int		/* height */,
-    Bool			/* exposures */
+extern void XmbufClearBufferArea(Display * /* dpy */,
+                                 Multibuffer /* buffer */,
+                                 int /* x */,
+                                 int /* y */,
+                                 unsigned int /* width */,
+                                 unsigned int /* height */,
+                                 Bool /* exposures */
 );
 
 _XFUNCPROTOEND

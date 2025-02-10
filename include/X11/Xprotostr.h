@@ -51,27 +51,31 @@ SOFTWARE.
 
 /* Used by PolySegment */
 
-typedef struct _xSegment {
+typedef struct _xSegment
+{
     INT16 x1, y1, x2, y2;
 } xSegment;
 
 /* POINT */
 
-typedef struct _xPoint {
-    INT16   x, y;
+typedef struct _xPoint
+{
+    INT16 x, y;
 } xPoint;
 
-typedef struct _xRectangle {
-    INT16   x, y;
-    CARD16  width, height;
+typedef struct _xRectangle
+{
+    INT16  x, y;
+    CARD16 width, height;
 } xRectangle;
 
 /*  ARC  */
 
-typedef struct _xArc {
-    INT16   x, y;
-    CARD16  width, height;
-    INT16   angle1, angle2;
+typedef struct _xArc
+{
+    INT16  x, y;
+    CARD16 width, height;
+    INT16  angle1, angle2;
 } xArc;
 
 #endif /* XPROTOSTRUCTS_H */

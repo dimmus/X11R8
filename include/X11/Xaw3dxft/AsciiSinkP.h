@@ -70,34 +70,37 @@ SOFTWARE.
  *
  ************************************************************/
 
-typedef struct _AsciiSinkClassPart {
-  int foo;
+typedef struct _AsciiSinkClassPart
+{
+    int foo;
 } AsciiSinkClassPart;
 
 /* Full class record declaration */
 
-typedef struct _AsciiSinkClassRec {
-    ObjectClassPart     object_class;
-    TextSinkClassPart	text_sink_class;
-    AsciiSinkClassPart	ascii_sink_class;
+typedef struct _AsciiSinkClassRec
+{
+    ObjectClassPart    object_class;
+    TextSinkClassPart  text_sink_class;
+    AsciiSinkClassPart ascii_sink_class;
 } AsciiSinkClassRec;
 
 extern AsciiSinkClassRec asciiSinkClassRec;
 
 /* New fields for the AsciiSink object record */
-typedef struct {
+typedef struct
+{
     /* public resources */
     XFontStruct *font;          /* Font to draw in. */
-    Boolean echo;
-    Boolean display_nonprinting;
-    char *xftfontname;
+    Boolean      echo;
+    Boolean      display_nonprinting;
+    char        *xftfontname;
 
     /* private state */
-    GC normgc, invgc, xorgc;
-    Pixmap insertCursorOn;
+    GC                 normgc, invgc, xorgc;
+    Pixmap             insertCursorOn;
     XawTextInsertState laststate;
-    short cursor_x, cursor_y;	/* Cursor Location. */
-    XftFont *xftfont;
+    short              cursor_x, cursor_y; /* Cursor Location. */
+    XftFont           *xftfont;
 } AsciiSinkPart;
 
 /****************************************************************
@@ -106,11 +109,11 @@ typedef struct {
  *
  ****************************************************************/
 
-typedef struct _AsciiSinkRec {
-    ObjectPart          object;
-    TextSinkPart	text_sink;
-    AsciiSinkPart	ascii_sink;
+typedef struct _AsciiSinkRec
+{
+    ObjectPart    object;
+    TextSinkPart  text_sink;
+    AsciiSinkPart ascii_sink;
 } AsciiSinkRec;
 
 #endif /* _XawAsciiSinkP_h */
-

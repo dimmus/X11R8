@@ -25,7 +25,7 @@ in this Software without prior written authorization from The Open Group.
 */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 #include "X11/IntrinsicP.h"
 #include "X11/StringDefs.h"
@@ -34,7 +34,7 @@ in this Software without prior written authorization from The Open Group.
 /*
  * Class Methods
  */
-static void TemplateInitialize(Widget, Widget, ArgList, Cardinal*);
+static void TemplateInitialize(Widget, Widget, ArgList, Cardinal *);
 
 /*
  * Prototypes
@@ -44,7 +44,7 @@ static Bool TemplateFunction(TemplateWidget, int, int, Bool);
 /*
  * Actions
  */
-static void TemplateAction(Widget, XEvent*, String*, Cardinal*);
+static void TemplateAction(Widget, XEvent *, String *, Cardinal *);
 
 /*
  * Initialization
@@ -60,69 +60,63 @@ static XtResource resources[] = {
     default_type,
     default_addr
   },*/
-  {
-    XtNtemplateResource,
-    XtCTemplateResource,
-    XtRTemplateResource,
-    sizeof(char*),
-    offset(resource),
-    XtRString,
-    (XtPointer)"default"
-  },
+    { XtNtemplateResource,
+     XtCTemplateResource, XtRTemplateResource,
+     sizeof(char *),
+     offset(resource),
+     XtRString, (XtPointer) "default" },
 };
 #undef offset
 
-static XtActionsRec actions[] =
-{
+static XtActionsRec actions[] = {
     /*{name,		procedure},*/
-    {"template",	TemplateAction},
+    { "template", TemplateAction },
 };
 
-static char translations[] =
-"<Key>:"	"template()\n"
-;
+static char translations[] = "<Key>:"
+                             "template()\n";
 
-#define Superclass	(&widgetClassRec)
+#define Superclass (&widgetClassRec)
 TemplateClassRec templateClassRec = {
   /* core */
-  {
-    (WidgetClass)Superclass,		/* superclass */
-    "Template",				/* class_name */
-    sizeof(TemplateRec),		/* widget_size */
-    NULL,				/* class_initialize */
-    NULL,				/* class_part_initialize */
-    False,				/* class_inited */
-    TemplateInitialize,			/* initialize */
-    NULL,				/* initialize_hook */
-    XtInheritRealize,			/* realize */
-    actions,				/* actions */
-    XtNumber(actions),			/* num_actions */
-    resources,				/* resources */
-    XtNumber(resources),		/* num_resources */
-    NULLQUARK,				/* xrm_class */
-    True,				/* compress_motion */
-    True,				/* compress_exposure */
-    True,				/* compress_enterleave */
-    False,				/* visible_interest */
-    NULL,				/* destroy */
-    NULL,				/* resize */
-    NULL,				/* expose */
-    NULL,				/* set_values */
-    NULL,				/* set_values_hook */
-    XtInheritSetValuesAlmost,		/* set_values_almost */
-    NULL,				/* get_values_hook */
-    NULL,				/* accept_focus */
-    XtVersion,				/* version */
-    NULL,				/* callback_private */
-    translations,			/* tm_table */
-    XtInheritQueryGeometry,		/* query_geometry */
-    XtInheritDisplayAccelerator,	/* display_accelerator */
-    NULL,				/* extension */
-  },
+    {
+     (WidgetClass)Superclass,  /* superclass */
+        "Template",    /* class_name */
+        sizeof(TemplateRec),  /* widget_size */
+        NULL,    /* class_initialize */
+        NULL,    /* class_part_initialize */
+        False,    /* class_inited */
+        TemplateInitialize,   /* initialize */
+        NULL,    /* initialize_hook */
+        XtInheritRealize,   /* realize */
+        actions,    /* actions */
+        XtNumber(actions),   /* num_actions */
+        resources,    /* resources */
+        XtNumber(resources),  /* num_resources */
+        NULLQUARK,    /* xrm_class */
+        True,    /* compress_motion */
+        True,    /* compress_exposure */
+        True,    /* compress_enterleave */
+        False,    /* visible_interest */
+        NULL,    /* destroy */
+        NULL,    /* resize */
+        NULL,    /* expose */
+        NULL,    /* set_values */
+        NULL,    /* set_values_hook */
+        XtInheritSetValuesAlmost,  /* set_values_almost */
+        NULL,    /* get_values_hook */
+        NULL,    /* accept_focus */
+        XtVersion,    /* version */
+        NULL,    /* callback_private */
+        translations,   /* tm_table */
+        XtInheritQueryGeometry,  /* query_geometry */
+        XtInheritDisplayAccelerator, /* display_accelerator */
+        NULL,    /* extension */
+    },
   /* template */
-  {
-    NULL,				/* extension */
-  }
+    {
+     NULL,    /* extension */
+    }
 };
 
 WidgetClass templateWidgetClass = (WidgetClass)&templateClassRec;
@@ -191,5 +185,4 @@ TemplateFunction(TemplateWidget tw, int x, int y, Bool force)
 /*ARGSUSED*/
 static void
 TemplateAction(Widget w, XEvent *event, String *params, Cardinal *num_params)
-{
-}
+{}

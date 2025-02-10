@@ -22,7 +22,6 @@ used in advertising or otherwise to promote the sale, use or other dealings
 in this Software without prior written authorization from The Open Group.
 */
 
-
 /*
  * This is a List widget.  It allows the user to select an item in a list and
  * notifies the application through a callback function.
@@ -41,75 +40,78 @@ in this Software without prior written authorization from The Open Group.
 #include "X11/Xaw/SimpleP.h"
 #include "X11/Xaw/List.h"
 
-#define NO_HIGHLIGHT            XAW_LIST_NONE
-#define OUT_OF_RANGE            -1
-#define OKAY                     0
+#define NO_HIGHLIGHT XAW_LIST_NONE
+#define OUT_OF_RANGE -1
+#define OKAY         0
 
 /* New fields for the List widget class */
-typedef struct {
+typedef struct
+{
     XtPointer extension;
 } ListClassPart;
 
 /* Full class record */
-typedef struct _ListClassRec {
-    CoreClassPart	core_class;
-    SimpleClassPart	simple_class;
-    ListClassPart	list_class;
+typedef struct _ListClassRec
+{
+    CoreClassPart   core_class;
+    SimpleClassPart simple_class;
+    ListClassPart   list_class;
 } ListClassRec;
 
 extern ListClassRec listClassRec;
 
 /* New fields for the List widget */
-typedef struct {
+typedef struct
+{
     /* resources */
-    Pixel foreground;
-    Dimension internal_width;		/* if not 3d, user sets directly */
-    Dimension internal_height;
-    Dimension column_space;		/* half of *_space is add on
+    Pixel          foreground;
+    Dimension      internal_width;  /* if not 3d, user sets directly */
+    Dimension      internal_height;
+    Dimension      column_space;  /* half of *_space is add on
 					   top/bot/left of */
-    Dimension row_space;		/* each item's text bounding box
+    Dimension      row_space;  /* each item's text bounding box
 					   half added to longest for right */
-    int default_cols;
-    Boolean force_cols;
-    Boolean paste;
-    Boolean vertical_cols;
-    int longest;			/* in pixels */
-    int nitems;
-    XFontStruct	*font;
-    XFontSet fontset;			/* Sheeran, Omron KK, 93/03/05 */
-    String *list;			/* for i18n, always in multibyte
+    int            default_cols;
+    Boolean        force_cols;
+    Boolean        paste;
+    Boolean        vertical_cols;
+    int            longest;   /* in pixels */
+    int            nitems;
+    XFontStruct   *font;
+    XFontSet       fontset;   /* Sheeran, Omron KK, 93/03/05 */
+    String        *list;   /* for i18n, always in multibyte
 					   format */
     XtCallbackList callback;
 
     /* private */
-    int is_highlighted;			/* set to the item currently
+    int is_highlighted;   /* set to the item currently
 					   highlighted */
-    int highlight;			/* set to the item that should be
+    int highlight;   /* set to the item that should be
 					   highlighted */
-    int col_width;			/* width of each column */
-    int row_height;			/* height of each row */
-    int nrows;				/* number of rows in the list */
-    int ncols;				/* number of columns in the list */
-    GC normgc;
-    GC revgc;
-    GC graygc;
-    int freedoms;			/* flags for resizing height
+    int col_width;   /* width of each column */
+    int row_height;   /* height of each row */
+    int nrows;    /* number of rows in the list */
+    int ncols;    /* number of columns in the list */
+    GC  normgc;
+    GC  revgc;
+    GC  graygc;
+    int freedoms;   /* flags for resizing height
 					   and width */
 #ifndef OLDXAW
-    int selected;
-    Boolean show_current;
-    char pad1[(sizeof(XtPointer) - sizeof(Boolean)) +
-		 (sizeof(XtPointer) - sizeof(int))];
-    XtPointer pad2[2];	/* for future use and keep binary compatibility */
+    int       selected;
+    Boolean   show_current;
+    char      pad1[(sizeof(XtPointer) - sizeof(Boolean)) +
+              (sizeof(XtPointer) - sizeof(int))];
+    XtPointer pad2[2]; /* for future use and keep binary compatibility */
 #endif
 } ListPart;
 
-
 /* Full instance record */
-typedef struct _ListRec {
-    CorePart	core;
-    SimplePart	simple;
-    ListPart	list;
+typedef struct _ListRec
+{
+    CorePart   core;
+    SimplePart simple;
+    ListPart   list;
 } ListRec;
 
 #endif /* _XawListP_h */

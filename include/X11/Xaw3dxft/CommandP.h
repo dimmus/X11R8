@@ -63,12 +63,13 @@ SOFTWARE.
  *
  ***********************************************************************/
 
-typedef enum {
-  HighlightNone,		/* Do not highlight. */
-  HighlightWhenUnset,		/* Highlight only when unset, this is
+typedef enum
+{
+    HighlightNone,  /* Do not highlight. */
+    HighlightWhenUnset,  /* Highlight only when unset, this is
 				   to preserve current command widget
 				   functionality. */
-  HighlightAlways		/* Always highlight, lets the toggle widget
+    HighlightAlways  /* Always highlight, lets the toggle widget
 				   and other subclasses do the right thing. */
 } XtCommandHighlight;
 
@@ -78,20 +79,20 @@ typedef enum {
  *
  ***********************************/
 
-
    /* New fields for the Command widget class record */
 typedef struct _CommandClass
-  {
+{
     int makes_compiler_happy;  /* not used */
-  } CommandClassPart;
+} CommandClassPart;
 
    /* Full class record declaration */
-typedef struct _CommandClassRec {
-    CoreClassPart	core_class;
-    SimpleClassPart	simple_class;
-    ThreeDClassPart	threeD_class;
-    LabelClassPart	label_class;
-    CommandClassPart    command_class;
+typedef struct _CommandClassRec
+{
+    CoreClassPart    core_class;
+    SimpleClassPart  simple_class;
+    ThreeDClassPart  threeD_class;
+    LabelClassPart   label_class;
+    CommandClassPart command_class;
 } CommandClassRec;
 
 extern CommandClassRec commandClassRec;
@@ -103,36 +104,34 @@ extern CommandClassRec commandClassRec;
  **************************************/
 
     /* New fields for the Command widget record */
-typedef struct {
+typedef struct
+{
     /* resources */
-    Dimension   highlight_thickness;
+    Dimension      highlight_thickness;
     XtCallbackList callbacks;
 
     /* private state */
-    Pixmap      	gray_pixmap;
-    GC          	normal_GC;
-    GC          	inverse_GC;
-    Boolean     	set;
-    XtCommandHighlight	highlighted;
-    Dimension		shadow_width;
+    Pixmap             gray_pixmap;
+    GC                 normal_GC;
+    GC                 inverse_GC;
+    Boolean            set;
+    XtCommandHighlight highlighted;
+    Dimension          shadow_width;
     /* more resources */
-    int			shape_style;
-    Dimension		corner_round;
+    int       shape_style;
+    Dimension corner_round;
 } CommandPart;
-
 
 /*    XtEventsPtr eventTable;*/
 
-
    /* Full widget declaration */
-typedef struct _CommandRec {
-    CorePart         core;
-    SimplePart	     simple;
-    ThreeDPart       threeD;
-    LabelPart	     label;
-    CommandPart      command;
+typedef struct _CommandRec
+{
+    CorePart    core;
+    SimplePart  simple;
+    ThreeDPart  threeD;
+    LabelPart   label;
+    CommandPart command;
 } CommandRec;
 
 #endif /* _XawCommandP_h */
-
-

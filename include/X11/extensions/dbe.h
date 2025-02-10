@@ -34,24 +34,23 @@
 #define DBE_H
 
 /* Values for swap_action field of XdbeSwapInfo structure */
-#define XdbeUndefined    0
-#define XdbeBackground   1
-#define XdbeUntouched    2
-#define XdbeCopied       3
+#define XdbeUndefined  0
+#define XdbeBackground 1
+#define XdbeUntouched  2
+#define XdbeCopied     3
 
 /* Errors */
-#define XdbeBadBuffer    0
+#define XdbeBadBuffer 0
 
 #define DBE_PROTOCOL_NAME "DOUBLE-BUFFER"
 
 /* Current version numbers */
-#define DBE_MAJOR_VERSION       1
-#define DBE_MINOR_VERSION       0
+#define DBE_MAJOR_VERSION 1
+#define DBE_MINOR_VERSION 0
 
 /* Used when adding extension; also used in Xdbe macros */
-#define DbeNumberEvents			0
-#define DbeBadBuffer			0
-#define DbeNumberErrors			(DbeBadBuffer + 1)
+#define DbeNumberEvents 0
+#define DbeBadBuffer    0
+#define DbeNumberErrors (DbeBadBuffer + 1)
 
 #endif /* DBE_H */
-
