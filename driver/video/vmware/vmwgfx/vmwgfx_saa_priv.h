@@ -35,84 +35,74 @@
 #include <picturestr.h>
 #include "vmwgfx_saa.h"
 
-struct vmwgfx_saa {
-    struct saa_driver driver;
-    struct vmwgfx_dma_ctx *ctx;
-    struct xa_tracker *xat;
-    struct xa_context *xa_ctx;
-    ScreenPtr pScreen;
-    int drm_fd;
+struct vmwgfx_saa
+{
+    struct saa_driver         driver;
+    struct vmwgfx_dma_ctx    *ctx;
+    struct xa_tracker        *xat;
+    struct xa_context        *xa_ctx;
+    ScreenPtr                 pScreen;
+    int                       drm_fd;
     struct vmwgfx_saa_pixmap *src_vpix;
     struct vmwgfx_saa_pixmap *dst_vpix;
-    Bool present_copy;
-    Bool diff_valid;
-    int xdiff;
-    int ydiff;
-    RegionRec present_region;
-    uint32_t src_handle;
-    Bool can_optimize_dma;
-    Bool use_present_opt;
-    Bool only_hw_presents;
-    Bool rendercheck;
-    Bool is_master;
-    Bool known_prime_format;
-    Bool has_screen_targets;
-    void (*present_flush) (ScreenPtr pScreen);
-    struct _WsbmListHead sync_x_list;
-    struct _WsbmListHead pixmaps;
+    Bool                      present_copy;
+    Bool                      diff_valid;
+    int                       xdiff;
+    int                       ydiff;
+    RegionRec                 present_region;
+    uint32_t                  src_handle;
+    Bool                      can_optimize_dma;
+    Bool                      use_present_opt;
+    Bool                      only_hw_presents;
+    Bool                      rendercheck;
+    Bool                      is_master;
+    Bool                      known_prime_format;
+    Bool                      has_screen_targets;
+    void (*present_flush)(ScreenPtr pScreen);
+    struct _WsbmListHead     sync_x_list;
+    struct _WsbmListHead     pixmaps;
     struct vmwgfx_composite *vcomp;
 };
 
 static inline struct vmwgfx_saa *
-to_vmwgfx_saa(struct saa_driver *driver) {
-    return (struct vmwgfx_saa *) driver;
+to_vmwgfx_saa(struct saa_driver *driver)
+{
+    return (struct vmwgfx_saa *)driver;
 }
 
 /*
  * In vmwgfx_saa.c
  */
 
-Bool
-vmwgfx_hw_kill(struct vmwgfx_saa *vsaa,
-	       struct saa_pixmap *spix);
-Bool
-vmwgfx_create_hw(struct vmwgfx_saa *vsaa,
-		 PixmapPtr pixmap,
-		 Bool shared);
-
+Bool vmwgfx_hw_kill(struct vmwgfx_saa *vsaa, struct saa_pixmap *spix);
+Bool vmwgfx_create_hw(struct vmwgfx_saa *vsaa, PixmapPtr pixmap, Bool shared);
 
 /*
  * vmwgfx_xa_surface.c
  */
 
-enum xa_formats
-vmwgfx_xa_format(enum _PictFormatShort format);
-Bool
-vmwgfx_hw_validate(PixmapPtr pixmap, RegionPtr region);
-Bool
-vmwgfx_hw_dri2_stage(PixmapPtr pixmap, unsigned int depth);
-Bool
-vmwgfx_hw_accel_stage(PixmapPtr pixmap, unsigned int depth,
-		      uint32_t add_flags, uint32_t remove_flags);
-Bool
-vmwgfx_hw_composite_src_stage(PixmapPtr pixmap,
-			      enum _PictFormatShort pict_format);
-Bool
-vmwgfx_hw_composite_dst_stage(PixmapPtr pixmap,
-			      enum _PictFormatShort pict_format);
-Bool
-vmwgfx_hw_commit(PixmapPtr pixmap);
+enum xa_formats vmwgfx_xa_format(enum _PictFormatShort format);
+Bool            vmwgfx_hw_validate(PixmapPtr pixmap, RegionPtr region);
+Bool            vmwgfx_hw_dri2_stage(PixmapPtr pixmap, unsigned int depth);
+Bool            vmwgfx_hw_accel_stage(PixmapPtr    pixmap,
+                                      unsigned int depth,
+                                      uint32_t     add_flags,
+                                      uint32_t     remove_flags);
+Bool            vmwgfx_hw_composite_src_stage(PixmapPtr             pixmap,
+                                              enum _PictFormatShort pict_format);
+Bool            vmwgfx_hw_composite_dst_stage(PixmapPtr             pixmap,
+                                              enum _PictFormatShort pict_format);
+Bool            vmwgfx_hw_commit(PixmapPtr pixmap);
 
-Bool
-vmwgfx_xa_surface_redefine(struct vmwgfx_saa_pixmap *vpix,
-			   struct xa_surface *srf,
-			   int width,
-			   int height,
-			   int depth,
-			   enum xa_surface_type stype,
-			   enum xa_formats rgb_format,
-			   unsigned int new_flags,
-			   int copy_contents);
+Bool vmwgfx_xa_surface_redefine(struct vmwgfx_saa_pixmap *vpix,
+                                struct xa_surface        *srf,
+                                int                       width,
+                                int                       height,
+                                int                       depth,
+                                enum xa_surface_type      stype,
+                                enum xa_formats           rgb_format,
+                                unsigned int              new_flags,
+                                int                       copy_contents);
 
 /*
  * vmwgfx_xa_composite.c
@@ -120,23 +110,18 @@ vmwgfx_xa_surface_redefine(struct vmwgfx_saa_pixmap *vpix,
 
 struct vmwgfx_composite;
 
-void
-vmwgfx_free_composite(struct vmwgfx_composite *vcomp);
-struct vmwgfx_composite *
-vmwgfx_alloc_composite(void);
+void                     vmwgfx_free_composite(struct vmwgfx_composite *vcomp);
+struct vmwgfx_composite *vmwgfx_alloc_composite(void);
 
-Bool
-vmwgfx_xa_update_comp(struct xa_composite *comp,
-		      PixmapPtr src_pix,
-		      PixmapPtr mask_pix,
-		      PixmapPtr dst_pix);
+Bool vmwgfx_xa_update_comp(struct xa_composite *comp,
+                           PixmapPtr            src_pix,
+                           PixmapPtr            mask_pix,
+                           PixmapPtr            dst_pix);
 
-struct xa_composite *
-vmwgfx_xa_setup_comp(struct vmwgfx_composite *vcomp,
-		     int op,
-		     PicturePtr src_pict,
-		     PicturePtr mask_pict,
-		     PicturePtr dst_pict);
-
+struct xa_composite *vmwgfx_xa_setup_comp(struct vmwgfx_composite *vcomp,
+                                          int                      op,
+                                          PicturePtr               src_pict,
+                                          PicturePtr               mask_pict,
+                                          PicturePtr               dst_pict);
 
 #endif

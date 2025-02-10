@@ -37,9 +37,9 @@
 #ifndef _AMDGPU_DRV_H_
 #define _AMDGPU_DRV_H_
 
-#include <stdlib.h>		/* For abs() */
-#include <unistd.h>		/* For usleep() */
-#include <sys/time.h>		/* For gettimeofday() */
+#include <stdlib.h>  /* For abs() */
+#include <unistd.h>  /* For usleep() */
+#include <sys/time.h>  /* For gettimeofday() */
 
 #include "config.h"
 
@@ -67,8 +67,8 @@
 #include "amdgpu_drm.h"
 
 #ifdef DAMAGE
-#include "damage.h"
-#include "globals.h"
+#  include "damage.h"
+#  include "globals.h"
 #endif
 
 #include "xf86Crtc.h"
@@ -80,7 +80,7 @@
 
 /* Render support */
 #ifdef RENDER
-#include "picturestr.h"
+#  include "picturestr.h"
 #endif
 
 #include "compat-api.h"
@@ -94,267 +94,280 @@ struct _SyncFence;
 static inline RegionPtr
 RegionDuplicate(RegionPtr pOld)
 {
-	RegionPtr pNew;
+    RegionPtr pNew;
 
-	pNew = RegionCreate(&pOld->extents, 0);
-	if (!pNew)
-		return NULL;
-	if (!RegionCopy(pNew, pOld)) {
-		RegionDestroy(pNew);
-		return NULL;
-	}
-	return pNew;
+    pNew = RegionCreate(&pOld->extents, 0);
+    if (!pNew) return NULL;
+    if (!RegionCopy(pNew, pOld))
+    {
+        RegionDestroy(pNew);
+        return NULL;
+    }
+    return pNew;
 }
 
 #endif
 
 #ifndef MAX
-#define MAX(a,b) ((a)>(b)?(a):(b))
+#  define MAX(a, b) ((a) > (b) ? (a) : (b))
 #endif
 #ifndef MIN
-#define MIN(a,b) ((a)>(b)?(b):(a))
+#  define MIN(a, b) ((a) > (b) ? (b) : (a))
 #endif
 
 #ifdef HAVE_BYTESWAP_H
-#include <byteswap.h>
+#  include <byteswap.h>
 #elif defined(HAVE_SYS_ENDIAN_H)
-#include <sys/endian.h>
+#  include <sys/endian.h>
 #else
-#define bswap_16(value)  \
-        ((((value) & 0xff) << 8) | ((value) >> 8))
+#  define bswap_16(value) ((((value) & 0xff) << 8) | ((value) >> 8))
 
-#define bswap_32(value) \
-        (((uint32_t)bswap_16((uint16_t)((value) & 0xffff)) << 16) | \
-        (uint32_t)bswap_16((uint16_t)((value) >> 16)))
+#  define bswap_32(value)                                         \
+      (((uint32_t)bswap_16((uint16_t)((value) & 0xffff)) << 16) | \
+       (uint32_t)bswap_16((uint16_t)((value) >> 16)))
 
-#define bswap_64(value) \
-        (((uint64_t)bswap_32((uint32_t)((value) & 0xffffffff)) \
-            << 32) | \
-        (uint64_t)bswap_32((uint32_t)((value) >> 32)))
+#  define bswap_64(value)                                             \
+      (((uint64_t)bswap_32((uint32_t)((value) & 0xffffffff)) << 32) | \
+       (uint64_t)bswap_32((uint32_t)((value) >> 32)))
 #endif
 
 #if X_BYTE_ORDER == X_BIG_ENDIAN
-#define le32_to_cpu(x) bswap_32(x)
-#define le16_to_cpu(x) bswap_16(x)
-#define cpu_to_le32(x) bswap_32(x)
-#define cpu_to_le16(x) bswap_16(x)
+#  define le32_to_cpu(x) bswap_32(x)
+#  define le16_to_cpu(x) bswap_16(x)
+#  define cpu_to_le32(x) bswap_32(x)
+#  define cpu_to_le16(x) bswap_16(x)
 #else
-#define le32_to_cpu(x) (x)
-#define le16_to_cpu(x) (x)
-#define cpu_to_le32(x) (x)
-#define cpu_to_le16(x) (x)
+#  define le32_to_cpu(x) (x)
+#  define le16_to_cpu(x) (x)
+#  define cpu_to_le32(x) (x)
+#  define cpu_to_le16(x) (x)
 #endif
 
 /* Provide substitutes for gcc's __FUNCTION__ on other compilers */
 #if !defined(__GNUC__) && !defined(__FUNCTION__)
-#define __FUNCTION__ __func__	/* C99 */
+#  define __FUNCTION__ __func__ /* C99 */
 #endif
 
-typedef enum {
-	OPTION_ACCEL,
-	OPTION_SW_CURSOR,
-	OPTION_PAGE_FLIP,
+typedef enum
+{
+    OPTION_ACCEL,
+    OPTION_SW_CURSOR,
+    OPTION_PAGE_FLIP,
 #ifdef RENDER
-	OPTION_SUBPIXEL_ORDER,
+    OPTION_SUBPIXEL_ORDER,
 #endif
-	OPTION_ZAPHOD_HEADS,
-	OPTION_ACCEL_METHOD,
-	OPTION_DRI3,
-	OPTION_DRI,
-	OPTION_SHADOW_PRIMARY,
-	OPTION_TEAR_FREE,
-	OPTION_DELETE_DP12,
-	OPTION_VARIABLE_REFRESH,
-	OPTION_ASYNC_FLIP_SECONDARIES,
+    OPTION_ZAPHOD_HEADS,
+    OPTION_ACCEL_METHOD,
+    OPTION_DRI3,
+    OPTION_DRI,
+    OPTION_SHADOW_PRIMARY,
+    OPTION_TEAR_FREE,
+    OPTION_DELETE_DP12,
+    OPTION_VARIABLE_REFRESH,
+    OPTION_ASYNC_FLIP_SECONDARIES,
 } AMDGPUOpts;
 
 static inline ScreenPtr
 amdgpu_primary_screen(ScreenPtr screen)
 {
-	if (screen->current_primary)
-		return screen->current_primary;
+    if (screen->current_primary) return screen->current_primary;
 
-	return screen;
+    return screen;
 }
 
 static inline ScreenPtr
 amdgpu_dirty_primary(PixmapDirtyUpdatePtr dirty)
 {
-	return amdgpu_primary_screen(dirty->secondary_dst->drawable.pScreen);
+    return amdgpu_primary_screen(dirty->secondary_dst->drawable.pScreen);
 }
 
 static inline DrawablePtr
 amdgpu_dirty_src_drawable(PixmapDirtyUpdatePtr dirty)
 {
 #ifdef HAS_DIRTYTRACKING_DRAWABLE_SRC
-	return dirty->src;
+    return dirty->src;
 #else
-	return &dirty->src->drawable;
+    return &dirty->src->drawable;
 #endif
 }
 
 static inline Bool
 amdgpu_dirty_src_equals(PixmapDirtyUpdatePtr dirty, PixmapPtr pixmap)
 {
-	return amdgpu_dirty_src_drawable(dirty) == &pixmap->drawable;
+    return amdgpu_dirty_src_drawable(dirty) == &pixmap->drawable;
 }
 
-
-#define AMDGPU_VSYNC_TIMEOUT	20000	/* Maximum wait for VSYNC (in usecs) */
+#define AMDGPU_VSYNC_TIMEOUT 20000 /* Maximum wait for VSYNC (in usecs) */
 
 /* Buffer are aligned on 4096 byte boundaries */
 #define AMDGPU_GPU_PAGE_SIZE 4096
-#define AMDGPU_BUFFER_ALIGN (AMDGPU_GPU_PAGE_SIZE - 1)
+#define AMDGPU_BUFFER_ALIGN  (AMDGPU_GPU_PAGE_SIZE - 1)
 
-#define xFixedToFloat(f) (((float) (f)) / 65536)
+#define xFixedToFloat(f) (((float)(f)) / 65536)
 
 #define AMDGPU_LOGLEVEL_DEBUG 4
 
 /* Other macros */
-#define AMDGPU_ALIGN(x,bytes) (((x) + ((bytes) - 1)) & ~((bytes) - 1))
-#define AMDGPUPTR(pScrn)      ((AMDGPUInfoPtr)(pScrn)->driverPrivate)
+#define AMDGPU_ALIGN(x, bytes) (((x) + ((bytes) - 1)) & ~((bytes) - 1))
+#define AMDGPUPTR(pScrn)       ((AMDGPUInfoPtr)(pScrn)->driverPrivate)
 
-#define CURSOR_WIDTH	64
-#define CURSOR_HEIGHT	64
+#define CURSOR_WIDTH  64
+#define CURSOR_HEIGHT 64
 
-#define CURSOR_WIDTH_CIK	128
-#define CURSOR_HEIGHT_CIK	128
+#define CURSOR_WIDTH_CIK  128
+#define CURSOR_HEIGHT_CIK 128
 
-#define AMDGPU_BO_FLAGS_GBM	0x1
+#define AMDGPU_BO_FLAGS_GBM 0x1
 
-struct amdgpu_buffer {
-	union {
-		struct gbm_bo *gbm;
-		amdgpu_bo_handle amdgpu;
-	} bo;
-	void *cpu_ptr;
-	uint32_t ref_count;
-	uint32_t flags;
+struct amdgpu_buffer
+{
+    union {
+        struct gbm_bo   *gbm;
+        amdgpu_bo_handle amdgpu;
+    } bo;
+
+    void    *cpu_ptr;
+    uint32_t ref_count;
+    uint32_t flags;
 };
 
-struct amdgpu_client_priv {
-	uint_fast32_t needs_flush;
+struct amdgpu_client_priv
+{
+    uint_fast32_t needs_flush;
 };
 
-struct amdgpu_device_priv {
-	CursorPtr cursor;
-	Bool sprite_visible;
+struct amdgpu_device_priv
+{
+    CursorPtr cursor;
+    Bool      sprite_visible;
 };
 
-struct amdgpu_window_priv {
-	Bool variable_refresh;
+struct amdgpu_window_priv
+{
+    Bool variable_refresh;
 };
 
 extern DevScreenPrivateKeyRec amdgpu_device_private_key;
 
-typedef struct {
-	EntityInfoPtr pEnt;
-	uint32_t family;
-	struct gbm_device *gbm;
+typedef struct
+{
+    EntityInfoPtr      pEnt;
+    uint32_t           family;
+    struct gbm_device *gbm;
 
-	Bool(*CloseScreen) (ScreenPtr pScreen);
+    Bool (*CloseScreen)(ScreenPtr pScreen);
 
-	void (*BlockHandler) (BLOCKHANDLER_ARGS_DECL);
+    void (*BlockHandler)(BLOCKHANDLER_ARGS_DECL);
 
-	void (*CreateFence) (ScreenPtr pScreen, struct _SyncFence *pFence,
-			     Bool initially_triggered);
+    void (*CreateFence)(ScreenPtr          pScreen,
+                        struct _SyncFence *pFence,
+                        Bool               initially_triggered);
 
-	int pix24bpp;		/* Depth of pixmap for 24bpp fb      */
-	Bool dac6bits;		/* Use 6 bit DAC?                    */
+    int  pix24bpp;  /* Depth of pixmap for 24bpp fb      */
+    Bool dac6bits;  /* Use 6 bit DAC?                    */
 
-	int pixel_bytes;
+    int pixel_bytes;
 
-	Bool directRenderingEnabled;
-	struct amdgpu_dri2 dri2;
+    Bool               directRenderingEnabled;
+    struct amdgpu_dri2 dri2;
 
-	/* accel */
-	int callback_event_type;
-	uint_fast32_t gpu_flushed;
-	uint_fast32_t gpu_synced;
-	Bool use_glamor;
-	Bool force_accel;
-	Bool shadow_primary;
-	Bool vrr_support;
-	int tear_free;
+    /* accel */
+    int           callback_event_type;
+    uint_fast32_t gpu_flushed;
+    uint_fast32_t gpu_synced;
+    Bool          use_glamor;
+    Bool          force_accel;
+    Bool          shadow_primary;
+    Bool          vrr_support;
+    int           tear_free;
 
-	/* general */
-	OptionInfoPtr Options;
+    /* general */
+    OptionInfoPtr Options;
 
-	DisplayModePtr currentMode;
+    DisplayModePtr currentMode;
 
-	CreateScreenResourcesProcPtr CreateScreenResources;
-	CreateWindowProcPtr CreateWindow;
-	WindowExposuresProcPtr WindowExposures;
-	miPointerSpriteFuncPtr SpriteFuncs;
+    CreateScreenResourcesProcPtr CreateScreenResources;
+    CreateWindowProcPtr          CreateWindow;
+    WindowExposuresProcPtr       WindowExposures;
+    miPointerSpriteFuncPtr       SpriteFuncs;
 
-	/* Number of SW cursors currently visible on this screen */
-	int sprites_visible;
+    /* Number of SW cursors currently visible on this screen */
+    int sprites_visible;
 
-	int instance_id;
+    int instance_id;
 
-	Bool shadow_fb;
-	void *fb_shadow;
-	struct amdgpu_buffer *front_buffer;
+    Bool                  shadow_fb;
+    void                 *fb_shadow;
+    struct amdgpu_buffer *front_buffer;
 
-	uint64_t vram_size;
-	uint64_t gart_size;
-	drmmode_rec drmmode;
-	Bool drmmode_inited;
-	/* r6xx+ tile config */
-	Bool have_tiling_info;
-	int group_bytes;
+    uint64_t    vram_size;
+    uint64_t    gart_size;
+    drmmode_rec drmmode;
+    Bool        drmmode_inited;
+    /* r6xx+ tile config */
+    Bool have_tiling_info;
+    int  group_bytes;
 
-	/* kms pageflipping */
-	WindowPtr flip_window;
-	Bool allowPageFlip;
-	Bool can_async_flip;
-	Bool async_flip_secondaries;
+    /* kms pageflipping */
+    WindowPtr flip_window;
+    Bool      allowPageFlip;
+    Bool      can_async_flip;
+    Bool      async_flip_secondaries;
 
-	/* cursor size */
-	int cursor_w;
-	int cursor_h;
+    /* cursor size */
+    int cursor_w;
+    int cursor_h;
 
-	/* If bit n of this field is set, xf86_config->crtc[n] currently can't
+    /* If bit n of this field is set, xf86_config->crtc[n] currently can't
 	 * use the HW cursor
 	 */
-	unsigned hwcursor_disabled;
+    unsigned hwcursor_disabled;
 
-	struct {
-		CreateGCProcPtr SavedCreateGC;
-		RegionPtr (*SavedCopyArea)(DrawablePtr, DrawablePtr, GCPtr,
-					   int, int, int, int, int, int);
-		void (*SavedPolyFillRect)(DrawablePtr, GCPtr, int, xRectangle*);
-		CloseScreenProcPtr SavedCloseScreen;
-		GetImageProcPtr SavedGetImage;
-		GetSpansProcPtr SavedGetSpans;
-		CreatePixmapProcPtr SavedCreatePixmap;
-		DestroyPixmapProcPtr SavedDestroyPixmap;
-		CopyWindowProcPtr SavedCopyWindow;
-		ChangeWindowAttributesProcPtr SavedChangeWindowAttributes;
-		BitmapToRegionProcPtr SavedBitmapToRegion;
+    struct
+    {
+        CreateGCProcPtr SavedCreateGC;
+        RegionPtr (*SavedCopyArea)(DrawablePtr,
+                                   DrawablePtr,
+                                   GCPtr,
+                                   int,
+                                   int,
+                                   int,
+                                   int,
+                                   int,
+                                   int);
+        void (*SavedPolyFillRect)(DrawablePtr, GCPtr, int, xRectangle *);
+        CloseScreenProcPtr            SavedCloseScreen;
+        GetImageProcPtr               SavedGetImage;
+        GetSpansProcPtr               SavedGetSpans;
+        CreatePixmapProcPtr           SavedCreatePixmap;
+        DestroyPixmapProcPtr          SavedDestroyPixmap;
+        CopyWindowProcPtr             SavedCopyWindow;
+        ChangeWindowAttributesProcPtr SavedChangeWindowAttributes;
+        BitmapToRegionProcPtr         SavedBitmapToRegion;
 #ifdef RENDER
-		CompositeProcPtr SavedComposite;
-		TrianglesProcPtr SavedTriangles;
-		GlyphsProcPtr SavedGlyphs;
-		TrapezoidsProcPtr SavedTrapezoids;
-		AddTrapsProcPtr SavedAddTraps;
-		UnrealizeGlyphProcPtr SavedUnrealizeGlyph;
+        CompositeProcPtr      SavedComposite;
+        TrianglesProcPtr      SavedTriangles;
+        GlyphsProcPtr         SavedGlyphs;
+        TrapezoidsProcPtr     SavedTrapezoids;
+        AddTrapsProcPtr       SavedAddTraps;
+        UnrealizeGlyphProcPtr SavedUnrealizeGlyph;
 #endif
-		SharePixmapBackingProcPtr SavedSharePixmapBacking;
-		SetSharedPixmapBackingProcPtr SavedSetSharedPixmapBacking;
-	} glamor;
+        SharePixmapBackingProcPtr     SavedSharePixmapBacking;
+        SetSharedPixmapBackingProcPtr SavedSetSharedPixmapBacking;
+    } glamor;
 
-	xf86CrtcFuncsRec drmmode_crtc_funcs;
+    xf86CrtcFuncsRec drmmode_crtc_funcs;
 } AMDGPUInfoRec, *AMDGPUInfoPtr;
-
 
 /* amdgpu_dri3.c */
 Bool amdgpu_dri3_screen_init(ScreenPtr screen);
 
 /* amdgpu_kms.c */
 Bool amdgpu_window_has_variable_refresh(WindowPtr win);
-Bool amdgpu_scanout_do_update(xf86CrtcPtr xf86_crtc, int scanout_id,
-			      PixmapPtr src_pix, BoxRec extents);
+Bool amdgpu_scanout_do_update(xf86CrtcPtr xf86_crtc,
+                              int         scanout_id,
+                              PixmapPtr   src_pix,
+                              BoxRec      extents);
 void AMDGPUWindowExposures_oneshot(WindowPtr pWin, RegionPtr pRegion);
 
 /* amdgpu_present.c */
@@ -368,8 +381,8 @@ extern void amdgpu_sync_close(ScreenPtr screen);
 /* amdgpu_video.c */
 extern void AMDGPUInitVideo(ScreenPtr pScreen);
 extern void AMDGPUResetVideo(ScrnInfoPtr pScrn);
-extern xf86CrtcPtr amdgpu_pick_best_crtc(ScreenPtr pScreen,
-					 int x1, int x2, int y1, int y2);
+extern xf86CrtcPtr
+amdgpu_pick_best_crtc(ScreenPtr pScreen, int x1, int x2, int y1, int y2);
 extern RRCrtcPtr amdgpu_randr_crtc_covering_drawable(DrawablePtr pDraw);
 
 extern AMDGPUEntPtr AMDGPUEntPriv(ScrnInfoPtr pScrn);

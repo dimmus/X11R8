@@ -57,43 +57,69 @@
 #define VBOX_DEVICEID 0xBEEF
 
 #ifndef VBVA_SCREEN_F_BLANK
-# define VBVA_SCREEN_F_BLANK    0x0004
+#  define VBVA_SCREEN_F_BLANK 0x0004
 #endif
 
 #include <VBoxVideoVBE.h>
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
-
 
 #ifdef DEBUG
 
-#define TRACE_ENTRY() do { xf86ErrorF("%s: entering\n", __func__); } while(0)
-#define TRACE_EXIT() do { xf86ErrorF("%s: leaving\n", __func__); } while(0)
-#define TRACE_LINE() \
-    do { xf86ErrorF("%s: line\n", __func__, __LINE__); } while(0)
-#define TRACE_LOG(...) \
-do { \
-    xf86ErrorF("%s: ", __func__); \
-    xf86ErrorF(__VA_ARGS__); \
-} while(0)
+#  define TRACE_ENTRY()                           \
+      do                                          \
+      {                                           \
+          xf86ErrorF("%s: entering\n", __func__); \
+      }                                           \
+      while (0)
+#  define TRACE_EXIT()                           \
+      do                                         \
+      {                                          \
+          xf86ErrorF("%s: leaving\n", __func__); \
+      }                                          \
+      while (0)
+#  define TRACE_LINE()                                  \
+      do                                                \
+      {                                                 \
+          xf86ErrorF("%s: line\n", __func__, __LINE__); \
+      }                                                 \
+      while (0)
+#  define TRACE_LOG(...)                \
+      do                                \
+      {                                 \
+          xf86ErrorF("%s: ", __func__); \
+          xf86ErrorF(__VA_ARGS__);      \
+      }                                 \
+      while (0)
 
 #else  /* !DEBUG */
 
-#define TRACE_ENTRY()         do { } while (0)
-#define TRACE_EXIT()          do { } while (0)
-#define TRACE_LOG(...)        do { } while (0)
+#  define TRACE_ENTRY() \
+      do                \
+      {                 \
+      }                 \
+      while (0)
+#  define TRACE_EXIT() \
+      do               \
+      {                \
+      }                \
+      while (0)
+#  define TRACE_LOG(...) \
+      do                 \
+      {                  \
+      }                  \
+      while (0)
 
 #endif  /* !DEBUG */
 
-#define VBOX_VERSION            VBOX_VERSION_MAJOR * 10000 \
-                              + VBOX_VERSION_MINOR * 100
-#define VBOX_NAME               "VBoxVideo"
-#define VBOX_DRIVER_NAME        "vboxvideo"
+#define VBOX_VERSION     VBOX_VERSION_MAJOR * 10000 + VBOX_VERSION_MINOR * 100
+#define VBOX_NAME        "VBoxVideo"
+#define VBOX_DRIVER_NAME "vboxvideo"
 
-#define VBOX_VIDEO_MAJOR  VBOX_VERSION_MAJOR
-#define VBOX_VIDEO_MINOR  VBOX_VERSION_MINOR
+#define VBOX_VIDEO_MAJOR VBOX_VERSION_MAJOR
+#define VBOX_VIDEO_MINOR VBOX_VERSION_MINOR
 
 #define VBOX_VIDEO_MIN_SIZE    64
 #define VBOX_VIDEO_MAX_VIRTUAL (INT16_MAX - 1)
@@ -102,7 +128,7 @@ do { \
 
 /** Helper to work round different ways of getting the root window in different
  * server versions. */
-# define ROOT_WINDOW(pScrn) screenInfo.screens[(pScrn)->scrnIndex]->root
+#define ROOT_WINDOW(pScrn) screenInfo.screens[(pScrn)->scrnIndex]->root
 
 /** Structure containing all virtual monitor-specific information. */
 struct VBoxScreen
@@ -132,9 +158,9 @@ struct VBoxScreen
 
 typedef struct VBOXRec
 {
-    EntityInfoPtr pEnt;
+    EntityInfoPtr      pEnt;
     struct pci_device *pciInfo;
-    void *base;
+    void              *base;
     /** The amount of VRAM available for use as a framebuffer */
     unsigned long cbFBMax;
     /** The size of the framebuffer and the VBVA buffers at the end of it. */
@@ -147,7 +173,7 @@ typedef struct VBOXRec
     CloseScreenProcPtr CloseScreen;
     /** Default X server procedure for enabling and disabling framebuffer access */
     xf86EnableDisableFBAccessProc *EnableDisableFBAccess;
-    OptionInfoPtr Options;
+    OptionInfoPtr                  Options;
     /** @todo we never actually free this */
     xf86CursorInfoPtr pCurs;
     /** Do we currently want to use the host cursor? */
@@ -162,12 +188,12 @@ typedef struct VBOXRec
     Bool fHostHasScreenBlankingFlag;
     /** Array of structures for receiving mode hints. */
     VBVAMODEHINT *paVBVAModeHints;
-# ifdef RT_OS_LINUX
+#ifdef RT_OS_LINUX
     /** Input device file descriptor for getting ACPI hot-plug events. */
     int fdACPIDevices;
     /** Input handler handle for ACPI hot-plug listener. */
     void *hACPIEventHandler;
-# endif
+#endif
     /** HGSMI guest heap context */
     HGSMIGUESTCOMMANDCONTEXT guestCtx;
     /** Unrestricted horizontal resolution flag. */
@@ -180,7 +206,8 @@ typedef struct VBOXRec
 
 /** Structure describing the virtual frame buffer.  It starts at the beginning
  * of the video RAM. */
-struct vbvxFrameBuffer {
+struct vbvxFrameBuffer
+{
     /** X offset of first screen in frame buffer. */
     int x0;
     /** Y offset of first screen in frame buffer. */
@@ -193,9 +220,17 @@ struct vbvxFrameBuffer {
     unsigned cBPP;
 };
 
-extern void vbvxClearVRAM(ScrnInfoPtr pScrn, size_t cbOldSize, size_t cbNewSize);
-extern void vbvxSetMode(ScrnInfoPtr pScrn, unsigned cDisplay, unsigned cWidth, unsigned cHeight, int x, int y, Bool fEnabled,
-                        Bool fConnected, struct vbvxFrameBuffer *pFrameBuffer);
+extern void
+vbvxClearVRAM(ScrnInfoPtr pScrn, size_t cbOldSize, size_t cbNewSize);
+extern void vbvxSetMode(ScrnInfoPtr             pScrn,
+                        unsigned                cDisplay,
+                        unsigned                cWidth,
+                        unsigned                cHeight,
+                        int                     x,
+                        int                     y,
+                        Bool                    fEnabled,
+                        Bool                    fConnected,
+                        struct vbvxFrameBuffer *pFrameBuffer);
 extern void vbvxSetSolarisMouseRange(int width, int height);
 
 /* pointer.h */
@@ -211,8 +246,10 @@ extern void vboxDisableVbva(ScrnInfoPtr pScrn);
 /* getmode.c */
 extern void vboxAddModes(ScrnInfoPtr pScrn);
 extern void VBoxInitialiseSizeHints(ScrnInfoPtr pScrn);
-extern void vbvxReadSizesAndCursorIntegrationFromProperties(ScrnInfoPtr pScrn, Bool *pfNeedUpdate);
-extern void vbvxReadSizesAndCursorIntegrationFromHGSMI(ScrnInfoPtr pScrn, Bool *pfNeedUpdate);
+extern void vbvxReadSizesAndCursorIntegrationFromProperties(ScrnInfoPtr pScrn,
+                                                            Bool *pfNeedUpdate);
+extern void vbvxReadSizesAndCursorIntegrationFromHGSMI(ScrnInfoPtr pScrn,
+                                                       Bool *pfNeedUpdate);
 extern void vbvxSetUpLinuxACPI(ScreenPtr pScreen);
 extern void vbvxCleanUpLinuxACPI(ScreenPtr pScreen);
 

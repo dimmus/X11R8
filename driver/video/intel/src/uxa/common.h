@@ -42,14 +42,14 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /* Provide substitutes for gcc's __FUNCTION__ on other compilers */
 #if !defined(__GNUC__) && !defined(__FUNCTION__)
-# if defined(__STDC__) && (__STDC_VERSION__>=199901L) /* C99 */
-#  define __FUNCTION__ __func__
-# else
-#  define __FUNCTION__ ""
-# endif
+#  if defined(__STDC__) && (__STDC_VERSION__ >= 199901L) /* C99 */
+#    define __FUNCTION__ __func__
+#  else
+#    define __FUNCTION__ ""
+#  endif
 #endif
 
-#define PFX __FILE__,__LINE__,__FUNCTION__
+#define PFX           __FILE__, __LINE__, __FUNCTION__
 #define FUNCTION_NAME __FUNCTION__
 
 #define KB(x) ((x) * 1024)
@@ -61,11 +61,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * Compare to CREATE_PIXMAP_USAGE_* in the server.
  */
-enum {
-	INTEL_CREATE_PIXMAP_TILING_X	= 0x10000000,
-	INTEL_CREATE_PIXMAP_TILING_Y	= 0x20000000,
-	INTEL_CREATE_PIXMAP_TILING_NONE	= 0x40000000,
-	INTEL_CREATE_PIXMAP_DRI2	= 0x80000000,
+enum
+{
+    INTEL_CREATE_PIXMAP_TILING_X    = 0x10000000,
+    INTEL_CREATE_PIXMAP_TILING_Y    = 0x20000000,
+    INTEL_CREATE_PIXMAP_TILING_NONE = 0x40000000,
+    INTEL_CREATE_PIXMAP_DRI2        = 0x80000000,
 };
 
 #endif /* _INTEL_COMMON_H_ */

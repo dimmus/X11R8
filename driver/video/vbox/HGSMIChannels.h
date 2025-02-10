@@ -20,10 +20,8 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 #ifndef __HGSMIChannels_h__
 #define __HGSMIChannels_h__
-
 
 /*
  * Each channel has an 8 bit identifier. There are a number of predefined
@@ -34,31 +32,27 @@
  * [HGSMI_CH_STRING_FIRST;HGSMI_CH_STRING_LAST].
  */
 
-
 /* Predefined channel identifiers. Used internally by VBOX to simplify the channel setup. */
 /* A reserved channel value */
-#define HGSMI_CH_RESERVED     0x00
+#define HGSMI_CH_RESERVED 0x00
 /* HGCMI: setup and configuration */
-#define HGSMI_CH_HGSMI        0x01
+#define HGSMI_CH_HGSMI 0x01
 /* Graphics: VBVA */
-#define HGSMI_CH_VBVA         0x02
+#define HGSMI_CH_VBVA 0x02
 /* Graphics: Seamless with a single guest region */
-#define HGSMI_CH_SEAMLESS     0x03
+#define HGSMI_CH_SEAMLESS 0x03
 /* Graphics: Seamless with separate host windows */
-#define HGSMI_CH_SEAMLESS2    0x04
+#define HGSMI_CH_SEAMLESS2 0x04
 /* Graphics: OpenGL HW acceleration */
-#define HGSMI_CH_OPENGL       0x05
-
+#define HGSMI_CH_OPENGL 0x05
 
 /* Dynamically allocated channel identifiers. */
 /* The first channel index to be used for string mappings (inclusive) */
 #define HGSMI_CH_STRING_FIRST 0x20
 /* The last channel index for string mappings (inclusive) */
-#define HGSMI_CH_STRING_LAST  0xff
-
+#define HGSMI_CH_STRING_LAST 0xff
 
 /* Check whether the channel identifier is allocated for a dynamic channel */
 #define HGSMI_IS_DYNAMIC_CHANNEL(_channel) (((uint8_t)(_channel) & 0xE0) != 0)
-
 
 #endif /* !__HGSMIChannels_h__*/

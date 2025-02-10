@@ -27,23 +27,21 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #ifdef USE_GLAMOR
 
-#include "radeon.h"
-#include "radeon_bo_helper.h"
-#include "radeon_glamor.h"
-
+#  include "radeon.h"
+#  include "radeon_bo_helper.h"
+#  include "radeon_glamor.h"
 
 /* Are there any outstanding GPU operations for this pixmap? */
 static Bool
 radeon_glamor_gpu_pending(uint_fast32_t gpu_synced, uint_fast32_t gpu_access)
 {
-	return (int_fast32_t)(gpu_access - gpu_synced) > 0;
+    return (int_fast32_t)(gpu_access - gpu_synced) > 0;
 }
 
 /*
@@ -51,78 +49,90 @@ radeon_glamor_gpu_pending(uint_fast32_t gpu_synced, uint_fast32_t gpu_access)
  */
 
 static Bool
-radeon_glamor_prepare_access_cpu(ScrnInfoPtr scrn, RADEONInfoPtr info,
-				 PixmapPtr pixmap, struct radeon_pixmap *priv,
-				 Bool need_sync)
+radeon_glamor_prepare_access_cpu(ScrnInfoPtr           scrn,
+                                 RADEONInfoPtr         info,
+                                 PixmapPtr             pixmap,
+                                 struct radeon_pixmap *priv,
+                                 Bool                  need_sync)
 {
-	struct radeon_buffer *bo = priv->bo;
-	int ret;
+    struct radeon_buffer *bo = priv->bo;
+    int                   ret;
 
-	if (!pixmap->devPrivate.ptr) {
-		/* When falling back to swrast, flush all pending operations */
-		if (need_sync) {
-			glamor_block_handler(scrn->pScreen);
-			info->gpu_flushed++;
-		}
+    if (!pixmap->devPrivate.ptr)
+    {
+        /* When falling back to swrast, flush all pending operations */
+        if (need_sync)
+        {
+            glamor_block_handler(scrn->pScreen);
+            info->gpu_flushed++;
+        }
 
-		ret = radeon_bo_map(bo->bo.radeon, 1);
-		if (ret) {
-			xf86DrvMsg(scrn->scrnIndex, X_WARNING,
-				   "%s: bo map (tiling_flags %d) failed: %s\n",
-				   __FUNCTION__,
-				   priv->tiling_flags,
-				   strerror(-ret));
-			return FALSE;
-		}
+        ret = radeon_bo_map(bo->bo.radeon, 1);
+        if (ret)
+        {
+            xf86DrvMsg(scrn->scrnIndex,
+                       X_WARNING,
+                       "%s: bo map (tiling_flags %d) failed: %s\n",
+                       __FUNCTION__,
+                       priv->tiling_flags,
+                       strerror(-ret));
+            return FALSE;
+        }
 
-		pixmap->devPrivate.ptr = bo->bo.radeon->ptr;
-	} else if (need_sync)
-		radeon_finish(scrn, bo);
+        pixmap->devPrivate.ptr = bo->bo.radeon->ptr;
+    }
+    else if (need_sync) radeon_finish(scrn, bo);
 
-	info->gpu_synced = info->gpu_flushed;
+    info->gpu_synced = info->gpu_flushed;
 
-	return TRUE;
+    return TRUE;
 }
 
 static Bool
-radeon_glamor_prepare_access_cpu_ro(ScrnInfoPtr scrn, PixmapPtr pixmap,
-				    struct radeon_pixmap *priv)
+radeon_glamor_prepare_access_cpu_ro(ScrnInfoPtr           scrn,
+                                    PixmapPtr             pixmap,
+                                    struct radeon_pixmap *priv)
 {
-	RADEONInfoPtr info;
-	Bool need_sync;
+    RADEONInfoPtr info;
+    Bool          need_sync;
 
-	if (!priv)
-		return TRUE;
+    if (!priv) return TRUE;
 
-	info = RADEONPTR(scrn);
-	need_sync = radeon_glamor_gpu_pending(info->gpu_synced, priv->gpu_write);
-	return radeon_glamor_prepare_access_cpu(scrn, RADEONPTR(scrn), pixmap,
-						priv, need_sync);
+    info      = RADEONPTR(scrn);
+    need_sync = radeon_glamor_gpu_pending(info->gpu_synced, priv->gpu_write);
+    return radeon_glamor_prepare_access_cpu(scrn,
+                                            RADEONPTR(scrn),
+                                            pixmap,
+                                            priv,
+                                            need_sync);
 }
 
 static Bool
-radeon_glamor_prepare_access_cpu_rw(ScrnInfoPtr scrn, PixmapPtr pixmap,
-				    struct radeon_pixmap *priv)
+radeon_glamor_prepare_access_cpu_rw(ScrnInfoPtr           scrn,
+                                    PixmapPtr             pixmap,
+                                    struct radeon_pixmap *priv)
 {
-	RADEONInfoPtr info;
-	uint_fast32_t gpu_synced;
-	Bool need_sync;
+    RADEONInfoPtr info;
+    uint_fast32_t gpu_synced;
+    Bool          need_sync;
 
-	if (!priv)
-		return TRUE;
+    if (!priv) return TRUE;
 
-	info = RADEONPTR(scrn);
-	gpu_synced = info->gpu_synced;
-	need_sync = radeon_glamor_gpu_pending(gpu_synced, priv->gpu_write) |
-		radeon_glamor_gpu_pending(gpu_synced, priv->gpu_read);
-	return radeon_glamor_prepare_access_cpu(scrn, info, pixmap, priv,
-						need_sync);
+    info       = RADEONPTR(scrn);
+    gpu_synced = info->gpu_synced;
+    need_sync  = radeon_glamor_gpu_pending(gpu_synced, priv->gpu_write) |
+                radeon_glamor_gpu_pending(gpu_synced, priv->gpu_read);
+    return radeon_glamor_prepare_access_cpu(scrn,
+                                            info,
+                                            pixmap,
+                                            priv,
+                                            need_sync);
 }
 
 static void
 radeon_glamor_finish_access_cpu(PixmapPtr pixmap)
 {
-	/* Nothing to do */
+    /* Nothing to do */
 }
 
 /*
@@ -132,21 +142,21 @@ radeon_glamor_finish_access_cpu(PixmapPtr pixmap)
 static Bool
 radeon_glamor_prepare_access_gpu(struct radeon_pixmap *priv)
 {
-	return !!priv;
+    return !!priv;
 }
 
 static void
-radeon_glamor_finish_access_gpu_ro(RADEONInfoPtr info,
-				   struct radeon_pixmap *priv)
+radeon_glamor_finish_access_gpu_ro(RADEONInfoPtr         info,
+                                   struct radeon_pixmap *priv)
 {
-	priv->gpu_read = info->gpu_flushed + 1;
+    priv->gpu_read = info->gpu_flushed + 1;
 }
 
 static void
-radeon_glamor_finish_access_gpu_rw(RADEONInfoPtr info,
-				   struct radeon_pixmap *priv)
+radeon_glamor_finish_access_gpu_rw(RADEONInfoPtr         info,
+                                   struct radeon_pixmap *priv)
 {
-	priv->gpu_write = priv->gpu_read = info->gpu_flushed + 1;
+    priv->gpu_write = priv->gpu_read = info->gpu_flushed + 1;
 }
 
 /*
@@ -156,32 +166,32 @@ radeon_glamor_finish_access_gpu_rw(RADEONInfoPtr info,
 static Bool
 radeon_glamor_prepare_access_gc(ScrnInfoPtr scrn, GCPtr pGC)
 {
-	struct radeon_pixmap *priv;
+    struct radeon_pixmap *priv;
 
-	if (pGC->stipple) {
-		priv = radeon_get_pixmap_private(pGC->stipple);
-		if (!radeon_glamor_prepare_access_cpu_ro(scrn, pGC->stipple, priv))
-			return FALSE;
-	}
-	if (pGC->fillStyle == FillTiled) {
-		priv = radeon_get_pixmap_private(pGC->tile.pixmap);
-		if (!radeon_glamor_prepare_access_cpu_ro(scrn, pGC->tile.pixmap,
-						      priv)) {
-			if (pGC->stipple)
-				radeon_glamor_finish_access_cpu(pGC->stipple);
-			return FALSE;
-		}
-	}
-	return TRUE;
+    if (pGC->stipple)
+    {
+        priv = radeon_get_pixmap_private(pGC->stipple);
+        if (!radeon_glamor_prepare_access_cpu_ro(scrn, pGC->stipple, priv))
+            return FALSE;
+    }
+    if (pGC->fillStyle == FillTiled)
+    {
+        priv = radeon_get_pixmap_private(pGC->tile.pixmap);
+        if (!radeon_glamor_prepare_access_cpu_ro(scrn, pGC->tile.pixmap, priv))
+        {
+            if (pGC->stipple) radeon_glamor_finish_access_cpu(pGC->stipple);
+            return FALSE;
+        }
+    }
+    return TRUE;
 }
 
 static void
 radeon_glamor_finish_access_gc(GCPtr pGC)
 {
-	if (pGC->fillStyle == FillTiled)
-		radeon_glamor_finish_access_cpu(pGC->tile.pixmap);
-	if (pGC->stipple)
-		radeon_glamor_finish_access_cpu(pGC->stipple);
+    if (pGC->fillStyle == FillTiled)
+        radeon_glamor_finish_access_cpu(pGC->tile.pixmap);
+    if (pGC->stipple) radeon_glamor_finish_access_cpu(pGC->stipple);
 }
 
 /*
@@ -191,58 +201,59 @@ radeon_glamor_finish_access_gc(GCPtr pGC)
 static void
 radeon_glamor_picture_finish_access_cpu(PicturePtr picture)
 {
-	/* Nothing to do */
+    /* Nothing to do */
 }
 
 static Bool
 radeon_glamor_picture_prepare_access_cpu_ro(ScrnInfoPtr scrn,
-					    PicturePtr picture)
+                                            PicturePtr  picture)
 {
-	PixmapPtr pixmap;
-	struct radeon_pixmap *priv;
+    PixmapPtr             pixmap;
+    struct radeon_pixmap *priv;
 
-	if (!picture->pDrawable)
-		return TRUE;
+    if (!picture->pDrawable) return TRUE;
 
-	pixmap = get_drawable_pixmap(picture->pDrawable);
-	priv = radeon_get_pixmap_private(pixmap);
-	if (!radeon_glamor_prepare_access_cpu_ro(scrn, pixmap, priv))
-		return FALSE;
+    pixmap = get_drawable_pixmap(picture->pDrawable);
+    priv   = radeon_get_pixmap_private(pixmap);
+    if (!radeon_glamor_prepare_access_cpu_ro(scrn, pixmap, priv)) return FALSE;
 
-	if (picture->alphaMap) {
-		pixmap = get_drawable_pixmap(picture->alphaMap->pDrawable);
-		priv = radeon_get_pixmap_private(pixmap);
-		if (!radeon_glamor_prepare_access_cpu_ro(scrn, pixmap, priv)) {
-			radeon_glamor_picture_finish_access_cpu(picture);
-			return FALSE;
-		}
-	}
+    if (picture->alphaMap)
+    {
+        pixmap = get_drawable_pixmap(picture->alphaMap->pDrawable);
+        priv   = radeon_get_pixmap_private(pixmap);
+        if (!radeon_glamor_prepare_access_cpu_ro(scrn, pixmap, priv))
+        {
+            radeon_glamor_picture_finish_access_cpu(picture);
+            return FALSE;
+        }
+    }
 
-	return TRUE;
+    return TRUE;
 }
 
 static Bool
 radeon_glamor_picture_prepare_access_cpu_rw(ScrnInfoPtr scrn,
-					    PicturePtr picture)
+                                            PicturePtr  picture)
 {
-	PixmapPtr pixmap;
-	struct radeon_pixmap *priv;
+    PixmapPtr             pixmap;
+    struct radeon_pixmap *priv;
 
-	pixmap = get_drawable_pixmap(picture->pDrawable);
-	priv = radeon_get_pixmap_private(pixmap);
-	if (!radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv))
-		return FALSE;
+    pixmap = get_drawable_pixmap(picture->pDrawable);
+    priv   = radeon_get_pixmap_private(pixmap);
+    if (!radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv)) return FALSE;
 
-	if (picture->alphaMap) {
-		pixmap = get_drawable_pixmap(picture->alphaMap->pDrawable);
-		priv = radeon_get_pixmap_private(pixmap);
-		if (!radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv)) {
-			radeon_glamor_picture_finish_access_cpu(picture);
-			return FALSE;
-		}
-	}
+    if (picture->alphaMap)
+    {
+        pixmap = get_drawable_pixmap(picture->alphaMap->pDrawable);
+        priv   = radeon_get_pixmap_private(pixmap);
+        if (!radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv))
+        {
+            radeon_glamor_picture_finish_access_cpu(picture);
+            return FALSE;
+        }
+    }
 
-	return TRUE;
+    return TRUE;
 }
 
 /*
@@ -250,352 +261,473 @@ radeon_glamor_picture_prepare_access_cpu_rw(ScrnInfoPtr scrn,
  */
 
 static void
-radeon_glamor_fill_spans(DrawablePtr pDrawable, GCPtr pGC, int nspans,
-			 DDXPointPtr ppt, int *pwidth, int fSorted)
+radeon_glamor_fill_spans(DrawablePtr pDrawable,
+                         GCPtr       pGC,
+                         int         nspans,
+                         DDXPointPtr ppt,
+                         int        *pwidth,
+                         int         fSorted)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pDrawable->pScreen);
-	PixmapPtr pixmap = get_drawable_pixmap(pDrawable);
-	struct radeon_pixmap *priv = radeon_get_pixmap_private(pixmap);
+    ScrnInfoPtr           scrn   = xf86ScreenToScrn(pDrawable->pScreen);
+    PixmapPtr             pixmap = get_drawable_pixmap(pDrawable);
+    struct radeon_pixmap *priv   = radeon_get_pixmap_private(pixmap);
 
-	if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv)) {
-		if (radeon_glamor_prepare_access_gc(scrn, pGC)) {
-			fbFillSpans(pDrawable, pGC, nspans, ppt, pwidth,
-				    fSorted);
-			radeon_glamor_finish_access_gc(pGC);
-		}
-		radeon_glamor_finish_access_cpu(pixmap);
-	}
+    if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv))
+    {
+        if (radeon_glamor_prepare_access_gc(scrn, pGC))
+        {
+            fbFillSpans(pDrawable, pGC, nspans, ppt, pwidth, fSorted);
+            radeon_glamor_finish_access_gc(pGC);
+        }
+        radeon_glamor_finish_access_cpu(pixmap);
+    }
 }
 
 static void
-radeon_glamor_set_spans(DrawablePtr pDrawable, GCPtr pGC, char *psrc,
-			DDXPointPtr ppt, int *pwidth, int nspans, int fSorted)
+radeon_glamor_set_spans(DrawablePtr pDrawable,
+                        GCPtr       pGC,
+                        char       *psrc,
+                        DDXPointPtr ppt,
+                        int        *pwidth,
+                        int         nspans,
+                        int         fSorted)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pDrawable->pScreen);
-	PixmapPtr pixmap = get_drawable_pixmap(pDrawable);
-	struct radeon_pixmap *priv = radeon_get_pixmap_private(pixmap);
+    ScrnInfoPtr           scrn   = xf86ScreenToScrn(pDrawable->pScreen);
+    PixmapPtr             pixmap = get_drawable_pixmap(pDrawable);
+    struct radeon_pixmap *priv   = radeon_get_pixmap_private(pixmap);
 
-	if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv)) {
-		fbSetSpans(pDrawable, pGC, psrc, ppt, pwidth, nspans, fSorted);
-		radeon_glamor_finish_access_cpu(pixmap);
-	}
+    if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv))
+    {
+        fbSetSpans(pDrawable, pGC, psrc, ppt, pwidth, nspans, fSorted);
+        radeon_glamor_finish_access_cpu(pixmap);
+    }
 }
 
 static void
-radeon_glamor_put_image(DrawablePtr pDrawable, GCPtr pGC, int depth,
-			int x, int y, int w, int h, int leftPad, int format,
-			char *bits)
+radeon_glamor_put_image(DrawablePtr pDrawable,
+                        GCPtr       pGC,
+                        int         depth,
+                        int         x,
+                        int         y,
+                        int         w,
+                        int         h,
+                        int         leftPad,
+                        int         format,
+                        char       *bits)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pDrawable->pScreen);
-	PixmapPtr pixmap = get_drawable_pixmap(pDrawable);
-	struct radeon_pixmap *priv = radeon_get_pixmap_private(pixmap);
+    ScrnInfoPtr           scrn   = xf86ScreenToScrn(pDrawable->pScreen);
+    PixmapPtr             pixmap = get_drawable_pixmap(pDrawable);
+    struct radeon_pixmap *priv   = radeon_get_pixmap_private(pixmap);
 
-	if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv)) {
-		fbPutImage(pDrawable, pGC, depth, x, y, w, h, leftPad, format,
-			   bits);
-		radeon_glamor_finish_access_cpu(pixmap);
-	}
+    if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv))
+    {
+        fbPutImage(pDrawable, pGC, depth, x, y, w, h, leftPad, format, bits);
+        radeon_glamor_finish_access_cpu(pixmap);
+    }
 }
 
 static RegionPtr
-radeon_glamor_copy_plane(DrawablePtr pSrc, DrawablePtr pDst, GCPtr pGC,
-			 int srcx, int srcy, int w, int h, int dstx, int dsty,
-			 unsigned long bitPlane)
+radeon_glamor_copy_plane(DrawablePtr   pSrc,
+                         DrawablePtr   pDst,
+                         GCPtr         pGC,
+                         int           srcx,
+                         int           srcy,
+                         int           w,
+                         int           h,
+                         int           dstx,
+                         int           dsty,
+                         unsigned long bitPlane)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pDst->pScreen);
-	PixmapPtr dst_pix = get_drawable_pixmap(pDst);
-	struct radeon_pixmap *dst_priv = radeon_get_pixmap_private(dst_pix);
-	RegionPtr ret = NULL;
+    ScrnInfoPtr           scrn     = xf86ScreenToScrn(pDst->pScreen);
+    PixmapPtr             dst_pix  = get_drawable_pixmap(pDst);
+    struct radeon_pixmap *dst_priv = radeon_get_pixmap_private(dst_pix);
+    RegionPtr             ret      = NULL;
 
-	if (radeon_glamor_prepare_access_cpu_rw(scrn, dst_pix, dst_priv)) {
-		PixmapPtr src_pix = get_drawable_pixmap(pSrc);
-		struct radeon_pixmap *src_priv = radeon_get_pixmap_private(src_pix);
-		if (radeon_glamor_prepare_access_cpu_ro(scrn, src_pix, src_priv)) {
-			ret =
-			    fbCopyPlane(pSrc, pDst, pGC, srcx, srcy, w, h, dstx,
-					dsty, bitPlane);
-			radeon_glamor_finish_access_cpu(src_pix);
-		}
-		radeon_glamor_finish_access_cpu(dst_pix);
-	}
-	return ret;
+    if (radeon_glamor_prepare_access_cpu_rw(scrn, dst_pix, dst_priv))
+    {
+        PixmapPtr             src_pix  = get_drawable_pixmap(pSrc);
+        struct radeon_pixmap *src_priv = radeon_get_pixmap_private(src_pix);
+        if (radeon_glamor_prepare_access_cpu_ro(scrn, src_pix, src_priv))
+        {
+            ret = fbCopyPlane(pSrc,
+                              pDst,
+                              pGC,
+                              srcx,
+                              srcy,
+                              w,
+                              h,
+                              dstx,
+                              dsty,
+                              bitPlane);
+            radeon_glamor_finish_access_cpu(src_pix);
+        }
+        radeon_glamor_finish_access_cpu(dst_pix);
+    }
+    return ret;
 }
 
 static RegionPtr
-radeon_glamor_copy_plane_nodstbo(DrawablePtr pSrc, DrawablePtr pDst, GCPtr pGC,
-				 int srcx, int srcy, int w, int h,
-				 int dstx, int dsty, unsigned long bitPlane)
+radeon_glamor_copy_plane_nodstbo(DrawablePtr   pSrc,
+                                 DrawablePtr   pDst,
+                                 GCPtr         pGC,
+                                 int           srcx,
+                                 int           srcy,
+                                 int           w,
+                                 int           h,
+                                 int           dstx,
+                                 int           dsty,
+                                 unsigned long bitPlane)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pDst->pScreen);
-	PixmapPtr src_pix = get_drawable_pixmap(pSrc);
-	struct radeon_pixmap *src_priv = radeon_get_pixmap_private(src_pix);
-	RegionPtr ret = NULL;
+    ScrnInfoPtr           scrn     = xf86ScreenToScrn(pDst->pScreen);
+    PixmapPtr             src_pix  = get_drawable_pixmap(pSrc);
+    struct radeon_pixmap *src_priv = radeon_get_pixmap_private(src_pix);
+    RegionPtr             ret      = NULL;
 
-	if (radeon_glamor_prepare_access_cpu_ro(scrn, src_pix, src_priv)) {
-		ret = fbCopyPlane(pSrc, pDst, pGC, srcx, srcy, w, h,
-				  dstx,	dsty, bitPlane);
-		radeon_glamor_finish_access_cpu(src_pix);
-	}
-	return ret;
+    if (radeon_glamor_prepare_access_cpu_ro(scrn, src_pix, src_priv))
+    {
+        ret = fbCopyPlane(pSrc,
+                          pDst,
+                          pGC,
+                          srcx,
+                          srcy,
+                          w,
+                          h,
+                          dstx,
+                          dsty,
+                          bitPlane);
+        radeon_glamor_finish_access_cpu(src_pix);
+    }
+    return ret;
 }
 
 static void
-radeon_glamor_poly_point(DrawablePtr pDrawable, GCPtr pGC, int mode, int npt,
-			 DDXPointPtr pptInit)
+radeon_glamor_poly_point(DrawablePtr pDrawable,
+                         GCPtr       pGC,
+                         int         mode,
+                         int         npt,
+                         DDXPointPtr pptInit)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pDrawable->pScreen);
-	PixmapPtr pixmap = get_drawable_pixmap(pDrawable);
-	struct radeon_pixmap *priv = radeon_get_pixmap_private(pixmap);
+    ScrnInfoPtr           scrn   = xf86ScreenToScrn(pDrawable->pScreen);
+    PixmapPtr             pixmap = get_drawable_pixmap(pDrawable);
+    struct radeon_pixmap *priv   = radeon_get_pixmap_private(pixmap);
 
-	if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv)) {
-		fbPolyPoint(pDrawable, pGC, mode, npt, pptInit);
-		radeon_glamor_finish_access_cpu(pixmap);
-	}
+    if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv))
+    {
+        fbPolyPoint(pDrawable, pGC, mode, npt, pptInit);
+        radeon_glamor_finish_access_cpu(pixmap);
+    }
 }
 
 static void
-radeon_glamor_poly_lines(DrawablePtr pDrawable, GCPtr pGC,
-			 int mode, int npt, DDXPointPtr ppt)
+radeon_glamor_poly_lines(DrawablePtr pDrawable,
+                         GCPtr       pGC,
+                         int         mode,
+                         int         npt,
+                         DDXPointPtr ppt)
 {
-	if (pGC->lineWidth == 0) {
-		ScrnInfoPtr scrn = xf86ScreenToScrn(pDrawable->pScreen);
-		PixmapPtr pixmap = get_drawable_pixmap(pDrawable);
-		struct radeon_pixmap *priv = radeon_get_pixmap_private(pixmap);
+    if (pGC->lineWidth == 0)
+    {
+        ScrnInfoPtr           scrn   = xf86ScreenToScrn(pDrawable->pScreen);
+        PixmapPtr             pixmap = get_drawable_pixmap(pDrawable);
+        struct radeon_pixmap *priv   = radeon_get_pixmap_private(pixmap);
 
-		if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv)) {
-			if (radeon_glamor_prepare_access_gc(scrn, pGC)) {
-				fbPolyLine(pDrawable, pGC, mode, npt, ppt);
-				radeon_glamor_finish_access_gc(pGC);
-			}
-			radeon_glamor_finish_access_cpu(pixmap);
-		}
-		return;
-	}
-	/* fb calls mi functions in the lineWidth != 0 case. */
-	fbPolyLine(pDrawable, pGC, mode, npt, ppt);
+        if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv))
+        {
+            if (radeon_glamor_prepare_access_gc(scrn, pGC))
+            {
+                fbPolyLine(pDrawable, pGC, mode, npt, ppt);
+                radeon_glamor_finish_access_gc(pGC);
+            }
+            radeon_glamor_finish_access_cpu(pixmap);
+        }
+        return;
+    }
+    /* fb calls mi functions in the lineWidth != 0 case. */
+    fbPolyLine(pDrawable, pGC, mode, npt, ppt);
 }
 
 static void
-radeon_glamor_poly_segment(DrawablePtr pDrawable, GCPtr pGC,
-			   int nsegInit, xSegment *pSegInit)
+radeon_glamor_poly_segment(DrawablePtr pDrawable,
+                           GCPtr       pGC,
+                           int         nsegInit,
+                           xSegment   *pSegInit)
 {
-	if (pGC->lineWidth == 0) {
-		ScrnInfoPtr scrn = xf86ScreenToScrn(pDrawable->pScreen);
-		PixmapPtr pixmap = get_drawable_pixmap(pDrawable);
-		struct radeon_pixmap *priv = radeon_get_pixmap_private(pixmap);
+    if (pGC->lineWidth == 0)
+    {
+        ScrnInfoPtr           scrn   = xf86ScreenToScrn(pDrawable->pScreen);
+        PixmapPtr             pixmap = get_drawable_pixmap(pDrawable);
+        struct radeon_pixmap *priv   = radeon_get_pixmap_private(pixmap);
 
-		if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv)) {
-			if (radeon_glamor_prepare_access_gc(scrn, pGC)) {
-				fbPolySegment(pDrawable, pGC, nsegInit,
-					      pSegInit);
-				radeon_glamor_finish_access_gc(pGC);
-			}
-			radeon_glamor_finish_access_cpu(pixmap);
-		}
-		return;
-	}
-	/* fb calls mi functions in the lineWidth != 0 case. */
-	fbPolySegment(pDrawable, pGC, nsegInit, pSegInit);
+        if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv))
+        {
+            if (radeon_glamor_prepare_access_gc(scrn, pGC))
+            {
+                fbPolySegment(pDrawable, pGC, nsegInit, pSegInit);
+                radeon_glamor_finish_access_gc(pGC);
+            }
+            radeon_glamor_finish_access_cpu(pixmap);
+        }
+        return;
+    }
+    /* fb calls mi functions in the lineWidth != 0 case. */
+    fbPolySegment(pDrawable, pGC, nsegInit, pSegInit);
 }
 
 static void
-radeon_glamor_poly_fill_rect(DrawablePtr pDrawable, GCPtr pGC,
-			     int nrect, xRectangle *prect)
+radeon_glamor_poly_fill_rect(DrawablePtr pDrawable,
+                             GCPtr       pGC,
+                             int         nrect,
+                             xRectangle *prect)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pDrawable->pScreen);
-	RADEONInfoPtr info = RADEONPTR(scrn);
-	PixmapPtr pixmap = get_drawable_pixmap(pDrawable);
-	struct radeon_pixmap *priv = radeon_get_pixmap_private(pixmap);
+    ScrnInfoPtr           scrn   = xf86ScreenToScrn(pDrawable->pScreen);
+    RADEONInfoPtr         info   = RADEONPTR(scrn);
+    PixmapPtr             pixmap = get_drawable_pixmap(pDrawable);
+    struct radeon_pixmap *priv   = radeon_get_pixmap_private(pixmap);
 
-	if ((info->accel_state->force || (priv && !priv->bo)) &&
-	    radeon_glamor_prepare_access_gpu(priv)) {
-		info->glamor.SavedPolyFillRect(pDrawable, pGC, nrect, prect);
-		radeon_glamor_finish_access_gpu_rw(info, priv);
-		return;
-	}
+    if ((info->accel_state->force || (priv && !priv->bo)) &&
+        radeon_glamor_prepare_access_gpu(priv))
+    {
+        info->glamor.SavedPolyFillRect(pDrawable, pGC, nrect, prect);
+        radeon_glamor_finish_access_gpu_rw(info, priv);
+        return;
+    }
 
-	if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv)) {
-		if (radeon_glamor_prepare_access_gc(scrn, pGC)) {
-			fbPolyFillRect(pDrawable, pGC, nrect, prect);
-			radeon_glamor_finish_access_gc(pGC);
-		}
-		radeon_glamor_finish_access_cpu(pixmap);
-	}
+    if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv))
+    {
+        if (radeon_glamor_prepare_access_gc(scrn, pGC))
+        {
+            fbPolyFillRect(pDrawable, pGC, nrect, prect);
+            radeon_glamor_finish_access_gc(pGC);
+        }
+        radeon_glamor_finish_access_cpu(pixmap);
+    }
 }
 
 static void
-radeon_glamor_image_glyph_blt(DrawablePtr pDrawable, GCPtr pGC,
-			      int x, int y, unsigned int nglyph,
-			      CharInfoPtr *ppci, pointer pglyphBase)
+radeon_glamor_image_glyph_blt(DrawablePtr  pDrawable,
+                              GCPtr        pGC,
+                              int          x,
+                              int          y,
+                              unsigned int nglyph,
+                              CharInfoPtr *ppci,
+                              pointer      pglyphBase)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pDrawable->pScreen);
-	PixmapPtr pixmap = get_drawable_pixmap(pDrawable);
-	struct radeon_pixmap *priv = radeon_get_pixmap_private(pixmap);
+    ScrnInfoPtr           scrn   = xf86ScreenToScrn(pDrawable->pScreen);
+    PixmapPtr             pixmap = get_drawable_pixmap(pDrawable);
+    struct radeon_pixmap *priv   = radeon_get_pixmap_private(pixmap);
 
-	if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv)) {
-		if (radeon_glamor_prepare_access_gc(scrn, pGC)) {
-			fbImageGlyphBlt(pDrawable, pGC, x, y, nglyph, ppci,
-					pglyphBase);
-			radeon_glamor_finish_access_gc(pGC);
-		}
-		radeon_glamor_finish_access_cpu(pixmap);
-	}
+    if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv))
+    {
+        if (radeon_glamor_prepare_access_gc(scrn, pGC))
+        {
+            fbImageGlyphBlt(pDrawable, pGC, x, y, nglyph, ppci, pglyphBase);
+            radeon_glamor_finish_access_gc(pGC);
+        }
+        radeon_glamor_finish_access_cpu(pixmap);
+    }
 }
 
 static void
-radeon_glamor_poly_glyph_blt(DrawablePtr pDrawable, GCPtr pGC,
-			     int x, int y, unsigned int nglyph,
-			     CharInfoPtr *ppci, pointer pglyphBase)
+radeon_glamor_poly_glyph_blt(DrawablePtr  pDrawable,
+                             GCPtr        pGC,
+                             int          x,
+                             int          y,
+                             unsigned int nglyph,
+                             CharInfoPtr *ppci,
+                             pointer      pglyphBase)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pDrawable->pScreen);
-	PixmapPtr pixmap = get_drawable_pixmap(pDrawable);
-	struct radeon_pixmap *priv = radeon_get_pixmap_private(pixmap);
+    ScrnInfoPtr           scrn   = xf86ScreenToScrn(pDrawable->pScreen);
+    PixmapPtr             pixmap = get_drawable_pixmap(pDrawable);
+    struct radeon_pixmap *priv   = radeon_get_pixmap_private(pixmap);
 
-	if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv)) {
-		if (radeon_glamor_prepare_access_gc(scrn, pGC)) {
-			fbPolyGlyphBlt(pDrawable, pGC, x, y, nglyph, ppci,
-				       pglyphBase);
-			radeon_glamor_finish_access_gc(pGC);
-		}
-		radeon_glamor_finish_access_cpu(pixmap);
-	}
+    if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv))
+    {
+        if (radeon_glamor_prepare_access_gc(scrn, pGC))
+        {
+            fbPolyGlyphBlt(pDrawable, pGC, x, y, nglyph, ppci, pglyphBase);
+            radeon_glamor_finish_access_gc(pGC);
+        }
+        radeon_glamor_finish_access_cpu(pixmap);
+    }
 }
 
 static void
-radeon_glamor_push_pixels(GCPtr pGC, PixmapPtr pBitmap,
-			  DrawablePtr pDrawable, int w, int h, int x, int y)
+radeon_glamor_push_pixels(GCPtr       pGC,
+                          PixmapPtr   pBitmap,
+                          DrawablePtr pDrawable,
+                          int         w,
+                          int         h,
+                          int         x,
+                          int         y)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pDrawable->pScreen);
-	PixmapPtr pixmap = get_drawable_pixmap(pDrawable);
-	struct radeon_pixmap *priv = radeon_get_pixmap_private(pixmap);
+    ScrnInfoPtr           scrn   = xf86ScreenToScrn(pDrawable->pScreen);
+    PixmapPtr             pixmap = get_drawable_pixmap(pDrawable);
+    struct radeon_pixmap *priv   = radeon_get_pixmap_private(pixmap);
 
-	if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv)) {
-		priv = radeon_get_pixmap_private(pBitmap);
-		if (radeon_glamor_prepare_access_cpu_ro(scrn, pBitmap, priv)) {
-			if (radeon_glamor_prepare_access_gc(scrn, pGC)) {
-				fbPushPixels(pGC, pBitmap, pDrawable, w, h, x,
-					     y);
-				radeon_glamor_finish_access_gc(pGC);
-			}
-			radeon_glamor_finish_access_cpu(pBitmap);
-		}
-		radeon_glamor_finish_access_cpu(pixmap);
-	}
+    if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv))
+    {
+        priv = radeon_get_pixmap_private(pBitmap);
+        if (radeon_glamor_prepare_access_cpu_ro(scrn, pBitmap, priv))
+        {
+            if (radeon_glamor_prepare_access_gc(scrn, pGC))
+            {
+                fbPushPixels(pGC, pBitmap, pDrawable, w, h, x, y);
+                radeon_glamor_finish_access_gc(pGC);
+            }
+            radeon_glamor_finish_access_cpu(pBitmap);
+        }
+        radeon_glamor_finish_access_cpu(pixmap);
+    }
 }
 
 static void
-radeon_glamor_push_pixels_nodstbo(GCPtr pGC, PixmapPtr pBitmap,
-				  DrawablePtr pDrawable, int w, int h,
-				  int x, int y)
+radeon_glamor_push_pixels_nodstbo(GCPtr       pGC,
+                                  PixmapPtr   pBitmap,
+                                  DrawablePtr pDrawable,
+                                  int         w,
+                                  int         h,
+                                  int         x,
+                                  int         y)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pDrawable->pScreen);
-	struct radeon_pixmap *priv = radeon_get_pixmap_private(pBitmap);
+    ScrnInfoPtr           scrn = xf86ScreenToScrn(pDrawable->pScreen);
+    struct radeon_pixmap *priv = radeon_get_pixmap_private(pBitmap);
 
-	if (radeon_glamor_prepare_access_cpu_ro(scrn, pBitmap, priv)) {
-		fbPushPixels(pGC, pBitmap, pDrawable, w, h, x, y);
-		radeon_glamor_finish_access_cpu(pBitmap);
-	}
+    if (radeon_glamor_prepare_access_cpu_ro(scrn, pBitmap, priv))
+    {
+        fbPushPixels(pGC, pBitmap, pDrawable, w, h, x, y);
+        radeon_glamor_finish_access_cpu(pBitmap);
+    }
 }
 
 static RegionPtr
-radeon_glamor_copy_area(DrawablePtr pSrcDrawable, DrawablePtr pDstDrawable,
-			GCPtr pGC, int srcx, int srcy, int width, int height,
-			int dstx, int dsty)
+radeon_glamor_copy_area(DrawablePtr pSrcDrawable,
+                        DrawablePtr pDstDrawable,
+                        GCPtr       pGC,
+                        int         srcx,
+                        int         srcy,
+                        int         width,
+                        int         height,
+                        int         dstx,
+                        int         dsty)
 {
-	ScreenPtr screen = pDstDrawable->pScreen;
-	ScrnInfoPtr scrn = xf86ScreenToScrn(screen);
-	RADEONInfoPtr info = RADEONPTR(scrn);
-	PixmapPtr src_pixmap = get_drawable_pixmap(pSrcDrawable);
-	PixmapPtr dst_pixmap = get_drawable_pixmap(pDstDrawable);
-	struct radeon_pixmap *src_priv = radeon_get_pixmap_private(src_pixmap);
-	struct radeon_pixmap *dst_priv = radeon_get_pixmap_private(dst_pixmap);
-	RegionPtr ret = NULL;
+    ScreenPtr             screen     = pDstDrawable->pScreen;
+    ScrnInfoPtr           scrn       = xf86ScreenToScrn(screen);
+    RADEONInfoPtr         info       = RADEONPTR(scrn);
+    PixmapPtr             src_pixmap = get_drawable_pixmap(pSrcDrawable);
+    PixmapPtr             dst_pixmap = get_drawable_pixmap(pDstDrawable);
+    struct radeon_pixmap *src_priv   = radeon_get_pixmap_private(src_pixmap);
+    struct radeon_pixmap *dst_priv   = radeon_get_pixmap_private(dst_pixmap);
+    RegionPtr             ret        = NULL;
 
-	if (info->accel_state->force || (src_priv && !src_priv->bo) ||
-	    (dst_priv && !dst_priv->bo)) {
-		if (!radeon_glamor_prepare_access_gpu(dst_priv))
-			goto fallback;
-		if (src_priv != dst_priv &&
-		    !radeon_glamor_prepare_access_gpu(src_priv))
-			goto fallback;
+    if (info->accel_state->force || (src_priv && !src_priv->bo) ||
+        (dst_priv && !dst_priv->bo))
+    {
+        if (!radeon_glamor_prepare_access_gpu(dst_priv)) goto fallback;
+        if (src_priv != dst_priv && !radeon_glamor_prepare_access_gpu(src_priv))
+            goto fallback;
 
-		ret = info->glamor.SavedCopyArea(pSrcDrawable, pDstDrawable,
-						 pGC, srcx, srcy,
-						 width, height, dstx, dsty);
-		radeon_glamor_finish_access_gpu_rw(info, dst_priv);
-		if (src_priv != dst_priv)
-			radeon_glamor_finish_access_gpu_ro(info, src_priv);
+        ret = info->glamor.SavedCopyArea(pSrcDrawable,
+                                         pDstDrawable,
+                                         pGC,
+                                         srcx,
+                                         srcy,
+                                         width,
+                                         height,
+                                         dstx,
+                                         dsty);
+        radeon_glamor_finish_access_gpu_rw(info, dst_priv);
+        if (src_priv != dst_priv)
+            radeon_glamor_finish_access_gpu_ro(info, src_priv);
 
-		return ret;
-	}
+        return ret;
+    }
 
 fallback:
-	if (radeon_glamor_prepare_access_cpu_rw(scrn, dst_pixmap, dst_priv)) {
-		if (pSrcDrawable == pDstDrawable ||
-			radeon_glamor_prepare_access_cpu_ro(scrn, src_pixmap,
-							    src_priv)) {
-			ret = fbCopyArea(pSrcDrawable, pDstDrawable, pGC,
-					 srcx, srcy, width, height, dstx, dsty);
-			if (pSrcDrawable != pDstDrawable)
-				radeon_glamor_finish_access_cpu(src_pixmap);
-		}
-		radeon_glamor_finish_access_cpu(dst_pixmap);
-	}
+    if (radeon_glamor_prepare_access_cpu_rw(scrn, dst_pixmap, dst_priv))
+    {
+        if (pSrcDrawable == pDstDrawable ||
+            radeon_glamor_prepare_access_cpu_ro(scrn, src_pixmap, src_priv))
+        {
+            ret = fbCopyArea(pSrcDrawable,
+                             pDstDrawable,
+                             pGC,
+                             srcx,
+                             srcy,
+                             width,
+                             height,
+                             dstx,
+                             dsty);
+            if (pSrcDrawable != pDstDrawable)
+                radeon_glamor_finish_access_cpu(src_pixmap);
+        }
+        radeon_glamor_finish_access_cpu(dst_pixmap);
+    }
 
-	return ret;
+    return ret;
 }
 
 static RegionPtr
 radeon_glamor_copy_area_nodstbo(DrawablePtr pSrcDrawable,
-				DrawablePtr pDstDrawable, GCPtr pGC,
-				int srcx, int srcy, int width, int height,
-				int dstx, int dsty)
+                                DrawablePtr pDstDrawable,
+                                GCPtr       pGC,
+                                int         srcx,
+                                int         srcy,
+                                int         width,
+                                int         height,
+                                int         dstx,
+                                int         dsty)
 {
-	ScreenPtr screen = pDstDrawable->pScreen;
-	ScrnInfoPtr scrn = xf86ScreenToScrn(screen);
-	PixmapPtr src_pixmap = get_drawable_pixmap(pSrcDrawable);
-	PixmapPtr dst_pixmap = get_drawable_pixmap(pDstDrawable);
-	struct radeon_pixmap *src_priv;
-	RegionPtr ret = NULL;
+    ScreenPtr             screen     = pDstDrawable->pScreen;
+    ScrnInfoPtr           scrn       = xf86ScreenToScrn(screen);
+    PixmapPtr             src_pixmap = get_drawable_pixmap(pSrcDrawable);
+    PixmapPtr             dst_pixmap = get_drawable_pixmap(pDstDrawable);
+    struct radeon_pixmap *src_priv;
+    RegionPtr             ret = NULL;
 
-	if (src_pixmap != dst_pixmap) {
-		src_priv = radeon_get_pixmap_private(src_pixmap);
+    if (src_pixmap != dst_pixmap)
+    {
+        src_priv = radeon_get_pixmap_private(src_pixmap);
 
-		if (!radeon_glamor_prepare_access_cpu_ro(scrn, src_pixmap,
-							 src_priv))
-			return ret;
-	}
+        if (!radeon_glamor_prepare_access_cpu_ro(scrn, src_pixmap, src_priv))
+            return ret;
+    }
 
-	ret = fbCopyArea(pSrcDrawable, pDstDrawable, pGC, srcx, srcy,
-			 width, height, dstx, dsty);
+    ret = fbCopyArea(pSrcDrawable,
+                     pDstDrawable,
+                     pGC,
+                     srcx,
+                     srcy,
+                     width,
+                     height,
+                     dstx,
+                     dsty);
 
-	if (src_pixmap != dst_pixmap)
-		radeon_glamor_finish_access_cpu(src_pixmap);
+    if (src_pixmap != dst_pixmap) radeon_glamor_finish_access_cpu(src_pixmap);
 
-	return ret;
+    return ret;
 }
 
 static const GCOps radeon_glamor_ops = {
-	radeon_glamor_fill_spans,
-	radeon_glamor_set_spans,
-	radeon_glamor_put_image,
-	radeon_glamor_copy_area,
-	radeon_glamor_copy_plane,
-	radeon_glamor_poly_point,
-	radeon_glamor_poly_lines,
-	radeon_glamor_poly_segment,
-	miPolyRectangle,
-	miPolyArc,
-	miFillPolygon,
-	radeon_glamor_poly_fill_rect,
-	miPolyFillArc,
-	miPolyText8,
-	miPolyText16,
-	miImageText8,
-	miImageText16,
-	radeon_glamor_image_glyph_blt,
-	radeon_glamor_poly_glyph_blt,
-	radeon_glamor_push_pixels,
+    radeon_glamor_fill_spans,
+    radeon_glamor_set_spans,
+    radeon_glamor_put_image,
+    radeon_glamor_copy_area,
+    radeon_glamor_copy_plane,
+    radeon_glamor_poly_point,
+    radeon_glamor_poly_lines,
+    radeon_glamor_poly_segment,
+    miPolyRectangle,
+    miPolyArc,
+    miFillPolygon,
+    radeon_glamor_poly_fill_rect,
+    miPolyFillArc,
+    miPolyText8,
+    miPolyText16,
+    miImageText8,
+    miImageText16,
+    radeon_glamor_image_glyph_blt,
+    radeon_glamor_poly_glyph_blt,
+    radeon_glamor_push_pixels,
 };
 
 static GCOps radeon_glamor_nodstbo_ops;
@@ -605,33 +737,32 @@ static GCOps radeon_glamor_nodstbo_ops;
  * accelerated or may sync the card and fall back to fb.
  */
 static void
-radeon_glamor_validate_gc(GCPtr pGC, unsigned long changes, DrawablePtr pDrawable)
+radeon_glamor_validate_gc(GCPtr         pGC,
+                          unsigned long changes,
+                          DrawablePtr   pDrawable)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pGC->pScreen);
-	RADEONInfoPtr info = RADEONPTR(scrn);
+    ScrnInfoPtr   scrn = xf86ScreenToScrn(pGC->pScreen);
+    RADEONInfoPtr info = RADEONPTR(scrn);
 
-	glamor_validate_gc(pGC, changes, pDrawable);
-	info->glamor.SavedCopyArea = pGC->ops->CopyArea;
-	info->glamor.SavedPolyFillRect = pGC->ops->PolyFillRect;
+    glamor_validate_gc(pGC, changes, pDrawable);
+    info->glamor.SavedCopyArea     = pGC->ops->CopyArea;
+    info->glamor.SavedPolyFillRect = pGC->ops->PolyFillRect;
 
-	if (radeon_get_pixmap_private(get_drawable_pixmap(pDrawable)) ||
-	    (pGC->stipple && radeon_get_pixmap_private(pGC->stipple)) ||
-	    (pGC->fillStyle == FillTiled &&
-	     radeon_get_pixmap_private(pGC->tile.pixmap)))
-		pGC->ops = (GCOps *)&radeon_glamor_ops;
-	else
-		pGC->ops = &radeon_glamor_nodstbo_ops;
+    if (radeon_get_pixmap_private(get_drawable_pixmap(pDrawable)) ||
+        (pGC->stipple && radeon_get_pixmap_private(pGC->stipple)) ||
+        (pGC->fillStyle == FillTiled &&
+         radeon_get_pixmap_private(pGC->tile.pixmap)))
+        pGC->ops = (GCOps *)&radeon_glamor_ops;
+    else pGC->ops = &radeon_glamor_nodstbo_ops;
 }
 
-static GCFuncs glamorGCFuncs = {
-	radeon_glamor_validate_gc,
-	miChangeGC,
-	miCopyGC,
-	miDestroyGC,
-	miChangeClip,
-	miDestroyClip,
-	miCopyClip
-};
+static GCFuncs glamorGCFuncs = { radeon_glamor_validate_gc,
+                                 miChangeGC,
+                                 miCopyGC,
+                                 miDestroyGC,
+                                 miChangeClip,
+                                 miDestroyClip,
+                                 miCopyClip };
 
 /**
  * radeon_glamor_create_gc makes a new GC and hooks up its funcs handler, so that
@@ -640,33 +771,34 @@ static GCFuncs glamorGCFuncs = {
 static int
 radeon_glamor_create_gc(GCPtr pGC)
 {
-	static Bool nodstbo_ops_initialized;
+    static Bool nodstbo_ops_initialized;
 
-	if (!fbCreateGC(pGC))
-		return FALSE;
+    if (!fbCreateGC(pGC)) return FALSE;
 
-	if (!nodstbo_ops_initialized) {
-		radeon_glamor_nodstbo_ops = radeon_glamor_ops;
+    if (!nodstbo_ops_initialized)
+    {
+        radeon_glamor_nodstbo_ops = radeon_glamor_ops;
 
-		radeon_glamor_nodstbo_ops.FillSpans = pGC->ops->FillSpans;
-		radeon_glamor_nodstbo_ops.SetSpans = pGC->ops->SetSpans;
-		radeon_glamor_nodstbo_ops.PutImage = pGC->ops->PutImage;
-		radeon_glamor_nodstbo_ops.CopyArea = radeon_glamor_copy_area_nodstbo;
-		radeon_glamor_nodstbo_ops.CopyPlane = radeon_glamor_copy_plane_nodstbo;
-		radeon_glamor_nodstbo_ops.PolyPoint = pGC->ops->PolyPoint;
-		radeon_glamor_nodstbo_ops.Polylines = pGC->ops->Polylines;
-		radeon_glamor_nodstbo_ops.PolySegment = pGC->ops->PolySegment;
-		radeon_glamor_nodstbo_ops.PolyFillRect = pGC->ops->PolyFillRect;
-		radeon_glamor_nodstbo_ops.ImageGlyphBlt = pGC->ops->ImageGlyphBlt;
-		radeon_glamor_nodstbo_ops.PolyGlyphBlt = pGC->ops->PolyGlyphBlt;
-		radeon_glamor_nodstbo_ops.PushPixels = radeon_glamor_push_pixels_nodstbo;
+        radeon_glamor_nodstbo_ops.FillSpans = pGC->ops->FillSpans;
+        radeon_glamor_nodstbo_ops.SetSpans  = pGC->ops->SetSpans;
+        radeon_glamor_nodstbo_ops.PutImage  = pGC->ops->PutImage;
+        radeon_glamor_nodstbo_ops.CopyArea  = radeon_glamor_copy_area_nodstbo;
+        radeon_glamor_nodstbo_ops.CopyPlane = radeon_glamor_copy_plane_nodstbo;
+        radeon_glamor_nodstbo_ops.PolyPoint = pGC->ops->PolyPoint;
+        radeon_glamor_nodstbo_ops.Polylines = pGC->ops->Polylines;
+        radeon_glamor_nodstbo_ops.PolySegment   = pGC->ops->PolySegment;
+        radeon_glamor_nodstbo_ops.PolyFillRect  = pGC->ops->PolyFillRect;
+        radeon_glamor_nodstbo_ops.ImageGlyphBlt = pGC->ops->ImageGlyphBlt;
+        radeon_glamor_nodstbo_ops.PolyGlyphBlt  = pGC->ops->PolyGlyphBlt;
+        radeon_glamor_nodstbo_ops.PushPixels =
+            radeon_glamor_push_pixels_nodstbo;
 
-		nodstbo_ops_initialized = TRUE;
-	}
+        nodstbo_ops_initialized = TRUE;
+    }
 
-	pGC->funcs = &glamorGCFuncs;
+    pGC->funcs = &glamorGCFuncs;
 
-	return TRUE;
+    return TRUE;
 }
 
 /*
@@ -676,212 +808,285 @@ radeon_glamor_create_gc(GCPtr pGC)
 static RegionPtr
 radeon_glamor_bitmap_to_region(PixmapPtr pPix)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pPix->drawable.pScreen);
-	struct radeon_pixmap *priv = radeon_get_pixmap_private(pPix);
-	RegionPtr ret;
+    ScrnInfoPtr           scrn = xf86ScreenToScrn(pPix->drawable.pScreen);
+    struct radeon_pixmap *priv = radeon_get_pixmap_private(pPix);
+    RegionPtr             ret;
 
-	if (!radeon_glamor_prepare_access_cpu_ro(scrn, pPix, priv))
-		return NULL;
-	ret = fbPixmapToRegion(pPix);
-	radeon_glamor_finish_access_cpu(pPix);
-	return ret;
+    if (!radeon_glamor_prepare_access_cpu_ro(scrn, pPix, priv)) return NULL;
+    ret = fbPixmapToRegion(pPix);
+    radeon_glamor_finish_access_cpu(pPix);
+    return ret;
 }
 
 static void
-radeon_glamor_copy_window(WindowPtr pWin, DDXPointRec ptOldOrg,
-			  RegionPtr prgnSrc)
+radeon_glamor_copy_window(WindowPtr   pWin,
+                          DDXPointRec ptOldOrg,
+                          RegionPtr   prgnSrc)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pWin->drawable.pScreen);
-	PixmapPtr pixmap = get_drawable_pixmap(&pWin->drawable);
-	struct radeon_pixmap *priv = radeon_get_pixmap_private(pixmap);
+    ScrnInfoPtr           scrn   = xf86ScreenToScrn(pWin->drawable.pScreen);
+    PixmapPtr             pixmap = get_drawable_pixmap(&pWin->drawable);
+    struct radeon_pixmap *priv   = radeon_get_pixmap_private(pixmap);
 
-	if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv)) {
-		fbCopyWindow(pWin, ptOldOrg, prgnSrc);
-		radeon_glamor_finish_access_cpu(pixmap);
-	}
+    if (radeon_glamor_prepare_access_cpu_rw(scrn, pixmap, priv))
+    {
+        fbCopyWindow(pWin, ptOldOrg, prgnSrc);
+        radeon_glamor_finish_access_cpu(pixmap);
+    }
 }
 
 static void
-radeon_glamor_get_image(DrawablePtr pDrawable, int x, int y, int w, int h,
-			unsigned int format, unsigned long planeMask, char *d)
+radeon_glamor_get_image(DrawablePtr   pDrawable,
+                        int           x,
+                        int           y,
+                        int           w,
+                        int           h,
+                        unsigned int  format,
+                        unsigned long planeMask,
+                        char         *d)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pDrawable->pScreen);
-	PixmapPtr pixmap = get_drawable_pixmap(pDrawable);
-	struct radeon_pixmap *priv = radeon_get_pixmap_private(pixmap);
+    ScrnInfoPtr           scrn   = xf86ScreenToScrn(pDrawable->pScreen);
+    PixmapPtr             pixmap = get_drawable_pixmap(pDrawable);
+    struct radeon_pixmap *priv   = radeon_get_pixmap_private(pixmap);
 
-	if (radeon_glamor_prepare_access_cpu_ro(scrn, pixmap, priv)) {
-		fbGetImage(pDrawable, x, y, w, h, format, planeMask, d);
-		radeon_glamor_finish_access_cpu(pixmap);
-	}
+    if (radeon_glamor_prepare_access_cpu_ro(scrn, pixmap, priv))
+    {
+        fbGetImage(pDrawable, x, y, w, h, format, planeMask, d);
+        radeon_glamor_finish_access_cpu(pixmap);
+    }
 }
 
 static void
-radeon_glamor_get_spans(DrawablePtr pDrawable, int wMax, DDXPointPtr ppt,
-			int *pwidth, int nspans, char *pdstStart)
+radeon_glamor_get_spans(DrawablePtr pDrawable,
+                        int         wMax,
+                        DDXPointPtr ppt,
+                        int        *pwidth,
+                        int         nspans,
+                        char       *pdstStart)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pDrawable->pScreen);
-	PixmapPtr pixmap = get_drawable_pixmap(pDrawable);
-	struct radeon_pixmap *priv = radeon_get_pixmap_private(pixmap);
+    ScrnInfoPtr           scrn   = xf86ScreenToScrn(pDrawable->pScreen);
+    PixmapPtr             pixmap = get_drawable_pixmap(pDrawable);
+    struct radeon_pixmap *priv   = radeon_get_pixmap_private(pixmap);
 
-	if (radeon_glamor_prepare_access_cpu_ro(scrn, pixmap, priv)) {
-		fbGetSpans(pDrawable, wMax, ppt, pwidth, nspans, pdstStart);
-		radeon_glamor_finish_access_cpu(pixmap);
-	}
+    if (radeon_glamor_prepare_access_cpu_ro(scrn, pixmap, priv))
+    {
+        fbGetSpans(pDrawable, wMax, ppt, pwidth, nspans, pdstStart);
+        radeon_glamor_finish_access_cpu(pixmap);
+    }
 }
 
 /*
  * Picture screen rendering wrappers
  */
 
-#ifdef RENDER
+#  ifdef RENDER
 
 static void
-radeon_glamor_composite(CARD8 op,
-		    PicturePtr pSrc,
-		    PicturePtr pMask,
-		    PicturePtr pDst,
-		    INT16 xSrc, INT16 ySrc,
-		    INT16 xMask, INT16 yMask,
-		    INT16 xDst, INT16 yDst,
-		    CARD16 width, CARD16 height)
+radeon_glamor_composite(CARD8      op,
+                        PicturePtr pSrc,
+                        PicturePtr pMask,
+                        PicturePtr pDst,
+                        INT16      xSrc,
+                        INT16      ySrc,
+                        INT16      xMask,
+                        INT16      yMask,
+                        INT16      xDst,
+                        INT16      yDst,
+                        CARD16     width,
+                        CARD16     height)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pDst->pDrawable->pScreen);
-	RADEONInfoPtr info;
-	PixmapPtr pixmap;
-	struct radeon_pixmap *dst_priv, *src_priv = NULL, *mask_priv = NULL;
-	Bool gpu_done = FALSE;
+    ScrnInfoPtr           scrn = xf86ScreenToScrn(pDst->pDrawable->pScreen);
+    RADEONInfoPtr         info;
+    PixmapPtr             pixmap;
+    struct radeon_pixmap *dst_priv, *src_priv = NULL, *mask_priv = NULL;
+    Bool                  gpu_done = FALSE;
 
-	if (pDst->alphaMap || pSrc->alphaMap || (pMask && pMask->alphaMap))
-		goto fallback;
+    if (pDst->alphaMap || pSrc->alphaMap || (pMask && pMask->alphaMap))
+        goto fallback;
 
-	pixmap = get_drawable_pixmap(pDst->pDrawable);
-	if (&pixmap->drawable != pDst->pDrawable ||
-	    pixmap->usage_hint != RADEON_CREATE_PIXMAP_SCANOUT)
-		goto fallback;
+    pixmap = get_drawable_pixmap(pDst->pDrawable);
+    if (&pixmap->drawable != pDst->pDrawable ||
+        pixmap->usage_hint != RADEON_CREATE_PIXMAP_SCANOUT)
+        goto fallback;
 
-	dst_priv = radeon_get_pixmap_private(pixmap);
-	if (!radeon_glamor_prepare_access_gpu(dst_priv))
-		goto fallback;
+    dst_priv = radeon_get_pixmap_private(pixmap);
+    if (!radeon_glamor_prepare_access_gpu(dst_priv)) goto fallback;
 
-	info = RADEONPTR(scrn);
-	if (!pSrc->pDrawable ||
-	    ((pixmap = get_drawable_pixmap(pSrc->pDrawable)) &&
-	     (src_priv = radeon_get_pixmap_private(pixmap)) &&
-	     radeon_glamor_prepare_access_gpu(src_priv))) {
-		if (!pMask || !pMask->pDrawable ||
-		    ((pixmap = get_drawable_pixmap(pMask->pDrawable)) &&
-		     (mask_priv = radeon_get_pixmap_private(pixmap)) &&
-		     radeon_glamor_prepare_access_gpu(mask_priv))) {
-			info->glamor.SavedComposite(op, pSrc, pMask, pDst,
-						    xSrc, ySrc, xMask, yMask,
-						    xDst, yDst, width, height);
-			gpu_done = TRUE;
+    info = RADEONPTR(scrn);
+    if (!pSrc->pDrawable || ((pixmap = get_drawable_pixmap(pSrc->pDrawable)) &&
+                             (src_priv = radeon_get_pixmap_private(pixmap)) &&
+                             radeon_glamor_prepare_access_gpu(src_priv)))
+    {
+        if (!pMask || !pMask->pDrawable ||
+            ((pixmap = get_drawable_pixmap(pMask->pDrawable)) &&
+             (mask_priv = radeon_get_pixmap_private(pixmap)) &&
+             radeon_glamor_prepare_access_gpu(mask_priv)))
+        {
+            info->glamor.SavedComposite(op,
+                                        pSrc,
+                                        pMask,
+                                        pDst,
+                                        xSrc,
+                                        ySrc,
+                                        xMask,
+                                        yMask,
+                                        xDst,
+                                        yDst,
+                                        width,
+                                        height);
+            gpu_done = TRUE;
 
-			if (mask_priv)
-				radeon_glamor_finish_access_gpu_ro(info, mask_priv);
-		}
+            if (mask_priv) radeon_glamor_finish_access_gpu_ro(info, mask_priv);
+        }
 
-		if (src_priv)
-			radeon_glamor_finish_access_gpu_ro(info, src_priv);
-	}
-	radeon_glamor_finish_access_gpu_rw(info, dst_priv);
+        if (src_priv) radeon_glamor_finish_access_gpu_ro(info, src_priv);
+    }
+    radeon_glamor_finish_access_gpu_rw(info, dst_priv);
 
-	if (gpu_done)
-		return;
+    if (gpu_done) return;
 
 fallback:
-	if (radeon_glamor_picture_prepare_access_cpu_rw(scrn, pDst)) {
-		if (radeon_glamor_picture_prepare_access_cpu_ro(scrn, pSrc)) {
-			if (!pMask ||
-			    radeon_glamor_picture_prepare_access_cpu_ro(scrn, pMask)) {
-				fbComposite(op, pSrc, pMask, pDst,
-					    xSrc, ySrc,
-					    xMask, yMask,
-					    xDst, yDst,
-					    width, height);
-				if (pMask)
-					radeon_glamor_picture_finish_access_cpu(pMask);
-			}
-			radeon_glamor_picture_finish_access_cpu(pSrc);
-		}
-		radeon_glamor_picture_finish_access_cpu(pDst);
-	}
+    if (radeon_glamor_picture_prepare_access_cpu_rw(scrn, pDst))
+    {
+        if (radeon_glamor_picture_prepare_access_cpu_ro(scrn, pSrc))
+        {
+            if (!pMask ||
+                radeon_glamor_picture_prepare_access_cpu_ro(scrn, pMask))
+            {
+                fbComposite(op,
+                            pSrc,
+                            pMask,
+                            pDst,
+                            xSrc,
+                            ySrc,
+                            xMask,
+                            yMask,
+                            xDst,
+                            yDst,
+                            width,
+                            height);
+                if (pMask) radeon_glamor_picture_finish_access_cpu(pMask);
+            }
+            radeon_glamor_picture_finish_access_cpu(pSrc);
+        }
+        radeon_glamor_picture_finish_access_cpu(pDst);
+    }
 }
 
 static void
 radeon_glamor_add_traps(PicturePtr pPicture,
-		    INT16 x_off, INT16 y_off, int ntrap, xTrap *traps)
+                        INT16      x_off,
+                        INT16      y_off,
+                        int        ntrap,
+                        xTrap     *traps)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(pPicture->pDrawable->pScreen);
+    ScrnInfoPtr scrn = xf86ScreenToScrn(pPicture->pDrawable->pScreen);
 
-	if (radeon_glamor_picture_prepare_access_cpu_rw(scrn, pPicture)) {
-		fbAddTraps(pPicture, x_off, y_off, ntrap, traps);
-		radeon_glamor_picture_finish_access_cpu(pPicture);
-	}
+    if (radeon_glamor_picture_prepare_access_cpu_rw(scrn, pPicture))
+    {
+        fbAddTraps(pPicture, x_off, y_off, ntrap, traps);
+        radeon_glamor_picture_finish_access_cpu(pPicture);
+    }
 }
 
 static void
-radeon_glamor_glyphs(CARD8 op,
-		 PicturePtr src,
-		 PicturePtr dst,
-		 PictFormatPtr maskFormat,
-		 INT16 xSrc,
-		 INT16 ySrc, int nlist, GlyphListPtr list, GlyphPtr *glyphs)
+radeon_glamor_glyphs(CARD8         op,
+                     PicturePtr    src,
+                     PicturePtr    dst,
+                     PictFormatPtr maskFormat,
+                     INT16         xSrc,
+                     INT16         ySrc,
+                     int           nlist,
+                     GlyphListPtr  list,
+                     GlyphPtr     *glyphs)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(dst->pDrawable->pScreen);
+    ScrnInfoPtr scrn = xf86ScreenToScrn(dst->pDrawable->pScreen);
 
-	if (radeon_glamor_picture_prepare_access_cpu_rw(scrn, dst)) {
-		if (radeon_glamor_picture_prepare_access_cpu_ro(scrn, src)) {
-			RADEONInfoPtr info = RADEONPTR(scrn);
+    if (radeon_glamor_picture_prepare_access_cpu_rw(scrn, dst))
+    {
+        if (radeon_glamor_picture_prepare_access_cpu_ro(scrn, src))
+        {
+            RADEONInfoPtr info = RADEONPTR(scrn);
 
-			info->glamor.SavedGlyphs(op, src, dst, maskFormat, xSrc,
-						 ySrc, nlist, list, glyphs);
-			radeon_glamor_picture_finish_access_cpu(src);
-		}
-		radeon_glamor_picture_finish_access_cpu(dst);
-	}
+            info->glamor.SavedGlyphs(op,
+                                     src,
+                                     dst,
+                                     maskFormat,
+                                     xSrc,
+                                     ySrc,
+                                     nlist,
+                                     list,
+                                     glyphs);
+            radeon_glamor_picture_finish_access_cpu(src);
+        }
+        radeon_glamor_picture_finish_access_cpu(dst);
+    }
 }
 
 static void
-radeon_glamor_trapezoids(CARD8 op, PicturePtr src, PicturePtr dst,
-		     PictFormatPtr maskFormat, INT16 xSrc, INT16 ySrc,
-		     int ntrap, xTrapezoid *traps)
+radeon_glamor_trapezoids(CARD8         op,
+                         PicturePtr    src,
+                         PicturePtr    dst,
+                         PictFormatPtr maskFormat,
+                         INT16         xSrc,
+                         INT16         ySrc,
+                         int           ntrap,
+                         xTrapezoid   *traps)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(dst->pDrawable->pScreen);
+    ScrnInfoPtr scrn = xf86ScreenToScrn(dst->pDrawable->pScreen);
 
-	if (radeon_glamor_picture_prepare_access_cpu_rw(scrn, dst)) {
-		if (radeon_glamor_picture_prepare_access_cpu_ro(scrn, src)) {
-			RADEONInfoPtr info = RADEONPTR(scrn);
+    if (radeon_glamor_picture_prepare_access_cpu_rw(scrn, dst))
+    {
+        if (radeon_glamor_picture_prepare_access_cpu_ro(scrn, src))
+        {
+            RADEONInfoPtr info = RADEONPTR(scrn);
 
-			info->glamor.SavedTrapezoids(op, src, dst, maskFormat,
-						     xSrc, ySrc, ntrap, traps);
-			radeon_glamor_picture_finish_access_cpu(src);
-		}
-		radeon_glamor_picture_finish_access_cpu(dst);
-	}
+            info->glamor.SavedTrapezoids(op,
+                                         src,
+                                         dst,
+                                         maskFormat,
+                                         xSrc,
+                                         ySrc,
+                                         ntrap,
+                                         traps);
+            radeon_glamor_picture_finish_access_cpu(src);
+        }
+        radeon_glamor_picture_finish_access_cpu(dst);
+    }
 }
 
 static void
-radeon_glamor_triangles(CARD8 op, PicturePtr src, PicturePtr dst,
-		    PictFormatPtr maskFormat, INT16 xSrc, INT16 ySrc,
-		    int ntri, xTriangle *tri)
+radeon_glamor_triangles(CARD8         op,
+                        PicturePtr    src,
+                        PicturePtr    dst,
+                        PictFormatPtr maskFormat,
+                        INT16         xSrc,
+                        INT16         ySrc,
+                        int           ntri,
+                        xTriangle    *tri)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(dst->pDrawable->pScreen);
+    ScrnInfoPtr scrn = xf86ScreenToScrn(dst->pDrawable->pScreen);
 
-	if (radeon_glamor_picture_prepare_access_cpu_rw(scrn, dst)) {
-		if (radeon_glamor_picture_prepare_access_cpu_ro(scrn, src)) {
-			RADEONInfoPtr info = RADEONPTR(scrn);
+    if (radeon_glamor_picture_prepare_access_cpu_rw(scrn, dst))
+    {
+        if (radeon_glamor_picture_prepare_access_cpu_ro(scrn, src))
+        {
+            RADEONInfoPtr info = RADEONPTR(scrn);
 
-			info->glamor.SavedTriangles(op, src, dst, maskFormat,
-						    xSrc, ySrc, ntri, tri);
-			radeon_glamor_picture_finish_access_cpu(src);
-		}
-		radeon_glamor_picture_finish_access_cpu(dst);
-	}
+            info->glamor.SavedTriangles(op,
+                                        src,
+                                        dst,
+                                        maskFormat,
+                                        xSrc,
+                                        ySrc,
+                                        ntri,
+                                        tri);
+            radeon_glamor_picture_finish_access_cpu(src);
+        }
+        radeon_glamor_picture_finish_access_cpu(dst);
+    }
 }
 
-#endif /* RENDER */
-
+#  endif /* RENDER */
 
 /**
  * radeon_glamor_close_screen() unwraps its wrapped screen functions and tears
@@ -890,33 +1095,33 @@ radeon_glamor_triangles(CARD8 op, PicturePtr src, PicturePtr dst,
 static Bool
 radeon_glamor_close_screen(ScreenPtr pScreen)
 {
-	RADEONInfoPtr info = RADEONPTR(xf86ScreenToScrn(pScreen));
-#ifdef RENDER
-	PictureScreenPtr ps = GetPictureScreenIfSet(pScreen);
-#endif
+    RADEONInfoPtr info = RADEONPTR(xf86ScreenToScrn(pScreen));
+#  ifdef RENDER
+    PictureScreenPtr ps = GetPictureScreenIfSet(pScreen);
+#  endif
 
-	pScreen->CreateGC = info->glamor.SavedCreateGC;
-	pScreen->CloseScreen = info->glamor.SavedCloseScreen;
-	pScreen->GetImage = info->glamor.SavedGetImage;
-	pScreen->GetSpans = info->glamor.SavedGetSpans;
-	pScreen->CopyWindow = info->glamor.SavedCopyWindow;
-	pScreen->ChangeWindowAttributes =
-	    info->glamor.SavedChangeWindowAttributes;
-	pScreen->BitmapToRegion = info->glamor.SavedBitmapToRegion;
-#ifdef RENDER
-	if (ps) {
-		ps->Composite = info->glamor.SavedComposite;
-		ps->Glyphs = info->glamor.SavedGlyphs;
-		ps->UnrealizeGlyph = info->glamor.SavedUnrealizeGlyph;
-		ps->Trapezoids = info->glamor.SavedTrapezoids;
-		ps->AddTraps = info->glamor.SavedAddTraps;
-		ps->Triangles = info->glamor.SavedTriangles;
+    pScreen->CreateGC               = info->glamor.SavedCreateGC;
+    pScreen->CloseScreen            = info->glamor.SavedCloseScreen;
+    pScreen->GetImage               = info->glamor.SavedGetImage;
+    pScreen->GetSpans               = info->glamor.SavedGetSpans;
+    pScreen->CopyWindow             = info->glamor.SavedCopyWindow;
+    pScreen->ChangeWindowAttributes = info->glamor.SavedChangeWindowAttributes;
+    pScreen->BitmapToRegion         = info->glamor.SavedBitmapToRegion;
+#  ifdef RENDER
+    if (ps)
+    {
+        ps->Composite      = info->glamor.SavedComposite;
+        ps->Glyphs         = info->glamor.SavedGlyphs;
+        ps->UnrealizeGlyph = info->glamor.SavedUnrealizeGlyph;
+        ps->Trapezoids     = info->glamor.SavedTrapezoids;
+        ps->AddTraps       = info->glamor.SavedAddTraps;
+        ps->Triangles      = info->glamor.SavedTriangles;
 
-		ps->UnrealizeGlyph = info->glamor.SavedUnrealizeGlyph;
-	}
-#endif
+        ps->UnrealizeGlyph = info->glamor.SavedUnrealizeGlyph;
+    }
+#  endif
 
-	return pScreen->CloseScreen(pScreen);
+    return pScreen->CloseScreen(pScreen);
 }
 
 /**
@@ -925,47 +1130,48 @@ radeon_glamor_close_screen(ScreenPtr pScreen)
 void
 radeon_glamor_screen_init(ScreenPtr screen)
 {
-	RADEONInfoPtr info = RADEONPTR(xf86ScreenToScrn(screen));
+    RADEONInfoPtr info = RADEONPTR(xf86ScreenToScrn(screen));
 
-	/*
+    /*
 	 * Replace various fb screen functions
 	 */
-	info->glamor.SavedCloseScreen = screen->CloseScreen;
-	screen->CloseScreen = radeon_glamor_close_screen;
+    info->glamor.SavedCloseScreen = screen->CloseScreen;
+    screen->CloseScreen           = radeon_glamor_close_screen;
 
-	info->glamor.SavedCreateGC = screen->CreateGC;
-	screen->CreateGC = radeon_glamor_create_gc;
+    info->glamor.SavedCreateGC = screen->CreateGC;
+    screen->CreateGC           = radeon_glamor_create_gc;
 
-	info->glamor.SavedGetImage = screen->GetImage;
-	screen->GetImage = radeon_glamor_get_image;
+    info->glamor.SavedGetImage = screen->GetImage;
+    screen->GetImage           = radeon_glamor_get_image;
 
-	info->glamor.SavedGetSpans = screen->GetSpans;
-	screen->GetSpans = radeon_glamor_get_spans;
+    info->glamor.SavedGetSpans = screen->GetSpans;
+    screen->GetSpans           = radeon_glamor_get_spans;
 
-	info->glamor.SavedCopyWindow = screen->CopyWindow;
-	screen->CopyWindow = radeon_glamor_copy_window;
+    info->glamor.SavedCopyWindow = screen->CopyWindow;
+    screen->CopyWindow           = radeon_glamor_copy_window;
 
-	info->glamor.SavedBitmapToRegion = screen->BitmapToRegion;
-	screen->BitmapToRegion = radeon_glamor_bitmap_to_region;
+    info->glamor.SavedBitmapToRegion = screen->BitmapToRegion;
+    screen->BitmapToRegion           = radeon_glamor_bitmap_to_region;
 
-#ifdef RENDER
-	{
-		PictureScreenPtr ps = GetPictureScreenIfSet(screen);
-		if (ps) {
-			info->glamor.SavedComposite = ps->Composite;
-			ps->Composite = radeon_glamor_composite;
+#  ifdef RENDER
+    {
+        PictureScreenPtr ps = GetPictureScreenIfSet(screen);
+        if (ps)
+        {
+            info->glamor.SavedComposite = ps->Composite;
+            ps->Composite               = radeon_glamor_composite;
 
-			info->glamor.SavedUnrealizeGlyph = ps->UnrealizeGlyph;
+            info->glamor.SavedUnrealizeGlyph = ps->UnrealizeGlyph;
 
-			ps->Glyphs = radeon_glamor_glyphs;
-			ps->Triangles = radeon_glamor_triangles;
-			ps->Trapezoids = radeon_glamor_trapezoids;
+            ps->Glyphs     = radeon_glamor_glyphs;
+            ps->Triangles  = radeon_glamor_triangles;
+            ps->Trapezoids = radeon_glamor_trapezoids;
 
-			info->glamor.SavedAddTraps = ps->AddTraps;
-			ps->AddTraps = radeon_glamor_add_traps;
-		}
-	}
-#endif
+            info->glamor.SavedAddTraps = ps->AddTraps;
+            ps->AddTraps               = radeon_glamor_add_traps;
+        }
+    }
+#  endif
 }
 
 #endif /* USE_GLAMOR */

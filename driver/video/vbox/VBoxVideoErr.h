@@ -28,23 +28,23 @@
 /** @name VirtualBox error macros
  * @{ */
 
-#define VINF_SUCCESS                        0
-#define VERR_INVALID_PARAMETER              (-2)
-#define VERR_INVALID_POINTER                (-6)
-#define VERR_NO_MEMORY                      (-8)
-#define VERR_NOT_IMPLEMENTED                (-12)
-#define VERR_INVALID_FUNCTION               (-36)
-#define VERR_NOT_SUPPORTED                  (-37)
-#define VERR_TOO_MUCH_DATA                  (-42)
-#define VERR_NOT_FOUND                      (-78)
-#define VERR_INVALID_STATE                  (-79)
-#define VERR_OUT_OF_RESOURCES               (-80)
-#define VERR_ALREADY_EXISTS                 (-105)
-#define VERR_INTERNAL_ERROR                 (-225)
+#define VINF_SUCCESS           0
+#define VERR_INVALID_PARAMETER (-2)
+#define VERR_INVALID_POINTER   (-6)
+#define VERR_NO_MEMORY         (-8)
+#define VERR_NOT_IMPLEMENTED   (-12)
+#define VERR_INVALID_FUNCTION  (-36)
+#define VERR_NOT_SUPPORTED     (-37)
+#define VERR_TOO_MUCH_DATA     (-42)
+#define VERR_NOT_FOUND         (-78)
+#define VERR_INVALID_STATE     (-79)
+#define VERR_OUT_OF_RESOURCES  (-80)
+#define VERR_ALREADY_EXISTS    (-105)
+#define VERR_INTERNAL_ERROR    (-225)
 
-#define RT_SUCCESS_NP(rc)   ( (int)(rc) >= VINF_SUCCESS )
-#define RT_SUCCESS(rc)      ( likely(RT_SUCCESS_NP(rc)) )
-#define RT_FAILURE(rc)      ( unlikely(!RT_SUCCESS_NP(rc)) )
+#define RT_SUCCESS_NP(rc) ((int)(rc) >= VINF_SUCCESS)
+#define RT_SUCCESS(rc)    (likely(RT_SUCCESS_NP(rc)))
+#define RT_FAILURE(rc)    (unlikely(!RT_SUCCESS_NP(rc)))
 
 /** @}  */
 
@@ -53,11 +53,10 @@
 
 /* Unlike BUILD_BUG_ON(), these can be used outside of functions. */
 extern int vbox_assert_var[1];
-#define assert_compile(expr) \
+#define assert_compile(expr)                                   \
     extern int vbox_assert_var[1] __attribute__((__unused__)), \
-    vbox_assert_var[(expr) ? 1 : 0] __attribute__((__unused__))
-#define assert_compile_size(type, size) \
-    assert_compile(sizeof(type) == (size))
+        vbox_assert_var[(expr) ? 1 : 0] __attribute__((__unused__))
+#define assert_compile_size(type, size) assert_compile(sizeof(type) == (size))
 
 /** @}  */
 

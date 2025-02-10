@@ -37,43 +37,60 @@
 extern PixmapPtr RADEONGetDrawablePixmap(DrawablePtr pDrawable);
 
 extern void RADEONVlineHelperClear(ScrnInfoPtr pScrn);
-extern void RADEONVlineHelperSet(ScrnInfoPtr pScrn, int x1, int y1, int x2, int y2);
-extern Bool RADEONValidPM(uint32_t pm, int bpp);
-extern Bool RADEONCheckBPP(int bpp);
+extern void
+RADEONVlineHelperSet(ScrnInfoPtr pScrn, int x1, int y1, int x2, int y2);
+extern Bool      RADEONValidPM(uint32_t pm, int bpp);
+extern Bool      RADEONCheckBPP(int bpp);
 extern PixmapPtr RADEONSolidPixmap(ScreenPtr pScreen, uint32_t solid);
 
 #define RADEON_TRACE_FALL 0
 #define RADEON_TRACE_DRAW 0
 
 #ifdef RADEON_TRACE_FALL
-#define RADEON_FALLBACK(x)     		\
-do {					\
-	ErrorF("%s: ", __FUNCTION__);	\
-	ErrorF x;			\
-	return FALSE;			\
-} while (0)
+#  define RADEON_FALLBACK(x)            \
+      do                                \
+      {                                 \
+          ErrorF("%s: ", __FUNCTION__); \
+          ErrorF x;                     \
+          return FALSE;                 \
+      }                                 \
+      while (0)
 #else
-#define RADEON_FALLBACK(x) return FALSE
+#  define RADEON_FALLBACK(x) return FALSE
 #endif
 
 #ifdef RADEON_TRACE_DRAW
-#define TRACE do { ErrorF("TRACE: %s\n", __FUNCTION__); } while(0)
+#  define TRACE                                \
+      do                                       \
+      {                                        \
+          ErrorF("TRACE: %s\n", __FUNCTION__); \
+      }                                        \
+      while (0)
 #else
-#define TRACE
+#  define TRACE
 #endif
 
-static inline void radeon_add_pixmap(struct radeon_cs *cs, PixmapPtr pPix, int read_domains, int write_domain)
+static inline void
+radeon_add_pixmap(struct radeon_cs *cs,
+                  PixmapPtr         pPix,
+                  int               read_domains,
+                  int               write_domain)
 {
-    struct radeon_exa_pixmap_priv *driver_priv = exaGetPixmapDriverPrivate(pPix);
+    struct radeon_exa_pixmap_priv *driver_priv =
+        exaGetPixmapDriverPrivate(pPix);
 
-    radeon_cs_space_add_persistent_bo(cs, driver_priv->bo->bo.radeon,
-				      read_domains, write_domain);
+    radeon_cs_space_add_persistent_bo(cs,
+                                      driver_priv->bo->bo.radeon,
+                                      read_domains,
+                                      write_domain);
 }
 
 extern void radeon_ib_discard(ScrnInfoPtr pScrn);
 
-extern int radeon_cp_start(ScrnInfoPtr pScrn);
-extern void radeon_vb_no_space(ScrnInfoPtr pScrn, struct radeon_vbo_object *vbo, int vert_size);
+extern int  radeon_cp_start(ScrnInfoPtr pScrn);
+extern void radeon_vb_no_space(ScrnInfoPtr               pScrn,
+                               struct radeon_vbo_object *vbo,
+                               int                       vert_size);
 extern void radeon_vbo_done_composite(PixmapPtr pDst);
 
 #endif

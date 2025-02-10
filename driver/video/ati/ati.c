@@ -54,7 +54,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include <pciaccess.h>
@@ -66,10 +66,10 @@
 #include "ativersion.h"
 
 /* names duplicated from version headers */
-#define MACH64_DRIVER_NAME  "mach64"
-#define R128_DRIVER_NAME    "r128"
-#define RADEON_DRIVER_NAME  "radeon"
-#define AMDGPU_DRIVER_NAME  "amdgpu"
+#define MACH64_DRIVER_NAME "mach64"
+#define R128_DRIVER_NAME   "r128"
+#define RADEON_DRIVER_NAME "radeon"
+#define AMDGPU_DRIVER_NAME "amdgpu"
 
 enum
 {
@@ -82,16 +82,16 @@ enum
 static int ATIChipID(const uint16_t);
 
 /* domain defines (stolen from xserver) */
-#if (defined(__alpha__) || defined(__ia64__)) && defined (linux)
-# define PCI_DOM_MASK 0x01fful
+#if (defined(__alpha__) || defined(__ia64__)) && defined(linux)
+#  define PCI_DOM_MASK 0x01fful
 #else
-# define PCI_DOM_MASK 0x0ffu
+#  define PCI_DOM_MASK 0x0ffu
 #endif
 
 #define PCI_DOM_FROM_BUS(bus)  (((bus) >> 8) & (PCI_DOM_MASK))
 #define PCI_BUS_NO_DOMAIN(bus) ((bus) & 0xffu)
 
-static struct pci_device*
+static struct pci_device *
 ati_device_get_from_busid(int bus, int dev, int func)
 {
     return pci_device_find_by_slot(PCI_DOM_FROM_BUS(bus),
@@ -101,17 +101,17 @@ ati_device_get_from_busid(int bus, int dev, int func)
 }
 
 #ifndef XSERVER_PLATFORM_BUS
-static struct pci_device*
+static struct pci_device *
 ati_device_get_primary(void)
 {
-    struct pci_device *device = NULL;
+    struct pci_device          *device = NULL;
     struct pci_device_iterator *device_iter;
 
     device_iter = pci_slot_match_iterator_create(NULL);
 
-    while ((device = pci_device_next(device_iter))) {
-        if (xf86IsPrimaryPci(device))
-            break;
+    while ((device = pci_device_next(device_iter)))
+    {
+        if (xf86IsPrimaryPci(device)) break;
     }
 
     pci_iterator_destroy(device_iter);
@@ -122,16 +122,17 @@ ati_device_get_primary(void)
 static struct pci_device *
 ati_device_get_indexed(int index)
 {
-    struct pci_device *device = NULL;
+    struct pci_device          *device = NULL;
     struct pci_device_iterator *device_iter;
-    int count = 0;
+    int                         count = 0;
 
     device_iter = pci_slot_match_iterator_create(NULL);
 
-    while ((device = pci_device_next(device_iter))) {
-        if (device->vendor_id == PCI_VENDOR_ATI) {
-            if (count == index)
-                return device;
+    while ((device = pci_device_next(device_iter)))
+    {
+        if (device->vendor_id == PCI_VENDOR_ATI)
+        {
+            if (count == index) return device;
             count++;
         }
     }
@@ -144,27 +145,29 @@ ati_gdev_subdriver(pointer options)
 {
     int      nATIGDev, nMach64GDev, nR128GDev, nRadeonGDev, nAmdgpuGDev;
     GDevPtr *ATIGDevs;
-    Bool     load_mach64 = FALSE, load_r128 = FALSE, load_radeon = FALSE, load_amdgpu = FALSE;
-    int      i;
+    Bool     load_mach64 = FALSE, load_r128 = FALSE, load_radeon = FALSE,
+         load_amdgpu = FALSE;
+    int i;
 
     /* let the subdrivers configure for themselves */
-    if (xf86ServerIsOnlyDetecting())
-        return;
+    if (xf86ServerIsOnlyDetecting()) return;
 
     /* get Device sections with Driver "ati" */
-    nATIGDev = xf86MatchDevice(ATI_DRIVER_NAME, &ATIGDevs);
+    nATIGDev    = xf86MatchDevice(ATI_DRIVER_NAME, &ATIGDevs);
     nMach64GDev = xf86MatchDevice(MACH64_DRIVER_NAME, NULL);
-    nR128GDev = xf86MatchDevice(R128_DRIVER_NAME, NULL);
+    nR128GDev   = xf86MatchDevice(R128_DRIVER_NAME, NULL);
     nRadeonGDev = xf86MatchDevice(RADEON_DRIVER_NAME, NULL);
     nAmdgpuGDev = xf86MatchDevice(AMDGPU_DRIVER_NAME, NULL);
 
-    for (i = 0; i < nATIGDev; i++) {
+    for (i = 0; i < nATIGDev; i++)
+    {
         GDevPtr     ati_gdev = ATIGDevs[i];
-        pciVideoPtr device = NULL;
+        pciVideoPtr device   = NULL;
         int         chip_family;
 
         /* get pci device for the Device section */
-        if (ati_gdev->busID) {
+        if (ati_gdev->busID)
+        {
             int bus, dev, func;
 
             if (!xf86ParsePciBusString(ati_gdev->busID, &bus, &dev, &func))
@@ -173,16 +176,15 @@ ati_gdev_subdriver(pointer options)
             device = ati_device_get_from_busid(bus, dev, func);
         }
 #ifdef XSERVER_PLATFORM_BUS
-        else
-            device = ati_device_get_indexed(i);
+        else device = ati_device_get_indexed(i);
 #else
-        else {
+        else
+        {
             device = ati_device_get_primary();
         }
 #endif
 
-        if (!device)
-            continue;
+        if (!device) continue;
 
         /* check for non-ati devices and prehistoric mach32 */
         if ((PCI_DEV_VENDOR_ID(device) != PCI_VENDOR_ATI) ||
@@ -192,32 +194,41 @@ ati_gdev_subdriver(pointer options)
         /* replace Driver line in the Device section */
         chip_family = ATIChipID(PCI_DEV_DEVICE_ID(device));
 
-        if (chip_family == ATI_CHIP_FAMILY_Mach64) {
+        if (chip_family == ATI_CHIP_FAMILY_Mach64)
+        {
             ati_gdev->driver = MACH64_DRIVER_NAME;
-            load_mach64 = TRUE;
+            load_mach64      = TRUE;
         }
 
-        if (chip_family == ATI_CHIP_FAMILY_Rage128) {
+        if (chip_family == ATI_CHIP_FAMILY_Rage128)
+        {
             ati_gdev->driver = R128_DRIVER_NAME;
-            load_r128 = TRUE;
+            load_r128        = TRUE;
         }
 
-        if (chip_family == ATI_CHIP_FAMILY_Radeon) {
+        if (chip_family == ATI_CHIP_FAMILY_Radeon)
+        {
             char *busid;
 
-            XNFasprintf(&busid, "pci:%04x:%02x:%02x.%d",
-                        device->domain, device->bus, device->dev,
+            XNFasprintf(&busid,
+                        "pci:%04x:%02x:%02x.%d",
+                        device->domain,
+                        device->bus,
+                        device->dev,
                         device->func);
 
-            if (busid) {
+            if (busid)
+            {
                 int fd = drmOpen(NULL, busid);
 
-                if (fd >= 0) {
+                if (fd >= 0)
+                {
                     drmVersionPtr version = drmGetVersion(fd);
 
-                    if (version->version_major == 3) {
+                    if (version->version_major == 3)
+                    {
                         ati_gdev->driver = AMDGPU_DRIVER_NAME;
-                        load_amdgpu = TRUE;
+                        load_amdgpu      = TRUE;
                     }
 
                     free(version);
@@ -227,9 +238,10 @@ ati_gdev_subdriver(pointer options)
                 free(busid);
             }
 
-            if (strcmp(ati_gdev->driver, AMDGPU_DRIVER_NAME) != 0) {
+            if (strcmp(ati_gdev->driver, AMDGPU_DRIVER_NAME) != 0)
+            {
                 ati_gdev->driver = RADEON_DRIVER_NAME;
-                load_radeon = TRUE;
+                load_radeon      = TRUE;
             }
         }
     }
@@ -241,16 +253,16 @@ ati_gdev_subdriver(pointer options)
      */
 
     if (load_mach64 && (nMach64GDev == 0))
-         xf86LoadOneModule(MACH64_DRIVER_NAME, options);
+        xf86LoadOneModule(MACH64_DRIVER_NAME, options);
 
     if (load_r128 && (nR128GDev == 0))
-         xf86LoadOneModule(R128_DRIVER_NAME, options);
+        xf86LoadOneModule(R128_DRIVER_NAME, options);
 
     if (load_radeon && (nRadeonGDev == 0))
-         xf86LoadOneModule(RADEON_DRIVER_NAME, options);
+        xf86LoadOneModule(RADEON_DRIVER_NAME, options);
 
     if (load_amdgpu && (nAmdgpuGDev == 0))
-         xf86LoadOneModule(AMDGPU_DRIVER_NAME, options);
+        xf86LoadOneModule(AMDGPU_DRIVER_NAME, options);
 }
 
 /*

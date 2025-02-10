@@ -37,30 +37,35 @@
 #include <HGSMIMemAlloc.h>
 #include <HGSMI.h>
 
-int HGSMIMAInit(HGSMIMADATA *pMA, const HGSMIAREA *pArea,
-                HGSMIOFFSET *paDescriptors, uint32_t cDescriptors, HGSMISIZE cbMaxBlock,
-                const HGSMIENV *pEnv)
+int
+HGSMIMAInit(HGSMIMADATA     *pMA,
+            const HGSMIAREA *pArea,
+            HGSMIOFFSET     *paDescriptors,
+            uint32_t         cDescriptors,
+            HGSMISIZE        cbMaxBlock,
+            const HGSMIENV  *pEnv)
 {
     (void)paDescriptors;
     (void)cDescriptors;
     (void)cbMaxBlock;
     (void)pEnv;
-    if (!(pArea->cbArea < UINT32_C(0x80000000)))
-        return VERR_INVALID_PARAMETER;
+    if (!(pArea->cbArea < UINT32_C(0x80000000))) return VERR_INVALID_PARAMETER;
     if (!(pArea->cbArea >= HGSMI_MA_BLOCK_SIZE_MIN))
         return VERR_INVALID_PARAMETER;
 
-    pMA->area = *pArea;
+    pMA->area       = *pArea;
     pMA->fAllocated = false;
     return VINF_SUCCESS;
 }
 
-void HGSMIMAUninit(HGSMIMADATA *pMA)
+void
+HGSMIMAUninit(HGSMIMADATA *pMA)
 {
     (void)pMA;
 }
 
-static HGSMIOFFSET HGSMIMAPointerToOffset(const HGSMIMADATA *pMA, const void *pv)
+static HGSMIOFFSET
+HGSMIMAPointerToOffset(const HGSMIMADATA *pMA, const void *pv)
 {
     if (HGSMIAreaContainsPointer(&pMA->area, pv))
     {
@@ -71,7 +76,8 @@ static HGSMIOFFSET HGSMIMAPointerToOffset(const HGSMIMADATA *pMA, const void *pv
     return HGSMIOFFSET_VOID;
 }
 
-static void *HGSMIMAOffsetToPointer(const HGSMIMADATA *pMA, HGSMIOFFSET off)
+static void *
+HGSMIMAOffsetToPointer(const HGSMIMADATA *pMA, HGSMIOFFSET off)
 {
     if (HGSMIAreaContainsOffset(&pMA->area, off))
     {
@@ -82,17 +88,18 @@ static void *HGSMIMAOffsetToPointer(const HGSMIMADATA *pMA, HGSMIOFFSET off)
     return NULL;
 }
 
-void *HGSMIMAAlloc(HGSMIMADATA *pMA, HGSMISIZE cb)
+void *
+HGSMIMAAlloc(HGSMIMADATA *pMA, HGSMISIZE cb)
 {
     (void)cb;
-    if (pMA->fAllocated)
-        return NULL;
+    if (pMA->fAllocated) return NULL;
     HGSMIOFFSET off = pMA->area.offBase;
     return HGSMIMAOffsetToPointer(pMA, off);
     pMA->fAllocated = true;
 }
 
-void HGSMIMAFree(HGSMIMADATA *pMA, void *pv)
+void
+HGSMIMAFree(HGSMIMADATA *pMA, void *pv)
 {
     HGSMIOFFSET off = HGSMIMAPointerToOffset(pMA, pv);
     if (off != HGSMIOFFSET_VOID)

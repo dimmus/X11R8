@@ -1,5 +1,5 @@
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 /* All drivers should typically include these */
@@ -17,7 +17,7 @@ dummyShowCursor(ScrnInfoPtr pScrn)
     DUMMYPtr dPtr = DUMMYPTR(pScrn);
 
     /* turn cursor on */
-    dPtr->DummyHWCursorShown = TRUE;    
+    dPtr->DummyHWCursorShown = TRUE;
 }
 
 static void
@@ -47,21 +47,20 @@ static void
 dummySetCursorColors(ScrnInfoPtr pScrn, int bg, int fg)
 {
     DUMMYPtr dPtr = DUMMYPTR(pScrn);
-    
+
     dPtr->cursorFG = fg;
     dPtr->cursorBG = bg;
 }
 
 static void
 dummyLoadCursorImage(ScrnInfoPtr pScrn, unsigned char *src)
-{
-}
+{}
 
 static Bool
 dummyUseHWCursor(ScreenPtr pScr, CursorPtr pCurs)
 {
     DUMMYPtr dPtr = DUMMYPTR(xf86ScreenToScrn(pScr));
-    return(!dPtr->swCursor);
+    return (!dPtr->swCursor);
 }
 
 #if 0
@@ -79,24 +78,21 @@ DUMMYCursorInit(ScreenPtr pScreen)
 
     xf86CursorInfoPtr infoPtr;
     infoPtr = xf86CreateCursorInfoRec();
-    if(!infoPtr) return FALSE;
+    if (!infoPtr) return FALSE;
 
     dPtr->CursorInfo = infoPtr;
 
     infoPtr->MaxHeight = 64;
-    infoPtr->MaxWidth = 64;
-    infoPtr->Flags = HARDWARE_CURSOR_TRUECOLOR_AT_8BPP;
+    infoPtr->MaxWidth  = 64;
+    infoPtr->Flags     = HARDWARE_CURSOR_TRUECOLOR_AT_8BPP;
 
-    infoPtr->SetCursorColors = dummySetCursorColors;
+    infoPtr->SetCursorColors   = dummySetCursorColors;
     infoPtr->SetCursorPosition = dummySetCursorPosition;
-    infoPtr->LoadCursorImage = dummyLoadCursorImage;
-    infoPtr->HideCursor = dummyHideCursor;
-    infoPtr->ShowCursor = dummyShowCursor;
-    infoPtr->UseHWCursor = dummyUseHWCursor;
+    infoPtr->LoadCursorImage   = dummyLoadCursorImage;
+    infoPtr->HideCursor        = dummyHideCursor;
+    infoPtr->ShowCursor        = dummyShowCursor;
+    infoPtr->UseHWCursor       = dummyUseHWCursor;
 /*     infoPtr->RealizeCursor = dummyRealizeCursor; */
-    
-    return(xf86InitCursor(pScreen, infoPtr));
+
+    return (xf86InitCursor(pScreen, infoPtr));
 }
-
-
-

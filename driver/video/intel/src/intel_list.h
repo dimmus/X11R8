@@ -28,9 +28,10 @@
 
 #include <xorgVersion.h>
 
-#if XORG_VERSION_CURRENT < XORG_VERSION_NUMERIC(1,9,0,0,0) || XORG_VERSION_CURRENT >= XORG_VERSION_NUMERIC(1,11,99,903,0)
+#if XORG_VERSION_CURRENT < XORG_VERSION_NUMERIC(1, 9, 0, 0, 0) || \
+    XORG_VERSION_CURRENT >= XORG_VERSION_NUMERIC(1, 11, 99, 903, 0)
 
-#include <stdbool.h>
+#  include <stdbool.h>
 
 /**
  * @file Classic doubly-link circular list implementation.
@@ -111,7 +112,8 @@
  * There are no requirements for a list head, any struct list can be a list
  * head.
  */
-struct list {
+struct list
+{
     struct list *next, *prev;
 };
 
@@ -130,14 +132,12 @@ list_init(struct list *list)
 }
 
 static inline void
-__list_add(struct list *entry,
-	    struct list *prev,
-	    struct list *next)
+__list_add(struct list *entry, struct list *prev, struct list *next)
 {
-    next->prev = entry;
+    next->prev  = entry;
     entry->next = next;
     entry->prev = prev;
-    prev->next = entry;
+    prev->next  = entry;
 }
 
 /**
@@ -167,20 +167,20 @@ list_add_tail(struct list *entry, struct list *head)
     __list_add(entry, head->prev, head);
 }
 
-static inline void list_replace(struct list *old,
-				struct list *new)
+static inline void
+list_replace(struct list *old, struct list *new)
 {
-	new->next = old->next;
-	new->next->prev = new;
-	new->prev = old->prev;
-	new->prev->next = new;
+    new->next       = old->next;
+    new->next->prev = new;
+    new->prev       = old->prev;
+    new->prev->next = new;
 }
 
-#define list_last_entry(ptr, type, member) \
-    list_entry((ptr)->prev, type, member)
+#  define list_last_entry(ptr, type, member) \
+      list_entry((ptr)->prev, type, member)
 
-#define list_for_each(pos, head)				\
-    for (pos = (head)->next; pos != (head); pos = pos->next)
+#  define list_for_each(pos, head) \
+      for (pos = (head)->next; pos != (head); pos = pos->next)
 
 /**
  * Append a new element to the end of the list given with this list head.
@@ -203,13 +203,12 @@ list_append(struct list *entry, struct list *head)
     __list_add(entry, head->prev, head);
 }
 
-
 static inline void
 __list_del(struct list *prev, struct list *next)
 {
-	assert(next->prev == prev->next);
-	next->prev = prev;
-	prev->next = next;
+    assert(next->prev == prev->next);
+    next->prev = prev;
+    prev->next = next;
 }
 
 static inline void
@@ -241,18 +240,21 @@ list_del(struct list *entry)
     list_init(entry);
 }
 
-static inline void list_move(struct list *list, struct list *head)
+static inline void
+list_move(struct list *list, struct list *head)
 {
-	if (list->prev != head) {
-		_list_del(list);
-		list_add(list, head);
-	}
+    if (list->prev != head)
+    {
+        _list_del(list);
+        list_add(list, head);
+    }
 }
 
-static inline void list_move_tail(struct list *list, struct list *head)
+static inline void
+list_move_tail(struct list *list, struct list *head)
 {
-	_list_del(list);
-	list_add_tail(list, head);
+    _list_del(list);
+    list_add_tail(list, head);
 }
 
 /**
@@ -272,8 +274,7 @@ list_is_empty(const struct list *head)
 /**
  * Alias of container_of
  */
-#define list_entry(ptr, type, member) \
-    container_of(ptr, type, member)
+#  define list_entry(ptr, type, member) container_of(ptr, type, member)
 
 /**
  * Retrieve the first list entry for the given list pointer.
@@ -287,8 +288,8 @@ list_is_empty(const struct list *head)
  * @param member Member name of the struct list field in the list element.
  * @return A pointer to the first list element.
  */
-#define list_first_entry(ptr, type, member) \
-    list_entry((ptr)->next, type, member)
+#  define list_first_entry(ptr, type, member) \
+      list_entry((ptr)->next, type, member)
 
 /**
  * Retrieve the last list entry for the given listpointer.
@@ -302,11 +303,11 @@ list_is_empty(const struct list *head)
  * @param member Member name of the struct list field in the list element.
  * @return A pointer to the last list element.
  */
-#define list_last_entry(ptr, type, member) \
-    list_entry((ptr)->prev, type, member)
+#  define list_last_entry(ptr, type, member) \
+      list_entry((ptr)->prev, type, member)
 
-#define __container_of(ptr, sample, member)				\
-    (void *)((char *)(ptr) - ((char *)&(sample)->member - (char *)(sample)))
+#  define __container_of(ptr, sample, member) \
+      (void *)((char *)(ptr) - ((char *)&(sample)->member - (char *)(sample)))
 /**
  * Loop through the list given by head and set pos to struct in the list.
  *
@@ -324,15 +325,15 @@ list_is_empty(const struct list *head)
  * @param member Member name of the struct list in the list elements.
  *
  */
-#define list_for_each_entry(pos, head, member)				\
-    for (pos = __container_of((head)->next, pos, member);		\
-	 &pos->member != (head);					\
-	 pos = __container_of(pos->member.next, pos, member))
+#  define list_for_each_entry(pos, head, member)            \
+      for (pos = __container_of((head)->next, pos, member); \
+           &pos->member != (head);                          \
+           pos = __container_of(pos->member.next, pos, member))
 
-#define list_for_each_entry_reverse(pos, head, member)				\
-    for (pos = __container_of((head)->prev, pos, member);		\
-	 &pos->member != (head);					\
-	 pos = __container_of(pos->member.prev, pos, member))
+#  define list_for_each_entry_reverse(pos, head, member)    \
+      for (pos = __container_of((head)->prev, pos, member); \
+           &pos->member != (head);                          \
+           pos = __container_of(pos->member.prev, pos, member))
 
 /**
  * Loop through the list, keeping a backup pointer to the element. This
@@ -341,15 +342,15 @@ list_is_empty(const struct list *head)
  *
  * See list_for_each_entry for more details.
  */
-#define list_for_each_entry_safe(pos, tmp, head, member)		\
-    for (pos = __container_of((head)->next, pos, member),		\
-	 tmp = __container_of(pos->member.next, pos, member);		\
-	 &pos->member != (head);					\
-	 pos = tmp, tmp = __container_of(pos->member.next, tmp, member))
+#  define list_for_each_entry_safe(pos, tmp, head, member)      \
+      for (pos = __container_of((head)->next, pos, member),     \
+          tmp  = __container_of(pos->member.next, pos, member); \
+           &pos->member != (head);                              \
+           pos = tmp, tmp = __container_of(pos->member.next, tmp, member))
 
 #else
 
-#include <list.h>
+#  include <list.h>
 
 static inline void
 list_add_tail(struct list *entry, struct list *head)
@@ -365,80 +366,80 @@ _list_del(struct list *entry)
     __list_del(entry->prev, entry->next);
 }
 
-static inline void list_replace(struct list *old,
-				struct list *new)
+static inline void
+list_replace(struct list *old, struct list *new)
 {
-	new->next = old->next;
-	new->next->prev = new;
-	new->prev = old->prev;
-	new->prev->next = new;
+    new->next       = old->next;
+    new->next->prev = new;
+    new->prev       = old->prev;
+    new->prev->next = new;
 }
 
-static inline void list_move(struct list *list, struct list *head)
+static inline void
+list_move(struct list *list, struct list *head)
 {
-	if (list->prev != head) {
-		_list_del(list);
-		list_add(list, head);
-	}
+    if (list->prev != head)
+    {
+        _list_del(list);
+        list_add(list, head);
+    }
 }
 
-static inline void list_move_tail(struct list *list, struct list *head)
+static inline void
+list_move_tail(struct list *list, struct list *head)
 {
-	_list_del(list);
-	list_add_tail(list, head);
+    _list_del(list);
+    list_add_tail(list, head);
 }
 
-#define list_last_entry(ptr, type, member) \
-    list_entry((ptr)->prev, type, member)
+#  define list_last_entry(ptr, type, member) \
+      list_entry((ptr)->prev, type, member)
 
-#define list_for_each_entry_reverse(pos, head, member)			\
-    for (pos = __container_of((head)->prev, pos, member);		\
-	 &pos->member != (head);					\
-	 pos = __container_of(pos->member.prev, pos, member))
+#  define list_for_each_entry_reverse(pos, head, member)    \
+      for (pos = __container_of((head)->prev, pos, member); \
+           &pos->member != (head);                          \
+           pos = __container_of(pos->member.prev, pos, member))
 
 #endif
 
-#define list_for_each_entry_safe_from(pos, tmp, head, member)		\
-    for (tmp = __container_of(pos->member.next, pos, member);		\
-	 &pos->member != (head);					\
-	 pos = tmp, tmp = __container_of(tmp->member.next, tmp, member))
+#define list_for_each_entry_safe_from(pos, tmp, head, member) \
+    for (tmp = __container_of(pos->member.next, pos, member); \
+         &pos->member != (head);                              \
+         pos = tmp, tmp = __container_of(tmp->member.next, tmp, member))
 
 #undef container_of
 #define container_of(ptr, type, member) \
-	((type *)((char *)(ptr) - (char *) &((type *)0)->member))
+    ((type *)((char *)(ptr) - (char *)&((type *)0)->member))
 
-static inline void __list_splice(const struct list *list,
-				 struct list *prev,
-				 struct list *next)
+static inline void
+__list_splice(const struct list *list, struct list *prev, struct list *next)
 {
-	struct list *first = list->next;
-	struct list *last = list->prev;
+    struct list *first = list->next;
+    struct list *last  = list->prev;
 
-	first->prev = prev;
-	prev->next = first;
+    first->prev = prev;
+    prev->next  = first;
 
-	last->next = next;
-	next->prev = last;
+    last->next = next;
+    next->prev = last;
 }
 
-static inline void list_splice(const struct list *list,
-			       struct list *head)
+static inline void
+list_splice(const struct list *list, struct list *head)
 {
-	if (!list_is_empty(list))
-		__list_splice(list, head, head->next);
+    if (!list_is_empty(list)) __list_splice(list, head, head->next);
 }
 
-static inline void list_splice_tail(const struct list *list,
-				    struct list *head)
+static inline void
+list_splice_tail(const struct list *list, struct list *head)
 {
-	if (!list_is_empty(list))
-		__list_splice(list, head->prev, head);
+    if (!list_is_empty(list)) __list_splice(list, head->prev, head);
 }
 
-static inline int list_is_singular(const struct list *list)
+static inline int
+list_is_singular(const struct list *list)
 {
-	return list->next == list->prev;
+    return list->next == list->prev;
 }
 
 #endif /* _INTEL_LIST_H_ */
-

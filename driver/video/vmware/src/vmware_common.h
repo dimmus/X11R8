@@ -34,10 +34,9 @@
 
 #include "compat-api.h"
 
-xXineramaScreenInfo *
-VMWAREParseTopologyString(ScrnInfoPtr pScrn,
-                          const char *topology,
-                          unsigned int *retNumOutputs,
-			  const char info[]);
+xXineramaScreenInfo *VMWAREParseTopologyString(ScrnInfoPtr   pScrn,
+                                               const char   *topology,
+                                               unsigned int *retNumOutputs,
+                                               const char    info[]);
 
 #endif

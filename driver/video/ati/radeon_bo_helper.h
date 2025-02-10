@@ -24,42 +24,46 @@
 #define RADEON_BO_HELPER_H 1
 
 #ifdef USE_GLAMOR
-#include <gbm.h>
+#  include <gbm.h>
 #endif
 
-#define RADEON_BO_FLAGS_GBM	0x1
+#define RADEON_BO_FLAGS_GBM 0x1
 
-struct radeon_buffer {
-	union {
+struct radeon_buffer
+{
+    union {
 #ifdef USE_GLAMOR
-		struct gbm_bo *gbm;
+        struct gbm_bo *gbm;
 #endif
-		struct radeon_bo *radeon;
-	} bo;
-	uint32_t ref_count;
+        struct radeon_bo *radeon;
+    } bo;
+
+    uint32_t ref_count;
     uint32_t flags;
 };
 
 extern struct radeon_buffer *
-radeon_alloc_pixmap_bo(ScrnInfoPtr pScrn, int width, int height, int depth,
-		       int usage_hint, int bitsPerPixel, int *new_pitch,
-		       struct radeon_surface *new_surface, uint32_t *new_tiling);
+radeon_alloc_pixmap_bo(ScrnInfoPtr            pScrn,
+                       int                    width,
+                       int                    height,
+                       int                    depth,
+                       int                    usage_hint,
+                       int                    bitsPerPixel,
+                       int                   *new_pitch,
+                       struct radeon_surface *new_surface,
+                       uint32_t              *new_tiling);
 
-extern void
-radeon_finish(ScrnInfoPtr scrn, struct radeon_buffer *bo);
+extern void radeon_finish(ScrnInfoPtr scrn, struct radeon_buffer *bo);
 
-extern void
-radeon_pixmap_clear(PixmapPtr pixmap);
+extern void radeon_pixmap_clear(PixmapPtr pixmap);
 
-extern uint32_t
-radeon_get_pixmap_tiling_flags(PixmapPtr pPix);
+extern uint32_t radeon_get_pixmap_tiling_flags(PixmapPtr pPix);
 
-extern Bool
-radeon_share_pixmap_backing(struct radeon_bo *bo, void **handle_p);
+extern Bool radeon_share_pixmap_backing(struct radeon_bo *bo, void **handle_p);
 
-extern Bool
-radeon_set_shared_pixmap_backing(PixmapPtr ppix, void *fd_handle,
-				 struct radeon_surface *surface);
+extern Bool radeon_set_shared_pixmap_backing(PixmapPtr              ppix,
+                                             void                  *fd_handle,
+                                             struct radeon_surface *surface);
 
 /**
  * get_drawable_pixmap() returns the backing pixmap for a given drawable.
@@ -69,12 +73,11 @@ radeon_set_shared_pixmap_backing(PixmapPtr ppix, void *fd_handle,
  * This function returns the backing pixmap for a drawable, whether it is a
  * redirected window, unredirected window, or already a pixmap.
  */
-static inline PixmapPtr get_drawable_pixmap(DrawablePtr drawable)
+static inline PixmapPtr
+get_drawable_pixmap(DrawablePtr drawable)
 {
-    if (drawable->type == DRAWABLE_PIXMAP)
-	return (PixmapPtr)drawable;
-    else
-	return drawable->pScreen->GetWindowPixmap((WindowPtr)drawable);
+    if (drawable->type == DRAWABLE_PIXMAP) return (PixmapPtr)drawable;
+    else return drawable->pScreen->GetWindowPixmap((WindowPtr)drawable);
 }
 
 static inline void
@@ -88,22 +91,24 @@ radeon_buffer_unref(struct radeon_buffer **buffer)
 {
     struct radeon_buffer *buf = *buffer;
 
-    if (!buf)
-	return;
+    if (!buf) return;
 
-    if (buf->ref_count > 1) {
-	buf->ref_count--;
-	return;
+    if (buf->ref_count > 1)
+    {
+        buf->ref_count--;
+        return;
     }
 
 #ifdef USE_GLAMOR
-    if (buf->flags & RADEON_BO_FLAGS_GBM) {
-	gbm_bo_destroy(buf->bo.gbm);
-    } else
+    if (buf->flags & RADEON_BO_FLAGS_GBM)
+    {
+        gbm_bo_destroy(buf->bo.gbm);
+    }
+    else
 #endif
     {
-	radeon_bo_unmap(buf->bo.radeon);
-	radeon_bo_unref(buf->bo.radeon);
+        radeon_bo_unmap(buf->bo.radeon);
+        radeon_bo_unref(buf->bo.radeon);
     }
 
     free(buf);

@@ -21,39 +21,38 @@
  * OF THIS SOFTWARE.
  */
 
-
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include "amdgpu_drv.h"
 
 #ifdef HAVE_DRI3_H
 
-#include "amdgpu_glamor.h"
-#include "amdgpu_pixmap.h"
-#include "dri3.h"
+#  include "amdgpu_glamor.h"
+#  include "amdgpu_pixmap.h"
+#  include "dri3.h"
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <gbm.h>
-#include <errno.h>
-#include <libgen.h>
+#  include <sys/types.h>
+#  include <sys/stat.h>
+#  include <fcntl.h>
+#  include <gbm.h>
+#  include <errno.h>
+#  include <libgen.h>
 
-static int open_card_node(ScreenPtr screen, int *out)
+static int
+open_card_node(ScreenPtr screen, int *out)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(screen);
-	AMDGPUEntPtr pAMDGPUEnt = AMDGPUEntPriv(scrn);
-	AMDGPUInfoPtr info = AMDGPUPTR(scrn);
-	drm_magic_t magic;
-	int fd;
+    ScrnInfoPtr   scrn       = xf86ScreenToScrn(screen);
+    AMDGPUEntPtr  pAMDGPUEnt = AMDGPUEntPriv(scrn);
+    AMDGPUInfoPtr info       = AMDGPUPTR(scrn);
+    drm_magic_t   magic;
+    int           fd;
 
-	fd = open(info->dri2.device_name, O_RDWR | O_CLOEXEC);
-	if (fd < 0)
-		return BadAlloc;
+    fd = open(info->dri2.device_name, O_RDWR | O_CLOEXEC);
+    if (fd < 0) return BadAlloc;
 
-	/* Before FD passing in the X protocol with DRI3 (and increased
+    /* Before FD passing in the X protocol with DRI3 (and increased
 	 * security of rendering with per-process address spaces on the
 	 * GPU), the kernel had to come up with a way to have the server
 	 * decide which clients got to access the GPU, which was done by
@@ -65,221 +64,235 @@ static int open_card_node(ScreenPtr screen, int *out)
 	 * authentication on its own and hand the prepared FD off to the
 	 * client.
 	 */
-	if (drmGetMagic(fd, &magic) < 0) {
-		if (errno == EACCES) {
-			/* Assume that we're on a render node, and the fd is
+    if (drmGetMagic(fd, &magic) < 0)
+    {
+        if (errno == EACCES)
+        {
+            /* Assume that we're on a render node, and the fd is
 			 * already as authenticated as it should be.
 			 */
-			*out = fd;
-			return Success;
-		} else {
-			close(fd);
-			return BadMatch;
-		}
-	}
+            *out = fd;
+            return Success;
+        }
+        else
+        {
+            close(fd);
+            return BadMatch;
+        }
+    }
 
-	if (drmAuthMagic(pAMDGPUEnt->fd, magic) < 0) {
-		close(fd);
-		return BadMatch;
-	}
+    if (drmAuthMagic(pAMDGPUEnt->fd, magic) < 0)
+    {
+        close(fd);
+        return BadMatch;
+    }
 
-	*out = fd;
-	return Success;
+    *out = fd;
+    return Success;
 }
 
-static int open_render_node(ScreenPtr screen, int *out)
+static int
+open_render_node(ScreenPtr screen, int *out)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(screen);
-	AMDGPUEntPtr pAMDGPUEnt = AMDGPUEntPriv(scrn);
-	int fd;
+    ScrnInfoPtr  scrn       = xf86ScreenToScrn(screen);
+    AMDGPUEntPtr pAMDGPUEnt = AMDGPUEntPriv(scrn);
+    int          fd;
 
-	fd = open(pAMDGPUEnt->render_node, O_RDWR | O_CLOEXEC);
-	if (fd < 0)
-		return BadAlloc;
+    fd = open(pAMDGPUEnt->render_node, O_RDWR | O_CLOEXEC);
+    if (fd < 0) return BadAlloc;
 
-	*out = fd;
-	return Success;
+    *out = fd;
+    return Success;
 }
 
 static int
 amdgpu_dri3_open(ScreenPtr screen, RRProviderPtr provider, int *out)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(screen);
-	AMDGPUEntPtr pAMDGPUEnt = AMDGPUEntPriv(scrn);
-	int ret = BadAlloc;
+    ScrnInfoPtr  scrn       = xf86ScreenToScrn(screen);
+    AMDGPUEntPtr pAMDGPUEnt = AMDGPUEntPriv(scrn);
+    int          ret        = BadAlloc;
 
-	if (pAMDGPUEnt->render_node)
-		ret = open_render_node(screen, out);
+    if (pAMDGPUEnt->render_node) ret = open_render_node(screen, out);
 
-	if (ret != Success)
-		ret = open_card_node(screen, out);
+    if (ret != Success) ret = open_card_node(screen, out);
 
-	return ret;
+    return ret;
 }
 
-#if DRI3_SCREEN_INFO_VERSION >= 1 && XORG_VERSION_CURRENT <= XORG_VERSION_NUMERIC(1,18,99,1,0)
+#  if DRI3_SCREEN_INFO_VERSION >= 1 && \
+      XORG_VERSION_CURRENT <= XORG_VERSION_NUMERIC(1, 18, 99, 1, 0)
 
 static int
-amdgpu_dri3_open_client(ClientPtr client, ScreenPtr screen,
-			RRProviderPtr provider, int *out)
+amdgpu_dri3_open_client(ClientPtr     client,
+                        ScreenPtr     screen,
+                        RRProviderPtr provider,
+                        int          *out)
 {
-	const char *cmdname = GetClientCmdName(client);
-	Bool is_ssh = FALSE;
+    const char *cmdname = GetClientCmdName(client);
+    Bool        is_ssh  = FALSE;
 
-	/* If the executable name is "ssh", assume that this client connection
+    /* If the executable name is "ssh", assume that this client connection
 	 * is forwarded from another host via SSH
 	 */
-	if (cmdname) {
-		char *cmd = strdup(cmdname);
+    if (cmdname)
+    {
+        char *cmd = strdup(cmdname);
 
-		/* Cut off any colon and whatever comes after it, see
+        /* Cut off any colon and whatever comes after it, see
 		 * https://lists.freedesktop.org/archives/xorg-devel/2015-December/048164.html
 		 */
-		cmd = strtok(cmd, ":");
+        cmd = strtok(cmd, ":");
 
-		is_ssh = strcmp(basename(cmd), "ssh") == 0;
-		free(cmd);
-	}
+        is_ssh = strcmp(basename(cmd), "ssh") == 0;
+        free(cmd);
+    }
 
-	if (!is_ssh)
-		return amdgpu_dri3_open(screen, provider, out);
+    if (!is_ssh) return amdgpu_dri3_open(screen, provider, out);
 
-	return BadAccess;
+    return BadAccess;
 }
 
-#endif /* DRI3_SCREEN_INFO_VERSION >= 1 && XORG_VERSION_CURRENT <= XORG_VERSION_NUMERIC(1,18,99,1,0) */
+#  endif /* DRI3_SCREEN_INFO_VERSION >= 1 && XORG_VERSION_CURRENT <= XORG_VERSION_NUMERIC(1,18,99,1,0) */
 
-static PixmapPtr amdgpu_dri3_pixmap_from_fd(ScreenPtr screen,
-					    int fd,
-					    CARD16 width,
-					    CARD16 height,
-					    CARD16 stride,
-					    CARD8 depth,
-					    CARD8 bpp)
+static PixmapPtr
+amdgpu_dri3_pixmap_from_fd(ScreenPtr screen,
+                           int       fd,
+                           CARD16    width,
+                           CARD16    height,
+                           CARD16    stride,
+                           CARD8     depth,
+                           CARD8     bpp)
 {
-	PixmapPtr pixmap;
+    PixmapPtr pixmap;
 
-#ifdef USE_GLAMOR
-	/* Avoid generating a GEM flink name if possible */
-	if (AMDGPUPTR(xf86ScreenToScrn(screen))->use_glamor) {
-		pixmap = glamor_pixmap_from_fd(screen, fd, width, height,
-					       stride, depth, bpp);
-		if (pixmap) {
-			struct amdgpu_pixmap *priv = calloc(1, sizeof(*priv));
+#  ifdef USE_GLAMOR
+    /* Avoid generating a GEM flink name if possible */
+    if (AMDGPUPTR(xf86ScreenToScrn(screen))->use_glamor)
+    {
+        pixmap = glamor_pixmap_from_fd(screen,
+                                       fd,
+                                       width,
+                                       height,
+                                       stride,
+                                       depth,
+                                       bpp);
+        if (pixmap)
+        {
+            struct amdgpu_pixmap *priv = calloc(1, sizeof(*priv));
 
-			if (priv) {
-				amdgpu_set_pixmap_private(pixmap, priv);
-				pixmap->usage_hint |= AMDGPU_CREATE_PIXMAP_DRI2;
-				return pixmap;
-			}
+            if (priv)
+            {
+                amdgpu_set_pixmap_private(pixmap, priv);
+                pixmap->usage_hint |= AMDGPU_CREATE_PIXMAP_DRI2;
+                return pixmap;
+            }
 
-			screen->DestroyPixmap(pixmap);
-			return NULL;
-		}
-	}
-#endif
+            screen->DestroyPixmap(pixmap);
+            return NULL;
+        }
+    }
+#  endif
 
-	if (depth < 8)
-		return NULL;
+    if (depth < 8) return NULL;
 
-	switch (bpp) {
-	case 8:
-	case 16:
-	case 32:
-		break;
-	default:
-		return NULL;
-	}
+    switch (bpp)
+    {
+        case 8:
+        case 16:
+        case 32:
+            break;
+        default:
+            return NULL;
+    }
 
-	pixmap = screen->CreatePixmap(screen, 0, 0, depth,
-				      AMDGPU_CREATE_PIXMAP_DRI2);
-	if (!pixmap)
-		return NULL;
+    pixmap =
+        screen->CreatePixmap(screen, 0, 0, depth, AMDGPU_CREATE_PIXMAP_DRI2);
+    if (!pixmap) return NULL;
 
-	if (!screen->ModifyPixmapHeader(pixmap, width, height, 0, bpp, stride,
-					NULL))
-		goto free_pixmap;
+    if (!screen
+             ->ModifyPixmapHeader(pixmap, width, height, 0, bpp, stride, NULL))
+        goto free_pixmap;
 
-	if (screen->SetSharedPixmapBacking(pixmap, (void*)(intptr_t)fd))
-		return pixmap;
+    if (screen->SetSharedPixmapBacking(pixmap, (void *)(intptr_t)fd))
+        return pixmap;
 
 free_pixmap:
-	fbDestroyPixmap(pixmap);
-	return NULL;
+    fbDestroyPixmap(pixmap);
+    return NULL;
 }
 
-static int amdgpu_dri3_fd_from_pixmap(ScreenPtr screen,
-				      PixmapPtr pixmap,
-				      CARD16 *stride,
-				      CARD32 *size)
+static int
+amdgpu_dri3_fd_from_pixmap(ScreenPtr screen,
+                           PixmapPtr pixmap,
+                           CARD16   *stride,
+                           CARD32   *size)
 {
-	struct amdgpu_buffer *bo;
-	struct amdgpu_bo_info bo_info;
-	uint32_t fd;
-#ifdef USE_GLAMOR
-	ScrnInfoPtr scrn = xf86ScreenToScrn(screen);
-	AMDGPUInfoPtr info = AMDGPUPTR(scrn);
+    struct amdgpu_buffer *bo;
+    struct amdgpu_bo_info bo_info;
+    uint32_t              fd;
+#  ifdef USE_GLAMOR
+    ScrnInfoPtr   scrn = xf86ScreenToScrn(screen);
+    AMDGPUInfoPtr info = AMDGPUPTR(scrn);
 
-	if (info->use_glamor) {
-		int ret = glamor_fd_from_pixmap(screen, pixmap, stride, size);
+    if (info->use_glamor)
+    {
+        int ret = glamor_fd_from_pixmap(screen, pixmap, stride, size);
 
-		/* Any pending drawing operations need to be flushed to the
+        /* Any pending drawing operations need to be flushed to the
 		 * kernel driver before the client starts using the pixmap
 		 * storage for direct rendering.
 		 */
-		if (ret >= 0)
-			amdgpu_glamor_flush(scrn);
+        if (ret >= 0) amdgpu_glamor_flush(scrn);
 
-		return ret;
-	}
-#endif
+        return ret;
+    }
+#  endif
 
-	bo = amdgpu_get_pixmap_bo(pixmap);
-	if (!bo)
-		return -1;
+    bo = amdgpu_get_pixmap_bo(pixmap);
+    if (!bo) return -1;
 
-	if (pixmap->devKind > UINT16_MAX)
-		return -1;
+    if (pixmap->devKind > UINT16_MAX) return -1;
 
-	if (amdgpu_bo_query_info(bo->bo.amdgpu, &bo_info) != 0)
-		return -1;
+    if (amdgpu_bo_query_info(bo->bo.amdgpu, &bo_info) != 0) return -1;
 
-	if (amdgpu_bo_export(bo->bo.amdgpu, amdgpu_bo_handle_type_dma_buf_fd,
-			     &fd) != 0)
-		return -1;
+    if (amdgpu_bo_export(bo->bo.amdgpu,
+                         amdgpu_bo_handle_type_dma_buf_fd,
+                         &fd) != 0)
+        return -1;
 
-	*stride = pixmap->devKind;
-	*size = bo_info.alloc_size;
-	return fd;
+    *stride = pixmap->devKind;
+    *size   = bo_info.alloc_size;
+    return fd;
 }
 
 static dri3_screen_info_rec amdgpu_dri3_screen_info = {
-#if DRI3_SCREEN_INFO_VERSION >= 1 && XORG_VERSION_CURRENT <= XORG_VERSION_NUMERIC(1,18,99,1,0)
-	.version = 1,
-	.open_client = amdgpu_dri3_open_client,
-#else
-	.version = 0,
-	.open = amdgpu_dri3_open,
-#endif
-	.pixmap_from_fd = amdgpu_dri3_pixmap_from_fd,
-	.fd_from_pixmap = amdgpu_dri3_fd_from_pixmap
+#  if DRI3_SCREEN_INFO_VERSION >= 1 && \
+      XORG_VERSION_CURRENT <= XORG_VERSION_NUMERIC(1, 18, 99, 1, 0)
+    .version     = 1,
+    .open_client = amdgpu_dri3_open_client,
+#  else
+    .version = 0,
+    .open    = amdgpu_dri3_open,
+#  endif
+    .pixmap_from_fd = amdgpu_dri3_pixmap_from_fd,
+    .fd_from_pixmap = amdgpu_dri3_fd_from_pixmap
 };
 
 Bool
 amdgpu_dri3_screen_init(ScreenPtr screen)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(screen);
-	AMDGPUEntPtr pAMDGPUEnt = AMDGPUEntPriv(scrn);
+    ScrnInfoPtr  scrn       = xf86ScreenToScrn(screen);
+    AMDGPUEntPtr pAMDGPUEnt = AMDGPUEntPriv(scrn);
 
-	pAMDGPUEnt->render_node = drmGetRenderDeviceNameFromFd(pAMDGPUEnt->fd);
+    pAMDGPUEnt->render_node = drmGetRenderDeviceNameFromFd(pAMDGPUEnt->fd);
 
-	if (!dri3_screen_init(screen, &amdgpu_dri3_screen_info)) {
-		xf86DrvMsg(scrn->scrnIndex, X_WARNING,
-			   "dri3_screen_init failed\n");
-		return FALSE;
-	}
+    if (!dri3_screen_init(screen, &amdgpu_dri3_screen_info))
+    {
+        xf86DrvMsg(scrn->scrnIndex, X_WARNING, "dri3_screen_init failed\n");
+        return FALSE;
+    }
 
-	return TRUE;
+    return TRUE;
 }
 
 #else /* !HAVE_DRI3_H */
@@ -287,11 +300,12 @@ amdgpu_dri3_screen_init(ScreenPtr screen)
 Bool
 amdgpu_dri3_screen_init(ScreenPtr screen)
 {
-	xf86DrvMsg(xf86ScreenToScrn(screen)->scrnIndex, X_INFO,
-		   "Can't initialize DRI3 because dri3.h not available at "
-		   "build time\n");
+    xf86DrvMsg(xf86ScreenToScrn(screen)->scrnIndex,
+               X_INFO,
+               "Can't initialize DRI3 because dri3.h not available at "
+               "build time\n");
 
-	return FALSE;
+    return FALSE;
 }
 
 #endif

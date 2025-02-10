@@ -28,36 +28,37 @@
 #ifndef COMPAT_API_H
 #define COMPAT_API_H
 
-#define SCRN_ARG_TYPE ScrnInfoPtr
+#define SCRN_ARG_TYPE       ScrnInfoPtr
 #define SCRN_INFO_PTR(arg1) ScrnInfoPtr pScrn = (arg1)
 
-#define SCREEN_ARG_TYPE ScreenPtr
+#define SCREEN_ARG_TYPE  ScreenPtr
 #define SCREEN_PTR(arg1) ScreenPtr pScreen = (arg1)
 
 #define SCREEN_INIT_ARGS_DECL ScreenPtr pScreen, int argc, char **argv
 
-#if ABI_VIDEODRV_VERSION >= SET_ABI_VERSION(22,0)
-#define HAVE_NOTIFY_FD	1
+#if ABI_VIDEODRV_VERSION >= SET_ABI_VERSION(22, 0)
+#  define HAVE_NOTIFY_FD 1
 #endif
 
 #if ABI_VIDEODRV_VERSION >= SET_ABI_VERSION(23, 0)
-#define BLOCKHANDLER_ARGS_DECL ScreenPtr arg, pointer pTimeout
-#define BLOCKHANDLER_ARGS arg, pTimeout
+#  define BLOCKHANDLER_ARGS_DECL ScreenPtr arg, pointer pTimeout
+#  define BLOCKHANDLER_ARGS      arg, pTimeout
 #else
-#define BLOCKHANDLER_ARGS_DECL ScreenPtr arg, pointer pTimeout, pointer pReadmask
-#define BLOCKHANDLER_ARGS arg, pTimeout, pReadmask
+#  define BLOCKHANDLER_ARGS_DECL \
+      ScreenPtr arg, pointer pTimeout, pointer pReadmask
+#  define BLOCKHANDLER_ARGS arg, pTimeout, pReadmask
 #endif
 
 #define CLOSE_SCREEN_ARGS_DECL ScreenPtr pScreen
-#define CLOSE_SCREEN_ARGS pScreen
+#define CLOSE_SCREEN_ARGS      pScreen
 
 #define ADJUST_FRAME_ARGS_DECL ScrnInfoPtr arg, int x, int y
-#define SWITCH_MODE_ARGS_DECL ScrnInfoPtr arg, DisplayModePtr mode
+#define SWITCH_MODE_ARGS_DECL  ScrnInfoPtr arg, DisplayModePtr mode
 
 #define FREE_SCREEN_ARGS_DECL ScrnInfoPtr arg
-#define FREE_SCREEN_ARGS(x) (x)
+#define FREE_SCREEN_ARGS(x)   (x)
 
-#define VT_FUNC_ARGS_DECL ScrnInfoPtr arg
+#define VT_FUNC_ARGS_DECL   ScrnInfoPtr arg
 #define VT_FUNC_ARGS(flags) pScrn
 
 #define XF86_ENABLEDISABLEFB_ARG(x) (x)
@@ -65,8 +66,8 @@
 #endif
 
 #if ABI_VIDEODRV_VERSION < SET_ABI_VERSION(25, 2)
-#define secondary_dst slave_dst
-#define secondary_list slave_list
-#define secondary_head slave_head
+#define secondary_dst       slave_dst
+#define secondary_list      slave_list
+#define secondary_head      slave_head
 #define is_output_secondary is_output_slave
 #endif

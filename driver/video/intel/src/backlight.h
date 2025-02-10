@@ -27,30 +27,32 @@
 #ifndef BACKLIGHT_H
 #define BACKLIGHT_H
 
-enum backlight_type {
-	BL_NONE = -1,
-	BL_PLATFORM,
-	BL_FIRMWARE,
-	BL_RAW,
-	BL_NAMED,
+enum backlight_type
+{
+    BL_NONE = -1,
+    BL_PLATFORM,
+    BL_FIRMWARE,
+    BL_RAW,
+    BL_NAMED,
 };
 
-struct backlight {
-	char *iface;
-	enum backlight_type type;
-	int max;
-	int has_power;
-	int pid, fd;
+struct backlight
+{
+    char               *iface;
+    enum backlight_type type;
+    int                 max;
+    int                 has_power;
+    int                 pid, fd;
 };
 
 int backlight_exists(const char *iface);
 
 void backlight_init(struct backlight *backlight);
-int backlight_open(struct backlight *backlight, char *iface);
-int backlight_set(struct backlight *backlight, int level);
-int backlight_get(struct backlight *backlight);
-int backlight_on(struct backlight *b);
-int backlight_off(struct backlight *b);
+int  backlight_open(struct backlight *backlight, char *iface);
+int  backlight_set(struct backlight *backlight, int level);
+int  backlight_get(struct backlight *backlight);
+int  backlight_on(struct backlight *b);
+int  backlight_off(struct backlight *b);
 void backlight_disable(struct backlight *backlight);
 void backlight_close(struct backlight *backlight);
 

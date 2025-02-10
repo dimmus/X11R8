@@ -35,8 +35,8 @@
 #include "xf86_OSproc.h"
 
 #if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 6
-#include "xf86Resources.h"
-#include "xf86RAC.h"
+#  include "xf86Resources.h"
+#  include "xf86RAC.h"
 #endif
 
 /* All drivers need this */
@@ -62,60 +62,59 @@
 #include "fb.h"
 
 #ifdef XSERVER_LIBPCIACCESS
-#include <pciaccess.h>
+#  include <pciaccess.h>
 #endif
 
 typedef void *pointer;
 
-#define VESA_VERSION		4000
-#define VESA_NAME		    "VESA"
-#define VESA_DRIVER_NAME	"vesa"
-#define VESA_MAJOR_VERSION	VESA_PACKAGE_VERSION_MAJOR
-#define VESA_MINOR_VERSION	VESA_PACKAGE_VERSION_MINOR
-#define VESA_PATCHLEVEL		VESA_PACKAGE_VERSION_PATCHLEVEL
+#define VESA_VERSION       4000
+#define VESA_NAME          "VESA"
+#define VESA_DRIVER_NAME   "vesa"
+#define VESA_MAJOR_VERSION VESA_PACKAGE_VERSION_MAJOR
+#define VESA_MINOR_VERSION VESA_PACKAGE_VERSION_MINOR
+#define VESA_PATCHLEVEL    VESA_PACKAGE_VERSION_PATCHLEVEL
 
 /*XXX*/
 
 typedef struct _VESARec
 {
-    vbeInfoPtr pVbe;
+    vbeInfoPtr    pVbe;
     EntityInfoPtr pEnt;
-    CARD16 major, minor;
+    CARD16        major, minor;
     VbeInfoBlock *vbeInfo;
 #ifdef XSERVER_LIBPCIACCESS
     struct pci_device *pciInfo;
 #else
     pciVideoPtr pciInfo;
-    PCITAG pciTag;
+    PCITAG      pciTag;
 #endif
-    int curBank, bankSwitchWindowB;
-    CARD16 maxBytesPerScanline;
-    unsigned long mapPhys, mapOff, mapSize;	/* video memory */
-    void *base, *VGAbase;
-    CARD8 *state, *pstate;	/* SVGA state */
-    int statePage, stateSize, stateMode;
-    int page;
-    CARD32 *pal, *savedPal;
-    CARD8 *fonts;
-    xf86MonPtr monitor;
-    Bool shadowFB, strict_validation;
-    CARD32 windowAoffset;
+    int           curBank, bankSwitchWindowB;
+    CARD16        maxBytesPerScanline;
+    unsigned long mapPhys, mapOff, mapSize; /* video memory */
+    void         *base, *VGAbase;
+    CARD8        *state, *pstate; /* SVGA state */
+    int           statePage, stateSize, stateMode;
+    int           page;
+    CARD32       *pal, *savedPal;
+    CARD8        *fonts;
+    xf86MonPtr    monitor;
+    Bool          shadowFB, strict_validation;
+    CARD32        windowAoffset;
     /* Don't override the default refresh rate. */
     Bool defaultRefresh;
     /* DGA info */
-    DGAModePtr pDGAMode;
-    int nDGAMode;
-    CloseScreenProcPtr CloseScreen;
-    CreateScreenResourcesProcPtr CreateScreenResources;
+    DGAModePtr                     pDGAMode;
+    int                            nDGAMode;
+    CloseScreenProcPtr             CloseScreen;
+    CreateScreenResourcesProcPtr   CreateScreenResources;
     xf86EnableDisableFBAccessProc *EnableDisableFBAccess;
-    Bool accessEnabled;
-    OptionInfoPtr Options;
-    unsigned long ioBase;
-    Bool ModeSetClearScreen;
-    void *shadow;
-    ShadowUpdateProc update;
-    ShadowWindowProc window;
+    Bool                           accessEnabled;
+    OptionInfoPtr                  Options;
+    unsigned long                  ioBase;
+    Bool                           ModeSetClearScreen;
+    void                          *shadow;
+    ShadowUpdateProc               update;
+    ShadowWindowProc               window;
 } VESARec, *VESAPtr;
-
 
 #endif /* _VESA_H_ */

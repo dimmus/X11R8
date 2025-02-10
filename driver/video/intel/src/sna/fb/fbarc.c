@@ -26,26 +26,26 @@
 #include <mizerarc.h>
 #include <limits.h>
 
-#define ARC	    fbArc8
-#define BITS	    BYTE
-#define BITS2	    CARD16
-#define BITS4	    CARD32
+#define ARC   fbArc8
+#define BITS  BYTE
+#define BITS2 CARD16
+#define BITS4 CARD32
 #include "fbarcbits.h"
 #undef BITS
 #undef BITS2
 #undef BITS4
 #undef ARC
 
-#define ARC	    fbArc16
-#define BITS	    CARD16
-#define BITS2	    CARD32
+#define ARC   fbArc16
+#define BITS  CARD16
+#define BITS2 CARD32
 #include "fbarcbits.h"
 #undef BITS
 #undef BITS2
 #undef ARC
 
-#define ARC	    fbArc32
-#define BITS	    CARD32
+#define ARC  fbArc32
+#define BITS CARD32
 #include "fbarcbits.h"
 #undef BITS
 #undef ARC
@@ -53,43 +53,58 @@
 void
 fbPolyArc(DrawablePtr drawable, GCPtr gc, int n, xArc *arc)
 {
-	DBG(("%s x %d, width=%d, fill=%d, line=%d\n",
-	     __FUNCTION__, n, gc->lineWidth, gc->lineStyle, gc->fillStyle));
+    DBG(("%s x %d, width=%d, fill=%d, line=%d\n",
+         __FUNCTION__,
+         n,
+         gc->lineWidth,
+         gc->lineStyle,
+         gc->fillStyle));
 
-	if (gc->lineWidth == 0) {
-		void (*raster)(FbBits *dst, FbStride dstStride, int dstBpp,
-			       xArc *arc, int dx, int dy,
-			       FbBits and, FbBits xor);
+    if (gc->lineWidth == 0)
+    {
+        void (*raster)(FbBits  *dst,
+                       FbStride dstStride,
+                       int      dstBpp,
+                       xArc    *arc,
+                       int      dx,
+                       int      dy,
+                       FbBits and,
+                       FbBits xor);
 
-		raster = 0;
-		if (gc->lineStyle == LineSolid && gc->fillStyle == FillSolid) {
-			switch (drawable->bitsPerPixel) {
-			case 8:
-				raster = fbArc8;
-				break;
-			case 16:
-				raster = fbArc16;
-				break;
-			case 32:
-				raster = fbArc32;
-				break;
-			}
-		}
-		if (raster) {
-			FbGCPrivPtr pgc = fb_gc(gc);
-			FbBits *dst;
-			FbStride dstStride;
-			int dstBpp;
-			int dstXoff, dstYoff;
-			BoxRec box;
-			int x2, y2;
+        raster = 0;
+        if (gc->lineStyle == LineSolid && gc->fillStyle == FillSolid)
+        {
+            switch (drawable->bitsPerPixel)
+            {
+                case 8:
+                    raster = fbArc8;
+                    break;
+                case 16:
+                    raster = fbArc16;
+                    break;
+                case 32:
+                    raster = fbArc32;
+                    break;
+            }
+        }
+        if (raster)
+        {
+            FbGCPrivPtr pgc = fb_gc(gc);
+            FbBits     *dst;
+            FbStride    dstStride;
+            int         dstBpp;
+            int         dstXoff, dstYoff;
+            BoxRec      box;
+            int         x2, y2;
 
-			fbGetDrawable(drawable, dst, dstStride, dstBpp, dstXoff, dstYoff);
-			while (n--) {
-				if (miCanZeroArc(arc)) {
-					box.x1 = arc->x + drawable->x;
-					box.y1 = arc->y + drawable->y;
-					/*
+            fbGetDrawable(drawable, dst, dstStride, dstBpp, dstXoff, dstYoff);
+            while (n--)
+            {
+                if (miCanZeroArc(arc))
+                {
+                    box.x1 = arc->x + drawable->x;
+                    box.y1 = arc->y + drawable->y;
+                    /*
 					 * Because box.x2 and box.y2 get truncated to 16 bits, and the
 					 * RECT_IN_REGION test treats the resulting number as a signed
 					 * integer, the RECT_IN_REGION test alone can go the wrong way.
@@ -100,23 +115,29 @@ fbPolyArc(DrawablePtr drawable, GCPtr gc, int n, xArc *arc)
 					 * So we only allow the RECT_IN_REGION test to be used for
 					 * values that can be expressed correctly in a signed short.
 					 */
-					x2 = box.x1 + (int) arc->width + 1;
-					box.x2 = x2;
-					y2 = box.y1 + (int) arc->height + 1;
-					box.y2 = y2;
-					if ((x2 <= SHRT_MAX) && (y2 <= SHRT_MAX) &&
-					    (RegionContainsRect(gc->pCompositeClip, &box) == rgnIN)) {
-						raster(dst, dstStride, dstBpp,
-						       arc, drawable->x + dstXoff,
-							drawable->y + dstYoff, pgc->and, pgc->xor);
-					} else
-						miZeroPolyArc(drawable, gc, 1, arc);
-				} else
-					miPolyArc(drawable, gc, 1, arc);
-				arc++;
-			}
-		} else
-			miZeroPolyArc(drawable, gc, n, arc);
-	} else
-		miPolyArc(drawable, gc, n, arc);
+                    x2     = box.x1 + (int)arc->width + 1;
+                    box.x2 = x2;
+                    y2     = box.y1 + (int)arc->height + 1;
+                    box.y2 = y2;
+                    if ((x2 <= SHRT_MAX) && (y2 <= SHRT_MAX) &&
+                        (RegionContainsRect(gc->pCompositeClip, &box) == rgnIN))
+                    {
+                        raster(dst,
+                               dstStride,
+                               dstBpp,
+                               arc,
+                               drawable->x + dstXoff,
+                               drawable->y + dstYoff,
+                               pgc->and,
+                               pgc->xor);
+                    }
+                    else miZeroPolyArc(drawable, gc, 1, arc);
+                }
+                else miPolyArc(drawable, gc, 1, arc);
+                arc++;
+            }
+        }
+        else miZeroPolyArc(drawable, gc, n, arc);
+    }
+    else miPolyArc(drawable, gc, n, arc);
 }

@@ -109,83 +109,96 @@ static const uint32_t ps_kernel_planar[][4] = {
 #include "exa_wm_write.g7b"
 };
 
-#define compare(old) brw_test_compare(__FUNCTION__, p.gen, p.store, p.nr_insn, (struct brw_instruction *)old, ARRAY_SIZE(old))
+#define compare(old)                                \
+    brw_test_compare(__FUNCTION__,                  \
+                     p.gen,                         \
+                     p.store,                       \
+                     p.nr_insn,                     \
+                     (struct brw_instruction *)old, \
+                     ARRAY_SIZE(old))
 #define GEN 070
 
-static void gen7_ps_nomask_affine(void)
+static void
+gen7_ps_nomask_affine(void)
 {
-	uint32_t store[1024];
-	struct brw_compile p;
+    uint32_t           store[1024];
+    struct brw_compile p;
 
-	brw_compile_init(&p, GEN, store);
-	brw_wm_kernel__affine(&p, 8);
+    brw_compile_init(&p, GEN, store);
+    brw_wm_kernel__affine(&p, 8);
 
-	compare(ps_kernel_nomask_affine);
+    compare(ps_kernel_nomask_affine);
 }
 
-static void gen7_ps_mask_affine(void)
+static void
+gen7_ps_mask_affine(void)
 {
-	uint32_t store[1024];
-	struct brw_compile p;
+    uint32_t           store[1024];
+    struct brw_compile p;
 
-	brw_compile_init(&p, GEN, store);
-	brw_wm_kernel__affine_mask(&p, 8);
+    brw_compile_init(&p, GEN, store);
+    brw_wm_kernel__affine_mask(&p, 8);
 
-	compare(ps_kernel_masknoca_affine);
+    compare(ps_kernel_masknoca_affine);
 }
 
-static void gen7_ps_maskca_affine(void)
+static void
+gen7_ps_maskca_affine(void)
 {
-	uint32_t store[1024];
-	struct brw_compile p;
+    uint32_t           store[1024];
+    struct brw_compile p;
 
-	brw_compile_init(&p, GEN, store);
-	brw_wm_kernel__affine_mask_ca(&p, 8);
+    brw_compile_init(&p, GEN, store);
+    brw_wm_kernel__affine_mask_ca(&p, 8);
 
-	compare(ps_kernel_maskca_affine);
+    compare(ps_kernel_maskca_affine);
 }
 
-static void gen7_ps_masksa_affine(void)
+static void
+gen7_ps_masksa_affine(void)
 {
-	uint32_t store[1024];
-	struct brw_compile p;
+    uint32_t           store[1024];
+    struct brw_compile p;
 
-	brw_compile_init(&p, GEN, store);
-	brw_wm_kernel__affine_mask_sa(&p, 8);
+    brw_compile_init(&p, GEN, store);
+    brw_wm_kernel__affine_mask_sa(&p, 8);
 
-	compare(ps_kernel_maskca_srcalpha_affine);
+    compare(ps_kernel_maskca_srcalpha_affine);
 }
 
-static void gen7_ps_nomask_projective(void)
+static void
+gen7_ps_nomask_projective(void)
 {
-	uint32_t store[1024];
-	struct brw_compile p;
+    uint32_t           store[1024];
+    struct brw_compile p;
 
-	brw_compile_init(&p, GEN, store);
-	brw_wm_kernel__projective(&p, 8);
+    brw_compile_init(&p, GEN, store);
+    brw_wm_kernel__projective(&p, 8);
 
-	compare(ps_kernel_nomask_projective);
+    compare(ps_kernel_nomask_projective);
 }
 
-static void gen7_ps_opacity(void)
+static void
+gen7_ps_opacity(void)
 {
-	uint32_t store[1024];
-	struct brw_compile p;
+    uint32_t           store[1024];
+    struct brw_compile p;
 
-	brw_compile_init(&p, GEN, store);
-	brw_wm_kernel__affine_opacity(&p, 16);
+    brw_compile_init(&p, GEN, store);
+    brw_wm_kernel__affine_opacity(&p, 16);
 
-	compare(ps_kernel_nomask_affine);
+    compare(ps_kernel_nomask_affine);
 }
 
-void brw_test_gen7(void)
+void
+brw_test_gen7(void)
 {
-	gen7_ps_nomask_affine();
-	gen7_ps_mask_affine();
-	gen7_ps_maskca_affine();
-	gen7_ps_masksa_affine();
+    gen7_ps_nomask_affine();
+    gen7_ps_mask_affine();
+    gen7_ps_maskca_affine();
+    gen7_ps_masksa_affine();
 
-	gen7_ps_nomask_projective();
+    gen7_ps_nomask_projective();
 
-	gen7_ps_opacity();
+    gen7_ps_opacity();
 }

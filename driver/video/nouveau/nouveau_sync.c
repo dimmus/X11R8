@@ -22,96 +22,97 @@
 
 #include "nouveau_sync.h"
 #ifdef DRI3
-#include "nv_include.h"
+#  include "nv_include.h"
 
 static DevPrivateKeyRec nouveau_syncobj_key;
 
-struct nouveau_syncobj {
-	SyncFenceSetTriggeredFunc SetTriggered;
+struct nouveau_syncobj
+{
+    SyncFenceSetTriggeredFunc SetTriggered;
 };
 
-#define nouveau_syncobj(fence)                                                 \
-	dixLookupPrivate(&(fence)->devPrivates, &nouveau_syncobj_key)
+#  define nouveau_syncobj(fence) \
+      dixLookupPrivate(&(fence)->devPrivates, &nouveau_syncobj_key)
 
-struct nouveau_syncctx {
-	SyncScreenCreateFenceFunc CreateFence;
+struct nouveau_syncctx
+{
+    SyncScreenCreateFenceFunc CreateFence;
 };
 
-#define nouveau_syncctx(screen) ({                                             \
-	ScrnInfoPtr scrn = xf86ScreenToScrn(screen);                           \
-	NVPtr pNv = NVPTR(scrn);                                               \
-	pNv->sync;                                                             \
-})
+#  define nouveau_syncctx(screen)                    \
+      ({                                             \
+        ScrnInfoPtr scrn = xf86ScreenToScrn(screen); \
+        NVPtr       pNv  = NVPTR(scrn);              \
+        pNv->sync;                                   \
+      })
 
 static void
 nouveau_syncobj_flush(SyncFence *fence)
 {
-	struct nouveau_syncobj *pobj = nouveau_syncobj(fence);
-	ScrnInfoPtr scrn = xf86ScreenToScrn(fence->pScreen);
-	NVPtr pNv = NVPTR(scrn);
-	SyncFenceFuncsPtr func = &fence->funcs;
+    struct nouveau_syncobj *pobj = nouveau_syncobj(fence);
+    ScrnInfoPtr             scrn = xf86ScreenToScrn(fence->pScreen);
+    NVPtr                   pNv  = NVPTR(scrn);
+    SyncFenceFuncsPtr       func = &fence->funcs;
 
-	if (pNv->Flush)
-		pNv->Flush(scrn);
+    if (pNv->Flush) pNv->Flush(scrn);
 
-	swap(pobj, func, SetTriggered);
-	func->SetTriggered(fence);
-	swap(pobj, func, SetTriggered);
+    swap(pobj, func, SetTriggered);
+    func->SetTriggered(fence);
+    swap(pobj, func, SetTriggered);
 }
 
 static void
 nouveau_syncobj_new(ScreenPtr screen, SyncFence *fence, Bool triggered)
 {
-	struct nouveau_syncctx *priv = nouveau_syncctx(screen);
-	struct nouveau_syncobj *pobj = nouveau_syncobj(fence);
-	SyncScreenFuncsPtr sync = miSyncGetScreenFuncs(screen);
-	SyncFenceFuncsPtr func = &fence->funcs;
+    struct nouveau_syncctx *priv = nouveau_syncctx(screen);
+    struct nouveau_syncobj *pobj = nouveau_syncobj(fence);
+    SyncScreenFuncsPtr      sync = miSyncGetScreenFuncs(screen);
+    SyncFenceFuncsPtr       func = &fence->funcs;
 
-	swap(priv, sync, CreateFence);
-	sync->CreateFence(screen, fence, triggered);
-	swap(priv, sync, CreateFence);
+    swap(priv, sync, CreateFence);
+    sync->CreateFence(screen, fence, triggered);
+    swap(priv, sync, CreateFence);
 
-	wrap(pobj, func, SetTriggered, nouveau_syncobj_flush);
+    wrap(pobj, func, SetTriggered, nouveau_syncobj_flush);
 }
 
 void
 nouveau_sync_fini(ScreenPtr screen)
 {
-	struct nouveau_syncctx *priv = nouveau_syncctx(screen);
-	SyncScreenFuncsPtr sync = miSyncGetScreenFuncs(screen);
-	ScrnInfoPtr scrn = xf86ScreenToScrn(screen);
-	NVPtr pNv = NVPTR(scrn);
+    struct nouveau_syncctx *priv = nouveau_syncctx(screen);
+    SyncScreenFuncsPtr      sync = miSyncGetScreenFuncs(screen);
+    ScrnInfoPtr             scrn = xf86ScreenToScrn(screen);
+    NVPtr                   pNv  = NVPTR(scrn);
 
-	unwrap(priv, sync, CreateFence);
+    unwrap(priv, sync, CreateFence);
 
-	pNv->sync = NULL;
-	free(priv);
+    pNv->sync = NULL;
+    free(priv);
 }
 
 Bool
 nouveau_sync_init(ScreenPtr screen)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(screen);
-	NVPtr pNv = NVPTR(scrn);
-	struct nouveau_syncctx *priv;
-	SyncScreenFuncsPtr sync;
+    ScrnInfoPtr             scrn = xf86ScreenToScrn(screen);
+    NVPtr                   pNv  = NVPTR(scrn);
+    struct nouveau_syncctx *priv;
+    SyncScreenFuncsPtr      sync;
 
-	priv = pNv->sync = calloc(1, sizeof(*priv));
-	if (!priv)
-		return FALSE;
+    priv = pNv->sync = calloc(1, sizeof(*priv));
+    if (!priv) return FALSE;
 
-	if (!miSyncShmScreenInit(screen))
-		return FALSE;
+    if (!miSyncShmScreenInit(screen)) return FALSE;
 
-	if (!dixPrivateKeyRegistered(&nouveau_syncobj_key)) {
-		if (!dixRegisterPrivateKey(&nouveau_syncobj_key,
-					    PRIVATE_SYNC_FENCE,
-					   sizeof(struct nouveau_syncobj)))
-			return FALSE;
-	}
+    if (!dixPrivateKeyRegistered(&nouveau_syncobj_key))
+    {
+        if (!dixRegisterPrivateKey(&nouveau_syncobj_key,
+                                   PRIVATE_SYNC_FENCE,
+                                   sizeof(struct nouveau_syncobj)))
+            return FALSE;
+    }
 
-	sync = miSyncGetScreenFuncs(screen);
-	wrap(priv, sync, CreateFence, nouveau_syncobj_new);
-	return TRUE;
+    sync = miSyncGetScreenFuncs(screen);
+    wrap(priv, sync, CreateFence, nouveau_syncobj_new);
+    return TRUE;
 }
 #endif

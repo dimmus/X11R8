@@ -27,7 +27,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include "armsoc_driver.h"
@@ -42,38 +42,49 @@
  * not installed.
  */
 
-struct ARMSOCNullEXARec {
-	struct ARMSOCEXARec base;
-	ExaDriverPtr exa;
-	/* add any other driver private data here.. */
+struct ARMSOCNullEXARec
+{
+    struct ARMSOCEXARec base;
+    ExaDriverPtr        exa;
+    /* add any other driver private data here.. */
 };
 
 static Bool
 PrepareSolidFail(PixmapPtr pPixmap, int alu, Pixel planemask, Pixel fill_colour)
 {
-	return FALSE;
+    return FALSE;
 }
 
 static Bool
-PrepareCopyFail(PixmapPtr pSrc, PixmapPtr pDst, int xdir, int ydir,
-		int alu, Pixel planemask)
+PrepareCopyFail(PixmapPtr pSrc,
+                PixmapPtr pDst,
+                int       xdir,
+                int       ydir,
+                int       alu,
+                Pixel     planemask)
 {
-	return FALSE;
+    return FALSE;
 }
 
 static Bool
-CheckCompositeFail(int op, PicturePtr pSrcPicture, PicturePtr pMaskPicture,
-		PicturePtr pDstPicture)
+CheckCompositeFail(int        op,
+                   PicturePtr pSrcPicture,
+                   PicturePtr pMaskPicture,
+                   PicturePtr pDstPicture)
 {
-	return FALSE;
+    return FALSE;
 }
 
 static Bool
-PrepareCompositeFail(int op, PicturePtr pSrcPicture, PicturePtr pMaskPicture,
-		PicturePtr pDstPicture, PixmapPtr pSrc,
-		PixmapPtr pMask, PixmapPtr pDst)
+PrepareCompositeFail(int        op,
+                     PicturePtr pSrcPicture,
+                     PicturePtr pMaskPicture,
+                     PicturePtr pDstPicture,
+                     PixmapPtr  pSrc,
+                     PixmapPtr  pMask,
+                     PixmapPtr  pDst)
 {
-	return FALSE;
+    return FALSE;
 }
 
 /**
@@ -83,15 +94,15 @@ PrepareCompositeFail(int op, PicturePtr pSrcPicture, PicturePtr pMaskPicture,
 static Bool
 CloseScreen(CLOSE_SCREEN_ARGS_DECL)
 {
-	ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
-	struct ARMSOCRec *pARMSOC = ARMSOCPTR(pScrn);
+    ScrnInfoPtr       pScrn   = xf86ScreenToScrn(pScreen);
+    struct ARMSOCRec *pARMSOC = ARMSOCPTR(pScrn);
 
-	exaDriverFini(pScreen);
-	free(((struct ARMSOCNullEXARec *)pARMSOC->pARMSOCEXA)->exa);
-	free(pARMSOC->pARMSOCEXA);
-	pARMSOC->pARMSOCEXA = NULL;
+    exaDriverFini(pScreen);
+    free(((struct ARMSOCNullEXARec *)pARMSOC->pARMSOCEXA)->exa);
+    free(pARMSOC->pARMSOCEXA);
+    pARMSOC->pARMSOCEXA = NULL;
 
-	return TRUE;
+    return TRUE;
 }
 
 /* FreeScreen() is called on an error during PreInit and
@@ -101,71 +112,68 @@ CloseScreen(CLOSE_SCREEN_ARGS_DECL)
  */
 static void
 FreeScreen(FREE_SCREEN_ARGS_DECL)
-{
-}
+{}
 
 struct ARMSOCEXARec *
 InitNullEXA(ScreenPtr pScreen, ScrnInfoPtr pScrn, int fd)
 {
-	struct ARMSOCNullEXARec *null_exa;
-	struct ARMSOCEXARec *armsoc_exa;
-	ExaDriverPtr exa;
+    struct ARMSOCNullEXARec *null_exa;
+    struct ARMSOCEXARec     *armsoc_exa;
+    ExaDriverPtr             exa;
 
-	INFO_MSG("Soft EXA mode");
+    INFO_MSG("Soft EXA mode");
 
-	null_exa = calloc(1, sizeof(*null_exa));
-	if (!null_exa)
-		goto out;
+    null_exa = calloc(1, sizeof(*null_exa));
+    if (!null_exa) goto out;
 
-	armsoc_exa = (struct ARMSOCEXARec *)null_exa;
+    armsoc_exa = (struct ARMSOCEXARec *)null_exa;
 
-	exa = exaDriverAlloc();
-	if (!exa)
-		goto free_null_exa;
+    exa = exaDriverAlloc();
+    if (!exa) goto free_null_exa;
 
-	null_exa->exa = exa;
+    null_exa->exa = exa;
 
-	exa->exa_major = EXA_VERSION_MAJOR;
-	exa->exa_minor = EXA_VERSION_MINOR;
+    exa->exa_major = EXA_VERSION_MAJOR;
+    exa->exa_minor = EXA_VERSION_MINOR;
 
-	exa->pixmapOffsetAlign = 0;
-	exa->pixmapPitchAlign = 32;
-	exa->flags = EXA_OFFSCREEN_PIXMAPS |
-			EXA_HANDLES_PIXMAPS | EXA_SUPPORTS_PREPARE_AUX;
-	exa->maxX = 4096;
-	exa->maxY = 4096;
+    exa->pixmapOffsetAlign = 0;
+    exa->pixmapPitchAlign  = 32;
+    exa->flags =
+        EXA_OFFSCREEN_PIXMAPS | EXA_HANDLES_PIXMAPS | EXA_SUPPORTS_PREPARE_AUX;
+    exa->maxX = 4096;
+    exa->maxY = 4096;
 
-	/* Required EXA functions: */
-	exa->WaitMarker = ARMSOCWaitMarker;
-	exa->CreatePixmap2 = ARMSOCCreatePixmap2;
-	exa->DestroyPixmap = ARMSOCDestroyPixmap;
-	exa->ModifyPixmapHeader = ARMSOCModifyPixmapHeader;
+    /* Required EXA functions: */
+    exa->WaitMarker         = ARMSOCWaitMarker;
+    exa->CreatePixmap2      = ARMSOCCreatePixmap2;
+    exa->DestroyPixmap      = ARMSOCDestroyPixmap;
+    exa->ModifyPixmapHeader = ARMSOCModifyPixmapHeader;
 
-	exa->PrepareAccess = ARMSOCPrepareAccess;
-	exa->FinishAccess = ARMSOCFinishAccess;
-	exa->PixmapIsOffscreen = ARMSOCPixmapIsOffscreen;
+    exa->PrepareAccess     = ARMSOCPrepareAccess;
+    exa->FinishAccess      = ARMSOCFinishAccess;
+    exa->PixmapIsOffscreen = ARMSOCPixmapIsOffscreen;
 
-	/* Always fallback for software operations */
-	exa->PrepareCopy = PrepareCopyFail;
-	exa->PrepareSolid = PrepareSolidFail;
-	exa->CheckComposite = CheckCompositeFail;
-	exa->PrepareComposite = PrepareCompositeFail;
+    /* Always fallback for software operations */
+    exa->PrepareCopy      = PrepareCopyFail;
+    exa->PrepareSolid     = PrepareSolidFail;
+    exa->CheckComposite   = CheckCompositeFail;
+    exa->PrepareComposite = PrepareCompositeFail;
 
-	if (!exaDriverInit(pScreen, exa)) {
-		ERROR_MSG("exaDriverInit failed");
-		goto free_exa;
-	}
+    if (!exaDriverInit(pScreen, exa))
+    {
+        ERROR_MSG("exaDriverInit failed");
+        goto free_exa;
+    }
 
-	armsoc_exa->CloseScreen = CloseScreen;
-	armsoc_exa->FreeScreen = FreeScreen;
+    armsoc_exa->CloseScreen = CloseScreen;
+    armsoc_exa->FreeScreen  = FreeScreen;
 
-	return armsoc_exa;
+    return armsoc_exa;
 
 free_exa:
-	free(exa);
+    free(exa);
 free_null_exa:
-	free(null_exa);
+    free(null_exa);
 out:
-	return NULL;
+    return NULL;
 }
-

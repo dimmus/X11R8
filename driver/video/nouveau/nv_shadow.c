@@ -31,33 +31,36 @@
 void
 NVRefreshArea(ScrnInfoPtr pScrn, int num, BoxPtr pbox)
 {
-	NVPtr pNv = NVPTR(pScrn);
-	int x1, y1, x2, y2, width, height, cpp, FBPitch;
-	unsigned char *src, *dst;
-   
-	cpp = pScrn->bitsPerPixel >> 3;
-	FBPitch = pScrn->displayWidth * cpp;
+    NVPtr          pNv = NVPTR(pScrn);
+    int            x1, y1, x2, y2, width, height, cpp, FBPitch;
+    unsigned char *src, *dst;
 
-	nouveau_bo_map(pNv->scanout, NOUVEAU_BO_WR, pNv->client);
-	while(num--) {
-		x1 = MAX(pbox->x1, 0);
-		y1 = MAX(pbox->y1, 0);
-		x2 = MIN(pbox->x2, pScrn->virtualX);
-		y2 = MIN(pbox->y2, pScrn->virtualY);
-		width = (x2 - x1) * cpp;
-		height = y2 - y1;
+    cpp     = pScrn->bitsPerPixel >> 3;
+    FBPitch = pScrn->displayWidth * cpp;
 
-		if (width > 0 && height > 0) {
-			src = pNv->ShadowPtr + (y1 * pNv->ShadowPitch) + (x1 * cpp);
-			dst = pNv->scanout->map + (y1 * FBPitch) + (x1 * cpp);
+    nouveau_bo_map(pNv->scanout, NOUVEAU_BO_WR, pNv->client);
+    while (num--)
+    {
+        x1     = MAX(pbox->x1, 0);
+        y1     = MAX(pbox->y1, 0);
+        x2     = MIN(pbox->x2, pScrn->virtualX);
+        y2     = MIN(pbox->y2, pScrn->virtualY);
+        width  = (x2 - x1) * cpp;
+        height = y2 - y1;
 
-			while(height--) {
-				memcpy(dst, src, width);
-				dst += FBPitch;
-				src += pNv->ShadowPitch;
-			}
-		}
+        if (width > 0 && height > 0)
+        {
+            src = pNv->ShadowPtr + (y1 * pNv->ShadowPitch) + (x1 * cpp);
+            dst = pNv->scanout->map + (y1 * FBPitch) + (x1 * cpp);
 
-		pbox++;
-	}
-} 
+            while (height--)
+            {
+                memcpy(dst, src, width);
+                dst += FBPitch;
+                src += pNv->ShadowPitch;
+            }
+        }
+
+        pbox++;
+    }
+}

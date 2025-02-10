@@ -31,28 +31,28 @@
 
 #ifdef USE_GLAMOR
 
-#define GLAMOR_FOR_XORG  1
-#include <glamor.h>
+#  define GLAMOR_FOR_XORG 1
+#  include <glamor.h>
 
-#define AMDGPU_CREATE_PIXMAP_SHARED(usage) \
-	((usage) == AMDGPU_CREATE_PIXMAP_DRI2 || \
-	 (usage) == CREATE_PIXMAP_USAGE_SHARED)
+#  define AMDGPU_CREATE_PIXMAP_SHARED(usage)   \
+      ((usage) == AMDGPU_CREATE_PIXMAP_DRI2 || \
+       (usage) == CREATE_PIXMAP_USAGE_SHARED)
 
-#ifndef GLAMOR_NO_DRI3
-#define GLAMOR_NO_DRI3 0
-#define glamor_fd_from_pixmap glamor_dri3_fd_from_pixmap
-#define glamor_pixmap_from_fd glamor_egl_dri3_pixmap_from_fd
-#endif
+#  ifndef GLAMOR_NO_DRI3
+#    define GLAMOR_NO_DRI3        0
+#    define glamor_fd_from_pixmap glamor_dri3_fd_from_pixmap
+#    define glamor_pixmap_from_fd glamor_egl_dri3_pixmap_from_fd
+#  endif
 
-#ifndef GLAMOR_INVERTED_Y_AXIS
-#define GLAMOR_INVERTED_Y_AXIS 0
-#endif
-#ifndef GLAMOR_USE_SCREEN
-#define GLAMOR_USE_SCREEN 0
-#endif
-#ifndef GLAMOR_USE_PICTURE_SCREEN
-#define GLAMOR_USE_PICTURE_SCREEN 0
-#endif
+#  ifndef GLAMOR_INVERTED_Y_AXIS
+#    define GLAMOR_INVERTED_Y_AXIS 0
+#  endif
+#  ifndef GLAMOR_USE_SCREEN
+#    define GLAMOR_USE_SCREEN 0
+#  endif
+#  ifndef GLAMOR_USE_PICTURE_SCREEN
+#    define GLAMOR_USE_PICTURE_SCREEN 0
+#  endif
 
 struct amdgpu_pixmap;
 
@@ -66,29 +66,66 @@ void amdgpu_glamor_free_screen(int scrnIndex, int flags);
 void amdgpu_glamor_flush(ScrnInfoPtr pScrn);
 void amdgpu_glamor_finish(ScrnInfoPtr pScrn);
 
-Bool
-amdgpu_glamor_create_textured_pixmap(PixmapPtr pixmap, struct amdgpu_buffer *bo);
-void amdgpu_glamor_exchange_buffers(PixmapPtr src, PixmapPtr dst);
+Bool      amdgpu_glamor_create_textured_pixmap(PixmapPtr             pixmap,
+                                               struct amdgpu_buffer *bo);
+void      amdgpu_glamor_exchange_buffers(PixmapPtr src, PixmapPtr dst);
 PixmapPtr amdgpu_glamor_set_pixmap_bo(DrawablePtr drawable, PixmapPtr pixmap);
 
 XF86VideoAdaptorPtr amdgpu_glamor_xv_init(ScreenPtr pScreen, int num_adapt);
 
 #else /* !USE_GLAMOR */
 
-static inline Bool amdgpu_glamor_pre_init(ScrnInfoPtr scrn) { return FALSE; }
-static inline Bool amdgpu_glamor_init(ScreenPtr screen) { return FALSE; }
-static inline void amdgpu_glamor_fini(ScreenPtr screen) { }
-static inline Bool amdgpu_glamor_create_screen_resources(ScreenPtr screen) { return FALSE; }
+static inline Bool
+amdgpu_glamor_pre_init(ScrnInfoPtr scrn)
+{
+    return FALSE;
+}
 
-static inline Bool amdgpu_glamor_create_textured_pixmap(PixmapPtr pixmap, struct amdgpu_buffer *bo) { return TRUE; }
+static inline Bool
+amdgpu_glamor_init(ScreenPtr screen)
+{
+    return FALSE;
+}
 
-static inline void amdgpu_glamor_exchange_buffers(PixmapPtr src, PixmapPtr dst) {}
-static inline PixmapPtr amdgpu_glamor_set_pixmap_bo(DrawablePtr drawable, PixmapPtr pixmap) { return pixmap; }
+static inline void
+amdgpu_glamor_fini(ScreenPtr screen)
+{}
 
-static inline XF86VideoAdaptorPtr amdgpu_glamor_xv_init(ScreenPtr pScreen, int num_adapt) { return NULL; }
+static inline Bool
+amdgpu_glamor_create_screen_resources(ScreenPtr screen)
+{
+    return FALSE;
+}
 
-static inline void amdgpu_glamor_flush(ScrnInfoPtr pScrn) { }
-static inline void amdgpu_glamor_finish(ScrnInfoPtr pScrn) { }
+static inline Bool
+amdgpu_glamor_create_textured_pixmap(PixmapPtr pixmap, struct amdgpu_buffer *bo)
+{
+    return TRUE;
+}
+
+static inline void
+amdgpu_glamor_exchange_buffers(PixmapPtr src, PixmapPtr dst)
+{}
+
+static inline PixmapPtr
+amdgpu_glamor_set_pixmap_bo(DrawablePtr drawable, PixmapPtr pixmap)
+{
+    return pixmap;
+}
+
+static inline XF86VideoAdaptorPtr
+amdgpu_glamor_xv_init(ScreenPtr pScreen, int num_adapt)
+{
+    return NULL;
+}
+
+static inline void
+amdgpu_glamor_flush(ScrnInfoPtr pScrn)
+{}
+
+static inline void
+amdgpu_glamor_finish(ScrnInfoPtr pScrn)
+{}
 
 #endif /* USE_GLAMOR */
 

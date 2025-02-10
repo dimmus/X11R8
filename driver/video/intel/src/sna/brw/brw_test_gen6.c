@@ -109,7 +109,13 @@ static const uint32_t ps_kernel_planar[][4] = {
 #include "exa_wm_write.g6b"
 };
 
-#define compare(old) brw_test_compare(__FUNCTION__, p.gen, p.store, p.nr_insn, (struct brw_instruction *)old, ARRAY_SIZE(old))
+#define compare(old)                                \
+    brw_test_compare(__FUNCTION__,                  \
+                     p.gen,                         \
+                     p.store,                       \
+                     p.nr_insn,                     \
+                     (struct brw_instruction *)old, \
+                     ARRAY_SIZE(old))
 
 #if 0
 static void wm_src_affine(struct brw_compile *p)
@@ -123,9 +129,9 @@ static void wm_src_affine(struct brw_compile *p)
 static void wm_src_sample_argb(struct brw_compile *p)
 {
 	static const uint32_t fragment[][4] = {
-#include "exa_wm_src_affine.g6b"
-#include "exa_wm_src_sample_argb.g6b"
-#include "exa_wm_write.g6b"
+#  include "exa_wm_src_affine.g6b"
+#  include "exa_wm_src_sample_argb.g6b"
+#  include "exa_wm_write.g6b"
 	};
 	int n;
 
@@ -167,43 +173,47 @@ static void wm_write(struct brw_compile *p)
 }
 #endif
 
-static void gen6_ps_nomask_affine(void)
+static void
+gen6_ps_nomask_affine(void)
 {
-	uint32_t store[1024];
-	struct brw_compile p;
+    uint32_t           store[1024];
+    struct brw_compile p;
 
-	brw_compile_init(&p, 060, store);
-	brw_wm_kernel__affine(&p, 16);
+    brw_compile_init(&p, 060, store);
+    brw_wm_kernel__affine(&p, 16);
 
-	compare(ps_kernel_nomask_affine);
+    compare(ps_kernel_nomask_affine);
 }
 
-static void gen6_ps_mask_affine(void)
+static void
+gen6_ps_mask_affine(void)
 {
-	uint32_t store[1024];
-	struct brw_compile p;
+    uint32_t           store[1024];
+    struct brw_compile p;
 
-	brw_compile_init(&p, 060, store);
-	brw_wm_kernel__affine_mask(&p, 16);
+    brw_compile_init(&p, 060, store);
+    brw_wm_kernel__affine_mask(&p, 16);
 
-	compare(ps_kernel_masknoca_affine);
+    compare(ps_kernel_masknoca_affine);
 }
 
-static void gen6_ps_nomask_projective(void)
+static void
+gen6_ps_nomask_projective(void)
 {
-	uint32_t store[1024];
-	struct brw_compile p;
+    uint32_t           store[1024];
+    struct brw_compile p;
 
-	brw_compile_init(&p, 060, store);
-	brw_wm_kernel__projective(&p, 16);
+    brw_compile_init(&p, 060, store);
+    brw_wm_kernel__projective(&p, 16);
 
-	compare(ps_kernel_nomask_projective);
+    compare(ps_kernel_nomask_projective);
 }
 
-void brw_test_gen6(void)
+void
+brw_test_gen6(void)
 {
-	gen6_ps_nomask_affine();
-	gen6_ps_mask_affine();
+    gen6_ps_nomask_affine();
+    gen6_ps_mask_affine();
 
-	gen6_ps_nomask_projective();
+    gen6_ps_nomask_projective();
 }

@@ -26,7 +26,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include "vmwgfx_hosted.h"
@@ -59,5 +59,4 @@ vmwgfx_hosted_detect(void)
  */
 void
 vmwgfx_hosted_modify_flags(uint32_t *flags)
-{
-}
+{}

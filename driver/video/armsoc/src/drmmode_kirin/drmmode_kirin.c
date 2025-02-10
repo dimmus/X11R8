@@ -46,50 +46,49 @@ DEALINGS IN THE
  * that are too big
  */
 /* width */
-#define CURSORW   (64)
+#define CURSORW (64)
 /* height */
-#define CURSORH   (64)
+#define CURSORH (64)
 /* Padding added down each side of cursor image */
 #define CURSORPAD (0)
 
-#define ALIGN(val, align)      (((val) + (align) - 1) & ~((align) - 1))
+#define ALIGN(val, align) (((val) + (align) - 1) & ~((align) - 1))
 
-static int create_custom_gem(int fd, struct armsoc_create_gem *create_gem)
+static int
+create_custom_gem(int fd, struct armsoc_create_gem *create_gem)
 {
-	struct drm_mode_create_dumb arg;
-	unsigned int pitch;
-	int ret;
+    struct drm_mode_create_dumb arg;
+    unsigned int                pitch;
+    int                         ret;
 
-	/* For 32bpp mali 450GPU needs pitch 8 bytes alignment */
-	pitch = ALIGN(create_gem->width * ((create_gem->bpp + 7) / 8), 8);
-	memset(&arg, 0, sizeof(arg));
-	arg.width = create_gem->width;
-	arg.height = create_gem->height;
-	arg.bpp = create_gem->bpp;
-	arg.pitch = pitch;
-	arg.size = pitch * create_gem->height;
+    /* For 32bpp mali 450GPU needs pitch 8 bytes alignment */
+    pitch = ALIGN(create_gem->width * ((create_gem->bpp + 7) / 8), 8);
+    memset(&arg, 0, sizeof(arg));
+    arg.width  = create_gem->width;
+    arg.height = create_gem->height;
+    arg.bpp    = create_gem->bpp;
+    arg.pitch  = pitch;
+    arg.size   = pitch * create_gem->height;
 
-	ret = drmIoctl(fd, DRM_IOCTL_MODE_CREATE_DUMB, &arg);
-	if (ret)
-		return ret;
+    ret = drmIoctl(fd, DRM_IOCTL_MODE_CREATE_DUMB, &arg);
+    if (ret) return ret;
 
-	create_gem->handle = arg.handle;
-	create_gem->pitch = arg.pitch;
-	create_gem->size = arg.size;
+    create_gem->handle = arg.handle;
+    create_gem->pitch  = arg.pitch;
+    create_gem->size   = arg.size;
 
-	return 0;
+    return 0;
 }
 
 struct drmmode_interface kirin_interface = {
-	"kirin"               /* name of drm driver */,
-	1                     /* use_page_flip_events */,
-	1                     /* use_early_display */,
-	CURSORW               /* cursor width */,
-	CURSORH               /* cursor_height */,
-	CURSORPAD             /* cursor padding */,
-	HWCURSOR_API_NONE     /* software cursor */,
-	NULL                  /* no plane for cursor */,
-	0                     /* vblank_query_supported */,
-	create_custom_gem     /* create_custom_gem */,
+    "kirin" /* name of drm driver */,
+    1 /* use_page_flip_events */,
+    1 /* use_early_display */,
+    CURSORW /* cursor width */,
+    CURSORH /* cursor_height */,
+    CURSORPAD /* cursor padding */,
+    HWCURSOR_API_NONE /* software cursor */,
+    NULL /* no plane for cursor */,
+    0 /* vblank_query_supported */,
+    create_custom_gem /* create_custom_gem */,
 };
-

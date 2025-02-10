@@ -39,16 +39,20 @@
 
 /* Forward declarations of internal functions. */
 static void vboxHwBufferFlush(PHGSMIGUESTCOMMANDCONTEXT pCtx);
-static void vboxHwBufferPlaceDataAt(PVBVABUFFERCONTEXT pCtx, const void *p,
-                                    uint32_t cb, uint32_t offset);
-static bool vboxHwBufferWrite(PVBVABUFFERCONTEXT pCtx,
+static void vboxHwBufferPlaceDataAt(PVBVABUFFERCONTEXT pCtx,
+                                    const void        *p,
+                                    uint32_t           cb,
+                                    uint32_t           offset);
+static bool vboxHwBufferWrite(PVBVABUFFERCONTEXT        pCtx,
                               PHGSMIGUESTCOMMANDCONTEXT pHGSMICtx,
-                              const void *p, uint32_t cb);
+                              const void               *p,
+                              uint32_t                  cb);
 
-
-static bool vboxVBVAInformHost(PVBVABUFFERCONTEXT pCtx,
-                               PHGSMIGUESTCOMMANDCONTEXT pHGSMICtx,
-                               int32_t cScreen, bool bEnable)
+static bool
+vboxVBVAInformHost(PVBVABUFFERCONTEXT        pCtx,
+                   PHGSMIGUESTCOMMANDCONTEXT pHGSMICtx,
+                   int32_t                   cScreen,
+                   bool                      bEnable)
 {
     bool bRc = false;
 
@@ -57,7 +61,7 @@ static bool vboxVBVAInformHost(PVBVABUFFERCONTEXT pCtx,
 #endif
     {
         void *p = VBoxHGSMIBufferAlloc(pHGSMICtx,
-                                       sizeof (VBVAENABLE_EX),
+                                       sizeof(VBVAENABLE_EX),
                                        HGSMI_CH_VBVA,
                                        VBVA_ENABLE);
         if (!p)
@@ -68,13 +72,13 @@ static bool vboxVBVAInformHost(PVBVABUFFERCONTEXT pCtx,
         {
             VBVAENABLE_EX *pEnable = (VBVAENABLE_EX *)p;
 
-            pEnable->Base.u32Flags  = bEnable? VBVA_F_ENABLE: VBVA_F_DISABLE;
+            pEnable->Base.u32Flags  = bEnable ? VBVA_F_ENABLE : VBVA_F_DISABLE;
             pEnable->Base.u32Offset = pCtx->offVRAMBuffer;
             pEnable->Base.i32Result = VERR_NOT_SUPPORTED;
             if (cScreen >= 0)
             {
                 pEnable->Base.u32Flags |= VBVA_F_EXTENDED | VBVA_F_ABSOFFSET;
-                pEnable->u32ScreenId    = cScreen;
+                pEnable->u32ScreenId = cScreen;
             }
 
             VBoxHGSMIBufferSubmit(pHGSMICtx, p);
@@ -98,9 +102,11 @@ static bool vboxVBVAInformHost(PVBVABUFFERCONTEXT pCtx,
 /*
  * Public hardware buffer methods.
  */
-DECLHIDDEN(bool) VBoxVBVAEnable(PVBVABUFFERCONTEXT pCtx,
-                                PHGSMIGUESTCOMMANDCONTEXT pHGSMICtx,
-                                VBVABUFFER *pVBVA, int32_t cScreen)
+DECLHIDDEN(bool)
+VBoxVBVAEnable(PVBVABUFFERCONTEXT        pCtx,
+               PHGSMIGUESTCOMMANDCONTEXT pHGSMICtx,
+               VBVABUFFER               *pVBVA,
+               int32_t                   cScreen)
 {
     bool bRc = false;
 
@@ -114,17 +120,18 @@ DECLHIDDEN(bool) VBoxVBVAEnable(PVBVABUFFERCONTEXT pCtx,
 
         pVBVA->hostFlags.u32HostEvents      = 0;
         pVBVA->hostFlags.u32SupportedOrders = 0;
-        pVBVA->off32Data          = 0;
-        pVBVA->off32Free          = 0;
-        memset(pVBVA->aRecords, 0, sizeof (pVBVA->aRecords));
-        pVBVA->indexRecordFirst   = 0;
-        pVBVA->indexRecordFree    = 0;
+        pVBVA->off32Data                    = 0;
+        pVBVA->off32Free                    = 0;
+        memset(pVBVA->aRecords, 0, sizeof(pVBVA->aRecords));
+        pVBVA->indexRecordFirst        = 0;
+        pVBVA->indexRecordFree         = 0;
         pVBVA->cbPartialWriteThreshold = 256;
-        pVBVA->cbData             = pCtx->cbBuffer - sizeof (VBVABUFFER) + sizeof (pVBVA->au8Data);
+        pVBVA->cbData =
+            pCtx->cbBuffer - sizeof(VBVABUFFER) + sizeof(pVBVA->au8Data);
 
         pCtx->fHwBufferOverflow = false;
-        pCtx->pRecord    = NULL;
-        pCtx->pVBVA      = pVBVA;
+        pCtx->pRecord           = NULL;
+        pCtx->pVBVA             = pVBVA;
 
         bRc = vboxVBVAInformHost(pCtx, pHGSMICtx, cScreen, true);
     }
@@ -137,9 +144,10 @@ DECLHIDDEN(bool) VBoxVBVAEnable(PVBVABUFFERCONTEXT pCtx,
     return bRc;
 }
 
-DECLHIDDEN(void) VBoxVBVADisable(PVBVABUFFERCONTEXT pCtx,
-                                 PHGSMIGUESTCOMMANDCONTEXT pHGSMICtx,
-                                 int32_t cScreen)
+DECLHIDDEN(void)
+VBoxVBVADisable(PVBVABUFFERCONTEXT        pCtx,
+                PHGSMIGUESTCOMMANDCONTEXT pHGSMICtx,
+                int32_t                   cScreen)
 {
     // LogFlowFunc(("\n"));
 
@@ -152,15 +160,16 @@ DECLHIDDEN(void) VBoxVBVADisable(PVBVABUFFERCONTEXT pCtx,
     return;
 }
 
-DECLHIDDEN(bool) VBoxVBVABufferBeginUpdate(PVBVABUFFERCONTEXT pCtx,
-                                           PHGSMIGUESTCOMMANDCONTEXT pHGSMICtx)
+DECLHIDDEN(bool)
+VBoxVBVABufferBeginUpdate(PVBVABUFFERCONTEXT        pCtx,
+                          PHGSMIGUESTCOMMANDCONTEXT pHGSMICtx)
 {
     bool bRc = false;
 
     // LogFunc(("flags = 0x%08X\n", pCtx->pVBVA? pCtx->pVBVA->u32HostEvents: -1));
 
-    if (   pCtx->pVBVA
-        && (pCtx->pVBVA->hostFlags.u32HostEvents & VBVA_F_MODE_ENABLED))
+    if (pCtx->pVBVA &&
+        (pCtx->pVBVA->hostFlags.u32HostEvents & VBVA_F_MODE_ENABLED))
     {
         uint32_t indexRecordNext;
 
@@ -172,7 +181,7 @@ DECLHIDDEN(bool) VBoxVBVABufferBeginUpdate(PVBVABUFFERCONTEXT pCtx,
         if (indexRecordNext == pCtx->pVBVA->indexRecordFirst)
         {
             /* All slots in the records queue are used. */
-            vboxHwBufferFlush (pHGSMICtx);
+            vboxHwBufferFlush(pHGSMICtx);
         }
 
         if (indexRecordNext == pCtx->pVBVA->indexRecordFirst)
@@ -184,7 +193,8 @@ DECLHIDDEN(bool) VBoxVBVABufferBeginUpdate(PVBVABUFFERCONTEXT pCtx,
         else
         {
             /* Initialize the record. */
-            VBVARECORD *pRecord = &pCtx->pVBVA->aRecords[pCtx->pVBVA->indexRecordFree];
+            VBVARECORD *pRecord =
+                &pCtx->pVBVA->aRecords[pCtx->pVBVA->indexRecordFree];
 
             pRecord->cbRecord = VBVA_F_RECORD_PARTIAL;
 
@@ -217,7 +227,7 @@ DECLHIDDEN(void) VBoxVBVABufferEndUpdate(PVBVABUFFERCONTEXT pCtx)
     pRecord->cbRecord &= ~VBVA_F_RECORD_PARTIAL;
 
     pCtx->fHwBufferOverflow = false;
-    pCtx->pRecord = NULL;
+    pCtx->pRecord           = NULL;
 
     return;
 }
@@ -225,18 +235,20 @@ DECLHIDDEN(void) VBoxVBVABufferEndUpdate(PVBVABUFFERCONTEXT pCtx)
 /*
  * Private operations.
  */
-static uint32_t vboxHwBufferAvail (const VBVABUFFER *pVBVA)
+static uint32_t
+vboxHwBufferAvail(const VBVABUFFER *pVBVA)
 {
     int32_t i32Diff = pVBVA->off32Data - pVBVA->off32Free;
 
-    return i32Diff > 0? i32Diff: pVBVA->cbData + i32Diff;
+    return i32Diff > 0 ? i32Diff : pVBVA->cbData + i32Diff;
 }
 
-static void vboxHwBufferFlush(PHGSMIGUESTCOMMANDCONTEXT pCtx)
+static void
+vboxHwBufferFlush(PHGSMIGUESTCOMMANDCONTEXT pCtx)
 {
     /* Issue the flush command. */
     void *p = VBoxHGSMIBufferAlloc(pCtx,
-                                   sizeof (VBVAFLUSH),
+                                   sizeof(VBVAFLUSH),
                                    HGSMI_CH_VBVA,
                                    VBVA_FLUSH);
     if (!p)
@@ -257,35 +269,42 @@ static void vboxHwBufferFlush(PHGSMIGUESTCOMMANDCONTEXT pCtx)
     return;
 }
 
-static void vboxHwBufferPlaceDataAt(PVBVABUFFERCONTEXT pCtx, const void *p,
-                                    uint32_t cb, uint32_t offset)
+static void
+vboxHwBufferPlaceDataAt(PVBVABUFFERCONTEXT pCtx,
+                        const void        *p,
+                        uint32_t           cb,
+                        uint32_t           offset)
 {
-    VBVABUFFER *pVBVA = pCtx->pVBVA;
-    uint32_t u32BytesTillBoundary = pVBVA->cbData - offset;
-    uint8_t  *dst                 = &pVBVA->au8Data[offset];
-    int32_t i32Diff               = cb - u32BytesTillBoundary;
+    VBVABUFFER *pVBVA                = pCtx->pVBVA;
+    uint32_t    u32BytesTillBoundary = pVBVA->cbData - offset;
+    uint8_t    *dst                  = &pVBVA->au8Data[offset];
+    int32_t     i32Diff              = cb - u32BytesTillBoundary;
 
     if (i32Diff <= 0)
     {
         /* Chunk will not cross buffer boundary. */
-        memcpy (dst, p, cb);
+        memcpy(dst, p, cb);
     }
     else
     {
         /* Chunk crosses buffer boundary. */
-        memcpy (dst, p, u32BytesTillBoundary);
-        memcpy (&pVBVA->au8Data[0], (uint8_t *)p + u32BytesTillBoundary, i32Diff);
+        memcpy(dst, p, u32BytesTillBoundary);
+        memcpy(&pVBVA->au8Data[0],
+               (uint8_t *)p + u32BytesTillBoundary,
+               i32Diff);
     }
 
     return;
 }
 
-static bool vboxHwBufferWrite(PVBVABUFFERCONTEXT pCtx,
-                              PHGSMIGUESTCOMMANDCONTEXT pHGSMICtx,
-                              const void *p, uint32_t cb)
+static bool
+vboxHwBufferWrite(PVBVABUFFERCONTEXT        pCtx,
+                  PHGSMIGUESTCOMMANDCONTEXT pHGSMICtx,
+                  const void               *p,
+                  uint32_t                  cb)
 {
     VBVARECORD *pRecord;
-    uint32_t cbHwBufferAvail;
+    uint32_t    cbHwBufferAvail;
 
     uint32_t cbWritten = 0;
 
@@ -304,7 +323,7 @@ static bool vboxHwBufferWrite(PVBVABUFFERCONTEXT pCtx,
 
     // LogFunc(("%d\n", cb));
 
-    cbHwBufferAvail = vboxHwBufferAvail (pVBVA);
+    cbHwBufferAvail = vboxHwBufferAvail(pVBVA);
 
     while (cb > 0)
     {
@@ -317,9 +336,9 @@ static bool vboxHwBufferWrite(PVBVABUFFERCONTEXT pCtx,
         {
             // LogFunc(("1) avail %d, chunk %d\n", cbHwBufferAvail, cbChunk));
 
-            vboxHwBufferFlush (pHGSMICtx);
+            vboxHwBufferFlush(pHGSMICtx);
 
-            cbHwBufferAvail = vboxHwBufferAvail (pVBVA);
+            cbHwBufferAvail = vboxHwBufferAvail(pVBVA);
 
             if (cbChunk >= cbHwBufferAvail)
             {
@@ -339,15 +358,18 @@ static bool vboxHwBufferWrite(PVBVABUFFERCONTEXT pCtx,
         }
 
         Assert(cbChunk <= cb);
-        Assert(cbChunk <= vboxHwBufferAvail (pVBVA));
+        Assert(cbChunk <= vboxHwBufferAvail(pVBVA));
 
-        vboxHwBufferPlaceDataAt (pCtx, (uint8_t *)p + cbWritten, cbChunk, pVBVA->off32Free);
+        vboxHwBufferPlaceDataAt(pCtx,
+                                (uint8_t *)p + cbWritten,
+                                cbChunk,
+                                pVBVA->off32Free);
 
-        pVBVA->off32Free   = (pVBVA->off32Free + cbChunk) % pVBVA->cbData;
+        pVBVA->off32Free = (pVBVA->off32Free + cbChunk) % pVBVA->cbData;
         pRecord->cbRecord += cbChunk;
         cbHwBufferAvail -= cbChunk;
 
-        cb        -= cbChunk;
+        cb -= cbChunk;
         cbWritten += cbChunk;
     }
 
@@ -357,11 +379,13 @@ static bool vboxHwBufferWrite(PVBVABUFFERCONTEXT pCtx,
 /*
  * Public writer to the hardware buffer.
  */
-DECLHIDDEN(bool) VBoxVBVAWrite(PVBVABUFFERCONTEXT pCtx,
-                               PHGSMIGUESTCOMMANDCONTEXT pHGSMICtx,
-                               const void *pv, uint32_t cb)
+DECLHIDDEN(bool)
+VBoxVBVAWrite(PVBVABUFFERCONTEXT        pCtx,
+              PHGSMIGUESTCOMMANDCONTEXT pHGSMICtx,
+              const void               *pv,
+              uint32_t                  cb)
 {
-    return vboxHwBufferWrite (pCtx, pHGSMICtx, pv, cb);
+    return vboxHwBufferWrite(pCtx, pHGSMICtx, pv, cb);
 }
 
 DECLHIDDEN(bool) VBoxVBVAOrderSupported(PVBVABUFFERCONTEXT pCtx, unsigned code)
@@ -381,9 +405,10 @@ DECLHIDDEN(bool) VBoxVBVAOrderSupported(PVBVABUFFERCONTEXT pCtx, unsigned code)
     return false;
 }
 
-DECLHIDDEN(void) VBoxVBVASetupBufferContext(PVBVABUFFERCONTEXT pCtx,
-                                            uint32_t offVRAMBuffer,
-                                            uint32_t cbBuffer)
+DECLHIDDEN(void)
+VBoxVBVASetupBufferContext(PVBVABUFFERCONTEXT pCtx,
+                           uint32_t           offVRAMBuffer,
+                           uint32_t           cbBuffer)
 {
     pCtx->offVRAMBuffer = offVRAMBuffer;
     pCtx->cbBuffer      = cbBuffer;

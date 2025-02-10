@@ -32,80 +32,82 @@
 
 static DevPrivateKeyRec intel_sync_fence_private_key;
 
-typedef struct _intel_sync_fence_private {
-        SyncFenceSetTriggeredFunc set_triggered;
+typedef struct _intel_sync_fence_private
+{
+    SyncFenceSetTriggeredFunc set_triggered;
 } intel_sync_fence_private;
 
-#define SYNC_FENCE_PRIV(pFence)                                         \
-        (intel_sync_fence_private *) dixLookupPrivate(&pFence->devPrivates, &intel_sync_fence_private_key)
+#define SYNC_FENCE_PRIV(pFence)                   \
+    (intel_sync_fence_private *)dixLookupPrivate( \
+        &pFence->devPrivates,                     \
+        &intel_sync_fence_private_key)
 
 static void
-intel_sync_fence_set_triggered (SyncFence *fence)
+intel_sync_fence_set_triggered(SyncFence *fence)
 {
-	ScreenPtr screen = fence->pScreen;
-	ScrnInfoPtr scrn = xf86ScreenToScrn(screen);
-	intel_screen_private *intel = intel_get_screen_private(scrn);
-	intel_sync_fence_private *private = SYNC_FENCE_PRIV(fence);
+    ScreenPtr             screen      = fence->pScreen;
+    ScrnInfoPtr           scrn        = xf86ScreenToScrn(screen);
+    intel_screen_private *intel       = intel_get_screen_private(scrn);
+    intel_sync_fence_private *private = SYNC_FENCE_PRIV(fence);
 
-	/* Flush pending rendering operations */
-	if (intel->flush_rendering)
-		intel->flush_rendering(intel);
+    /* Flush pending rendering operations */
+    if (intel->flush_rendering) intel->flush_rendering(intel);
 
-	fence->funcs.SetTriggered = private->set_triggered;
-	fence->funcs.SetTriggered(fence);
-	private->set_triggered = fence->funcs.SetTriggered;
-	fence->funcs.SetTriggered = intel_sync_fence_set_triggered;
+    fence->funcs.SetTriggered = private->set_triggered;
+    fence->funcs.SetTriggered(fence);
+    private->set_triggered    = fence->funcs.SetTriggered;
+    fence->funcs.SetTriggered = intel_sync_fence_set_triggered;
 }
 
 static void
-intel_sync_create_fence(ScreenPtr screen,
+intel_sync_create_fence(ScreenPtr  screen,
                         SyncFence *fence,
-                        Bool initially_triggered)
+                        Bool       initially_triggered)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(screen);
-	intel_screen_private *intel = intel_get_screen_private(scrn);
-	SyncScreenFuncsPtr screen_funcs = miSyncGetScreenFuncs(screen);
-	intel_sync_fence_private *private = SYNC_FENCE_PRIV(fence);
+    ScrnInfoPtr           scrn         = xf86ScreenToScrn(screen);
+    intel_screen_private *intel        = intel_get_screen_private(scrn);
+    SyncScreenFuncsPtr    screen_funcs = miSyncGetScreenFuncs(screen);
+    intel_sync_fence_private *private  = SYNC_FENCE_PRIV(fence);
 
-	screen_funcs->CreateFence = intel->save_sync_screen_funcs.CreateFence;
-	screen_funcs->CreateFence(screen, fence, initially_triggered);
-	intel->save_sync_screen_funcs.CreateFence = screen_funcs->CreateFence;
-	screen_funcs->CreateFence = intel_sync_create_fence;
+    screen_funcs->CreateFence = intel->save_sync_screen_funcs.CreateFence;
+    screen_funcs->CreateFence(screen, fence, initially_triggered);
+    intel->save_sync_screen_funcs.CreateFence = screen_funcs->CreateFence;
+    screen_funcs->CreateFence                 = intel_sync_create_fence;
 
-	private->set_triggered = fence->funcs.SetTriggered;
-	fence->funcs.SetTriggered = intel_sync_fence_set_triggered;
+    private->set_triggered    = fence->funcs.SetTriggered;
+    fence->funcs.SetTriggered = intel_sync_fence_set_triggered;
 }
 
 Bool
 intel_sync_init(ScreenPtr screen)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(screen);
-	intel_screen_private *intel = intel_get_screen_private(scrn);
-	SyncScreenFuncsPtr screen_funcs;
+    ScrnInfoPtr           scrn  = xf86ScreenToScrn(screen);
+    intel_screen_private *intel = intel_get_screen_private(scrn);
+    SyncScreenFuncsPtr    screen_funcs;
 
-	if (!miSyncShmScreenInit(screen))
-		return FALSE;
+    if (!miSyncShmScreenInit(screen)) return FALSE;
 
-	if (!dixPrivateKeyRegistered(&intel_sync_fence_private_key)) {
-		if (!dixRegisterPrivateKey(&intel_sync_fence_private_key,
-					   PRIVATE_SYNC_FENCE,
-					   sizeof (intel_sync_fence_private)))
-			return FALSE;
-	}
+    if (!dixPrivateKeyRegistered(&intel_sync_fence_private_key))
+    {
+        if (!dixRegisterPrivateKey(&intel_sync_fence_private_key,
+                                   PRIVATE_SYNC_FENCE,
+                                   sizeof(intel_sync_fence_private)))
+            return FALSE;
+    }
 
-	screen_funcs = miSyncGetScreenFuncs(screen);
-	intel->save_sync_screen_funcs.CreateFence = screen_funcs->CreateFence;
-	screen_funcs->CreateFence = intel_sync_create_fence;
-	return TRUE;
+    screen_funcs                              = miSyncGetScreenFuncs(screen);
+    intel->save_sync_screen_funcs.CreateFence = screen_funcs->CreateFence;
+    screen_funcs->CreateFence                 = intel_sync_create_fence;
+    return TRUE;
 }
 
 void
 intel_sync_close(ScreenPtr screen)
 {
-        ScrnInfoPtr scrn = xf86ScreenToScrn(screen);
-        intel_screen_private *intel = intel_get_screen_private(scrn);
-        SyncScreenFuncsPtr screen_funcs = miSyncGetScreenFuncs(screen);
+    ScrnInfoPtr           scrn         = xf86ScreenToScrn(screen);
+    intel_screen_private *intel        = intel_get_screen_private(scrn);
+    SyncScreenFuncsPtr    screen_funcs = miSyncGetScreenFuncs(screen);
 
-        if (screen_funcs)
-                screen_funcs->CreateFence = intel->save_sync_screen_funcs.CreateFence;
+    if (screen_funcs)
+        screen_funcs->CreateFence = intel->save_sync_screen_funcs.CreateFence;
 }

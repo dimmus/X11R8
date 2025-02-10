@@ -33,7 +33,8 @@
 
 typedef void *pointer;
 
-typedef enum {
+typedef enum
+{
     OPTION_HW_CURSOR,
     OPTION_XINERAMA,
     OPTION_STATIC_XINERAMA,
@@ -48,28 +49,24 @@ typedef enum {
 
 OptionInfoPtr VMWARECopyOptions(void);
 
-void
-vmwlegacy_hookup(ScrnInfoPtr pScrn);
+void vmwlegacy_hookup(ScrnInfoPtr pScrn);
 
 #ifdef BUILD_VMWGFX
-void
-vmwgfx_hookup(ScrnInfoPtr pScrn);
-void
-vmwgfx_modify_flags(uint32_t *flags);
+void vmwgfx_hookup(ScrnInfoPtr pScrn);
+void vmwgfx_modify_flags(uint32_t *flags);
 #endif /* defined(BUILD_VMWGFX) */
 
 #ifdef XFree86LOADER
-void
-VMWARERefSymLists(void);
-#endif	/* XFree86LOADER */
+void VMWARERefSymLists(void);
+#endif /* XFree86LOADER */
 
 /*#define DEBUG_LOGGING*/
 #ifdef DEBUG_LOGGING
-# define VmwareLog(args) ErrorF args
-# define TRACEPOINT VmwareLog(("%s : %s\n", __FUNCTION__, __FILE__));
+#  define VmwareLog(args) ErrorF args
+#  define TRACEPOINT      VmwareLog(("%s : %s\n", __FUNCTION__, __FILE__));
 #else
-# define VmwareLog(args)
-# define TRACEPOINT
+#  define VmwareLog(args)
+#  define TRACEPOINT
 #endif
 
 #endif

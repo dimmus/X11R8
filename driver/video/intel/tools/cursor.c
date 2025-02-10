@@ -23,7 +23,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config_intel.h"
+#  include "config_intel.h"
 #endif
 
 #include "X11/Xlib.h"
@@ -34,94 +34,99 @@
 #include <stdlib.h>
 #include <png.h>
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
-	Display *dpy;
-	XFixesCursorImage *cur;
-	unsigned long *src; /* XXX deep sigh */
-	unsigned x, y;
-	png_struct *png;
-	png_info *info;
-	png_byte **rows;
-	FILE *file;
+    Display           *dpy;
+    XFixesCursorImage *cur;
+    unsigned long     *src; /* XXX deep sigh */
+    unsigned           x, y;
+    png_struct        *png;
+    png_info          *info;
+    png_byte         **rows;
+    FILE              *file;
 
-	dpy = XOpenDisplay(NULL);
-	if (dpy == NULL)
-		return 1;
+    dpy = XOpenDisplay(NULL);
+    if (dpy == NULL) return 1;
 
-	if (!XFixesQueryExtension(dpy, (int *)&x, (int *)&y))
-		return 1;
+    if (!XFixesQueryExtension(dpy, (int *)&x, (int *)&y)) return 1;
 
-	cur = XFixesGetCursorImage(dpy);
-	if (cur == NULL)
-		return 1;
+    cur = XFixesGetCursorImage(dpy);
+    if (cur == NULL) return 1;
 
-	printf("Cursor on display '%s': %dx%d, (hotspot %dx%d)\n",
-	       DisplayString(dpy),
-	       cur->width, cur->height,
-	       cur->xhot, cur->yhot);
+    printf("Cursor on display '%s': %dx%d, (hotspot %dx%d)\n",
+           DisplayString(dpy),
+           cur->width,
+           cur->height,
+           cur->xhot,
+           cur->yhot);
 
-	if (1) {
-		int x, y;
+    if (1)
+    {
+        int x, y;
 
-		src = cur->pixels;
-		for (y = 0; y < cur->height; y++) {
-			for (x = 0; x < cur->width; x++) {
-				if (x == cur->xhot && y == cur->yhot)
-					printf("+");
-				else
-					printf("%c", *src ? *src >> 24 >= 127 ? 'x' : '.' : ' ');
-				src++;
-			}
-			printf("\n");
-		}
-	}
+        src = cur->pixels;
+        for (y = 0; y < cur->height; y++)
+        {
+            for (x = 0; x < cur->width; x++)
+            {
+                if (x == cur->xhot && y == cur->yhot) printf("+");
+                else printf("%c", *src ? *src >> 24 >= 127 ? 'x' : '.' : ' ');
+                src++;
+            }
+            printf("\n");
+        }
+    }
 
-	file = fopen("cursor.png", "wb");
-	if (file == NULL)
-		return 2;
+    file = fopen("cursor.png", "wb");
+    if (file == NULL) return 2;
 
-	png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	info = png_create_info_struct(png);
-	png_init_io(png, file);
-	png_set_IHDR(png, info,
-		     cur->width, cur->height, 8,
-		     PNG_COLOR_TYPE_RGB_ALPHA,
-		     PNG_INTERLACE_NONE,
-		     PNG_COMPRESSION_TYPE_DEFAULT,
-		     PNG_FILTER_TYPE_DEFAULT);
-	png_write_info(png, info);
+    png  = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    info = png_create_info_struct(png);
+    png_init_io(png, file);
+    png_set_IHDR(png,
+                 info,
+                 cur->width,
+                 cur->height,
+                 8,
+                 PNG_COLOR_TYPE_RGB_ALPHA,
+                 PNG_INTERLACE_NONE,
+                 PNG_COMPRESSION_TYPE_DEFAULT,
+                 PNG_FILTER_TYPE_DEFAULT);
+    png_write_info(png, info);
 
-	src = cur->pixels;
-	rows = malloc(cur->height*sizeof(png_byte*));
-	if (rows == NULL)
-		return 3;
+    src  = cur->pixels;
+    rows = malloc(cur->height * sizeof(png_byte *));
+    if (rows == NULL) return 3;
 
-	for (y = 0; y < cur->height; y++) {
-		rows[y] = malloc(cur->width * 4);
-		for (x = 0; x < cur->width; x++) {
-			uint32_t p = *src++;
-			uint8_t r = p >> 0;
-			uint8_t g = p >> 8;
-			uint8_t b = p >> 16;
-			uint8_t a = p >> 24;
+    for (y = 0; y < cur->height; y++)
+    {
+        rows[y] = malloc(cur->width * 4);
+        for (x = 0; x < cur->width; x++)
+        {
+            uint32_t p = *src++;
+            uint8_t  r = p >> 0;
+            uint8_t  g = p >> 8;
+            uint8_t  b = p >> 16;
+            uint8_t  a = p >> 24;
 
-			if (a > 0x00 && a < 0xff) {
-				r = (r * 0xff + a /2) / a;
-				g = (g * 0xff + a /2) / a;
-				b = (b * 0xff + a /2) / a;
-			}
+            if (a > 0x00 && a < 0xff)
+            {
+                r = (r * 0xff + a / 2) / a;
+                g = (g * 0xff + a / 2) / a;
+                b = (b * 0xff + a / 2) / a;
+            }
 
-			rows[y][4*x + 0] = b;
-			rows[y][4*x + 1] = g;
-			rows[y][4*x + 2] = r;
-			rows[y][4*x + 3] = a;
-		}
-	}
+            rows[y][4 * x + 0] = b;
+            rows[y][4 * x + 1] = g;
+            rows[y][4 * x + 2] = r;
+            rows[y][4 * x + 3] = a;
+        }
+    }
 
-	png_write_image(png, rows);
-	png_write_end(png, NULL);
-	fclose(file);
+    png_write_image(png, rows);
+    png_write_end(png, NULL);
+    fclose(file);
 
-	return 0;
+    return 0;
 }

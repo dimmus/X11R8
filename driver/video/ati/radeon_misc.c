@@ -21,7 +21,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include "radeon_probe.h"
@@ -31,18 +31,11 @@
 
 /* Module loader interface for subsidiary driver module */
 
-static XF86ModuleVersionInfo RADEONVersionRec =
-{
-    RADEON_DRIVER_NAME,
-    MODULEVENDORSTRING,
-    MODINFOSTRING1,
-    MODINFOSTRING2,
-    XORG_VERSION_CURRENT,
-    RADEON_VERSION_MAJOR, RADEON_VERSION_MINOR, RADEON_VERSION_PATCH,
-    ABI_CLASS_VIDEODRV,
-    ABI_VIDEODRV_VERSION,
-    MOD_CLASS_VIDEODRV,
-    {0, 0, 0, 0}
+static XF86ModuleVersionInfo RADEONVersionRec = {
+    RADEON_DRIVER_NAME,   MODULEVENDORSTRING,   MODINFOSTRING1,
+    MODINFOSTRING2,       XORG_VERSION_CURRENT, RADEON_VERSION_MAJOR,
+    RADEON_VERSION_MINOR, RADEON_VERSION_PATCH, ABI_CLASS_VIDEODRV,
+    ABI_VIDEODRV_VERSION, MOD_CLASS_VIDEODRV,   { 0, 0, 0, 0 }
 };
 
 /*
@@ -51,17 +44,12 @@ static XF86ModuleVersionInfo RADEONVersionRec =
  * This function is called every time the module is loaded.
  */
 static pointer
-RADEONSetup
-(
-    pointer Module,
-    pointer Options,
-    int     *ErrorMajor,
-    int     *ErrorMinor
-)
+RADEONSetup(pointer Module, pointer Options, int *ErrorMajor, int *ErrorMinor)
 {
     static Bool Inited = FALSE;
 
-    if (!Inited) {
+    if (!Inited)
+    {
         Inited = TRUE;
         xf86AddDriver(&RADEON, Module, HaveDriverFuncs);
     }
@@ -70,9 +58,6 @@ RADEONSetup
 }
 
 /* The following record must be called radeonModuleData */
-_X_EXPORT XF86ModuleData radeonModuleData =
-{
-    &RADEONVersionRec,
-    RADEONSetup,
-    NULL
-};
+_X_EXPORT XF86ModuleData radeonModuleData = { &RADEONVersionRec,
+                                              RADEONSetup,
+                                              NULL };

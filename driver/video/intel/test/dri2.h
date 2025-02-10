@@ -40,69 +40,81 @@
 
 typedef struct
 {
-   unsigned int attachment;
-   unsigned int name;
-   unsigned int pitch;
-   unsigned int cpp;
-   unsigned int flags;
+    unsigned int attachment;
+    unsigned int name;
+    unsigned int pitch;
+    unsigned int cpp;
+    unsigned int flags;
 } DRI2Buffer;
 
 extern Bool
-DRI2QueryExtension(Display * display, int *eventBase, int *errorBase);
+DRI2QueryExtension(Display *display, int *eventBase, int *errorBase);
+
+extern Bool DRI2QueryVersion(Display *display, int *major, int *minor);
 
 extern Bool
-DRI2QueryVersion(Display * display, int *major, int *minor);
+DRI2Connect(Display *display, XID window, char **driverName, char **deviceName);
 
-extern Bool
-DRI2Connect(Display * display, XID window,
-            char **driverName, char **deviceName);
+extern Bool DRI2Authenticate(Display *display, XID window, unsigned int magic);
 
-extern Bool
-DRI2Authenticate(Display * display, XID window, unsigned int magic);
+extern void DRI2CreateDrawable(Display *display, XID drawable);
 
-extern void
-DRI2CreateDrawable(Display * display, XID drawable);
+extern void DRI2DestroyDrawable(Display *display, XID handle);
 
-extern void
-DRI2DestroyDrawable(Display * display, XID handle);
-
-extern DRI2Buffer*
-DRI2GetBuffers(Display * dpy, XID drawable,
-               int *width, int *height,
-               unsigned int *attachments, int count,
-               int *outCount);
+extern DRI2Buffer *DRI2GetBuffers(Display      *dpy,
+                                  XID           drawable,
+                                  int          *width,
+                                  int          *height,
+                                  unsigned int *attachments,
+                                  int           count,
+                                  int          *outCount);
 
 /**
  * \note
  * This function is only supported with DRI2 version 1.1 or later.
  */
-extern DRI2Buffer*
-DRI2GetBuffersWithFormat(Display * dpy, XID drawable,
-                         int *width, int *height,
-                         unsigned int *attachments,
-                         int count, int *outCount);
+extern DRI2Buffer *DRI2GetBuffersWithFormat(Display      *dpy,
+                                            XID           drawable,
+                                            int          *width,
+                                            int          *height,
+                                            unsigned int *attachments,
+                                            int           count,
+                                            int          *outCount);
 
-extern void
-DRI2CopyRegion(Display * dpy, XID drawable,
-               XserverRegion region,
-               uint32_t dest, uint32_t src);
+extern void DRI2CopyRegion(Display      *dpy,
+                           XID           drawable,
+                           XserverRegion region,
+                           uint32_t      dest,
+                           uint32_t      src);
 
-extern uint64_t
-DRI2SwapBuffers(Display *dpy, XID drawable,
-		uint64_t target_msc, uint64_t divisor, uint64_t remainder);
+extern uint64_t DRI2SwapBuffers(Display *dpy,
+                                XID      drawable,
+                                uint64_t target_msc,
+                                uint64_t divisor,
+                                uint64_t remainder);
 
-extern Bool
-DRI2GetMSC(Display *dpy, XID drawable, uint64_t *ust, uint64_t *msc, uint64_t *sbc);
+extern Bool DRI2GetMSC(Display  *dpy,
+                       XID       drawable,
+                       uint64_t *ust,
+                       uint64_t *msc,
+                       uint64_t *sbc);
 
-extern Bool
-DRI2WaitMSC(Display *dpy, XID drawable, uint64_t target_msc, uint64_t divisor,
-	    uint64_t remainder, uint64_t *ust, uint64_t *msc, uint64_t *sbc);
+extern Bool DRI2WaitMSC(Display  *dpy,
+                        XID       drawable,
+                        uint64_t  target_msc,
+                        uint64_t  divisor,
+                        uint64_t  remainder,
+                        uint64_t *ust,
+                        uint64_t *msc,
+                        uint64_t *sbc);
 
-extern Bool
-DRI2WaitSBC(Display *dpy, XID drawable, uint64_t target_sbc, uint64_t *ust,
-	    uint64_t *msc, uint64_t *sbc);
+extern Bool DRI2WaitSBC(Display  *dpy,
+                        XID       drawable,
+                        uint64_t  target_sbc,
+                        uint64_t *ust,
+                        uint64_t *msc,
+                        uint64_t *sbc);
 
-extern void
-DRI2SwapInterval(Display *dpy, XID drawable, int interval);
+extern void DRI2SwapInterval(Display *dpy, XID drawable, int interval);
 
 #endif

@@ -33,108 +33,107 @@
 #include "vmwgfx_drmi.h"
 #include "wsbm_util.h"
 
+#define VMWGFX_FLAG_FORCE_GMR (1 << 0) /* Create with GMR as backing store */
+#define VMWGFX_FLAG_FORCE_SURFACE \
+    (1 << 1) /* Create with surface as backing store */
+#define VMWGFX_FLAG_AVOID_HWACCEL \
+    (1 << 2) /* Avoid Hardware acceleration on this pixmap */
+#define VMWGFX_FLAG_USE_PRESENT \
+    (1 << 3) /* Use presents when copying to this pixmap */
 
-#define VMWGFX_FLAG_FORCE_GMR     (1 << 0) /* Create with GMR as backing store */
-#define VMWGFX_FLAG_FORCE_SURFACE (1 << 1) /* Create with surface as backing store */
-#define VMWGFX_FLAG_AVOID_HWACCEL (1 << 2) /* Avoid Hardware acceleration on this pixmap */
-#define VMWGFX_FLAG_USE_PRESENT   (1 << 3) /* Use presents when copying to this pixmap */
-
-struct vmwgfx_saa_pixmap {
-    struct saa_pixmap base;
-    RegionPtr dirty_present;
-    RegionPtr present_damage;
-    RegionPtr pending_update;
-    RegionPtr pending_present;
-    uint32_t usage_flags;
-    uint32_t backing;
-    void *malloc;
+struct vmwgfx_saa_pixmap
+{
+    struct saa_pixmap     base;
+    RegionPtr             dirty_present;
+    RegionPtr             present_damage;
+    RegionPtr             pending_update;
+    RegionPtr             pending_present;
+    uint32_t              usage_flags;
+    uint32_t              backing;
+    void                 *malloc;
     struct vmwgfx_dmabuf *gmr;
-    struct xa_surface *hw;
-    uint32_t fb_id;
-    int hw_is_dri2_fronts;
-    Bool hw_is_hosted;
-    struct _WsbmListHead sync_x_head;
-    struct _WsbmListHead scanout_list;
-    struct _WsbmListHead pixmap_list;
-    Bool scanout_hw;
+    struct xa_surface    *hw;
+    uint32_t              fb_id;
+    int                   hw_is_dri2_fronts;
+    Bool                  hw_is_hosted;
+    struct _WsbmListHead  sync_x_head;
+    struct _WsbmListHead  scanout_list;
+    struct _WsbmListHead  pixmap_list;
+    Bool                  scanout_hw;
 
-    uint32_t xa_flags;
-    uint32_t staging_add_flags;
-    uint32_t staging_remove_flags;
+    uint32_t        xa_flags;
+    uint32_t        staging_add_flags;
+    uint32_t        staging_remove_flags;
     enum xa_formats staging_format;
 };
 
-struct vmwgfx_screen_entry {
+struct vmwgfx_screen_entry
+{
     struct _WsbmListHead scanout_head;
-    PixmapPtr pixmap;
+    PixmapPtr            pixmap;
 };
 
 static inline struct vmwgfx_saa_pixmap *
 to_vmwgfx_saa_pixmap(struct saa_pixmap *spix)
 {
-    return (struct vmwgfx_saa_pixmap *) spix;
+    return (struct vmwgfx_saa_pixmap *)spix;
 }
 
-static inline struct vmwgfx_saa_pixmap*
+static inline struct vmwgfx_saa_pixmap *
 vmwgfx_saa_pixmap(PixmapPtr pix)
 {
     return to_vmwgfx_saa_pixmap(saa_get_saa_pixmap(pix));
 }
 
-extern Bool
-vmwgfx_saa_init(ScreenPtr pScreen, int drm_fd, struct xa_tracker *xat,
-		void (*present_flush)(ScreenPtr pScreen),
-		Bool direct_presents,
-		Bool only_hw_presents,
-		Bool rendercheck,
-		Bool has_screen_targets);
+extern Bool vmwgfx_saa_init(ScreenPtr          pScreen,
+                            int                drm_fd,
+                            struct xa_tracker *xat,
+                            void (*present_flush)(ScreenPtr pScreen),
+                            Bool direct_presents,
+                            Bool only_hw_presents,
+                            Bool rendercheck,
+                            Bool has_screen_targets);
 
-extern uint32_t
-vmwgfx_scanout_ref(struct vmwgfx_screen_entry *entry,
-		   Bool scanout_equals_pixmap);
+extern uint32_t vmwgfx_scanout_ref(struct vmwgfx_screen_entry *entry,
+                                   Bool scanout_equals_pixmap);
 
-extern void
-vmwgfx_scanout_unref(struct vmwgfx_screen_entry *box);
+extern void vmwgfx_scanout_unref(struct vmwgfx_screen_entry *box);
 
-extern void
-vmwgfx_scanout_refresh(PixmapPtr pixmap);
+extern void vmwgfx_scanout_refresh(PixmapPtr pixmap);
 
-extern void
-vmwgfx_remove_dri2_list(struct vmwgfx_saa_pixmap *vpix);
+extern void vmwgfx_remove_dri2_list(struct vmwgfx_saa_pixmap *vpix);
 
-extern void
-vmwgfx_flush_dri2(ScreenPtr pScreen);
+extern void vmwgfx_flush_dri2(ScreenPtr pScreen);
 
-extern Bool
-vmwgfx_hw_dri2_validate(PixmapPtr pixmap, unsigned int depth);
+extern Bool vmwgfx_hw_dri2_validate(PixmapPtr pixmap, unsigned int depth);
 
-Bool
-vmwgfx_hw_accel_validate(PixmapPtr pixmap, unsigned int depth,
-			 uint32_t add_flags, uint32_t remove_flags,
-			 RegionPtr region);
+Bool vmwgfx_hw_accel_validate(PixmapPtr    pixmap,
+                              unsigned int depth,
+                              uint32_t     add_flags,
+                              uint32_t     remove_flags,
+                              RegionPtr    region);
 
-void
-vmwgfx_saa_set_master(ScreenPtr pScreen);
+void vmwgfx_saa_set_master(ScreenPtr pScreen);
 
-void
-vmwgfx_saa_drop_master(ScreenPtr pScreen);
+void vmwgfx_saa_drop_master(ScreenPtr pScreen);
 
 #if (XA_TRACKER_VERSION_MAJOR >= 2) && defined(HAVE_LIBDRM_2_4_38)
-Bool
-vmwgfx_saa_copy_to_surface(DrawablePtr pDraw, uint32_t surface_fd,
-			   const BoxRec *dst_box, RegionPtr region);
+Bool vmwgfx_saa_copy_to_surface(DrawablePtr   pDraw,
+                                uint32_t      surface_fd,
+                                const BoxRec *dst_box,
+                                RegionPtr     region);
 #endif /* (XA_TRACKER_VERSION_MAJOR >= 2) && defined(HAVE_LIBDRM_2_4_38) */
 
 #if (XA_TRACKER_VERSION_MAJOR <= 1) && !defined(HAVE_XA_2)
 
-#define _xa_surface_handle(_a, _b, _c) xa_surface_handle(_a, _b, _c)
-#define xa_context_flush(_a)
+#  define _xa_surface_handle(_a, _b, _c) xa_surface_handle(_a, _b, _c)
+#  define xa_context_flush(_a)
 
 #else
 
-#define xa_surface_destroy(_a) xa_surface_unref(_a)
-#define _xa_surface_handle(_a, _b, _c)		\
-    xa_surface_handle(_a, xa_handle_type_shared, _b, _c)
+#  define xa_surface_destroy(_a) xa_surface_unref(_a)
+#  define _xa_surface_handle(_a, _b, _c) \
+      xa_surface_handle(_a, xa_handle_type_shared, _b, _c)
 
 #endif /*  (XA_TRACKER_VERSION_MAJOR <= 1) */
 #endif

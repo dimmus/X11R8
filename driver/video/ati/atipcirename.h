@@ -29,9 +29,10 @@
 #ifndef ATIPCIRENAME_H
 #define ATIPCIRENAME_H
 
-enum region_type {
+enum region_type
+{
     REGION_MEM,
-    REGION_IO 
+    REGION_IO
 };
 
 typedef struct pci_device *pciVideoPtr;
@@ -44,21 +45,20 @@ typedef struct pci_device *pciVideoPtr;
 #define PCI_SUB_DEVICE_ID(_pcidev) ((_pcidev)->subdevice_id)
 
 /* pci-rework functions take a 'pci_device' parameter instead of a tag */
-#define PCI_DEV_TAG(_pcidev)        (_pcidev)
+#define PCI_DEV_TAG(_pcidev) (_pcidev)
 
 /* PCI_DEV macros, typically used in printf's, add domain ? XXX */
-#define PCI_DEV_BUS(_pcidev)       ((_pcidev)->bus)
-#define PCI_DEV_DEV(_pcidev)       ((_pcidev)->dev)
-#define PCI_DEV_FUNC(_pcidev)      ((_pcidev)->func)
+#define PCI_DEV_BUS(_pcidev)  ((_pcidev)->bus)
+#define PCI_DEV_DEV(_pcidev)  ((_pcidev)->dev)
+#define PCI_DEV_FUNC(_pcidev) ((_pcidev)->func)
 
 /* pci-rework functions take a 'pci_device' parameter instead of a tag */
-#define PCI_CFG_TAG(_pcidev)        (_pcidev)
+#define PCI_CFG_TAG(_pcidev) (_pcidev)
 
 /* PCI_CFG macros, typically used in DRI init, contain the domain */
-#define PCI_CFG_BUS(_pcidev)      (((_pcidev)->domain << 8) | \
-                                    (_pcidev)->bus)
-#define PCI_CFG_DEV(_pcidev)       ((_pcidev)->dev)
-#define PCI_CFG_FUNC(_pcidev)      ((_pcidev)->func)
+#define PCI_CFG_BUS(_pcidev)  (((_pcidev)->domain << 8) | (_pcidev)->bus)
+#define PCI_CFG_DEV(_pcidev)  ((_pcidev)->dev)
+#define PCI_CFG_FUNC(_pcidev) ((_pcidev)->func)
 
 #define PCI_REGION_BASE(_pcidev, _b, _type) ((_pcidev)->regions[(_b)].base_addr)
 #define PCI_REGION_SIZE(_pcidev, _b)        ((_pcidev)->regions[(_b)].size)

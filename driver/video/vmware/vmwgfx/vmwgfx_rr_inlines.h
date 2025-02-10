@@ -34,7 +34,7 @@
 #include <xf86Crtc.h>
 #include <xf86RandR12.h>
 
-#define VMW_DPI 96.
+#define VMW_DPI        96.
 #define VMW_INCH_TO_MM 25.4
 
 /**
@@ -51,7 +51,6 @@ vmwgfx_notify_rr(ScreenPtr pScreen)
 {
     rrScrPriv(pScreen);
 
-
     /*
      * We need to update the time-stamps, otherwise X clients that haven't
      * yet read this config might just overwrite it.
@@ -60,7 +59,7 @@ vmwgfx_notify_rr(ScreenPtr pScreen)
      * clients that haven't read this config and tag their request with
      * an earlier timestamp.
      */
-    pScrPriv->lastSetTime = currentTime;
+    pScrPriv->lastSetTime    = currentTime;
     pScrPriv->lastConfigTime = currentTime;
 #ifdef RANDR_12_INTERFACE
     xf86RandR12TellChanged(pScreen);
@@ -82,11 +81,14 @@ vmwgfx_rr_screen_set_size(ScreenPtr pScreen, int width, int height)
     rrScrPriv(pScreen);
     float mm_width, mm_height;
 
-    mm_width = ((float) width) * VMW_INCH_TO_MM / VMW_DPI + .5;
-    mm_height = ((float) height) * VMW_INCH_TO_MM / VMW_DPI + .5;
+    mm_width  = ((float)width) * VMW_INCH_TO_MM / VMW_DPI + .5;
+    mm_height = ((float)height) * VMW_INCH_TO_MM / VMW_DPI + .5;
 
-    return pScrPriv->rrScreenSetSize(pScreen, width, height,
-				     (int) mm_width, (int) mm_height);
+    return pScrPriv->rrScreenSetSize(pScreen,
+                                     width,
+                                     height,
+                                     (int)mm_width,
+                                     (int)mm_height);
 }
 
 #endif

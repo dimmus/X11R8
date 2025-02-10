@@ -31,12 +31,15 @@
 #include "brw.h"
 
 #ifndef ARRAY_SIZE
-#define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
+#  define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
 #endif
 
-void brw_test_compare(const char *function, int gen,
-		      const struct brw_instruction *new, int num_new,
-		      const struct brw_instruction *old, int num_old);
+void brw_test_compare(const char *function,
+                      int         gen,
+                      const struct brw_instruction *new,
+                      int                           num_new,
+                      const struct brw_instruction *old,
+                      int                           num_old);
 
 void brw_test_gen4(void);
 void brw_test_gen5(void);

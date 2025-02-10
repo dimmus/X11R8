@@ -32,26 +32,30 @@
 #define RADEON_DRM_QUEUE_ERROR 0
 
 #define RADEON_DRM_QUEUE_CLIENT_DEFAULT serverClient
-#define RADEON_DRM_QUEUE_ID_DEFAULT ~0ULL
+#define RADEON_DRM_QUEUE_ID_DEFAULT     ~0ULL
 
 struct radeon_drm_queue_entry;
 
-typedef void (*radeon_drm_handler_proc)(xf86CrtcPtr crtc, uint32_t seq,
-					uint64_t usec, void *data);
+typedef void (*radeon_drm_handler_proc)(xf86CrtcPtr crtc,
+                                        uint32_t    seq,
+                                        uint64_t    usec,
+                                        void       *data);
 typedef void (*radeon_drm_abort_proc)(xf86CrtcPtr crtc, void *data);
 
-void radeon_drm_queue_handle_deferred(xf86CrtcPtr crtc);
-uintptr_t radeon_drm_queue_alloc(xf86CrtcPtr crtc, ClientPtr client,
-				 uint64_t id, void *data,
-				 radeon_drm_handler_proc handler,
-				 radeon_drm_abort_proc abort,
-				 Bool is_flip);
-void radeon_drm_abort_client(ClientPtr client);
-void radeon_drm_abort_entry(uintptr_t seq);
-void radeon_drm_abort_id(uint64_t id);
-int radeon_drm_handle_event(int fd, drmEventContext *event_context);
-void radeon_drm_wait_pending_flip(xf86CrtcPtr crtc);
-void radeon_drm_queue_init(ScrnInfoPtr scrn);
-void radeon_drm_queue_close(ScrnInfoPtr scrn);
+void      radeon_drm_queue_handle_deferred(xf86CrtcPtr crtc);
+uintptr_t radeon_drm_queue_alloc(xf86CrtcPtr             crtc,
+                                 ClientPtr               client,
+                                 uint64_t                id,
+                                 void                   *data,
+                                 radeon_drm_handler_proc handler,
+                                 radeon_drm_abort_proc   abort,
+                                 Bool                    is_flip);
+void      radeon_drm_abort_client(ClientPtr client);
+void      radeon_drm_abort_entry(uintptr_t seq);
+void      radeon_drm_abort_id(uint64_t id);
+int       radeon_drm_handle_event(int fd, drmEventContext *event_context);
+void      radeon_drm_wait_pending_flip(xf86CrtcPtr crtc);
+void      radeon_drm_queue_init(ScrnInfoPtr scrn);
+void      radeon_drm_queue_close(ScrnInfoPtr scrn);
 
 #endif /* _RADEON_DRM_QUEUE_H_ */

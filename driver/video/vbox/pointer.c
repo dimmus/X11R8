@@ -26,7 +26,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include <stdlib.h>
@@ -39,7 +39,7 @@
 #include "servermd.h"
 #include "vboxvideo.h"
 
-#define VBOX_MAX_CURSOR_WIDTH 64
+#define VBOX_MAX_CURSOR_WIDTH  64
 #define VBOX_MAX_CURSOR_HEIGHT 64
 
 /**************************************************************************
@@ -49,18 +49,22 @@
 /* #define DEBUG_POINTER */
 
 #ifdef DEBUG
-# define PUT_PIXEL(c) ErrorF ("%c", c)
+#  define PUT_PIXEL(c) ErrorF("%c", c)
 #else /* DEBUG_VIDEO not defined */
-# define PUT_PIXEL(c) do { } while(0)
+#  define PUT_PIXEL(c) \
+      do               \
+      {                \
+      }                \
+      while (0)
 #endif /* DEBUG_VIDEO not defined */
 
 /** Macro to printf an error message and return from a function */
-#define RETERROR(scrnIndex, RetVal, ...) \
-    do \
-    { \
+#define RETERROR(scrnIndex, RetVal, ...)             \
+    do                                               \
+    {                                                \
         xf86DrvMsg(scrnIndex, X_ERROR, __VA_ARGS__); \
-        return RetVal; \
-    } \
+        return RetVal;                               \
+    }                                                \
     while (0)
 
 /** Structure to pass cursor image data between realise_cursor() and
@@ -79,34 +83,34 @@ struct vboxCursorImage
 
 #ifdef DEBUG_POINTER
 static void
-vbox_show_shape(unsigned short w, unsigned short h, CARD32 bg, unsigned char *image)
+vbox_show_shape(unsigned short w,
+                unsigned short h,
+                CARD32         bg,
+                unsigned char *image)
 {
-    size_t x, y;
+    size_t         x, y;
     unsigned short pitch;
-    CARD32 *color;
+    CARD32        *color;
     unsigned char *mask;
-    size_t sizeMask;
+    size_t         sizeMask;
 
-    image    += sizeof(struct vboxCursorImage);
-    mask      = image;
-    pitch     = (w + 7) / 8;
-    sizeMask  = (pitch * h + 3) & ~3;
-    color     = (CARD32 *)(image + sizeMask);
+    image += sizeof(struct vboxCursorImage);
+    mask     = image;
+    pitch    = (w + 7) / 8;
+    sizeMask = (pitch * h + 3) & ~3;
+    color    = (CARD32 *)(image + sizeMask);
 
     TRACE_ENTRY();
     for (y = 0; y < h; ++y, mask += pitch, color += w)
     {
         for (x = 0; x < w; ++x)
         {
-            if (mask[x / 8] & (1 << (7 - (x % 8))))
-                ErrorF (" ");
+            if (mask[x / 8] & (1 << (7 - (x % 8)))) ErrorF(" ");
             else
             {
                 CARD32 c = color[x];
-                if (c == bg)
-                    ErrorF("Y");
-                else
-                    ErrorF("X");
+                if (c == bg) ErrorF("Y");
+                else ErrorF("X");
             }
         }
         ErrorF("\n");
@@ -118,7 +122,8 @@ vbox_show_shape(unsigned short w, unsigned short h, CARD32 bg, unsigned char *im
 * Main functions                                                          *
 **************************************************************************/
 
-void vbvxCursorTerm(VBOXPtr pVBox)
+void
+vbvxCursorTerm(VBOXPtr pVBox)
 {
     TRACE_ENTRY();
 
@@ -134,7 +139,9 @@ vbox_vmm_hide_cursor(ScrnInfoPtr pScrn, VBOXPtr pVBox)
     RT_NOREF(pScrn);
 
     rc = VBoxHGSMIUpdatePointerShape(&pVBox->guestCtx, 0, 0, 0, 0, 0, NULL, 0);
-    AssertMsg(rc == VINF_SUCCESS, ("Could not hide the virtual mouse pointer, VBox error %d.\n", rc));
+    AssertMsg(
+        rc == VINF_SUCCESS,
+        ("Could not hide the virtual mouse pointer, VBox error %d.\n", rc));
 }
 
 static void
@@ -143,18 +150,25 @@ vbox_vmm_show_cursor(ScrnInfoPtr pScrn, VBOXPtr pVBox)
     int rc;
     RT_NOREF(pScrn);
 
-    if (!pVBox->fUseHardwareCursor)
-        return;
-    rc = VBoxHGSMIUpdatePointerShape(&pVBox->guestCtx, VBOX_MOUSE_POINTER_VISIBLE,
-                                     0, 0, 0, 0, NULL, 0);
-    AssertMsg(rc == VINF_SUCCESS, ("Could not unhide the virtual mouse pointer.\n"));
+    if (!pVBox->fUseHardwareCursor) return;
+    rc = VBoxHGSMIUpdatePointerShape(&pVBox->guestCtx,
+                                     VBOX_MOUSE_POINTER_VISIBLE,
+                                     0,
+                                     0,
+                                     0,
+                                     0,
+                                     NULL,
+                                     0);
+    AssertMsg(rc == VINF_SUCCESS,
+              ("Could not unhide the virtual mouse pointer.\n"));
 }
 
 static void
-vbox_vmm_load_cursor_image(ScrnInfoPtr pScrn, VBOXPtr pVBox,
+vbox_vmm_load_cursor_image(ScrnInfoPtr    pScrn,
+                           VBOXPtr        pVBox,
                            unsigned char *pvImage)
 {
-    int rc;
+    int                     rc;
     struct vboxCursorImage *pImage;
     pImage = (struct vboxCursorImage *)pvImage;
     RT_NOREF(pScrn);
@@ -163,10 +177,16 @@ vbox_vmm_load_cursor_image(ScrnInfoPtr pScrn, VBOXPtr pVBox,
     vbox_show_shape(pImage->cWidth, pImage->cHeight, 0, pvImage);
 #endif
 
-    rc = VBoxHGSMIUpdatePointerShape(&pVBox->guestCtx, pImage->fFlags,
-             pImage->cHotX, pImage->cHotY, pImage->cWidth, pImage->cHeight,
-             pImage->pPixels, pImage->cbLength);
-    AssertMsg(rc == VINF_SUCCESS, ("Unable to set the virtual mouse pointer image.\n"));
+    rc = VBoxHGSMIUpdatePointerShape(&pVBox->guestCtx,
+                                     pImage->fFlags,
+                                     pImage->cHotX,
+                                     pImage->cHotY,
+                                     pImage->cWidth,
+                                     pImage->cHeight,
+                                     pImage->pPixels,
+                                     pImage->cbLength);
+    AssertMsg(rc == VINF_SUCCESS,
+              ("Unable to set the virtual mouse pointer image.\n"));
 }
 
 static void
@@ -177,7 +197,6 @@ vbox_set_cursor_colors(ScrnInfoPtr pScrn, int bg, int fg)
     RT_NOREF(fg);
     /* ErrorF("vbox_set_cursor_colors NOT IMPLEMENTED\n"); */
 }
-
 
 static void
 vbox_set_cursor_position(ScrnInfoPtr pScrn, int x, int y)
@@ -216,7 +235,7 @@ static Bool
 vbox_use_hw_cursor(ScreenPtr pScreen, CursorPtr pCurs)
 {
     ScrnInfoPtr pScrn = xf86Screens[pScreen->myNum];
-    VBOXPtr pVBox = pScrn->driverPrivate;
+    VBOXPtr     pVBox = pScrn->driverPrivate;
     RT_NOREF(pCurs);
     return pVBox->fUseHardwareCursor;
 }
@@ -230,56 +249,68 @@ color_to_byte(unsigned c)
 static unsigned char *
 vbox_realize_cursor(xf86CursorInfoPtr infoPtr, CursorPtr pCurs)
 {
-    VBOXPtr pVBox;
-    CursorBitsPtr bitsp;
-    unsigned short w, h, x, y;
-    unsigned char *c, *p, *pm, *ps, *m;
-    size_t sizeRequest, sizeRgba, sizeMask, srcPitch, dstPitch;
-    CARD32 fc, bc, *cp;
-    int scrnIndex = infoPtr->pScrn->scrnIndex;
+    VBOXPtr                 pVBox;
+    CursorBitsPtr           bitsp;
+    unsigned short          w, h, x, y;
+    unsigned char          *c, *p, *pm, *ps, *m;
+    size_t                  sizeRequest, sizeRgba, sizeMask, srcPitch, dstPitch;
+    CARD32                  fc, bc, *cp;
+    int                     scrnIndex = infoPtr->pScrn->scrnIndex;
     struct vboxCursorImage *pImage;
 
     pVBox = infoPtr->pScrn->driverPrivate;
     bitsp = pCurs->bits;
-    w = bitsp->width;
-    h = bitsp->height;
+    w     = bitsp->width;
+    h     = bitsp->height;
 
     if (!w || !h || w > VBOX_MAX_CURSOR_WIDTH || h > VBOX_MAX_CURSOR_HEIGHT)
-        RETERROR(scrnIndex, NULL,
-            "Error invalid cursor dimensions %dx%d\n", w, h);
+        RETERROR(scrnIndex,
+                 NULL,
+                 "Error invalid cursor dimensions %dx%d\n",
+                 w,
+                 h);
 
     if ((bitsp->xhot > w) || (bitsp->yhot > h))
-        RETERROR(scrnIndex, NULL,
-            "Error invalid cursor hotspot location %dx%d (max %dx%d)\n",
-            bitsp->xhot, bitsp->yhot, w, h);
+        RETERROR(scrnIndex,
+                 NULL,
+                 "Error invalid cursor hotspot location %dx%d (max %dx%d)\n",
+                 bitsp->xhot,
+                 bitsp->yhot,
+                 w,
+                 h);
 
-    srcPitch = PixmapBytePad (bitsp->width, 1);
-    dstPitch = (w + 7) / 8;
-    sizeMask = ((dstPitch * h) + 3) & (size_t) ~3;
-    sizeRgba = w * h * 4;
+    srcPitch    = PixmapBytePad(bitsp->width, 1);
+    dstPitch    = (w + 7) / 8;
+    sizeMask    = ((dstPitch * h) + 3) & (size_t)~3;
+    sizeRgba    = w * h * 4;
     sizeRequest = sizeMask + sizeRgba + sizeof(*pImage);
 
-    p = c = calloc (1, sizeRequest);
+    p = c = calloc(1, sizeRequest);
     if (!c)
-        RETERROR(scrnIndex, NULL,
+        RETERROR(scrnIndex,
+                 NULL,
                  "Error failed to alloc %lu bytes for cursor\n",
-                 (unsigned long) sizeRequest);
+                 (unsigned long)sizeRequest);
 
-    pImage = (struct vboxCursorImage *)p;
+    pImage          = (struct vboxCursorImage *)p;
     pImage->pPixels = m = p + sizeof(*pImage);
-    cp = (CARD32 *)(m + sizeMask);
+    cp                  = (CARD32 *)(m + sizeMask);
 
-    TRACE_LOG ("w=%d h=%d sm=%d sr=%d p=%d\n",
-           w, h, (int) sizeMask, (int) sizeRgba, (int) dstPitch);
-    TRACE_LOG ("m=%p c=%p cp=%p\n", m, c, (void *)cp);
+    TRACE_LOG("w=%d h=%d sm=%d sr=%d p=%d\n",
+              w,
+              h,
+              (int)sizeMask,
+              (int)sizeRgba,
+              (int)dstPitch);
+    TRACE_LOG("m=%p c=%p cp=%p\n", m, c, (void *)cp);
 
-    fc = color_to_byte (pCurs->foreBlue)
-      | (color_to_byte (pCurs->foreGreen) << 8)
-      | (color_to_byte (pCurs->foreRed)   << 16);
+    fc = color_to_byte(pCurs->foreBlue) |
+         (color_to_byte(pCurs->foreGreen) << 8) |
+         (color_to_byte(pCurs->foreRed) << 16);
 
-    bc = color_to_byte (pCurs->backBlue)
-      | (color_to_byte (pCurs->backGreen) << 8)
-      | (color_to_byte (pCurs->backRed)   << 16);
+    bc = color_to_byte(pCurs->backBlue) |
+         (color_to_byte(pCurs->backGreen) << 8) |
+         (color_to_byte(pCurs->backRed) << 16);
 
     /*
      * Convert the Xorg source/mask bits to the and/xor bits VBox needs.
@@ -299,8 +330,7 @@ vbox_realize_cursor(xf86CursorInfoPtr infoPtr, CursorPtr pCurs)
      *   For example when you have the AND mask all 0, then you see the
      *   correct mouse pointer image surrounded by black square.
      */
-    for (pm = bitsp->mask, ps = bitsp->source, y = 0;
-         y < h;
+    for (pm = bitsp->mask, ps = bitsp->source, y = 0; y < h;
          ++y, pm += srcPitch, ps += srcPitch, m += dstPitch)
     {
         for (x = 0; x < w; ++x)
@@ -351,56 +381,58 @@ static Bool
 vbox_use_hw_cursor_argb(ScreenPtr pScreen, CursorPtr pCurs)
 {
     ScrnInfoPtr pScrn = xf86Screens[pScreen->myNum];
-    VBOXPtr pVBox = pScrn->driverPrivate;
+    VBOXPtr     pVBox = pScrn->driverPrivate;
 
-    if (!pVBox->fUseHardwareCursor)
-        return FALSE;
-    if (   (pCurs->bits->height > VBOX_MAX_CURSOR_HEIGHT)
-        || (pCurs->bits->width > VBOX_MAX_CURSOR_WIDTH)
-        || (pScrn->bitsPerPixel <= 8))
+    if (!pVBox->fUseHardwareCursor) return FALSE;
+    if ((pCurs->bits->height > VBOX_MAX_CURSOR_HEIGHT) ||
+        (pCurs->bits->width > VBOX_MAX_CURSOR_WIDTH) ||
+        (pScrn->bitsPerPixel <= 8))
         return FALSE;
     return TRUE;
 }
 
-
 static void
 vbox_load_cursor_argb(ScrnInfoPtr pScrn, CursorPtr pCurs)
 {
-    VBOXPtr pVBox;
-    CursorBitsPtr bitsp;
+    VBOXPtr        pVBox;
+    CursorBitsPtr  bitsp;
     unsigned short w, h;
     unsigned short cx, cy;
     unsigned char *pm;
-    CARD32 *pc;
-    size_t sizeData, sizeMask;
-    CARD8 *p;
-    int scrnIndex;
-    uint32_t fFlags =   VBOX_MOUSE_POINTER_VISIBLE | VBOX_MOUSE_POINTER_SHAPE
-                      | VBOX_MOUSE_POINTER_ALPHA;
+    CARD32        *pc;
+    size_t         sizeData, sizeMask;
+    CARD8         *p;
+    int            scrnIndex;
+    uint32_t fFlags = VBOX_MOUSE_POINTER_VISIBLE | VBOX_MOUSE_POINTER_SHAPE |
+                      VBOX_MOUSE_POINTER_ALPHA;
 
-    pVBox = pScrn->driverPrivate;
-    bitsp = pCurs->bits;
-    w     = bitsp->width;
-    h     = bitsp->height;
+    pVBox     = pScrn->driverPrivate;
+    bitsp     = pCurs->bits;
+    w         = bitsp->width;
+    h         = bitsp->height;
     scrnIndex = pScrn->scrnIndex;
 
     /* Mask must be generated for alpha cursors, that is required by VBox. */
     /* note: (michael) the next struct must be 32bit aligned. */
-    sizeMask  = ((w + 7) / 8 * h + 3) & ~3;
+    sizeMask = ((w + 7) / 8 * h + 3) & ~3;
 
     if (!w || !h || w > VBOX_MAX_CURSOR_WIDTH || h > VBOX_MAX_CURSOR_HEIGHT)
-        RETERROR(scrnIndex, ,
-                 "Error invalid cursor dimensions %dx%d\n", w, h);
+        RETERROR(scrnIndex, , "Error invalid cursor dimensions %dx%d\n", w, h);
 
     if ((bitsp->xhot > w) || (bitsp->yhot > h))
-        RETERROR(scrnIndex, ,
+        RETERROR(scrnIndex,
+                 ,
                  "Error invalid cursor hotspot location %dx%d (max %dx%d)\n",
-                 bitsp->xhot, bitsp->yhot, w, h);
+                 bitsp->xhot,
+                 bitsp->yhot,
+                 w,
+                 h);
 
     sizeData = w * h * 4 + sizeMask;
-    p = calloc(1, sizeData);
+    p        = calloc(1, sizeData);
     if (!p)
-        RETERROR(scrnIndex, ,
+        RETERROR(scrnIndex,
+                 ,
                  "Error failed to alloc %lu bytes for cursor\n",
                  (unsigned long)sizeData);
 
@@ -425,11 +457,9 @@ vbox_load_cursor_argb(ScrnInfoPtr pScrn, CursorPtr pCurs)
 
         for (cx = 0; cx < w; cx++, bitmask >>= 1)
         {
-            if (bitmask == 0)
-                bitmask = 0x80;
+            if (bitmask == 0) bitmask = 0x80;
 
-            if (pc[cx] >= 0xF0000000)
-                pm[cx / 8] &= ~bitmask;
+            if (pc[cx] >= 0xF0000000) pm[cx / 8] &= ~bitmask;
         }
 
         /* Point to next source and dest scans */
@@ -437,33 +467,44 @@ vbox_load_cursor_argb(ScrnInfoPtr pScrn, CursorPtr pCurs)
         pm += (w + 7) / 8;
     }
 
-    VBoxHGSMIUpdatePointerShape(&pVBox->guestCtx, fFlags, bitsp->xhot,
-                                bitsp->yhot, w, h, p, sizeData);
+    VBoxHGSMIUpdatePointerShape(&pVBox->guestCtx,
+                                fFlags,
+                                bitsp->xhot,
+                                bitsp->yhot,
+                                w,
+                                h,
+                                p,
+                                sizeData);
     free(p);
 }
 #endif
 
-Bool vbvxCursorInit(ScreenPtr pScreen)
+Bool
+vbvxCursorInit(ScreenPtr pScreen)
 {
-    ScrnInfoPtr pScrn = xf86Screens[pScreen->myNum];
-    VBOXPtr pVBox = pScrn->driverPrivate;
+    ScrnInfoPtr       pScrn = xf86Screens[pScreen->myNum];
+    VBOXPtr           pVBox = pScrn->driverPrivate;
     xf86CursorInfoPtr pCurs = NULL;
-    Bool rc = TRUE;
+    Bool              rc    = TRUE;
 
     TRACE_ENTRY();
     pVBox->pCurs = pCurs = xf86CreateCursorInfoRec();
-    if (!pCurs) {
-        xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
-                   "Failed to create X Window cursor information structures for virtual mouse.\n");
+    if (!pCurs)
+    {
+        xf86DrvMsg(pScrn->scrnIndex,
+                   X_ERROR,
+                   "Failed to create X Window cursor information structures "
+                   "for virtual mouse.\n");
         rc = FALSE;
     }
-    if (rc) {
-        pCurs->MaxWidth = VBOX_MAX_CURSOR_WIDTH;
+    if (rc)
+    {
+        pCurs->MaxWidth  = VBOX_MAX_CURSOR_WIDTH;
         pCurs->MaxHeight = VBOX_MAX_CURSOR_HEIGHT;
-        pCurs->Flags =   HARDWARE_CURSOR_TRUECOLOR_AT_8BPP
-                       | HARDWARE_CURSOR_SOURCE_MASK_INTERLEAVE_1
-                       | HARDWARE_CURSOR_BIT_ORDER_MSBFIRST
-                       | HARDWARE_CURSOR_UPDATE_UNHIDDEN;
+        pCurs->Flags     = HARDWARE_CURSOR_TRUECOLOR_AT_8BPP |
+                       HARDWARE_CURSOR_SOURCE_MASK_INTERLEAVE_1 |
+                       HARDWARE_CURSOR_BIT_ORDER_MSBFIRST |
+                       HARDWARE_CURSOR_UPDATE_UNHIDDEN;
 
         pCurs->SetCursorColors   = vbox_set_cursor_colors;
         pCurs->SetCursorPosition = vbox_set_cursor_position;
@@ -474,16 +515,16 @@ Bool vbvxCursorInit(ScreenPtr pScreen)
         pCurs->RealizeCursor     = vbox_realize_cursor;
 
 #ifdef ARGB_CURSOR
-        pCurs->UseHWCursorARGB   = vbox_use_hw_cursor_argb;
-        pCurs->LoadCursorARGB    = vbox_load_cursor_argb;
+        pCurs->UseHWCursorARGB = vbox_use_hw_cursor_argb;
+        pCurs->LoadCursorARGB  = vbox_load_cursor_argb;
 #endif
 
         rc = xf86InitCursor(pScreen, pCurs);
     }
     if (!rc)
-        xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
+        xf86DrvMsg(pScrn->scrnIndex,
+                   X_ERROR,
                    "Failed to enable mouse pointer integration.\n");
-    if (!rc && (pCurs != NULL))
-        xf86DestroyCursorInfoRec(pCurs);
+    if (!rc && (pCurs != NULL)) xf86DestroyCursorInfoRec(pCurs);
     return rc;
 }

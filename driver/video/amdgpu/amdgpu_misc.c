@@ -21,7 +21,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include "amdgpu_probe.h"
@@ -32,16 +32,10 @@
 /* Module loader interface for subsidiary driver module */
 
 static XF86ModuleVersionInfo AMDGPUVersionRec = {
-	AMDGPU_DRIVER_NAME,
-	MODULEVENDORSTRING,
-	MODINFOSTRING1,
-	MODINFOSTRING2,
-	XORG_VERSION_CURRENT,
-	AMDGPU_VERSION_MAJOR, AMDGPU_VERSION_MINOR, AMDGPU_VERSION_PATCH,
-	ABI_CLASS_VIDEODRV,
-	ABI_VIDEODRV_VERSION,
-	MOD_CLASS_VIDEODRV,
-	{0, 0, 0, 0}
+    AMDGPU_DRIVER_NAME,   MODULEVENDORSTRING,   MODINFOSTRING1,
+    MODINFOSTRING2,       XORG_VERSION_CURRENT, AMDGPU_VERSION_MAJOR,
+    AMDGPU_VERSION_MINOR, AMDGPU_VERSION_PATCH, ABI_CLASS_VIDEODRV,
+    ABI_VIDEODRV_VERSION, MOD_CLASS_VIDEODRV,   { 0, 0, 0, 0 }
 };
 
 /*
@@ -52,19 +46,18 @@ static XF86ModuleVersionInfo AMDGPUVersionRec = {
 static pointer
 AMDGPUSetup(pointer Module, pointer Options, int *ErrorMajor, int *ErrorMinor)
 {
-	static Bool Inited = FALSE;
+    static Bool Inited = FALSE;
 
-	if (!Inited) {
-		Inited = TRUE;
-		xf86AddDriver(&AMDGPU, Module, HaveDriverFuncs);
-	}
+    if (!Inited)
+    {
+        Inited = TRUE;
+        xf86AddDriver(&AMDGPU, Module, HaveDriverFuncs);
+    }
 
-	return (pointer) TRUE;
+    return (pointer)TRUE;
 }
 
 /* The following record must be called amdgpuModuleData */
-_X_EXPORT XF86ModuleData amdgpuModuleData = {
-	&AMDGPUVersionRec,
-	AMDGPUSetup,
-	NULL
-};
+_X_EXPORT XF86ModuleData amdgpuModuleData = { &AMDGPUVersionRec,
+                                              AMDGPUSetup,
+                                              NULL };

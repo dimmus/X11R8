@@ -20,7 +20,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 #ifndef ___VBox_Graphics_HGSMI_h
 #define ___VBox_Graphics_HGSMI_h
 
@@ -67,7 +66,7 @@
 
 typedef struct HGSMIHEAP
 {
-    HGSMIAREA area; /* Description. */
+    HGSMIAREA   area; /* Description. */
     HGSMIMADATA ma; /* Memory allocator */
 } HGSMIHEAP;
 
@@ -75,32 +74,36 @@ typedef struct HGSMIHEAP
 #define HGSMI_NUMBER_OF_CHANNELS 0x100
 
 /* Channel handler called when the guest submits a buffer. */
-typedef DECLCALLBACK(int) FNHGSMICHANNELHANDLER(void *pvHandler, uint16_t u16ChannelInfo, void *pvBuffer, HGSMISIZE cbBuffer);
+typedef DECLCALLBACK(int) FNHGSMICHANNELHANDLER(void     *pvHandler,
+                                                uint16_t  u16ChannelInfo,
+                                                void     *pvBuffer,
+                                                HGSMISIZE cbBuffer);
 typedef FNHGSMICHANNELHANDLER *PFNHGSMICHANNELHANDLER;
 
 /* Information about a handler: pfn + context. */
 typedef struct _HGSMICHANNELHANDLER
 {
     PFNHGSMICHANNELHANDLER pfnHandler;
-    void *pvHandler;
+    void                  *pvHandler;
 } HGSMICHANNELHANDLER;
 
 /* Channel description. */
 typedef struct _HGSMICHANNEL
 {
-    HGSMICHANNELHANDLER handler;       /* The channel handler. */
-    const char *pszName;               /* NULL for hardcoded channels or RTStrDup'ed name. */
-    uint8_t u8Channel;                 /* The channel id, equal to the channel index in the array. */
-    uint8_t u8Flags;                   /* HGSMI_CH_F_* */
+    HGSMICHANNELHANDLER handler; /* The channel handler. */
+    const char *pszName; /* NULL for hardcoded channels or RTStrDup'ed name. */
+    uint8_t
+        u8Channel; /* The channel id, equal to the channel index in the array. */
+    uint8_t u8Flags; /* HGSMI_CH_F_* */
 } HGSMICHANNEL;
 
 typedef struct _HGSMICHANNELINFO
 {
-    HGSMICHANNEL Channels[HGSMI_NUMBER_OF_CHANNELS]; /* Channel handlers indexed by the channel id.
+    HGSMICHANNEL Channels
+        [HGSMI_NUMBER_OF_CHANNELS]; /* Channel handlers indexed by the channel id.
                                                       * The array is accessed under the instance lock.
                                                       */
-}  HGSMICHANNELINFO;
-
+} HGSMICHANNELINFO;
 
 RT_C_DECLS_BEGIN
 
@@ -114,8 +117,8 @@ DECLINLINE(uint8_t *) HGSMIBufferDataFromPtr(void *pvBuffer)
     return (uint8_t *)pvBuffer + sizeof(HGSMIBUFFERHEADER);
 }
 
-DECLINLINE(HGSMIBUFFERTAIL *) HGSMIBufferTailFromPtr(void *pvBuffer,
-                                                     uint32_t u32DataSize)
+DECLINLINE(HGSMIBUFFERTAIL *)
+HGSMIBufferTailFromPtr(void *pvBuffer, uint32_t u32DataSize)
 {
     return (HGSMIBUFFERTAIL *)(HGSMIBufferDataFromPtr(pvBuffer) + u32DataSize);
 }
@@ -135,89 +138,91 @@ DECLINLINE(HGSMISIZE) HGSMIBufferRequiredSize(uint32_t u32DataSize)
     return HGSMIBufferMinimumSize() + u32DataSize;
 }
 
-DECLINLINE(HGSMIOFFSET) HGSMIPointerToOffset(const HGSMIAREA *pArea,
-                                             const void *pv)
+DECLINLINE(HGSMIOFFSET)
+HGSMIPointerToOffset(const HGSMIAREA *pArea, const void *pv)
 {
     return pArea->offBase + (HGSMIOFFSET)((uint8_t *)pv - pArea->pu8Base);
 }
 
-DECLINLINE(void *) HGSMIOffsetToPointer(const HGSMIAREA *pArea,
-                                        HGSMIOFFSET offBuffer)
+DECLINLINE(void *)
+HGSMIOffsetToPointer(const HGSMIAREA *pArea, HGSMIOFFSET offBuffer)
 {
     return pArea->pu8Base + (offBuffer - pArea->offBase);
 }
 
-DECLINLINE(uint8_t *) HGSMIBufferDataFromOffset(const HGSMIAREA *pArea,
-                                                HGSMIOFFSET offBuffer)
+DECLINLINE(uint8_t *)
+HGSMIBufferDataFromOffset(const HGSMIAREA *pArea, HGSMIOFFSET offBuffer)
 {
     void *pvBuffer = HGSMIOffsetToPointer(pArea, offBuffer);
     return HGSMIBufferDataFromPtr(pvBuffer);
 }
 
-DECLINLINE(HGSMIOFFSET) HGSMIBufferOffsetFromData(const HGSMIAREA *pArea,
-                                                  void *pvData)
+DECLINLINE(HGSMIOFFSET)
+HGSMIBufferOffsetFromData(const HGSMIAREA *pArea, void *pvData)
 {
     HGSMIBUFFERHEADER *pHeader = HGSMIBufferHeaderFromData(pvData);
     return HGSMIPointerToOffset(pArea, pHeader);
 }
 
-DECLINLINE(uint8_t *) HGSMIBufferDataAndChInfoFromOffset(const HGSMIAREA *pArea,
-                                                         HGSMIOFFSET offBuffer,
-                                                         uint16_t *pu16ChannelInfo)
+DECLINLINE(uint8_t *)
+HGSMIBufferDataAndChInfoFromOffset(const HGSMIAREA *pArea,
+                                   HGSMIOFFSET      offBuffer,
+                                   uint16_t        *pu16ChannelInfo)
 {
-    HGSMIBUFFERHEADER *pHeader = (HGSMIBUFFERHEADER *)HGSMIOffsetToPointer(pArea, offBuffer);
+    HGSMIBUFFERHEADER *pHeader =
+        (HGSMIBUFFERHEADER *)HGSMIOffsetToPointer(pArea, offBuffer);
     *pu16ChannelInfo = pHeader->u16ChannelInfo;
     return HGSMIBufferDataFromPtr(pHeader);
 }
 
-uint32_t HGSMIChecksum(HGSMIOFFSET offBuffer,
+uint32_t HGSMIChecksum(HGSMIOFFSET              offBuffer,
                        const HGSMIBUFFERHEADER *pHeader,
-                       const HGSMIBUFFERTAIL *pTail);
+                       const HGSMIBUFFERTAIL   *pTail);
 
-int HGSMIAreaInitialize(HGSMIAREA *pArea,
-                        void *pvBase,
-                        HGSMISIZE cbArea,
+int HGSMIAreaInitialize(HGSMIAREA  *pArea,
+                        void       *pvBase,
+                        HGSMISIZE   cbArea,
                         HGSMIOFFSET offBase);
 
 void HGSMIAreaClear(HGSMIAREA *pArea);
 
-DECLINLINE(bool) HGSMIAreaContainsOffset(const HGSMIAREA *pArea, HGSMIOFFSET off)
+DECLINLINE(bool)
+HGSMIAreaContainsOffset(const HGSMIAREA *pArea, HGSMIOFFSET off)
 {
     return off >= pArea->offBase && off - pArea->offBase < pArea->cbArea;
 }
 
-DECLINLINE(bool) HGSMIAreaContainsPointer(const HGSMIAREA *pArea, const void *pv)
+DECLINLINE(bool)
+HGSMIAreaContainsPointer(const HGSMIAREA *pArea, const void *pv)
 {
-    return (uintptr_t)pv >= (uintptr_t)pArea->pu8Base && (uintptr_t)pv - (uintptr_t)pArea->pu8Base < pArea->cbArea;
+    return (uintptr_t)pv >= (uintptr_t)pArea->pu8Base &&
+           (uintptr_t)pv - (uintptr_t)pArea->pu8Base < pArea->cbArea;
 }
 
-HGSMIOFFSET HGSMIBufferInitializeSingle(const HGSMIAREA *pArea,
+HGSMIOFFSET HGSMIBufferInitializeSingle(const HGSMIAREA   *pArea,
                                         HGSMIBUFFERHEADER *pHeader,
-                                        HGSMISIZE cbBuffer,
-                                        uint8_t u8Channel,
-                                        uint16_t u16ChannelInfo);
+                                        HGSMISIZE          cbBuffer,
+                                        uint8_t            u8Channel,
+                                        uint16_t           u16ChannelInfo);
 
-int HGSMIHeapSetup(HGSMIHEAP *pHeap,
-                   void *pvBase,
-                   HGSMISIZE cbArea,
-                   HGSMIOFFSET offBase,
+int HGSMIHeapSetup(HGSMIHEAP      *pHeap,
+                   void           *pvBase,
+                   HGSMISIZE       cbArea,
+                   HGSMIOFFSET     offBase,
                    const HGSMIENV *pEnv);
 
 void HGSMIHeapDestroy(HGSMIHEAP *pHeap);
 
-void *HGSMIHeapBufferAlloc(HGSMIHEAP *pHeap,
-                           HGSMISIZE cbBuffer);
+void *HGSMIHeapBufferAlloc(HGSMIHEAP *pHeap, HGSMISIZE cbBuffer);
 
-void HGSMIHeapBufferFree(HGSMIHEAP *pHeap,
-                         void *pvBuf);
+void HGSMIHeapBufferFree(HGSMIHEAP *pHeap, void *pvBuf);
 
 void *HGSMIHeapAlloc(HGSMIHEAP *pHeap,
-                     HGSMISIZE cbData,
-                     uint8_t u8Channel,
-                     uint16_t u16ChannelInfo);
+                     HGSMISIZE  cbData,
+                     uint8_t    u8Channel,
+                     uint16_t   u16ChannelInfo);
 
-void HGSMIHeapFree(HGSMIHEAP *pHeap,
-                   void *pvData);
+void HGSMIHeapFree(HGSMIHEAP *pHeap, void *pvData);
 
 DECLINLINE(const HGSMIAREA *) HGSMIHeapArea(HGSMIHEAP *pHeap)
 {
@@ -234,25 +239,23 @@ DECLINLINE(HGSMISIZE) HGSMIHeapSize(HGSMIHEAP *pHeap)
     return HGSMIHeapArea(pHeap)->cbArea;
 }
 
-DECLINLINE(HGSMIOFFSET) HGSMIHeapBufferOffset(HGSMIHEAP *pHeap,
-                                              void *pvData)
+DECLINLINE(HGSMIOFFSET) HGSMIHeapBufferOffset(HGSMIHEAP *pHeap, void *pvData)
 {
     return HGSMIBufferOffsetFromData(HGSMIHeapArea(pHeap), pvData);
 }
 
 HGSMICHANNEL *HGSMIChannelFindById(HGSMICHANNELINFO *pChannelInfo,
-                                   uint8_t u8Channel);
+                                   uint8_t           u8Channel);
 
-int HGSMIChannelRegister(HGSMICHANNELINFO *pChannelInfo,
-                         uint8_t u8Channel,
-                         const char *pszName,
+int HGSMIChannelRegister(HGSMICHANNELINFO      *pChannelInfo,
+                         uint8_t                u8Channel,
+                         const char            *pszName,
                          PFNHGSMICHANNELHANDLER pfnChannelHandler,
-                         void *pvChannelHandler);
+                         void                  *pvChannelHandler);
 
-int HGSMIBufferProcess(const HGSMIAREA *pArea,
+int HGSMIBufferProcess(const HGSMIAREA  *pArea,
                        HGSMICHANNELINFO *pChannelInfo,
-                       HGSMIOFFSET offBuffer);
+                       HGSMIOFFSET       offBuffer);
 RT_C_DECLS_END
 
 #endif /* !___VBox_Graphics_HGSMI_h */
-

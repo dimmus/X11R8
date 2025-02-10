@@ -31,31 +31,33 @@
 void
 fbPadPixmap(PixmapPtr pPixmap)
 {
-	int width;
-	FbBits *bits;
-	FbBits b;
-	FbBits mask;
-	int height;
-	int w;
-	int stride;
-	int bpp;
-	_X_UNUSED int xOff, yOff;
+    int           width;
+    FbBits       *bits;
+    FbBits        b;
+    FbBits        mask;
+    int           height;
+    int           w;
+    int           stride;
+    int           bpp;
+    _X_UNUSED int xOff, yOff;
 
-	fbGetDrawable(&pPixmap->drawable, bits, stride, bpp, xOff, yOff);
+    fbGetDrawable(&pPixmap->drawable, bits, stride, bpp, xOff, yOff);
 
-	width = pPixmap->drawable.width * pPixmap->drawable.bitsPerPixel;
-	height = pPixmap->drawable.height;
-	mask = FbBitsMask(0, width);
-	while (height--) {
-		b = READ(bits) & mask;
-		w = width;
-		while (w < FB_UNIT) {
-			b = b | FbScrRight(b, w);
-			w <<= 1;
-		}
-		WRITE(bits, b);
-		bits += stride;
-	}
+    width  = pPixmap->drawable.width * pPixmap->drawable.bitsPerPixel;
+    height = pPixmap->drawable.height;
+    mask   = FbBitsMask(0, width);
+    while (height--)
+    {
+        b = READ(bits) & mask;
+        w = width;
+        while (w < FB_UNIT)
+        {
+            b = b | FbScrRight(b, w);
+            w <<= 1;
+        }
+        WRITE(bits, b);
+        bits += stride;
+    }
 }
 
 /*
@@ -64,18 +66,17 @@ fbPadPixmap(PixmapPtr pPixmap)
 static Bool
 fbBitsRepeat(FbBits bits, int len, int width)
 {
-	FbBits mask = FbBitsMask(0, len);
-	FbBits orig = bits & mask;
-	int i;
+    FbBits mask = FbBitsMask(0, len);
+    FbBits orig = bits & mask;
+    int    i;
 
-	if (width > FB_UNIT)
-		width = FB_UNIT;
-	for (i = 0; i < width / len; i++) {
-		if ((bits & mask) != orig)
-			return FALSE;
-		bits = FbScrLeft(bits, len);
-	}
-	return TRUE;
+    if (width > FB_UNIT) width = FB_UNIT;
+    for (i = 0; i < width / len; i++)
+    {
+        if ((bits & mask) != orig) return FALSE;
+        bits = FbScrLeft(bits, len);
+    }
+    return TRUE;
 }
 
 /*
@@ -83,18 +84,16 @@ fbBitsRepeat(FbBits bits, int len, int width)
  * the first 'len' bits
  */
 static Bool
-fbLineRepeat(FbBits * bits, int len, int width)
+fbLineRepeat(FbBits *bits, int len, int width)
 {
-	FbBits first = bits[0];
+    FbBits first = bits[0];
 
-	if (!fbBitsRepeat(first, len, width))
-		return FALSE;
-	width = (width + FB_UNIT - 1) >> FB_SHIFT;
-	bits++;
-	while (--width)
-		if (READ(bits) != first)
-			return FALSE;
-	return TRUE;
+    if (!fbBitsRepeat(first, len, width)) return FALSE;
+    width = (width + FB_UNIT - 1) >> FB_SHIFT;
+    bits++;
+    while (--width)
+        if (READ(bits) != first) return FALSE;
+    return TRUE;
 }
 
 /*
@@ -104,94 +103,115 @@ fbLineRepeat(FbBits * bits, int len, int width)
 static Bool
 fbCanEvenStipple(PixmapPtr pStipple, int bpp)
 {
-	int len = FB_UNIT / bpp;
-	FbBits *bits;
-	int stride;
-	int stip_bpp;
-	_X_UNUSED int stipXoff, stipYoff;
-	int h;
+    int           len = FB_UNIT / bpp;
+    FbBits       *bits;
+    int           stride;
+    int           stip_bpp;
+    _X_UNUSED int stipXoff, stipYoff;
+    int           h;
 
-	/* make sure the stipple width is a multiple of the even stipple width */
-	if (pStipple->drawable.width % len != 0)
-		return FALSE;
+    /* make sure the stipple width is a multiple of the even stipple width */
+    if (pStipple->drawable.width % len != 0) return FALSE;
 
-	fbGetDrawable(&pStipple->drawable, bits, stride, stip_bpp, stipXoff,
-		      stipYoff);
-	h = pStipple->drawable.height;
-	/* check to see that the stipple repeats horizontally */
-	while (h--) {
-		if (!fbLineRepeat(bits, len, pStipple->drawable.width))
-			return FALSE;
+    fbGetDrawable(&pStipple->drawable,
+                  bits,
+                  stride,
+                  stip_bpp,
+                  stipXoff,
+                  stipYoff);
+    h = pStipple->drawable.height;
+    /* check to see that the stipple repeats horizontally */
+    while (h--)
+    {
+        if (!fbLineRepeat(bits, len, pStipple->drawable.width)) return FALSE;
 
-		bits += stride;
-	}
-	return TRUE;
+        bits += stride;
+    }
+    return TRUE;
 }
 
 void
 fbValidateGC(GCPtr gc, unsigned long changes, DrawablePtr drawable)
 {
-	FbGCPrivPtr pgc = fb_gc(gc);
-	FbBits mask;
+    FbGCPrivPtr pgc = fb_gc(gc);
+    FbBits      mask;
 
-	DBG(("%s changes=%lx\n", __FUNCTION__, changes));
+    DBG(("%s changes=%lx\n", __FUNCTION__, changes));
 
-	if (changes & GCStipple) {
-		pgc->evenStipple = FALSE;
+    if (changes & GCStipple)
+    {
+        pgc->evenStipple = FALSE;
 
-		if (gc->stipple) {
-			/* can we do an even stipple ?? */
-			if (FbEvenStip(gc->stipple->drawable.width,
-				       drawable->bitsPerPixel) &&
-			    (fbCanEvenStipple(gc->stipple, drawable->bitsPerPixel)))
-				pgc->evenStipple = TRUE;
-		}
-	}
+        if (gc->stipple)
+        {
+            /* can we do an even stipple ?? */
+            if (FbEvenStip(gc->stipple->drawable.width,
+                           drawable->bitsPerPixel) &&
+                (fbCanEvenStipple(gc->stipple, drawable->bitsPerPixel)))
+                pgc->evenStipple = TRUE;
+        }
+    }
 
-	/*
+    /*
 	 * Recompute reduced rop values
 	 */
-	if (changes & (GCForeground | GCBackground | GCPlaneMask | GCFunction)) {
-		int s;
-		FbBits depthMask;
+    if (changes & (GCForeground | GCBackground | GCPlaneMask | GCFunction))
+    {
+        int    s;
+        FbBits depthMask;
 
-		mask = FbFullMask(drawable->bitsPerPixel);
-		depthMask = FbFullMask(drawable->depth);
+        mask      = FbFullMask(drawable->bitsPerPixel);
+        depthMask = FbFullMask(drawable->depth);
 
-		DBG(("%s: computing rrop mask=%08x, depthMask=%08x, fg=%08x, bg=%08x, planemask=%08x\n",
-		     __FUNCTION__, mask, depthMask, (int)gc->fgPixel, (int)gc->bgPixel, (int)gc->planemask));
+        DBG(("%s: computing rrop mask=%08x, depthMask=%08x, fg=%08x, bg=%08x, "
+             "planemask=%08x\n",
+             __FUNCTION__,
+             mask,
+             depthMask,
+             (int)gc->fgPixel,
+             (int)gc->bgPixel,
+             (int)gc->planemask));
 
-		pgc->fg = gc->fgPixel & mask;
-		pgc->bg = gc->bgPixel & mask;
+        pgc->fg = gc->fgPixel & mask;
+        pgc->bg = gc->bgPixel & mask;
 
-		if ((gc->planemask & depthMask) == depthMask)
-			pgc->pm = mask;
-		else
-			pgc->pm = gc->planemask & mask;
+        if ((gc->planemask & depthMask) == depthMask) pgc->pm = mask;
+        else pgc->pm = gc->planemask & mask;
 
-		s = drawable->bitsPerPixel;
-		while (s < FB_UNIT) {
-			pgc->fg |= pgc->fg << s;
-			pgc->bg |= pgc->bg << s;
-			pgc->pm |= pgc->pm << s;
-			s <<= 1;
-		}
-		pgc->and = fbAnd(gc->alu, pgc->fg, pgc->pm);
-		pgc->xor = fbXor(gc->alu, pgc->fg, pgc->pm);
-		pgc->bgand = fbAnd(gc->alu, pgc->bg, pgc->pm);
-		pgc->bgxor = fbXor(gc->alu, pgc->bg, pgc->pm);
+        s = drawable->bitsPerPixel;
+        while (s < FB_UNIT)
+        {
+            pgc->fg |= pgc->fg << s;
+            pgc->bg |= pgc->bg << s;
+            pgc->pm |= pgc->pm << s;
+            s <<= 1;
+        }
+        pgc->and   = fbAnd(gc->alu, pgc->fg, pgc->pm);
+        pgc->xor   = fbXor(gc->alu, pgc->fg, pgc->pm);
+        pgc->bgand = fbAnd(gc->alu, pgc->bg, pgc->pm);
+        pgc->bgxor = fbXor(gc->alu, pgc->bg, pgc->pm);
 
-		DBG(("%s: rrop fg=%08x, bg=%08x, pm=%08x, and=%08x, xor=%08x, bgand=%08x, bgxor=%08x\n",
-		     __FUNCTION__, pgc->fg, pgc->bg, pgc->pm, pgc->and, pgc->xor, pgc->bgand, pgc->bgxor));
-	}
+        DBG(("%s: rrop fg=%08x, bg=%08x, pm=%08x, and=%08x, xor=%08x, "
+             "bgand=%08x, bgxor=%08x\n",
+             __FUNCTION__,
+             pgc->fg,
+             pgc->bg,
+             pgc->pm,
+             pgc->and,
+             pgc->xor
+             ,
+             pgc->bgand,
+             pgc->bgxor));
+    }
 
-	if (changes & GCDashList) {
-		unsigned short n = gc->numInDashList;
-		unsigned char *dash = gc->dash;
-		unsigned int dashLength = 0;
+    if (changes & GCDashList)
+    {
+        unsigned short n          = gc->numInDashList;
+        unsigned char *dash       = gc->dash;
+        unsigned int   dashLength = 0;
 
-		while (n--)
-			dashLength += (unsigned int) *dash++;
-		pgc->dashLength = dashLength;
-	}
+        while (n--)
+            dashLength += (unsigned int)*dash++;
+        pgc->dashLength = dashLength;
+    }
 }

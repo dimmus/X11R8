@@ -21,7 +21,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config_intel.h"
+#  include "config_intel.h"
 #endif
 
 #include "xorg-server.h"
@@ -30,116 +30,110 @@
 
 #include "intel.h"
 #if USE_UXA
-#include "intel_uxa.h"
+#  include "intel_uxa.h"
 #endif
 #include "dri3.h"
 
 static int
-intel_dri3_open(ScreenPtr screen,
-                RRProviderPtr provider,
-                int *out)
+intel_dri3_open(ScreenPtr screen, RRProviderPtr provider, int *out)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(screen);
-	intel_screen_private *intel = intel_get_screen_private(scrn);
-	int fd;
+    ScrnInfoPtr           scrn  = xf86ScreenToScrn(screen);
+    intel_screen_private *intel = intel_get_screen_private(scrn);
+    int                   fd;
 
-	fd = intel_get_client_fd(intel->dev);
-	if (fd < 0)
-		return -fd;
+    fd = intel_get_client_fd(intel->dev);
+    if (fd < 0) return -fd;
 
-	*out = fd;
-	return Success;
+    *out = fd;
+    return Success;
 }
 
-static PixmapPtr intel_dri3_pixmap_from_fd(ScreenPtr screen,
-					   int fd,
-					   CARD16 width,
-					   CARD16 height,
-					   CARD16 stride,
-					   CARD8 depth,
-					   CARD8 bpp)
+static PixmapPtr
+intel_dri3_pixmap_from_fd(ScreenPtr screen,
+                          int       fd,
+                          CARD16    width,
+                          CARD16    height,
+                          CARD16    stride,
+                          CARD8     depth,
+                          CARD8     bpp)
 {
-	ScrnInfoPtr scrn = xf86ScreenToScrn(screen);
-	intel_screen_private *intel = intel_get_screen_private(scrn);
-	struct intel_uxa_pixmap *priv;
-	PixmapPtr pixmap;
-	dri_bo *bo;
+    ScrnInfoPtr              scrn  = xf86ScreenToScrn(screen);
+    intel_screen_private    *intel = intel_get_screen_private(scrn);
+    struct intel_uxa_pixmap *priv;
+    PixmapPtr                pixmap;
+    dri_bo                  *bo;
 
-	if (depth < 8)
-		return NULL;
+    if (depth < 8) return NULL;
 
-	switch (bpp) {
-	case 8:
-	case 16:
-	case 32:
-		break;
-	default:
-		return NULL;
-	}
+    switch (bpp)
+    {
+        case 8:
+        case 16:
+        case 32:
+            break;
+        default:
+            return NULL;
+    }
 
-	pixmap = fbCreatePixmap(screen, 0, 0, depth, 0);
-	if (!pixmap)
-		return NULL;
+    pixmap = fbCreatePixmap(screen, 0, 0, depth, 0);
+    if (!pixmap) return NULL;
 
-	if (!screen->ModifyPixmapHeader(pixmap, width, height, 0, 0, stride, NULL))
-		goto free_pixmap;
+    if (!screen->ModifyPixmapHeader(pixmap, width, height, 0, 0, stride, NULL))
+        goto free_pixmap;
 
-	bo = drm_intel_bo_gem_create_from_prime(intel->bufmgr,
-						fd, (uint32_t)height * stride);
-	if (bo == NULL)
-		goto free_pixmap;
+    bo = drm_intel_bo_gem_create_from_prime(intel->bufmgr,
+                                            fd,
+                                            (uint32_t)height * stride);
+    if (bo == NULL) goto free_pixmap;
 
-	intel_uxa_set_pixmap_bo(pixmap, bo);
-	dri_bo_unreference(bo);
+    intel_uxa_set_pixmap_bo(pixmap, bo);
+    dri_bo_unreference(bo);
 
-	priv = intel_uxa_get_pixmap_private(pixmap);
-	if (priv == NULL)
-		goto free_pixmap;
+    priv = intel_uxa_get_pixmap_private(pixmap);
+    if (priv == NULL) goto free_pixmap;
 
-	priv->pinned |= PIN_DRI3;
+    priv->pinned |= PIN_DRI3;
 
-	return pixmap;
+    return pixmap;
 
 free_pixmap:
-	fbDestroyPixmap(pixmap);
-	return NULL;
+    fbDestroyPixmap(pixmap);
+    return NULL;
 }
 
-static int intel_dri3_fd_from_pixmap(ScreenPtr screen,
-				     PixmapPtr pixmap,
-				     CARD16 *stride,
-				     CARD32 *size)
+static int
+intel_dri3_fd_from_pixmap(ScreenPtr screen,
+                          PixmapPtr pixmap,
+                          CARD16   *stride,
+                          CARD32   *size)
 {
-	struct intel_uxa_pixmap *priv;
-	int fd;
+    struct intel_uxa_pixmap *priv;
+    int                      fd;
 
-	priv = intel_uxa_get_pixmap_private(pixmap);
-	if (!priv)
-		return -1;
+    priv = intel_uxa_get_pixmap_private(pixmap);
+    if (!priv) return -1;
 
-	if (intel_pixmap_pitch(pixmap) > UINT16_MAX)
-		return -1;
+    if (intel_pixmap_pitch(pixmap) > UINT16_MAX) return -1;
 
-	if (drm_intel_bo_gem_export_to_prime(priv->bo, &fd) < 0)
-		return -1;
+    if (drm_intel_bo_gem_export_to_prime(priv->bo, &fd) < 0) return -1;
 
-	priv->pinned |= PIN_DRI3;
+    priv->pinned |= PIN_DRI3;
 
-	*stride = intel_pixmap_pitch(pixmap);
-	*size = priv->bo->size;
-	return fd;
+    *stride = intel_pixmap_pitch(pixmap);
+    *size   = priv->bo->size;
+    return fd;
 }
 
 static dri3_screen_info_rec intel_dri3_screen_info = {
-        .version = DRI3_SCREEN_INFO_VERSION,
+    .version = DRI3_SCREEN_INFO_VERSION,
 
-        .open = intel_dri3_open,
-        .pixmap_from_fd = intel_dri3_pixmap_from_fd,
-        .fd_from_pixmap = intel_dri3_fd_from_pixmap
+    .open           = intel_dri3_open,
+    .pixmap_from_fd = intel_dri3_pixmap_from_fd,
+    .fd_from_pixmap = intel_dri3_fd_from_pixmap
 };
 
 Bool
 intel_dri3_screen_init(ScreenPtr screen)
 {
-        return dri3_screen_init(screen, &intel_dri3_screen_info);
+    return dri3_screen_init(screen, &intel_dri3_screen_info);
 }

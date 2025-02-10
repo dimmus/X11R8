@@ -19,8 +19,8 @@
 /*
  * Location and size of SVGA frame buffer and the FIFO.
  */
-#define SVGA_VRAM_SIZE         (16*1024*1024)
-#define SVGA_MEM_SIZE          (256*1024)
+#define SVGA_VRAM_SIZE (16 * 1024 * 1024)
+#define SVGA_MEM_SIZE  (256 * 1024)
 
 /*
  * SVGA_FB_START is the default starting address of the SVGA frame
@@ -49,7 +49,7 @@
  * chipset, the framebuffer start is determined solely based on the value
  * the guest BIOS or OS programs into the PCI base address registers.
  */
-#define SVGA_FB_LEGACY_START		0x7EFC0000
-#define SVGA_FB_LEGACY_START_BIGMEM	0xE0000000
+#define SVGA_FB_LEGACY_START        0x7EFC0000
+#define SVGA_FB_LEGACY_START_BIGMEM 0xE0000000
 
 #endif

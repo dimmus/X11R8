@@ -47,8 +47,8 @@ DEALINGS IN THE
  * cursor images in the max size, so don't use width/height values
  * that are too big
  */
-#define CURSORW  (64)
-#define CURSORH  (64)
+#define CURSORW (64)
+#define CURSORH (64)
 
 /*
  * Padding added down each side of cursor image. This is a workaround
@@ -58,42 +58,43 @@ for a bug
 #define CURSORPAD (16)
 
 /* Optional function */
-static int init_plane_for_cursor(int drm_fd, uint32_t plane_id) {
-	return 0;
+static int
+init_plane_for_cursor(int drm_fd, uint32_t plane_id)
+{
+    return 0;
 }
 
-static int create_custom_gem(int fd, struct armsoc_create_gem
-*create_gem) {
-	struct drm_mode_create_dumb create_arg;
-	int ret;
+static int
+create_custom_gem(int fd, struct armsoc_create_gem *create_gem)
+{
+    struct drm_mode_create_dumb create_arg;
+    int                         ret;
 
-	memset (&create_arg, 0, sizeof (create_arg));
-	create_arg.bpp = create_gem->bpp;
-	create_arg.width = create_gem->width;
-	create_arg.height = create_gem->height;
+    memset(&create_arg, 0, sizeof(create_arg));
+    create_arg.bpp    = create_gem->bpp;
+    create_arg.width  = create_gem->width;
+    create_arg.height = create_gem->height;
 
-	ret = ioctl (fd, DRM_IOCTL_MODE_CREATE_DUMB, &create_arg);
-	if (ret)
-		return ret;
+    ret = ioctl(fd, DRM_IOCTL_MODE_CREATE_DUMB, &create_arg);
+    if (ret) return ret;
 
-	/* Convert custom create_exynos to generic create_gem */
-	create_gem->handle = create_arg.handle;
-	create_gem->pitch = create_arg.pitch;
-	create_gem->size = create_gem->height * create_arg.pitch;
+    /* Convert custom create_exynos to generic create_gem */
+    create_gem->handle = create_arg.handle;
+    create_gem->pitch  = create_arg.pitch;
+    create_gem->size   = create_gem->height * create_arg.pitch;
 
-	return 0;
+    return 0;
 }
 
 struct drmmode_interface sti_interface = {
-	"sti"                 /* name of drm driver */,
-	1                     /* use_page_flip_events */,
-	1                     /* use_early_display */,
-	CURSORW               /* cursor width */,
-	CURSORH               /* cursor_height */,
-	CURSORPAD             /* cursor padding */,
-	HWCURSOR_API_STANDARD /* cursor_api */,
-	init_plane_for_cursor /* init_plane_for_cursor */,
-	0                     /* vblank_query_supported */,
-	create_custom_gem     /* create_custom_gem */,
+    "sti" /* name of drm driver */,
+    1 /* use_page_flip_events */,
+    1 /* use_early_display */,
+    CURSORW /* cursor width */,
+    CURSORH /* cursor_height */,
+    CURSORPAD /* cursor padding */,
+    HWCURSOR_API_STANDARD /* cursor_api */,
+    init_plane_for_cursor /* init_plane_for_cursor */,
+    0 /* vblank_query_supported */,
+    create_custom_gem /* create_custom_gem */,
 };
-

@@ -26,93 +26,81 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config_intel.h"
+#  include "config_intel.h"
 #endif
 
 #include "sna.h"
 #include "sna_cpuid.h"
 
-#define xgetbv(index,eax,edx)                                   \
-	__asm__ ("xgetbv" : "=a"(eax), "=d"(edx) : "c" (index))
+#define xgetbv(index, eax, edx) \
+    __asm__("xgetbv" : "=a"(eax), "=d"(edx) : "c"(index))
 
 #define has_YMM 0x1
 
-unsigned sna_cpu_detect(void)
+unsigned
+sna_cpu_detect(void)
 {
-	unsigned max = __get_cpuid_max(BASIC_CPUID, NULL);
-	unsigned eax, ebx, ecx, edx;
-	unsigned features = 0;
-	unsigned extra = 0;
+    unsigned max = __get_cpuid_max(BASIC_CPUID, NULL);
+    unsigned eax, ebx, ecx, edx;
+    unsigned features = 0;
+    unsigned extra    = 0;
 
-	if (max >= 1) {
-		__cpuid(1, eax, ebx, ecx, edx);
+    if (max >= 1)
+    {
+        __cpuid(1, eax, ebx, ecx, edx);
 
-		if (ecx & bit_SSE3)
-			features |= SSE3;
+        if (ecx & bit_SSE3) features |= SSE3;
 
-		if (ecx & bit_SSSE3)
-			features |= SSSE3;
+        if (ecx & bit_SSSE3) features |= SSSE3;
 
-		if (ecx & bit_SSE4_1)
-			features |= SSE4_1;
+        if (ecx & bit_SSE4_1) features |= SSE4_1;
 
-		if (ecx & bit_SSE4_2)
-			features |= SSE4_2;
+        if (ecx & bit_SSE4_2) features |= SSE4_2;
 
-		if (ecx & bit_OSXSAVE) {
-			unsigned int bv_eax, bv_ecx;
-			xgetbv(0, bv_eax, bv_ecx);
-			if ((bv_eax & 6) == 6)
-				extra |= has_YMM;
-		}
+        if (ecx & bit_OSXSAVE)
+        {
+            unsigned int bv_eax, bv_ecx;
+            xgetbv(0, bv_eax, bv_ecx);
+            if ((bv_eax & 6) == 6) extra |= has_YMM;
+        }
 
-		if ((extra & has_YMM) && (ecx & bit_AVX))
-			features |= AVX;
+        if ((extra & has_YMM) && (ecx & bit_AVX)) features |= AVX;
 
-		if (edx & bit_MMX)
-			features |= MMX;
+        if (edx & bit_MMX) features |= MMX;
 
-		if (edx & bit_SSE)
-			features |= SSE;
+        if (edx & bit_SSE) features |= SSE;
 
-		if (edx & bit_SSE2)
-			features |= SSE2;
-	}
+        if (edx & bit_SSE2) features |= SSE2;
+    }
 
-	if (max >= 7) {
-		__cpuid_count(7, 0, eax, ebx, ecx, edx);
+    if (max >= 7)
+    {
+        __cpuid_count(7, 0, eax, ebx, ecx, edx);
 
-		if ((extra & has_YMM) && (ebx & bit_AVX2))
-			features |= AVX2;
-	}
+        if ((extra & has_YMM) && (ebx & bit_AVX2)) features |= AVX2;
+    }
 
-	return features;
+    return features;
 }
 
-char *sna_cpu_features_to_string(unsigned features, char *line)
+char *
+sna_cpu_features_to_string(unsigned features, char *line)
 {
-	char *ret = line;
+    char *ret = line;
 
 #ifdef __x86_64__
-	line += sprintf (line, "x86-64");
+    line += sprintf(line, "x86-64");
 #else
-	line += sprintf (line, "x86");
+    line += sprintf(line, "x86");
 #endif
 
-	if (features & SSE2)
-		line += sprintf (line, ", sse2");
-	if (features & SSE3)
-		line += sprintf (line, ", sse3");
-	if (features & SSSE3)
-		line += sprintf (line, ", ssse3");
-	if (features & SSE4_1)
-		line += sprintf (line, ", sse4.1");
-	if (features & SSE4_2)
-		line += sprintf (line, ", sse4.2");
-	if (features & AVX)
-		line += sprintf (line, ", avx");
-	if (features & AVX2)
-		line += sprintf (line, ", avx2");
+    if (features & SSE2) line += sprintf(line, ", sse2");
+    if (features & SSE3) line += sprintf(line, ", sse3");
+    if (features & SSSE3) line += sprintf(line, ", ssse3");
+    if (features & SSE4_1) line += sprintf(line, ", sse4.1");
+    if (features & SSE4_2) line += sprintf(line, ", sse4.2");
+    if (features & AVX) line += sprintf(line, ", avx");
+    if (features & AVX2) line += sprintf(line, ", avx2");
 
-	return ret;
+    return ret;
 }

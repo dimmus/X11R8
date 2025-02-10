@@ -33,13 +33,13 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 #ifndef _SIMPLE_LIST_H
 #define _SIMPLE_LIST_H
 
-struct simple_node {
-   struct simple_node *next;
-   struct simple_node *prev;
+struct simple_node
+{
+    struct simple_node *next;
+    struct simple_node *prev;
 };
 
 /**
@@ -47,11 +47,13 @@ struct simple_node {
  *
  * \param elem element to remove.
  */
-#define remove_from_list(elem)			\
-do {						\
-   (elem)->next->prev = (elem)->prev;		\
-   (elem)->prev->next = (elem)->next;		\
-} while (0)
+#define remove_from_list(elem)             \
+    do                                     \
+    {                                      \
+        (elem)->next->prev = (elem)->prev; \
+        (elem)->prev->next = (elem)->next; \
+    }                                      \
+    while (0)
 
 /**
  * Insert an element to the list head.
@@ -59,13 +61,15 @@ do {						\
  * \param list list.
  * \param elem element to insert.
  */
-#define insert_at_head(list, elem)		\
-do {						\
-   (elem)->prev = list;				\
-   (elem)->next = (list)->next;			\
-   (list)->next->prev = elem;			\
-   (list)->next = elem;				\
-} while(0)
+#define insert_at_head(list, elem)         \
+    do                                     \
+    {                                      \
+        (elem)->prev       = list;         \
+        (elem)->next       = (list)->next; \
+        (list)->next->prev = elem;         \
+        (list)->next       = elem;         \
+    }                                      \
+    while (0)
 
 /**
  * Insert an element to the list tail.
@@ -73,13 +77,15 @@ do {						\
  * \param list list.
  * \param elem element to insert.
  */
-#define insert_at_tail(list, elem)		\
-do {						\
-   (elem)->next = list;				\
-   (elem)->prev = (list)->prev;			\
-   (list)->prev->next = elem;			\
-   (list)->prev = elem;				\
-} while(0)
+#define insert_at_tail(list, elem)         \
+    do                                     \
+    {                                      \
+        (elem)->next       = list;         \
+        (elem)->prev       = (list)->prev; \
+        (list)->prev->next = elem;         \
+        (list)->prev       = elem;         \
+    }                                      \
+    while (0)
 
 /**
  * Move an element to the list head.
@@ -87,11 +93,13 @@ do {						\
  * \param list list.
  * \param elem element to move.
  */
-#define move_to_head(list, elem)		\
-do {						\
-   remove_from_list(elem);			\
-   insert_at_head(list, elem);			\
-} while (0)
+#define move_to_head(list, elem)    \
+    do                              \
+    {                               \
+        remove_from_list(elem);     \
+        insert_at_head(list, elem); \
+    }                               \
+    while (0)
 
 /**
  * Move an element to the list tail.
@@ -99,22 +107,26 @@ do {						\
  * \param list list.
  * \param elem element to move.
  */
-#define move_to_tail(list, elem)		\
-do {						\
-   remove_from_list(elem);			\
-   insert_at_tail(list, elem);			\
-} while (0)
+#define move_to_tail(list, elem)    \
+    do                              \
+    {                               \
+        remove_from_list(elem);     \
+        insert_at_tail(list, elem); \
+    }                               \
+    while (0)
 
 /**
  * Make a empty list empty.
  *
  * \param sentinel list (sentinel element).
  */
-#define make_empty_list(sentinel)		\
-do {						\
-   (sentinel)->next = sentinel;			\
-   (sentinel)->prev = sentinel;			\
-} while (0)
+#define make_empty_list(sentinel)    \
+    do                               \
+    {                                \
+        (sentinel)->next = sentinel; \
+        (sentinel)->prev = sentinel; \
+    }                                \
+    while (0)
 
 /**
  * Get list first element.
@@ -123,7 +135,7 @@ do {						\
  *
  * \return pointer to first element.
  */
-#define first_elem(list)       ((list)->next)
+#define first_elem(list) ((list)->next)
 
 /**
  * Get list last element.
@@ -132,7 +144,7 @@ do {						\
  *
  * \return pointer to last element.
  */
-#define last_elem(list)        ((list)->prev)
+#define last_elem(list) ((list)->prev)
 
 /**
  * Get next element.
@@ -141,7 +153,7 @@ do {						\
  *
  * \return pointer to next element.
  */
-#define next_elem(elem)        ((elem)->next)
+#define next_elem(elem) ((elem)->next)
 
 /**
  * Get previous element.
@@ -150,7 +162,7 @@ do {						\
  *
  * \return pointer to previous element.
  */
-#define prev_elem(elem)        ((elem)->prev)
+#define prev_elem(elem) ((elem)->prev)
 
 /**
  * Test whether element is at end of the list.
@@ -160,7 +172,7 @@ do {						\
  * 
  * \return non-zero if element is at end of list, or zero otherwise.
  */
-#define at_end(list, elem)     ((elem) == (list))
+#define at_end(list, elem) ((elem) == (list))
 
 /**
  * Test if a list is empty.
@@ -169,7 +181,7 @@ do {						\
  * 
  * \return non-zero if list empty, or zero otherwise.
  */
-#define is_empty_list(list)    ((list)->next == (list))
+#define is_empty_list(list) ((list)->next == (list))
 
 /**
  * Walk through the elements of a list.
@@ -180,8 +192,8 @@ do {						\
  * \note It should be followed by a { } block or a single statement, as in a \c
  * for loop.
  */
-#define foreach(ptr, list)     \
-        for( ptr=(list)->next ;  ptr!=list ;  ptr=(ptr)->next )
+#define foreach(ptr, list) \
+    for (ptr = (list)->next; ptr != list; ptr = (ptr)->next)
 
 /**
  * Walk through the elements of a list.
@@ -196,7 +208,8 @@ do {						\
  * \note It should be followed by a { } block or a single statement, as in a \c
  * for loop.
  */
-#define foreach_s(ptr, t, list)   \
-        for(ptr=(list)->next,t=(ptr)->next; list != ptr; ptr=t, t=(t)->next)
+#define foreach_s(ptr, t, list)                            \
+    for (ptr = (list)->next, t = (ptr)->next; list != ptr; \
+         ptr = t, t = (t)->next)
 
 #endif

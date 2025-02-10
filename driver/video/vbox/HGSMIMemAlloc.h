@@ -21,7 +21,6 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 /* In builds inside of the VirtualBox source tree we override the default
  * HGSMIMemAlloc.h using -include, therefore this define must match the one
  * there. */
@@ -38,18 +37,21 @@
 typedef struct HGSMIMADATA
 {
     HGSMIAREA area;
-    bool fAllocated;
+    bool      fAllocated;
 } HGSMIMADATA;
 
 RT_C_DECLS_BEGIN
 
-int HGSMIMAInit(HGSMIMADATA *pMA, const HGSMIAREA *pArea,
-                HGSMIOFFSET *paDescriptors, uint32_t cDescriptors, HGSMISIZE cbMaxBlock,
-                const HGSMIENV *pEnv);
+int  HGSMIMAInit(HGSMIMADATA     *pMA,
+                 const HGSMIAREA *pArea,
+                 HGSMIOFFSET     *paDescriptors,
+                 uint32_t         cDescriptors,
+                 HGSMISIZE        cbMaxBlock,
+                 const HGSMIENV  *pEnv);
 void HGSMIMAUninit(HGSMIMADATA *pMA);
 
 void *HGSMIMAAlloc(HGSMIMADATA *pMA, HGSMISIZE cb);
-void HGSMIMAFree(HGSMIMADATA *pMA, void *pv);
+void  HGSMIMAFree(HGSMIMADATA *pMA, void *pv);
 
 RT_C_DECLS_END
 

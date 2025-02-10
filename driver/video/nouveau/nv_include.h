@@ -2,7 +2,7 @@
 #define __NV_INCLUDE_H__
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include <string.h>
@@ -21,7 +21,7 @@
 #include "xf86Pci.h"
 
 #ifdef XSERVER_PLATFORM_BUS
-#include "xf86platformBus.h"
+#  include "xf86platformBus.h"
 #endif
 
 /* All drivers initialising the SW cursor need this */
@@ -54,10 +54,10 @@
 #include "X11/extensions/randr.h"
 
 #ifdef HAVE_XEXTPROTO_71
-#include "X11/extensions/dpmsconst.h"
+#  include "X11/extensions/dpmsconst.h"
 #else
-#define DPMS_SERVER
-#include "X11/extensions/dpms.h"
+#  define DPMS_SERVER
+#  include "X11/extensions/dpms.h"
 #endif
 
 #define NV_DMA_DEBUG 0

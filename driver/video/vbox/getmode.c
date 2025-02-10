@@ -34,19 +34,19 @@
 #define NEED_XF86_TYPES
 #include "xf86.h"
 
-# ifdef RT_OS_LINUX
+#ifdef RT_OS_LINUX
 #  include <linux/input.h>
 #  ifndef EVIOCGRAB
-#   define EVIOCGRAB _IOW('E', 0x90, int)
+#    define EVIOCGRAB _IOW('E', 0x90, int)
 #  endif
 #  ifndef KEY_SWITCHVIDEOMODE
-#   define KEY_SWITCHVIDEOMODE 227
+#    define KEY_SWITCHVIDEOMODE 227
 #  endif
 #  include <dirent.h>
 #  include <errno.h>
 #  include <fcntl.h>
 #  include <unistd.h>
-# endif /* RT_OS_LINUX */
+#endif /* RT_OS_LINUX */
 
 /**************************************************************************
 * Main functions                                                          *
@@ -56,11 +56,15 @@
  * Fills a display mode M with a built-in mode of name pszName and dimensions
  * cx and cy.
  */
-static void vboxFillDisplayMode(ScrnInfoPtr pScrn, DisplayModePtr m,
-                                const char *pszName, unsigned cx, unsigned cy)
+static void
+vboxFillDisplayMode(ScrnInfoPtr    pScrn,
+                    DisplayModePtr m,
+                    const char    *pszName,
+                    unsigned       cx,
+                    unsigned       cy)
 {
-    VBOXPtr pVBox = pScrn->driverPrivate;
-    char szName[256];
+    VBOXPtr        pVBox = pScrn->driverPrivate;
+    char           szName[256];
     DisplayModePtr pPrev = m->prev;
     DisplayModePtr pNext = m->next;
 
@@ -70,28 +74,25 @@ static void vboxFillDisplayMode(ScrnInfoPtr pScrn, DisplayModePtr m,
         pszName = szName;
     }
     TRACE_LOG("pszName=%s, cx=%u, cy=%u\n", pszName, cx, cy);
-    if (m->name)
-        free((void*)m->name);
+    if (m->name) free((void *)m->name);
     memset(m, '\0', sizeof(*m));
-    m->prev          = pPrev;
-    m->next          = pNext;
-    m->status        = MODE_OK;
-    m->type          = M_T_BUILTIN;
+    m->prev   = pPrev;
+    m->next   = pNext;
+    m->status = MODE_OK;
+    m->type   = M_T_BUILTIN;
     /* Older versions of VBox only support screen widths which are a multiple
      * of 8 */
-    if (pVBox->fAnyX)
-        m->HDisplay  = cx;
-    else
-        m->HDisplay  = cx & ~7;
-    m->HSyncStart    = m->HDisplay + 2;
-    m->HSyncEnd      = m->HDisplay + 4;
-    m->HTotal        = m->HDisplay + 6;
-    m->VDisplay      = cy;
-    m->VSyncStart    = m->VDisplay + 2;
-    m->VSyncEnd      = m->VDisplay + 4;
-    m->VTotal        = m->VDisplay + 6;
-    m->Clock         = m->HTotal * m->VTotal * 60 / 1000; /* kHz */
-    m->name          = XNFstrdup(pszName);
+    if (pVBox->fAnyX) m->HDisplay = cx;
+    else m->HDisplay = cx & ~7;
+    m->HSyncStart = m->HDisplay + 2;
+    m->HSyncEnd   = m->HDisplay + 4;
+    m->HTotal     = m->HDisplay + 6;
+    m->VDisplay   = cy;
+    m->VSyncStart = m->VDisplay + 2;
+    m->VSyncEnd   = m->VDisplay + 4;
+    m->VTotal     = m->VDisplay + 6;
+    m->Clock      = m->HTotal * m->VTotal * 60 / 1000; /* kHz */
+    m->name       = XNFstrdup(pszName);
 }
 
 /**
@@ -99,7 +100,8 @@ static void vboxFillDisplayMode(ScrnInfoPtr pScrn, DisplayModePtr m,
  * modes pointed to by pScrn->modes.  Returns a pointer to the newly allocated
  * memory.
  */
-static DisplayModePtr vboxAddEmptyScreenMode(ScrnInfoPtr pScrn)
+static DisplayModePtr
+vboxAddEmptyScreenMode(ScrnInfoPtr pScrn)
 {
     DisplayModePtr pMode = XNFcallocarray(sizeof(DisplayModeRec), 1);
 
@@ -107,13 +109,13 @@ static DisplayModePtr vboxAddEmptyScreenMode(ScrnInfoPtr pScrn)
     if (!pScrn->modes)
     {
         pScrn->modes = pMode;
-        pMode->next = pMode;
-        pMode->prev = pMode;
+        pMode->next  = pMode;
+        pMode->prev  = pMode;
     }
     else
     {
-        pMode->next = pScrn->modes;
-        pMode->prev = pScrn->modes->prev;
+        pMode->next       = pScrn->modes;
+        pMode->prev       = pScrn->modes->prev;
         pMode->next->prev = pMode;
         pMode->prev->next = pMode;
     }
@@ -126,11 +128,12 @@ static DisplayModePtr vboxAddEmptyScreenMode(ScrnInfoPtr pScrn)
  *  - A dynamic mode in first place which will be updated by the RandR code.
  *  - Any modes that the user requested in xorg.conf/XFree86Config.
  */
-void vboxAddModes(ScrnInfoPtr pScrn)
+void
+vboxAddModes(ScrnInfoPtr pScrn)
 {
-    unsigned cx = 0;
-    unsigned cy = 0;
-    unsigned i;
+    unsigned       cx = 0;
+    unsigned       cy = 0;
+    unsigned       i;
     DisplayModePtr pMode;
 
     /* Add two dynamic mode entries.  When we receive a new size hint we will
@@ -153,9 +156,10 @@ void vboxAddModes(ScrnInfoPtr pScrn)
 
 /** Set the initial values for the guest screen size hints to standard values
  * in case nothing else is available. */
-void VBoxInitialiseSizeHints(ScrnInfoPtr pScrn)
+void
+VBoxInitialiseSizeHints(ScrnInfoPtr pScrn)
 {
-    VBOXPtr pVBox = VBOXGetRec(pScrn);
+    VBOXPtr  pVBox = VBOXGetRec(pScrn);
     unsigned i;
 
     for (i = 0; i < pVBox->cScreens; ++i)
@@ -169,14 +173,18 @@ void VBoxInitialiseSizeHints(ScrnInfoPtr pScrn)
     pScrn->modes->VDisplay = pVBox->pScreens[0].aPreferredSize.cy;
 }
 
-static Bool useHardwareCursor(uint32_t fCursorCapabilities)
+static Bool
+useHardwareCursor(uint32_t fCursorCapabilities)
 {
-    if (fCursorCapabilities & VBOX_VBVA_CURSOR_CAPABILITY_HARDWARE)
-        return true;
+    if (fCursorCapabilities & VBOX_VBVA_CURSOR_CAPABILITY_HARDWARE) return true;
     return false;
 }
 
-static void compareAndMaybeSetUseHardwareCursor(VBOXPtr pVBox, uint32_t fCursorCapabilities, Bool *pfChanged, Bool fSet)
+static void
+compareAndMaybeSetUseHardwareCursor(VBOXPtr  pVBox,
+                                    uint32_t fCursorCapabilities,
+                                    Bool    *pfChanged,
+                                    Bool     fSet)
 {
     if (pVBox->fUseHardwareCursor != useHardwareCursor(fCursorCapabilities))
         *pfChanged = true;
@@ -185,128 +193,162 @@ static void compareAndMaybeSetUseHardwareCursor(VBOXPtr pVBox, uint32_t fCursorC
 }
 
 #define COMPARE_AND_MAYBE_SET(pDest, src, pfChanged, fSet) \
-do { \
-    if (*(pDest) != (src)) \
-    { \
-        if (fSet) \
-            *(pDest) = (src); \
-        *(pfChanged) = true; \
-    } \
-} while(0)
+    do                                                     \
+    {                                                      \
+        if (*(pDest) != (src))                             \
+        {                                                  \
+            if (fSet) *(pDest) = (src);                    \
+            *(pfChanged) = true;                           \
+        }                                                  \
+    }                                                      \
+    while (0)
 
 /** Read in information about the most recent size hints and cursor
  * capabilities requested for the guest screens from HGSMI. */
-void vbvxReadSizesAndCursorIntegrationFromHGSMI(ScrnInfoPtr pScrn, Bool *pfNeedUpdate)
+void
+vbvxReadSizesAndCursorIntegrationFromHGSMI(ScrnInfoPtr pScrn,
+                                           Bool       *pfNeedUpdate)
 {
-    VBOXPtr pVBox = VBOXGetRec(pScrn);
-    int rc;
+    VBOXPtr  pVBox = VBOXGetRec(pScrn);
+    int      rc;
     unsigned i;
-    Bool fChanged = false;
+    Bool     fChanged = false;
     uint32_t fCursorCapabilities;
 
-    if (!pVBox->fHaveHGSMIModeHints)
-        return;
-    rc = VBoxHGSMIGetModeHints(&pVBox->guestCtx, pVBox->cScreens, pVBox->paVBVAModeHints);
-    AssertMsg(rc == VINF_SUCCESS, ("VBoxHGSMIGetModeHints failed, rc=%d.\n", rc));
+    if (!pVBox->fHaveHGSMIModeHints) return;
+    rc = VBoxHGSMIGetModeHints(&pVBox->guestCtx,
+                               pVBox->cScreens,
+                               pVBox->paVBVAModeHints);
+    AssertMsg(rc == VINF_SUCCESS,
+              ("VBoxHGSMIGetModeHints failed, rc=%d.\n", rc));
     for (i = 0; i < pVBox->cScreens; ++i)
         if (pVBox->paVBVAModeHints[i].magic == VBVAMODEHINT_MAGIC)
         {
-            COMPARE_AND_MAYBE_SET(&pVBox->pScreens[i].aPreferredSize.cx, pVBox->paVBVAModeHints[i].cx & 0x8fff, &fChanged, true);
-            COMPARE_AND_MAYBE_SET(&pVBox->pScreens[i].aPreferredSize.cy, pVBox->paVBVAModeHints[i].cy & 0x8fff, &fChanged, true);
-            COMPARE_AND_MAYBE_SET(&pVBox->pScreens[i].afConnected, RT_BOOL(pVBox->paVBVAModeHints[i].fEnabled), &fChanged, true);
-            COMPARE_AND_MAYBE_SET(&pVBox->pScreens[i].aPreferredLocation.x, (int32_t)pVBox->paVBVAModeHints[i].dx & 0x8fff, &fChanged,
+            COMPARE_AND_MAYBE_SET(&pVBox->pScreens[i].aPreferredSize.cx,
+                                  pVBox->paVBVAModeHints[i].cx & 0x8fff,
+                                  &fChanged,
                                   true);
-            COMPARE_AND_MAYBE_SET(&pVBox->pScreens[i].aPreferredLocation.y, (int32_t)pVBox->paVBVAModeHints[i].dy & 0x8fff, &fChanged,
+            COMPARE_AND_MAYBE_SET(&pVBox->pScreens[i].aPreferredSize.cy,
+                                  pVBox->paVBVAModeHints[i].cy & 0x8fff,
+                                  &fChanged,
                                   true);
-            if (pVBox->paVBVAModeHints[i].dx != ~(uint32_t)0 && pVBox->paVBVAModeHints[i].dy != ~(uint32_t)0)
-                COMPARE_AND_MAYBE_SET(&pVBox->pScreens[i].afHaveLocation, true, &fChanged, true);
+            COMPARE_AND_MAYBE_SET(&pVBox->pScreens[i].afConnected,
+                                  RT_BOOL(pVBox->paVBVAModeHints[i].fEnabled),
+                                  &fChanged,
+                                  true);
+            COMPARE_AND_MAYBE_SET(&pVBox->pScreens[i].aPreferredLocation.x,
+                                  (int32_t)pVBox->paVBVAModeHints[i].dx &
+                                      0x8fff,
+                                  &fChanged,
+                                  true);
+            COMPARE_AND_MAYBE_SET(&pVBox->pScreens[i].aPreferredLocation.y,
+                                  (int32_t)pVBox->paVBVAModeHints[i].dy &
+                                      0x8fff,
+                                  &fChanged,
+                                  true);
+            if (pVBox->paVBVAModeHints[i].dx != ~(uint32_t)0 &&
+                pVBox->paVBVAModeHints[i].dy != ~(uint32_t)0)
+                COMPARE_AND_MAYBE_SET(&pVBox->pScreens[i].afHaveLocation,
+                                      true,
+                                      &fChanged,
+                                      true);
             else
-                COMPARE_AND_MAYBE_SET(&pVBox->pScreens[i].afHaveLocation, false, &fChanged, true);
+                COMPARE_AND_MAYBE_SET(&pVBox->pScreens[i].afHaveLocation,
+                                      false,
+                                      &fChanged,
+                                      true);
         }
-    rc = VBoxQueryConfHGSMI(&pVBox->guestCtx, VBOX_VBVA_CONF32_CURSOR_CAPABILITIES, &fCursorCapabilities);
-    AssertMsg(rc == VINF_SUCCESS, ("Getting VBOX_VBVA_CONF32_CURSOR_CAPABILITIES failed, rc=%d.\n", rc));
-    compareAndMaybeSetUseHardwareCursor(pVBox, fCursorCapabilities, &fChanged, true);
-    if (pfNeedUpdate != NULL && fChanged)
-        *pfNeedUpdate = true;
+    rc = VBoxQueryConfHGSMI(&pVBox->guestCtx,
+                            VBOX_VBVA_CONF32_CURSOR_CAPABILITIES,
+                            &fCursorCapabilities);
+    AssertMsg(
+        rc == VINF_SUCCESS,
+        ("Getting VBOX_VBVA_CONF32_CURSOR_CAPABILITIES failed, rc=%d.\n", rc));
+    compareAndMaybeSetUseHardwareCursor(pVBox,
+                                        fCursorCapabilities,
+                                        &fChanged,
+                                        true);
+    if (pfNeedUpdate != NULL && fChanged) *pfNeedUpdate = true;
 }
 
 #undef COMPARE_AND_MAYBE_SET
 
-# ifdef RT_OS_LINUX
+#ifdef RT_OS_LINUX
 /** We have this for two purposes: one is to ensure that the X server is woken
  * up when we get a video ACPI event.  Two is to grab ACPI video events to
  * prevent gnome-settings-daemon from seeing them, as older versions ignored
  * the time stamp and handled them at the wrong time. */
-static void acpiEventHandler(int fd, void *pvData)
+static void
+acpiEventHandler(int fd, void *pvData)
 {
     struct input_event event;
-    ssize_t rc;
+    ssize_t            rc;
     RT_NOREF(pvData);
 
     do
         rc = read(fd, &event, sizeof(event));
     while (rc > 0 || (rc == -1 && errno == EINTR));
     /* Why do they return EAGAIN instead of zero bytes read like everyone else does? */
-    AssertMsg(rc != -1 || errno == EAGAIN, ("Reading ACPI input event failed.\n"));
+    AssertMsg(rc != -1 || errno == EAGAIN,
+              ("Reading ACPI input event failed.\n"));
 }
 
-void vbvxSetUpLinuxACPI(ScreenPtr pScreen)
+void
+vbvxSetUpLinuxACPI(ScreenPtr pScreen)
 {
-    VBOXPtr pVBox = VBOXGetRec(xf86Screens[pScreen->myNum]);
+    VBOXPtr        pVBox = VBOXGetRec(xf86Screens[pScreen->myNum]);
     struct dirent *pDirent;
-    DIR *pDir;
-    int fd = -1;
+    DIR           *pDir;
+    int            fd = -1;
 
     if (pVBox->fdACPIDevices != -1 || pVBox->hACPIEventHandler != NULL)
         FatalError("ACPI input file descriptor not initialised correctly.\n");
     pDir = opendir("/dev/input");
-    if (pDir == NULL)
-        return;
+    if (pDir == NULL) return;
     for (pDirent = readdir(pDir); pDirent != NULL; pDirent = readdir(pDir))
     {
         if (strncmp(pDirent->d_name, "event", sizeof("event") - 1) == 0)
         {
-#define BITS_PER_BLOCK (sizeof(unsigned long) * 8)
-            char szFile[64] = "/dev/input/";
-            char szDevice[64] = "";
+#  define BITS_PER_BLOCK (sizeof(unsigned long) * 8)
+            char          szFile[64]   = "/dev/input/";
+            char          szDevice[64] = "";
             unsigned long afKeys[KEY_MAX / BITS_PER_BLOCK];
 
-            strncat(szFile, pDirent->d_name, sizeof(szFile) - sizeof("/dev/input/"));
-            if (fd != -1)
-                close(fd);
+            strncat(szFile,
+                    pDirent->d_name,
+                    sizeof(szFile) - sizeof("/dev/input/"));
+            if (fd != -1) close(fd);
             fd = open(szFile, O_RDONLY | O_NONBLOCK);
-            if (   fd == -1
-                || ioctl(fd, EVIOCGNAME(sizeof(szDevice)), szDevice) == -1
-                || strcmp(szDevice, "Video Bus") != 0)
+            if (fd == -1 ||
+                ioctl(fd, EVIOCGNAME(sizeof(szDevice)), szDevice) == -1 ||
+                strcmp(szDevice, "Video Bus") != 0)
                 continue;
-            if (   ioctl(fd, EVIOCGBIT(EV_KEY, sizeof(afKeys)), afKeys) == -1
-                || ((   afKeys[KEY_SWITCHVIDEOMODE / BITS_PER_BLOCK]
-                     >> KEY_SWITCHVIDEOMODE % BITS_PER_BLOCK) & 1) == 0)
+            if (ioctl(fd, EVIOCGBIT(EV_KEY, sizeof(afKeys)), afKeys) == -1 ||
+                ((afKeys[KEY_SWITCHVIDEOMODE / BITS_PER_BLOCK] >>
+                  KEY_SWITCHVIDEOMODE % BITS_PER_BLOCK) &
+                 1) == 0)
                 break;
-            if (ioctl(fd, EVIOCGRAB, (void *)1) != 0)
-                break;
-            pVBox->hACPIEventHandler
-                = xf86AddGeneralHandler(fd, acpiEventHandler, pScreen);
-            if (pVBox->hACPIEventHandler == NULL)
-                break;
+            if (ioctl(fd, EVIOCGRAB, (void *)1) != 0) break;
+            pVBox->hACPIEventHandler =
+                xf86AddGeneralHandler(fd, acpiEventHandler, pScreen);
+            if (pVBox->hACPIEventHandler == NULL) break;
             pVBox->fdACPIDevices = fd;
-            fd = -1;
+            fd                   = -1;
             break;
-#undef BITS_PER_BLOCK
+#  undef BITS_PER_BLOCK
         }
     }
-    if (fd != -1)
-        close(fd);
+    if (fd != -1) close(fd);
     closedir(pDir);
 }
 
-void vbvxCleanUpLinuxACPI(ScreenPtr pScreen)
+void
+vbvxCleanUpLinuxACPI(ScreenPtr pScreen)
 {
     VBOXPtr pVBox = VBOXGetRec(xf86Screens[pScreen->myNum]);
-    if (pVBox->fdACPIDevices != -1)
-        close(pVBox->fdACPIDevices);
+    if (pVBox->fdACPIDevices != -1) close(pVBox->fdACPIDevices);
     pVBox->fdACPIDevices = -1;
     xf86RemoveGeneralHandler(pVBox->hACPIEventHandler);
     pVBox->hACPIEventHandler = NULL;
 }
-# endif /* RT_OS_LINUX */
+#endif /* RT_OS_LINUX */

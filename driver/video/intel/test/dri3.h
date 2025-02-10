@@ -31,19 +31,23 @@ int dri3_open(Display *dpy);
 int dri3_open__full(Display *dpy, Window root, unsigned provider);
 
 Pixmap dri3_create_pixmap(Display *dpy,
-			  Drawable draw,
-			  int width, int height, int depth,
-			  int fd, int bpp, int stride, int size);
-int dri3_create_fd(Display *dpy,
-		   Pixmap pixmap,
-		   int *stride);
+                          Drawable draw,
+                          int      width,
+                          int      height,
+                          int      depth,
+                          int      fd,
+                          int      bpp,
+                          int      stride,
+                          int      size);
+int    dri3_create_fd(Display *dpy, Pixmap pixmap, int *stride);
 
-struct dri3_fence {
-	XID xid;
-	void *addr;
+struct dri3_fence
+{
+    XID   xid;
+    void *addr;
 };
 
-int dri3_create_fence(Display *dpy, Pixmap pixmap, struct dri3_fence *out);
+int  dri3_create_fence(Display *dpy, Pixmap pixmap, struct dri3_fence *out);
 void dri3_fence_sync(Display *dpy, struct dri3_fence *fence);
 void dri3_fence_free(Display *dpy, struct dri3_fence *fence);
 

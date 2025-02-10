@@ -29,29 +29,31 @@
 
 #include <xorg-server.h>
 
-struct amdgpu_dri2 {
-	drmVersionPtr pKernelDRMVersion;
-	Bool available;
-	Bool enabled;
-	char *device_name;
+struct amdgpu_dri2
+{
+    drmVersionPtr pKernelDRMVersion;
+    Bool          available;
+    Bool          enabled;
+    char         *device_name;
 };
 
 #ifdef DRI2
 
-#include "dri2.h"
+#  include "dri2.h"
 Bool amdgpu_dri2_screen_init(ScreenPtr pScreen);
 void amdgpu_dri2_close_screen(ScreenPtr pScreen);
 
 #else
 
-static inline Bool amdgpu_dri2_screen_init(ScreenPtr pScreen)
+static inline Bool
+amdgpu_dri2_screen_init(ScreenPtr pScreen)
 {
-	return FALSE;
+    return FALSE;
 }
 
-static inline void amdgpu_dri2_close_screen(ScreenPtr pScreen)
-{
-}
+static inline void
+amdgpu_dri2_close_screen(ScreenPtr pScreen)
+{}
 
 #endif
 

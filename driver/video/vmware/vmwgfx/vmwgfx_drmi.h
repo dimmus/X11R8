@@ -39,57 +39,52 @@ struct vmwgfx_dma_ctx;
 extern int
 vmwgfx_present_readback(int drm_fd, uint32_t fb_id, RegionPtr region);
 
-extern int
-vmwgfx_present(int drm_fd, uint32_t fb_id, unsigned int dst_x,
-	       unsigned int dst_y, RegionPtr region, uint32_t handle);
+extern int vmwgfx_present(int          drm_fd,
+                          uint32_t     fb_id,
+                          unsigned int dst_x,
+                          unsigned int dst_y,
+                          RegionPtr    region,
+                          uint32_t     handle);
 
-struct vmwgfx_dmabuf {
-  uint32_t handle;
-  uint32_t gmr_id;
-  uint32_t gmr_offset;
-  size_t size;
+struct vmwgfx_dmabuf
+{
+    uint32_t handle;
+    uint32_t gmr_id;
+    uint32_t gmr_offset;
+    size_t   size;
 };
 
-extern struct vmwgfx_dmabuf*
-vmwgfx_dmabuf_alloc(int drm_fd, size_t size);
-extern void
-vmwgfx_dmabuf_destroy(struct vmwgfx_dmabuf *buf);
-extern void *
-vmwgfx_dmabuf_map(struct vmwgfx_dmabuf *buf);
-extern void
-vmwgfx_dmabuf_unmap(struct vmwgfx_dmabuf *buf);
+extern struct vmwgfx_dmabuf *vmwgfx_dmabuf_alloc(int drm_fd, size_t size);
+extern void                  vmwgfx_dmabuf_destroy(struct vmwgfx_dmabuf *buf);
+extern void                 *vmwgfx_dmabuf_map(struct vmwgfx_dmabuf *buf);
+extern void                  vmwgfx_dmabuf_unmap(struct vmwgfx_dmabuf *buf);
 
-extern int
-vmwgfx_dma(int host_x, int host_y,
-	   RegionPtr region, struct vmwgfx_dmabuf *buf,
-	   uint32_t buf_pitch, uint32_t surface_handle, int to_surface);
+extern int vmwgfx_dma(int                   host_x,
+                      int                   host_y,
+                      RegionPtr             region,
+                      struct vmwgfx_dmabuf *buf,
+                      uint32_t              buf_pitch,
+                      uint32_t              surface_handle,
+                      int                   to_surface);
 
-extern int
-vmwgfx_num_streams(int drm_fd, uint32_t *ntot, uint32_t *nfree);
+extern int vmwgfx_num_streams(int drm_fd, uint32_t *ntot, uint32_t *nfree);
 
-extern int
-vmwgfx_claim_stream(int drm_fd, uint32_t *out);
+extern int vmwgfx_claim_stream(int drm_fd, uint32_t *out);
 
-extern int
-vmwgfx_unref_stream(int drm_fd, uint32_t stream_id);
+extern int vmwgfx_unref_stream(int drm_fd, uint32_t stream_id);
 
-int
-vmwgfx_cursor_bypass(int drm_fd, int xhot, int yhot);
+int vmwgfx_cursor_bypass(int drm_fd, int xhot, int yhot);
 
-int
-vmwgfx_max_fb_size(int drm_fd, size_t *size);
+int vmwgfx_max_fb_size(int drm_fd, size_t *size);
 
-int
-vmwgfx_update_gui_layout(int drm_fd, unsigned int num_rects,
-			 struct drm_vmw_rect *rects);
-int
-vmwgfx_get_param(int drm_fd, uint32_t param, uint64_t *out);
+int vmwgfx_update_gui_layout(int                  drm_fd,
+                             unsigned int         num_rects,
+                             struct drm_vmw_rect *rects);
+int vmwgfx_get_param(int drm_fd, uint32_t param, uint64_t *out);
 
 #ifdef HAVE_LIBDRM_2_4_38
-int
-vmwgfx_prime_fd_to_handle(int drm_fd, int prime_fd, uint32_t *handle);
+int vmwgfx_prime_fd_to_handle(int drm_fd, int prime_fd, uint32_t *handle);
 
-void
-vmwgfx_prime_release_handle(int drm_fd, uint32_t handle);
+void vmwgfx_prime_release_handle(int drm_fd, uint32_t handle);
 #endif /* HAVE_LIBDRM_2_4_38 */
 #endif

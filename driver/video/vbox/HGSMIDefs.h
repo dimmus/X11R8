@@ -20,7 +20,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 #ifndef ___VBox_Graphics_HGSMIDefs_h
 #define ___VBox_Graphics_HGSMIDefs_h
 
@@ -37,53 +36,59 @@ typedef uint32_t HGSMIOFFSET;
  */
 typedef struct HGSMIAREA
 {
-    uint8_t     *pu8Base; /* The starting address of the area. Corresponds to offset 'offBase'. */
-    HGSMIOFFSET  offBase; /* The starting offset of the area. */
-    HGSMIOFFSET  offLast; /* The last valid offset:
+    uint8_t *
+        pu8Base; /* The starting address of the area. Corresponds to offset 'offBase'. */
+    HGSMIOFFSET offBase; /* The starting offset of the area. */
+    HGSMIOFFSET offLast; /* The last valid offset:
                            * offBase + cbArea - 1 - (sizeof(header) + sizeof(tail)).
                            */
-    HGSMISIZE    cbArea;  /* Size of the area. */
+    HGSMISIZE   cbArea; /* Size of the area. */
 } HGSMIAREA;
 
-
 /* The buffer description flags. */
-#define HGSMI_BUFFER_HEADER_F_SEQ_MASK     0x03 /* Buffer sequence type mask. */
-#define HGSMI_BUFFER_HEADER_F_SEQ_SINGLE   0x00 /* Single buffer, not a part of a sequence. */
-#define HGSMI_BUFFER_HEADER_F_SEQ_START    0x01 /* The first buffer in a sequence. */
-#define HGSMI_BUFFER_HEADER_F_SEQ_CONTINUE 0x02 /* A middle buffer in a sequence. */
-#define HGSMI_BUFFER_HEADER_F_SEQ_END      0x03 /* The last buffer in a sequence. */
-
+#define HGSMI_BUFFER_HEADER_F_SEQ_MASK 0x03 /* Buffer sequence type mask. */
+#define HGSMI_BUFFER_HEADER_F_SEQ_SINGLE \
+    0x00 /* Single buffer, not a part of a sequence. */
+#define HGSMI_BUFFER_HEADER_F_SEQ_START \
+    0x01 /* The first buffer in a sequence. */
+#define HGSMI_BUFFER_HEADER_F_SEQ_CONTINUE \
+    0x02 /* A middle buffer in a sequence. */
+#define HGSMI_BUFFER_HEADER_F_SEQ_END 0x03 /* The last buffer in a sequence. */
 
 #pragma pack(1) /** @todo not necessary. use AssertCompileSize instead. */
+
 /* 16 bytes buffer header. */
 typedef struct HGSMIBUFFERHEADER
 {
-    uint32_t    u32DataSize;            /* Size of data that follows the header. */
+    uint32_t u32DataSize; /* Size of data that follows the header. */
 
-    uint8_t     u8Flags;                /* The buffer description: HGSMI_BUFFER_HEADER_F_* */
+    uint8_t u8Flags; /* The buffer description: HGSMI_BUFFER_HEADER_F_* */
 
-    uint8_t     u8Channel;              /* The channel the data must be routed to. */
-    uint16_t    u16ChannelInfo;         /* Opaque to the HGSMI, used by the channel. */
+    uint8_t  u8Channel; /* The channel the data must be routed to. */
+    uint16_t u16ChannelInfo; /* Opaque to the HGSMI, used by the channel. */
 
     union {
-        uint8_t au8Union[8];            /* Opaque placeholder to make the union 8 bytes. */
+        uint8_t au8Union[8]; /* Opaque placeholder to make the union 8 bytes. */
 
         struct
-        {                               /* HGSMI_BUFFER_HEADER_F_SEQ_SINGLE */
-            uint32_t u32Reserved1;      /* A reserved field, initialize to 0. */
-            uint32_t u32Reserved2;      /* A reserved field, initialize to 0. */
+        { /* HGSMI_BUFFER_HEADER_F_SEQ_SINGLE */
+            uint32_t u32Reserved1; /* A reserved field, initialize to 0. */
+            uint32_t u32Reserved2; /* A reserved field, initialize to 0. */
         } Buffer;
 
         struct
-        {                               /* HGSMI_BUFFER_HEADER_F_SEQ_START */
-            uint32_t u32SequenceNumber; /* The sequence number, the same for all buffers in the sequence. */
-            uint32_t u32SequenceSize;   /* The total size of the sequence. */
+        { /* HGSMI_BUFFER_HEADER_F_SEQ_START */
+            uint32_t
+                u32SequenceNumber; /* The sequence number, the same for all buffers in the sequence. */
+            uint32_t u32SequenceSize; /* The total size of the sequence. */
         } SequenceStart;
 
         struct
-        {                               /* HGSMI_BUFFER_HEADER_F_SEQ_CONTINUE and HGSMI_BUFFER_HEADER_F_SEQ_END */
-            uint32_t u32SequenceNumber; /* The sequence number, the same for all buffers in the sequence. */
-            uint32_t u32SequenceOffset; /* Data offset in the entire sequence. */
+        { /* HGSMI_BUFFER_HEADER_F_SEQ_CONTINUE and HGSMI_BUFFER_HEADER_F_SEQ_END */
+            uint32_t
+                u32SequenceNumber; /* The sequence number, the same for all buffers in the sequence. */
+            uint32_t
+                u32SequenceOffset; /* Data offset in the entire sequence. */
         } SequenceContinue;
     } u;
 } HGSMIBUFFERHEADER;
@@ -91,9 +96,11 @@ typedef struct HGSMIBUFFERHEADER
 /* 8 bytes buffer tail. */
 typedef struct HGSMIBUFFERTAIL
 {
-    uint32_t    u32Reserved;        /* Reserved, must be initialized to 0. */
-    uint32_t    u32Checksum;        /* Verifyer for the buffer header and offset and for first 4 bytes of the tail. */
+    uint32_t u32Reserved; /* Reserved, must be initialized to 0. */
+    uint32_t
+        u32Checksum; /* Verifyer for the buffer header and offset and for first 4 bytes of the tail. */
 } HGSMIBUFFERTAIL;
+
 #pragma pack()
 
 AssertCompileSize(HGSMIBUFFERHEADER, 16);
@@ -115,4 +122,3 @@ typedef struct HGSMIENV
 } HGSMIENV;
 
 #endif /* !___VBox_Graphics_HGSMIDefs_h */
-

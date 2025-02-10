@@ -31,24 +31,22 @@
  *      The VMWARE_CTRL client library.
  */
 
-
 #include <X11/Xlibint.h>
 #include "libvmwarectrl.h"
 #include "vmwarectrlproto.h"
 #include <X11/extensions/Xext.h>
 #include <X11/extensions/extutil.h>
 
-
 /*
  * Static data and functions.
  */
- 
-static XExtensionInfo _vmwarectrl_info_data;
-static XExtensionInfo *vmwarectrl_info = &_vmwarectrl_info_data;
-static char *vmwarectrl_extension_name = VMWARE_CTRL_PROTOCOL_NAME;
+
+static XExtensionInfo  _vmwarectrl_info_data;
+static XExtensionInfo *vmwarectrl_info           = &_vmwarectrl_info_data;
+static char           *vmwarectrl_extension_name = VMWARE_CTRL_PROTOCOL_NAME;
 
 #define VMwareCtrlCheckExtension(dpy, i, val) \
-  XextCheckExtension(dpy, i, vmwarectrl_extension_name, val)
+    XextCheckExtension(dpy, i, vmwarectrl_extension_name, val)
 
 static int close_display(Display *dpy, XExtCodes *codes);
 
@@ -66,12 +64,14 @@ static /* const */ XExtensionHooks vmwarectrl_extension_hooks = {
     NULL,          /* error_string */
 };
 
-static XEXT_GENERATE_CLOSE_DISPLAY (close_display, vmwarectrl_info)
+static XEXT_GENERATE_CLOSE_DISPLAY(close_display, vmwarectrl_info)
 
-static XEXT_GENERATE_FIND_DISPLAY (find_display, vmwarectrl_info,
-				   vmwarectrl_extension_name,
-				   &vmwarectrl_extension_hooks,
-				   0, NULL)
+    static XEXT_GENERATE_FIND_DISPLAY(find_display,
+                                      vmwarectrl_info,
+                                      vmwarectrl_extension_name,
+                                      &vmwarectrl_extension_hooks,
+                                      0,
+                                      NULL)
 
 /*
  *----------------------------------------------------------------------------
@@ -90,22 +90,23 @@ static XEXT_GENERATE_FIND_DISPLAY (find_display, vmwarectrl_info,
  *----------------------------------------------------------------------------
  */
 
-Bool
-VMwareCtrl_QueryExtension(Display *dpy,     // IN:
-                          int *event_basep, // OUT:
-                          int *error_basep) // OUT:
+    Bool VMwareCtrl_QueryExtension(Display *dpy,     // IN:
+                                   int     *event_basep, // OUT:
+                                   int     *error_basep) // OUT:
 {
-   XExtDisplayInfo *info = find_display(dpy);
+    XExtDisplayInfo *info = find_display(dpy);
 
-   if (XextHasExtension(info)) {
-      *event_basep = info->codes->first_event;
-      *error_basep = info->codes->first_error;
-      return True;
-   } else {
-      return False;
-   }
+    if (XextHasExtension(info))
+    {
+        *event_basep = info->codes->first_event;
+        *error_basep = info->codes->first_error;
+        return True;
+    }
+    else
+    {
+        return False;
+    }
 }
-
 
 /*
  *----------------------------------------------------------------------------
@@ -125,36 +126,36 @@ VMwareCtrl_QueryExtension(Display *dpy,     // IN:
 
 Bool
 VMwareCtrl_QueryVersion(Display *dpy,      // IN:
-                        int *majorVersion, // OUT:
-                        int *minorVersion) // OUT:
+                        int     *majorVersion, // OUT:
+                        int     *minorVersion) // OUT:
 {
-   xVMwareCtrlQueryVersionReply rep;
-   xVMwareCtrlQueryVersionReq *req;
-   XExtDisplayInfo *info = find_display(dpy);
-   Bool ret = False;
+    xVMwareCtrlQueryVersionReply rep;
+    xVMwareCtrlQueryVersionReq  *req;
+    XExtDisplayInfo             *info = find_display(dpy);
+    Bool                         ret  = False;
 
-   VMwareCtrlCheckExtension(dpy, info, False);
-   LockDisplay(dpy);
+    VMwareCtrlCheckExtension(dpy, info, False);
+    LockDisplay(dpy);
 
-   GetReq(VMwareCtrlQueryVersion, req);
-   req->reqType = info->codes->major_opcode;
-   req->VMwareCtrlReqType = X_VMwareCtrlQueryVersion;
+    GetReq(VMwareCtrlQueryVersion, req);
+    req->reqType           = info->codes->major_opcode;
+    req->VMwareCtrlReqType = X_VMwareCtrlQueryVersion;
 
-   if (!_XReply(dpy, (xReply *)&rep, 0, xFalse)) {
-      goto exit;
-   }
-   *majorVersion = rep.majorVersion;
-   *minorVersion = rep.minorVersion;
+    if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
+        goto exit;
+    }
+    *majorVersion = rep.majorVersion;
+    *minorVersion = rep.minorVersion;
 
-   ret = True;
+    ret = True;
 
 exit:
-   UnlockDisplay(dpy);
-   SyncHandle();
+    UnlockDisplay(dpy);
+    SyncHandle();
 
-   return ret;
+    return ret;
 }
-
 
 /*
  *----------------------------------------------------------------------------
@@ -174,40 +175,41 @@ exit:
 
 Bool
 VMwareCtrl_SetRes(Display *dpy, // IN:
-                  int screen,   // IN:
-                  int x,        // IN:
-                  int y)        // IN:
+                  int      screen,   // IN:
+                  int      x,        // IN:
+                  int      y)        // IN:
 {
-   xVMwareCtrlSetResReply rep;
-   xVMwareCtrlSetResReq *req;
-   XExtDisplayInfo *info = find_display(dpy);
-   Bool ret = False;
+    xVMwareCtrlSetResReply rep;
+    xVMwareCtrlSetResReq  *req;
+    XExtDisplayInfo       *info = find_display(dpy);
+    Bool                   ret  = False;
 
-   VMwareCtrlCheckExtension(dpy, info, False);
-   LockDisplay(dpy);
+    VMwareCtrlCheckExtension(dpy, info, False);
+    LockDisplay(dpy);
 
-   GetReq(VMwareCtrlSetRes, req);
-   req->reqType = info->codes->major_opcode;
-   req->VMwareCtrlReqType = X_VMwareCtrlSetRes;
-   req->screen = screen;
-   req->x = x;
-   req->y = y;
+    GetReq(VMwareCtrlSetRes, req);
+    req->reqType           = info->codes->major_opcode;
+    req->VMwareCtrlReqType = X_VMwareCtrlSetRes;
+    req->screen            = screen;
+    req->x                 = x;
+    req->y                 = y;
 
-   if (!_XReply(dpy, (xReply *)&rep,
-                (SIZEOF(xVMwareCtrlSetResReply) - SIZEOF(xReply)) >> 2,
-                xFalse)) {
-      goto exit;
-   }
+    if (!_XReply(dpy,
+                 (xReply *)&rep,
+                 (SIZEOF(xVMwareCtrlSetResReply) - SIZEOF(xReply)) >> 2,
+                 xFalse))
+    {
+        goto exit;
+    }
 
-   ret = True;
+    ret = True;
 
 exit:
-   UnlockDisplay(dpy);
-   SyncHandle();
+    UnlockDisplay(dpy);
+    SyncHandle();
 
-   return ret;
+    return ret;
 }
-
 
 /*
  *----------------------------------------------------------------------------
@@ -226,42 +228,44 @@ exit:
  */
 
 Bool
-VMwareCtrl_SetTopology(Display *dpy,          // IN:
-                       int screen,            // IN:
+VMwareCtrl_SetTopology(Display            *dpy,          // IN:
+                       int                 screen,            // IN:
                        xXineramaScreenInfo extents[], // IN:
-                       int number)            // IN:
+                       int                 number)            // IN:
 {
-   xVMwareCtrlSetTopologyReply rep;
-   xVMwareCtrlSetTopologyReq *req;
-   XExtDisplayInfo *info = find_display(dpy);
-   Bool ret = False;
-   long len;
+    xVMwareCtrlSetTopologyReply rep;
+    xVMwareCtrlSetTopologyReq  *req;
+    XExtDisplayInfo            *info = find_display(dpy);
+    Bool                        ret  = False;
+    long                        len;
 
-   VMwareCtrlCheckExtension(dpy, info, False);
-   LockDisplay(dpy);
+    VMwareCtrlCheckExtension(dpy, info, False);
+    LockDisplay(dpy);
 
-   GetReq(VMwareCtrlSetTopology, req);
-   req->reqType = info->codes->major_opcode;
-   req->VMwareCtrlReqType = X_VMwareCtrlSetTopology;
-   req->screen = screen;
-   req->number = number;
+    GetReq(VMwareCtrlSetTopology, req);
+    req->reqType           = info->codes->major_opcode;
+    req->VMwareCtrlReqType = X_VMwareCtrlSetTopology;
+    req->screen            = screen;
+    req->number            = number;
 
-   len = ((long) number) << 1;
-   SetReqLen(req, len, len);
-   len <<= 2;
-   _XSend(dpy, (char *)extents, len);
+    len = ((long)number) << 1;
+    SetReqLen(req, len, len);
+    len <<= 2;
+    _XSend(dpy, (char *)extents, len);
 
-   if (!_XReply(dpy, (xReply *)&rep,
-                (SIZEOF(xVMwareCtrlSetTopologyReply) - SIZEOF(xReply)) >> 2,
-                xFalse)) {
-      goto exit;
-   }
+    if (!_XReply(dpy,
+                 (xReply *)&rep,
+                 (SIZEOF(xVMwareCtrlSetTopologyReply) - SIZEOF(xReply)) >> 2,
+                 xFalse))
+    {
+        goto exit;
+    }
 
-   ret = True;
+    ret = True;
 
 exit:
-   UnlockDisplay(dpy);
-   SyncHandle();
+    UnlockDisplay(dpy);
+    SyncHandle();
 
-   return ret;
+    return ret;
 }

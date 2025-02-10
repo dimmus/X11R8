@@ -32,7 +32,6 @@
 #include <xorg-server.h>
 #include <xf86.h>
 
-
 /**
  * struct vmwgfx_hosted - hosting environment private information.
  *
@@ -56,7 +55,8 @@ struct vmwgfx_hosted;
  * instruct the hosting environment about damaged windows.
  * @dri_auth: Authenticate a dri client.
  */
-struct vmwgfx_hosted_driver {
+struct vmwgfx_hosted_driver
+{
     struct vmwgfx_hosted *(*create)(ScrnInfoPtr);
     void (*destroy)(struct vmwgfx_hosted *);
     int (*drm_fd)(struct vmwgfx_hosted *, const struct pci_device *);
@@ -92,12 +92,11 @@ vmwgfx_is_hosted(const struct vmwgfx_hosted_driver *driver)
  *
  * Convenience wrapper around the hosted_driver function.
  */
-static inline struct vmwgfx_hosted*
+static inline struct vmwgfx_hosted *
 vmwgfx_hosted_create(const struct vmwgfx_hosted_driver *driver,
-		     ScrnInfoPtr pScrn)
+                     ScrnInfoPtr                        pScrn)
 {
-    if (!vmwgfx_is_hosted(driver))
-	return NULL;
+    if (!vmwgfx_is_hosted(driver)) return NULL;
 
     return driver->create(pScrn);
 }
@@ -115,10 +114,9 @@ vmwgfx_hosted_create(const struct vmwgfx_hosted_driver *driver,
  */
 static inline void
 vmwgfx_hosted_destroy(const struct vmwgfx_hosted_driver *driver,
-		      struct vmwgfx_hosted *hosted)
+                      struct vmwgfx_hosted              *hosted)
 {
-    if (!vmwgfx_is_hosted(driver))
-	return;
+    if (!vmwgfx_is_hosted(driver)) return;
 
     driver->destroy(hosted);
 }
@@ -137,11 +135,10 @@ vmwgfx_hosted_destroy(const struct vmwgfx_hosted_driver *driver,
  */
 static inline int
 vmwgfx_hosted_drm_fd(const struct vmwgfx_hosted_driver *driver,
-		     struct vmwgfx_hosted *hosted,
-		     const struct pci_device *pci)
+                     struct vmwgfx_hosted              *hosted,
+                     const struct pci_device           *pci)
 {
-    if (!vmwgfx_is_hosted(driver))
-	return -1;
+    if (!vmwgfx_is_hosted(driver)) return -1;
 
     return driver->drm_fd(hosted, pci);
 }
@@ -160,10 +157,10 @@ vmwgfx_hosted_drm_fd(const struct vmwgfx_hosted_driver *driver,
  */
 static inline Bool
 vmwgfx_hosted_pre_init(const struct vmwgfx_hosted_driver *driver,
-		       struct vmwgfx_hosted *hosted, int flags)
+                       struct vmwgfx_hosted              *hosted,
+                       int                                flags)
 {
-    if (!vmwgfx_is_hosted(driver))
-	return TRUE;
+    if (!vmwgfx_is_hosted(driver)) return TRUE;
 
     return driver->pre_init(hosted, flags);
 }
@@ -182,10 +179,10 @@ vmwgfx_hosted_pre_init(const struct vmwgfx_hosted_driver *driver,
  */
 static inline Bool
 vmwgfx_hosted_screen_init(const struct vmwgfx_hosted_driver *driver,
-			  struct vmwgfx_hosted *hosted, ScreenPtr pScreen)
+                          struct vmwgfx_hosted              *hosted,
+                          ScreenPtr                          pScreen)
 {
-    if (!vmwgfx_is_hosted(driver))
-	return TRUE;
+    if (!vmwgfx_is_hosted(driver)) return TRUE;
 
     return driver->screen_init(hosted, pScreen);
 }
@@ -203,10 +200,9 @@ vmwgfx_hosted_screen_init(const struct vmwgfx_hosted_driver *driver,
  */
 static inline void
 vmwgfx_hosted_screen_close(const struct vmwgfx_hosted_driver *driver,
-			   struct vmwgfx_hosted *hosted)
+                           struct vmwgfx_hosted              *hosted)
 {
-    if (!vmwgfx_is_hosted(driver))
-	return;
+    if (!vmwgfx_is_hosted(driver)) return;
 
     driver->screen_close(hosted);
 }
@@ -225,10 +221,9 @@ vmwgfx_hosted_screen_close(const struct vmwgfx_hosted_driver *driver,
  */
 static inline void
 vmwgfx_hosted_post_damage(const struct vmwgfx_hosted_driver *driver,
-			  struct vmwgfx_hosted *hosted)
+                          struct vmwgfx_hosted              *hosted)
 {
-    if (!vmwgfx_is_hosted(driver))
-	return;
+    if (!vmwgfx_is_hosted(driver)) return;
 
     driver->post_damage(hosted);
 }
@@ -249,9 +244,9 @@ vmwgfx_hosted_post_damage(const struct vmwgfx_hosted_driver *driver,
  */
 static inline int
 vmwgfx_hosted_dri_auth(const struct vmwgfx_hosted_driver *driver,
-		       struct vmwgfx_hosted *hosted,
-		       ClientPtr client,
-		       uint32_t magic)
+                       struct vmwgfx_hosted              *hosted,
+                       ClientPtr                          client,
+                       uint32_t                           magic)
 {
     return driver->dri_auth(hosted, client, magic);
 }

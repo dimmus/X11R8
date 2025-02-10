@@ -23,18 +23,18 @@
 #ifndef ___ATIVERSION_H___
 #define ___ATIVERSION_H___ 1
 
-#undef  ATI_NAME
-#undef  ATI_DRIVER_NAME
-#undef  ATI_VERSION_CURRENT
-#undef  ATI_VERSION_EVALUATE
-#undef  ATI_VERSION_STRINGIFY
-#undef  ATI_VERSION_NAME
+#undef ATI_NAME
+#undef ATI_DRIVER_NAME
+#undef ATI_VERSION_CURRENT
+#undef ATI_VERSION_EVALUATE
+#undef ATI_VERSION_STRINGIFY
+#undef ATI_VERSION_NAME
 
-#define ATI_NAME          "ATI"
-#define ATI_DRIVER_NAME   "ati"
+#define ATI_NAME        "ATI"
+#define ATI_DRIVER_NAME "ati"
 
 #ifndef ATI_VERSION_EXTRA
-#define ATI_VERSION_EXTRA ""
+#  define ATI_VERSION_EXTRA ""
 #endif
 
 #define ATI_VERSION_MAJOR ATI_PACKAGE_VERSION_MAJOR
@@ -46,9 +46,9 @@
 
 #define ATI_VERSION_EVALUATE(__x) #__x
 #define ATI_VERSION_STRINGIFY(_x) ATI_VERSION_EVALUATE(_x)
-#define ATI_VERSION_NAME                                        \
-    ATI_VERSION_STRINGIFY(ATI_VERSION_MAJOR) "."                \
-    ATI_VERSION_STRINGIFY(ATI_VERSION_MINOR) "."                \
-    ATI_VERSION_STRINGIFY(ATI_VERSION_PATCH) ATI_VERSION_EXTRA
+#define ATI_VERSION_NAME                                                    \
+    ATI_VERSION_STRINGIFY(ATI_VERSION_MAJOR)                                \
+    "." ATI_VERSION_STRINGIFY(ATI_VERSION_MINOR) "." ATI_VERSION_STRINGIFY( \
+        ATI_VERSION_PATCH) ATI_VERSION_EXTRA
 
 #endif /* ___ATIVERSION_H___ */

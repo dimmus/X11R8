@@ -25,6 +25,6 @@
  * minor command number, respectively.
  */
 
-#define SVGA_ESCAPE_VMWARE_MAJOR_MASK  0xFFFF0000
+#define SVGA_ESCAPE_VMWARE_MAJOR_MASK 0xFFFF0000
 
 #endif /* _SVGA_ESCAPE_H_ */

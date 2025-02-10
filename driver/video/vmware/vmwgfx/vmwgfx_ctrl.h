@@ -32,7 +32,6 @@
  *      allows X clients to communicate with the driver.
  */
 
-
 #ifndef _VMWGFX_CTRL_H_
 #define _VMWGFX_CTRL_H_
 
@@ -42,7 +41,7 @@
 #define VMWARE_CTRL_MINOR_VERSION 2
 
 #define X_VMwareCtrlQueryVersion 0
-#define X_VMwareCtrlSetRes 1
-#define X_VMwareCtrlSetTopology 2
+#define X_VMwareCtrlSetRes       1
+#define X_VMwareCtrlSetTopology  2
 
 #endif /* _VMW_CTRL_H_ */

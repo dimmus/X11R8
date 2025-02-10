@@ -21,7 +21,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include "ati.h"
@@ -29,18 +29,11 @@
 
 /* Module loader interface */
 
-static XF86ModuleVersionInfo ATIVersionRec =
-{
-    ATI_DRIVER_NAME,
-    MODULEVENDORSTRING,
-    MODINFOSTRING1,
-    MODINFOSTRING2,
-    XORG_VERSION_CURRENT,
-    ATI_VERSION_MAJOR, ATI_VERSION_MINOR, ATI_VERSION_PATCH,
-    ABI_CLASS_VIDEODRV,
-    ABI_VIDEODRV_VERSION,
-    MOD_CLASS_VIDEODRV,
-    {0, 0, 0, 0}
+static XF86ModuleVersionInfo ATIVersionRec = {
+    ATI_DRIVER_NAME,      MODULEVENDORSTRING,   MODINFOSTRING1,
+    MODINFOSTRING2,       XORG_VERSION_CURRENT, ATI_VERSION_MAJOR,
+    ATI_VERSION_MINOR,    ATI_VERSION_PATCH,    ABI_CLASS_VIDEODRV,
+    ABI_VIDEODRV_VERSION, MOD_CLASS_VIDEODRV,   { 0, 0, 0, 0 }
 };
 
 /*
@@ -49,13 +42,7 @@ static XF86ModuleVersionInfo ATIVersionRec =
  * This function is called every time the module is loaded.
  */
 static pointer
-ATISetup
-(
-    pointer Module,
-    pointer Options,
-    int     *ErrorMajor,
-    int     *ErrorMinor
-)
+ATISetup(pointer Module, pointer Options, int *ErrorMajor, int *ErrorMinor)
 {
     static Bool Inited = FALSE;
 
@@ -69,9 +56,4 @@ ATISetup
 }
 
 /* The following record must be called atiModuleData */
-_X_EXPORT XF86ModuleData atiModuleData =
-{
-    &ATIVersionRec,
-    ATISetup,
-    NULL
-};
+_X_EXPORT XF86ModuleData atiModuleData = { &ATIVersionRec, ATISetup, NULL };

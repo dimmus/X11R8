@@ -31,7 +31,6 @@
  *      The VMWARE_CTRL client library.
  */
 
-
 #ifndef _LIB_VMWARE_CTRL_H_
 #define _LIB_VMWARE_CTRL_H_
 
@@ -39,9 +38,14 @@
 #include <X11/Xmd.h>
 #include <X11/extensions/panoramiXproto.h>
 
-Bool VMwareCtrl_QueryExtension(Display *dpy, int *event_basep, int *error_basep);
-Bool VMwareCtrl_QueryVersion(Display *dpy, int *majorVersion, int *minorVersion);
+Bool
+VMwareCtrl_QueryExtension(Display *dpy, int *event_basep, int *error_basep);
+Bool
+VMwareCtrl_QueryVersion(Display *dpy, int *majorVersion, int *minorVersion);
 Bool VMwareCtrl_SetRes(Display *dpy, int screen, int x, int y);
-Bool VMwareCtrl_SetTopology(Display *dpy, int screen, xXineramaScreenInfo[], int number);
+Bool VMwareCtrl_SetTopology(Display *dpy,
+                            int      screen,
+                            xXineramaScreenInfo[],
+                            int number);
 
 #endif /* _LIB_VMWARE_CTRL_H_ */

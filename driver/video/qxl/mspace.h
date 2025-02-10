@@ -9,7 +9,8 @@ extern "C" {
 
 //typedef unsigned long size_t;
 typedef void (*mspace_abort_t)(void *user_data);
-typedef void (*mspace_print_t)(void *user_data, const char *format, ...)  __attribute__((format(gnu_printf, 2, 3)));
+typedef void (*mspace_print_t)(void *user_data, const char *format, ...)
+    __attribute__((format(gnu_printf, 2, 3)));
 
 void mspace_set_abort_func(mspace_abort_t f);
 void mspace_set_print_func(mspace_print_t f);
@@ -21,7 +22,7 @@ void default_print_func(void *user_data, const char *format, ...);
   mspace is an opaque type representing an independent
   region of space that supports mspace_malloc, etc.
 */
-typedef void* mspace;
+typedef void *mspace;
 
 /*
   create_mspace creates and returns a new independent space with the
@@ -53,13 +54,16 @@ typedef void* mspace;
   Destroying this space will deallocate all additionally allocated
   space (if possible) but not the initial base.
 */
-mspace create_mspace_with_base(void* base, size_t capacity, int locked, void *user_data);
+mspace create_mspace_with_base(void  *base,
+                               size_t capacity,
+                               int    locked,
+                               void  *user_data);
 
 /*
   mspace_malloc behaves as malloc, but operates within
   the given space.
 */
-void* mspace_malloc(mspace msp, size_t bytes);
+void *mspace_malloc(mspace msp, size_t bytes);
 
 /*
   mspace_free behaves as free, but operates within
@@ -69,7 +73,7 @@ void* mspace_malloc(mspace msp, size_t bytes);
   free may be called instead of mspace_free because freed chunks from
   any space are handled by their originating spaces.
 */
-void mspace_free(mspace msp, void* mem);
+void mspace_free(mspace msp, void *mem);
 
 /*
   mspace_realloc behaves as realloc, but operates within
@@ -80,19 +84,19 @@ void mspace_free(mspace msp, void* mem);
   realloced chunks from any space are handled by their originating
   spaces.
 */
-void* mspace_realloc(mspace msp, void* mem, size_t newsize);
+void *mspace_realloc(mspace msp, void *mem, size_t newsize);
 
 /*
   mspace_calloc behaves as calloc, but operates within
   the given space.
 */
-void* mspace_calloc(mspace msp, size_t n_elements, size_t elem_size);
+void *mspace_calloc(mspace msp, size_t n_elements, size_t elem_size);
 
 /*
   mspace_memalign behaves as memalign, but operates within
   the given space.
 */
-void* mspace_memalign(mspace msp, size_t alignment, size_t bytes);
+void *mspace_memalign(mspace msp, size_t alignment, size_t bytes);
 
 /*
   mspace_independent_calloc behaves as independent_calloc, but
@@ -120,7 +124,6 @@ size_t mspace_footprint(mspace msp);
 */
 size_t mspace_max_footprint(mspace msp);
 
-
 #if !NO_MALLINFO
 /*
   mspace_mallinfo behaves as mallinfo, but reports properties of
@@ -135,7 +138,9 @@ struct mallinfo mspace_mallinfo(mspace msp);
   printing the three quantities, maxfp, fp, and used.
 */
 void mspace_malloc_stats(mspace msp);
-void mspace_malloc_stats_return(mspace msp, size_t *ret_maxfp, size_t *ret_fp,
+void mspace_malloc_stats_return(mspace  msp,
+                                size_t *ret_maxfp,
+                                size_t *ret_fp,
                                 size_t *ret_used);
 
 /*

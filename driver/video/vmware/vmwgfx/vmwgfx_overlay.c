@@ -34,9 +34,8 @@
  *
  */
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
-
 
 #include "xorg-server.h"
 #include "xf86xv.h"
@@ -46,16 +45,16 @@
 /*
  * We can't incude svga_types.h due to conflicting types for Bool.
  */
-typedef int64_t int64;
+typedef int64_t  int64;
 typedef uint64_t uint64;
 
-typedef int32_t int32;
+typedef int32_t  int32;
 typedef uint32_t uint32;
 
-typedef int16_t int16;
+typedef int16_t  int16;
 typedef uint16_t uint16;
 
-typedef int8_t int8;
+typedef int8_t  int8;
 typedef uint8_t uint8;
 
 #include "../src/svga_reg.h"
@@ -88,53 +87,38 @@ typedef void *pointer;
 /*
  * Maximum dimensions
  */
-#define VMWARE_VID_MAX_WIDTH    2048
-#define VMWARE_VID_MAX_HEIGHT   2048
+#define VMWARE_VID_MAX_WIDTH  2048
+#define VMWARE_VID_MAX_HEIGHT 2048
 
 #define VMWARE_VID_NUM_ENCODINGS 1
-static XF86VideoEncodingRec vmwareVideoEncodings[] =
-{
-    {
-       0,
-       "XV_IMAGE",
-       VMWARE_VID_MAX_WIDTH, VMWARE_VID_MAX_HEIGHT,
-       {1, 1}
-    }
+static XF86VideoEncodingRec vmwareVideoEncodings[] = {
+    { 0, "XV_IMAGE", VMWARE_VID_MAX_WIDTH, VMWARE_VID_MAX_HEIGHT, { 1, 1 } }
 };
 
 #define VMWARE_VID_NUM_FORMATS 2
-static XF86VideoFormatRec vmwareVideoFormats[] =
-{
-    { 16, TrueColor},
-    { 24, TrueColor}
+static XF86VideoFormatRec vmwareVideoFormats[] = {
+    { 16, TrueColor },
+    { 24, TrueColor }
 };
 
 #define VMWARE_VID_NUM_IMAGES 3
-static XF86ImageRec vmwareVideoImages[] =
-{
-    XVIMAGE_YV12,
-    XVIMAGE_YUY2,
-    XVIMAGE_UYVY
-};
+static XF86ImageRec vmwareVideoImages[] = { XVIMAGE_YV12,
+                                            XVIMAGE_YUY2,
+                                            XVIMAGE_UYVY };
 
-static CONST_ABI_16_TO_19 char xv_colorkey_name[] = "XV_COLORKEY";
+static CONST_ABI_16_TO_19 char xv_colorkey_name[]  = "XV_COLORKEY";
 static CONST_ABI_16_TO_19 char xv_autopaint_name[] = "XV_AUTOPAINT_COLORKEY";
 
 #define VMWARE_VID_NUM_ATTRIBUTES 2
-static XF86AttributeRec vmwareVideoAttributes[] =
-{
+static XF86AttributeRec vmwareVideoAttributes[] = {
     {
-        XvGettable | XvSettable,
-        0x000000,
-        0xffffff,
-        xv_colorkey_name,
-    },
+     XvGettable | XvSettable,
+     0x000000, 0xffffff,
+     xv_colorkey_name, },
     {
-        XvGettable | XvSettable,
-        0,
-        1,
-        xv_autopaint_name,
-    }
+     XvGettable | XvSettable,
+     0,      1,
+     xv_autopaint_name, }
 };
 
 /*
@@ -148,11 +132,10 @@ static XF86AttributeRec vmwareVideoAttributes[] =
  */
 struct vmw_video_buffer
 {
-    int size;
-    void *data;
+    int                   size;
+    void                 *data;
     struct vmwgfx_dmabuf *buf;
 };
-
 
 /**
  * Structure representing a single video stream, aka port.
@@ -169,10 +152,22 @@ struct vmwgfx_overlay_port
      * At init this function is set to port_init. In port_init we set it
      * to port_play and call it, after initializing the struct.
      */
-    int (*play)(ScrnInfoPtr, struct vmwgfx_overlay_port *,
-                short, short, short, short, short,
-                short, short, short, int, unsigned char*,
-                short, short, RegionPtr, DrawablePtr);
+    int (*play)(ScrnInfoPtr,
+                struct vmwgfx_overlay_port *,
+                short,
+                short,
+                short,
+                short,
+                short,
+                short,
+                short,
+                short,
+                int,
+                unsigned char *,
+                short,
+                short,
+                RegionPtr,
+                DrawablePtr);
 
     /* values to go into the SVGAOverlayUnit */
     uint32 streamId;
@@ -180,7 +175,7 @@ struct vmwgfx_overlay_port
     uint32 flags;
 
     /* round robin of buffers */
-    unsigned currBuf;
+    unsigned                currBuf;
     struct vmw_video_buffer bufs[VMWARE_VID_NUM_BUFFERS];
 
     /* properties that applies to all buffers */
@@ -190,71 +185,108 @@ struct vmwgfx_overlay_port
 
     /* things for X */
     RegionRec clipBoxes;
-    Bool isAutoPaintColorkey;
-    int drm_fd;
+    Bool      isAutoPaintColorkey;
+    int       drm_fd;
 };
 
 /*
  * Callback functions exported to Xv, prefixed with vmw_xv_*.
  */
-static int vmw_xv_put_image(ScrnInfoPtr pScrn, short src_x, short src_y,
-                            short drw_x, short drw_y, short src_w, short src_h,
-                            short drw_w, short drw_h, int image,
-                            unsigned char *buf, short width, short height,
-                            Bool sync, RegionPtr clipBoxes, pointer data,
-                            DrawablePtr dst);
+static int  vmw_xv_put_image(ScrnInfoPtr    pScrn,
+                             short          src_x,
+                             short          src_y,
+                             short          drw_x,
+                             short          drw_y,
+                             short          src_w,
+                             short          src_h,
+                             short          drw_w,
+                             short          drw_h,
+                             int            image,
+                             unsigned char *buf,
+                             short          width,
+                             short          height,
+                             Bool           sync,
+                             RegionPtr      clipBoxes,
+                             pointer        data,
+                             DrawablePtr    dst);
 static void vmw_xv_stop_video(ScrnInfoPtr pScrn, pointer data, Bool Cleanup);
-static int vmw_xv_query_image_attributes(ScrnInfoPtr pScrn, int format,
-                                         unsigned short *width,
-                                         unsigned short *height, int *pitches,
-                                         int *offsets);
-static int vmw_xv_set_port_attribute(ScrnInfoPtr pScrn, Atom attribute,
-                                     INT32 value, pointer data);
-static int vmw_xv_get_port_attribute(ScrnInfoPtr pScrn, Atom attribute,
-                                     INT32 *value, pointer data);
-static void vmw_xv_query_best_size(ScrnInfoPtr pScrn, Bool motion,
-                                short vid_w, short vid_h, short drw_w,
-                                short drw_h, unsigned int *p_w,
-                                unsigned int *p_h, pointer data);
-
+static int  vmw_xv_query_image_attributes(ScrnInfoPtr     pScrn,
+                                          int             format,
+                                          unsigned short *width,
+                                          unsigned short *height,
+                                          int            *pitches,
+                                          int            *offsets);
+static int  vmw_xv_set_port_attribute(ScrnInfoPtr pScrn,
+                                      Atom        attribute,
+                                      INT32       value,
+                                      pointer     data);
+static int  vmw_xv_get_port_attribute(ScrnInfoPtr pScrn,
+                                      Atom        attribute,
+                                      INT32      *value,
+                                      pointer     data);
+static void vmw_xv_query_best_size(ScrnInfoPtr   pScrn,
+                                   Bool          motion,
+                                   short         vid_w,
+                                   short         vid_h,
+                                   short         drw_w,
+                                   short         drw_h,
+                                   unsigned int *p_w,
+                                   unsigned int *p_h,
+                                   pointer       data);
 
 /*
  * Local functions.
  */
-static int vmw_video_port_init(ScrnInfoPtr pScrn,
-                               struct vmwgfx_overlay_port *port,
-                               short src_x, short src_y, short drw_x,
-                               short drw_y, short src_w, short src_h,
-                               short drw_w, short drw_h, int format,
-                               unsigned char *buf, short width,
-                               short height, RegionPtr clipBoxes,
-                               DrawablePtr pDraw);
-static int vmw_video_port_play(ScrnInfoPtr pScrn, struct vmwgfx_overlay_port *port,
-                               short src_x, short src_y, short drw_x,
-                               short drw_y, short src_w, short src_h,
-                               short drw_w, short drw_h, int format,
-                               unsigned char *buf, short width,
-                               short height, RegionPtr clipBoxes,
-                               DrawablePtr pDraw);
-static void vmw_video_port_cleanup(ScrnInfoPtr pScrn, struct vmwgfx_overlay_port *port);
+static int  vmw_video_port_init(ScrnInfoPtr                 pScrn,
+                                struct vmwgfx_overlay_port *port,
+                                short                       src_x,
+                                short                       src_y,
+                                short                       drw_x,
+                                short                       drw_y,
+                                short                       src_w,
+                                short                       src_h,
+                                short                       drw_w,
+                                short                       drw_h,
+                                int                         format,
+                                unsigned char              *buf,
+                                short                       width,
+                                short                       height,
+                                RegionPtr                   clipBoxes,
+                                DrawablePtr                 pDraw);
+static int  vmw_video_port_play(ScrnInfoPtr                 pScrn,
+                                struct vmwgfx_overlay_port *port,
+                                short                       src_x,
+                                short                       src_y,
+                                short                       drw_x,
+                                short                       drw_y,
+                                short                       src_w,
+                                short                       src_h,
+                                short                       drw_w,
+                                short                       drw_h,
+                                int                         format,
+                                unsigned char              *buf,
+                                short                       width,
+                                short                       height,
+                                RegionPtr                   clipBoxes,
+                                DrawablePtr                 pDraw);
+static void vmw_video_port_cleanup(ScrnInfoPtr                 pScrn,
+                                   struct vmwgfx_overlay_port *port);
 
-static int vmw_video_buffer_alloc(int drm_fd, int size,
-                                  struct vmw_video_buffer *out);
+static int
+vmw_video_buffer_alloc(int drm_fd, int size, struct vmw_video_buffer *out);
 static int vmw_video_buffer_free(struct vmw_video_buffer *out);
-
 
 static struct vmwgfx_overlay_port *
 vmwgfx_overlay_port_create(int drm_fd, ScreenPtr pScreen)
 {
     struct vmwgfx_overlay_port *port = calloc(1, sizeof(*port));
 
-    if (!port)
-	return NULL;
+    if (!port) return NULL;
 
-    port->drm_fd = drm_fd;
-    port->play = vmw_video_port_init;
-    port->flags = SVGA_VIDEO_FLAG_COLORKEY;
-    port->colorKey = VMWARE_VIDEO_COLORKEY;
+    port->drm_fd              = drm_fd;
+    port->play                = vmw_video_port_init;
+    port->flags               = SVGA_VIDEO_FLAG_COLORKEY;
+    port->colorKey            = VMWARE_VIDEO_COLORKEY;
     port->isAutoPaintColorkey = TRUE;
     return port;
 }
@@ -265,7 +297,7 @@ vmw_video_free_adaptor(XF86VideoAdaptorPtr adaptor)
     int i;
 
     for (i = 0; i < adaptor->nPorts; ++i)
-	free(adaptor->pPortPrivates[i].ptr);
+        free(adaptor->pPortPrivates[i].ptr);
 
     free(adaptor->pPortPrivates);
     xf86XVFreeVideoAdaptorRec(adaptor);
@@ -292,28 +324,30 @@ XF86VideoAdaptorPtr
 vmw_video_init_adaptor(ScrnInfoPtr pScrn)
 {
     XF86VideoAdaptorPtr adaptor;
-    modesettingPtr ms = modesettingPTR(pScrn);
-    int i;
-    DevUnion *dev_unions;
-    uint32_t ntot, nfree;
+    modesettingPtr      ms = modesettingPTR(pScrn);
+    int                 i;
+    DevUnion           *dev_unions;
+    uint32_t            ntot, nfree;
 
-    if (vmwgfx_is_hosted(ms->hdriver))
-	return NULL;
+    if (vmwgfx_is_hosted(ms->hdriver)) return NULL;
 
-    if (vmwgfx_num_streams(ms->fd, &ntot, &nfree) != 0) {
+    if (vmwgfx_num_streams(ms->fd, &ntot, &nfree) != 0)
+    {
         debug_printf("No stream ioctl support\n");
         return NULL;
     }
-    if (nfree == 0) {
+    if (nfree == 0)
+    {
         debug_printf("No free streams\n");
         return NULL;
     }
-    adaptor = xf86XVAllocateVideoAdaptorRec(pScrn);
+    adaptor    = xf86XVAllocateVideoAdaptorRec(pScrn);
     dev_unions = calloc(VMWARE_VID_NUM_PORTS, sizeof(DevUnion));
-    if (adaptor == NULL || dev_unions == NULL) {
-	xf86XVFreeVideoAdaptorRec(adaptor);
-	free(dev_unions);
-	return NULL;
+    if (adaptor == NULL || dev_unions == NULL)
+    {
+        xf86XVFreeVideoAdaptorRec(adaptor);
+        free(dev_unions);
+        return NULL;
     }
 
     adaptor->type = XvInputMask | XvImageMask | XvWindowMask;
@@ -326,41 +360,41 @@ vmw_video_init_adaptor(ScrnInfoPtr pScrn)
      * scanout area union of all active crtcs. Revisit if needed.
      */
 
-    adaptor->flags = VIDEO_OVERLAID_IMAGES;
-    adaptor->name = "VMware Overlay Video Engine";
-    adaptor->nEncodings = VMWARE_VID_NUM_ENCODINGS;
-    adaptor->pEncodings = vmwareVideoEncodings;
-    adaptor->nFormats = VMWARE_VID_NUM_FORMATS;
-    adaptor->pFormats = vmwareVideoFormats;
-    adaptor->nPorts = VMWARE_VID_NUM_PORTS;
+    adaptor->flags         = VIDEO_OVERLAID_IMAGES;
+    adaptor->name          = "VMware Overlay Video Engine";
+    adaptor->nEncodings    = VMWARE_VID_NUM_ENCODINGS;
+    adaptor->pEncodings    = vmwareVideoEncodings;
+    adaptor->nFormats      = VMWARE_VID_NUM_FORMATS;
+    adaptor->pFormats      = vmwareVideoFormats;
+    adaptor->nPorts        = VMWARE_VID_NUM_PORTS;
     adaptor->pPortPrivates = dev_unions;
 
-    for (i = 0; i < VMWARE_VID_NUM_PORTS; ++i) {
-	struct vmwgfx_overlay_port *priv =
-	    vmwgfx_overlay_port_create(ms->fd, pScrn->pScreen);
+    for (i = 0; i < VMWARE_VID_NUM_PORTS; ++i)
+    {
+        struct vmwgfx_overlay_port *priv =
+            vmwgfx_overlay_port_create(ms->fd, pScrn->pScreen);
 
-        adaptor->pPortPrivates[i].ptr = (pointer) priv;
+        adaptor->pPortPrivates[i].ptr = (pointer)priv;
     }
 
     adaptor->nAttributes = VMWARE_VID_NUM_ATTRIBUTES;
     adaptor->pAttributes = vmwareVideoAttributes;
-    adaptor->nImages = VMWARE_VID_NUM_IMAGES;
-    adaptor->pImages = vmwareVideoImages;
+    adaptor->nImages     = VMWARE_VID_NUM_IMAGES;
+    adaptor->pImages     = vmwareVideoImages;
 
-    adaptor->PutVideo = NULL;
-    adaptor->PutStill = NULL;
-    adaptor->GetVideo = NULL;
-    adaptor->GetStill = NULL;
-    adaptor->StopVideo = vmw_xv_stop_video;
-    adaptor->SetPortAttribute = vmw_xv_set_port_attribute;
-    adaptor->GetPortAttribute = vmw_xv_get_port_attribute;
-    adaptor->QueryBestSize = vmw_xv_query_best_size;
-    adaptor->PutImage = vmw_xv_put_image;
+    adaptor->PutVideo             = NULL;
+    adaptor->PutStill             = NULL;
+    adaptor->GetVideo             = NULL;
+    adaptor->GetStill             = NULL;
+    adaptor->StopVideo            = vmw_xv_stop_video;
+    adaptor->SetPortAttribute     = vmw_xv_set_port_attribute;
+    adaptor->GetPortAttribute     = vmw_xv_get_port_attribute;
+    adaptor->QueryBestSize        = vmw_xv_query_best_size;
+    adaptor->PutImage             = vmw_xv_put_image;
     adaptor->QueryImageAttributes = vmw_xv_query_image_attributes;
 
     return adaptor;
 }
-
 
 /*
  *-----------------------------------------------------------------------------
@@ -384,55 +418,83 @@ vmw_video_init_adaptor(ScrnInfoPtr pScrn)
  */
 
 static int
-vmw_video_port_init(ScrnInfoPtr pScrn, struct vmwgfx_overlay_port *port,
-                    short src_x, short src_y, short drw_x,
-                    short drw_y, short src_w, short src_h,
-                    short drw_w, short drw_h, int format,
-                    unsigned char *buf, short width,
-                    short height, RegionPtr clipBoxes, DrawablePtr pDraw)
+vmw_video_port_init(ScrnInfoPtr                 pScrn,
+                    struct vmwgfx_overlay_port *port,
+                    short                       src_x,
+                    short                       src_y,
+                    short                       drw_x,
+                    short                       drw_y,
+                    short                       src_w,
+                    short                       src_h,
+                    short                       drw_w,
+                    short                       drw_h,
+                    int                         format,
+                    unsigned char              *buf,
+                    short                       width,
+                    short                       height,
+                    RegionPtr                   clipBoxes,
+                    DrawablePtr                 pDraw)
 {
     unsigned short w, h;
-    int i, ret;
+    int            i, ret;
 
     debug_printf("\t%s: id %d, format %d\n", __func__, port->streamId, format);
 
     ret = vmwgfx_claim_stream(port->drm_fd, &port->streamId);
-    if (ret != 0)
-	return XvBadAlloc;
+    if (ret != 0) return XvBadAlloc;
 
-    w = width;
-    h = height;
+    w          = width;
+    h          = height;
     /* init all the format attributes, used for buffers */
-    port->size = vmw_xv_query_image_attributes(pScrn, format, &w, &h,
-                                               port->pitches, port->offsets);
+    port->size = vmw_xv_query_image_attributes(pScrn,
+                                               format,
+                                               &w,
+                                               &h,
+                                               port->pitches,
+                                               port->offsets);
 
-    if (port->size == -1) {
-	ret = XvBadAlloc;
-	goto out_bad_size;
+    if (port->size == -1)
+    {
+        ret = XvBadAlloc;
+        goto out_bad_size;
     }
 
-    for (i = 0; i < VMWARE_VID_NUM_BUFFERS; ++i) {
-	ret = vmw_video_buffer_alloc(port->drm_fd, port->size, &port->bufs[i]);
-	if (ret != Success)
-	    goto out_no_buffer;
+    for (i = 0; i < VMWARE_VID_NUM_BUFFERS; ++i)
+    {
+        ret = vmw_video_buffer_alloc(port->drm_fd, port->size, &port->bufs[i]);
+        if (ret != Success) goto out_no_buffer;
     }
 
     port->currBuf = 0;
     REGION_NULL(pScrn->pScreen, &port->clipBoxes);
     port->play = vmw_video_port_play;
-    return port->play(pScrn, port, src_x, src_y, drw_x, drw_y, src_w, src_h,
-                      drw_w, drw_h, format, buf, width, height, clipBoxes, pDraw);
+    return port->play(pScrn,
+                      port,
+                      src_x,
+                      src_y,
+                      drw_x,
+                      drw_y,
+                      src_w,
+                      src_h,
+                      drw_w,
+                      drw_h,
+                      format,
+                      buf,
+                      width,
+                      height,
+                      clipBoxes,
+                      pDraw);
 
-  out_no_buffer:
-    while(i-- != 0) {
-	vmw_video_buffer_free(&port->bufs[i]);
+out_no_buffer:
+    while (i-- != 0)
+    {
+        vmw_video_buffer_free(&port->bufs[i]);
     }
-  out_bad_size:
-    (void) vmwgfx_unref_stream(port->drm_fd, port->streamId);
+out_bad_size:
+    (void)vmwgfx_unref_stream(port->drm_fd, port->streamId);
 
     return ret;
 }
-
 
 /*
  *-----------------------------------------------------------------------------
@@ -452,17 +514,27 @@ vmw_video_port_init(ScrnInfoPtr pScrn, struct vmwgfx_overlay_port *port,
  */
 
 static int
-vmw_video_port_play(ScrnInfoPtr pScrn, struct vmwgfx_overlay_port *port,
-                    short src_x, short src_y, short drw_x,
-                    short drw_y, short src_w, short src_h,
-                    short drw_w, short drw_h, int format,
-                    unsigned char *buf, short width,
-                    short height, RegionPtr clipBoxes, DrawablePtr pDraw)
+vmw_video_port_play(ScrnInfoPtr                 pScrn,
+                    struct vmwgfx_overlay_port *port,
+                    short                       src_x,
+                    short                       src_y,
+                    short                       drw_x,
+                    short                       drw_y,
+                    short                       src_w,
+                    short                       src_h,
+                    short                       drw_w,
+                    short                       drw_h,
+                    int                         format,
+                    unsigned char              *buf,
+                    short                       width,
+                    short                       height,
+                    RegionPtr                   clipBoxes,
+                    DrawablePtr                 pDraw)
 {
     struct drm_vmw_control_stream_arg arg;
-    unsigned short w, h;
-    int size;
-    int ret;
+    unsigned short                    w, h;
+    int                               size;
+    int                               ret;
 
     debug_printf("\t%s: enter\n", __func__);
 
@@ -470,14 +542,32 @@ vmw_video_port_play(ScrnInfoPtr pScrn, struct vmwgfx_overlay_port *port,
     h = height;
 
     /* we don't update the ports size */
-    size = vmw_xv_query_image_attributes(pScrn, format, &w, &h,
-                                         port->pitches, port->offsets);
+    size = vmw_xv_query_image_attributes(pScrn,
+                                         format,
+                                         &w,
+                                         &h,
+                                         port->pitches,
+                                         port->offsets);
 
-    if (size != port->size) {
+    if (size != port->size)
+    {
         vmw_xv_stop_video(pScrn, port, TRUE);
-        return port->play(pScrn, port, src_x, src_y, drw_x, drw_y, src_w,
-                          src_h, drw_w, drw_h, format, buf, width, height,
-                          clipBoxes, pDraw);
+        return port->play(pScrn,
+                          port,
+                          src_x,
+                          src_y,
+                          drw_x,
+                          drw_y,
+                          src_w,
+                          src_h,
+                          drw_w,
+                          drw_h,
+                          format,
+                          buf,
+                          width,
+                          height,
+                          clipBoxes,
+                          pDraw);
     }
 
     memcpy(port->bufs[port->currBuf].data, buf, port->size);
@@ -485,55 +575,62 @@ vmw_video_port_play(ScrnInfoPtr pScrn, struct vmwgfx_overlay_port *port,
     memset(&arg, 0, sizeof(arg));
 
     arg.stream_id = port->streamId;
-    arg.enabled = TRUE;
-    arg.flags = port->flags;
+    arg.enabled   = TRUE;
+    arg.flags     = port->flags;
     arg.color_key = port->colorKey;
-    arg.handle = port->bufs[port->currBuf].buf->handle;
-    arg.format = format;
-    arg.size = port->size;
-    arg.width = w;
-    arg.height = h;
-    arg.src.x = src_x;
-    arg.src.y = src_y;
-    arg.src.w = src_w;
-    arg.src.h = src_h;
-    arg.dst.x = drw_x;
-    arg.dst.y = drw_y;
-    arg.dst.w = drw_w;
-    arg.dst.h = drw_h;
-    arg.pitch[0] = port->pitches[0];
-    arg.pitch[1] = port->pitches[1];
-    arg.pitch[2] = port->pitches[2];
-    arg.offset = 0;
+    arg.handle    = port->bufs[port->currBuf].buf->handle;
+    arg.format    = format;
+    arg.size      = port->size;
+    arg.width     = w;
+    arg.height    = h;
+    arg.src.x     = src_x;
+    arg.src.y     = src_y;
+    arg.src.w     = src_w;
+    arg.src.h     = src_h;
+    arg.dst.x     = drw_x;
+    arg.dst.y     = drw_y;
+    arg.dst.w     = drw_w;
+    arg.dst.h     = drw_h;
+    arg.pitch[0]  = port->pitches[0];
+    arg.pitch[1]  = port->pitches[1];
+    arg.pitch[2]  = port->pitches[2];
+    arg.offset    = 0;
 
     /*
      *  Update the clipList and paint the colorkey, if required.
      */
-    if (!REGION_EQUAL(pScrn->pScreen, &port->clipBoxes, clipBoxes)) {
+    if (!REGION_EQUAL(pScrn->pScreen, &port->clipBoxes, clipBoxes))
+    {
         REGION_COPY(pScrn->pScreen, &port->clipBoxes, clipBoxes);
-        if (port->isAutoPaintColorkey) {
-            if (pDraw->type == DRAWABLE_WINDOW) {
+        if (port->isAutoPaintColorkey)
+        {
+            if (pDraw->type == DRAWABLE_WINDOW)
+            {
                 xf86XVFillKeyHelperDrawable(pDraw, port->colorKey, clipBoxes);
                 DamageDamageRegion(pDraw, clipBoxes);
-            } else {
+            }
+            else
+            {
                 xf86XVFillKeyHelper(pScrn->pScreen, port->colorKey, clipBoxes);
             }
         }
     }
 
     xorg_flush(pScrn->pScreen);
-    ret = drmCommandWrite(port->drm_fd, DRM_VMW_CONTROL_STREAM, &arg, sizeof(arg));
-    if (ret) {
-	vmw_video_port_cleanup(pScrn, port);
-	return XvBadAlloc;
+    ret = drmCommandWrite(port->drm_fd,
+                          DRM_VMW_CONTROL_STREAM,
+                          &arg,
+                          sizeof(arg));
+    if (ret)
+    {
+        vmw_video_port_cleanup(pScrn, port);
+        return XvBadAlloc;
     }
 
-    if (++(port->currBuf) >= VMWARE_VID_NUM_BUFFERS)
-	port->currBuf = 0;
+    if (++(port->currBuf) >= VMWARE_VID_NUM_BUFFERS) port->currBuf = 0;
 
     return Success;
 }
-
 
 /*
  *-----------------------------------------------------------------------------
@@ -558,19 +655,18 @@ vmw_video_port_cleanup(ScrnInfoPtr pScrn, struct vmwgfx_overlay_port *port)
 
     debug_printf("\t%s: enter\n", __func__);
 
-    if (port->play == vmw_video_port_init)
-	return;
+    if (port->play == vmw_video_port_init) return;
 
     port->play = vmw_video_port_init;
-    (void) vmwgfx_unref_stream(port->drm_fd, port->streamId);
+    (void)vmwgfx_unref_stream(port->drm_fd, port->streamId);
 
-    for (i = 0; i < VMWARE_VID_NUM_BUFFERS; i++) {
-	vmw_video_buffer_free(&port->bufs[i]);
+    for (i = 0; i < VMWARE_VID_NUM_BUFFERS; i++)
+    {
+        vmw_video_buffer_free(&port->bufs[i]);
     }
 
     REGION_UNINIT(pScreen->pScreen, &port->clipBoxes);
 }
-
 
 /*
  *-----------------------------------------------------------------------------
@@ -589,26 +685,27 @@ vmw_video_port_cleanup(ScrnInfoPtr pScrn, struct vmwgfx_overlay_port *port)
  */
 
 static int
-vmw_video_buffer_alloc(int drm_fd, int size,
-                       struct vmw_video_buffer *out)
+vmw_video_buffer_alloc(int drm_fd, int size, struct vmw_video_buffer *out)
 {
     out->buf = vmwgfx_dmabuf_alloc(drm_fd, size);
-    if (!out->buf)
-	return XvBadAlloc;
+    if (!out->buf) return XvBadAlloc;
 
     out->data = vmwgfx_dmabuf_map(out->buf);
-    if (!out->data) {
-	vmwgfx_dmabuf_destroy(out->buf);
-	out->buf = NULL;
-	return XvBadAlloc;
+    if (!out->data)
+    {
+        vmwgfx_dmabuf_destroy(out->buf);
+        out->buf = NULL;
+        return XvBadAlloc;
     }
 
     out->size = size;
-    debug_printf("\t\t%s: allocated buffer %p of size %i\n", __func__, out, size);
+    debug_printf("\t\t%s: allocated buffer %p of size %i\n",
+                 __func__,
+                 out,
+                 size);
 
     return Success;
 }
-
 
 /*
  *-----------------------------------------------------------------------------
@@ -629,13 +726,12 @@ vmw_video_buffer_alloc(int drm_fd, int size,
 static int
 vmw_video_buffer_free(struct vmw_video_buffer *out)
 {
-    if (out->size == 0)
-	return Success;
+    if (out->size == 0) return Success;
 
     vmwgfx_dmabuf_unmap(out->buf);
     vmwgfx_dmabuf_destroy(out->buf);
 
-    out->buf = NULL;
+    out->buf  = NULL;
     out->data = NULL;
     out->size = 0;
 
@@ -643,7 +739,6 @@ vmw_video_buffer_free(struct vmw_video_buffer *out)
 
     return Success;
 }
-
 
 /*
  *-----------------------------------------------------------------------------
@@ -667,24 +762,56 @@ vmw_video_buffer_free(struct vmw_video_buffer *out)
  */
 
 static int
-vmw_xv_put_image(ScrnInfoPtr pScrn, short src_x, short src_y,
-                 short drw_x, short drw_y, short src_w, short src_h,
-                 short drw_w, short drw_h, int format,
-                 unsigned char *buf, short width, short height,
-                 Bool sync, RegionPtr clipBoxes, pointer data,
-                 DrawablePtr dst)
+vmw_xv_put_image(ScrnInfoPtr    pScrn,
+                 short          src_x,
+                 short          src_y,
+                 short          drw_x,
+                 short          drw_y,
+                 short          src_w,
+                 short          src_h,
+                 short          drw_w,
+                 short          drw_h,
+                 int            format,
+                 unsigned char *buf,
+                 short          width,
+                 short          height,
+                 Bool           sync,
+                 RegionPtr      clipBoxes,
+                 pointer        data,
+                 DrawablePtr    dst)
 {
     struct vmwgfx_overlay_port *port = data;
 
-    debug_printf("%s: enter (%u, %u) (%ux%u) (%u, %u) (%ux%u) (%ux%u)\n", __func__,
-		 src_x, src_y, src_w, src_h,
-		 drw_x, drw_y, drw_w, drw_h,
-		 width, height);
+    debug_printf("%s: enter (%u, %u) (%ux%u) (%u, %u) (%ux%u) (%ux%u)\n",
+                 __func__,
+                 src_x,
+                 src_y,
+                 src_w,
+                 src_h,
+                 drw_x,
+                 drw_y,
+                 drw_w,
+                 drw_h,
+                 width,
+                 height);
 
-    return port->play(pScrn, port, src_x, src_y, drw_x, drw_y, src_w, src_h,
-                      drw_w, drw_h, format, buf, width, height, clipBoxes, dst);
+    return port->play(pScrn,
+                      port,
+                      src_x,
+                      src_y,
+                      drw_x,
+                      drw_y,
+                      src_w,
+                      src_h,
+                      drw_w,
+                      drw_h,
+                      format,
+                      buf,
+                      width,
+                      height,
+                      clipBoxes,
+                      dst);
 }
-
 
 /*
  *-----------------------------------------------------------------------------
@@ -713,12 +840,10 @@ vmw_xv_stop_video(ScrnInfoPtr pScrn, pointer data, Bool cleanup)
     debug_printf("%s: cleanup is %s\n", __func__, cleanup ? "TRUE" : "FALSE");
     REGION_EMPTY(pScrn->pScreen, &port->clipBoxes);
 
-    if (!cleanup)
-        return;
+    if (!cleanup) return;
 
     vmw_video_port_cleanup(pScrn, port);
 }
-
 
 /*
  *-----------------------------------------------------------------------------
@@ -740,61 +865,72 @@ vmw_xv_stop_video(ScrnInfoPtr pScrn, pointer data, Bool cleanup)
  */
 
 static int
-vmw_xv_query_image_attributes(ScrnInfoPtr pScrn, int format,
-                              unsigned short *width, unsigned short *height,
-                              int *pitches, int *offsets)
+vmw_xv_query_image_attributes(ScrnInfoPtr     pScrn,
+                              int             format,
+                              unsigned short *width,
+                              unsigned short *height,
+                              int            *pitches,
+                              int            *offsets)
 {
     INT32 size, tmp;
 
-    if (*width > VMWARE_VID_MAX_WIDTH) {
+    if (*width > VMWARE_VID_MAX_WIDTH)
+    {
         *width = VMWARE_VID_MAX_WIDTH;
     }
-    if (*height > VMWARE_VID_MAX_HEIGHT) {
+    if (*height > VMWARE_VID_MAX_HEIGHT)
+    {
         *height = VMWARE_VID_MAX_HEIGHT;
     }
 
     *width = (*width + 1) & ~1;
-    if (offsets != NULL) {
+    if (offsets != NULL)
+    {
         offsets[0] = 0;
     }
 
-    switch (format) {
-       case FOURCC_YV12:
-           *height = (*height + 1) & ~1;
-           size = (*width + 3) & ~3;
-           if (pitches) {
-               pitches[0] = size;
-           }
-           size *= *height;
-           if (offsets) {
-               offsets[1] = size;
-           }
-           tmp = ((*width >> 1) + 3) & ~3;
-           if (pitches) {
+    switch (format)
+    {
+        case FOURCC_YV12:
+            *height = (*height + 1) & ~1;
+            size    = (*width + 3) & ~3;
+            if (pitches)
+            {
+                pitches[0] = size;
+            }
+            size *= *height;
+            if (offsets)
+            {
+                offsets[1] = size;
+            }
+            tmp = ((*width >> 1) + 3) & ~3;
+            if (pitches)
+            {
                 pitches[1] = pitches[2] = tmp;
-           }
-           tmp *= (*height >> 1);
-           size += tmp;
-           if (offsets) {
-               offsets[2] = size;
-           }
-           size += tmp;
-           break;
-       case FOURCC_UYVY:
-       case FOURCC_YUY2:
-           size = *width * 2;
-           if (pitches) {
-               pitches[0] = size;
-           }
-           size *= *height;
-           break;
-       default:
-           debug_printf("Query for invalid video format %d\n", format);
-           return -1;
+            }
+            tmp *= (*height >> 1);
+            size += tmp;
+            if (offsets)
+            {
+                offsets[2] = size;
+            }
+            size += tmp;
+            break;
+        case FOURCC_UYVY:
+        case FOURCC_YUY2:
+            size = *width * 2;
+            if (pitches)
+            {
+                pitches[0] = size;
+            }
+            size *= *height;
+            break;
+        default:
+            debug_printf("Query for invalid video format %d\n", format);
+            return -1;
     }
     return size;
 }
-
 
 /*
  *-----------------------------------------------------------------------------
@@ -815,26 +951,34 @@ vmw_xv_query_image_attributes(ScrnInfoPtr pScrn, int format,
  */
 
 static int
-vmw_xv_set_port_attribute(ScrnInfoPtr pScrn, Atom attribute,
-                          INT32 value, pointer data)
+vmw_xv_set_port_attribute(ScrnInfoPtr pScrn,
+                          Atom        attribute,
+                          INT32       value,
+                          pointer     data)
 {
-    struct vmwgfx_overlay_port *port = data;
-    Atom xvColorKey = MAKE_ATOM("XV_COLORKEY");
-    Atom xvAutoPaint = MAKE_ATOM("XV_AUTOPAINT_COLORKEY");
+    struct vmwgfx_overlay_port *port       = data;
+    Atom                        xvColorKey = MAKE_ATOM("XV_COLORKEY");
+    Atom xvAutoPaint                       = MAKE_ATOM("XV_AUTOPAINT_COLORKEY");
 
-    if (attribute == xvColorKey) {
+    if (attribute == xvColorKey)
+    {
         debug_printf("%s: Set colorkey:0x%x\n", __func__, (unsigned)value);
         port->colorKey = value;
-    } else if (attribute == xvAutoPaint) {
-        debug_printf("%s: Set autoPaint: %s\n", __func__, value? "TRUE": "FALSE");
+    }
+    else if (attribute == xvAutoPaint)
+    {
+        debug_printf("%s: Set autoPaint: %s\n",
+                     __func__,
+                     value ? "TRUE" : "FALSE");
         port->isAutoPaintColorkey = value;
-    } else {
+    }
+    else
+    {
         return XvBadAlloc;
     }
 
     return Success;
 }
-
 
 /*
  *-----------------------------------------------------------------------------
@@ -855,24 +999,30 @@ vmw_xv_set_port_attribute(ScrnInfoPtr pScrn, Atom attribute,
  */
 
 static int
-vmw_xv_get_port_attribute(ScrnInfoPtr pScrn, Atom attribute,
-                          INT32 *value, pointer data)
+vmw_xv_get_port_attribute(ScrnInfoPtr pScrn,
+                          Atom        attribute,
+                          INT32      *value,
+                          pointer     data)
 {
-    struct vmwgfx_overlay_port *port = data;
-    Atom xvColorKey = MAKE_ATOM("XV_COLORKEY");
-    Atom xvAutoPaint = MAKE_ATOM("XV_AUTOPAINT_COLORKEY");
+    struct vmwgfx_overlay_port *port       = data;
+    Atom                        xvColorKey = MAKE_ATOM("XV_COLORKEY");
+    Atom xvAutoPaint                       = MAKE_ATOM("XV_AUTOPAINT_COLORKEY");
 
-    if (attribute == xvColorKey) {
+    if (attribute == xvColorKey)
+    {
         *value = port->colorKey;
-    } else if (attribute == xvAutoPaint) {
+    }
+    else if (attribute == xvAutoPaint)
+    {
         *value = port->isAutoPaintColorkey;
-    } else {
+    }
+    else
+    {
         return XvBadAlloc;
     }
 
     return Success;
 }
-
 
 /*
  *-----------------------------------------------------------------------------
@@ -900,10 +1050,15 @@ vmw_xv_get_port_attribute(ScrnInfoPtr pScrn, Atom attribute,
  */
 
 static void
-vmw_xv_query_best_size(ScrnInfoPtr pScrn, Bool motion,
-                       short vid_w, short vid_h, short drw_w,
-                       short drw_h, unsigned int *p_w,
-                       unsigned int *p_h, pointer data)
+vmw_xv_query_best_size(ScrnInfoPtr   pScrn,
+                       Bool          motion,
+                       short         vid_w,
+                       short         vid_h,
+                       short         drw_w,
+                       short         drw_h,
+                       unsigned int *p_w,
+                       unsigned int *p_h,
+                       pointer       data)
 {
     *p_w = (drw_w + 1) & ~1;
     *p_h = drw_h;

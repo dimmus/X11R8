@@ -28,33 +28,38 @@
 #include "brw_test.h"
 #include <string.h>
 
-void brw_test_compare(const char *function, int gen,
-		      const struct brw_instruction *new, int num_new,
-		      const struct brw_instruction *old, int num_old)
+void
+brw_test_compare(const char *function,
+                 int         gen,
+                 const struct brw_instruction *new,
+                 int                           num_new,
+                 const struct brw_instruction *old,
+                 int                           num_old)
 {
-	int n;
+    int n;
 
-	if (num_new != num_old ||
-	    memcmp(new, old, num_new * sizeof(struct brw_instruction))) {
-		printf ("%s: new\n", function);
-		for (n = 0; n < num_new; n++)
-			brw_disasm(stdout, &new[n], gen);
+    if (num_new != num_old ||
+        memcmp(new, old, num_new * sizeof(struct brw_instruction)))
+    {
+        printf("%s: new\n", function);
+        for (n = 0; n < num_new; n++)
+            brw_disasm(stdout, &new[n], gen);
 
-		printf ("%s: old\n", function);
-		for (n = 0; n < num_old; n++)
-			brw_disasm(stdout, &old[n], gen);
-		printf ("\n");
-	}
+        printf("%s: old\n", function);
+        for (n = 0; n < num_old; n++)
+            brw_disasm(stdout, &old[n], gen);
+        printf("\n");
+    }
 }
 
-
 /* Check that we can recreate all the existing programs using the assembler */
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
-	brw_test_gen4();
-	brw_test_gen5();
-	brw_test_gen6();
-	brw_test_gen7();
+    brw_test_gen4();
+    brw_test_gen5();
+    brw_test_gen6();
+    brw_test_gen7();
 
-	return 0;
+    return 0;
 }

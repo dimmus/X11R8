@@ -26,39 +26,45 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config_intel.h"
+#  include "config_intel.h"
 #endif
 
 #include "gen4_common.h"
 #include "gen4_vertex.h"
 
-void gen4_render_flush(struct sna *sna)
+void
+gen4_render_flush(struct sna *sna)
 {
-	gen4_vertex_close(sna);
+    gen4_vertex_close(sna);
 
-	assert(sna->render.vb_id == 0);
-	assert(sna->render.vertex_offset == 0);
+    assert(sna->render.vb_id == 0);
+    assert(sna->render.vertex_offset == 0);
 }
 
-void gen4_render_retire(struct kgem *kgem)
+void
+gen4_render_retire(struct kgem *kgem)
 {
-	struct sna *sna;
+    struct sna *sna;
 
-	sna = container_of(kgem, struct sna, kgem);
-	if (sna->render.nvertex_reloc == 0 && sna->render.vbo && !kgem_bo_is_busy(sna->render.vbo)) {
-		DBG(("%s: resetting idle vbo\n", __FUNCTION__));
-		sna->render.vertex_used = 0;
-		sna->render.vertex_index = 0;
-	}
+    sna = container_of(kgem, struct sna, kgem);
+    if (sna->render.nvertex_reloc == 0 && sna->render.vbo &&
+        !kgem_bo_is_busy(sna->render.vbo))
+    {
+        DBG(("%s: resetting idle vbo\n", __FUNCTION__));
+        sna->render.vertex_used  = 0;
+        sna->render.vertex_index = 0;
+    }
 }
 
-void gen4_render_expire(struct kgem *kgem)
+void
+gen4_render_expire(struct kgem *kgem)
 {
-	struct sna *sna;
+    struct sna *sna;
 
-	sna = container_of(kgem, struct sna, kgem);
-	if (sna->render.vbo && !sna->render.vertex_used) {
-		DBG(("%s: discarding vbo\n", __FUNCTION__));
-		discard_vbo(sna);
-	}
+    sna = container_of(kgem, struct sna, kgem);
+    if (sna->render.vbo && !sna->render.vertex_used)
+    {
+        DBG(("%s: discarding vbo\n", __FUNCTION__));
+        discard_vbo(sna);
+    }
 }

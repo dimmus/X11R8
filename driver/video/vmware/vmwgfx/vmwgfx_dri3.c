@@ -26,52 +26,56 @@
  *
  */
 #ifdef _HAVE_CONFIG_H_
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include <xorg-server.h>
 
 #ifdef DRI3
-#include "vmwgfx_driver.h"
-#if (XA_TRACKER_VERSION_MAJOR == VMW_XA_VERSION_MAJOR_DRI3 &&   \
-     XA_TRACKER_VERSION_MINOR >= VMW_XA_VERSION_MINOR_DRI3)
+#  include "vmwgfx_driver.h"
+#  if (XA_TRACKER_VERSION_MAJOR == VMW_XA_VERSION_MAJOR_DRI3 && \
+       XA_TRACKER_VERSION_MINOR >= VMW_XA_VERSION_MINOR_DRI3)
 
-#include "vmwgfx_driver.h"
-#include "vmwgfx_saa_priv.h"
-#include <dri3.h>
-#include <misyncshm.h>
-#include <xf86drm.h>
-#include <unistd.h>
-
+#    include "vmwgfx_driver.h"
+#    include "vmwgfx_saa_priv.h"
+#    include <dri3.h>
+#    include <misyncshm.h>
+#    include <xf86drm.h>
+#    include <unistd.h>
 
 /**
  * \brief DRI3 fd_from_pixmap callback.
  *
  */
 static int
-vmwgfx_dri3_fd_from_pixmap(ScreenPtr screen, PixmapPtr pixmap,
-                           CARD16 *stride, CARD32 *size)
+vmwgfx_dri3_fd_from_pixmap(ScreenPtr screen,
+                           PixmapPtr pixmap,
+                           CARD16   *stride,
+                           CARD32   *size)
 {
     struct vmwgfx_saa_pixmap *vpix = vmwgfx_saa_pixmap(pixmap);
-    uint32_t handle;
-    unsigned int byte_stride;
-    ScrnInfoPtr pScrn = xf86ScreenToScrn(screen);
+    uint32_t                  handle;
+    unsigned int              byte_stride;
+    ScrnInfoPtr               pScrn = xf86ScreenToScrn(screen);
 
-    if (!vmwgfx_hw_dri2_validate(pixmap, 0)) {
-        xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
+    if (!vmwgfx_hw_dri2_validate(pixmap, 0))
+    {
+        xf86DrvMsg(pScrn->scrnIndex,
+                   X_ERROR,
                    "DRI3 pixmap export failed to create HW surface.\n");
         return -1;
     }
 
-    if (xa_surface_handle(vpix->hw, xa_handle_type_fd, &handle,
-                          &byte_stride)) {
-        xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
+    if (xa_surface_handle(vpix->hw, xa_handle_type_fd, &handle, &byte_stride))
+    {
+        xf86DrvMsg(pScrn->scrnIndex,
+                   X_ERROR,
                    "DRI3 pixmap export failed to create handle.\n");
         return -1;
     }
 
     *stride = byte_stride;
-    *size = byte_stride * pixmap->drawable.height;
+    *size   = byte_stride * pixmap->drawable.height;
 
     /*
      * hw_is_dri2_fronts will make sure any software rendering to
@@ -91,50 +95,65 @@ vmwgfx_dri3_fd_from_pixmap(ScreenPtr screen, PixmapPtr pixmap,
  *
  */
 static PixmapPtr
-vmwgfx_dri3_pixmap_from_fd(ScreenPtr screen, int fd,
-                           CARD16 width, CARD16 height, CARD16 stride,
-                           CARD8 depth, CARD8 bpp)
+vmwgfx_dri3_pixmap_from_fd(ScreenPtr screen,
+                           int       fd,
+                           CARD16    width,
+                           CARD16    height,
+                           CARD16    stride,
+                           CARD8     depth,
+                           CARD8     bpp)
 {
-    struct vmwgfx_saa *vsaa = to_vmwgfx_saa(saa_get_driver(screen));
-    struct xa_surface *srf;
+    struct vmwgfx_saa        *vsaa = to_vmwgfx_saa(saa_get_driver(screen));
+    struct xa_surface        *srf;
     struct vmwgfx_saa_pixmap *vpix;
-    ScrnInfoPtr pScrn = xf86ScreenToScrn(screen);
-    PixmapPtr pixmap;
+    ScrnInfoPtr               pScrn = xf86ScreenToScrn(screen);
+    PixmapPtr                 pixmap;
 
-    if (width == 0 || height == 0 ||
-        depth < 15 || bpp != BitsPerPixel(depth) || stride < width * bpp / 8)
+    if (width == 0 || height == 0 || depth < 15 || bpp != BitsPerPixel(depth) ||
+        stride < width * bpp / 8)
         return NULL;
 
     pixmap = screen->CreatePixmap(screen, width, height, depth, 0);
-    if (!pixmap) {
+    if (!pixmap)
+    {
         xf86DrvMsg(pScrn->scrnIndex, X_ERROR, "DRI3 pixmap creation failed.\n");
         return NULL;
     }
 
     vpix = vmwgfx_saa_pixmap(pixmap);
 
-    if (!vmwgfx_hw_dri2_stage(pixmap, depth)) {
-        xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
+    if (!vmwgfx_hw_dri2_stage(pixmap, depth))
+    {
+        xf86DrvMsg(pScrn->scrnIndex,
+                   X_ERROR,
                    "DRI3 pixmap creation bad format.\n");
         goto out_bad_format;
     }
 
-    srf = xa_surface_from_handle2(vsaa->xat, width, height, depth,
+    srf = xa_surface_from_handle2(vsaa->xat,
+                                  width,
+                                  height,
+                                  depth,
                                   xa_type_other,
                                   vpix->staging_format,
                                   vpix->staging_add_flags,
                                   xa_handle_type_fd,
-                                  fd, stride);
-    if (!srf) {
-        xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
+                                  fd,
+                                  stride);
+    if (!srf)
+    {
+        xf86DrvMsg(pScrn->scrnIndex,
+                   X_ERROR,
                    "DRI3 pixmap creation surface sharing failed.\n");
         goto out_bad_format;
     }
 
     vpix->xa_flags = vpix->staging_add_flags;
-    vpix->hw = srf;
-    if (!vmwgfx_create_hw(vsaa, pixmap, TRUE)) {
-        xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
+    vpix->hw       = srf;
+    if (!vmwgfx_create_hw(vsaa, pixmap, TRUE))
+    {
+        xf86DrvMsg(pScrn->scrnIndex,
+                   X_ERROR,
                    "DRI3 pixmap creation failed SAA enabling.\n");
         goto out_no_damage;
     }
@@ -142,9 +161,9 @@ vmwgfx_dri3_pixmap_from_fd(ScreenPtr screen, int fd,
     vpix->hw_is_dri2_fronts = 1;
     return pixmap;
 
-  out_no_damage:
+out_no_damage:
     xa_surface_unref(srf);
-  out_bad_format:
+out_bad_format:
     screen->DestroyPixmap(pixmap);
 
     return NULL;
@@ -159,20 +178,25 @@ vmwgfx_dri3_pixmap_from_fd(ScreenPtr screen, int fd,
 static int
 vmwgfx_dri3_open_render(ScreenPtr screen)
 {
-    ScrnInfoPtr pScrn = xf86ScreenToScrn(screen);
-    modesettingPtr ms = modesettingPTR(pScrn);
-    char bus_id[64];
-    int fd;
+    ScrnInfoPtr    pScrn = xf86ScreenToScrn(screen);
+    modesettingPtr ms    = modesettingPTR(pScrn);
+    char           bus_id[64];
+    int            fd;
 
-    snprintf(bus_id, sizeof(bus_id), "PCI:%d:%d:%d",
+    snprintf(bus_id,
+             sizeof(bus_id),
+             "PCI:%d:%d:%d",
              ((ms->PciInfo->domain << 8) | ms->PciInfo->bus),
-             ms->PciInfo->dev, ms->PciInfo->func);
+             ms->PciInfo->dev,
+             ms->PciInfo->func);
 
     /* Render nodes can't be opened by busid yet.. */
     fd = drmOpenWithType("vmwgfx", bus_id, DRM_NODE_RENDER);
     if (fd < 0)
-        xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
-                   "DRI3 client open busid \"%s\" failed.\n", bus_id);
+        xf86DrvMsg(pScrn->scrnIndex,
+                   X_ERROR,
+                   "DRI3 client open busid \"%s\" failed.\n",
+                   bus_id);
 
     return fd;
 }
@@ -182,8 +206,10 @@ vmwgfx_dri3_open_render(ScreenPtr screen)
  *
  */
 static int
-vmwgfx_dri3_open_client(ClientPtr client, ScreenPtr screen,
-                        RRProviderPtr provider, int *pfd)
+vmwgfx_dri3_open_client(ClientPtr     client,
+                        ScreenPtr     screen,
+                        RRProviderPtr provider,
+                        int          *pfd)
 {
     *pfd = vmwgfx_dri3_open_render(screen);
 
@@ -209,28 +235,29 @@ vmwgfx_dri3_open_client(ClientPtr client, ScreenPtr screen,
 static Bool
 vmwgfx_dri3_verify_sharing(ScreenPtr screen)
 {
-    ScrnInfoPtr pScrn = xf86ScreenToScrn(screen);
-    modesettingPtr ms = modesettingPTR(pScrn);
-    int fd = vmwgfx_dri3_open_render(screen);
+    ScrnInfoPtr        pScrn = xf86ScreenToScrn(screen);
+    modesettingPtr     ms    = modesettingPTR(pScrn);
+    int                fd    = vmwgfx_dri3_open_render(screen);
     struct xa_tracker *xat;
     struct xa_surface *srf1;
-    unsigned int stride;
-    uint32_t handle;
-    Bool ret = FALSE;
+    unsigned int       stride;
+    uint32_t           handle;
+    Bool               ret = FALSE;
 
-    if (fd < 0)
-        return FALSE;
+    if (fd < 0) return FALSE;
 
     xat = xa_tracker_create(fd);
-    if (!xat)
-        goto out_no_xa;
+    if (!xat) goto out_no_xa;
 
     /* Here we're the render client (xat) */
-    srf1 = xa_surface_create(xat, 16, 16, 32, xa_type_argb,
+    srf1 = xa_surface_create(xat,
+                             16,
+                             16,
+                             32,
+                             xa_type_argb,
                              xa_format_unknown,
                              XA_FLAG_RENDER_TARGET | XA_FLAG_SHARED);
-    if (!srf1)
-        goto out_no_surface;
+    if (!srf1) goto out_no_surface;
 
     if (xa_surface_handle(srf1, xa_handle_type_fd, &handle, &stride) !=
         XA_ERR_NONE)
@@ -239,34 +266,38 @@ vmwgfx_dri3_verify_sharing(ScreenPtr screen)
     xa_surface_unref(srf1);
 
     /* Now we're the X server (ms->xat) */
-    srf1 = xa_surface_from_handle2(ms->xat, 16, 16, 24, xa_type_argb,
+    srf1 = xa_surface_from_handle2(ms->xat,
+                                   16,
+                                   16,
+                                   24,
+                                   xa_type_argb,
                                    xa_format_unknown,
                                    XA_FLAG_RENDER_TARGET | XA_FLAG_SHARED,
-                                   xa_handle_type_fd, handle, stride);
-    if (!srf1)
-        goto out_no_surface;
+                                   xa_handle_type_fd,
+                                   handle,
+                                   stride);
+    if (!srf1) goto out_no_surface;
 
     ret = TRUE;
     close(handle);
 
-  out_no_handle:
+out_no_handle:
     xa_surface_unref(srf1);
-  out_no_surface:
+out_no_surface:
     xa_tracker_destroy(xat);
-  out_no_xa:
+out_no_xa:
     close(fd);
 
     return ret;
 }
 
 static dri3_screen_info_rec vmwgfx_dri3_info = {
-    .version = 1,
-    .open = NULL,
+    .version        = 1,
+    .open           = NULL,
     .pixmap_from_fd = vmwgfx_dri3_pixmap_from_fd,
     .fd_from_pixmap = vmwgfx_dri3_fd_from_pixmap,
-    .open_client = vmwgfx_dri3_open_client,
+    .open_client    = vmwgfx_dri3_open_client,
 };
-
 
 /**
  * \brief Initialize dri3.
@@ -279,19 +310,24 @@ vmwgfx_dri3_init(ScreenPtr screen)
 {
     ScrnInfoPtr pScrn = xf86ScreenToScrn(screen);
 
-    if (!vmwgfx_dri3_verify_sharing(screen)) {
-        xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
+    if (!vmwgfx_dri3_verify_sharing(screen))
+    {
+        xf86DrvMsg(pScrn->scrnIndex,
+                   X_ERROR,
                    "Failed to verify XA surface sharing for DRI3.\n");
         return FALSE;
     }
 
-    if (!miSyncShmScreenInit(screen)) {
-        xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
+    if (!miSyncShmScreenInit(screen))
+    {
+        xf86DrvMsg(pScrn->scrnIndex,
+                   X_ERROR,
                    "Failed to initialize xshm sync for DRI3.\n");
         return FALSE;
     }
 
-    if (!dri3_screen_init(screen, &vmwgfx_dri3_info)) {
+    if (!dri3_screen_init(screen, &vmwgfx_dri3_info))
+    {
         xf86DrvMsg(pScrn->scrnIndex, X_ERROR, "Failed to initialize DRI3.\n");
         return FALSE;
     }
@@ -299,12 +335,12 @@ vmwgfx_dri3_init(ScreenPtr screen)
     return TRUE;
 }
 
-#else /* XA INCLUDES SUFFICIENT */
+#  else /* XA INCLUDES SUFFICIENT */
 Bool
 vmwgfx_dri3_init(ScreenPtr screen)
 {
     return FALSE;
 }
 
-#endif /* !XA INCLUDES SUFFICIENT */
+#  endif /* !XA INCLUDES SUFFICIENT */
 #endif /* DRI3 */

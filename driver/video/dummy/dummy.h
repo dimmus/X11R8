@@ -6,15 +6,16 @@
 #include "xf86Cursor.h"
 
 #ifdef XvExtension
-#include "xf86xv.h"
-#include "X11/extensions/Xv.h"
+#  include "xf86xv.h"
+#  include "X11/extensions/Xv.h"
 #endif
 #include <string.h>
 
 #define DUMMY_MAX_SCREENS 16
 
 /* Supported chipsets */
-typedef enum {
+typedef enum
+{
     DUMMY_CHIP
 } DUMMYType;
 
@@ -36,30 +37,29 @@ typedef struct _color
     int blue;
 } dummy_colors;
 
-typedef struct dummyRec 
+typedef struct dummyRec
 {
     /* options */
     OptionInfoPtr Options;
-    Bool swCursor;
+    Bool          swCursor;
     /* proc pointer */
     CloseScreenProcPtr CloseScreen;
-    xf86CursorInfoPtr CursorInfo;
+    xf86CursorInfoPtr  CursorInfo;
 
     Bool DummyHWCursorShown;
-    int cursorX, cursorY;
-    int cursorFG, cursorBG;
+    int  cursorX, cursorY;
+    int  cursorFG, cursorBG;
 
     dummy_colors colors[1024];
-    Bool        (*CreateWindow)(WindowPtr) ;     /* wrapped CreateWindow */
+    Bool (*CreateWindow)(WindowPtr);     /* wrapped CreateWindow */
     Bool prop;
     /* XRANDR support begin */
-    int num_screens;
-    struct _xf86Crtc *paCrtcs[DUMMY_MAX_SCREENS];
+    int                 num_screens;
+    struct _xf86Crtc   *paCrtcs[DUMMY_MAX_SCREENS];
     struct _xf86Output *paOutputs[DUMMY_MAX_SCREENS];
-    int connected_outputs;
+    int                 connected_outputs;
     /* XRANDR support end */
 } DUMMYRec, *DUMMYPtr;
 
 /* The privates of the DUMMY driver */
-#define DUMMYPTR(p)	((DUMMYPtr)((p)->driverPrivate))
-
+#define DUMMYPTR(p) ((DUMMYPtr)((p)->driverPrivate))

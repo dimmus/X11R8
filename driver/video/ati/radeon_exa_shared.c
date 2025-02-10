@@ -31,7 +31,7 @@
  *    Matthias Hopf <mhopf@suse.de>
  */
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include "radeon.h"
@@ -43,97 +43,97 @@ PixmapPtr
 RADEONGetDrawablePixmap(DrawablePtr pDrawable)
 {
     if (pDrawable->type == DRAWABLE_WINDOW)
-	return pDrawable->pScreen->GetWindowPixmap((WindowPtr)pDrawable);
-    else
-	return (PixmapPtr)pDrawable;
+        return pDrawable->pScreen->GetWindowPixmap((WindowPtr)pDrawable);
+    else return (PixmapPtr)pDrawable;
 }
 
-void RADEONVlineHelperClear(ScrnInfoPtr pScrn)
+void
+RADEONVlineHelperClear(ScrnInfoPtr pScrn)
 {
-    RADEONInfoPtr info = RADEONPTR(pScrn);
+    RADEONInfoPtr              info        = RADEONPTR(pScrn);
     struct radeon_accel_state *accel_state = info->accel_state;
 
     accel_state->vline_crtc = NULL;
-    accel_state->vline_y1 = -1;
-    accel_state->vline_y2 = 0;
+    accel_state->vline_y1   = -1;
+    accel_state->vline_y2   = 0;
 }
 
-void RADEONVlineHelperSet(ScrnInfoPtr pScrn, int x1, int y1, int x2, int y2)
+void
+RADEONVlineHelperSet(ScrnInfoPtr pScrn, int x1, int y1, int x2, int y2)
 {
-    RADEONInfoPtr info = RADEONPTR(pScrn);
+    RADEONInfoPtr              info        = RADEONPTR(pScrn);
     struct radeon_accel_state *accel_state = info->accel_state;
 
     accel_state->vline_crtc =
-	radeon_pick_best_crtc(pScrn, FALSE, x1, x2, y1, y2);
-    if (accel_state->vline_y1 == -1)
-	accel_state->vline_y1 = y1;
-    if (y1 < accel_state->vline_y1)
-	accel_state->vline_y1 = y1;
-    if (y2 > accel_state->vline_y2)
-	accel_state->vline_y2 = y2;
+        radeon_pick_best_crtc(pScrn, FALSE, x1, x2, y1, y2);
+    if (accel_state->vline_y1 == -1) accel_state->vline_y1 = y1;
+    if (y1 < accel_state->vline_y1) accel_state->vline_y1 = y1;
+    if (y2 > accel_state->vline_y2) accel_state->vline_y2 = y2;
 }
 
-Bool RADEONValidPM(uint32_t pm, int bpp)
+Bool
+RADEONValidPM(uint32_t pm, int bpp)
 {
     uint8_t r, g, b, a;
-    Bool ret = FALSE;
+    Bool    ret = FALSE;
 
-    switch (bpp) {
-    case 8:
-	a = pm & 0xff;
-	if ((a == 0) || (a == 0xff))
-	    ret = TRUE;
-	break;
-    case 16:
-	r = (pm >> 11) & 0x1f;
-	g = (pm >> 5) & 0x3f;
-	b = (pm >> 0) & 0x1f;
-	if (((r == 0) || (r == 0x1f)) &&
-	    ((g == 0) || (g == 0x3f)) &&
-	    ((b == 0) || (b == 0x1f)))
-	    ret = TRUE;
-	break;
-    case 32:
-	a = (pm >> 24) & 0xff;
-	r = (pm >> 16) & 0xff;
-	g = (pm >> 8) & 0xff;
-	b = (pm >> 0) & 0xff;
-	if (((a == 0) || (a == 0xff)) &&
-	    ((r == 0) || (r == 0xff)) &&
-	    ((g == 0) || (g == 0xff)) &&
-	    ((b == 0) || (b == 0xff)))
-	    ret = TRUE;
-	break;
-    default:
-	break;
+    switch (bpp)
+    {
+        case 8:
+            a = pm & 0xff;
+            if ((a == 0) || (a == 0xff)) ret = TRUE;
+            break;
+        case 16:
+            r = (pm >> 11) & 0x1f;
+            g = (pm >> 5) & 0x3f;
+            b = (pm >> 0) & 0x1f;
+            if (((r == 0) || (r == 0x1f)) && ((g == 0) || (g == 0x3f)) &&
+                ((b == 0) || (b == 0x1f)))
+                ret = TRUE;
+            break;
+        case 32:
+            a = (pm >> 24) & 0xff;
+            r = (pm >> 16) & 0xff;
+            g = (pm >> 8) & 0xff;
+            b = (pm >> 0) & 0xff;
+            if (((a == 0) || (a == 0xff)) && ((r == 0) || (r == 0xff)) &&
+                ((g == 0) || (g == 0xff)) && ((b == 0) || (b == 0xff)))
+                ret = TRUE;
+            break;
+        default:
+            break;
     }
     return ret;
 }
 
-Bool RADEONCheckBPP(int bpp)
+Bool
+RADEONCheckBPP(int bpp)
 {
-	switch (bpp) {
-	case 8:
-	case 16:
-	case 32:
-		return TRUE;
-	default:
-		break;
-	}
-	return FALSE;
+    switch (bpp)
+    {
+        case 8:
+        case 16:
+        case 32:
+            return TRUE;
+        default:
+            break;
+    }
+    return FALSE;
 }
 
-PixmapPtr RADEONSolidPixmap(ScreenPtr pScreen, uint32_t solid)
+PixmapPtr
+RADEONSolidPixmap(ScreenPtr pScreen, uint32_t solid)
 {
-    PixmapPtr pPix = pScreen->CreatePixmap(pScreen, 1, 1, 32, 0);
+    PixmapPtr         pPix = pScreen->CreatePixmap(pScreen, 1, 1, 32, 0);
     struct radeon_bo *bo;
     exaMoveInPixmap(pPix);
 
     bo = radeon_get_pixmap_bo(pPix)->bo.radeon;
 
-    if (radeon_bo_map(bo, 1)) {
-	pScreen->DestroyPixmap(pPix);
-	return NULL;
+    if (radeon_bo_map(bo, 1))
+    {
+        pScreen->DestroyPixmap(pPix);
+        return NULL;
     }
 
     memcpy(bo->ptr, &solid, 4);
@@ -142,81 +142,90 @@ PixmapPtr RADEONSolidPixmap(ScreenPtr pScreen, uint32_t solid)
     return pPix;
 }
 
-int radeon_cp_start(ScrnInfoPtr pScrn)
+int
+radeon_cp_start(ScrnInfoPtr pScrn)
 {
-    RADEONInfoPtr info = RADEONPTR(pScrn);
+    RADEONInfoPtr              info        = RADEONPTR(pScrn);
     struct radeon_accel_state *accel_state = info->accel_state;
 
-    if (CS_FULL(info->cs)) {
+    if (CS_FULL(info->cs))
+    {
         radeon_cs_flush_indirect(pScrn);
     }
-    accel_state->ib_reset_op = info->cs->cdw;
-    accel_state->vbo.vb_start_op = accel_state->vbo.vb_offset;
+    accel_state->ib_reset_op      = info->cs->cdw;
+    accel_state->vbo.vb_start_op  = accel_state->vbo.vb_offset;
     accel_state->cbuf.vb_start_op = accel_state->cbuf.vb_offset;
     return 0;
 }
 
-void radeon_vb_no_space(ScrnInfoPtr pScrn,
-			struct radeon_vbo_object *vbo,
-			int vert_size)
+void
+radeon_vb_no_space(ScrnInfoPtr               pScrn,
+                   struct radeon_vbo_object *vbo,
+                   int                       vert_size)
 {
-    RADEONInfoPtr info = RADEONPTR(pScrn);
+    RADEONInfoPtr              info        = RADEONPTR(pScrn);
     struct radeon_accel_state *accel_state = info->accel_state;
 
-    if (vbo->vb_bo) {
-	if (vbo->vb_start_op != vbo->vb_offset) {
-	    accel_state->finish_op(pScrn, vert_size);
-	    accel_state->ib_reset_op = info->cs->cdw;
-	}
+    if (vbo->vb_bo)
+    {
+        if (vbo->vb_start_op != vbo->vb_offset)
+        {
+            accel_state->finish_op(pScrn, vert_size);
+            accel_state->ib_reset_op = info->cs->cdw;
+        }
 
-	/* release the current VBO */
-	radeon_vbo_put(pScrn, vbo);
+    /* release the current VBO */
+        radeon_vbo_put(pScrn, vbo);
     }
     /* get a new one */
     radeon_vbo_get(pScrn, vbo);
     return;
 }
 
-void radeon_ib_discard(ScrnInfoPtr pScrn)
+void
+radeon_ib_discard(ScrnInfoPtr pScrn)
 {
     RADEONInfoPtr info = RADEONPTR(pScrn);
-    int ret;
+    int           ret;
 
-    if (info->accel_state->ib_reset_op) {
+    if (info->accel_state->ib_reset_op)
+    {
         /* if we have data just reset the CS and ignore the operation */
-	info->cs->cdw = info->accel_state->ib_reset_op;
-	info->accel_state->ib_reset_op = 0;
-	goto out;
+        info->cs->cdw                  = info->accel_state->ib_reset_op;
+        info->accel_state->ib_reset_op = 0;
+        goto out;
     }
 
-    info->accel_state->vbo.vb_offset = 0;
-    info->accel_state->vbo.vb_start_op = -1;
-    info->accel_state->cbuf.vb_offset = 0;
+    info->accel_state->vbo.vb_offset    = 0;
+    info->accel_state->vbo.vb_start_op  = -1;
+    info->accel_state->cbuf.vb_offset   = 0;
     info->accel_state->cbuf.vb_start_op = -1;
 
-    if (CS_FULL(info->cs)) {
-	radeon_cs_flush_indirect(pScrn);
-	return;
+    if (CS_FULL(info->cs))
+    {
+        radeon_cs_flush_indirect(pScrn);
+        return;
     }
     radeon_cs_erase(info->cs);
     ret = radeon_cs_space_check_with_bo(info->cs,
-					info->accel_state->vbo.vb_bo,
-					RADEON_GEM_DOMAIN_GTT, 0);
-    if (ret)
-	ErrorF("space check failed in flush\n");
+                                        info->accel_state->vbo.vb_bo,
+                                        RADEON_GEM_DOMAIN_GTT,
+                                        0);
+    if (ret) ErrorF("space check failed in flush\n");
 
-    if (info->accel_state->cbuf.vb_bo) {
-	ret = radeon_cs_space_check_with_bo(info->cs,
-					    info->accel_state->cbuf.vb_bo,
-					    RADEON_GEM_DOMAIN_GTT, 0);
-	if (ret)
-	    ErrorF("space check failed in flush\n");
+    if (info->accel_state->cbuf.vb_bo)
+    {
+        ret = radeon_cs_space_check_with_bo(info->cs,
+                                            info->accel_state->cbuf.vb_bo,
+                                            RADEON_GEM_DOMAIN_GTT,
+                                            0);
+        if (ret) ErrorF("space check failed in flush\n");
     }
 
- out:
-    if (info->dri2.enabled) {
-	info->accel_state->XInited3D = FALSE;
-	info->accel_state->engineMode = EXA_ENGINEMODE_UNKNOWN;
+out:
+    if (info->dri2.enabled)
+    {
+        info->accel_state->XInited3D  = FALSE;
+        info->accel_state->engineMode = EXA_ENGINEMODE_UNKNOWN;
     }
-
 }

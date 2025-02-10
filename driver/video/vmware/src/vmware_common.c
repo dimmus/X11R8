@@ -25,134 +25,197 @@
  * Author: Unknown at vmware
  */
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include <xf86.h>
 #include "vmware_common.h"
 
 static int
-VMWAREParseTopologyElement(ScrnInfoPtr pScrn,
-                           unsigned int output,
-                           const char *elementName,
-                           const char *element,
-                           const char *expectedTerminators,
-                           Bool needTerminator,
+VMWAREParseTopologyElement(ScrnInfoPtr   pScrn,
+                           unsigned int  output,
+                           const char   *elementName,
+                           const char   *element,
+                           const char   *expectedTerminators,
+                           Bool          needTerminator,
                            unsigned int *outValue)
 {
-   char buf[10] = {0, };
-   size_t i = 0;
-   int retVal = -1;
-   const char *str = element;
+    char buf[10] = {
+        0,
+    };
+    size_t      i      = 0;
+    int         retVal = -1;
+    const char *str    = element;
 
-   for (i = 0; str[i] >= '0' && str[i] <= '9'; i++);
-   if (i == 0) {
-      xf86DrvMsg(pScrn->scrnIndex, X_INFO, "Output %u: unable to parse %s.\n",
-                 output, elementName);
-      goto exit;
-   }
+    for (i = 0; str[i] >= '0' && str[i] <= '9'; i++)
+        ;
+    if (i == 0)
+    {
+        xf86DrvMsg(pScrn->scrnIndex,
+                   X_INFO,
+                   "Output %u: unable to parse %s.\n",
+                   output,
+                   elementName);
+        goto exit;
+    }
 
-   strncpy(buf, str, i);
-   *outValue = atoi(buf);
+    strncpy(buf, str, i);
+    *outValue = atoi(buf);
 
-   if (*outValue > (unsigned short)-1) {
-      xf86DrvMsg(pScrn->scrnIndex, X_INFO, "Output %u: %s must be less than %hu.\n",
-                 output, elementName, (unsigned short)-1);
-      goto exit;
-   }
+    if (*outValue > (unsigned short)-1)
+    {
+        xf86DrvMsg(pScrn->scrnIndex,
+                   X_INFO,
+                   "Output %u: %s must be less than %hu.\n",
+                   output,
+                   elementName,
+                   (unsigned short)-1);
+        goto exit;
+    }
 
-   str += i;
+    str += i;
 
-   if (needTerminator || str[0] != '\0') {
-      Bool unexpected = TRUE;
+    if (needTerminator || str[0] != '\0')
+    {
+        Bool unexpected = TRUE;
 
-      for (i = 0; i < strlen(expectedTerminators); i++) {
-         if (str[0] == expectedTerminators[i]) {
-            unexpected = FALSE;
-         }
-      }
+        for (i = 0; i < strlen(expectedTerminators); i++)
+        {
+            if (str[0] == expectedTerminators[i])
+            {
+                unexpected = FALSE;
+            }
+        }
 
-      if (unexpected) {
-         xf86DrvMsg(pScrn->scrnIndex, X_INFO,
-                    "Output %u: unexpected character '%c' after %s.\n",
-                    output, str[0], elementName);
-         goto exit;
-      } else {
-         str++;
-      }
-   }
+        if (unexpected)
+        {
+            xf86DrvMsg(pScrn->scrnIndex,
+                       X_INFO,
+                       "Output %u: unexpected character '%c' after %s.\n",
+                       output,
+                       str[0],
+                       elementName);
+            goto exit;
+        }
+        else
+        {
+            str++;
+        }
+    }
 
-   retVal = str - element;
+    retVal = str - element;
 
- exit:
-   return retVal;
+exit:
+    return retVal;
 }
 
 xXineramaScreenInfo *
-VMWAREParseTopologyString(ScrnInfoPtr pScrn,
-                          const char *topology,
+VMWAREParseTopologyString(ScrnInfoPtr   pScrn,
+                          const char   *topology,
                           unsigned int *retNumOutputs,
-			  const char info[])
+                          const char    info[])
 {
-   xXineramaScreenInfo *extents = NULL;
-   unsigned int numOutputs = 0;
-   const char *str = topology;
+    xXineramaScreenInfo *extents    = NULL;
+    unsigned int         numOutputs = 0;
+    const char          *str        = topology;
 
-   xf86DrvMsg(pScrn->scrnIndex, X_INFO, "Parsing %s topology: Starting...\n",
-	      info);
+    xf86DrvMsg(pScrn->scrnIndex,
+               X_INFO,
+               "Parsing %s topology: Starting...\n",
+               info);
 
-   do {
-      unsigned int x, y, width, height;
-      int i;
+    do
+    {
+        unsigned int x, y, width, height;
+        int          i;
 
-      i = VMWAREParseTopologyElement(pScrn, numOutputs, "width", str, "xX", TRUE, &width);
-      if (i == -1) {
-         goto error;
-      }
-      str += i;
+        i = VMWAREParseTopologyElement(pScrn,
+                                       numOutputs,
+                                       "width",
+                                       str,
+                                       "xX",
+                                       TRUE,
+                                       &width);
+        if (i == -1)
+        {
+            goto error;
+        }
+        str += i;
 
-      i = VMWAREParseTopologyElement(pScrn, numOutputs, "height", str, "+", TRUE, &height);
-      if (i == -1) {
-         goto error;
-      }
-      str += i;
+        i = VMWAREParseTopologyElement(pScrn,
+                                       numOutputs,
+                                       "height",
+                                       str,
+                                       "+",
+                                       TRUE,
+                                       &height);
+        if (i == -1)
+        {
+            goto error;
+        }
+        str += i;
 
-      i= VMWAREParseTopologyElement(pScrn, numOutputs, "X offset", str, "+", TRUE, &x);
-      if (i == -1) {
-         goto error;
-      }
-      str += i;
+        i = VMWAREParseTopologyElement(pScrn,
+                                       numOutputs,
+                                       "X offset",
+                                       str,
+                                       "+",
+                                       TRUE,
+                                       &x);
+        if (i == -1)
+        {
+            goto error;
+        }
+        str += i;
 
-      i = VMWAREParseTopologyElement(pScrn, numOutputs, "Y offset", str, ";", FALSE, &y);
-      if (i == -1) {
-         goto error;
-      }
-      str += i;
+        i = VMWAREParseTopologyElement(pScrn,
+                                       numOutputs,
+                                       "Y offset",
+                                       str,
+                                       ";",
+                                       FALSE,
+                                       &y);
+        if (i == -1)
+        {
+            goto error;
+        }
+        str += i;
 
-      xf86DrvMsg(pScrn->scrnIndex, X_INFO, "Output %u: %ux%u+%u+%u\n",
-                 numOutputs, width, height, x, y);
+        xf86DrvMsg(pScrn->scrnIndex,
+                   X_INFO,
+                   "Output %u: %ux%u+%u+%u\n",
+                   numOutputs,
+                   width,
+                   height,
+                   x,
+                   y);
 
-      numOutputs++;
-      extents = realloc(extents, numOutputs * sizeof (xXineramaScreenInfo));
-      extents[numOutputs - 1].x_org = x;
-      extents[numOutputs - 1].y_org = y;
-      extents[numOutputs - 1].width = width;
-      extents[numOutputs - 1].height = height;
-   } while (*str != 0);
+        numOutputs++;
+        extents = realloc(extents, numOutputs * sizeof(xXineramaScreenInfo));
+        extents[numOutputs - 1].x_org  = x;
+        extents[numOutputs - 1].y_org  = y;
+        extents[numOutputs - 1].width  = width;
+        extents[numOutputs - 1].height = height;
+    }
+    while (*str != 0);
 
-   xf86DrvMsg(pScrn->scrnIndex, X_INFO, "Parsing %s topology: Succeeded.\n",
-	      info);
-   goto exit;
+    xf86DrvMsg(pScrn->scrnIndex,
+               X_INFO,
+               "Parsing %s topology: Succeeded.\n",
+               info);
+    goto exit;
 
- error:
-   xf86DrvMsg(pScrn->scrnIndex, X_INFO, "Parsing %s topology: Failed.\n",
-	      info);
+error:
+    xf86DrvMsg(pScrn->scrnIndex,
+               X_INFO,
+               "Parsing %s topology: Failed.\n",
+               info);
 
-   free(extents);
-   extents = NULL;
-   numOutputs = 0;
+    free(extents);
+    extents    = NULL;
+    numOutputs = 0;
 
- exit:
-   *retNumOutputs = numOutputs;
-   return extents;
+exit:
+    *retNumOutputs = numOutputs;
+    return extents;
 }

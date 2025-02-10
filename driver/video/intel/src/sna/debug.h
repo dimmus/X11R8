@@ -30,15 +30,23 @@
 
 #ifdef HAS_DEBUG_FULL
 void LogF(const char *f, ...);
-#define DBG(x) LogF x
+#  define DBG(x) LogF x
 #else
-#define DBG(x) do {} while (0)
+#  define DBG(x) \
+      do         \
+      {          \
+      }          \
+      while (0)
 #endif
 
 #if defined(HAS_DEBUG_FULL) || !defined(NDEBUG)
-#define ERR(x) ErrorF x
+#  define ERR(x) ErrorF x
 #else
-#define ERR(x) do {} while (0)
+#  define ERR(x) \
+      do         \
+      {          \
+      }          \
+      while (0)
 #endif
 
 #endif /* _SNA_DEBUG_H_ */

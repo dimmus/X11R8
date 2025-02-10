@@ -23,7 +23,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include <xf86.h>
@@ -31,82 +31,85 @@
 #include "amdgpu_bo_helper.h"
 
 static PixmapPtr
-amdgpu_pixmap_create(ScreenPtr screen, int w, int h, int depth,	unsigned usage)
+amdgpu_pixmap_create(ScreenPtr screen, int w, int h, int depth, unsigned usage)
 {
-	ScrnInfoPtr scrn;
-	struct amdgpu_pixmap *priv;
-	PixmapPtr pixmap;
-	AMDGPUInfoPtr info;
+    ScrnInfoPtr           scrn;
+    struct amdgpu_pixmap *priv;
+    PixmapPtr             pixmap;
+    AMDGPUInfoPtr         info;
 
-	/* only DRI2 pixmap is supported */
-	if (!(usage & AMDGPU_CREATE_PIXMAP_DRI2))
-		return fbCreatePixmap(screen, w, h, depth, usage);
+    /* only DRI2 pixmap is supported */
+    if (!(usage & AMDGPU_CREATE_PIXMAP_DRI2))
+        return fbCreatePixmap(screen, w, h, depth, usage);
 
-	if (w > 32767 || h > 32767)
-		return NullPixmap;
+    if (w > 32767 || h > 32767) return NullPixmap;
 
-	if (depth == 1)
-		return fbCreatePixmap(screen, w, h, depth, usage);
+    if (depth == 1) return fbCreatePixmap(screen, w, h, depth, usage);
 
-	pixmap = fbCreatePixmap(screen, 0, 0, depth, usage);
-	if (pixmap == NullPixmap)
-		return pixmap;
+    pixmap = fbCreatePixmap(screen, 0, 0, depth, usage);
+    if (pixmap == NullPixmap) return pixmap;
 
-	if (w && h) {
-		int stride;
+    if (w && h)
+    {
+        int stride;
 
-		priv = calloc(1, sizeof(struct amdgpu_pixmap));
-		if (!priv)
-			goto fallback_pixmap;
+        priv = calloc(1, sizeof(struct amdgpu_pixmap));
+        if (!priv) goto fallback_pixmap;
 
-		scrn = xf86ScreenToScrn(screen);
-		info = AMDGPUPTR(scrn);
-		if (!info->use_glamor)
-			usage |= AMDGPU_CREATE_PIXMAP_LINEAR;
-		priv->bo = amdgpu_alloc_pixmap_bo(scrn, w, h, depth, usage,
-						  pixmap->drawable.bitsPerPixel,
-						  &stride);
-		if (!priv->bo)
-			goto fallback_priv;
+        scrn = xf86ScreenToScrn(screen);
+        info = AMDGPUPTR(scrn);
+        if (!info->use_glamor) usage |= AMDGPU_CREATE_PIXMAP_LINEAR;
+        priv->bo = amdgpu_alloc_pixmap_bo(scrn,
+                                          w,
+                                          h,
+                                          depth,
+                                          usage,
+                                          pixmap->drawable.bitsPerPixel,
+                                          &stride);
+        if (!priv->bo) goto fallback_priv;
 
-		amdgpu_set_pixmap_private(pixmap, priv);
+        amdgpu_set_pixmap_private(pixmap, priv);
 
-		if (amdgpu_bo_map(scrn, priv->bo)) {
-			ErrorF("Failed to mmap the bo\n");
-			goto fallback_bo;
-		}
+        if (amdgpu_bo_map(scrn, priv->bo))
+        {
+            ErrorF("Failed to mmap the bo\n");
+            goto fallback_bo;
+        }
 
-		screen->ModifyPixmapHeader(pixmap, w, h, 0, 0, stride,
-					   priv->bo->cpu_ptr);
-	}
+        screen
+            ->ModifyPixmapHeader(pixmap, w, h, 0, 0, stride, priv->bo->cpu_ptr);
+    }
 
-	return pixmap;
+    return pixmap;
 
 fallback_bo:
-	amdgpu_bo_unref(&priv->bo);
+    amdgpu_bo_unref(&priv->bo);
 fallback_priv:
-	free(priv);
+    free(priv);
 fallback_pixmap:
-	fbDestroyPixmap(pixmap);
-	return fbCreatePixmap(screen, w, h, depth, usage);
+    fbDestroyPixmap(pixmap);
+    return fbCreatePixmap(screen, w, h, depth, usage);
 }
 
-static Bool amdgpu_pixmap_destroy(PixmapPtr pixmap)
+static Bool
+amdgpu_pixmap_destroy(PixmapPtr pixmap)
 {
-	if (pixmap->refcnt == 1) {
-		amdgpu_set_pixmap_bo(pixmap, NULL);
-	}
-	fbDestroyPixmap(pixmap);
-	return TRUE;
+    if (pixmap->refcnt == 1)
+    {
+        amdgpu_set_pixmap_bo(pixmap, NULL);
+    }
+    fbDestroyPixmap(pixmap);
+    return TRUE;
 }
 
 /* This should only be called when glamor is disabled */
-Bool amdgpu_pixmap_init(ScreenPtr screen)
+Bool
+amdgpu_pixmap_init(ScreenPtr screen)
 {
-	if (!dixRegisterPrivateKey(&amdgpu_pixmap_index, PRIVATE_PIXMAP, 0))
-		return FALSE;
+    if (!dixRegisterPrivateKey(&amdgpu_pixmap_index, PRIVATE_PIXMAP, 0))
+        return FALSE;
 
-	screen->CreatePixmap = amdgpu_pixmap_create;
-	screen->DestroyPixmap = amdgpu_pixmap_destroy;
-	return TRUE;
+    screen->CreatePixmap  = amdgpu_pixmap_create;
+    screen->DestroyPixmap = amdgpu_pixmap_destroy;
+    return TRUE;
 }

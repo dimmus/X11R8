@@ -29,123 +29,192 @@
  */
 
 static void
-fbEvenTile(FbBits *dst, FbStride dstStride, int dstX, int width, int height,
-           FbBits *tile, FbStride tileStride, int tileHeight,
-	   int alu, FbBits pm,
-	   int xRot, int yRot)
+fbEvenTile(FbBits  *dst,
+           FbStride dstStride,
+           int      dstX,
+           int      width,
+           int      height,
+           FbBits  *tile,
+           FbStride tileStride,
+           int      tileHeight,
+           int      alu,
+           FbBits   pm,
+           int      xRot,
+           int      yRot)
 {
-	FbBits *t, *tileEnd, bits;
-	FbBits startmask, endmask;
-	FbBits and, xor;
-	int n, nmiddle;
-	int tileX, tileY;
-	int rot;
-	int startbyte, endbyte;
+    FbBits *t, *tileEnd, bits;
+    FbBits  startmask, endmask;
+    FbBits and, xor;
+    int n, nmiddle;
+    int tileX, tileY;
+    int rot;
+    int startbyte, endbyte;
 
-	dst += dstX >> FB_SHIFT;
-	dstX &= FB_MASK;
-	FbMaskBitsBytes(dstX, width, FbDestInvarientRop(alu, pm),
-			startmask, startbyte, nmiddle, endmask, endbyte);
-	if (startmask)
-		dstStride--;
-	dstStride -= nmiddle;
+    dst += dstX >> FB_SHIFT;
+    dstX &= FB_MASK;
+    FbMaskBitsBytes(dstX,
+                    width,
+                    FbDestInvarientRop(alu, pm),
+                    startmask,
+                    startbyte,
+                    nmiddle,
+                    endmask,
+                    endbyte);
+    if (startmask) dstStride--;
+    dstStride -= nmiddle;
 
-	/*
+    /*
 	 * Compute tile start scanline and rotation parameters
 	 */
-	tileEnd = tile + tileHeight * tileStride;
-	modulus(-yRot, tileHeight, tileY);
-	t = tile + tileY * tileStride;
-	modulus(-xRot, FB_UNIT, tileX);
-	rot = tileX;
+    tileEnd = tile + tileHeight * tileStride;
+    modulus(-yRot, tileHeight, tileY);
+    t = tile + tileY * tileStride;
+    modulus(-xRot, FB_UNIT, tileX);
+    rot = tileX;
 
-	while (height--) {
-		/*
+    while (height--)
+    {
+        /*
 		 * Pick up bits for this scanline
 		 */
-		bits = READ(t);
-		t += tileStride;
-		if (t >= tileEnd)
-			t = tile;
-		bits = FbRotLeft(bits, rot);
-		and = fbAnd(alu, bits, pm);
-		xor = fbXor(alu, bits, pm);
+        bits = READ(t);
+        t += tileStride;
+        if (t >= tileEnd) t = tile;
+        bits = FbRotLeft(bits, rot);
+        and  = fbAnd(alu, bits, pm);
+        xor  = fbXor(alu, bits, pm);
 
-		if (startmask) {
-			FbDoLeftMaskByteRRop(dst, startbyte, startmask, and, xor);
-			dst++;
-		}
-		n = nmiddle;
-		if (!and)
-			while (n--)
-				WRITE(dst++, xor);
-		else
-			while (n--) {
-				WRITE(dst, FbDoRRop(READ(dst), and, xor));
-				dst++;
-			}
-		if (endmask)
-			FbDoRightMaskByteRRop(dst, endbyte, endmask, and, xor);
-		dst += dstStride;
-	}
+        if (startmask)
+        {
+            FbDoLeftMaskByteRRop(dst, startbyte, startmask, and, xor);
+            dst++;
+        }
+        n = nmiddle;
+        if (!and)
+            while (n--)
+                WRITE(dst++, xor);
+        else
+            while (n--)
+            {
+                WRITE(dst, FbDoRRop(READ(dst), and, xor));
+                dst++;
+            }
+        if (endmask) FbDoRightMaskByteRRop(dst, endbyte, endmask, and, xor);
+        dst += dstStride;
+    }
 }
 
 static void
-fbOddTile(FbBits *dst, FbStride dstStride, int dstX,
-          int width, int height,
-          FbBits *tile, FbStride tileStride,
-          int tileWidth, int tileHeight,
-	  int alu, FbBits pm, int bpp,
-	  int xRot, int yRot)
+fbOddTile(FbBits  *dst,
+          FbStride dstStride,
+          int      dstX,
+          int      width,
+          int      height,
+          FbBits  *tile,
+          FbStride tileStride,
+          int      tileWidth,
+          int      tileHeight,
+          int      alu,
+          FbBits   pm,
+          int      bpp,
+          int      xRot,
+          int      yRot)
 {
-	int tileX, tileY;
-	int x, y;
+    int tileX, tileY;
+    int x, y;
 
-	DBG(("%s tile=%dx%d, size=%dx%d\n", __FUNCTION__,
-	     tileWidth, tileHeight, width, height));
+    DBG(("%s tile=%dx%d, size=%dx%d\n",
+         __FUNCTION__,
+         tileWidth,
+         tileHeight,
+         width,
+         height));
 
-	modulus(-yRot, tileHeight, tileY);
-	y = 0;
-	while (height) {
-		int ww = width;
-		int h = tileHeight - tileY;
-		if (h > height)
-			h = height;
-		height -= h;
-		x = dstX;
-		modulus(dstX - xRot, tileWidth, tileX);
-		while (ww) {
-			int w = tileWidth - tileX;
-			if (w > ww)
-				w = ww;
-			ww -= w;
-			fbBlt(tile + tileY * tileStride, tileStride, tileX,
-			      dst + y * dstStride, dstStride,
-			      x, w, h, alu, pm, bpp, FALSE, FALSE);
-			x += w;
-			tileX = 0;
-		}
-		y += h;
-		tileY = 0;
-	}
+    modulus(-yRot, tileHeight, tileY);
+    y = 0;
+    while (height)
+    {
+        int ww = width;
+        int h  = tileHeight - tileY;
+        if (h > height) h = height;
+        height -= h;
+        x = dstX;
+        modulus(dstX - xRot, tileWidth, tileX);
+        while (ww)
+        {
+            int w = tileWidth - tileX;
+            if (w > ww) w = ww;
+            ww -= w;
+            fbBlt(tile + tileY * tileStride,
+                  tileStride,
+                  tileX,
+                  dst + y * dstStride,
+                  dstStride,
+                  x,
+                  w,
+                  h,
+                  alu,
+                  pm,
+                  bpp,
+                  FALSE,
+                  FALSE);
+            x += w;
+            tileX = 0;
+        }
+        y += h;
+        tileY = 0;
+    }
 }
 
 void
-fbTile(FbBits *dst, FbStride dstStride, int dstX,
-       int width, int height,
-       FbBits *tile, FbStride tileStride,
-       int tileWidth, int tileHeight,
-       int alu, FbBits pm, int bpp,
-       int xRot, int yRot)
+fbTile(FbBits  *dst,
+       FbStride dstStride,
+       int      dstX,
+       int      width,
+       int      height,
+       FbBits  *tile,
+       FbStride tileStride,
+       int      tileWidth,
+       int      tileHeight,
+       int      alu,
+       FbBits   pm,
+       int      bpp,
+       int      xRot,
+       int      yRot)
 {
-	DBG(("%s tile=%dx%d, size=%dx%d\n", __FUNCTION__,
-	     tileWidth, tileHeight, width, height));
+    DBG(("%s tile=%dx%d, size=%dx%d\n",
+         __FUNCTION__,
+         tileWidth,
+         tileHeight,
+         width,
+         height));
 
-	if (FbEvenTile(tileWidth))
-		fbEvenTile(dst, dstStride, dstX, width, height,
-			   tile, tileStride, tileHeight, alu, pm, xRot, yRot);
-	else
-		fbOddTile(dst, dstStride, dstX, width, height,
-			  tile, tileStride, tileWidth, tileHeight,
-			  alu, pm, bpp, xRot, yRot);
+    if (FbEvenTile(tileWidth))
+        fbEvenTile(dst,
+                   dstStride,
+                   dstX,
+                   width,
+                   height,
+                   tile,
+                   tileStride,
+                   tileHeight,
+                   alu,
+                   pm,
+                   xRot,
+                   yRot);
+    else
+        fbOddTile(dst,
+                  dstStride,
+                  dstX,
+                  width,
+                  height,
+                  tile,
+                  tileStride,
+                  tileWidth,
+                  tileHeight,
+                  alu,
+                  pm,
+                  bpp,
+                  xRot,
+                  yRot);
 }

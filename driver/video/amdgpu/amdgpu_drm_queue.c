@@ -27,7 +27,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include <errno.h>
@@ -39,28 +39,27 @@
 #include "amdgpu_drv.h"
 #include "amdgpu_drm_queue.h"
 
-
-struct amdgpu_drm_queue_entry {
-	struct xorg_list list;
-	uint64_t usec;
-	uint64_t id;
-	uintptr_t seq;
-	void *data;
-	ClientPtr client;
-	xf86CrtcPtr crtc;
-	amdgpu_drm_handler_proc handler;
-	amdgpu_drm_abort_proc abort;
-	Bool is_flip;
-	unsigned int frame;
+struct amdgpu_drm_queue_entry
+{
+    struct xorg_list        list;
+    uint64_t                usec;
+    uint64_t                id;
+    uintptr_t               seq;
+    void                   *data;
+    ClientPtr               client;
+    xf86CrtcPtr             crtc;
+    amdgpu_drm_handler_proc handler;
+    amdgpu_drm_abort_proc   abort;
+    Bool                    is_flip;
+    unsigned int            frame;
 };
 
-static int amdgpu_drm_queue_refcnt;
+static int              amdgpu_drm_queue_refcnt;
 static struct xorg_list amdgpu_drm_queue;
 static struct xorg_list amdgpu_drm_flip_signalled;
 static struct xorg_list amdgpu_drm_vblank_signalled;
 static struct xorg_list amdgpu_drm_vblank_deferred;
-static uintptr_t amdgpu_drm_queue_seq;
-
+static uintptr_t        amdgpu_drm_queue_seq;
 
 /*
  * Process a DRM event
@@ -68,12 +67,13 @@ static uintptr_t amdgpu_drm_queue_seq;
 static void
 amdgpu_drm_queue_handle_one(struct amdgpu_drm_queue_entry *e)
 {
-	xorg_list_del(&e->list);
-	if (e->handler) {
-		e->handler(e->crtc, e->frame, e->usec, e->data);
-	} else
-		e->abort(e->crtc, e->data);
-	free(e);
+    xorg_list_del(&e->list);
+    if (e->handler)
+    {
+        e->handler(e->crtc, e->frame, e->usec, e->data);
+    }
+    else e->abort(e->crtc, e->data);
+    free(e);
 }
 
 /*
@@ -84,34 +84,40 @@ amdgpu_drm_queue_handle_one(struct amdgpu_drm_queue_entry *e)
 static void
 amdgpu_drm_abort_one(struct amdgpu_drm_queue_entry *e)
 {
-	xorg_list_del(&e->list);
-	e->abort(e->crtc, e->data);
-	free(e);
+    xorg_list_del(&e->list);
+    e->abort(e->crtc, e->data);
+    free(e);
 }
 
 static void
-amdgpu_drm_queue_handler(int fd, unsigned int frame, unsigned int sec,
-			 unsigned int usec, void *user_ptr)
+amdgpu_drm_queue_handler(int          fd,
+                         unsigned int frame,
+                         unsigned int sec,
+                         unsigned int usec,
+                         void        *user_ptr)
 {
-	uintptr_t seq = (uintptr_t)user_ptr;
-	struct amdgpu_drm_queue_entry *e, *tmp;
+    uintptr_t                      seq = (uintptr_t)user_ptr;
+    struct amdgpu_drm_queue_entry *e, *tmp;
 
-	xorg_list_for_each_entry_safe(e, tmp, &amdgpu_drm_queue, list) {
-		if (e->seq == seq) {
-			if (!e->handler) {
-				amdgpu_drm_abort_one(e);
-				break;
-			}
+    xorg_list_for_each_entry_safe(e, tmp, &amdgpu_drm_queue, list)
+    {
+        if (e->seq == seq)
+        {
+            if (!e->handler)
+            {
+                amdgpu_drm_abort_one(e);
+                break;
+            }
 
-			xorg_list_del(&e->list);
-			e->usec = (uint64_t)sec * 1000000 + usec;
-			e->frame = frame;
-			xorg_list_append(&e->list, e->is_flip ?
-					 &amdgpu_drm_flip_signalled :
-					 &amdgpu_drm_vblank_signalled);
-			break;
-		}
-	}
+            xorg_list_del(&e->list);
+            e->usec  = (uint64_t)sec * 1000000 + usec;
+            e->frame = frame;
+            xorg_list_append(&e->list,
+                             e->is_flip ? &amdgpu_drm_flip_signalled
+                                        : &amdgpu_drm_vblank_signalled);
+            break;
+        }
+    }
 }
 
 /*
@@ -121,22 +127,25 @@ amdgpu_drm_queue_handler(int fd, unsigned int frame, unsigned int sec,
 static void
 amdgpu_drm_handle_vblank_signalled(void)
 {
-	drmmode_crtc_private_ptr drmmode_crtc;
-	struct amdgpu_drm_queue_entry *e;
+    drmmode_crtc_private_ptr       drmmode_crtc;
+    struct amdgpu_drm_queue_entry *e;
 
-	while (!xorg_list_is_empty(&amdgpu_drm_vblank_signalled)) {
-		e = xorg_list_first_entry(&amdgpu_drm_vblank_signalled,
-					  struct amdgpu_drm_queue_entry, list);
-		drmmode_crtc = e->crtc->driver_private;
+    while (!xorg_list_is_empty(&amdgpu_drm_vblank_signalled))
+    {
+        e            = xorg_list_first_entry(&amdgpu_drm_vblank_signalled,
+                                  struct amdgpu_drm_queue_entry,
+                                  list);
+        drmmode_crtc = e->crtc->driver_private;
 
-		if (drmmode_crtc->wait_flip_nesting_level == 0) {
-			amdgpu_drm_queue_handle_one(e);
-			continue;
-		}
+        if (drmmode_crtc->wait_flip_nesting_level == 0)
+        {
+            amdgpu_drm_queue_handle_one(e);
+            continue;
+        }
 
-		xorg_list_del(&e->list);
-		xorg_list_append(&e->list, &amdgpu_drm_vblank_deferred);
-	}
+        xorg_list_del(&e->list);
+        xorg_list_append(&e->list, &amdgpu_drm_vblank_deferred);
+    }
 }
 
 /*
@@ -148,25 +157,25 @@ amdgpu_drm_handle_vblank_signalled(void)
 void
 amdgpu_drm_queue_handle_deferred(xf86CrtcPtr crtc)
 {
-	drmmode_crtc_private_ptr drmmode_crtc = crtc->driver_private;
-	struct amdgpu_drm_queue_entry *e, *tmp;
+    drmmode_crtc_private_ptr       drmmode_crtc = crtc->driver_private;
+    struct amdgpu_drm_queue_entry *e, *tmp;
 
-	if (drmmode_crtc->wait_flip_nesting_level == 0 ||
-	    --drmmode_crtc->wait_flip_nesting_level > 0)
-		return;
+    if (drmmode_crtc->wait_flip_nesting_level == 0 ||
+        --drmmode_crtc->wait_flip_nesting_level > 0)
+        return;
 
-	/* Put previously deferred vblank events for this CRTC back in the
+    /* Put previously deferred vblank events for this CRTC back in the
 	 * signalled queue
 	 */
-	xorg_list_for_each_entry_safe(e, tmp, &amdgpu_drm_vblank_deferred, list) {
-		if (e->crtc != crtc)
-			continue;
+    xorg_list_for_each_entry_safe(e, tmp, &amdgpu_drm_vblank_deferred, list)
+    {
+        if (e->crtc != crtc) continue;
 
-		xorg_list_del(&e->list);
-		xorg_list_append(&e->list, &amdgpu_drm_vblank_signalled);
-	}
+        xorg_list_del(&e->list);
+        xorg_list_append(&e->list, &amdgpu_drm_vblank_signalled);
+    }
 
-	amdgpu_drm_handle_vblank_signalled();
+    amdgpu_drm_handle_vblank_signalled();
 }
 
 /*
@@ -174,33 +183,34 @@ amdgpu_drm_queue_handle_deferred(xf86CrtcPtr crtc)
  * appears, we've got data to pass to the handler from here
  */
 uintptr_t
-amdgpu_drm_queue_alloc(xf86CrtcPtr crtc, ClientPtr client,
-		       uint64_t id, void *data,
-		       amdgpu_drm_handler_proc handler,
-		       amdgpu_drm_abort_proc abort,
-		       Bool is_flip)
+amdgpu_drm_queue_alloc(xf86CrtcPtr             crtc,
+                       ClientPtr               client,
+                       uint64_t                id,
+                       void                   *data,
+                       amdgpu_drm_handler_proc handler,
+                       amdgpu_drm_abort_proc   abort,
+                       Bool                    is_flip)
 {
-	struct amdgpu_drm_queue_entry *e;
+    struct amdgpu_drm_queue_entry *e;
 
-	e = calloc(1, sizeof(struct amdgpu_drm_queue_entry));
-	if (!e)
-		return AMDGPU_DRM_QUEUE_ERROR;
+    e = calloc(1, sizeof(struct amdgpu_drm_queue_entry));
+    if (!e) return AMDGPU_DRM_QUEUE_ERROR;
 
-	if (_X_UNLIKELY(amdgpu_drm_queue_seq == AMDGPU_DRM_QUEUE_ERROR))
-		amdgpu_drm_queue_seq++;
+    if (_X_UNLIKELY(amdgpu_drm_queue_seq == AMDGPU_DRM_QUEUE_ERROR))
+        amdgpu_drm_queue_seq++;
 
-	e->seq = amdgpu_drm_queue_seq++;
-	e->client = client;
-	e->crtc = crtc;
-	e->id = id;
-	e->data = data;
-	e->handler = handler;
-	e->abort = abort;
-	e->is_flip = is_flip;
+    e->seq     = amdgpu_drm_queue_seq++;
+    e->client  = client;
+    e->crtc    = crtc;
+    e->id      = id;
+    e->data    = data;
+    e->handler = handler;
+    e->abort   = abort;
+    e->is_flip = is_flip;
 
-	xorg_list_append(&e->list, &amdgpu_drm_queue);
+    xorg_list_append(&e->list, &amdgpu_drm_queue);
 
-	return e->seq;
+    return e->seq;
 }
 
 /*
@@ -213,12 +223,12 @@ amdgpu_drm_queue_alloc(xf86CrtcPtr crtc, ClientPtr client,
 void
 amdgpu_drm_abort_client(ClientPtr client)
 {
-	struct amdgpu_drm_queue_entry *e;
+    struct amdgpu_drm_queue_entry *e;
 
-	xorg_list_for_each_entry(e, &amdgpu_drm_queue, list) {
-		if (e->client == client)
-			e->handler = NULL;
-	}
+    xorg_list_for_each_entry(e, &amdgpu_drm_queue, list)
+    {
+        if (e->client == client) e->handler = NULL;
+    }
 }
 
 /*
@@ -227,31 +237,36 @@ amdgpu_drm_abort_client(ClientPtr client)
 void
 amdgpu_drm_abort_entry(uintptr_t seq)
 {
-	struct amdgpu_drm_queue_entry *e, *tmp;
+    struct amdgpu_drm_queue_entry *e, *tmp;
 
-	if (seq == AMDGPU_DRM_QUEUE_ERROR)
-		return;
+    if (seq == AMDGPU_DRM_QUEUE_ERROR) return;
 
-	xorg_list_for_each_entry_safe(e, tmp, &amdgpu_drm_vblank_signalled, list) {
-		if (e->seq == seq) {
-			amdgpu_drm_abort_one(e);
-			return;
-		}
-	}
+    xorg_list_for_each_entry_safe(e, tmp, &amdgpu_drm_vblank_signalled, list)
+    {
+        if (e->seq == seq)
+        {
+            amdgpu_drm_abort_one(e);
+            return;
+        }
+    }
 
-	xorg_list_for_each_entry_safe(e, tmp, &amdgpu_drm_vblank_deferred, list) {
-		if (e->seq == seq) {
-			amdgpu_drm_abort_one(e);
-			return;
-		}
-	}
+    xorg_list_for_each_entry_safe(e, tmp, &amdgpu_drm_vblank_deferred, list)
+    {
+        if (e->seq == seq)
+        {
+            amdgpu_drm_abort_one(e);
+            return;
+        }
+    }
 
-	xorg_list_for_each_entry_safe(e, tmp, &amdgpu_drm_queue, list) {
-		if (e->seq == seq) {
-			amdgpu_drm_abort_one(e);
-			break;
-		}
-	}
+    xorg_list_for_each_entry_safe(e, tmp, &amdgpu_drm_queue, list)
+    {
+        if (e->seq == seq)
+        {
+            amdgpu_drm_abort_one(e);
+            break;
+        }
+    }
 }
 
 /*
@@ -260,14 +275,16 @@ amdgpu_drm_abort_entry(uintptr_t seq)
 void
 amdgpu_drm_abort_id(uint64_t id)
 {
-	struct amdgpu_drm_queue_entry *e, *tmp;
+    struct amdgpu_drm_queue_entry *e, *tmp;
 
-	xorg_list_for_each_entry_safe(e, tmp, &amdgpu_drm_queue, list) {
-		if (e->id == id) {
-			amdgpu_drm_abort_one(e);
-			break;
-		}
-	}
+    xorg_list_for_each_entry_safe(e, tmp, &amdgpu_drm_queue, list)
+    {
+        if (e->id == id)
+        {
+            amdgpu_drm_abort_one(e);
+            break;
+        }
+    }
 }
 
 /*
@@ -276,56 +293,69 @@ amdgpu_drm_abort_id(uint64_t id)
 int
 amdgpu_drm_handle_event(int fd, drmEventContext *event_context)
 {
-	struct amdgpu_drm_queue_entry *e;
-	int r;
+    struct amdgpu_drm_queue_entry *e;
+    int                            r;
 
-	/* Retry drmHandleEvent if it was interrupted by a signal in read() */
-	do {
-		r = drmHandleEvent(fd, event_context);
-	} while (r < 0 && (errno == EINTR || errno == EAGAIN));
+    /* Retry drmHandleEvent if it was interrupted by a signal in read() */
+    do
+    {
+        r = drmHandleEvent(fd, event_context);
+    }
+    while (r < 0 && (errno == EINTR || errno == EAGAIN));
 
-	if (r < 0) {
-		static Bool printed;
+    if (r < 0)
+    {
+        static Bool printed;
 
-		if (!printed) {
-			ErrorF("%s: drmHandleEvent returned %d, errno=%d (%s)\n",
-			       __func__, r, errno, strerror(errno));
-			printed = TRUE;
-		}
-	}
+        if (!printed)
+        {
+            ErrorF("%s: drmHandleEvent returned %d, errno=%d (%s)\n",
+                   __func__,
+                   r,
+                   errno,
+                   strerror(errno));
+            printed = TRUE;
+        }
+    }
 
-	while (!xorg_list_is_empty(&amdgpu_drm_flip_signalled)) {
-		e = xorg_list_first_entry(&amdgpu_drm_flip_signalled,
-					  struct amdgpu_drm_queue_entry, list);
-		amdgpu_drm_queue_handle_one(e);
-	}
+    while (!xorg_list_is_empty(&amdgpu_drm_flip_signalled))
+    {
+        e = xorg_list_first_entry(&amdgpu_drm_flip_signalled,
+                                  struct amdgpu_drm_queue_entry,
+                                  list);
+        amdgpu_drm_queue_handle_one(e);
+    }
 
-	amdgpu_drm_handle_vblank_signalled();
+    amdgpu_drm_handle_vblank_signalled();
 
-	return r;
+    return r;
 }
 
 /*
  * Wait for pending page flip on given CRTC to complete
  */
-void amdgpu_drm_wait_pending_flip(xf86CrtcPtr crtc)
+void
+amdgpu_drm_wait_pending_flip(xf86CrtcPtr crtc)
 {
-	drmmode_crtc_private_ptr drmmode_crtc = crtc->driver_private;
-	AMDGPUEntPtr pAMDGPUEnt = AMDGPUEntPriv(crtc->scrn);
-	struct amdgpu_drm_queue_entry *e;
+    drmmode_crtc_private_ptr       drmmode_crtc = crtc->driver_private;
+    AMDGPUEntPtr                   pAMDGPUEnt   = AMDGPUEntPriv(crtc->scrn);
+    struct amdgpu_drm_queue_entry *e;
 
-	drmmode_crtc->wait_flip_nesting_level++;
+    drmmode_crtc->wait_flip_nesting_level++;
 
-	while (drmmode_crtc->flip_pending &&
-	       !xorg_list_is_empty(&amdgpu_drm_flip_signalled)) {
-		e = xorg_list_first_entry(&amdgpu_drm_flip_signalled,
-					  struct amdgpu_drm_queue_entry, list);
-		amdgpu_drm_queue_handle_one(e);
-	}
+    while (drmmode_crtc->flip_pending &&
+           !xorg_list_is_empty(&amdgpu_drm_flip_signalled))
+    {
+        e = xorg_list_first_entry(&amdgpu_drm_flip_signalled,
+                                  struct amdgpu_drm_queue_entry,
+                                  list);
+        amdgpu_drm_queue_handle_one(e);
+    }
 
-	while (drmmode_crtc->flip_pending
-	       && amdgpu_drm_handle_event(pAMDGPUEnt->fd,
-					  &drmmode_crtc->drmmode->event_context) >= 0);
+    while (drmmode_crtc->flip_pending &&
+           amdgpu_drm_handle_event(pAMDGPUEnt->fd,
+                                   &drmmode_crtc->drmmode->event_context) >= 0)
+        ;
 }
 
 /*
@@ -334,20 +364,19 @@ void amdgpu_drm_wait_pending_flip(xf86CrtcPtr crtc)
 void
 amdgpu_drm_queue_init(ScrnInfoPtr scrn)
 {
-	AMDGPUInfoPtr info = AMDGPUPTR(scrn);
-	drmmode_ptr drmmode = &info->drmmode;
+    AMDGPUInfoPtr info    = AMDGPUPTR(scrn);
+    drmmode_ptr   drmmode = &info->drmmode;
 
-	drmmode->event_context.version = 2;
-	drmmode->event_context.vblank_handler = amdgpu_drm_queue_handler;
-	drmmode->event_context.page_flip_handler = amdgpu_drm_queue_handler;
+    drmmode->event_context.version           = 2;
+    drmmode->event_context.vblank_handler    = amdgpu_drm_queue_handler;
+    drmmode->event_context.page_flip_handler = amdgpu_drm_queue_handler;
 
-	if (amdgpu_drm_queue_refcnt++)
-		return;
+    if (amdgpu_drm_queue_refcnt++) return;
 
-	xorg_list_init(&amdgpu_drm_queue);
-	xorg_list_init(&amdgpu_drm_flip_signalled);
-	xorg_list_init(&amdgpu_drm_vblank_signalled);
-	xorg_list_init(&amdgpu_drm_vblank_deferred);
+    xorg_list_init(&amdgpu_drm_queue);
+    xorg_list_init(&amdgpu_drm_flip_signalled);
+    xorg_list_init(&amdgpu_drm_vblank_signalled);
+    xorg_list_init(&amdgpu_drm_vblank_deferred);
 }
 
 /*
@@ -356,12 +385,12 @@ amdgpu_drm_queue_init(ScrnInfoPtr scrn)
 void
 amdgpu_drm_queue_close(ScrnInfoPtr scrn)
 {
-	struct amdgpu_drm_queue_entry *e, *tmp;
+    struct amdgpu_drm_queue_entry *e, *tmp;
 
-	xorg_list_for_each_entry_safe(e, tmp, &amdgpu_drm_queue, list) {
-		if (e->crtc->scrn == scrn)
-			amdgpu_drm_abort_one(e);
-	}
+    xorg_list_for_each_entry_safe(e, tmp, &amdgpu_drm_queue, list)
+    {
+        if (e->crtc->scrn == scrn) amdgpu_drm_abort_one(e);
+    }
 
-	amdgpu_drm_queue_refcnt--;
+    amdgpu_drm_queue_refcnt--;
 }

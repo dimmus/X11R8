@@ -1,4 +1,5 @@
-void *alloca(size_t sz)
+void *
+alloca(size_t sz)
 {
-	return NULL;
+    return NULL;
 }

@@ -25,18 +25,18 @@
  **************************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #ifdef HAVE_LIBUDEV
-#include "vmwgfx_driver.h"
-#include <xf86Crtc.h>
-#include "vmwgfx_rr_inlines.h"
-#include "../src/common_compat.h"
+#  include "vmwgfx_driver.h"
+#  include <xf86Crtc.h>
+#  include "vmwgfx_rr_inlines.h"
+#  include "../src/common_compat.h"
 
-#ifndef X_DEBUG
-#define X_DEBUG X_NOTICE
-#endif
+#  ifndef X_DEBUG
+#    define X_DEBUG X_NOTICE
+#  endif
 
 /**
  * struct vmwgfx_layout_box - Struct representing a GUI layout rect
@@ -46,7 +46,8 @@
  * @width: Width of the rect.
  * @height: Height of the rect.
  */
-struct vmwgfx_layout_box {
+struct vmwgfx_layout_box
+{
     int x, y, width, height;
 };
 
@@ -58,10 +59,11 @@ struct vmwgfx_layout_box {
  * @root_height: Height of full desktop.
  * @boxes: Array of GUI layout rects.
  */
-struct vmwgfx_layout {
-    int connected;
-    int root_width;
-    int root_height;
+struct vmwgfx_layout
+{
+    int                      connected;
+    int                      root_width;
+    int                      root_height;
     struct vmwgfx_layout_box boxes[];
 };
 
@@ -79,9 +81,14 @@ vmwgfx_layout_debug(ScrnInfoPtr pScrn, const struct vmwgfx_layout *l1)
 
     xf86DrvMsg(pScrn->scrnIndex, X_DEBUG, "New layout.\n");
     for (i = 0; i < l1->connected; ++i)
-	xf86DrvMsg(pScrn->scrnIndex, X_DEBUG,
-		   "%d: %d %d %d %d\n", i, l1->boxes[i].x,
-		   l1->boxes[i].y, l1->boxes[i].width, l1->boxes[i].height);
+        xf86DrvMsg(pScrn->scrnIndex,
+                   X_DEBUG,
+                   "%d: %d %d %d %d\n",
+                   i,
+                   l1->boxes[i].x,
+                   l1->boxes[i].y,
+                   l1->boxes[i].width,
+                   l1->boxes[i].height);
     xf86DrvMsg(pScrn->scrnIndex, X_DEBUG, "\n");
 }
 
@@ -95,16 +102,15 @@ vmwgfx_layout_debug(ScrnInfoPtr pScrn, const struct vmwgfx_layout *l1)
  */
 static Bool
 vmwgfx_layouts_equal(const struct vmwgfx_layout *l1,
-		     const struct vmwgfx_layout *l2)
+                     const struct vmwgfx_layout *l2)
 {
-    if (l1->connected != l2->connected)
-	return FALSE;
+    if (l1->connected != l2->connected) return FALSE;
 
-    if (!l1->connected)
-	return TRUE;
+    if (!l1->connected) return TRUE;
 
-    return !memcmp(l1->boxes, l2->boxes,
-		   l1->connected*sizeof(struct vmwgfx_layout_box));
+    return !memcmp(l1->boxes,
+                   l2->boxes,
+                   l1->connected * sizeof(struct vmwgfx_layout_box));
 }
 
 /**
@@ -118,50 +124,50 @@ vmwgfx_layouts_equal(const struct vmwgfx_layout *l1,
 struct vmwgfx_layout *
 vmwgfx_layout_from_kms(ScrnInfoPtr pScrn)
 {
-    xf86CrtcConfigPtr config = XF86_CRTC_CONFIG_PTR(pScrn);
-    int i, connected;
+    xf86CrtcConfigPtr     config = XF86_CRTC_CONFIG_PTR(pScrn);
+    int                   i, connected;
     struct vmwgfx_layout *layout;
-    size_t size;
+    size_t                size;
     int min_x = INT_MAX, max_x = INT_MIN, min_y = INT_MAX, max_y = INT_MIN;
 
-    for (i = 0; i < config->num_output; ++i) {
-	xf86OutputPtr output = config->output[i];
+    for (i = 0; i < config->num_output; ++i)
+    {
+        xf86OutputPtr output = config->output[i];
 
-	if (!vmwgfx_output_has_origin(output))
-	    return NULL;
+        if (!vmwgfx_output_has_origin(output)) return NULL;
 
-	if (output->status != XF86OutputStatusConnected)
-	    break;
+        if (output->status != XF86OutputStatusConnected) break;
     }
     connected = i;
 
     size = offsetof(struct vmwgfx_layout, boxes) +
-	connected * sizeof(struct vmwgfx_layout_box);
+           connected * sizeof(struct vmwgfx_layout_box);
     layout = calloc(1, size);
-    if (!layout)
-	return NULL;
+    if (!layout) return NULL;
 
     layout->connected = connected;
-    for (i = 0; i < connected; ++i) {
-	struct vmwgfx_layout_box *box = &layout->boxes[i];
-	xf86OutputPtr output = config->output[i];
-	DisplayModePtr mode = output->probed_modes;
+    for (i = 0; i < connected; ++i)
+    {
+        struct vmwgfx_layout_box *box    = &layout->boxes[i];
+        xf86OutputPtr             output = config->output[i];
+        DisplayModePtr            mode   = output->probed_modes;
 
-	if (mode == NULL) {
-	    free(layout);
-	    return NULL;
-	}
+        if (mode == NULL)
+        {
+            free(layout);
+            return NULL;
+        }
 
-	vmwgfx_output_origin(output, &box->x, &box->y);
-	box->width = output->probed_modes->HDisplay;
-	box->height = output->probed_modes->VDisplay;
-	min_x = min(min_x, box->x);
-	min_y = min(min_y, box->y);
-	max_x = max(max_x, box->x + box->width);
-	max_y = max(max_y, box->y + box->height);
+        vmwgfx_output_origin(output, &box->x, &box->y);
+        box->width  = output->probed_modes->HDisplay;
+        box->height = output->probed_modes->VDisplay;
+        min_x       = min(min_x, box->x);
+        min_y       = min(min_y, box->y);
+        max_x       = max(max_x, box->x + box->width);
+        max_y       = max(max_y, box->y + box->height);
     }
 
-    layout->root_width = max_x;
+    layout->root_width  = max_x;
     layout->root_height = max_y;
 
     return layout;
@@ -180,41 +186,43 @@ vmwgfx_layout_from_kms(ScrnInfoPtr pScrn)
 void
 vmwgfx_layout_configuration(ScrnInfoPtr pScrn, struct vmwgfx_layout *layout)
 {
-    xf86CrtcConfigPtr config = XF86_CRTC_CONFIG_PTR(pScrn);
+    xf86CrtcConfigPtr         config = XF86_CRTC_CONFIG_PTR(pScrn);
     struct vmwgfx_layout_box *box;
-    xf86OutputPtr output;
-    xf86CrtcPtr crtc;
-    int i, j;
+    xf86OutputPtr             output;
+    xf86CrtcPtr               crtc;
+    int                       i, j;
 
-    for (j = 0; j < config->num_crtc; ++j) {
-	crtc = config->crtc[j];
-	crtc->enabled = FALSE;
+    for (j = 0; j < config->num_crtc; ++j)
+    {
+        crtc          = config->crtc[j];
+        crtc->enabled = FALSE;
     }
 
-    for (i = 0, box = layout->boxes; i < config->num_output; ++i, ++box) {
-	output = config->output[i];
-	output->crtc = NULL;
-	if (i >= layout->connected)
-	    continue;
+    for (i = 0, box = layout->boxes; i < config->num_output; ++i, ++box)
+    {
+        output       = config->output[i];
+        output->crtc = NULL;
+        if (i >= layout->connected) continue;
 
-	for (j = 0; j < config->num_crtc; ++j) {
-	    crtc = config->crtc[j];
-	    if (!crtc->enabled && (output->possible_crtcs & (1 << j))) {
-		crtc->enabled = TRUE;
-		output->crtc = crtc;
-		break;
-	    }
-	}
+        for (j = 0; j < config->num_crtc; ++j)
+        {
+            crtc = config->crtc[j];
+            if (!crtc->enabled && (output->possible_crtcs & (1 << j)))
+            {
+                crtc->enabled = TRUE;
+                output->crtc  = crtc;
+                break;
+            }
+        }
 
-	if (!output->crtc)
-	    continue;
+        if (!output->crtc) continue;
 
-	crtc = output->crtc;
-	xf86SaveModeContents(&crtc->desiredMode, output->probed_modes);
-	crtc->desiredRotation = RR_Rotate_0;
-	crtc->desiredX = box->x;
-	crtc->desiredY = box->y;
-	crtc->desiredTransformPresent = FALSE;
+        crtc = output->crtc;
+        xf86SaveModeContents(&crtc->desiredMode, output->probed_modes);
+        crtc->desiredRotation         = RR_Rotate_0;
+        crtc->desiredX                = box->x;
+        crtc->desiredY                = box->y;
+        crtc->desiredTransformPresent = FALSE;
     }
 }
 
@@ -232,38 +240,42 @@ vmwgfx_layout_configuration(ScrnInfoPtr pScrn, struct vmwgfx_layout *layout)
 void
 vmwgfx_layout_handler(ScrnInfoPtr pScrn)
 {
-
-    ScreenPtr pScreen = xf86ScrnToScreen(pScrn);
-    modesettingPtr ms = modesettingPTR(pScrn);
+    ScreenPtr             pScreen = xf86ScrnToScreen(pScrn);
+    modesettingPtr        ms      = modesettingPTR(pScrn);
     struct vmwgfx_layout *layout;
 
-    if (!pScreen)
-	return;
+    if (!pScreen) return;
 
     /*
      * Construct a layout from the new information and determine whether we
      * need to take action
      */
     layout = vmwgfx_layout_from_kms(pScrn);
-    if (layout && (!ms->layout || !vmwgfx_layouts_equal(ms->layout, layout))) {
-	vmwgfx_layout_debug(pScrn, layout);
-	vmwgfx_outputs_off(pScrn);
-	xf86DisableUnusedFunctions(pScrn);
-	if (!vmwgfx_rr_screen_set_size(pScreen, layout->root_width,
-				       layout->root_height)) {
-	    xf86DrvMsg(pScrn->scrnIndex, X_ERROR, "Resizing screen failed.\n");
-	    vmwgfx_outputs_on(pScrn);
-	    free(layout);
-	} else {
-	    vmwgfx_layout_configuration(pScrn, layout);
-	    if (ms->layout)
-	      free(ms->layout);
-	    ms->layout = layout;
-	}
-	xf86SetDesiredModes(pScrn);
-	vmwgfx_notify_rr(pScreen);
-    } else if (layout) {
-	free(layout);
+    if (layout && (!ms->layout || !vmwgfx_layouts_equal(ms->layout, layout)))
+    {
+        vmwgfx_layout_debug(pScrn, layout);
+        vmwgfx_outputs_off(pScrn);
+        xf86DisableUnusedFunctions(pScrn);
+        if (!vmwgfx_rr_screen_set_size(pScreen,
+                                       layout->root_width,
+                                       layout->root_height))
+        {
+            xf86DrvMsg(pScrn->scrnIndex, X_ERROR, "Resizing screen failed.\n");
+            vmwgfx_outputs_on(pScrn);
+            free(layout);
+        }
+        else
+        {
+            vmwgfx_layout_configuration(pScrn, layout);
+            if (ms->layout) free(ms->layout);
+            ms->layout = layout;
+        }
+        xf86SetDesiredModes(pScrn);
+        vmwgfx_notify_rr(pScreen);
+    }
+    else if (layout)
+    {
+        free(layout);
     }
 }
 

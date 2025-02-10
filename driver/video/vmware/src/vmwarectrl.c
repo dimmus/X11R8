@@ -32,9 +32,8 @@
  *      allows X clients to communicate with the driver.
  */
 
-
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include "dixstruct.h"
@@ -66,27 +65,29 @@
 static int
 VMwareCtrlQueryVersion(ClientPtr client)
 {
-   xVMwareCtrlQueryVersionReply rep = { 0, };
-   register int n;
+    xVMwareCtrlQueryVersionReply rep = {
+        0,
+    };
+    register int n;
 
-   REQUEST_SIZE_MATCH(xVMwareCtrlQueryVersionReq);
+    REQUEST_SIZE_MATCH(xVMwareCtrlQueryVersionReq);
 
-   rep.type = X_Reply;
-   rep.length = 0;
-   rep.sequenceNumber = client->sequence;
-   rep.majorVersion = VMWARE_CTRL_MAJOR_VERSION;
-   rep.minorVersion = VMWARE_CTRL_MINOR_VERSION;
-   if (client->swapped) {
-      _swaps(&rep.sequenceNumber, n);
-      _swapl(&rep.length, n);
-      _swapl(&rep.majorVersion, n);
-      _swapl(&rep.minorVersion, n);
-   }
-   WriteToClient(client, sizeof(xVMwareCtrlQueryVersionReply), (char *)&rep);
+    rep.type           = X_Reply;
+    rep.length         = 0;
+    rep.sequenceNumber = client->sequence;
+    rep.majorVersion   = VMWARE_CTRL_MAJOR_VERSION;
+    rep.minorVersion   = VMWARE_CTRL_MINOR_VERSION;
+    if (client->swapped)
+    {
+        _swaps(&rep.sequenceNumber, n);
+        _swapl(&rep.length, n);
+        _swapl(&rep.majorVersion, n);
+        _swapl(&rep.minorVersion, n);
+    }
+    WriteToClient(client, sizeof(xVMwareCtrlQueryVersionReply), (char *)&rep);
 
-   return client->noClientException;
+    return client->noClientException;
 }
-
 
 /*
  *----------------------------------------------------------------------------
@@ -109,32 +110,31 @@ VMwareCtrlQueryVersion(ClientPtr client)
  */
 
 static Bool
-VMwareCtrlDoSetRes(ScrnInfoPtr pScrn,
-                   CARD32 x,
-                   CARD32 y,
-                   Bool resetXinerama)
+VMwareCtrlDoSetRes(ScrnInfoPtr pScrn, CARD32 x, CARD32 y, Bool resetXinerama)
 {
-   int modeIndex;
-   DisplayModePtr mode;
-   VMWAREPtr pVMWARE = VMWAREPTR(pScrn);
+    int            modeIndex;
+    DisplayModePtr mode;
+    VMWAREPtr      pVMWARE = VMWAREPTR(pScrn);
 
-   if (pScrn && pScrn->modes) {
-      VmwareLog(("DoSetRes: %d %d\n", x, y));
+    if (pScrn && pScrn->modes)
+    {
+        VmwareLog(("DoSetRes: %d %d\n", x, y));
 
-      if (resetXinerama) {
-         free(pVMWARE->xineramaNextState);
-         pVMWARE->xineramaNextState = NULL;
-         pVMWARE->xineramaNextNumOutputs = 0;
-      }
+        if (resetXinerama)
+        {
+            free(pVMWARE->xineramaNextState);
+            pVMWARE->xineramaNextState      = NULL;
+            pVMWARE->xineramaNextNumOutputs = 0;
+        }
 
       /*
        * Don't resize larger than possible but don't
        * return an X Error either.
        */
-      if (x > pVMWARE->maxWidth ||
-          y > pVMWARE->maxHeight) {
-         return TRUE;
-      }
+        if (x > pVMWARE->maxWidth || y > pVMWARE->maxHeight)
+        {
+            return TRUE;
+        }
 
       /*
        * Find an dynamic mode which isn't current, and replace it with
@@ -148,29 +148,34 @@ VMwareCtrlDoSetRes(ScrnInfoPtr pScrn,
        * screen.
        */
 
-      for (modeIndex = 0; modeIndex < NUM_DYN_MODES; modeIndex++) {
+        for (modeIndex = 0; modeIndex < NUM_DYN_MODES; modeIndex++)
+        {
          /*
           * Initialise the dynamic mode if it hasn't been used before.
           */
-         if (!pVMWARE->dynModes[modeIndex]) {
-            pVMWARE->dynModes[modeIndex] = VMWAREAddDisplayMode(pScrn, "DynMode", 1, 1);
-         }
+            if (!pVMWARE->dynModes[modeIndex])
+            {
+                pVMWARE->dynModes[modeIndex] =
+                    VMWAREAddDisplayMode(pScrn, "DynMode", 1, 1);
+            }
 
-         mode = pVMWARE->dynModes[modeIndex];
-         if (mode != pScrn->currentMode) {
-            break;
-         }
-      }
+            mode = pVMWARE->dynModes[modeIndex];
+            if (mode != pScrn->currentMode)
+            {
+                break;
+            }
+        }
 
-      mode->HDisplay = x;
-      mode->VDisplay = y;
+        mode->HDisplay = x;
+        mode->VDisplay = y;
 
-      return TRUE;
-   } else {
-      return FALSE;
-   }
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
 }
-
 
 /*
  *----------------------------------------------------------------------------
@@ -192,45 +197,50 @@ VMwareCtrlDoSetRes(ScrnInfoPtr pScrn,
 static int
 VMwareCtrlSetRes(ClientPtr client)
 {
-   REQUEST(xVMwareCtrlSetResReq);
-   xVMwareCtrlSetResReply rep = { 0, };
-   ScrnInfoPtr pScrn;
-   ExtensionEntry *ext;
-   register int n;
+    REQUEST(xVMwareCtrlSetResReq);
+    xVMwareCtrlSetResReply rep = {
+        0,
+    };
+    ScrnInfoPtr     pScrn;
+    ExtensionEntry *ext;
+    register int    n;
 
-   REQUEST_SIZE_MATCH(xVMwareCtrlSetResReq);
+    REQUEST_SIZE_MATCH(xVMwareCtrlSetResReq);
 
-   if (!(ext = CheckExtension(VMWARE_CTRL_PROTOCOL_NAME))) {
-      return BadMatch;
-   }
+    if (!(ext = CheckExtension(VMWARE_CTRL_PROTOCOL_NAME)))
+    {
+        return BadMatch;
+    }
 
-   pScrn = ext->extPrivate;
-   if (pScrn->scrnIndex != stuff->screen) {
-      return BadMatch;
-   }
+    pScrn = ext->extPrivate;
+    if (pScrn->scrnIndex != stuff->screen)
+    {
+        return BadMatch;
+    }
 
-   if (!VMwareCtrlDoSetRes(pScrn, stuff->x, stuff->y, TRUE)) {
-      return BadValue;
-   }
+    if (!VMwareCtrlDoSetRes(pScrn, stuff->x, stuff->y, TRUE))
+    {
+        return BadValue;
+    }
 
-   rep.type = X_Reply;
-   rep.length = (sizeof(xVMwareCtrlSetResReply) - sizeof(xGenericReply)) >> 2;
-   rep.sequenceNumber = client->sequence;
-   rep.screen = stuff->screen;
-   rep.x = stuff->x;
-   rep.y = stuff->y;
-   if (client->swapped) {
-      _swaps(&rep.sequenceNumber, n);
-      _swapl(&rep.length, n);
-      _swapl(&rep.screen, n);
-      _swapl(&rep.x, n);
-      _swapl(&rep.y, n);
-   }
-   WriteToClient(client, sizeof(xVMwareCtrlSetResReply), (char *)&rep);
+    rep.type   = X_Reply;
+    rep.length = (sizeof(xVMwareCtrlSetResReply) - sizeof(xGenericReply)) >> 2;
+    rep.sequenceNumber = client->sequence;
+    rep.screen         = stuff->screen;
+    rep.x              = stuff->x;
+    rep.y              = stuff->y;
+    if (client->swapped)
+    {
+        _swaps(&rep.sequenceNumber, n);
+        _swapl(&rep.length, n);
+        _swapl(&rep.screen, n);
+        _swapl(&rep.x, n);
+        _swapl(&rep.y, n);
+    }
+    WriteToClient(client, sizeof(xVMwareCtrlSetResReply), (char *)&rep);
 
-   return client->noClientException;
+    return client->noClientException;
 }
-
 
 /*
  *----------------------------------------------------------------------------
@@ -252,33 +262,39 @@ VMwareCtrlSetRes(ClientPtr client)
  */
 
 static Bool
-VMwareCtrlDoSetTopology(ScrnInfoPtr pScrn,
+VMwareCtrlDoSetTopology(ScrnInfoPtr          pScrn,
                         xXineramaScreenInfo *extents,
-                        unsigned long number)
+                        unsigned long        number)
 {
-   VMWAREPtr pVMWARE = VMWAREPTR(pScrn);
+    VMWAREPtr pVMWARE = VMWAREPTR(pScrn);
 
-   if (pVMWARE && pVMWARE->xinerama) { 
-      VMWAREXineramaPtr xineramaState;
-      short maxX = 0;
-      short maxY = 0;
-      size_t i;
+    if (pVMWARE && pVMWARE->xinerama)
+    {
+        VMWAREXineramaPtr xineramaState;
+        short             maxX = 0;
+        short             maxY = 0;
+        size_t            i;
 
-      if (pVMWARE->xineramaNextState) {
-         VmwareLog(("DoSetTopology: Aborting due to existing pending state\n"));
-         return TRUE;
-      }
+        if (pVMWARE->xineramaNextState)
+        {
+            VmwareLog(
+                ("DoSetTopology: Aborting due to existing pending state\n"));
+            return TRUE;
+        }
 
-      for (i = 0; i < number; i++) {
-         maxX = MAX(maxX, extents[i].x_org + extents[i].width);
-         maxY = MAX(maxY, extents[i].y_org + extents[i].height);
-      }
+        for (i = 0; i < number; i++)
+        {
+            maxX = MAX(maxX, extents[i].x_org + extents[i].width);
+            maxY = MAX(maxY, extents[i].y_org + extents[i].height);
+        }
 
-      VmwareLog(("DoSetTopology: %d %d\n", maxX, maxY));
+        VmwareLog(("DoSetTopology: %d %d\n", maxX, maxY));
 
-      xineramaState = (VMWAREXineramaPtr)calloc(number, sizeof(VMWAREXineramaRec));
-      if (xineramaState) {
-         memcpy(xineramaState, extents, number * sizeof (VMWAREXineramaRec));
+        xineramaState =
+            (VMWAREXineramaPtr)calloc(number, sizeof(VMWAREXineramaRec));
+        if (xineramaState)
+        {
+            memcpy(xineramaState, extents, number * sizeof(VMWAREXineramaRec));
 
          /*
           * Make this the new pending Xinerama state. Normally we'll
@@ -289,14 +305,14 @@ VMwareCtrlDoSetTopology(ScrnInfoPtr pScrn,
           * will be no mode change. In this case, push it out
           * immediately.
           */
-         free(pVMWARE->xineramaNextState);
-         pVMWARE->xineramaNextState = xineramaState;
-         pVMWARE->xineramaNextNumOutputs = number;
+            free(pVMWARE->xineramaNextState);
+            pVMWARE->xineramaNextState      = xineramaState;
+            pVMWARE->xineramaNextNumOutputs = number;
 
-         if (maxX == pVMWARE->ModeReg.svga_reg_width &&
-             maxY == pVMWARE->ModeReg.svga_reg_height) {
-
-	    /*
+            if (maxX == pVMWARE->ModeReg.svga_reg_width &&
+                maxY == pVMWARE->ModeReg.svga_reg_height)
+            {
+        /*
 	     * The annoyance here is that when we reprogram the
 	     * SVGA device's monitor topology registers, it may
 	     * rearrange those monitors on the host's screen, but they
@@ -306,25 +322,29 @@ VMwareCtrlDoSetTopology(ScrnInfoPtr pScrn,
 	     * full-framebuffer update rect afterwards.
 	     */
 
-            vmwareNextXineramaState(pVMWARE);
+                vmwareNextXineramaState(pVMWARE);
 #ifdef HAVE_XORG_SERVER_1_2_0
-            RRSendConfigNotify(pScrn->pScreen);
+                RRSendConfigNotify(pScrn->pScreen);
 #endif
-            vmwareSendSVGACmdUpdateFullScreen(pVMWARE);
+                vmwareSendSVGACmdUpdateFullScreen(pVMWARE);
 
-            return TRUE;
-         } else {
-            return VMwareCtrlDoSetRes(pScrn, maxX, maxY, FALSE);
-         }
-
-      } else {
-         return FALSE;
-      }
-   } else {
-      return FALSE;
-   }
+                return TRUE;
+            }
+            else
+            {
+                return VMwareCtrlDoSetRes(pScrn, maxX, maxY, FALSE);
+            }
+        }
+        else
+        {
+            return FALSE;
+        }
+    }
+    else
+    {
+        return FALSE;
+    }
 }
-
 
 /*
  *----------------------------------------------------------------------------
@@ -346,43 +366,49 @@ VMwareCtrlDoSetTopology(ScrnInfoPtr pScrn,
 static int
 VMwareCtrlSetTopology(ClientPtr client)
 {
-   REQUEST(xVMwareCtrlSetTopologyReq);
-   xVMwareCtrlSetTopologyReply rep = { 0, };
-   ScrnInfoPtr pScrn;
-   ExtensionEntry *ext;
-   register int n;
-   xXineramaScreenInfo *extents;
+    REQUEST(xVMwareCtrlSetTopologyReq);
+    xVMwareCtrlSetTopologyReply rep = {
+        0,
+    };
+    ScrnInfoPtr          pScrn;
+    ExtensionEntry      *ext;
+    register int         n;
+    xXineramaScreenInfo *extents;
 
-   REQUEST_AT_LEAST_SIZE(xVMwareCtrlSetTopologyReq);
+    REQUEST_AT_LEAST_SIZE(xVMwareCtrlSetTopologyReq);
 
-   if (!(ext = CheckExtension(VMWARE_CTRL_PROTOCOL_NAME))) {
-      return BadMatch;
-   }
+    if (!(ext = CheckExtension(VMWARE_CTRL_PROTOCOL_NAME)))
+    {
+        return BadMatch;
+    }
 
-   pScrn = ext->extPrivate;
-   if (pScrn->scrnIndex != stuff->screen) {
-      return BadMatch;
-   }
+    pScrn = ext->extPrivate;
+    if (pScrn->scrnIndex != stuff->screen)
+    {
+        return BadMatch;
+    }
 
-   extents = (xXineramaScreenInfo *)(stuff + 1);
-   if (!VMwareCtrlDoSetTopology(pScrn, extents, stuff->number)) {
-      return BadValue;
-   }
+    extents = (xXineramaScreenInfo *)(stuff + 1);
+    if (!VMwareCtrlDoSetTopology(pScrn, extents, stuff->number))
+    {
+        return BadValue;
+    }
 
-   rep.type = X_Reply;
-   rep.length = (sizeof(xVMwareCtrlSetTopologyReply) - sizeof(xGenericReply)) >> 2;
-   rep.sequenceNumber = client->sequence;
-   rep.screen = stuff->screen;
-   if (client->swapped) {
-      _swaps(&rep.sequenceNumber, n);
-      _swapl(&rep.length, n);
-      _swapl(&rep.screen, n);
-   }
-   WriteToClient(client, sizeof(xVMwareCtrlSetTopologyReply), (char *)&rep);
+    rep.type = X_Reply;
+    rep.length =
+        (sizeof(xVMwareCtrlSetTopologyReply) - sizeof(xGenericReply)) >> 2;
+    rep.sequenceNumber = client->sequence;
+    rep.screen         = stuff->screen;
+    if (client->swapped)
+    {
+        _swaps(&rep.sequenceNumber, n);
+        _swapl(&rep.length, n);
+        _swapl(&rep.screen, n);
+    }
+    WriteToClient(client, sizeof(xVMwareCtrlSetTopologyReply), (char *)&rep);
 
-   return client->noClientException;
+    return client->noClientException;
 }
-
 
 /*
  *----------------------------------------------------------------------------
@@ -404,19 +430,19 @@ VMwareCtrlSetTopology(ClientPtr client)
 static int
 VMwareCtrlDispatch(ClientPtr client)
 {
-   REQUEST(xReq);
+    REQUEST(xReq);
 
-   switch(stuff->data) {
-   case X_VMwareCtrlQueryVersion:
-      return VMwareCtrlQueryVersion(client);
-   case X_VMwareCtrlSetRes:
-      return VMwareCtrlSetRes(client);
-   case X_VMwareCtrlSetTopology:
-      return VMwareCtrlSetTopology(client);
-   }
-   return BadRequest;
+    switch (stuff->data)
+    {
+        case X_VMwareCtrlQueryVersion:
+            return VMwareCtrlQueryVersion(client);
+        case X_VMwareCtrlSetRes:
+            return VMwareCtrlSetRes(client);
+        case X_VMwareCtrlSetTopology:
+            return VMwareCtrlSetTopology(client);
+    }
+    return BadRequest;
 }
-
 
 /*
  *----------------------------------------------------------------------------
@@ -438,16 +464,15 @@ VMwareCtrlDispatch(ClientPtr client)
 static int
 SVMwareCtrlQueryVersion(ClientPtr client)
 {
-   register int n;
+    register int n;
 
-   REQUEST(xVMwareCtrlQueryVersionReq);
-   REQUEST_SIZE_MATCH(xVMwareCtrlQueryVersionReq);
+    REQUEST(xVMwareCtrlQueryVersionReq);
+    REQUEST_SIZE_MATCH(xVMwareCtrlQueryVersionReq);
 
-   _swaps(&stuff->length, n);
+    _swaps(&stuff->length, n);
 
-   return VMwareCtrlQueryVersion(client);
+    return VMwareCtrlQueryVersion(client);
 }
-
 
 /*
  *----------------------------------------------------------------------------
@@ -469,19 +494,18 @@ SVMwareCtrlQueryVersion(ClientPtr client)
 static int
 SVMwareCtrlSetRes(ClientPtr client)
 {
-   register int n;
+    register int n;
 
-   REQUEST(xVMwareCtrlSetResReq);
-   REQUEST_SIZE_MATCH(xVMwareCtrlSetResReq);
+    REQUEST(xVMwareCtrlSetResReq);
+    REQUEST_SIZE_MATCH(xVMwareCtrlSetResReq);
 
-   _swaps(&stuff->length, n);
-   _swapl(&stuff->screen, n);
-   _swapl(&stuff->x, n);
-   _swapl(&stuff->y, n);
+    _swaps(&stuff->length, n);
+    _swapl(&stuff->screen, n);
+    _swapl(&stuff->x, n);
+    _swapl(&stuff->y, n);
 
-   return VMwareCtrlSetRes(client);
+    return VMwareCtrlSetRes(client);
 }
-
 
 /*
  *----------------------------------------------------------------------------
@@ -503,20 +527,19 @@ SVMwareCtrlSetRes(ClientPtr client)
 static int
 SVMwareCtrlSetTopology(ClientPtr client)
 {
-   register int n;
+    register int n;
 
-   REQUEST(xVMwareCtrlSetTopologyReq);
-   REQUEST_SIZE_MATCH(xVMwareCtrlSetTopologyReq);
+    REQUEST(xVMwareCtrlSetTopologyReq);
+    REQUEST_SIZE_MATCH(xVMwareCtrlSetTopologyReq);
 
-   _swaps(&stuff->length, n);
-   _swapl(&stuff->screen, n);
-   _swapl(&stuff->number, n);
+    _swaps(&stuff->length, n);
+    _swapl(&stuff->screen, n);
+    _swapl(&stuff->number, n);
    /* Each extent is a struct of shorts. */
-   SwapRestS(stuff);
+    SwapRestS(stuff);
 
-   return VMwareCtrlSetTopology(client);
+    return VMwareCtrlSetTopology(client);
 }
-
 
 /*
  *----------------------------------------------------------------------------
@@ -537,19 +560,19 @@ SVMwareCtrlSetTopology(ClientPtr client)
 static int
 SVMwareCtrlDispatch(ClientPtr client)
 {
-   REQUEST(xReq);
+    REQUEST(xReq);
 
-   switch(stuff->data) {
-   case X_VMwareCtrlQueryVersion:
-      return SVMwareCtrlQueryVersion(client);
-   case X_VMwareCtrlSetRes:
-      return SVMwareCtrlSetRes(client);
-   case X_VMwareCtrlSetTopology:
-      return SVMwareCtrlSetTopology(client);
-   }
-   return BadRequest;
+    switch (stuff->data)
+    {
+        case X_VMwareCtrlQueryVersion:
+            return SVMwareCtrlQueryVersion(client);
+        case X_VMwareCtrlSetRes:
+            return SVMwareCtrlSetRes(client);
+        case X_VMwareCtrlSetTopology:
+            return SVMwareCtrlSetTopology(client);
+    }
+    return BadRequest;
 }
-
 
 /*
  *----------------------------------------------------------------------------
@@ -568,11 +591,10 @@ SVMwareCtrlDispatch(ClientPtr client)
  */
 
 static void
-VMwareCtrlResetProc(ExtensionEntry* extEntry)
+VMwareCtrlResetProc(ExtensionEntry *extEntry)
 {
    /* Currently, no cleanup is necessary. */
 }
-
 
 /*
  *----------------------------------------------------------------------------
@@ -593,27 +615,34 @@ VMwareCtrlResetProc(ExtensionEntry* extEntry)
 void
 VMwareCtrl_ExtInit(ScrnInfoPtr pScrn)
 {
-   ExtensionEntry *myext;
+    ExtensionEntry *myext;
 
-   if (!(myext = CheckExtension(VMWARE_CTRL_PROTOCOL_NAME))) {
-      if (!(myext = AddExtension(VMWARE_CTRL_PROTOCOL_NAME, 0, 0,
-                                 VMwareCtrlDispatch,
-                                 SVMwareCtrlDispatch,
-                                 VMwareCtrlResetProc,
-                                 StandardMinorOpcode))) {
-         xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
-                    "Failed to add VMWARE_CTRL extension\n");
-	 return;
-      }
+    if (!(myext = CheckExtension(VMWARE_CTRL_PROTOCOL_NAME)))
+    {
+        if (!(myext = AddExtension(VMWARE_CTRL_PROTOCOL_NAME,
+                                   0,
+                                   0,
+                                   VMwareCtrlDispatch,
+                                   SVMwareCtrlDispatch,
+                                   VMwareCtrlResetProc,
+                                   StandardMinorOpcode)))
+        {
+            xf86DrvMsg(pScrn->scrnIndex,
+                       X_ERROR,
+                       "Failed to add VMWARE_CTRL extension\n");
+            return;
+        }
 
       /*
        * For now, only support one screen as that's all the virtual
        * hardware supports.
        */
-      myext->extPrivate = pScrn;
+        myext->extPrivate = pScrn;
 
-      xf86DrvMsg(pScrn->scrnIndex, X_INFO,
-                 "Initialized VMWARE_CTRL extension version %d.%d\n",
-                 VMWARE_CTRL_MAJOR_VERSION, VMWARE_CTRL_MINOR_VERSION);
-   }
+        xf86DrvMsg(pScrn->scrnIndex,
+                   X_INFO,
+                   "Initialized VMWARE_CTRL extension version %d.%d\n",
+                   VMWARE_CTRL_MAJOR_VERSION,
+                   VMWARE_CTRL_MINOR_VERSION);
+    }
 }

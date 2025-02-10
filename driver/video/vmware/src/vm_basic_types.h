@@ -10,7 +10,6 @@
  *    basic data types.
  */
 
- 
 #ifndef _VM_BASIC_TYPES_H_
 #define _VM_BASIC_TYPES_H_
 
@@ -26,48 +25,51 @@ typedef char           Bool;
 #endif
 
 #ifndef FALSE
-#define FALSE          0
+#  define FALSE 0
 #endif
 
 #ifndef TRUE
-#define TRUE           1
+#  define TRUE 1
 #endif
 
 #ifdef _MSC_VER
 typedef unsigned __int64 uint64;
-typedef signed __int64 int64;
+typedef signed __int64   int64;
 
-#pragma warning (disable :4018) // signed/unsigned mismatch
-#pragma warning (disable :4761) // integral size mismatch in argument; conversion supplied
-#pragma warning (disable :4305) // truncation from 'const int' to 'short'
-#pragma warning (disable :4244) // conversion from 'unsigned short' to 'unsigned char'
+#  pragma warning(disable : 4018) // signed/unsigned mismatch
+#  pragma warning( \
+      disable : 4761)  // integral size mismatch in argument; conversion supplied
+#  pragma warning(disable : 4305)  // truncation from 'const int' to 'short'
+#  pragma warning( \
+      disable : 4244)  // conversion from 'unsigned short' to 'unsigned char'
 //#pragma warning (disable :4101) // unreferenced local variable
-#pragma warning (disable :4133) // incompatible types - from 'struct VM *' to 'int *'
-#pragma warning (disable :4047) // differs in levels of indirection
-#pragma warning (disable :4146) // unary minus operator applied to unsigned type, result still unsigned
-#pragma warning (disable :4142) // benign redefinition of type
+#  pragma warning( \
+      disable : 4133)  // incompatible types - from 'struct VM *' to 'int *'
+#  pragma warning(disable : 4047)  // differs in levels of indirection
+#  pragma warning( \
+      disable : 4146)  // unary minus operator applied to unsigned type, result still unsigned
+#  pragma warning(disable : 4142)  // benign redefinition of type
 
 #elif defined(__GNUC__)
 /* The Xserver source compiles with -ansi -pendantic */
-#ifndef __STRICT_ANSI__
+#  ifndef __STRICT_ANSI__
 typedef unsigned long long uint64;
-typedef long long int64;
-#endif
+typedef long long          int64;
+#  endif
 #else
 /* int64/uint64 aren't actually used in the vmware driver. */
-#if 0
-#error - Need compiler define for int64/uint64
+#  if 0
+#    error - Need compiler define for int64/uint64
+#  endif
 #endif
-#endif
 
-typedef unsigned int       uint32;
-typedef unsigned short     uint16;
-typedef unsigned char      uint8;
+typedef unsigned int   uint32;
+typedef unsigned short uint16;
+typedef unsigned char  uint8;
 
-typedef int       int32;
-typedef short     int16;
-typedef char      int8;
-
+typedef int   int32;
+typedef short int16;
+typedef char  int8;
 
 /*
  * Printf format for 64-bit number.  Use it like this:
@@ -75,14 +77,14 @@ typedef char      int8;
  */
 
 #ifdef _MSC_VER
-#define FMT64   "I64"
+#  define FMT64 "I64"
 #elif defined(__GNUC__)
-#define FMT64   "L"
+#  define FMT64 "L"
 #else
 /* FMT64 isn't actually used in the vmware driver. */
-#if 0
-#error - Need compiler define for FMT64
-#endif
+#  if 0
+#    error - Need compiler define for FMT64
+#  endif
 #endif
 
 typedef uint32 VA;
@@ -94,36 +96,35 @@ typedef uint32 PPN;
 typedef uint32 MA;
 typedef uint32 MPN;
 
-#define INVALID_MPN ((MPN)-1)
+#define INVALID_MPN ((MPN) - 1)
 
-#define EXTERN        extern
+#define EXTERN extern
 /*
  * Right now our use of CONST is broken enough that it only works
  * with GCC. XXX Need to fix this.
  */
 #ifdef __GNUC__
-#define CONST         const
+#  define CONST const
 #else
-#ifndef CONST
-#define CONST
-#endif
+#  ifndef CONST
+#    define CONST
+#  endif
 #endif
 
 #ifdef _MSC_VER
-#ifndef INLINE
-#define INLINE        __inline
-#endif
+#  ifndef INLINE
+#    define INLINE __inline
+#  endif
 #else
-#ifndef INLINE
-#define INLINE        inline
+#  ifndef INLINE
+#    define INLINE inline
+#  endif
 #endif
-#endif
-
 
 #if defined(WIN32) && !defined(VMX86_NO_THREADS)
-#define THREADSPECIFIC _declspec(thread) 
+#  define THREADSPECIFIC _declspec(thread)
 #else
-#define THREADSPECIFIC
+#  define THREADSPECIFIC
 #endif
 
 /* 
@@ -139,13 +140,12 @@ typedef uint32 MPN;
  * that the function never returns.
  */
 #ifdef _MSC_VER
-#define NORETURN_DECL(_fndecl)    __declspec(noreturn) _fndecl
+#  define NORETURN_DECL(_fndecl) __declspec(noreturn) _fndecl
 #elif defined(__GNUC__) && __GNUC__ >= 2 && __GNUC_MINOR__ >= 5
-#define NORETURN_DECL(_fndecl)    _fndecl __attribute__((__noreturn__))
+#  define NORETURN_DECL(_fndecl) _fndecl __attribute__((__noreturn__))
 #else
-#define NORETURN_DECL(_fndecl)    _fndecl
+#  define NORETURN_DECL(_fndecl) _fndecl
 #endif
-
 
 /*
  * GCC's argument checking for printf-like functions
@@ -157,15 +157,20 @@ typedef uint32 MPN;
  * varPos is the position of the variable argument, beginning at 1
  */
 #if defined(__GNUC__) && defined(notdef)
-# define PRINTF_DECL(fmtPos, varPos) __attribute__((__format__(__printf__, fmtPos, varPos)))
+#  define PRINTF_DECL(fmtPos, varPos) \
+      __attribute__((__format__(__printf__, fmtPos, varPos)))
 #else
-# define PRINTF_DECL(fmtPos, varPos)
+#  define PRINTF_DECL(fmtPos, varPos)
 #endif
 
 /*
  * Used to silence compiler warnings that get generated when the
  * compiler thinks that a function returns when it is marked noreturn.
  */
-#define INFINITE_LOOP()           do { } while (1)
+#define INFINITE_LOOP() \
+    do                  \
+    {                   \
+    }                   \
+    while (1)
 
 #endif

@@ -23,7 +23,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config_intel.h"
+#  include "config_intel.h"
 #endif
 
 #include <sys/types.h>
@@ -40,353 +40,422 @@
 #include <misyncstr.h>
 
 static DevPrivateKeyRec sna_sync_fence_private_key;
-struct sna_sync_fence {
-	SyncFenceSetTriggeredFunc set_triggered;
+
+struct sna_sync_fence
+{
+    SyncFenceSetTriggeredFunc set_triggered;
 };
 
-static inline struct sna_sync_fence *sna_sync_fence(SyncFence *fence)
+static inline struct sna_sync_fence *
+sna_sync_fence(SyncFence *fence)
 {
-	return dixLookupPrivate(&fence->devPrivates, &sna_sync_fence_private_key);
+    return dixLookupPrivate(&fence->devPrivates, &sna_sync_fence_private_key);
 }
 
-static inline void mark_dri3_pixmap(struct sna *sna, struct sna_pixmap *priv, struct kgem_bo *bo)
+static inline void
+mark_dri3_pixmap(struct sna *sna, struct sna_pixmap *priv, struct kgem_bo *bo)
 {
-	bo->flush = true;
-	if (bo->exec)
-		sna->kgem.flush = 1;
-	if (bo == priv->gpu_bo)
-		priv->flush |= FLUSH_READ | FLUSH_WRITE;
-	else
-		priv->shm = true;
+    bo->flush = true;
+    if (bo->exec) sna->kgem.flush = 1;
+    if (bo == priv->gpu_bo) priv->flush |= FLUSH_READ | FLUSH_WRITE;
+    else priv->shm = true;
 
-	sna_watch_flush(sna, 1);
+    sna_watch_flush(sna, 1);
 
-	kgem_bo_submit(&sna->kgem, bo);
-	kgem_bo_unclean(&sna->kgem, bo);
+    kgem_bo_submit(&sna->kgem, bo);
+    kgem_bo_unclean(&sna->kgem, bo);
 }
 
-static void sna_sync_flush(struct sna *sna, struct sna_pixmap *priv)
+static void
+sna_sync_flush(struct sna *sna, struct sna_pixmap *priv)
 {
-	struct kgem_bo *bo = NULL;
+    struct kgem_bo *bo = NULL;
 
-	DBG(("%s(pixmap=%ld)\n", __FUNCTION__, priv->pixmap->drawable.serialNumber));
-	assert(priv);
+    DBG(("%s(pixmap=%ld)\n",
+         __FUNCTION__,
+         priv->pixmap->drawable.serialNumber));
+    assert(priv);
 
-	if (priv->pinned & PIN_DRI3) {
-		assert(priv->gpu_bo);
-		assert(priv->pinned & PIN_DRI3);
-		DBG(("%s: flushing prime GPU bo, handle=%ld\n", __FUNCTION__, priv->gpu_bo->handle));
-		if (sna_pixmap_move_to_gpu(priv->pixmap, MOVE_READ | MOVE_WRITE | MOVE_ASYNC_HINT | __MOVE_FORCE)) {
-			sna_damage_all(&priv->gpu_damage, priv->pixmap);
-			bo = priv->gpu_bo;
-		}
-	} else {
-		assert(priv->cpu_bo);
-		assert(IS_STATIC_PTR(priv->ptr));
-		DBG(("%s: flushing prime CPU bo, handle=%ld\n", __FUNCTION__, priv->cpu_bo->handle));
-		if (sna_pixmap_move_to_cpu(priv->pixmap, MOVE_READ | MOVE_WRITE | MOVE_ASYNC_HINT))
-			bo = priv->cpu_bo;
-	}
+    if (priv->pinned & PIN_DRI3)
+    {
+        assert(priv->gpu_bo);
+        assert(priv->pinned & PIN_DRI3);
+        DBG(("%s: flushing prime GPU bo, handle=%ld\n",
+             __FUNCTION__,
+             priv->gpu_bo->handle));
+        if (sna_pixmap_move_to_gpu(priv->pixmap,
+                                   MOVE_READ | MOVE_WRITE | MOVE_ASYNC_HINT |
+                                       __MOVE_FORCE))
+        {
+            sna_damage_all(&priv->gpu_damage, priv->pixmap);
+            bo = priv->gpu_bo;
+        }
+    }
+    else
+    {
+        assert(priv->cpu_bo);
+        assert(IS_STATIC_PTR(priv->ptr));
+        DBG(("%s: flushing prime CPU bo, handle=%ld\n",
+             __FUNCTION__,
+             priv->cpu_bo->handle));
+        if (sna_pixmap_move_to_cpu(priv->pixmap,
+                                   MOVE_READ | MOVE_WRITE | MOVE_ASYNC_HINT))
+            bo = priv->cpu_bo;
+    }
 
-	if (bo != NULL) {
-		kgem_bo_submit(&sna->kgem, bo);
-		kgem_bo_unclean(&sna->kgem, bo);
-	}
+    if (bo != NULL)
+    {
+        kgem_bo_submit(&sna->kgem, bo);
+        kgem_bo_unclean(&sna->kgem, bo);
+    }
 }
 
 static void
 sna_sync_fence_set_triggered(SyncFence *fence)
 {
-	struct sna *sna = to_sna_from_screen(fence->pScreen);
-	struct sna_sync_fence *sna_fence = sna_sync_fence(fence);
+    struct sna            *sna       = to_sna_from_screen(fence->pScreen);
+    struct sna_sync_fence *sna_fence = sna_sync_fence(fence);
 
-	DBG(("%s()\n", __FUNCTION__));
-	sna_accel_flush(sna);
+    DBG(("%s()\n", __FUNCTION__));
+    sna_accel_flush(sna);
 
-	fence->funcs.SetTriggered = sna_fence->set_triggered;
-	sna_fence->set_triggered(fence);
-	sna_fence->set_triggered = fence->funcs.SetTriggered;
-	fence->funcs.SetTriggered = sna_sync_fence_set_triggered;
+    fence->funcs.SetTriggered = sna_fence->set_triggered;
+    sna_fence->set_triggered(fence);
+    sna_fence->set_triggered  = fence->funcs.SetTriggered;
+    fence->funcs.SetTriggered = sna_sync_fence_set_triggered;
 }
 
 static void
-sna_sync_create_fence(ScreenPtr screen, SyncFence *fence, Bool initially_triggered)
+sna_sync_create_fence(ScreenPtr  screen,
+                      SyncFence *fence,
+                      Bool       initially_triggered)
 {
-	struct sna *sna = to_sna_from_screen(screen);
-	SyncScreenFuncsPtr funcs = miSyncGetScreenFuncs(screen);
+    struct sna        *sna   = to_sna_from_screen(screen);
+    SyncScreenFuncsPtr funcs = miSyncGetScreenFuncs(screen);
 
-	DBG(("%s()\n", __FUNCTION__));
+    DBG(("%s()\n", __FUNCTION__));
 
-	funcs->CreateFence = sna->dri3.create_fence;
-	sna->dri3.create_fence(screen, fence, initially_triggered);
-	sna->dri3.create_fence = funcs->CreateFence;
-	funcs->CreateFence = sna_sync_create_fence;
+    funcs->CreateFence = sna->dri3.create_fence;
+    sna->dri3.create_fence(screen, fence, initially_triggered);
+    sna->dri3.create_fence = funcs->CreateFence;
+    funcs->CreateFence     = sna_sync_create_fence;
 
-	sna_sync_fence(fence)->set_triggered = fence->funcs.SetTriggered;
-	fence->funcs.SetTriggered = sna_sync_fence_set_triggered;
+    sna_sync_fence(fence)->set_triggered = fence->funcs.SetTriggered;
+    fence->funcs.SetTriggered            = sna_sync_fence_set_triggered;
 }
 
 static bool
 sna_sync_open(struct sna *sna, ScreenPtr screen)
 {
-	SyncScreenFuncsPtr funcs;
+    SyncScreenFuncsPtr funcs;
 
-	DBG(("%s()\n", __FUNCTION__));
+    DBG(("%s()\n", __FUNCTION__));
 
-	if (!miSyncShmScreenInit(screen))
-		return false;
+    if (!miSyncShmScreenInit(screen)) return false;
 
-	if (!dixPrivateKeyRegistered(&sna_sync_fence_private_key)) {
-		if (!dixRegisterPrivateKey(&sna_sync_fence_private_key,
-					   PRIVATE_SYNC_FENCE,
-					   sizeof(struct sna_sync_fence)))
-			return false;
-	}
+    if (!dixPrivateKeyRegistered(&sna_sync_fence_private_key))
+    {
+        if (!dixRegisterPrivateKey(&sna_sync_fence_private_key,
+                                   PRIVATE_SYNC_FENCE,
+                                   sizeof(struct sna_sync_fence)))
+            return false;
+    }
 
-	funcs = miSyncGetScreenFuncs(screen);
-	sna->dri3.create_fence = funcs->CreateFence;
-	funcs->CreateFence = sna_sync_create_fence;
+    funcs                  = miSyncGetScreenFuncs(screen);
+    sna->dri3.create_fence = funcs->CreateFence;
+    funcs->CreateFence     = sna_sync_create_fence;
 
-	return true;
+    return true;
 }
 
-static int sna_dri3_open_device(ScreenPtr screen,
-				RRProviderPtr provider,
-				int *out)
+static int
+sna_dri3_open_device(ScreenPtr screen, RRProviderPtr provider, int *out)
 {
-	int fd;
+    int fd;
 
-	DBG(("%s()\n", __FUNCTION__));
-	fd = intel_get_client_fd(to_sna_from_screen(screen)->dev);
-	if (fd < 0)
-		return -fd;
+    DBG(("%s()\n", __FUNCTION__));
+    fd = intel_get_client_fd(to_sna_from_screen(screen)->dev);
+    if (fd < 0) return -fd;
 
-	*out = fd;
-	return Success;
+    *out = fd;
+    return Success;
 }
 
-static PixmapPtr sna_dri3_pixmap_from_fd(ScreenPtr screen,
-					 int fd,
-					 CARD16 width,
-					 CARD16 height,
-					 CARD16 stride,
-					 CARD8 depth,
-					 CARD8 bpp)
+static PixmapPtr
+sna_dri3_pixmap_from_fd(ScreenPtr screen,
+                        int       fd,
+                        CARD16    width,
+                        CARD16    height,
+                        CARD16    stride,
+                        CARD8     depth,
+                        CARD8     bpp)
 {
-	struct sna *sna = to_sna_from_screen(screen);
-	PixmapPtr pixmap;
-	struct sna_pixmap *priv;
-	struct kgem_bo *bo;
+    struct sna        *sna = to_sna_from_screen(screen);
+    PixmapPtr          pixmap;
+    struct sna_pixmap *priv;
+    struct kgem_bo    *bo;
 
-	DBG(("%s(fd=%d, width=%d, height=%d, stride=%d, depth=%d, bpp=%d)\n",
-	     __FUNCTION__, fd, width, height, stride, depth, bpp));
-	if (width > INT16_MAX || height > INT16_MAX)
-		return NULL;
+    DBG(("%s(fd=%d, width=%d, height=%d, stride=%d, depth=%d, bpp=%d)\n",
+         __FUNCTION__,
+         fd,
+         width,
+         height,
+         stride,
+         depth,
+         bpp));
+    if (width > INT16_MAX || height > INT16_MAX) return NULL;
 
-	if ((uint32_t)width * bpp > (uint32_t)stride * 8)
-		return NULL;
+    if ((uint32_t)width * bpp > (uint32_t)stride * 8) return NULL;
 
-	if (depth < 8)
-		return NULL;
+    if (depth < 8) return NULL;
 
-	switch (bpp) {
-	case 8:
-	case 16:
-	case 32:
-		break;
-	default:
-		return NULL;
-	}
+    switch (bpp)
+    {
+        case 8:
+        case 16:
+        case 32:
+            break;
+        default:
+            return NULL;
+    }
 
-	bo = kgem_create_for_prime(&sna->kgem, fd, (uint32_t)stride * height);
-	if (bo == NULL)
-		return NULL;
+    bo = kgem_create_for_prime(&sna->kgem, fd, (uint32_t)stride * height);
+    if (bo == NULL) return NULL;
 
-	/* Check for a duplicate */
-	list_for_each_entry(priv, &sna->dri3.pixmaps, cow_list) {
-		int other_stride = 0;
-		if (bo->snoop) {
-			assert(priv->cpu_bo);
-			assert(IS_STATIC_PTR(priv->ptr));
-			if (bo->handle == priv->cpu_bo->handle)
-				other_stride = priv->cpu_bo->pitch;
-		} else  {
-			assert(priv->gpu_bo);
-			assert(priv->pinned & PIN_DRI3);
-			if (bo->handle == priv->gpu_bo->handle)
-				other_stride = priv->gpu_bo->pitch;
-		}
-		if (other_stride) {
-			pixmap = priv->pixmap;
-			DBG(("%s: imported fd matches existing DRI3 pixmap=%ld\n", __FUNCTION__, pixmap->drawable.serialNumber));
-			bo->handle = 0; /* fudge to prevent gem_close */
-			kgem_bo_destroy(&sna->kgem, bo);
-			if (width != pixmap->drawable.width ||
-			    height != pixmap->drawable.height ||
-			    depth != pixmap->drawable.depth ||
-			    bpp != pixmap->drawable.bitsPerPixel ||
-			    stride != other_stride) {
-				DBG(("%s: imported fd mismatches existing DRI3 pixmap (width=%d, height=%d, depth=%d, bpp=%d, stride=%d)\n", __FUNCTION__,
-				     pixmap->drawable.width,
-				     pixmap->drawable.height,
-				     pixmap->drawable.depth,
-				     pixmap->drawable.bitsPerPixel,
-				     other_stride));
-				return NULL;
-			}
-			sna_sync_flush(sna, priv);
-			pixmap->refcnt++;
-			return pixmap;
-		}
-	}
+    /* Check for a duplicate */
+    list_for_each_entry(priv, &sna->dri3.pixmaps, cow_list)
+    {
+        int other_stride = 0;
+        if (bo->snoop)
+        {
+            assert(priv->cpu_bo);
+            assert(IS_STATIC_PTR(priv->ptr));
+            if (bo->handle == priv->cpu_bo->handle)
+                other_stride = priv->cpu_bo->pitch;
+        }
+        else
+        {
+            assert(priv->gpu_bo);
+            assert(priv->pinned & PIN_DRI3);
+            if (bo->handle == priv->gpu_bo->handle)
+                other_stride = priv->gpu_bo->pitch;
+        }
+        if (other_stride)
+        {
+            pixmap = priv->pixmap;
+            DBG(("%s: imported fd matches existing DRI3 pixmap=%ld\n",
+                 __FUNCTION__,
+                 pixmap->drawable.serialNumber));
+            bo->handle = 0; /* fudge to prevent gem_close */
+            kgem_bo_destroy(&sna->kgem, bo);
+            if (width != pixmap->drawable.width ||
+                height != pixmap->drawable.height ||
+                depth != pixmap->drawable.depth ||
+                bpp != pixmap->drawable.bitsPerPixel || stride != other_stride)
+            {
+                DBG(("%s: imported fd mismatches existing DRI3 pixmap "
+                     "(width=%d, height=%d, depth=%d, bpp=%d, stride=%d)\n",
+                     __FUNCTION__,
+                     pixmap->drawable.width,
+                     pixmap->drawable.height,
+                     pixmap->drawable.depth,
+                     pixmap->drawable.bitsPerPixel,
+                     other_stride));
+                return NULL;
+            }
+            sna_sync_flush(sna, priv);
+            pixmap->refcnt++;
+            return pixmap;
+        }
+    }
 
-	if (!kgem_check_surface_size(&sna->kgem,
-				     width, height, bpp,
-				     bo->tiling, stride, kgem_bo_size(bo))) {
-		DBG(("%s: client supplied pitch=%d, size=%d too small for %dx%d surface\n",
-		     __FUNCTION__, stride, kgem_bo_size(bo), width, height));
-		goto free_bo;
-	}
+    if (!kgem_check_surface_size(&sna->kgem,
+                                 width,
+                                 height,
+                                 bpp,
+                                 bo->tiling,
+                                 stride,
+                                 kgem_bo_size(bo)))
+    {
+        DBG(("%s: client supplied pitch=%d, size=%d too small for %dx%d "
+             "surface\n",
+             __FUNCTION__,
+             stride,
+             kgem_bo_size(bo),
+             width,
+             height));
+        goto free_bo;
+    }
 
-	pixmap = sna_pixmap_create_unattached(screen, 0, 0, depth);
-	if (pixmap == NullPixmap)
-		goto free_bo;
+    pixmap = sna_pixmap_create_unattached(screen, 0, 0, depth);
+    if (pixmap == NullPixmap) goto free_bo;
 
-	if (!screen->ModifyPixmapHeader(pixmap, width, height,
-					depth, bpp, stride, NULL))
-		goto free_pixmap;
+    if (!screen->ModifyPixmapHeader(pixmap,
+                                    width,
+                                    height,
+                                    depth,
+                                    bpp,
+                                    stride,
+                                    NULL))
+        goto free_pixmap;
 
-	priv = sna_pixmap_attach_to_bo(pixmap, bo);
-	if (priv == NULL)
-		goto free_pixmap;
+    priv = sna_pixmap_attach_to_bo(pixmap, bo);
+    if (priv == NULL) goto free_pixmap;
 
-	bo->pitch = stride;
-	priv->stride = stride;
+    bo->pitch    = stride;
+    priv->stride = stride;
 
-	if (bo->snoop) {
-		assert(priv->cpu_bo == bo);
-		pixmap->devPrivate.ptr = kgem_bo_map__cpu(&sna->kgem, priv->cpu_bo);
-		if (pixmap->devPrivate.ptr == NULL)
-			goto free_pixmap;
+    if (bo->snoop)
+    {
+        assert(priv->cpu_bo == bo);
+        pixmap->devPrivate.ptr = kgem_bo_map__cpu(&sna->kgem, priv->cpu_bo);
+        if (pixmap->devPrivate.ptr == NULL) goto free_pixmap;
 
-		pixmap->devKind = stride;
-		priv->ptr = MAKE_STATIC_PTR(pixmap->devPrivate.ptr);
-	} else {
-		assert(priv->gpu_bo == bo);
-		priv->create = kgem_can_create_2d(&sna->kgem,
-						  width, height, depth);
-		priv->pinned |= PIN_DRI3;
-	}
-	list_add(&priv->cow_list, &sna->dri3.pixmaps);
+        pixmap->devKind = stride;
+        priv->ptr       = MAKE_STATIC_PTR(pixmap->devPrivate.ptr);
+    }
+    else
+    {
+        assert(priv->gpu_bo == bo);
+        priv->create = kgem_can_create_2d(&sna->kgem, width, height, depth);
+        priv->pinned |= PIN_DRI3;
+    }
+    list_add(&priv->cow_list, &sna->dri3.pixmaps);
 
-	mark_dri3_pixmap(sna, priv, bo);
+    mark_dri3_pixmap(sna, priv, bo);
 
-	return pixmap;
+    return pixmap;
 
 free_pixmap:
-	screen->DestroyPixmap(pixmap);
+    screen->DestroyPixmap(pixmap);
 free_bo:
-	kgem_bo_destroy(&sna->kgem, bo);
-	return NULL;
+    kgem_bo_destroy(&sna->kgem, bo);
+    return NULL;
 }
 
-static int sna_dri3_fd_from_pixmap(ScreenPtr screen,
-				   PixmapPtr pixmap,
-				   CARD16 *stride,
-				   CARD32 *size)
+static int
+sna_dri3_fd_from_pixmap(ScreenPtr screen,
+                        PixmapPtr pixmap,
+                        CARD16   *stride,
+                        CARD32   *size)
 {
-	struct sna *sna = to_sna_from_screen(screen);
-	struct sna_pixmap *priv;
-	struct kgem_bo *bo = NULL;
-	int fd;
+    struct sna        *sna = to_sna_from_screen(screen);
+    struct sna_pixmap *priv;
+    struct kgem_bo    *bo = NULL;
+    int                fd;
 
-	DBG(("%s(pixmap=%ld, width=%d, height=%d)\n", __FUNCTION__,
-	     pixmap->drawable.serialNumber, pixmap->drawable.width, pixmap->drawable.height));
-	if (pixmap == sna->front && sna->flags & SNA_TEAR_FREE) {
-		DBG(("%s: DRI3 protocol cannot support TearFree frontbuffers\n", __FUNCTION__));
-		return -1;
-	}
+    DBG(("%s(pixmap=%ld, width=%d, height=%d)\n",
+         __FUNCTION__,
+         pixmap->drawable.serialNumber,
+         pixmap->drawable.width,
+         pixmap->drawable.height));
+    if (pixmap == sna->front && sna->flags & SNA_TEAR_FREE)
+    {
+        DBG(("%s: DRI3 protocol cannot support TearFree frontbuffers\n",
+             __FUNCTION__));
+        return -1;
+    }
 
-	priv = sna_pixmap(pixmap);
-	if (priv && IS_STATIC_PTR(priv->ptr) && priv->cpu_bo) {
-		if (sna_pixmap_move_to_cpu(pixmap, MOVE_READ | MOVE_WRITE | MOVE_ASYNC_HINT))
-			bo = priv->cpu_bo;
-	} else {
-		priv = sna_pixmap_move_to_gpu(pixmap, MOVE_READ | MOVE_WRITE | MOVE_ASYNC_HINT | __MOVE_FORCE | __MOVE_DRI);
-		if (priv != NULL) {
-			sna_damage_all(&priv->gpu_damage, pixmap);
-			bo = priv->gpu_bo;
-		}
-	}
-	if (bo == NULL) {
-		DBG(("%s: pixmap not supported by GPU\n", __FUNCTION__));
-		return -1;
-	}
-	assert(priv != NULL);
+    priv = sna_pixmap(pixmap);
+    if (priv && IS_STATIC_PTR(priv->ptr) && priv->cpu_bo)
+    {
+        if (sna_pixmap_move_to_cpu(pixmap,
+                                   MOVE_READ | MOVE_WRITE | MOVE_ASYNC_HINT))
+            bo = priv->cpu_bo;
+    }
+    else
+    {
+        priv = sna_pixmap_move_to_gpu(pixmap,
+                                      MOVE_READ | MOVE_WRITE | MOVE_ASYNC_HINT |
+                                          __MOVE_FORCE | __MOVE_DRI);
+        if (priv != NULL)
+        {
+            sna_damage_all(&priv->gpu_damage, pixmap);
+            bo = priv->gpu_bo;
+        }
+    }
+    if (bo == NULL)
+    {
+        DBG(("%s: pixmap not supported by GPU\n", __FUNCTION__));
+        return -1;
+    }
+    assert(priv != NULL);
 
-	if (bo->pitch > UINT16_MAX) {
-		DBG(("%s: pixmap pitch (%d) too large for DRI3 protocol\n",
-		     __FUNCTION__, bo->pitch));
-		return -1;
-	}
+    if (bo->pitch > UINT16_MAX)
+    {
+        DBG(("%s: pixmap pitch (%d) too large for DRI3 protocol\n",
+             __FUNCTION__,
+             bo->pitch));
+        return -1;
+    }
 
-	if (bo->tiling && !sna->kgem.can_fence) {
-		if (!sna_pixmap_change_tiling(pixmap, I915_TILING_NONE)) {
-			DBG(("%s: unable to discard GPU tiling (%d) for DRI3 protocol\n",
-			     __FUNCTION__, bo->tiling));
-			return -1;
-		}
-		bo = priv->gpu_bo;
-	}
+    if (bo->tiling && !sna->kgem.can_fence)
+    {
+        if (!sna_pixmap_change_tiling(pixmap, I915_TILING_NONE))
+        {
+            DBG(("%s: unable to discard GPU tiling (%d) for DRI3 protocol\n",
+                 __FUNCTION__,
+                 bo->tiling));
+            return -1;
+        }
+        bo = priv->gpu_bo;
+    }
 
-	fd = kgem_bo_export_to_prime(&sna->kgem, bo);
-	if (fd == -1) {
-		DBG(("%s: exporting handle=%d to fd failed\n", __FUNCTION__, bo->handle));
-		return -1;
-	}
+    fd = kgem_bo_export_to_prime(&sna->kgem, bo);
+    if (fd == -1)
+    {
+        DBG(("%s: exporting handle=%d to fd failed\n",
+             __FUNCTION__,
+             bo->handle));
+        return -1;
+    }
 
-	if (bo == priv->gpu_bo)
-		priv->pinned |= PIN_DRI3;
-	list_move(&priv->cow_list, &sna->dri3.pixmaps);
+    if (bo == priv->gpu_bo) priv->pinned |= PIN_DRI3;
+    list_move(&priv->cow_list, &sna->dri3.pixmaps);
 
-	mark_dri3_pixmap(sna, priv, bo);
+    mark_dri3_pixmap(sna, priv, bo);
 
-	*stride = (priv->pinned & PIN_DRI3) ? priv->gpu_bo->pitch : priv->cpu_bo->pitch;
-	*size = kgem_bo_size((priv->pinned & PIN_DRI3) ? priv->gpu_bo : priv->cpu_bo);
-	DBG(("%s: exporting %s pixmap=%ld, handle=%d, stride=%d, size=%d\n",
-	     __FUNCTION__,
-	     (priv->pinned & PIN_DRI3) ? "GPU" : "CPU", pixmap->drawable.serialNumber,
-	     (priv->pinned & PIN_DRI3) ? priv->gpu_bo->handle : priv->cpu_bo->handle,
-	     *stride, *size));
-	return fd;
+    *stride =
+        (priv->pinned & PIN_DRI3) ? priv->gpu_bo->pitch : priv->cpu_bo->pitch;
+    *size =
+        kgem_bo_size((priv->pinned & PIN_DRI3) ? priv->gpu_bo : priv->cpu_bo);
+    DBG(("%s: exporting %s pixmap=%ld, handle=%d, stride=%d, size=%d\n",
+         __FUNCTION__,
+         (priv->pinned & PIN_DRI3) ? "GPU" : "CPU",
+         pixmap->drawable.serialNumber,
+         (priv->pinned & PIN_DRI3) ? priv->gpu_bo->handle
+                                   : priv->cpu_bo->handle,
+         *stride,
+         *size));
+    return fd;
 }
 
 static dri3_screen_info_rec sna_dri3_info = {
-	.version = DRI3_SCREEN_INFO_VERSION,
+    .version = DRI3_SCREEN_INFO_VERSION,
 
-	.open = sna_dri3_open_device,
-	.pixmap_from_fd = sna_dri3_pixmap_from_fd,
-	.fd_from_pixmap = sna_dri3_fd_from_pixmap,
+    .open           = sna_dri3_open_device,
+    .pixmap_from_fd = sna_dri3_pixmap_from_fd,
+    .fd_from_pixmap = sna_dri3_fd_from_pixmap,
 };
 
-bool sna_dri3_open(struct sna *sna, ScreenPtr screen)
+bool
+sna_dri3_open(struct sna *sna, ScreenPtr screen)
 {
-	DBG(("%s()\n", __FUNCTION__));
+    DBG(("%s()\n", __FUNCTION__));
 
-	if (!sna_sync_open(sna, screen))
-		return false;
+    if (!sna_sync_open(sna, screen)) return false;
 
-	list_init(&sna->dri3.pixmaps);
-	return dri3_screen_init(screen, &sna_dri3_info);
+    list_init(&sna->dri3.pixmaps);
+    return dri3_screen_init(screen, &sna_dri3_info);
 }
 
-void sna_dri3_close(struct sna *sna, ScreenPtr screen)
+void
+sna_dri3_close(struct sna *sna, ScreenPtr screen)
 {
-	SyncScreenFuncsPtr funcs;
+    SyncScreenFuncsPtr funcs;
 
-	DBG(("%s()\n", __FUNCTION__));
+    DBG(("%s()\n", __FUNCTION__));
 
-	funcs = miSyncGetScreenFuncs(screen);
-	if (funcs)
-		funcs->CreateFence = sna->dri3.create_fence;
+    funcs = miSyncGetScreenFuncs(screen);
+    if (funcs) funcs->CreateFence = sna->dri3.create_fence;
 }

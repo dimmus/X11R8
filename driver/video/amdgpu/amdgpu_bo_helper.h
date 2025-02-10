@@ -25,9 +25,13 @@
 
 #include "amdgpu_drv.h"
 
-extern struct amdgpu_buffer *amdgpu_alloc_pixmap_bo(ScrnInfoPtr pScrn, int width,
-						     int height, int depth, int usage_hint,
-						     int bitsPerPixel, int *new_pitch);
+extern struct amdgpu_buffer *amdgpu_alloc_pixmap_bo(ScrnInfoPtr pScrn,
+                                                    int         width,
+                                                    int         height,
+                                                    int         depth,
+                                                    int         usage_hint,
+                                                    int         bitsPerPixel,
+                                                    int        *new_pitch);
 
 extern void amdgpu_pixmap_clear(PixmapPtr pixmap);
 
@@ -41,8 +45,7 @@ extern int amdgpu_bo_map(ScrnInfoPtr pScrn, struct amdgpu_buffer *bo);
 
 extern void amdgpu_bo_unmap(struct amdgpu_buffer *bo);
 
-extern Bool
-amdgpu_set_shared_pixmap_backing(PixmapPtr ppix, void *fd_handle);
+extern Bool amdgpu_set_shared_pixmap_backing(PixmapPtr ppix, void *fd_handle);
 
 /* helper function to allocate memory to be used for GPU operations
  *
@@ -55,9 +58,9 @@ amdgpu_set_shared_pixmap_backing(PixmapPtr ppix, void *fd_handle);
  *		NULL on failure
 */
 extern struct amdgpu_buffer *amdgpu_bo_open(amdgpu_device_handle pDev,
-					      uint32_t alloc_size,
-					      uint32_t phys_alignment,
-					      uint32_t domains);
+                                            uint32_t             alloc_size,
+                                            uint32_t             phys_alignment,
+                                            uint32_t             domains);
 
 /* helper function to add the ref_count of a amdgpu_buffer
  * \param	buffer	- \c [in] amdgpu_buffer
@@ -90,9 +93,9 @@ int amdgpu_query_bo_size(amdgpu_bo_handle buf_handle, uint32_t *size);
 		<0 - Negative POSIX error code
 */
 int amdgpu_query_heap_size(amdgpu_device_handle pDev,
-                            uint32_t heap,
-                            uint64_t *heap_size,
-                            uint64_t *max_allocation);
+                           uint32_t             heap,
+                           uint64_t            *heap_size,
+                           uint64_t            *max_allocation);
 
 /* helper function to convert a DMA buf handle to a KMS handle
  * \param	pDev		- \c [in] amdgpu device handle
@@ -103,8 +106,8 @@ int amdgpu_query_heap_size(amdgpu_device_handle pDev,
 		NULL on failure
 */
 struct amdgpu_buffer *amdgpu_gem_bo_open_prime(amdgpu_device_handle pDev,
-                                                 int fd_handle,
-                                                 uint32_t size);
+                                               int                  fd_handle,
+                                               uint32_t             size);
 
 /**
  * get_drawable_pixmap() returns the backing pixmap for a given drawable.
@@ -114,12 +117,11 @@ struct amdgpu_buffer *amdgpu_gem_bo_open_prime(amdgpu_device_handle pDev,
  * This function returns the backing pixmap for a drawable, whether it is a
  * redirected window, unredirected window, or already a pixmap.
  */
-static inline PixmapPtr get_drawable_pixmap(DrawablePtr drawable)
+static inline PixmapPtr
+get_drawable_pixmap(DrawablePtr drawable)
 {
-	if (drawable->type == DRAWABLE_PIXMAP)
-		return (PixmapPtr)drawable;
-	else
-		return drawable->pScreen->GetWindowPixmap((WindowPtr)drawable);
+    if (drawable->type == DRAWABLE_PIXMAP) return (PixmapPtr)drawable;
+    else return drawable->pScreen->GetWindowPixmap((WindowPtr)drawable);
 }
 
 #endif /* AMDGPU_BO_HELPER_H */

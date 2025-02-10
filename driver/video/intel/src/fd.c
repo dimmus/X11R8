@@ -25,7 +25,7 @@
  **************************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include "config_intel.h"
+#  include "config_intel.h"
 #endif
 
 #include <fcntl.h>
@@ -35,59 +35,60 @@
 
 #include "fd.h"
 
-int fd_move_cloexec(int fd)
+int
+fd_move_cloexec(int fd)
 {
-	int newfd;
+    int newfd;
 
-	newfd = fcntl(fd,
+    newfd = fcntl(fd,
 #ifdef F_DUPFD_CLOEXEC
-		      F_DUPFD_CLOEXEC,
+                  F_DUPFD_CLOEXEC,
 #else
-		      F_DUPFD,
+                  F_DUPFD,
 #endif
-		      MAXCLIENTS);
-	if (newfd < 0)
-		return fd;
+                  MAXCLIENTS);
+    if (newfd < 0) return fd;
 
 #ifndef F_DUPFD_CLOEXEC
-	newfd = fd_set_cloexec(newfd);
+    newfd = fd_set_cloexec(newfd);
 #endif
 
-	close(fd);
-	return newfd;
+    close(fd);
+    return newfd;
 }
 
-int fd_set_cloexec(int fd)
+int
+fd_set_cloexec(int fd)
 {
-	int flags;
+    int flags;
 
-	if (fd == -1)
-		return fd;
+    if (fd == -1) return fd;
 
 #ifdef FD_CLOEXEC
-	flags = fcntl(fd, F_GETFD);
-	if (flags != -1) {
-		flags |= FD_CLOEXEC;
-		fcntl(fd, F_SETFD, flags);
-	}
+    flags = fcntl(fd, F_GETFD);
+    if (flags != -1)
+    {
+        flags |= FD_CLOEXEC;
+        fcntl(fd, F_SETFD, flags);
+    }
 #endif
 
-	return fd;
+    return fd;
 }
 
-int fd_set_nonblock(int fd)
+int
+fd_set_nonblock(int fd)
 {
-	int flags;
+    int flags;
 
-	if (fd == -1)
-		return fd;
+    if (fd == -1) return fd;
 
-	flags = fcntl(fd, F_GETFL);
-	if (flags != -1) {
-		flags |= O_NONBLOCK;
-		fcntl(fd, F_SETFL, flags);
-	}
+    flags = fcntl(fd, F_GETFL);
+    if (flags != -1)
+    {
+        flags |= O_NONBLOCK;
+        fcntl(fd, F_SETFL, flags);
+    }
 
-	return fd;
+    return fd;
 }
-

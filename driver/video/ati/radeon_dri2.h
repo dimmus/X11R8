@@ -29,23 +29,31 @@
 
 #include <xorg-server.h>
 
-struct radeon_dri2 {
-    drmVersionPtr     pKernelDRMVersion;
-    Bool        available;
-    Bool        enabled;
-    char	*device_name;
+struct radeon_dri2
+{
+    drmVersionPtr pKernelDRMVersion;
+    Bool          available;
+    Bool          enabled;
+    char         *device_name;
 };
 
 #ifdef DRI2
 
-#include "dri2.h"
+#  include "dri2.h"
 Bool radeon_dri2_screen_init(ScreenPtr pScreen);
 void radeon_dri2_close_screen(ScreenPtr pScreen);
 
 #else
 
-static inline Bool radeon_dri2_screen_init(ScreenPtr pScreen) { return FALSE; }
-static inline void radeon_dri2_close_screen(ScreenPtr pScreen) {}
+static inline Bool
+radeon_dri2_screen_init(ScreenPtr pScreen)
+{
+    return FALSE;
+}
+
+static inline void
+radeon_dri2_close_screen(ScreenPtr pScreen)
+{}
 
 #endif
 

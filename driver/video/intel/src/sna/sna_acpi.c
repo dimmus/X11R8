@@ -26,7 +26,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config_intel.h"
+#  include "config_intel.h"
 #endif
 
 #include <sys/types.h>
@@ -39,192 +39,192 @@
 
 #include "sna.h"
 
-#define ACPI_SOCKET  "/var/run/acpid.socket"
+#define ACPI_SOCKET "/var/run/acpid.socket"
 
-int sna_acpi_open(void)
+int
+sna_acpi_open(void)
 {
-	struct sockaddr_un addr;
-	int fd, ret;
+    struct sockaddr_un addr;
+    int                fd, ret;
 
-	DBG(("%s\n", __FUNCTION__));
+    DBG(("%s\n", __FUNCTION__));
 
-	fd = socket(AF_UNIX, SOCK_STREAM, 0);
-	if (fd < 0)
-		return -1;
+    fd = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (fd < 0) return -1;
 
-	memset(&addr, 0, sizeof(addr));
-	addr.sun_family = AF_UNIX;
-	strcpy(addr.sun_path, ACPI_SOCKET);
+    memset(&addr, 0, sizeof(addr));
+    addr.sun_family = AF_UNIX;
+    strcpy(addr.sun_path, ACPI_SOCKET);
 
-	ret = connect(fd, (struct sockaddr *)&addr, sizeof(addr));
-	if (ret < 0) {
-		close(fd);
-		return -1;
-	}
+    ret = connect(fd, (struct sockaddr *)&addr, sizeof(addr));
+    if (ret < 0)
+    {
+        close(fd);
+        return -1;
+    }
 
-	DBG(("%s: opened socket to APCI daemon, fd=%d\n", __FUNCTION__, fd));
+    DBG(("%s: opened socket to APCI daemon, fd=%d\n", __FUNCTION__, fd));
 
-	return fd;
+    return fd;
 }
 
-void _sna_acpi_wakeup(struct sna *sna)
+void
+_sna_acpi_wakeup(struct sna *sna)
 {
-	char *eol;
-	int n;
+    char *eol;
+    int   n;
 
-	n = read(sna->acpi.fd,
-		 sna->acpi.event + sna->acpi.offset,
-		 sna->acpi.remain);
-	DBG(("%s: read %d bytes from acpid\n", __FUNCTION__, n));
-	if (n <= 0) {
-		/* We will get '0' if we run out of space whilst reading
+    n = read(sna->acpi.fd,
+             sna->acpi.event + sna->acpi.offset,
+             sna->acpi.remain);
+    DBG(("%s: read %d bytes from acpid\n", __FUNCTION__, n));
+    if (n <= 0)
+    {
+        /* We will get '0' if we run out of space whilst reading
 		 * one event - that should never happen, so treat it as
 		 * an error and give up.
 		 */
-		if (n < 0)
-			n = errno;
-		switch (n) {
-		case EAGAIN:
-		case EINTR:
-			return;
-		}
+        if (n < 0) n = errno;
+        switch (n)
+        {
+            case EAGAIN:
+            case EINTR:
+                return;
+        }
 
-		DBG(("%s: error [%d], detaching from acpid\n", __FUNCTION__, n));
+        DBG(("%s: error [%d], detaching from acpid\n", __FUNCTION__, n));
 
-		/* XXX reattach later? */
-		RemoveNotifyFd(sna->acpi.fd);
-		sna_acpi_fini(sna);
-		return;
-	}
+        /* XXX reattach later? */
+        RemoveNotifyFd(sna->acpi.fd);
+        sna_acpi_fini(sna);
+        return;
+    }
 
-	sna->acpi.event[sna->acpi.offset + n] = '\0';
-	sna->acpi.offset += n;
-	sna->acpi.remain -= n;
+    sna->acpi.event[sna->acpi.offset + n] = '\0';
+    sna->acpi.offset += n;
+    sna->acpi.remain -= n;
 
-	DBG(("%s: event string [%d]: '%s'\n", __FUNCTION__, sna->acpi.offset, sna->acpi.event));
+    DBG(("%s: event string [%d]: '%s'\n",
+         __FUNCTION__,
+         sna->acpi.offset,
+         sna->acpi.event));
 
-	do {
-		eol = strchr(sna->acpi.event, '\n');
-		if (eol == NULL)
-			return;
+    do
+    {
+        eol = strchr(sna->acpi.event, '\n');
+        if (eol == NULL) return;
 
-		if (strncmp(sna->acpi.event, "ac_adapter", 10) == 0) {
-			char *space = sna->acpi.event;
-			int state = -1;
+        if (strncmp(sna->acpi.event, "ac_adapter", 10) == 0)
+        {
+            char *space = sna->acpi.event;
+            int   state = -1;
 
-			/* ac_adapter ACAD 00000080 00000001 */
+            /* ac_adapter ACAD 00000080 00000001 */
 
-			space = strchr(space, ' ');
-			if (space)
-				space = strchr(space + 1, ' ');
-			if (space)
-				space = strchr(space + 1, ' ');
-			if (space)
-				state = atoi(space + 1);
+            space = strchr(space, ' ');
+            if (space) space = strchr(space + 1, ' ');
+            if (space) space = strchr(space + 1, ' ');
+            if (space) state = atoi(space + 1);
 
-			DBG(("%s: ac_adapter event new state=%d\n", __FUNCTION__, state));
-			if (state)
-				sna->flags &= ~SNA_POWERSAVE;
-			else
-				sna->flags |= SNA_POWERSAVE;
-		}
+            DBG(("%s: ac_adapter event new state=%d\n", __FUNCTION__, state));
+            if (state) sna->flags &= ~SNA_POWERSAVE;
+            else sna->flags |= SNA_POWERSAVE;
+        }
 
-		n = (sna->acpi.event + sna->acpi.offset) - ++eol;
-		memmove(sna->acpi.event, eol, n+1);
-		sna->acpi.offset = n;
-		sna->acpi.remain = sizeof(sna->acpi.event) - 1 - n;
-	} while (n);
+        n = (sna->acpi.event + sna->acpi.offset) - ++eol;
+        memmove(sna->acpi.event, eol, n + 1);
+        sna->acpi.offset = n;
+        sna->acpi.remain = sizeof(sna->acpi.event) - 1 - n;
+    }
+    while (n);
 }
 
 #if HAVE_NOTIFY_FD
-static void sna_acpi_notify(int fd, int read, void *data)
+static void
+sna_acpi_notify(int fd, int read, void *data)
 {
-	_sna_acpi_wakeup(data);
+    _sna_acpi_wakeup(data);
 }
 #endif
 
-static int read_power_state(const char *path)
+static int
+read_power_state(const char *path)
 {
-	DIR *dir;
-	struct dirent *de;
-	int i = -1;
+    DIR           *dir;
+    struct dirent *de;
+    int            i = -1;
 
-	DBG(("%s: searching '%s'\n", __FUNCTION__, path));
+    DBG(("%s: searching '%s'\n", __FUNCTION__, path));
 
-	dir = opendir(path);
-	if (dir == NULL)
-		return -1;
+    dir = opendir(path);
+    if (dir == NULL) return -1;
 
-	while ((de = readdir(dir))) {
-		char buf[1024];
-		int fd;
+    while ((de = readdir(dir)))
+    {
+        char buf[1024];
+        int  fd;
 
-		if (*de->d_name == '.')
-			continue;
+        if (*de->d_name == '.') continue;
 
-		DBG(("%s: checking '%s'\n", __FUNCTION__, de->d_name));
+        DBG(("%s: checking '%s'\n", __FUNCTION__, de->d_name));
 
-		snprintf(buf, sizeof(buf), "%s/%s/type", path, de->d_name);
-		fd = open(buf, 0);
-		if (fd < 0)
-			continue;
+        snprintf(buf, sizeof(buf), "%s/%s/type", path, de->d_name);
+        fd = open(buf, 0);
+        if (fd < 0) continue;
 
-		i = read(fd, buf, sizeof(buf));
-		buf[i > 0 ? i - 1: 0] = '\0';
-		close(fd);
+        i                      = read(fd, buf, sizeof(buf));
+        buf[i > 0 ? i - 1 : 0] = '\0';
+        close(fd);
 
-		DBG(("%s: %s is of type '%s'\n", __FUNCTION__, de->d_name, buf));
+        DBG(("%s: %s is of type '%s'\n", __FUNCTION__, de->d_name, buf));
 
-		if (strcmp(buf, "Mains"))
-			continue;
+        if (strcmp(buf, "Mains")) continue;
 
-		snprintf(buf, sizeof(buf), "%s/%s/online", path, de->d_name);
-		fd = open(buf, 0);
-		if (fd < 0)
-			continue;
+        snprintf(buf, sizeof(buf), "%s/%s/online", path, de->d_name);
+        fd = open(buf, 0);
+        if (fd < 0) continue;
 
-		i = read(fd, buf, sizeof(buf));
-		buf[i > 0 ? i - 1: 0] = '\0';
-		if (i > 0)
-			i = atoi(buf);
-		DBG(("%s: %s is online? '%s'\n", __FUNCTION__, de->d_name, buf));
-		close(fd);
+        i                      = read(fd, buf, sizeof(buf));
+        buf[i > 0 ? i - 1 : 0] = '\0';
+        if (i > 0) i = atoi(buf);
+        DBG(("%s: %s is online? '%s'\n", __FUNCTION__, de->d_name, buf));
+        close(fd);
 
-		break;
-	}
-	closedir(dir);
+        break;
+    }
+    closedir(dir);
 
-	return i;
+    return i;
 }
 
-void sna_acpi_init(struct sna *sna)
+void
+sna_acpi_init(struct sna *sna)
 {
-	if (sna->acpi.fd < 0)
-		return;
+    if (sna->acpi.fd < 0) return;
 
-	if (sna->flags & SNA_PERFORMANCE)
-		return;
+    if (sna->flags & SNA_PERFORMANCE) return;
 
-	DBG(("%s: attaching to acpid\n", __FUNCTION__));
+    DBG(("%s: attaching to acpid\n", __FUNCTION__));
 
-	SetNotifyFd(sna->acpi.fd, sna_acpi_notify, X_NOTIFY_READ, sna);
-	sna->acpi.remain = sizeof(sna->acpi.event) - 1;
-	sna->acpi.offset = 0;
+    SetNotifyFd(sna->acpi.fd, sna_acpi_notify, X_NOTIFY_READ, sna);
+    sna->acpi.remain = sizeof(sna->acpi.event) - 1;
+    sna->acpi.offset = 0;
 
-	/* Read initial states */
-	if (read_power_state("/sys/class/power_supply") == 0) {
-		DBG(("%s: AC adapter is currently offline\n", __FUNCTION__));
-		sna->flags |= SNA_POWERSAVE;
-	}
+    /* Read initial states */
+    if (read_power_state("/sys/class/power_supply") == 0)
+    {
+        DBG(("%s: AC adapter is currently offline\n", __FUNCTION__));
+        sna->flags |= SNA_POWERSAVE;
+    }
 }
 
-void sna_acpi_fini(struct sna *sna)
+void
+sna_acpi_fini(struct sna *sna)
 {
-	if (sna->acpi.fd < 0)
-		return;
+    if (sna->acpi.fd < 0) return;
 
-	close(sna->acpi.fd);
-	sna->acpi.fd = -1;
+    close(sna->acpi.fd);
+    sna->acpi.fd = -1;
 
-	sna->flags &= ~SNA_POWERSAVE;
+    sna->flags &= ~SNA_POWERSAVE;
 }

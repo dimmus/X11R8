@@ -31,39 +31,55 @@
 #include <assert.h>
 
 #ifndef NDEBUG
-#include <os.h>
-#include "compiler.h"
+#  include <os.h>
+#  include "compiler.h"
 
-#if XORG_VERSION_CURRENT < XORG_VERSION_NUMERIC(1,6,0,0,0)
-#define xorg_backtrace()
-#endif
+#  if XORG_VERSION_CURRENT < XORG_VERSION_NUMERIC(1, 6, 0, 0, 0)
+#    define xorg_backtrace()
+#  endif
 
-#undef assert
-#define assert(E) do if (unlikely(!(E))) { \
-	xorg_backtrace(); \
-	FatalError("%s:%d assertion '%s' failed\n", __func__, __LINE__, #E); \
-} while (0)
+#  undef assert
+#  define assert(E)                                       \
+      do                                                  \
+          if (unlikely(!(E)))                             \
+          {                                               \
+              xorg_backtrace();                           \
+              FatalError("%s:%d assertion '%s' failed\n", \
+                         __func__,                        \
+                         __LINE__,                        \
+                         #E);                             \
+          }                                               \
+      while (0)
 
-#define warn_unless(E) \
-({ \
-	bool fail = !(E); \
-	if (unlikely(fail)) { \
-		static int __warn_once__; \
-		if (!__warn_once__) { \
-			xorg_backtrace(); \
-			ErrorF("%s:%d assertion '%s' failed\n", __func__, __LINE__, #E); \
-			__warn_once__ = 1; \
-		} \
-	} \
-	unlikely(fail); \
-})
+#  define warn_unless(E)                                \
+      ({                                                \
+        bool fail = !(E);                               \
+        if (unlikely(fail))                             \
+        {                                               \
+            static int __warn_once__;                   \
+            if (!__warn_once__)                         \
+            {                                           \
+                xorg_backtrace();                       \
+                ErrorF("%s:%d assertion '%s' failed\n", \
+                       __func__,                        \
+                       __LINE__,                        \
+                       #E);                             \
+                __warn_once__ = 1;                      \
+            }                                           \
+        }                                               \
+        unlikely(fail);                                 \
+      })
 
-#define dbg(EXPR) EXPR
+#  define dbg(EXPR) EXPR
 
 #else
 
-#define warn_unless(E) ({ bool fail = !(E); unlikely(fail); })
-#define dbg(EXPR)
+#  define warn_unless(E)  \
+      ({                  \
+        bool fail = !(E); \
+        unlikely(fail);   \
+      })
+#  define dbg(EXPR)
 
 #endif
 

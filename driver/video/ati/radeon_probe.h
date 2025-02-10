@@ -45,7 +45,7 @@
 #include "xf86Crtc.h"
 
 #ifdef XSERVER_PLATFORM_BUS
-#include "xf86platformBus.h"
+#  include "xf86platformBus.h"
 #endif
 
 #include "compat-api.h"
@@ -53,36 +53,37 @@
 
 extern DriverRec RADEON;
 
-typedef enum {
+typedef enum
+{
     CHIP_FAMILY_UNKNOW,
     CHIP_FAMILY_LEGACY,
     CHIP_FAMILY_RADEON,
     CHIP_FAMILY_RV100,
     CHIP_FAMILY_RS100,    /* U1 (IGP320M) or A3 (IGP320)*/
     CHIP_FAMILY_RV200,
-    CHIP_FAMILY_RS200,    /* U2 (IGP330M/340M/350M) or A4 (IGP330/340/345/350), RS250 (IGP 7000) */
+    CHIP_FAMILY_RS200, /* U2 (IGP330M/340M/350M) or A4 (IGP330/340/345/350), RS250 (IGP 7000) */
     CHIP_FAMILY_R200,
     CHIP_FAMILY_RV250,
-    CHIP_FAMILY_RS300,    /* RS300/RS350 */
+    CHIP_FAMILY_RS300, /* RS300/RS350 */
     CHIP_FAMILY_RV280,
     CHIP_FAMILY_R300,
     CHIP_FAMILY_R350,
     CHIP_FAMILY_RV350,
-    CHIP_FAMILY_RV380,    /* RV370/RV380/M22/M24 */
-    CHIP_FAMILY_R420,     /* R420/R423/M18 */
-    CHIP_FAMILY_RV410,    /* RV410, M26 */
-    CHIP_FAMILY_RS400,    /* xpress 200, 200m (RS400) Intel */
-    CHIP_FAMILY_RS480,    /* xpress 200, 200m (RS410/480/482/485) AMD */
-    CHIP_FAMILY_RV515,    /* rv515 */
-    CHIP_FAMILY_R520,    /* r520 */
-    CHIP_FAMILY_RV530,    /* rv530 */
-    CHIP_FAMILY_R580,    /* r580 */
-    CHIP_FAMILY_RV560,   /* rv560 */
-    CHIP_FAMILY_RV570,   /* rv570 */
+    CHIP_FAMILY_RV380, /* RV370/RV380/M22/M24 */
+    CHIP_FAMILY_R420, /* R420/R423/M18 */
+    CHIP_FAMILY_RV410, /* RV410, M26 */
+    CHIP_FAMILY_RS400, /* xpress 200, 200m (RS400) Intel */
+    CHIP_FAMILY_RS480, /* xpress 200, 200m (RS410/480/482/485) AMD */
+    CHIP_FAMILY_RV515, /* rv515 */
+    CHIP_FAMILY_R520, /* r520 */
+    CHIP_FAMILY_RV530, /* rv530 */
+    CHIP_FAMILY_R580, /* r580 */
+    CHIP_FAMILY_RV560, /* rv560 */
+    CHIP_FAMILY_RV570, /* rv570 */
     CHIP_FAMILY_RS600,
     CHIP_FAMILY_RS690,
     CHIP_FAMILY_RS740,
-    CHIP_FAMILY_R600,    /* r600 */
+    CHIP_FAMILY_R600, /* r600 */
     CHIP_FAMILY_RV610,
     CHIP_FAMILY_RV630,
     CHIP_FAMILY_RV670,
@@ -90,11 +91,11 @@ typedef enum {
     CHIP_FAMILY_RV635,
     CHIP_FAMILY_RS780,
     CHIP_FAMILY_RS880,
-    CHIP_FAMILY_RV770,   /* r700 */
+    CHIP_FAMILY_RV770, /* r700 */
     CHIP_FAMILY_RV730,
     CHIP_FAMILY_RV710,
     CHIP_FAMILY_RV740,
-    CHIP_FAMILY_CEDAR,   /* evergreen */
+    CHIP_FAMILY_CEDAR, /* evergreen */
     CHIP_FAMILY_REDWOOD,
     CHIP_FAMILY_JUNIPER,
     CHIP_FAMILY_CYPRESS,
@@ -120,28 +121,30 @@ typedef enum {
     CHIP_FAMILY_LAST
 } RADEONChipFamily;
 
-typedef struct {
-    uint32_t pci_device_id;
+typedef struct
+{
+    uint32_t         pci_device_id;
     RADEONChipFamily chip_family;
-    int mobility;
-    int igp;
-    int nocrtc2;
-    int nointtvout;
-    int singledac;
+    int              mobility;
+    int              igp;
+    int              nocrtc2;
+    int              nointtvout;
+    int              singledac;
 } RADEONCardInfo;
 
 typedef struct
 {
-    Bool              HasCRTC2;         /* All cards except original Radeon  */
+    Bool HasCRTC2; /* All cards except original Radeon  */
     Bool has_page_flip_target;
 
-    int fd;                             /* for sharing across zaphod heads   */
+    int fd; /* for sharing across zaphod heads   */
     int fd_ref;
-    unsigned long     fd_wakeup_registered; /* server generation for which fd has been registered for wakeup handling */
-    int fd_wakeup_ref;
+    unsigned long
+        fd_wakeup_registered; /* server generation for which fd has been registered for wakeup handling */
+    int          fd_wakeup_ref;
     unsigned int assigned_crtcs;
     unsigned int num_scrns;
-    ScrnInfoPtr scrn[6];
+    ScrnInfoPtr  scrn[6];
 #ifdef XSERVER_PLATFORM_BUS
     struct xf86_platform_device *platform_dev;
 #endif
@@ -150,14 +153,14 @@ typedef struct
 
 extern const OptionInfoRec *RADEONOptionsWeak(void);
 
-extern Bool                 RADEONPreInit_KMS(ScrnInfoPtr, int);
-extern Bool                 RADEONScreenInit_KMS(ScreenPtr pScreen, int argc, char **argv);
-extern Bool                 RADEONSwitchMode_KMS(ScrnInfoPtr pScrn, DisplayModePtr mode);
-extern void                 RADEONAdjustFrame_KMS(ScrnInfoPtr pScrn, int x, int y);
-extern Bool                 RADEONEnterVT_KMS(ScrnInfoPtr pScrn);
-extern void                 RADEONLeaveVT_KMS(ScrnInfoPtr pScrn);
-extern void                 RADEONFreeScreen_KMS(ScrnInfoPtr pScrn);
+extern Bool RADEONPreInit_KMS(ScrnInfoPtr, int);
+extern Bool RADEONScreenInit_KMS(ScreenPtr pScreen, int argc, char **argv);
+extern Bool RADEONSwitchMode_KMS(ScrnInfoPtr pScrn, DisplayModePtr mode);
+extern void RADEONAdjustFrame_KMS(ScrnInfoPtr pScrn, int x, int y);
+extern Bool RADEONEnterVT_KMS(ScrnInfoPtr pScrn);
+extern void RADEONLeaveVT_KMS(ScrnInfoPtr pScrn);
+extern void RADEONFreeScreen_KMS(ScrnInfoPtr pScrn);
 
-extern ModeStatus           RADEONValidMode(ScrnInfoPtr pScrn, DisplayModePtr mode,
-					    Bool verbose, int flag);
+extern ModeStatus
+RADEONValidMode(ScrnInfoPtr pScrn, DisplayModePtr mode, Bool verbose, int flag);
 #endif /* _RADEON_PROBE_H_ */

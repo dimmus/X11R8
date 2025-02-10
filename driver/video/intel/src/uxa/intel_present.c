@@ -21,7 +21,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config_intel.h"
+#  include "config_intel.h"
 #endif
 
 #include <stdio.h>
@@ -54,63 +54,60 @@
 
 #include "present.h"
 
-struct intel_present_vblank_event {
-	uint64_t        event_id;
+struct intel_present_vblank_event
+{
+    uint64_t event_id;
 };
 
-static uint32_t crtc_select(int index)
+static uint32_t
+crtc_select(int index)
 {
-	if (index > 1)
-		return index << DRM_VBLANK_HIGH_CRTC_SHIFT;
-	else if (index > 0)
-		return DRM_VBLANK_SECONDARY;
-	else
-		return 0;
+    if (index > 1) return index << DRM_VBLANK_HIGH_CRTC_SHIFT;
+    else if (index > 0) return DRM_VBLANK_SECONDARY;
+    else return 0;
 }
 
 static RRCrtcPtr
 intel_present_get_crtc(WindowPtr window)
 {
-	ScreenPtr screen = window->drawable.pScreen;
-	ScrnInfoPtr pScrn = xf86ScreenToScrn(screen);
-	BoxRec box, crtcbox;
-	xf86CrtcPtr crtc;
-	RRCrtcPtr randr_crtc = NULL;
+    ScreenPtr   screen = window->drawable.pScreen;
+    ScrnInfoPtr pScrn  = xf86ScreenToScrn(screen);
+    BoxRec      box, crtcbox;
+    xf86CrtcPtr crtc;
+    RRCrtcPtr   randr_crtc = NULL;
 
-	box.x1 = window->drawable.x;
-	box.y1 = window->drawable.y;
-	box.x2 = box.x1 + window->drawable.width;
-	box.y2 = box.y1 + window->drawable.height;
+    box.x1 = window->drawable.x;
+    box.y1 = window->drawable.y;
+    box.x2 = box.x1 + window->drawable.width;
+    box.y2 = box.y1 + window->drawable.height;
 
-	crtc = intel_covering_crtc(pScrn, &box, NULL, &crtcbox);
+    crtc = intel_covering_crtc(pScrn, &box, NULL, &crtcbox);
 
-	/* Make sure the CRTC is valid and this is the real front buffer */
-	if (crtc != NULL && !crtc->rotatedData)
-		randr_crtc = crtc->randr_crtc;
+    /* Make sure the CRTC is valid and this is the real front buffer */
+    if (crtc != NULL && !crtc->rotatedData) randr_crtc = crtc->randr_crtc;
 
-	return randr_crtc;
+    return randr_crtc;
 }
 
 static int
 intel_present_crtc_index(ScreenPtr screen, RRCrtcPtr randr_crtc)
 {
-	xf86CrtcPtr crtc;
+    xf86CrtcPtr crtc;
 
-	if (randr_crtc == NULL)
-		return 0;
+    if (randr_crtc == NULL) return 0;
 
-	crtc = randr_crtc->devPrivate;
-	return intel_crtc_to_index(crtc);
+    crtc = randr_crtc->devPrivate;
+    return intel_crtc_to_index(crtc);
 }
 
 static int
 intel_present_get_ust_msc(RRCrtcPtr crtc, CARD64 *ust, CARD64 *msc)
 {
-	xf86CrtcPtr             xf86_crtc = crtc->devPrivate;
-	ScreenPtr               screen = crtc->pScreen;
-	ScrnInfoPtr             scrn = xf86ScreenToScrn(screen);
+    xf86CrtcPtr xf86_crtc = crtc->devPrivate;
+    ScreenPtr   screen    = crtc->pScreen;
+    ScrnInfoPtr scrn      = xf86ScreenToScrn(screen);
 
-	return intel_get_crtc_msc_ust(scrn, xf86_crtc, msc, ust);
+    return intel_get_crtc_msc_ust(scrn, xf86_crtc, msc, ust);
 }
 
 /*
@@ -120,22 +117,26 @@ intel_present_get_ust_msc(RRCrtcPtr crtc, CARD64 *ust, CARD64 *msc)
 static Bool
 intel_present_flush_drm_events(ScreenPtr screen)
 {
-	ScrnInfoPtr             scrn = xf86ScreenToScrn(screen);
-	intel_screen_private    *intel = intel_get_screen_private(scrn);
+    ScrnInfoPtr           scrn  = xf86ScreenToScrn(screen);
+    intel_screen_private *intel = intel_get_screen_private(scrn);
 
-	return intel_mode_read_drm_events(intel) >= 0;
+    return intel_mode_read_drm_events(intel) >= 0;
 }
 
 /*
  * Called when the queued vblank event has occurred
  */
 static void
-intel_present_vblank_handler(ScrnInfoPtr scrn, xf86CrtcPtr crtc, uint64_t msc, uint64_t usec, void *data)
+intel_present_vblank_handler(ScrnInfoPtr scrn,
+                             xf86CrtcPtr crtc,
+                             uint64_t    msc,
+                             uint64_t    usec,
+                             void       *data)
 {
-	struct intel_present_vblank_event       *event = data;
+    struct intel_present_vblank_event *event = data;
 
-	present_event_notify(event->event_id, usec, msc);
-	free(event);
+    present_event_notify(event->event_id, usec, msc);
+    free(event);
 }
 
 /*
@@ -144,9 +145,9 @@ intel_present_vblank_handler(ScrnInfoPtr scrn, xf86CrtcPtr crtc, uint64_t msc, u
 static void
 intel_present_vblank_abort(ScrnInfoPtr scrn, xf86CrtcPtr crtc, void *data)
 {
-	struct intel_present_vblank_event       *event = data;
+    struct intel_present_vblank_event *event = data;
 
-	free(event);
+    free(event);
 }
 
 /*
@@ -154,54 +155,58 @@ intel_present_vblank_abort(ScrnInfoPtr scrn, xf86CrtcPtr crtc, void *data)
  * MSC has past
  */
 static int
-intel_present_queue_vblank(RRCrtcPtr                    crtc,
-                           uint64_t                     event_id,
-                           uint64_t                     msc)
+intel_present_queue_vblank(RRCrtcPtr crtc, uint64_t event_id, uint64_t msc)
 {
-	xf86CrtcPtr                             xf86_crtc = crtc->devPrivate;
-	ScreenPtr                               screen = crtc->pScreen;
-	ScrnInfoPtr                             scrn = xf86ScreenToScrn(screen);
-	intel_screen_private                    *intel = intel_get_screen_private(scrn);
-	int                                     index = intel_present_crtc_index(screen, crtc);
-	struct intel_present_vblank_event       *event;
-	drmVBlank                               vbl;
-	int                                     ret;
-	uint32_t                                seq;
+    xf86CrtcPtr           xf86_crtc = crtc->devPrivate;
+    ScreenPtr             screen    = crtc->pScreen;
+    ScrnInfoPtr           scrn      = xf86ScreenToScrn(screen);
+    intel_screen_private *intel     = intel_get_screen_private(scrn);
+    int                   index     = intel_present_crtc_index(screen, crtc);
+    struct intel_present_vblank_event *event;
+    drmVBlank                          vbl;
+    int                                ret;
+    uint32_t                           seq;
 
-	event = calloc(sizeof(struct intel_present_vblank_event), 1);
-	if (!event)
-		return BadAlloc;
-	event->event_id = event_id;
-	seq = intel_drm_queue_alloc(scrn, xf86_crtc, event,
-				    intel_present_vblank_handler,
-				    intel_present_vblank_abort);
-	if (!seq) {
-		free(event);
-		return BadAlloc;
-	}
+    event = calloc(sizeof(struct intel_present_vblank_event), 1);
+    if (!event) return BadAlloc;
+    event->event_id = event_id;
+    seq             = intel_drm_queue_alloc(scrn,
+                                xf86_crtc,
+                                event,
+                                intel_present_vblank_handler,
+                                intel_present_vblank_abort);
+    if (!seq)
+    {
+        free(event);
+        return BadAlloc;
+    }
 
-	vbl.request.type = DRM_VBLANK_ABSOLUTE | DRM_VBLANK_EVENT | crtc_select(index);
-	vbl.request.sequence = intel_crtc_msc_to_sequence(scrn, xf86_crtc, msc);
-	vbl.request.signal = seq;
-	for (;;) {
-		ret = drmWaitVBlank(intel->drmSubFD, &vbl);
-		if (!ret)
-			break;
-		if (errno != EBUSY || !intel_present_flush_drm_events(screen))
-			return BadAlloc;
-	}
-	DebugPresent(("\t\tiq %lld seq %u msc %llu (hw msc %u)\n",
-                      (long long) event_id, seq, (long long) msc, vbl.request.sequence));
-	return Success;
+    vbl.request.type =
+        DRM_VBLANK_ABSOLUTE | DRM_VBLANK_EVENT | crtc_select(index);
+    vbl.request.sequence = intel_crtc_msc_to_sequence(scrn, xf86_crtc, msc);
+    vbl.request.signal   = seq;
+    for (;;)
+    {
+        ret = drmWaitVBlank(intel->drmSubFD, &vbl);
+        if (!ret) break;
+        if (errno != EBUSY || !intel_present_flush_drm_events(screen))
+            return BadAlloc;
+    }
+    DebugPresent(("\t\tiq %lld seq %u msc %llu (hw msc %u)\n",
+                  (long long)event_id,
+                  seq,
+                  (long long)msc,
+                  vbl.request.sequence));
+    return Success;
 }
 
 static Bool
 intel_present_event_match(void *data, void *match_data)
 {
-	struct intel_present_vblank_event       *event = data;
-	uint64_t                                *match = match_data;
+    struct intel_present_vblank_event *event = data;
+    uint64_t                          *match = match_data;
 
-	return *match == event->event_id;
+    return *match == event->event_id;
 }
 
 /*
@@ -211,10 +216,10 @@ intel_present_event_match(void *data, void *match_data)
 static void
 intel_present_abort_vblank(RRCrtcPtr crtc, uint64_t event_id, uint64_t msc)
 {
-	ScreenPtr       screen = crtc->pScreen;
-	ScrnInfoPtr     scrn = xf86ScreenToScrn(screen);
+    ScreenPtr   screen = crtc->pScreen;
+    ScrnInfoPtr scrn   = xf86ScreenToScrn(screen);
 
-	intel_drm_abort(scrn, intel_present_event_match, &event_id);
+    intel_drm_abort(scrn, intel_present_event_match, &event_id);
 }
 
 /*
@@ -223,57 +228,48 @@ intel_present_abort_vblank(RRCrtcPtr crtc, uint64_t event_id, uint64_t msc)
 static void
 intel_present_flush(WindowPtr window)
 {
-	ScreenPtr                               screen = window->drawable.pScreen;
-	ScrnInfoPtr                             scrn = xf86ScreenToScrn(screen);
-	intel_screen_private                    *intel = intel_get_screen_private(scrn);
+    ScreenPtr             screen = window->drawable.pScreen;
+    ScrnInfoPtr           scrn   = xf86ScreenToScrn(screen);
+    intel_screen_private *intel  = intel_get_screen_private(scrn);
 
-	if (intel->flush_rendering)
-		intel->flush_rendering(intel);
+    if (intel->flush_rendering) intel->flush_rendering(intel);
 }
 
 /*
  * Test to see if page flipping is possible on the target crtc
  */
 static Bool
-intel_present_check_flip(RRCrtcPtr              crtc,
-                         WindowPtr              window,
-                         PixmapPtr              pixmap,
-                         Bool                   sync_flip)
+intel_present_check_flip(RRCrtcPtr crtc,
+                         WindowPtr window,
+                         PixmapPtr pixmap,
+                         Bool      sync_flip)
 {
-	ScreenPtr               screen = window->drawable.pScreen;
-	ScrnInfoPtr             scrn = xf86ScreenToScrn(screen);
-	intel_screen_private    *intel = intel_get_screen_private(scrn);
-        dri_bo                  *bo;
-	uint32_t		tiling, swizzle;
+    ScreenPtr             screen = window->drawable.pScreen;
+    ScrnInfoPtr           scrn   = xf86ScreenToScrn(screen);
+    intel_screen_private *intel  = intel_get_screen_private(scrn);
+    dri_bo               *bo;
+    uint32_t              tiling, swizzle;
 
-	if (!scrn->vtSema)
-		return FALSE;
+    if (!scrn->vtSema) return FALSE;
 
-	if (intel->shadow_present)
-		return FALSE;
+    if (intel->shadow_present) return FALSE;
 
-	if (!intel->use_pageflipping)
-		return FALSE;
+    if (!intel->use_pageflipping) return FALSE;
 
-	if (crtc && !intel_crtc_on(crtc->devPrivate))
-		return FALSE;
+    if (crtc && !intel_crtc_on(crtc->devPrivate)) return FALSE;
 
         /* Check stride, can't change that on flip */
-        if (pixmap->devKind != intel->front_pitch)
-                return FALSE;
+    if (pixmap->devKind != intel->front_pitch) return FALSE;
 
         /* Make sure there's a bo we can get to */
-        bo = intel_get_pixmap_bo(pixmap);
-        if (!bo)
-                return FALSE;
+    bo = intel_get_pixmap_bo(pixmap);
+    if (!bo) return FALSE;
 
-	if (drm_intel_bo_get_tiling(bo, &tiling, &swizzle))
-		return FALSE;
+    if (drm_intel_bo_get_tiling(bo, &tiling, &swizzle)) return FALSE;
 
-	if (tiling == I915_TILING_Y)
-		return FALSE;
+    if (tiling == I915_TILING_Y) return FALSE;
 
-	return TRUE;
+    return TRUE;
 }
 
 /*
@@ -283,10 +279,10 @@ intel_present_check_flip(RRCrtcPtr              crtc,
 static void
 intel_present_flip_event(uint64_t msc, uint64_t ust, void *pageflip_data)
 {
-	struct intel_present_vblank_event *event = pageflip_data;
+    struct intel_present_vblank_event *event = pageflip_data;
 
-	present_event_notify(event->event_id, ust, msc);
-	free(event);
+    present_event_notify(event->event_id, ust, msc);
+    free(event);
 }
 
 /*
@@ -295,9 +291,9 @@ intel_present_flip_event(uint64_t msc, uint64_t ust, void *pageflip_data)
 static void
 intel_present_flip_abort(void *pageflip_data)
 {
-	struct intel_present_vblank_event *event = pageflip_data;
+    struct intel_present_vblank_event *event = pageflip_data;
 
-	free(event);
+    free(event);
 }
 
 /*
@@ -305,41 +301,40 @@ intel_present_flip_abort(void *pageflip_data)
  * then wait for vblank. Otherwise, flip immediately
  */
 static Bool
-intel_present_flip(RRCrtcPtr                    crtc,
-                   uint64_t                     event_id,
-                   uint64_t                     target_msc,
-                   PixmapPtr                    pixmap,
-                   Bool                         sync_flip)
+intel_present_flip(RRCrtcPtr crtc,
+                   uint64_t  event_id,
+                   uint64_t  target_msc,
+                   PixmapPtr pixmap,
+                   Bool      sync_flip)
 {
-	ScreenPtr                               screen = crtc->pScreen;
-	ScrnInfoPtr                             scrn = xf86ScreenToScrn(screen);
-	intel_screen_private                    *intel = intel_get_screen_private(scrn);
-	struct intel_present_vblank_event       *event;
-	int                                     index = intel_present_crtc_index(screen, crtc);
-	dri_bo                                  *bo;
-	Bool                                    ret;
+    ScreenPtr                          screen = crtc->pScreen;
+    ScrnInfoPtr                        scrn   = xf86ScreenToScrn(screen);
+    intel_screen_private              *intel  = intel_get_screen_private(scrn);
+    struct intel_present_vblank_event *event;
+    int     index = intel_present_crtc_index(screen, crtc);
+    dri_bo *bo;
+    Bool    ret;
 
-	if (!intel_present_check_flip(crtc, screen->root, pixmap, sync_flip))
-		return FALSE;
+    if (!intel_present_check_flip(crtc, screen->root, pixmap, sync_flip))
+        return FALSE;
 
-	bo = intel_get_pixmap_bo(pixmap);
-	if (!bo)
-		return FALSE;
+    bo = intel_get_pixmap_bo(pixmap);
+    if (!bo) return FALSE;
 
-	event = calloc(1, sizeof(struct intel_present_vblank_event));
-	if (!event)
-		return FALSE;
+    event = calloc(1, sizeof(struct intel_present_vblank_event));
+    if (!event) return FALSE;
 
-	event->event_id = event_id;
+    event->event_id = event_id;
 
-	ret = intel_do_pageflip(intel, bo, index, !sync_flip,
-				event,
-				intel_present_flip_event,
-				intel_present_flip_abort);
-	if (!ret)
-		xf86DrvMsg(scrn->scrnIndex, X_ERROR,
-			   "present flip failed\n");
-	return ret;
+    ret = intel_do_pageflip(intel,
+                            bo,
+                            index,
+                            !sync_flip,
+                            event,
+                            intel_present_flip_event,
+                            intel_present_flip_abort);
+    if (!ret) xf86DrvMsg(scrn->scrnIndex, X_ERROR, "present flip failed\n");
+    return ret;
 }
 
 /*
@@ -348,73 +343,73 @@ intel_present_flip(RRCrtcPtr                    crtc,
 static void
 intel_present_unflip(ScreenPtr screen, uint64_t event_id)
 {
-	ScrnInfoPtr                             scrn = xf86ScreenToScrn(screen);
-	intel_screen_private                    *intel = intel_get_screen_private(scrn);
-	PixmapPtr                               pixmap = screen->GetScreenPixmap(screen);
-	struct intel_present_vblank_event       *event = NULL;
-	dri_bo                                  *bo;
+    ScrnInfoPtr                        scrn   = xf86ScreenToScrn(screen);
+    intel_screen_private              *intel  = intel_get_screen_private(scrn);
+    PixmapPtr                          pixmap = screen->GetScreenPixmap(screen);
+    struct intel_present_vblank_event *event  = NULL;
+    dri_bo                            *bo;
 
-	if (!intel_present_check_flip(NULL, screen->root, pixmap, true))
-		goto fail;
+    if (!intel_present_check_flip(NULL, screen->root, pixmap, true)) goto fail;
 
-	bo = intel_get_pixmap_bo(pixmap);
-	if (!bo)
-		goto fail;
+    bo = intel_get_pixmap_bo(pixmap);
+    if (!bo) goto fail;
 
-	event = calloc(1, sizeof(struct intel_present_vblank_event));
-	if (!event)
-		goto fail;
+    event = calloc(1, sizeof(struct intel_present_vblank_event));
+    if (!event) goto fail;
 
-	event->event_id = event_id;
+    event->event_id = event_id;
 
-	if (!intel_do_pageflip(intel, bo, -1, FALSE, event,
-			       intel_present_flip_event,
-			       intel_present_flip_abort))
-		goto fail;
+    if (!intel_do_pageflip(intel,
+                           bo,
+                           -1,
+                           FALSE,
+                           event,
+                           intel_present_flip_event,
+                           intel_present_flip_abort))
+        goto fail;
 
-	return;
+    return;
 fail:
-	xf86SetDesiredModes(scrn);
-	present_event_notify(event_id, 0, 0);
-	free(event);
+    xf86SetDesiredModes(scrn);
+    present_event_notify(event_id, 0, 0);
+    free(event);
 }
 
 static present_screen_info_rec intel_present_screen_info = {
-	.version = PRESENT_SCREEN_INFO_VERSION,
+    .version = PRESENT_SCREEN_INFO_VERSION,
 
-	.get_crtc = intel_present_get_crtc,
-	.get_ust_msc = intel_present_get_ust_msc,
-	.queue_vblank = intel_present_queue_vblank,
-	.abort_vblank = intel_present_abort_vblank,
-	.flush = intel_present_flush,
+    .get_crtc     = intel_present_get_crtc,
+    .get_ust_msc  = intel_present_get_ust_msc,
+    .queue_vblank = intel_present_queue_vblank,
+    .abort_vblank = intel_present_abort_vblank,
+    .flush        = intel_present_flush,
 
-	.capabilities = PresentCapabilityNone,
-	.check_flip = intel_present_check_flip,
-	.flip = intel_present_flip,
-	.unflip = intel_present_unflip,
+    .capabilities = PresentCapabilityNone,
+    .check_flip   = intel_present_check_flip,
+    .flip         = intel_present_flip,
+    .unflip       = intel_present_unflip,
 };
 
 static Bool
 intel_present_has_async_flip(ScreenPtr screen)
 {
 #ifdef DRM_CAP_ASYNC_PAGE_FLIP
-	ScrnInfoPtr             scrn = xf86ScreenToScrn(screen);
-	intel_screen_private    *intel = intel_get_screen_private(scrn);
-	int                     ret;
-	uint64_t                value;
+    ScrnInfoPtr           scrn  = xf86ScreenToScrn(screen);
+    intel_screen_private *intel = intel_get_screen_private(scrn);
+    int                   ret;
+    uint64_t              value;
 
-	ret = drmGetCap(intel->drmSubFD, DRM_CAP_ASYNC_PAGE_FLIP, &value);
-	if (ret == 0)
-		return value == 1;
+    ret = drmGetCap(intel->drmSubFD, DRM_CAP_ASYNC_PAGE_FLIP, &value);
+    if (ret == 0) return value == 1;
 #endif
-	return FALSE;
+    return FALSE;
 }
 
 Bool
 intel_present_screen_init(ScreenPtr screen)
 {
-	if (intel_present_has_async_flip(screen))
-		intel_present_screen_info.capabilities |= PresentCapabilityAsync;
+    if (intel_present_has_async_flip(screen))
+        intel_present_screen_info.capabilities |= PresentCapabilityAsync;
 
-	return present_screen_init(screen, &intel_present_screen_info);
+    return present_screen_init(screen, &intel_present_screen_info);
 }

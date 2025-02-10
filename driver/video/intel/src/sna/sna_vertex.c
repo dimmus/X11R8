@@ -26,16 +26,17 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config_intel.h"
+#  include "config_intel.h"
 #endif
 
 #include "sna.h"
 
 #include <unistd.h>
 
-void sna_vertex_init(struct sna *sna)
+void
+sna_vertex_init(struct sna *sna)
 {
-	pthread_mutex_init(&sna->render.lock, NULL);
-	pthread_cond_init(&sna->render.wait, NULL);
-	sna->render.active = 0;
+    pthread_mutex_init(&sna->render.lock, NULL);
+    pthread_cond_init(&sna->render.wait, NULL);
+    sna->render.active = 0;
 }

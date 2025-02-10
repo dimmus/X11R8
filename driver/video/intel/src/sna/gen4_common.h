@@ -30,15 +30,15 @@
 
 #include "sna.h"
 
-inline static void
+static inline void
 discard_vbo(struct sna *sna)
 {
-	kgem_bo_destroy(&sna->kgem, sna->render.vbo);
-	sna->render.vbo = NULL;
-	sna->render.vertices = sna->render.vertex_data;
-	sna->render.vertex_size = ARRAY_SIZE(sna->render.vertex_data);
-	sna->render.vertex_used = 0;
-	sna->render.vertex_index = 0;
+    kgem_bo_destroy(&sna->kgem, sna->render.vbo);
+    sna->render.vbo          = NULL;
+    sna->render.vertices     = sna->render.vertex_data;
+    sna->render.vertex_size  = ARRAY_SIZE(sna->render.vertex_data);
+    sna->render.vertex_used  = 0;
+    sna->render.vertex_index = 0;
 }
 
 void gen4_render_flush(struct sna *sna);
@@ -46,4 +46,3 @@ void gen4_render_retire(struct kgem *kgem);
 void gen4_render_expire(struct kgem *kgem);
 
 #endif /* GEN4_COMMON_H */
-

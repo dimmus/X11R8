@@ -30,46 +30,63 @@
 #include "X11/Xatom.h"
 #include "VBoxVideoErr.h"
 
-VBOXPtr vbvxGetRec(ScrnInfoPtr pScrn)
+VBOXPtr
+vbvxGetRec(ScrnInfoPtr pScrn)
 {
     return ((VBOXPtr)pScrn->driverPrivate);
 }
 
-int vbvxGetIntegerPropery(ScrnInfoPtr pScrn, char *pszName, size_t *pcData, int32_t **ppaData)
+int
+vbvxGetIntegerPropery(ScrnInfoPtr pScrn,
+                      char       *pszName,
+                      size_t     *pcData,
+                      int32_t   **ppaData)
 {
-    Atom atom;
+    Atom        atom;
     PropertyPtr prop;
 
     /* We can get called early, before the root window is created. */
-    if (!ROOT_WINDOW(pScrn))
-        return VERR_NOT_FOUND;
+    if (!ROOT_WINDOW(pScrn)) return VERR_NOT_FOUND;
     atom = MakeAtom(pszName, strlen(pszName), TRUE);
-    if (atom == BAD_RESOURCE)
-        return VERR_NOT_FOUND;
+    if (atom == BAD_RESOURCE) return VERR_NOT_FOUND;
     for (prop = wUserProps(ROOT_WINDOW(pScrn));
-         prop != NULL && prop->propertyName != atom; prop = prop->next);
-    if (prop == NULL)
-        return VERR_NOT_FOUND;
-    if (prop->type != XA_INTEGER || prop->format != 32)
-        return VERR_NOT_FOUND;
-    *pcData = prop->size;
+         prop != NULL && prop->propertyName != atom;
+         prop = prop->next)
+        ;
+    if (prop == NULL) return VERR_NOT_FOUND;
+    if (prop->type != XA_INTEGER || prop->format != 32) return VERR_NOT_FOUND;
+    *pcData  = prop->size;
     *ppaData = (int32_t *)prop->data;
     return VINF_SUCCESS;
 }
 
-void vbvxSetIntegerPropery(ScrnInfoPtr pScrn, char *pszName, size_t cData, int32_t *paData, Bool fSendEvent)
+void
+vbvxSetIntegerPropery(ScrnInfoPtr pScrn,
+                      char       *pszName,
+                      size_t      cData,
+                      int32_t    *paData,
+                      Bool        fSendEvent)
 {
     Atom property_name;
 
     property_name = MakeAtom(pszName, strlen(pszName), TRUE);
-    AssertMsg(property_name != BAD_RESOURCE, ("Failed to set atom \"%s\"\n", pszName));
-    dixChangeWindowProperty(serverClient, ROOT_WINDOW(pScrn), property_name, XA_INTEGER, 32, PropModeReplace, cData, paData, fSendEvent);
+    AssertMsg(property_name != BAD_RESOURCE,
+              ("Failed to set atom \"%s\"\n", pszName));
+    dixChangeWindowProperty(serverClient,
+                            ROOT_WINDOW(pScrn),
+                            property_name,
+                            XA_INTEGER,
+                            32,
+                            PropModeReplace,
+                            cData,
+                            paData,
+                            fSendEvent);
 }
 
-void vbvxReprobeCursor(ScrnInfoPtr pScrn)
+void
+vbvxReprobeCursor(ScrnInfoPtr pScrn)
 {
-    if (ROOT_WINDOW(pScrn) == NULL)
-        return;
+    if (ROOT_WINDOW(pScrn) == NULL) return;
     pScrn->EnableDisableFBAccess(pScrn, FALSE);
     pScrn->EnableDisableFBAccess(pScrn, TRUE);
 }

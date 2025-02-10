@@ -43,37 +43,39 @@
 #define UXA_VERSION_MINOR   0
 #define UXA_VERSION_RELEASE 0
 
-typedef enum {
-	UXA_ACCESS_RO,
-	UXA_ACCESS_RW,
+typedef enum
+{
+    UXA_ACCESS_RO,
+    UXA_ACCESS_RW,
 } uxa_access_t;
 
 /**
  * The UxaDriver structure is allocated through uxa_driver_alloc(), and then
  * fllled in by drivers.
  */
-typedef struct _UxaDriver {
-	/**
+typedef struct _UxaDriver
+{
+    /**
 	 * uxa_major and uxa_minor should be set by the driver to the version of
 	 * UXA which the driver was compiled for (or configures itself at
 	 * runtime to support).  This allows UXA to extend the structure for
 	 * new features without breaking ABI for drivers compiled against
 	 * older versions.
 	 */
-	int uxa_major, uxa_minor;
+    int uxa_major, uxa_minor;
 
-	/**
+    /**
 	 * The flags field is bitfield of boolean values controlling UXA's
 	 * behavior.
 	 *
 	 * The flags include UXA_TWO_BITBLT_DIRECTIONS.
 	 */
-	int flags;
+    int flags;
 
-	/** @name solid
+    /** @name solid
 	 * @{
 	 */
-	/**
+    /**
 	 * check_solid() checks whether the driver can do a solid fill to this drawable.
 	 * @param pDrawable Destination drawable
 	 * @param alu raster operation
@@ -82,9 +84,9 @@ typedef struct _UxaDriver {
 	 * The check_solid() call is recommended if prepare_solid() is
 	 * implemented, but is not required.
 	 */
-	Bool(*check_solid) (DrawablePtr pDrawable, int alu, Pixel planemask);
+    Bool (*check_solid)(DrawablePtr pDrawable, int alu, Pixel planemask);
 
-	/**
+    /**
 	 * prepare_solid() sets up the driver for doing a solid fill.
 	 * @param pPixmap Destination pixmap
 	 * @param alu raster operation
@@ -106,10 +108,12 @@ typedef struct _UxaDriver {
 	 * The prepare_solid() call is required of all drivers, but it may fail
 	 * for any reason.  Failure results in a fallback to software rendering.
 	 */
-	Bool(*prepare_solid) (PixmapPtr pPixmap,
-			      int alu, Pixel planemask, Pixel fg);
+    Bool (*prepare_solid)(PixmapPtr pPixmap,
+                          int       alu,
+                          Pixel     planemask,
+                          Pixel     fg);
 
-	/**
+    /**
 	 * solid() performs a solid fill set up in the last prepare_solid()
 	 * call.
 	 *
@@ -128,9 +132,9 @@ typedef struct _UxaDriver {
 	 *
 	 * This call is required if prepare_solid() ever succeeds.
 	 */
-	void (*solid) (PixmapPtr pPixmap, int x1, int y1, int x2, int y2);
+    void (*solid)(PixmapPtr pPixmap, int x1, int y1, int x2, int y2);
 
-	/**
+    /**
 	 * done_solid() finishes a set of solid fills.
 	 *
 	 * @param pPixmap destination pixmap.
@@ -142,17 +146,20 @@ typedef struct _UxaDriver {
 	 *
 	 * This call is required if prepare_solid() ever succeeds.
 	 */
-	void (*done_solid) (PixmapPtr pPixmap);
-	/** @} */
+    void (*done_solid)(PixmapPtr pPixmap);
+    /** @} */
 
-	/** @name copy
+    /** @name copy
 	 * @{
 	 */
-	/**
+    /**
 	 * check_copy() checks whether the driver can blit between the two Pictures
 	 */
-	Bool(*check_copy) (PixmapPtr pSrc, PixmapPtr pDst, int alu, Pixel planemask);
-	/**
+    Bool (*check_copy)(PixmapPtr pSrc,
+                       PixmapPtr pDst,
+                       int       alu,
+                       Pixel     planemask);
+    /**
 	 * prepare_copy() sets up the driver for doing a copy within video
 	 * memory.
 	 -     *
@@ -188,11 +195,14 @@ typedef struct _UxaDriver {
 	 * The prepare_copy() call is required of all drivers, but it may fail
 	 * for any reason.  Failure results in a fallback to software rendering.
 	 */
-	Bool(*prepare_copy) (PixmapPtr pSrcPixmap,
-			     PixmapPtr pDstPixmap,
-			     int dx, int dy, int alu, Pixel planemask);
+    Bool (*prepare_copy)(PixmapPtr pSrcPixmap,
+                         PixmapPtr pDstPixmap,
+                         int       dx,
+                         int       dy,
+                         int       alu,
+                         Pixel     planemask);
 
-	/**
+    /**
 	 * copy() performs a copy set up in the last prepare_copy call.
 	 *
 	 * @param pDstPixmap destination pixmap
@@ -217,11 +227,15 @@ typedef struct _UxaDriver {
 	 *
 	 * This call is required if prepare_copy ever succeeds.
 	 */
-	void (*copy) (PixmapPtr pDstPixmap,
-		      int srcX,
-		      int srcY, int dstX, int dstY, int width, int height);
+    void (*copy)(PixmapPtr pDstPixmap,
+                 int       srcX,
+                 int       srcY,
+                 int       dstX,
+                 int       dstY,
+                 int       width,
+                 int       height);
 
-	/**
+    /**
 	 * done_copy() finishes a set of copies.
 	 *
 	 * @param pPixmap destination pixmap.
@@ -233,13 +247,13 @@ typedef struct _UxaDriver {
 	 *
 	 * This call is required if prepare_copy() ever succeeds.
 	 */
-	void (*done_copy) (PixmapPtr pDstPixmap);
-	/** @} */
+    void (*done_copy)(PixmapPtr pDstPixmap);
+    /** @} */
 
-	/** @name composite
+    /** @name composite
 	 * @{
 	 */
-	/**
+    /**
 	 * check_composite() checks to see if a composite operation could be
 	 * accelerated.
 	 *
@@ -263,13 +277,14 @@ typedef struct _UxaDriver {
 	 * The check_composite() call is recommended if prepare_composite() is
 	 * implemented, but is not required.
 	 */
-	Bool(*check_composite) (int op,
-				PicturePtr pSrcPicture,
-				PicturePtr pMaskPicture,
-				PicturePtr pDstPicture,
-				int width, int height);
+    Bool (*check_composite)(int        op,
+                            PicturePtr pSrcPicture,
+                            PicturePtr pMaskPicture,
+                            PicturePtr pDstPicture,
+                            int        width,
+                            int        height);
 
-	/**
+    /**
 	 * check_composite_target() checks to see if the destination of the composite
 	 * operation can be used without midification.
 	 *
@@ -278,9 +293,9 @@ typedef struct _UxaDriver {
 	 * The check_composite_target() call is recommended if prepare_composite() is
 	 * implemented, but is not required.
 	 */
-	Bool(*check_composite_target) (PixmapPtr pixmap);
+    Bool (*check_composite_target)(PixmapPtr pixmap);
 
-	/**
+    /**
 	 * check_composite_texture() checks to see if a source to the composite
 	 * operation can be used without midification.
 	 *
@@ -290,10 +305,9 @@ typedef struct _UxaDriver {
 	 * The check_composite_texture() call is recommended if prepare_composite() is
 	 * implemented, but is not required.
 	 */
-	Bool(*check_composite_texture) (ScreenPtr pScreen,
-					PicturePtr pPicture);
+    Bool (*check_composite_texture)(ScreenPtr pScreen, PicturePtr pPicture);
 
-	/**
+    /**
 	 * prepare_composite() sets up the driver for doing a composite
 	 * operation described in the Render extension protocol spec.
 	 *
@@ -349,14 +363,15 @@ typedef struct _UxaDriver {
 	 * performance of cairo applications.  Failure results in a fallback
 	 * to software rendering.
 	 */
-	Bool(*prepare_composite) (int op,
-				  PicturePtr pSrcPicture,
-				  PicturePtr pMaskPicture,
-				  PicturePtr pDstPicture,
-				  PixmapPtr pSrc,
-				  PixmapPtr pMask, PixmapPtr pDst);
+    Bool (*prepare_composite)(int        op,
+                              PicturePtr pSrcPicture,
+                              PicturePtr pMaskPicture,
+                              PicturePtr pDstPicture,
+                              PixmapPtr  pSrc,
+                              PixmapPtr  pMask,
+                              PixmapPtr  pDst);
 
-	/**
+    /**
 	 * composite() performs a composite operation set up in the last
 	 * prepare_composite() call.
 	 *
@@ -381,14 +396,17 @@ typedef struct _UxaDriver {
 	 *
 	 * This call is required if prepare_composite() ever succeeds.
 	 */
-	void (*composite) (PixmapPtr pDst,
-			   int srcX,
-			   int srcY,
-			   int maskX,
-			   int maskY,
-			   int dstX, int dstY, int width, int height);
+    void (*composite)(PixmapPtr pDst,
+                      int       srcX,
+                      int       srcY,
+                      int       maskX,
+                      int       maskY,
+                      int       dstX,
+                      int       dstY,
+                      int       width,
+                      int       height);
 
-	/**
+    /**
 	 * done_composite() finishes a set of composite operations.
 	 *
 	 * @param pPixmap destination pixmap.
@@ -401,10 +419,10 @@ typedef struct _UxaDriver {
 	 *
 	 * This call is required if prepare_composite() ever succeeds.
 	 */
-	void (*done_composite) (PixmapPtr pDst);
-	/** @} */
+    void (*done_composite)(PixmapPtr pDst);
+    /** @} */
 
-	/**
+    /**
 	 * put_image() loads a rectangle of data from src into pDst.
 	 *
 	 * @param pDst destination pixmap
@@ -432,11 +450,15 @@ typedef struct _UxaDriver {
 	 * put_image() is not required, but is recommended if composite
 	 * acceleration is supported.
 	 */
-	Bool(*put_image) (PixmapPtr pDst,
-			  int x,
-			  int y, int w, int h, char *src, int src_pitch);
+    Bool (*put_image)(PixmapPtr pDst,
+                      int       x,
+                      int       y,
+                      int       w,
+                      int       h,
+                      char     *src,
+                      int       src_pitch);
 
-	/**
+    /**
 	 * get_image() loads a rectangle of data from pSrc into dst
 	 *
 	 * @param pSrc source pixmap
@@ -459,12 +481,16 @@ typedef struct _UxaDriver {
 	 *
 	 * get_image() is not required, but is highly recommended.
 	 */
-	Bool(*get_image) (PixmapPtr pSrc,
-			  int x, int y,
-			  int w, int h, char *dst, int dst_pitch);
+    Bool (*get_image)(PixmapPtr pSrc,
+                      int       x,
+                      int       y,
+                      int       w,
+                      int       h,
+                      char     *dst,
+                      int       dst_pitch);
 
-	/** @{ */
-	/**
+    /** @{ */
+    /**
 	 * prepare_access() is called before CPU access to an offscreen pixmap.
 	 *
 	 * @param pPix the pixmap being accessed
@@ -501,9 +527,9 @@ typedef struct _UxaDriver {
 	 * @return FALSE if prepare_access() is unsuccessful and UXA should use
 	 * get_image() to migate the pixmap out.
 	 */
-	Bool(*prepare_access) (PixmapPtr pPix, uxa_access_t access);
+    Bool (*prepare_access)(PixmapPtr pPix, uxa_access_t access);
 
-	/**
+    /**
 	 * finish_access() is called after CPU access to an offscreen pixmap.
 	 *
 	 * @param pPix the pixmap being accessed
@@ -513,9 +539,9 @@ typedef struct _UxaDriver {
 	 * offscreen pixmap set up by prepare_access().  Note that the
 	 * finish_access() will not be called if prepare_access() failed.
 	 */
-	void (*finish_access) (PixmapPtr pPix, uxa_access_t access);
+    void (*finish_access)(PixmapPtr pPix, uxa_access_t access);
 
-	/**
+    /**
 	 * PixmapIsOffscreen() is an optional driver replacement to
 	 * uxa_pixmap_is_offscreen(). Set to NULL if you want the standard
 	 * behaviour of uxa_pixmap_is_offscreen().
@@ -528,9 +554,9 @@ typedef struct _UxaDriver {
 	 * to it, and that it will need to be wrapped by
 	 * prepare_access()/finish_access() when accessing it with the CPU.
 	 */
-	Bool(*pixmap_is_offscreen) (PixmapPtr pPix);
+    Bool (*pixmap_is_offscreen)(PixmapPtr pPix);
 
-	/** @} */
+    /** @} */
 } uxa_driver_t;
 
 /** @name UXA driver flags
@@ -541,7 +567,7 @@ typedef struct _UxaDriver {
  * support copies that are (left-to-right, top-to-bottom) or
  * (right-to-left, bottom-to-top).
  */
-#define UXA_TWO_BITBLT_DIRECTIONS	(1 << 2)
+#define UXA_TWO_BITBLT_DIRECTIONS (1 << 2)
 
 /** @} */
 /** @name UXA CreatePixmap hint flags
@@ -551,23 +577,22 @@ typedef struct _UxaDriver {
  * Flag to hint that the first operation on the pixmap will be a
  * prepare_access.
  */
-#define UXA_CREATE_PIXMAP_FOR_MAP	0x20000000
+#define UXA_CREATE_PIXMAP_FOR_MAP 0x20000000
 /** @} */
 
 uxa_driver_t *uxa_driver_alloc(void);
 
-Bool uxa_driver_init(ScreenPtr screen, uxa_driver_t * uxa_driver);
+Bool uxa_driver_init(ScreenPtr screen, uxa_driver_t *uxa_driver);
 Bool uxa_resources_init(ScreenPtr screen);
 
 void uxa_driver_fini(ScreenPtr pScreen);
 
 CARD32 uxa_get_pixmap_first_pixel(PixmapPtr pPixmap);
 
-Bool
-uxa_get_color_for_pixmap (PixmapPtr	 pixmap,
-			  CARD32	 src_format,
-			  CARD32	 dst_format,
-			  CARD32	*pixel);
+Bool uxa_get_color_for_pixmap(PixmapPtr pixmap,
+                              CARD32    src_format,
+                              CARD32    dst_format,
+                              CARD32   *pixel);
 
 void uxa_set_fallback_debug(ScreenPtr screen, Bool enable);
 void uxa_set_force_fallback(ScreenPtr screen, Bool enable);
@@ -576,8 +601,8 @@ void uxa_set_force_fallback(ScreenPtr screen, Bool enable);
  * Returns TRUE if the given planemask covers all the significant bits in the
  * pixel values for pDrawable.
  */
-#define UXA_PM_IS_SOLID(_pDrawable, _pm) \
-	(((_pm) & FbFullMask((_pDrawable)->depth)) == \
-	 FbFullMask((_pDrawable)->depth))
+#define UXA_PM_IS_SOLID(_pDrawable, _pm)          \
+    (((_pm) & FbFullMask((_pDrawable)->depth)) == \
+     FbFullMask((_pDrawable)->depth))
 
 #endif /* UXA_H */

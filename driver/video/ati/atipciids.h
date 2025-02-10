@@ -34,21 +34,21 @@
 #define _ATIPCIIDS_H
 
 /* PCI Vendor */
-#define PCI_VENDOR_ASUS			0x1043
-#define PCI_VENDOR_ATI			0x1002
-#define PCI_VENDOR_IBM			0x1014
-#define PCI_VENDOR_AMD			0x1022
-#define PCI_VENDOR_DELL			0x1028
-#define PCI_VENDOR_VIA			0x1106
-#define PCI_VENDOR_INTEL		0x8086
+#define PCI_VENDOR_ASUS  0x1043
+#define PCI_VENDOR_ATI   0x1002
+#define PCI_VENDOR_IBM   0x1014
+#define PCI_VENDOR_AMD   0x1022
+#define PCI_VENDOR_DELL  0x1028
+#define PCI_VENDOR_VIA   0x1106
+#define PCI_VENDOR_INTEL 0x8086
 #ifndef PCI_VENDOR_HP
-#define PCI_VENDOR_HP			0x103c
+#  define PCI_VENDOR_HP 0x103c
 #endif
-#define PCI_VENDOR_SONY			0x104D
+#define PCI_VENDOR_SONY 0x104D
 
 #include "ati_pciids_gen.h"
 
 /* Misc */
-#define PCI_CHIP_AMD761			0x700E
+#define PCI_CHIP_AMD761 0x700E
 
 #endif /* _ATIPCIIDS_H */

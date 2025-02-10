@@ -30,7 +30,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
 #include "radeon.h"
@@ -42,12 +42,13 @@
 #include "radeon_exa_shared.h"
 #include "xf86.h"
 
-
 /***********************************************************************/
-#define RINFO_FROM_SCREEN(pScr) ScrnInfoPtr pScrn =  xf86ScreenToScrn(pScr); \
-    RADEONInfoPtr info   = RADEONPTR(pScrn)
+#define RINFO_FROM_SCREEN(pScr)                   \
+    ScrnInfoPtr   pScrn = xf86ScreenToScrn(pScr); \
+    RADEONInfoPtr info  = RADEONPTR(pScrn)
 
-static struct {
+static struct
+{
     int rop;
     int pattern;
 } RADEON_ROP[] = {
@@ -69,78 +70,85 @@ static struct {
     { RADEON_ROP3_ONE,  RADEON_ROP3_ONE  }  /* GXset          */
 };
 
-static __inline__ uint32_t F_TO_DW(float val)
+static __inline__ uint32_t
+F_TO_DW(float val)
 {
     union {
-	float f;
-	uint32_t l;
+        float    f;
+        uint32_t l;
     } tmp;
+
     tmp.f = val;
     return tmp.l;
 }
 
-
 /* Assumes that depth 15 and 16 can be used as depth 16, which is okay since we
  * require src and dest datatypes to be equal.
  */
-Bool RADEONGetDatatypeBpp(int bpp, uint32_t *type)
+Bool
+RADEONGetDatatypeBpp(int bpp, uint32_t *type)
 {
-	switch (bpp) {
-	case 8:
-		*type = ATI_DATATYPE_CI8;
-		return TRUE;
-	case 16:
-		*type = ATI_DATATYPE_RGB565;
-		return TRUE;
-	case 24:
-		*type = ATI_DATATYPE_CI8;
-		return TRUE;
-	case 32:
-		*type = ATI_DATATYPE_ARGB8888;
-		return TRUE;
-	default:
-		RADEON_FALLBACK(("Unsupported bpp: %d\n", bpp));
-		return FALSE;
-	}
+    switch (bpp)
+    {
+        case 8:
+            *type = ATI_DATATYPE_CI8;
+            return TRUE;
+        case 16:
+            *type = ATI_DATATYPE_RGB565;
+            return TRUE;
+        case 24:
+            *type = ATI_DATATYPE_CI8;
+            return TRUE;
+        case 32:
+            *type = ATI_DATATYPE_ARGB8888;
+            return TRUE;
+        default:
+            RADEON_FALLBACK(("Unsupported bpp: %d\n", bpp));
+            return FALSE;
+    }
 }
 
-static Bool RADEONPixmapIsColortiled(PixmapPtr pPix)
+static Bool
+RADEONPixmapIsColortiled(PixmapPtr pPix)
 {
     return FALSE;
 }
 
-static Bool RADEONGetOffsetPitch(PixmapPtr pPix, int bpp, uint32_t *pitch_offset,
-				 unsigned int offset, unsigned int pitch)
+static Bool
+RADEONGetOffsetPitch(PixmapPtr    pPix,
+                     int          bpp,
+                     uint32_t    *pitch_offset,
+                     unsigned int offset,
+                     unsigned int pitch)
 {
-	RINFO_FROM_SCREEN(pPix->drawable.pScreen);
+    RINFO_FROM_SCREEN(pPix->drawable.pScreen);
 
-	if (pitch > 16320 || pitch % info->accel_state->exa->pixmapPitchAlign != 0)
-		RADEON_FALLBACK(("Bad pitch 0x%08x\n", pitch));
+    if (pitch > 16320 || pitch % info->accel_state->exa->pixmapPitchAlign != 0)
+        RADEON_FALLBACK(("Bad pitch 0x%08x\n", pitch));
 
-	if (offset % info->accel_state->exa->pixmapOffsetAlign != 0)
-		RADEON_FALLBACK(("Bad offset 0x%08x\n", offset));
+    if (offset % info->accel_state->exa->pixmapOffsetAlign != 0)
+        RADEON_FALLBACK(("Bad offset 0x%08x\n", offset));
 
-	pitch = pitch >> 6;
-	*pitch_offset = (pitch << 22) | (offset >> 10);
+    pitch         = pitch >> 6;
+    *pitch_offset = (pitch << 22) | (offset >> 10);
 
-	/* If it's the front buffer, we've got to note that it's tiled? */
-	if (RADEONPixmapIsColortiled(pPix))
-		*pitch_offset |= RADEON_DST_TILE_MACRO;
-	return TRUE;
+    /* If it's the front buffer, we've got to note that it's tiled? */
+    if (RADEONPixmapIsColortiled(pPix)) *pitch_offset |= RADEON_DST_TILE_MACRO;
+    return TRUE;
 }
 
-Bool RADEONGetPixmapOffsetPitch(PixmapPtr pPix, uint32_t *pitch_offset)
+Bool
+RADEONGetPixmapOffsetPitch(PixmapPtr pPix, uint32_t *pitch_offset)
 {
-	uint32_t pitch;
-	int bpp;
+    uint32_t pitch;
+    int      bpp;
 
-	bpp = pPix->drawable.bitsPerPixel;
-	if (bpp == 24)
-		bpp = 8;
+    bpp = pPix->drawable.bitsPerPixel;
+    if (bpp == 24) bpp = 8;
 
-	pitch = exaGetPixmapPitch(pPix);
+    pitch = exaGetPixmapPitch(pPix);
 
-	return RADEONGetOffsetPitch(pPix, bpp, pitch_offset, 0, pitch);
+    return RADEONGetOffsetPitch(pPix, bpp, pitch_offset, 0, pitch);
 }
 
 /**
@@ -148,71 +156,75 @@ Bool RADEONGetPixmapOffsetPitch(PixmapPtr pPix, uint32_t *pitch_offset)
  *
  * transform may be null.
  */
-Bool radeon_transform_is_affine_or_scaled(PictTransformPtr t)
+Bool
+radeon_transform_is_affine_or_scaled(PictTransformPtr t)
 {
-	if (!t)
-		return TRUE;
-	/* the shaders don't handle scaling either */
-	return t->matrix[2][0] == 0 && t->matrix[2][1] == 0 && t->matrix[2][2] == IntToxFixed(1);
+    if (!t) return TRUE;
+    /* the shaders don't handle scaling either */
+    return t->matrix[2][0] == 0 && t->matrix[2][1] == 0 &&
+           t->matrix[2][2] == IntToxFixed(1);
 }
 
-Bool RADEONPrepareAccess_CS(PixmapPtr pPix, int index)
+Bool
+RADEONPrepareAccess_CS(PixmapPtr pPix, int index)
 {
-    ScreenPtr pScreen = pPix->drawable.pScreen;
-    ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
-    RADEONInfoPtr info = RADEONPTR(pScrn);
+    ScreenPtr                      pScreen = pPix->drawable.pScreen;
+    ScrnInfoPtr                    pScrn   = xf86ScreenToScrn(pScreen);
+    RADEONInfoPtr                  info    = RADEONPTR(pScrn);
     struct radeon_exa_pixmap_priv *driver_priv;
-    uint32_t possible_domains = ~0U;
-    uint32_t current_domain = 0;
+    uint32_t                       possible_domains = ~0U;
+    uint32_t                       current_domain   = 0;
     Bool can_fail = !(pPix->drawable.bitsPerPixel < 8) &&
-	pPix != pScreen->GetScreenPixmap(pScreen);
+                    pPix != pScreen->GetScreenPixmap(pScreen);
     Bool flush = FALSE;
-    int ret;
+    int  ret;
 
 #if X_BYTE_ORDER == X_BIG_ENDIAN
     /* May need to handle byte swapping in DownloadFrom/UploadToScreen */
-    if (pPix->drawable.bitsPerPixel > 8)
-	return FALSE;
+    if (pPix->drawable.bitsPerPixel > 8) return FALSE;
 #endif
 
     driver_priv = exaGetPixmapDriverPrivate(pPix);
-    if (!driver_priv)
-      return FALSE;
+    if (!driver_priv) return FALSE;
 
     /* untile in DFS/UTS */
     if (driver_priv->tiling_flags & (RADEON_TILING_MACRO | RADEON_TILING_MICRO))
-	return FALSE;
+        return FALSE;
 
     /* if we have more refs than just the BO then flush */
-    if (radeon_bo_is_referenced_by_cs(driver_priv->bo->bo.radeon, info->cs)) {
-	flush = TRUE;
+    if (radeon_bo_is_referenced_by_cs(driver_priv->bo->bo.radeon, info->cs))
+    {
+        flush = TRUE;
 
-	if (can_fail) {
-	    possible_domains = radeon_bo_get_src_domain(driver_priv->bo->bo.radeon);
-	    if (possible_domains == RADEON_GEM_DOMAIN_VRAM)
-		return FALSE; /* use DownloadFromScreen */
-	}
+        if (can_fail)
+        {
+            possible_domains =
+                radeon_bo_get_src_domain(driver_priv->bo->bo.radeon);
+            if (possible_domains == RADEON_GEM_DOMAIN_VRAM)
+                return FALSE; /* use DownloadFromScreen */
+        }
     }
 
     /* if the BO might end up in VRAM, prefer DownloadFromScreen */
-    if (can_fail && (possible_domains & RADEON_GEM_DOMAIN_VRAM)) {
-	radeon_bo_is_busy(driver_priv->bo->bo.radeon, &current_domain);
+    if (can_fail && (possible_domains & RADEON_GEM_DOMAIN_VRAM))
+    {
+        radeon_bo_is_busy(driver_priv->bo->bo.radeon, &current_domain);
 
-	if (current_domain & possible_domains) {
-	    if (current_domain == RADEON_GEM_DOMAIN_VRAM)
-		return FALSE;
-	} else if (possible_domains & RADEON_GEM_DOMAIN_VRAM)
-	    return FALSE;
+        if (current_domain & possible_domains)
+        {
+            if (current_domain == RADEON_GEM_DOMAIN_VRAM) return FALSE;
+        }
+        else if (possible_domains & RADEON_GEM_DOMAIN_VRAM) return FALSE;
     }
 
-    if (flush)
-        radeon_cs_flush_indirect(pScrn);
-    
+    if (flush) radeon_cs_flush_indirect(pScrn);
+
     /* flush IB */
     ret = radeon_bo_map(driver_priv->bo->bo.radeon, 1);
-    if (ret) {
-      FatalError("failed to map pixmap %d\n", ret);
-      return FALSE;
+    if (ret)
+    {
+        FatalError("failed to map pixmap %d\n", ret);
+        return FALSE;
     }
     driver_priv->bo_mapped = TRUE;
 
@@ -221,107 +233,127 @@ Bool RADEONPrepareAccess_CS(PixmapPtr pPix, int index)
     return TRUE;
 }
 
-void RADEONFinishAccess_CS(PixmapPtr pPix, int index)
+void
+RADEONFinishAccess_CS(PixmapPtr pPix, int index)
 {
     struct radeon_exa_pixmap_priv *driver_priv;
 
     driver_priv = exaGetPixmapDriverPrivate(pPix);
-    if (!driver_priv || !driver_priv->bo_mapped)
-        return;
+    if (!driver_priv || !driver_priv->bo_mapped) return;
 
     radeon_bo_unmap(driver_priv->bo->bo.radeon);
     driver_priv->bo_mapped = FALSE;
-    pPix->devPrivate.ptr = NULL;
+    pPix->devPrivate.ptr   = NULL;
 }
 
-
-void *RADEONEXACreatePixmap2(ScreenPtr pScreen, int width, int height,
-			     int depth, int usage_hint, int bitsPerPixel,
-			     int *new_pitch)
+void *
+RADEONEXACreatePixmap2(ScreenPtr pScreen,
+                       int       width,
+                       int       height,
+                       int       depth,
+                       int       usage_hint,
+                       int       bitsPerPixel,
+                       int      *new_pitch)
 {
-    ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
-    RADEONInfoPtr info = RADEONPTR(pScrn);
+    ScrnInfoPtr                    pScrn = xf86ScreenToScrn(pScreen);
+    RADEONInfoPtr                  info  = RADEONPTR(pScrn);
     struct radeon_exa_pixmap_priv *new_priv;
 
     if (width != 0 && height != 0 && !info->exa_force_create &&
-	info->exa_pixmaps == FALSE)
+        info->exa_pixmaps == FALSE)
         return NULL;
 
     new_priv = calloc(1, sizeof(struct radeon_exa_pixmap_priv));
-    if (!new_priv) {
-	return NULL;
+    if (!new_priv)
+    {
+        return NULL;
     }
 
-    if (width == 0 || height == 0) {
-	return new_priv;
+    if (width == 0 || height == 0)
+    {
+        return new_priv;
     }
 
-    new_priv->bo = radeon_alloc_pixmap_bo(pScrn, width, height, depth,
-					  usage_hint, bitsPerPixel, new_pitch,
-					  &new_priv->surface,
-					  &new_priv->tiling_flags);
-    if (!new_priv->bo) {
-	free(new_priv);
-	ErrorF("Failed to alloc memory\n");
-	return NULL;
+    new_priv->bo = radeon_alloc_pixmap_bo(pScrn,
+                                          width,
+                                          height,
+                                          depth,
+                                          usage_hint,
+                                          bitsPerPixel,
+                                          new_pitch,
+                                          &new_priv->surface,
+                                          &new_priv->tiling_flags);
+    if (!new_priv->bo)
+    {
+        free(new_priv);
+        ErrorF("Failed to alloc memory\n");
+        return NULL;
     }
 
     return new_priv;
 }
 
-void RADEONEXADestroyPixmap(ScreenPtr pScreen, void *driverPriv)
+void
+RADEONEXADestroyPixmap(ScreenPtr pScreen, void *driverPriv)
 {
     RADEONEntPtr pRADEONEnt = RADEONEntPriv(xf86ScreenToScrn(pScreen));
     struct radeon_exa_pixmap_priv *driver_priv = driverPriv;
 
-    if (!driverPriv)
-      return;
+    if (!driverPriv) return;
 
     radeon_buffer_unref(&driver_priv->bo);
     drmmode_fb_reference(pRADEONEnt->fd, &driver_priv->fb, NULL);
     free(driverPriv);
 }
 
-Bool RADEONEXASharePixmapBacking(PixmapPtr ppix, ScreenPtr seconndary, void **fd_handle)
+Bool
+RADEONEXASharePixmapBacking(PixmapPtr ppix,
+                            ScreenPtr seconndary,
+                            void    **fd_handle)
 {
-    struct radeon_exa_pixmap_priv *driver_priv = exaGetPixmapDriverPrivate(ppix);
+    struct radeon_exa_pixmap_priv *driver_priv =
+        exaGetPixmapDriverPrivate(ppix);
 
     if (!radeon_share_pixmap_backing(driver_priv->bo->bo.radeon, fd_handle))
-	return FALSE;
+        return FALSE;
 
     driver_priv->shared = TRUE;
     return TRUE;
 }
 
-Bool RADEONEXASetSharedPixmapBacking(PixmapPtr ppix, void *fd_handle)
+Bool
+RADEONEXASetSharedPixmapBacking(PixmapPtr ppix, void *fd_handle)
 {
-    struct radeon_exa_pixmap_priv *driver_priv = exaGetPixmapDriverPrivate(ppix);
+    struct radeon_exa_pixmap_priv *driver_priv =
+        exaGetPixmapDriverPrivate(ppix);
     int ihandle = (int)(long)fd_handle;
 
-    if (!radeon_set_shared_pixmap_backing(ppix, fd_handle, &driver_priv->surface))
-	return FALSE;
+    if (!radeon_set_shared_pixmap_backing(ppix,
+                                          fd_handle,
+                                          &driver_priv->surface))
+        return FALSE;
 
     driver_priv->shared = ihandle != -1;
     return TRUE;
 }
 
-uint32_t radeon_get_pixmap_tiling(PixmapPtr pPix)
+uint32_t
+radeon_get_pixmap_tiling(PixmapPtr pPix)
 {
     struct radeon_exa_pixmap_priv *driver_priv;
     driver_priv = exaGetPixmapDriverPrivate(pPix);
     return driver_priv->tiling_flags;
 }
 
-Bool RADEONEXAPixmapIsOffscreen(PixmapPtr pPix)
+Bool
+RADEONEXAPixmapIsOffscreen(PixmapPtr pPix)
 {
     struct radeon_exa_pixmap_priv *driver_priv;
 
     driver_priv = exaGetPixmapDriverPrivate(pPix);
 
-    if (!driver_priv)
-       return FALSE;
-    if (driver_priv->bo)
-       return TRUE;
+    if (!driver_priv) return FALSE;
+    if (driver_priv->bo) return TRUE;
     return FALSE;
 }
 
@@ -330,9 +362,6 @@ Bool RADEONEXAPixmapIsOffscreen(PixmapPtr pPix)
 /***********************************************************************/
 
 #ifdef RENDER
-#include "radeon_exa_render.c"
+#  include "radeon_exa_render.c"
 #endif
 #include "radeon_exa_funcs.c"
-
-
-

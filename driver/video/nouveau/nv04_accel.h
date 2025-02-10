@@ -17,7 +17,7 @@
 #define PFP_NV12_BILINEAR 0x00000700
 #define PFP_NV12_BICUBIC  0x00000800
 #define XV_TABLE          0x00001000
-#define SOLID(i)         (0x00002000 + (i) * 0x100)
+#define SOLID(i)          (0x00002000 + (i) * 0x100)
 
 /* subchannel assignments */
 #define SUBC_M2MF(mthd)  0, (mthd)
@@ -50,34 +50,38 @@
 #define NV40_3D(mthd)    SUBC_3D(NV40_3D_##mthd)
 
 static __inline__ void
-PUSH_DATAu(struct nouveau_pushbuf *push, struct nouveau_bo *bo,
-	   unsigned delta, unsigned dwords)
+PUSH_DATAu(struct nouveau_pushbuf *push,
+           struct nouveau_bo      *bo,
+           unsigned                delta,
+           unsigned                dwords)
 {
-	const uint32_t domain = NOUVEAU_BO_VRAM | NOUVEAU_BO_WR;
-	struct nouveau_pushbuf_refn refs[] = { { bo, domain } };
-	unsigned pitch = ((dwords * 4) + 63) & ~63;
+    const uint32_t              domain = NOUVEAU_BO_VRAM | NOUVEAU_BO_WR;
+    struct nouveau_pushbuf_refn refs[] = {
+        { bo, domain }
+    };
+    unsigned pitch = ((dwords * 4) + 63) & ~63;
 
-	if (nouveau_pushbuf_space(push, 32 + dwords, 2, 0) ||
-	    nouveau_pushbuf_refn (push, refs, 1))
-		return;
+    if (nouveau_pushbuf_space(push, 32 + dwords, 2, 0) ||
+        nouveau_pushbuf_refn(push, refs, 1))
+        return;
 
-	BEGIN_NV04(push, NV01_SUBC(MISC, OBJECT), 1);
-	PUSH_DATA (push, NvClipRectangle);
-	BEGIN_NV04(push, NV01_CLIP(POINT), 2);
-	PUSH_DATA (push, (0 << 16) | 0);
-	PUSH_DATA (push, (1 << 16) | dwords);
-	BEGIN_NV04(push, NV04_SF2D(FORMAT), 4);
-	PUSH_DATA (push, NV04_SURFACE_2D_FORMAT_A8R8G8B8);
-	PUSH_DATA (push, (pitch << 16) | pitch);
-	PUSH_RELOC(push, bo, delta, NOUVEAU_BO_LOW, 0, 0);
-	PUSH_RELOC(push, bo, delta, NOUVEAU_BO_LOW, 0, 0);
-	BEGIN_NV04(push, NV01_IFC(OPERATION), 5);
-	PUSH_DATA (push, NV01_IFC_OPERATION_SRCCOPY);
-	PUSH_DATA (push, NV01_IFC_COLOR_FORMAT_A8R8G8B8);
-	PUSH_DATA (push, (0 << 16) | 0);
-	PUSH_DATA (push, (1 << 16) | dwords);
-	PUSH_DATA (push, (1 << 16) | dwords);
-	BEGIN_NV04(push, NV01_IFC(COLOR(0)), dwords);
+    BEGIN_NV04(push, NV01_SUBC(MISC, OBJECT), 1);
+    PUSH_DATA(push, NvClipRectangle);
+    BEGIN_NV04(push, NV01_CLIP(POINT), 2);
+    PUSH_DATA(push, (0 << 16) | 0);
+    PUSH_DATA(push, (1 << 16) | dwords);
+    BEGIN_NV04(push, NV04_SF2D(FORMAT), 4);
+    PUSH_DATA(push, NV04_SURFACE_2D_FORMAT_A8R8G8B8);
+    PUSH_DATA(push, (pitch << 16) | pitch);
+    PUSH_RELOC(push, bo, delta, NOUVEAU_BO_LOW, 0, 0);
+    PUSH_RELOC(push, bo, delta, NOUVEAU_BO_LOW, 0, 0);
+    BEGIN_NV04(push, NV01_IFC(OPERATION), 5);
+    PUSH_DATA(push, NV01_IFC_OPERATION_SRCCOPY);
+    PUSH_DATA(push, NV01_IFC_COLOR_FORMAT_A8R8G8B8);
+    PUSH_DATA(push, (0 << 16) | 0);
+    PUSH_DATA(push, (1 << 16) | dwords);
+    PUSH_DATA(push, (1 << 16) | dwords);
+    BEGIN_NV04(push, NV01_IFC(COLOR(0)), dwords);
 }
 
 /* For NV40 FP upload, deal with the weird-arse big-endian swap */
@@ -85,9 +89,9 @@ static __inline__ void
 PUSH_DATAs(struct nouveau_pushbuf *push, unsigned data)
 {
 #if (X_BYTE_ORDER != X_LITTLE_ENDIAN)
-	data = (data >> 16) | ((data & 0xffff) << 16);
+    data = (data >> 16) | ((data & 0xffff) << 16);
 #endif
-	PUSH_DATA(push, data);
+    PUSH_DATA(push, data);
 }
 
 #endif

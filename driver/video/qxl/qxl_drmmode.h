@@ -29,60 +29,63 @@
 
 #ifdef XF86DRM_MODE
 
-#include "xf86drm.h"
-#include "xf86drmMode.h"
-#include "xf86str.h"
-#include "randrstr.h"
-#include "xf86Crtc.h"
-#ifdef HAVE_LIBUDEV
-#include "libudev.h"
-#endif
+#  include "xf86drm.h"
+#  include "xf86drmMode.h"
+#  include "xf86str.h"
+#  include "randrstr.h"
+#  include "xf86Crtc.h"
+#  ifdef HAVE_LIBUDEV
+#    include "libudev.h"
+#  endif
 
-typedef struct {
-  int fd;
-  unsigned fb_id;
-  drmModeResPtr mode_res;
-  drmModeFBPtr mode_fb;
-  int cpp;
-  ScrnInfoPtr scrn;
-#ifdef HAVE_LIBUDEV
-  struct udev_monitor *uevent_monitor;
-  InputHandlerProc uevent_handler;
-#endif
+typedef struct
+{
+    int           fd;
+    unsigned      fb_id;
+    drmModeResPtr mode_res;
+    drmModeFBPtr  mode_fb;
+    int           cpp;
+    ScrnInfoPtr   scrn;
+#  ifdef HAVE_LIBUDEV
+    struct udev_monitor *uevent_monitor;
+    InputHandlerProc     uevent_handler;
+#  endif
 } drmmode_rec, *drmmode_ptr;
 
-typedef struct {
-    drmmode_ptr drmmode;
+typedef struct
+{
+    drmmode_ptr    drmmode;
     drmModeCrtcPtr mode_crtc;
-    int hw_id;
+    int            hw_id;
     struct qxl_bo *cursor_bo;
-    void *cursor_ptr;
+    void          *cursor_ptr;
   //    struct radeon_bo *rotate_bo;
     unsigned rotate_fb_id;
-    int dpms_mode;
+    int      dpms_mode;
     uint16_t lut_r[256], lut_g[256], lut_b[256];
 } drmmode_crtc_private_rec, *drmmode_crtc_private_ptr;
 
-
-typedef struct {
+typedef struct
+{
     drmModePropertyPtr mode_prop;
-    uint64_t value;
+    uint64_t           value;
     int num_atoms; /* if range prop, num_atoms == 1; if enum prop, num_atoms == num_enums + 1 */
     Atom *atoms;
-    int index; /* index within the kernel-size property array */
+    int   index; /* index within the kernel-size property array */
 } drmmode_prop_rec, *drmmode_prop_ptr;
 
-typedef struct {
-    drmmode_ptr drmmode;
-    int output_id;
-    drmModeConnectorPtr mode_output;
-    drmModeEncoderPtr *mode_encoders;
+typedef struct
+{
+    drmmode_ptr            drmmode;
+    int                    output_id;
+    drmModeConnectorPtr    mode_output;
+    drmModeEncoderPtr     *mode_encoders;
     drmModePropertyBlobPtr edid_blob;
-    int dpms_enum_id;
-    int num_props;
-    drmmode_prop_ptr props;
-    int enc_mask;
-    int enc_clone_mask;
+    int                    dpms_enum_id;
+    int                    num_props;
+    drmmode_prop_ptr       props;
+    int                    enc_mask;
+    int                    enc_clone_mask;
 } drmmode_output_private_rec, *drmmode_output_private_ptr;
 
 extern Bool drmmode_pre_init(ScrnInfoPtr pScrn, drmmode_ptr drmmode, int cpp);

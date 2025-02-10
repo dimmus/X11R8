@@ -27,19 +27,19 @@
 #ifndef SNA_VIDEO_HWMC_H
 #define SNA_VIDEO_HWMC_H
 
-#define SNA_XVMC_LIBNAME	"IntelXvMC"
-#define SNA_XVMC_MAJOR	0
-#define SNA_XVMC_MINOR	1
-#define SNA_XVMC_PATCHLEVEL	0
+#define SNA_XVMC_LIBNAME    "IntelXvMC"
+#define SNA_XVMC_MAJOR      0
+#define SNA_XVMC_MINOR      1
+#define SNA_XVMC_PATCHLEVEL 0
 
 /* hw xvmc support type */
-#define XVMC_I915_MPEG2_MC	0x01
-#define XVMC_I965_MPEG2_MC	0x02
-#define XVMC_I945_MPEG2_VLD	0x04
-#define XVMC_I965_MPEG2_VLD	0x08
+#define XVMC_I915_MPEG2_MC  0x01
+#define XVMC_I965_MPEG2_MC  0x02
+#define XVMC_I945_MPEG2_VLD 0x04
+#define XVMC_I965_MPEG2_VLD 0x08
 
 #ifdef _SNA_XVMC_SERVER_
-#include <xf86xvmc.h>
+#  include <xf86xvmc.h>
 void sna_video_xvmc_setup(struct sna *sna, ScreenPtr screen);
 #endif
 

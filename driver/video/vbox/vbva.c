@@ -26,14 +26,14 @@
  */
 
 #if defined(IN_XF86_MODULE) && !defined(NO_ANSIC)
-# include "xf86_ansic.h"
+#  include "xf86_ansic.h"
 #endif
 #include "compiler.h"
 
 #include "vboxvideo.h"
 
-# include <stdlib.h>
-# include <string.h>
+#include <stdlib.h>
+#include <string.h>
 
 /**************************************************************************
 * Main functions                                                          *
@@ -49,35 +49,36 @@
  * @param aRects  Array of structures containing the coordinates of the
  *                rectangles
  */
-void vbvxHandleDirtyRect(ScrnInfoPtr pScrn, int iRects, BoxPtr aRects)
+void
+vbvxHandleDirtyRect(ScrnInfoPtr pScrn, int iRects, BoxPtr aRects)
 {
     VBVACMDHDR cmdHdr;
-    VBOXPtr pVBox;
-    int i;
-    unsigned j;
+    VBOXPtr    pVBox;
+    int        i;
+    unsigned   j;
 
     pVBox = pScrn->driverPrivate;
-    if (!pScrn->vtSema)
-        return;
+    if (!pScrn->vtSema) return;
 
     for (j = 0; j < pVBox->cScreens; ++j)
     {
         /* Just continue quietly if VBVA is not currently active. */
         struct VBVABUFFER *pVBVA = pVBox->pScreens[j].aVbvaCtx.pVBVA;
-        if (   !pVBVA
-            || !(pVBVA->hostFlags.u32HostEvents & VBVA_F_MODE_ENABLED))
+        if (!pVBVA || !(pVBVA->hostFlags.u32HostEvents & VBVA_F_MODE_ENABLED))
             continue;
         for (i = 0; i < iRects; ++i)
         {
-            if (   aRects[i].x1 >   pVBox->pScreens[j].aScreenLocation.x
-                                  + pVBox->pScreens[j].aScreenLocation.cx
-                || aRects[i].y1 >   pVBox->pScreens[j].aScreenLocation.y
-                                  + pVBox->pScreens[j].aScreenLocation.cy
-                || aRects[i].x2 <   pVBox->pScreens[j].aScreenLocation.x
-                || aRects[i].y2 <   pVBox->pScreens[j].aScreenLocation.y)
+            if (aRects[i].x1 > pVBox->pScreens[j].aScreenLocation.x +
+                                   pVBox->pScreens[j].aScreenLocation.cx ||
+                aRects[i].y1 > pVBox->pScreens[j].aScreenLocation.y +
+                                   pVBox->pScreens[j].aScreenLocation.cy ||
+                aRects[i].x2 < pVBox->pScreens[j].aScreenLocation.x ||
+                aRects[i].y2 < pVBox->pScreens[j].aScreenLocation.y)
                 continue;
-            cmdHdr.x = (int16_t)aRects[i].x1 - pVBox->pScreens[0].aScreenLocation.x;
-            cmdHdr.y = (int16_t)aRects[i].y1 - pVBox->pScreens[0].aScreenLocation.y;
+            cmdHdr.x =
+                (int16_t)aRects[i].x1 - pVBox->pScreens[0].aScreenLocation.x;
+            cmdHdr.y =
+                (int16_t)aRects[i].y1 - pVBox->pScreens[0].aScreenLocation.y;
             cmdHdr.w = (uint16_t)(aRects[i].x2 - aRects[i].x1);
             cmdHdr.h = (uint16_t)(aRects[i].y2 - aRects[i].y1);
 
@@ -89,7 +90,9 @@ void vbvxHandleDirtyRect(ScrnInfoPtr pScrn, int iRects, BoxPtr aRects)
             if (VBoxVBVABufferBeginUpdate(&pVBox->pScreens[j].aVbvaCtx,
                                           &pVBox->guestCtx))
             {
-                VBoxVBVAWrite(&pVBox->pScreens[j].aVbvaCtx, &pVBox->guestCtx, &cmdHdr,
+                VBoxVBVAWrite(&pVBox->pScreens[j].aVbvaCtx,
+                              &pVBox->guestCtx,
+                              &cmdHdr,
                               sizeof(cmdHdr));
                 VBoxVBVABufferEndUpdate(&pVBox->pScreens[j].aVbvaCtx);
             }
@@ -109,41 +112,50 @@ static DECLCALLBACK(void) hgsmiEnvFree(void *pvEnv, void *pv)
     free(pv);
 }
 
-static HGSMIENV g_hgsmiEnv =
-{
-    NULL,
-    hgsmiEnvAlloc,
-    hgsmiEnvFree
-};
+static HGSMIENV g_hgsmiEnv = { NULL, hgsmiEnvAlloc, hgsmiEnvFree };
 
 /**
  * Calculate the location in video RAM of and initialise the heap for guest to
  * host messages.
  */
-void vbvxSetUpHGSMIHeapInGuest(VBOXPtr pVBox, uint32_t cbVRAM)
+void
+vbvxSetUpHGSMIHeapInGuest(VBOXPtr pVBox, uint32_t cbVRAM)
 {
-    int rc;
+    int      rc;
     uint32_t offVRAMBaseMapping, offGuestHeapMemory, cbGuestHeapMemory;
-    void *pvGuestHeapMemory;
+    void    *pvGuestHeapMemory;
 
-    VBoxHGSMIGetBaseMappingInfo(cbVRAM, &offVRAMBaseMapping, NULL, &offGuestHeapMemory, &cbGuestHeapMemory, NULL);
-    pvGuestHeapMemory = ((uint8_t *)pVBox->base) + offVRAMBaseMapping + offGuestHeapMemory;
-    rc = VBoxHGSMISetupGuestContext(&pVBox->guestCtx, pvGuestHeapMemory, cbGuestHeapMemory,
-                                    offVRAMBaseMapping + offGuestHeapMemory, &g_hgsmiEnv);
-    AssertMsg(RT_SUCCESS(rc), ("Failed to set up the guest-to-host message buffer heap, rc=%d\n", rc));
+    VBoxHGSMIGetBaseMappingInfo(cbVRAM,
+                                &offVRAMBaseMapping,
+                                NULL,
+                                &offGuestHeapMemory,
+                                &cbGuestHeapMemory,
+                                NULL);
+    pvGuestHeapMemory =
+        ((uint8_t *)pVBox->base) + offVRAMBaseMapping + offGuestHeapMemory;
+    rc = VBoxHGSMISetupGuestContext(&pVBox->guestCtx,
+                                    pvGuestHeapMemory,
+                                    cbGuestHeapMemory,
+                                    offVRAMBaseMapping + offGuestHeapMemory,
+                                    &g_hgsmiEnv);
+    AssertMsg(
+        RT_SUCCESS(rc),
+        ("Failed to set up the guest-to-host message buffer heap, rc=%d\n",
+         rc));
     pVBox->cbView = offVRAMBaseMapping;
 }
 
 /** Callback to fill in the view structures */
-static DECLCALLBACK(int) vboxFillViewInfo(void *pvVBox, struct VBVAINFOVIEW *pViews, uint32_t cViews)
+static DECLCALLBACK(int)
+    vboxFillViewInfo(void *pvVBox, struct VBVAINFOVIEW *pViews, uint32_t cViews)
 {
-    VBOXPtr pVBox = (VBOXPtr)pvVBox;
+    VBOXPtr  pVBox = (VBOXPtr)pvVBox;
     unsigned i;
     for (i = 0; i < cViews; ++i)
     {
-        pViews[i].u32ViewIndex = i;
-        pViews[i].u32ViewOffset = 0;
-        pViews[i].u32ViewSize = pVBox->cbView;
+        pViews[i].u32ViewIndex     = i;
+        pViews[i].u32ViewOffset    = 0;
+        pViews[i].u32ViewSize      = pVBox->cbView;
         pViews[i].u32MaxScreenSize = pVBox->cbFBMax;
     }
     return VINF_SUCCESS;
@@ -154,9 +166,10 @@ static DECLCALLBACK(int) vboxFillViewInfo(void *pvVBox, struct VBVAINFOVIEW *pVi
  *
  * @returns TRUE on success, FALSE on failure
  */
-static Bool vboxSetupVRAMVbva(VBOXPtr pVBox)
+static Bool
+vboxSetupVRAMVbva(VBOXPtr pVBox)
 {
-    int rc = VINF_SUCCESS;
+    int      rc = VINF_SUCCESS;
     unsigned i;
 
     pVBox->cbFBMax = pVBox->cbView;
@@ -164,37 +177,50 @@ static Bool vboxSetupVRAMVbva(VBOXPtr pVBox)
     {
         pVBox->cbFBMax -= VBVA_MIN_BUFFER_SIZE;
         pVBox->pScreens[i].aoffVBVABuffer = pVBox->cbFBMax;
-        TRACE_LOG("VBVA buffer offset for screen %u: 0x%lx\n", i,
-                  (unsigned long) pVBox->cbFBMax);
+        TRACE_LOG("VBVA buffer offset for screen %u: 0x%lx\n",
+                  i,
+                  (unsigned long)pVBox->cbFBMax);
         VBoxVBVASetupBufferContext(&pVBox->pScreens[i].aVbvaCtx,
                                    pVBox->pScreens[i].aoffVBVABuffer,
                                    VBVA_MIN_BUFFER_SIZE);
     }
     TRACE_LOG("Maximum framebuffer size: %lu (0x%lx)\n",
-              (unsigned long) pVBox->cbFBMax,
-              (unsigned long) pVBox->cbFBMax);
-    rc = VBoxHGSMISendViewInfo(&pVBox->guestCtx, pVBox->cScreens,
-                               vboxFillViewInfo, (void *)pVBox);
-    AssertMsg(RT_SUCCESS(rc), ("Failed to send the view information to the host, rc=%d\n", rc));
+              (unsigned long)pVBox->cbFBMax,
+              (unsigned long)pVBox->cbFBMax);
+    rc = VBoxHGSMISendViewInfo(&pVBox->guestCtx,
+                               pVBox->cScreens,
+                               vboxFillViewInfo,
+                               (void *)pVBox);
+    AssertMsg(RT_SUCCESS(rc),
+              ("Failed to send the view information to the host, rc=%d\n", rc));
     return TRUE;
 }
 
-static Bool haveHGSMIModeHintAndCursorReportingInterface(VBOXPtr pVBox)
+static Bool
+haveHGSMIModeHintAndCursorReportingInterface(VBOXPtr pVBox)
 {
     uint32_t fModeHintReporting, fCursorReporting;
 
-    return    RT_SUCCESS(VBoxQueryConfHGSMI(&pVBox->guestCtx, VBOX_VBVA_CONF32_MODE_HINT_REPORTING, &fModeHintReporting))
-           && RT_SUCCESS(VBoxQueryConfHGSMI(&pVBox->guestCtx, VBOX_VBVA_CONF32_GUEST_CURSOR_REPORTING, &fCursorReporting))
-           && fModeHintReporting == VINF_SUCCESS
-           && fCursorReporting == VINF_SUCCESS;
+    return RT_SUCCESS(VBoxQueryConfHGSMI(&pVBox->guestCtx,
+                                         VBOX_VBVA_CONF32_MODE_HINT_REPORTING,
+                                         &fModeHintReporting)) &&
+           RT_SUCCESS(
+               VBoxQueryConfHGSMI(&pVBox->guestCtx,
+                                  VBOX_VBVA_CONF32_GUEST_CURSOR_REPORTING,
+                                  &fCursorReporting)) &&
+           fModeHintReporting == VINF_SUCCESS &&
+           fCursorReporting == VINF_SUCCESS;
 }
 
-static Bool hostHasScreenBlankingFlag(VBOXPtr pVBox)
+static Bool
+hostHasScreenBlankingFlag(VBOXPtr pVBox)
 {
     uint32_t fScreenFlags;
 
-    return    RT_SUCCESS(VBoxQueryConfHGSMI(&pVBox->guestCtx, VBOX_VBVA_CONF32_SCREEN_FLAGS, &fScreenFlags))
-           && fScreenFlags & VBVA_SCREEN_F_BLANK;
+    return RT_SUCCESS(VBoxQueryConfHGSMI(&pVBox->guestCtx,
+                                         VBOX_VBVA_CONF32_SCREEN_FLAGS,
+                                         &fScreenFlags)) &&
+           fScreenFlags & VBVA_SCREEN_F_BLANK;
 }
 
 /**
@@ -207,25 +233,29 @@ static Bool hostHasScreenBlankingFlag(VBOXPtr pVBox)
 Bool
 vboxEnableVbva(ScrnInfoPtr pScrn)
 {
-    Bool rc = TRUE;
+    Bool     rc = TRUE;
     unsigned i;
-    VBOXPtr pVBox = pScrn->driverPrivate;
+    VBOXPtr  pVBox = pScrn->driverPrivate;
 
     TRACE_ENTRY();
-    if (!vboxSetupVRAMVbva(pVBox))
-        return FALSE;
+    if (!vboxSetupVRAMVbva(pVBox)) return FALSE;
     for (i = 0; i < pVBox->cScreens; ++i)
     {
         struct VBVABUFFER *pVBVA;
 
-        pVBVA = (struct VBVABUFFER *) (  ((uint8_t *)pVBox->base)
-                                       + pVBox->pScreens[i].aoffVBVABuffer);
-        if (!VBoxVBVAEnable(&pVBox->pScreens[i].aVbvaCtx, &pVBox->guestCtx,
-                            pVBVA, i))
+        pVBVA = (struct VBVABUFFER *)(((uint8_t *)pVBox->base) +
+                                      pVBox->pScreens[i].aoffVBVABuffer);
+        if (!VBoxVBVAEnable(&pVBox->pScreens[i].aVbvaCtx,
+                            &pVBox->guestCtx,
+                            pVBVA,
+                            i))
             rc = FALSE;
     }
-    AssertMsg(rc, ("Failed to enable screen update reporting for at least one virtual monitor.\n"));
-    pVBox->fHaveHGSMIModeHints = haveHGSMIModeHintAndCursorReportingInterface(pVBox);
+    AssertMsg(rc,
+              ("Failed to enable screen update reporting for at least one "
+               "virtual monitor.\n"));
+    pVBox->fHaveHGSMIModeHints =
+        haveHGSMIModeHintAndCursorReportingInterface(pVBox);
     pVBox->fHostHasScreenBlankingFlag = hostHasScreenBlankingFlag(pVBox);
     return rc;
 }
@@ -242,7 +272,7 @@ void
 vboxDisableVbva(ScrnInfoPtr pScrn)
 {
     unsigned i;
-    VBOXPtr pVBox = pScrn->driverPrivate;
+    VBOXPtr  pVBox = pScrn->driverPrivate;
 
     TRACE_ENTRY();
     for (i = 0; i < pVBox->cScreens; ++i)

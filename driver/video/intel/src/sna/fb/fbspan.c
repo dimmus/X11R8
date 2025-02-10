@@ -24,110 +24,141 @@
 #include "fb.h"
 #include "fbclip.h"
 
-inline static void
+static inline void
 fbFillSpan(DrawablePtr drawable, GCPtr gc, const BoxRec *b, void *data)
 {
-	DBG(("%s (%d,%d)+%d\n", __FUNCTION__, b->x1, b->y1, b->x2-b->x1));
-	fbFill(drawable, gc, b->x1, b->y1, b->x2 - b->x1, 1);
+    DBG(("%s (%d,%d)+%d\n", __FUNCTION__, b->x1, b->y1, b->x2 - b->x1));
+    fbFill(drawable, gc, b->x1, b->y1, b->x2 - b->x1, 1);
 }
 
 void
-fbFillSpans(DrawablePtr drawable, GCPtr gc,
-	    int n, DDXPointPtr pt, int *width, int fSorted)
+fbFillSpans(DrawablePtr drawable,
+            GCPtr       gc,
+            int         n,
+            DDXPointPtr pt,
+            int        *width,
+            int         fSorted)
 {
-	DBG(("%s x %d\n", __FUNCTION__, n));
-	while (n--) {
-		BoxRec box;
+    DBG(("%s x %d\n", __FUNCTION__, n));
+    while (n--)
+    {
+        BoxRec box;
 
-		memcpy(&box, pt, sizeof(box));
-		box.x2 = box.x1 + *width++;
-		box.y2 = box.y1 + 1;
+        memcpy(&box, pt, sizeof(box));
+        box.x2 = box.x1 + *width++;
+        box.y2 = box.y1 + 1;
 
-		/* XXX fSorted */
-		fbDrawableRun(drawable, gc, &box, fbFillSpan, NULL);
-		pt++;
-	}
+        /* XXX fSorted */
+        fbDrawableRun(drawable, gc, &box, fbFillSpan, NULL);
+        pt++;
+    }
 }
 
-struct fbSetSpan {
-	char *src;
-	DDXPointRec pt;
-	FbStride stride;
-	FbBits *dst;
-	int dx, dy;
+struct fbSetSpan
+{
+    char       *src;
+    DDXPointRec pt;
+    FbStride    stride;
+    FbBits     *dst;
+    int         dx, dy;
 };
 
-inline static void
+static inline void
 fbSetSpan(DrawablePtr drawable, GCPtr gc, const BoxRec *b, void *_data)
 {
-	struct fbSetSpan *data = _data;
-	int xoff, bpp;
+    struct fbSetSpan *data = _data;
+    int               xoff, bpp;
 
-	xoff = (int) (((long)data->src) & (FB_MASK >> 3));
-	bpp = drawable->bitsPerPixel;
+    xoff = (int)(((long)data->src) & (FB_MASK >> 3));
+    bpp  = drawable->bitsPerPixel;
 
-	fbBlt((FbBits *)(data->src - xoff), 0,
-	      (b->x1 - data->pt.x) * bpp + (xoff << 3),
-	      data->dst + (b->y1 + data->dy) * data->stride, data->stride,
-	      (b->x1 + data->dx) * bpp,
-	      (b->x2 - b->x1) * bpp, 1,
-	      gc->alu, fb_gc(gc)->pm, bpp,
-	      FALSE, FALSE);
+    fbBlt((FbBits *)(data->src - xoff),
+          0,
+          (b->x1 - data->pt.x) * bpp + (xoff << 3),
+          data->dst + (b->y1 + data->dy) * data->stride,
+          data->stride,
+          (b->x1 + data->dx) * bpp,
+          (b->x2 - b->x1) * bpp,
+          1,
+          gc->alu,
+          fb_gc(gc)->pm,
+          bpp,
+          FALSE,
+          FALSE);
 }
 
 void
-fbSetSpans(DrawablePtr drawable, GCPtr gc,
-           char *src, DDXPointPtr pt, int *width, int n, int fSorted)
+fbSetSpans(DrawablePtr drawable,
+           GCPtr       gc,
+           char       *src,
+           DDXPointPtr pt,
+           int        *width,
+           int         n,
+           int         fSorted)
 {
-	struct fbSetSpan data;
-	PixmapPtr pixmap;
+    struct fbSetSpan data;
+    PixmapPtr        pixmap;
 
-	DBG(("%s x %d\n", __FUNCTION__, n));
+    DBG(("%s x %d\n", __FUNCTION__, n));
 
-	fbGetDrawablePixmap(drawable, pixmap, data.dx, data.dy);
-	data.dst = pixmap->devPrivate.ptr;
-	data.stride = pixmap->devKind / sizeof(FbStip);
+    fbGetDrawablePixmap(drawable, pixmap, data.dx, data.dy);
+    data.dst    = pixmap->devPrivate.ptr;
+    data.stride = pixmap->devKind / sizeof(FbStip);
 
-	data.src = src;
-	while (n--) {
-		BoxRec box;
+    data.src = src;
+    while (n--)
+    {
+        BoxRec box;
 
-		memcpy(&box, pt, sizeof(box));
-		data.pt = *pt;
-		box.x2 = box.x1 + *width;
-		box.y2 = box.y1 + 1;
+        memcpy(&box, pt, sizeof(box));
+        data.pt = *pt;
+        box.x2  = box.x1 + *width;
+        box.y2  = box.y1 + 1;
 
-		fbDrawableRun(drawable, gc, &box, fbSetSpan, &data);
+        fbDrawableRun(drawable, gc, &box, fbSetSpan, &data);
 
-		data.src += PixmapBytePad(*width, drawable->depth);
-		width++;
-		pt++;
-	}
+        data.src += PixmapBytePad(*width, drawable->depth);
+        width++;
+        pt++;
+    }
 }
 
 void
-fbGetSpans(DrawablePtr drawable, int wMax,
-           DDXPointPtr pt, int *width, int n, char *dst)
+fbGetSpans(DrawablePtr drawable,
+           int         wMax,
+           DDXPointPtr pt,
+           int        *width,
+           int         n,
+           char       *dst)
 {
-	FbBits *src, *d;
-	FbStride srcStride;
-	int srcBpp;
-	int srcXoff, srcYoff;
-	int xoff;
+    FbBits  *src, *d;
+    FbStride srcStride;
+    int      srcBpp;
+    int      srcXoff, srcYoff;
+    int      xoff;
 
-	fbGetDrawable(drawable, src, srcStride, srcBpp, srcXoff, srcYoff);
+    fbGetDrawable(drawable, src, srcStride, srcBpp, srcXoff, srcYoff);
 
-	DBG(("%s x %d\n", __FUNCTION__, n));
-	while (n--) {
-		xoff = (int) (((long) dst) & (FB_MASK >> 3));
-		d = (FbBits *) (dst - xoff);
-		fbBlt(src + (pt->y + srcYoff) * srcStride, srcStride,
-		      (pt->x + srcXoff) * srcBpp,
-		      d, 1, xoff << 3, *width * srcBpp,
-		      1, GXcopy, FB_ALLONES, srcBpp,
-		      FALSE, FALSE);
-		dst += PixmapBytePad(*width, drawable->depth);
-		pt++;
-		width++;
-	}
+    DBG(("%s x %d\n", __FUNCTION__, n));
+    while (n--)
+    {
+        xoff = (int)(((long)dst) & (FB_MASK >> 3));
+        d    = (FbBits *)(dst - xoff);
+        fbBlt(src + (pt->y + srcYoff) * srcStride,
+              srcStride,
+              (pt->x + srcXoff) * srcBpp,
+              d,
+              1,
+              xoff << 3,
+              *width * srcBpp,
+              1,
+              GXcopy,
+              FB_ALLONES,
+              srcBpp,
+              FALSE,
+              FALSE);
+        dst += PixmapBytePad(*width, drawable->depth);
+        pt++;
+        width++;
+    }
 }

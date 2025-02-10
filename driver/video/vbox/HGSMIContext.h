@@ -20,7 +20,6 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 #ifndef ___VBox_Graphics_HGSMIContext_h___
 #define ___VBox_Graphics_HGSMIContext_h___
 
@@ -29,12 +28,12 @@
 #include "VBoxVideoIPRT.h"
 
 #ifdef VBOX_WDDM_MINIPORT
-# include "wddm/VBoxMPShgsmi.h"
- typedef VBOXSHGSMI HGSMIGUESTCMDHEAP;
-# define HGSMIGUESTCMDHEAP_GET(_p) (&(_p)->Heap)
+#  include "wddm/VBoxMPShgsmi.h"
+typedef VBOXSHGSMI HGSMIGUESTCMDHEAP;
+#  define HGSMIGUESTCMDHEAP_GET(_p) (&(_p)->Heap)
 #else
- typedef HGSMIHEAP HGSMIGUESTCMDHEAP;
-# define HGSMIGUESTCMDHEAP_GET(_p) (_p)
+typedef HGSMIHEAP HGSMIGUESTCMDHEAP;
+#  define HGSMIGUESTCMDHEAP_GET(_p) (_p)
 #endif
 
 RT_C_DECLS_BEGIN
@@ -52,7 +51,6 @@ typedef struct HGSMIGUESTCOMMANDCONTEXT
      * offsets into the heap. */
     RTIOPORT port;
 } HGSMIGUESTCOMMANDCONTEXT, *PHGSMIGUESTCOMMANDCONTEXT;
-
 
 /**
  * Structure grouping the context needed for receiving commands from the host
@@ -84,21 +82,22 @@ typedef struct HGSMIHOSTCOMMANDCONTEXT
  * @{ */
 
 /** @todo we should provide a cleanup function too as part of the API */
-DECLHIDDEN(int)      VBoxHGSMISetupGuestContext(PHGSMIGUESTCOMMANDCONTEXT pCtx,
-                                                void *pvGuestHeapMemory,
-                                                uint32_t cbGuestHeapMemory,
-                                                uint32_t offVRAMGuestHeapMemory,
-                                                const HGSMIENV *pEnv);
-DECLHIDDEN(void)     VBoxHGSMISetupHostContext(PHGSMIHOSTCOMMANDCONTEXT pCtx,
-                                               void *pvBaseMapping,
-                                               uint32_t offHostFlags,
-                                               void *pvHostAreaMapping,
-                                               uint32_t offVRAMHostArea,
-                                               uint32_t cbHostArea);
+DECLHIDDEN(int)
+VBoxHGSMISetupGuestContext(PHGSMIGUESTCOMMANDCONTEXT pCtx,
+                           void                     *pvGuestHeapMemory,
+                           uint32_t                  cbGuestHeapMemory,
+                           uint32_t                  offVRAMGuestHeapMemory,
+                           const HGSMIENV           *pEnv);
+DECLHIDDEN(void)
+VBoxHGSMISetupHostContext(PHGSMIHOSTCOMMANDCONTEXT pCtx,
+                          void                    *pvBaseMapping,
+                          uint32_t                 offHostFlags,
+                          void                    *pvHostAreaMapping,
+                          uint32_t                 offVRAMHostArea,
+                          uint32_t                 cbHostArea);
 
 /** @}  */
 
 RT_C_DECLS_END
 
 #endif
-

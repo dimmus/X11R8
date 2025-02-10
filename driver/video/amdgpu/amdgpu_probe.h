@@ -45,7 +45,7 @@
 #include "xf86Crtc.h"
 
 #ifdef XSERVER_PLATFORM_BUS
-#include "xf86platformBus.h"
+#  include "xf86platformBus.h"
 #endif
 
 #include <amdgpu.h>
@@ -54,22 +54,24 @@
 
 extern DriverRec AMDGPU;
 
-typedef struct {
-	Bool HasCRTC2;		/* All cards except original Radeon  */
-	Bool has_page_flip_target;
+typedef struct
+{
+    Bool HasCRTC2;  /* All cards except original Radeon  */
+    Bool has_page_flip_target;
 
-	amdgpu_device_handle pDev;
+    amdgpu_device_handle pDev;
 
-	int fd;			/* for sharing across zaphod heads   */
-	int fd_ref;
-	unsigned long fd_wakeup_registered;	/* server generation for which fd has been registered for wakeup handling */
-	int fd_wakeup_ref;
-	unsigned int assigned_crtcs;
-	unsigned int num_scrns;
-	ScrnInfoPtr scrn[6];
-	struct xf86_platform_device *platform_dev;
-	char *render_node;
-	char *busid;
+    int fd;   /* for sharing across zaphod heads   */
+    int fd_ref;
+    unsigned long
+        fd_wakeup_registered; /* server generation for which fd has been registered for wakeup handling */
+    int                          fd_wakeup_ref;
+    unsigned int                 assigned_crtcs;
+    unsigned int                 num_scrns;
+    ScrnInfoPtr                  scrn[6];
+    struct xf86_platform_device *platform_dev;
+    char                        *render_node;
+    char                        *busid;
 } AMDGPUEntRec, *AMDGPUEntPtr;
 
 extern void amdgpu_kernel_close_fd(AMDGPUEntPtr pAMDGPUEnt);
@@ -84,6 +86,6 @@ extern Bool AMDGPUEnterVT_KMS(ScrnInfoPtr pScrn);
 extern void AMDGPULeaveVT_KMS(ScrnInfoPtr pScrn);
 extern void AMDGPUFreeScreen_KMS(ScrnInfoPtr pScrn);
 
-extern ModeStatus AMDGPUValidMode(ScrnInfoPtr pScrn, DisplayModePtr mode,
-				  Bool verbose, int flag);
+extern ModeStatus
+AMDGPUValidMode(ScrnInfoPtr pScrn, DisplayModePtr mode, Bool verbose, int flag);
 #endif /* _AMDGPU_PROBE_H_ */
