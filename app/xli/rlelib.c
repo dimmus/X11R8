@@ -16,12 +16,12 @@
 #include <ctype.h>
 #include "rle.h"
 
-#undef  DEBUG
+#undef DEBUG
 
 #ifdef DEBUG
-# define debug(xx)	fprintf(stderr,xx)
+#  define debug(xx) fprintf(stderr, xx)
 #else
-# define debug(xx)
+#  define debug(xx)
 #endif
 
 /*
@@ -52,43 +52,36 @@
  */
 
 #ifndef XTNDRUNSV
-#define XTNDRUNSV
+#  define XTNDRUNSV
 
 /* 
  * Opcode definitions
  */
 
-#define     LONG                0x40
-#define	    RSkipLinesOp	1
-#define	    RSetColorOp		2
-#define	    RSkipPixelsOp	3
-#define	    RByteDataOp		5
-#define	    RRunDataOp		6
-#define	    REOFOp		7
+#  define LONG          0x40
+#  define RSkipLinesOp  1
+#  define RSetColorOp   2
+#  define RSkipPixelsOp 3
+#  define RByteDataOp   5
+#  define RRunDataOp    6
+#  define REOFOp        7
 
-#define     H_CLEARFIRST        0x1	/* clear framebuffer flag */
-#define	    H_NO_BACKGROUND	0x2	/* if set, no bg color supplied */
-#define	    H_ALPHA		0x4   /* if set, alpha channel (-1) present */
-#define	    H_COMMENT		0x8	/* if set, comments present */
+#  define H_CLEARFIRST    0x1 /* clear framebuffer flag */
+#  define H_NO_BACKGROUND 0x2 /* if set, no bg color supplied */
+#  define H_ALPHA         0x4   /* if set, alpha channel (-1) present */
+#  define H_COMMENT       0x8 /* if set, comments present */
 
 struct XtndRsetup
 {
-    short   h_xpos,
-            h_ypos,
-            h_xlen,
-            h_ylen;
-    char    h_flags,
-            h_ncolors,
-	    h_pixelbits,
-	    h_ncmap,
-	    h_cmaplen;
+    short h_xpos, h_ypos, h_xlen, h_ylen;
+    char  h_flags, h_ncolors, h_pixelbits, h_ncmap, h_cmaplen;
 };
 
 /* "Old" RLE format magic numbers */
-#define	    RMAGIC	('R' << 8)	/* top half of magic number */
-#define	    WMAGIC	('W' << 8)	/* black&white rle image */
+#  define RMAGIC ('R' << 8) /* top half of magic number */
+#  define WMAGIC ('W' << 8) /* black&white rle image */
 
-#define	    XtndRMAGIC	((short)0xcc52)	/* RLE file magic number */
+#  define XtndRMAGIC ((short)0xcc52) /* RLE file magic number */
 
 #endif /* XTNDRUNSV */
 
@@ -123,11 +116,11 @@ struct XtndRsetup
 /* 
  * States for run detection
  */
-#define	DATA	0
-#define	RUN2	1
-#define RUN3	2
-#define	RUN4	3
-#define	INRUN	-1
+#define DATA  0
+#define RUN2  1
+#define RUN3  2
+#define RUN4  3
+#define INRUN -1
 
 /*
  * This software is copyrighted as noted below.  It may be freely copied,
@@ -162,20 +155,22 @@ struct XtndRsetup
 static int sv_bg_color[3] = { 0, 0, 0 };
 
 struct sv_globals sv_globals = {
-    RUN_DISPATCH,		/* dispatch value */
-    3,				/* 3 colors */
-    sv_bg_color,		/* background color */
-    0,				/* (alpha) if 1, save alpha channel */
-    2,				/* (background) 0->just save pixels, */
-				/* 1->overlay, 2->clear to bg first */
-    0, 511,			/* (xmin, xmax) X bounds to save */
-    0, 479,			/* (ymin, ymax) Y bounds to save */
-    0,				/* ncmap (if != 0, save color map) */
-    8,				/* cmaplen (log2 of length of color map) */
-    NULL,			/* pointer to color map */
-    NULL,			/* pointer to comment strings */
-    NULL,			/* output file */
-    { 7 }			/* RGB channels only */
+    RUN_DISPATCH,  /* dispatch value */
+    3,    /* 3 colors */
+    sv_bg_color,  /* background color */
+    0,    /* (alpha) if 1, save alpha channel */
+    2,    /* (background) 0->just save pixels, */
+                /* 1->overlay, 2->clear to bg first */
+    0,
+    511,   /* (xmin, xmax) X bounds to save */
+    0,
+    479,   /* (ymin, ymax) Y bounds to save */
+    0,    /* ncmap (if != 0, save color map) */
+    8,    /* cmaplen (log2 of length of color map) */
+    NULL,   /* pointer to color map */
+    NULL,   /* pointer to comment strings */
+    NULL,   /* output file */
+    { 7 }   /* RGB channels only */
     /* Can't initialize the union */
 };
 
@@ -265,7 +260,7 @@ struct sv_globals sv_globals = {
  * 		    follow the last byte in the run.
  */
 
-#define UPPER 255			/* anything bigger ain't a byte */
+#define UPPER 255   /* anything bigger ain't a byte */
 
 /*
  * This software is copyrighted as noted below.  It may be freely copied,
@@ -321,125 +316,120 @@ struct sv_globals sv_globals = {
 rle_pixel **
 buildmap(struct sv_globals *globals, int minmap, double gamma)
 {
-    rle_pixel ** cmap, * gammap;
+    rle_pixel  **cmap, *gammap;
     register int i, j;
-    int maplen, cmaplen, ncmap, nmap;
+    int          maplen, cmaplen, ncmap, nmap;
 
-    if ( globals->sv_ncmap == 0 )	/* make identity map */
+    if (globals->sv_ncmap == 0) /* make identity map */
     {
-	nmap = (minmap < globals->sv_ncolors) ? globals->sv_ncolors : minmap;
-	cmap = (rle_pixel **)lcalloc((nmap +1) * sizeof(rle_pixel *));
-	cmap[0] = (rle_pixel *)(nmap +1);
-	cmap++;	/* keep size in cmap[-1] */
-	cmap[0] = (rle_pixel *)lmalloc( 256 * sizeof(rle_pixel) );
-	for ( i = 0; i < 256; i++ )
-	    cmap[0][i] = i;
-	for ( i = 1; i < nmap; i++ )
-	    cmap[i] = cmap[0];
-	maplen = 256;
-	ncmap = 1;		/* number of unique rows */
+        nmap    = (minmap < globals->sv_ncolors) ? globals->sv_ncolors : minmap;
+        cmap    = (rle_pixel **)lcalloc((nmap + 1) * sizeof(rle_pixel *));
+        cmap[0] = (rle_pixel *)(nmap + 1);
+        cmap++; /* keep size in cmap[-1] */
+        cmap[0] = (rle_pixel *)lmalloc(256 * sizeof(rle_pixel));
+        for (i = 0; i < 256; i++)
+            cmap[0][i] = i;
+        for (i = 1; i < nmap; i++)
+            cmap[i] = cmap[0];
+        maplen = 256;
+        ncmap  = 1;  /* number of unique rows */
     }
-    else			/* make map from globals */
+    else   /* make map from globals */
     {
-	/* Map is at least 256 long */
-	cmaplen = (1 << globals->sv_cmaplen);
-	if ( cmaplen < 256 )
-	    maplen = 256;
-	else
-	    maplen = cmaplen;
+    /* Map is at least 256 long */
+        cmaplen = (1 << globals->sv_cmaplen);
+        if (cmaplen < 256) maplen = 256;
+        else maplen = cmaplen;
 
-	if ( globals->sv_ncmap == 1 )	/* make "b&w" map */
-	{
-	    nmap = (minmap < globals->sv_ncolors) ?
-		globals->sv_ncolors : minmap;
-	    cmap = (rle_pixel **)lcalloc((nmap+1) * sizeof(rle_pixel *));
-	    cmap[0] = (rle_pixel *)(nmap+1);
-	    cmap++;	/* keep size in cmap[-1] */
-	    cmap[0] = (rle_pixel *)lmalloc( maplen * sizeof(rle_pixel) );
-	    for ( i = 0; i < maplen; i++ )
-		if ( i < cmaplen )
-		    cmap[0][i] = globals->sv_cmap[i] >> 8;
-		else
-		    cmap[0][i] = i;
-	    for ( i = 1; i < nmap; i++ )
-		cmap[i] = cmap[0];
-	    ncmap = 1;
-	}
-	else if ( globals->sv_ncolors <= globals->sv_ncmap )
-	{
-	    nmap = (minmap < globals->sv_ncmap) ? globals->sv_ncmap : minmap;
-	    cmap = (rle_pixel **)lcalloc((nmap+1) * sizeof(rle_pixel *));
-	    cmap[0] = (rle_pixel *)(nmap+1);
-	    cmap++;	/* keep size in cmap[-1] */
-	    for ( j = 0; j < globals->sv_ncmap; j++ )
-	    {
-		cmap[j] = (rle_pixel *)lmalloc( maplen * sizeof(rle_pixel) );
-		for ( i = 0; i < maplen; i++ )
-		    if ( i < cmaplen )
-			cmap[j][i] = globals->sv_cmap[j*cmaplen + i] >> 8;
-		    else
-			cmap[j][i] = i;
-	    }
-	    for ( i = j, j--; i < nmap; i++ )
-		cmap[i] = cmap[j];
-	    ncmap = globals->sv_ncmap;
-	}
-	else			/* ncolors > ncmap */
-	{
-	    nmap = (minmap < globals->sv_ncolors) ?
-		globals->sv_ncolors : minmap;
-	    cmap = (rle_pixel **)lcalloc((nmap+1) * sizeof(rle_pixel *));
-	    cmap[0] = (rle_pixel *)(nmap+1);
-	    cmap++;	/* keep size in cmap[-1] */
-	    for ( j = 0; j < globals->sv_ncmap; j++ )
-	    {
-		cmap[j] = (rle_pixel *)lmalloc( maplen * sizeof(rle_pixel) );
-		for ( i = 0; i < maplen; i++ )
-		    if ( i < cmaplen )
-			cmap[j][i] = globals->sv_cmap[j*cmaplen + i] >> 8;
-		    else
-			cmap[j][i] = i;
-	    }
-	    for( i = j, j--; i < nmap; i++ )
-		cmap[i] = cmap[j];
-	    ncmap = globals->sv_ncmap;
-	}
+        if (globals->sv_ncmap == 1) /* make "b&w" map */
+        {
+            nmap =
+                (minmap < globals->sv_ncolors) ? globals->sv_ncolors : minmap;
+            cmap    = (rle_pixel **)lcalloc((nmap + 1) * sizeof(rle_pixel *));
+            cmap[0] = (rle_pixel *)(nmap + 1);
+            cmap++; /* keep size in cmap[-1] */
+            cmap[0] = (rle_pixel *)lmalloc(maplen * sizeof(rle_pixel));
+            for (i = 0; i < maplen; i++)
+                if (i < cmaplen) cmap[0][i] = globals->sv_cmap[i] >> 8;
+                else cmap[0][i] = i;
+            for (i = 1; i < nmap; i++)
+                cmap[i] = cmap[0];
+            ncmap = 1;
+        }
+        else if (globals->sv_ncolors <= globals->sv_ncmap)
+        {
+            nmap    = (minmap < globals->sv_ncmap) ? globals->sv_ncmap : minmap;
+            cmap    = (rle_pixel **)lcalloc((nmap + 1) * sizeof(rle_pixel *));
+            cmap[0] = (rle_pixel *)(nmap + 1);
+            cmap++; /* keep size in cmap[-1] */
+            for (j = 0; j < globals->sv_ncmap; j++)
+            {
+                cmap[j] = (rle_pixel *)lmalloc(maplen * sizeof(rle_pixel));
+                for (i = 0; i < maplen; i++)
+                    if (i < cmaplen)
+                        cmap[j][i] = globals->sv_cmap[j * cmaplen + i] >> 8;
+                    else cmap[j][i] = i;
+            }
+            for (i = j, j--; i < nmap; i++)
+                cmap[i] = cmap[j];
+            ncmap = globals->sv_ncmap;
+        }
+        else   /* ncolors > ncmap */
+        {
+            nmap =
+                (minmap < globals->sv_ncolors) ? globals->sv_ncolors : minmap;
+            cmap    = (rle_pixel **)lcalloc((nmap + 1) * sizeof(rle_pixel *));
+            cmap[0] = (rle_pixel *)(nmap + 1);
+            cmap++; /* keep size in cmap[-1] */
+            for (j = 0; j < globals->sv_ncmap; j++)
+            {
+                cmap[j] = (rle_pixel *)lmalloc(maplen * sizeof(rle_pixel));
+                for (i = 0; i < maplen; i++)
+                    if (i < cmaplen)
+                        cmap[j][i] = globals->sv_cmap[j * cmaplen + i] >> 8;
+                    else cmap[j][i] = i;
+            }
+            for (i = j, j--; i < nmap; i++)
+                cmap[i] = cmap[j];
+            ncmap = globals->sv_ncmap;
+        }
     }
-	    
+
     /* Gamma compensate if requested */
-    if ( gamma != 1.0 )
+    if (gamma != 1.0)
     {
-	gammap = (rle_pixel *)lmalloc( 256 * sizeof(rle_pixel) );
-	for ( i = 0; i < 256; i++ )
-		{
+        gammap = (rle_pixel *)lmalloc(256 * sizeof(rle_pixel));
+        for (i = 0; i < 256; i++)
+        {
 #ifdef BYTEBUG
-		int byteb1;
-		byteb1 = (int)(0.5 + 255.0 * pow( i / 255.0, gamma ));
-		gammap[i] = byteb1;
+            int byteb1;
+            byteb1    = (int)(0.5 + 255.0 * pow(i / 255.0, gamma));
+            gammap[i] = byteb1;
 #else
-	    gammap[i] = (int)(0.5 + 255.0 * pow( i / 255.0, gamma ));
+            gammap[i] = (int)(0.5 + 255.0 * pow(i / 255.0, gamma));
 #endif
-		}
-	for ( i = 0; i < ncmap; i++ )
-	    for ( j = 0; j < maplen; j++ )
-		cmap[i][j] = gammap[cmap[i][j]];
-	lfree((unsigned char *) gammap);		/* clean up */
+        }
+        for (i = 0; i < ncmap; i++)
+            for (j = 0; j < maplen; j++)
+                cmap[i][j] = gammap[cmap[i][j]];
+        lfree((unsigned char *)gammap);  /* clean up */
     }
     return cmap;
 }
 
 /* Free up the memory used in the cmap */
-void freemap(rle_pixel **cmap)
+void
+freemap(rle_pixel **cmap)
 {
-    int i,j;
+    int i, j;
 
-    if(cmap != NULL)	/* be carefull */
+    if (cmap != NULL) /* be carefull */
     {
-		j = (int)cmap[-1]-1;	/* recover size of cmap */
-		for(i=j-1;i>=0;i--)
-			if(cmap[i] != NULL && (i == 0 || cmap[i] != cmap[0]))
-				lfree((unsigned char *)cmap[i]);	/* free all its elements */
-		lfree((unsigned char *)(--cmap));	/* free it */
+        j = (int)cmap[-1] - 1; /* recover size of cmap */
+        for (i = j - 1; i >= 0; i--)
+            if (cmap[i] != NULL && (i == 0 || cmap[i] != cmap[0]))
+                lfree((unsigned char *)cmap[i]); /* free all its elements */
+        lfree((unsigned char *)(--cmap)); /* free it */
     }
 }
 
@@ -491,14 +481,13 @@ void freemap(rle_pixel **cmap)
 static char *
 match(register char *n, register char *v)
 {
-    for ( ; *n != '\0' && *n != '=' && *n == *v; n++, v++ )
-	;
-    if (*n == '\0' || *n == '=') {
-	if ( *v == '\0' )
-	    return v;
-	else
-		if ( *v == '=' ) return ++v;
-	}
+    for (; *n != '\0' && *n != '=' && *n == *v; n++, v++)
+        ;
+    if (*n == '\0' || *n == '=')
+    {
+        if (*v == '\0') return v;
+        else if (*v == '=') return ++v;
+    }
 
     return NULL;
 }
@@ -520,15 +509,13 @@ match(register char *n, register char *v)
 char *
 rle_getcom(char *name, struct sv_globals *globals)
 {
-    char ** cp;
-    char * v;
+    char **cp;
+    char  *v;
 
-    if ( globals->sv_comments == NULL )
-	return NULL;
+    if (globals->sv_comments == NULL) return NULL;
 
-    for ( cp = globals->sv_comments; *cp; cp++ )
-	if ( (v = match( name, *cp )) != NULL )
-	    return v;
+    for (cp = globals->sv_comments; *cp; cp++)
+        if ((v = match(name, *cp)) != NULL) return v;
 
     return NULL;
 }
@@ -564,21 +551,22 @@ rle_getcom(char *name, struct sv_globals *globals)
  * 
  */
 
-struct inst {
-  unsigned opcode:8, datum:8;
+struct inst
+{
+    unsigned opcode : 8, datum : 8;
 };
 
 /* read a byte from th input file */
 #define BREAD1(var) (var = zgetc(infile))
 
 /* read a little endian short from the input file */
-#define BREAD2(var) (var = zgetc(infile), var |=  (zgetc(infile) << 8))
+#define BREAD2(var) (var = zgetc(infile), var |= (zgetc(infile) << 8))
 
 #define OPCODE(inst) (inst.opcode & ~LONG)
-#define LONGP(inst) (inst.opcode & LONG)
-#define DATUM(inst) (0x00ff & inst.datum)
+#define LONGP(inst)  (inst.opcode & LONG)
+#define DATUM(inst)  (0x00ff & inst.datum)
 
-static int	   debug_f;		/* if non-zero, print debug info */
+static int debug_f;  /* if non-zero, print debug info */
 
 /*****************************************************************
  * TAG( rle_get_setup )
@@ -599,157 +587,152 @@ static int	   debug_f;		/* if non-zero, print debug info */
  * Algorithm:
  * 	Read in the setup info and fill in sv_globals.
  */
-int rle_get_setup(struct sv_globals *globals)
+int
+rle_get_setup(struct sv_globals *globals)
 {
     struct XtndRsetup setup;
-    short magic;			/* assume 16 bits */
-    register ZFILE *infile = globals->svfb_fd;
-    rle_pixel * bg_color;
-    register int i;
-    char * comment_buf;
+    short             magic;   /* assume 16 bits */
+    register ZFILE   *infile = globals->svfb_fd;
+    rle_pixel        *bg_color;
+    register int      i;
+    char             *comment_buf;
 
-    globals->sv_bg_color = NULL;	/* in case of error, nothing to free */
-    globals->sv_cmap = NULL;
+    globals->sv_bg_color = NULL; /* in case of error, nothing to free */
+    globals->sv_cmap     = NULL;
     globals->sv_comments = NULL;
 
-    BREAD2( magic );
-    if ( zeof( infile ) ) {
+    BREAD2(magic);
+    if (zeof(infile))
+    {
         debug("rlelib: EOF on reading magic\n");
-	return -3;
+        return -3;
     }
-    if ( magic != XtndRMAGIC ) {
+    if (magic != XtndRMAGIC)
+    {
         debug("rlelib: bad magic\n");
-	return -1;
+        return -1;
     }
-    BREAD2( setup.h_xpos );	/* assume VAX packing */
-    BREAD2( setup.h_ypos );
-    BREAD2( setup.h_xlen );
-    BREAD2( setup.h_ylen );
-    BREAD1( setup.h_flags );
-    BREAD1( setup.h_ncolors );
-    BREAD1( setup.h_pixelbits );
-    BREAD1( setup.h_ncmap );
-    BREAD1( setup.h_cmaplen );
-    if ( zeof( infile ) ) {
+    BREAD2(setup.h_xpos); /* assume VAX packing */
+    BREAD2(setup.h_ypos);
+    BREAD2(setup.h_xlen);
+    BREAD2(setup.h_ylen);
+    BREAD1(setup.h_flags);
+    BREAD1(setup.h_ncolors);
+    BREAD1(setup.h_pixelbits);
+    BREAD1(setup.h_ncmap);
+    BREAD1(setup.h_cmaplen);
+    if (zeof(infile))
+    {
         debug("rlelib: EOF on reading header\n");
-	return -4;
+        return -4;
     }
 
     /* Extract information from setup */
     globals->sv_ncolors = setup.h_ncolors;
-    for ( i = 0; i < globals->sv_ncolors; i++ )
-	SV_SET_BIT( *globals, i );
+    for (i = 0; i < globals->sv_ncolors; i++)
+        SV_SET_BIT(*globals, i);
 
-    if ( !(setup.h_flags & H_NO_BACKGROUND) )
+    if (!(setup.h_flags & H_NO_BACKGROUND))
     {
-	globals->sv_bg_color = (int *)lmalloc(
-	    (unsigned)(sizeof(int) * setup.h_ncolors) );
-	bg_color = (rle_pixel *)lmalloc(
-	    (unsigned)(1 + (setup.h_ncolors / 2) * 2) );
-	zread( infile, (byte *)bg_color, 1 + (setup.h_ncolors / 2) * 2 );
-	for ( i = 0; i < setup.h_ncolors; i++ )
-	    globals->sv_bg_color[i] = bg_color[i];
-	lfree( bg_color );
+        globals->sv_bg_color =
+            (int *)lmalloc((unsigned)(sizeof(int) * setup.h_ncolors));
+        bg_color =
+            (rle_pixel *)lmalloc((unsigned)(1 + (setup.h_ncolors / 2) * 2));
+        zread(infile, (byte *)bg_color, 1 + (setup.h_ncolors / 2) * 2);
+        for (i = 0; i < setup.h_ncolors; i++)
+            globals->sv_bg_color[i] = bg_color[i];
+        lfree(bg_color);
     }
-    else
-	zgetc( infile );			/* skip filler byte */
+    else zgetc(infile);   /* skip filler byte */
 
-    if ( setup.h_flags & H_NO_BACKGROUND )
-	globals->sv_background = 0;
-    else if ( setup.h_flags & H_CLEARFIRST )
-	globals->sv_background = 2;
-    else
-	globals->sv_background = 1;
-    if ( setup.h_flags & H_ALPHA )
+    if (setup.h_flags & H_NO_BACKGROUND) globals->sv_background = 0;
+    else if (setup.h_flags & H_CLEARFIRST) globals->sv_background = 2;
+    else globals->sv_background = 1;
+    if (setup.h_flags & H_ALPHA)
     {
-	globals->sv_alpha = 1;
-	SV_SET_BIT( *globals, SV_ALPHA );
+        globals->sv_alpha = 1;
+        SV_SET_BIT(*globals, SV_ALPHA);
     }
-    else
-	globals->sv_alpha = 0;
+    else globals->sv_alpha = 0;
 
     globals->sv_xmin = setup.h_xpos;
     globals->sv_ymin = setup.h_ypos;
     globals->sv_xmax = globals->sv_xmin + setup.h_xlen - 1;
     globals->sv_ymax = globals->sv_ymin + setup.h_ylen - 1;
 
-    globals->sv_ncmap = setup.h_ncmap;
+    globals->sv_ncmap   = setup.h_ncmap;
     globals->sv_cmaplen = setup.h_cmaplen;
-    if ( globals->sv_ncmap > 0 )
+    if (globals->sv_ncmap > 0)
     {
-	register int maplen =
-		     globals->sv_ncmap * (1 << globals->sv_cmaplen);
-	globals->sv_cmap = (rle_map *)lmalloc(
-	    (unsigned)(sizeof(rle_map) * maplen) );
-	if ( globals->sv_cmap == NULL )
-	{
-	    fprintf( stderr,
-		"Malloc failed for color map of size %d*%d in rle_get_setup\n",
-		globals->sv_ncmap, (1 << globals->sv_cmaplen) );
-	    return -2;
-	}
-    	for ( i = 0; i < maplen; i++ )
-    	    BREAD2( globals->sv_cmap[i] );
+        register int maplen = globals->sv_ncmap * (1 << globals->sv_cmaplen);
+        globals->sv_cmap =
+            (rle_map *)lmalloc((unsigned)(sizeof(rle_map) * maplen));
+        if (globals->sv_cmap == NULL)
+        {
+            fprintf(
+                stderr,
+                "Malloc failed for color map of size %d*%d in rle_get_setup\n",
+                globals->sv_ncmap,
+                (1 << globals->sv_cmaplen));
+            return -2;
+        }
+        for (i = 0; i < maplen; i++)
+            BREAD2(globals->sv_cmap[i]);
     }
 
     /* Check for comments */
-    if ( setup.h_flags & H_COMMENT )
+    if (setup.h_flags & H_COMMENT)
     {
-	short comlen, evenlen;
-	register char * cp;
+        short          comlen, evenlen;
+        register char *cp;
 
-	BREAD2( comlen );	/* get comment length */
-	evenlen = (comlen + 1) & ~1;	/* make it even */
-	comment_buf = (char *)lmalloc( (unsigned) evenlen );
-	if ( comment_buf == NULL )
-	{
-	    fprintf( stderr,
-		     "Malloc failed for comment buffer of size %d in rle_get_setup\n",
-		     comlen );
-	    return -2;
-	}
-	zread( infile, (byte *)comment_buf, evenlen );
-	/* Count the comments */
-	for ( i = 0, cp = comment_buf; cp < comment_buf + comlen; cp++ )
-	    if ( *cp == 0 )
-		i++;
-	i++;			/* extra for NULL pointer at end */
-	/* Get space to put pointers to comments */
-	globals->sv_comments =
-	    (char **)lmalloc( (unsigned)(i * sizeof(char *)) );
-	if ( globals->sv_comments == NULL )
-	{
-	    fprintf( stderr,
-		    "Malloc failed for %d comment pointers in rle_get_setup\n",
-		     i );
-	    return -2;
-	}
-	/* Get pointers to the comments */
-	*globals->sv_comments = comment_buf;
-	for ( i = 1, cp = comment_buf + 1; cp < comment_buf + comlen; cp++ )
-	    if ( *(cp - 1) == 0 )
-		globals->sv_comments[i++] = cp;
-	globals->sv_comments[i] = NULL;
+        BREAD2(comlen); /* get comment length */
+        evenlen     = (comlen + 1) & ~1; /* make it even */
+        comment_buf = (char *)lmalloc((unsigned)evenlen);
+        if (comment_buf == NULL)
+        {
+            fprintf(stderr,
+                    "Malloc failed for comment buffer of size %d in "
+                    "rle_get_setup\n",
+                    comlen);
+            return -2;
+        }
+        zread(infile, (byte *)comment_buf, evenlen);
+    /* Count the comments */
+        for (i = 0, cp = comment_buf; cp < comment_buf + comlen; cp++)
+            if (*cp == 0) i++;
+        i++;   /* extra for NULL pointer at end */
+    /* Get space to put pointers to comments */
+        globals->sv_comments = (char **)lmalloc((unsigned)(i * sizeof(char *)));
+        if (globals->sv_comments == NULL)
+        {
+            fprintf(stderr,
+                    "Malloc failed for %d comment pointers in rle_get_setup\n",
+                    i);
+            return -2;
+        }
+    /* Get pointers to the comments */
+        *globals->sv_comments = comment_buf;
+        for (i = 1, cp = comment_buf + 1; cp < comment_buf + comlen; cp++)
+            if (*(cp - 1) == 0) globals->sv_comments[i++] = cp;
+        globals->sv_comments[i] = NULL;
     }
-    else
-	globals->sv_comments = NULL;
+    else globals->sv_comments = NULL;
 
     /* Initialize state for rle_getrow */
-    globals->sv_private.get.scan_y = globals->sv_ymin;
+    globals->sv_private.get.scan_y    = globals->sv_ymin;
     globals->sv_private.get.vert_skip = 0;
-    globals->sv_private.get.is_eof = 0;
-    globals->sv_private.get.is_seek = 0;	/* Can't do seek on zfile */
-    debug_f = 0;
+    globals->sv_private.get.is_eof    = 0;
+    globals->sv_private.get.is_seek   = 0; /* Can't do seek on zfile */
+    debug_f                           = 0;
 
-    if ( !zeof( infile ) )
-	return 0;			/* success! */
+    if (!zeof(infile)) return 0;   /* success! */
     else
     {
-	globals->sv_private.get.is_eof = 1;
-	return -4;
+        globals->sv_private.get.is_eof = 1;
+        return -4;
     }
 }
-
 
 /*****************************************************************
  * TAG( rle_free_setup )
@@ -760,20 +743,20 @@ int rle_get_setup(struct sv_globals *globals)
  * Algorithm:
  *      Assumes non-zero values mean there is something to free.
  */
-void rle_free_setup(struct sv_globals *globals)
+void
+rle_free_setup(struct sv_globals *globals)
 {
-    if(globals->sv_bg_color != NULL)
-	lfree((unsigned char *)globals->sv_bg_color);
-    if(globals->sv_cmap != NULL)
-	lfree((unsigned char *)globals->sv_cmap);
-    if(globals->sv_comments != NULL)
+    if (globals->sv_bg_color != NULL)
+        lfree((unsigned char *)globals->sv_bg_color);
+    if (globals->sv_cmap != NULL) lfree((unsigned char *)globals->sv_cmap);
+    if (globals->sv_comments != NULL)
     {
-	if(*globals->sv_comments != NULL)
-	    lfree((unsigned char *)*globals->sv_comments);
-	lfree((unsigned char *)globals->sv_comments);
+        if (*globals->sv_comments != NULL)
+            lfree((unsigned char *)*globals->sv_comments);
+        lfree((unsigned char *)globals->sv_comments);
     }
     globals->sv_bg_color = NULL;
-    globals->sv_cmap = NULL;
+    globals->sv_cmap     = NULL;
     globals->sv_comments = NULL;
 }
 
@@ -795,7 +778,6 @@ rle_debug(int on_off)
 {
     debug_f = on_off;
 }
-
 
 /*****************************************************************
  * TAG( rle_getrow )
@@ -822,196 +804,200 @@ rle_debug(int on_off)
  *	decoding the instructions into scanline data.
  */
 
-int rle_getrow(struct sv_globals *globals, rle_pixel **scanline)
+int
+rle_getrow(struct sv_globals *globals, rle_pixel **scanline)
 {
-    register rle_pixel * scanc;
-    register int nc;
-    register ZFILE *infile = globals->svfb_fd;
-    int scan_x = globals->sv_xmin,	/* current X position */
-	   channel = 0;			/* current color channel */
-    short word, long_data;
+    register rle_pixel *scanc;
+    register int        nc;
+    register ZFILE     *infile = globals->svfb_fd;
+    int                 scan_x = globals->sv_xmin, /* current X position */
+        channel                = 0;   /* current color channel */
+    short       word, long_data;
     struct inst inst;
 
     /* Clear to background if specified */
-    if ( globals->sv_background == 2 )
+    if (globals->sv_background == 2)
     {
-	if ( globals->sv_alpha && SV_BIT( *globals, -1 ) )
-	    bfill( (char *)scanline[-1], globals->sv_xmax + 1, 0 );
-	for ( nc = 0; nc < globals->sv_ncolors; nc++ )
-	    if ( SV_BIT( *globals, nc ) )
-		bfill( (char *)scanline[nc], globals->sv_xmax+1,
-			globals->sv_bg_color[nc] );
+        if (globals->sv_alpha && SV_BIT(*globals, -1))
+            bfill((char *)scanline[-1], globals->sv_xmax + 1, 0);
+        for (nc = 0; nc < globals->sv_ncolors; nc++)
+            if (SV_BIT(*globals, nc))
+                bfill((char *)scanline[nc],
+                      globals->sv_xmax + 1,
+                      globals->sv_bg_color[nc]);
     }
 
     /* If skipping, then just return */
-    if ( globals->sv_private.get.vert_skip > 0 )
+    if (globals->sv_private.get.vert_skip > 0)
     {
-	globals->sv_private.get.vert_skip--;
-	globals->sv_private.get.scan_y++;
-	if ( globals->sv_private.get.vert_skip > 0 )
-	{
-            if (debug_f)
-	        fprintf(stderr, "Skipping a line\n");
-	    return globals->sv_private.get.scan_y;
-	}
+        globals->sv_private.get.vert_skip--;
+        globals->sv_private.get.scan_y++;
+        if (globals->sv_private.get.vert_skip > 0)
+        {
+            if (debug_f) fprintf(stderr, "Skipping a line\n");
+            return globals->sv_private.get.scan_y;
+        }
     }
 
     /* If EOF has been encountered, return also */
-    if ( globals->sv_private.get.is_eof )
+    if (globals->sv_private.get.is_eof)
     {
-        if (debug_f)
-	    fprintf(stderr, "EOF was was encountered last read.\n");
-	return ++globals->sv_private.get.scan_y;
+        if (debug_f) fprintf(stderr, "EOF was was encountered last read.\n");
+        return ++globals->sv_private.get.scan_y;
     }
 
     /* Otherwise, read and interpret instructions until a skipLines
      * instruction is encountered.
      */
-    if ( SV_BIT( *globals, channel ) )
-	scanc = scanline[channel] + scan_x;
-    else
-	scanc = NULL;
+    if (SV_BIT(*globals, channel)) scanc = scanline[channel] + scan_x;
+    else scanc = NULL;
     for (;;)
     {
-	BREAD1( inst.opcode );
-	BREAD1( inst.datum );
-	if ( zeof(infile) )
-	{
-	    if (debug_f)
-		fprintf(stderr, "Got eof on read\n");
-	    globals->sv_private.get.is_eof = 1;
-	    break;		/* <--- one of the exits */
-	}
+        BREAD1(inst.opcode);
+        BREAD1(inst.datum);
+        if (zeof(infile))
+        {
+            if (debug_f) fprintf(stderr, "Got eof on read\n");
+            globals->sv_private.get.is_eof = 1;
+            break;  /* <--- one of the exits */
+        }
 
-	switch( OPCODE(inst) )
-	{
-	case RSkipLinesOp:
-	    if ( LONGP(inst) )
-	    {
-	        BREAD2( long_data );
-		globals->sv_private.get.vert_skip = long_data;
-	    }
-	    else
-		globals->sv_private.get.vert_skip = DATUM(inst);
-	    if (debug_f)
-		fprintf(stderr, "Skip %d Lines (to %d)\n",
-			globals->sv_private.get.vert_skip,
-			globals->sv_private.get.scan_y +
-			    globals->sv_private.get.vert_skip );
+        switch (OPCODE(inst))
+        {
+            case RSkipLinesOp:
+                if (LONGP(inst))
+                {
+                    BREAD2(long_data);
+                    globals->sv_private.get.vert_skip = long_data;
+                }
+                else globals->sv_private.get.vert_skip = DATUM(inst);
+                if (debug_f)
+                    fprintf(stderr,
+                            "Skip %d Lines (to %d)\n",
+                            globals->sv_private.get.vert_skip,
+                            globals->sv_private.get.scan_y +
+                                globals->sv_private.get.vert_skip);
 
-	    break;			/* need to break for() here, too */
+                break;   /* need to break for() here, too */
 
-	case RSetColorOp:
-	    channel = DATUM(inst);	/* select color channel */
-	    if ( channel == 255 )
-		channel = -1;
-	    scan_x = globals->sv_xmin;
-	    if ( SV_BIT( *globals, channel ) )
-		scanc = scanline[channel]+scan_x;
-	    if ( debug_f )
-		fprintf( stderr, "Set color to %d (reset x to %d)\n",
-			 channel, scan_x );
-	    break;
+            case RSetColorOp:
+                channel = DATUM(inst); /* select color channel */
+                if (channel == 255) channel = -1;
+                scan_x = globals->sv_xmin;
+                if (SV_BIT(*globals, channel))
+                    scanc = scanline[channel] + scan_x;
+                if (debug_f)
+                    fprintf(stderr,
+                            "Set color to %d (reset x to %d)\n",
+                            channel,
+                            scan_x);
+                break;
 
-	case RSkipPixelsOp:
-	    if ( LONGP(inst) )
-	    {
-	        BREAD2( long_data );
-		scan_x += long_data;
-		scanc += long_data;
-		if ( debug_f )
-		    fprintf( stderr, "Skip %d pixels (to %d)\n",
-			    long_data, scan_x );
-			 
-	    }
-	    else
-	    {
-		scan_x += DATUM(inst);
-		scanc += DATUM(inst);
-		if ( debug_f )
-		    fprintf( stderr, "Skip %d pixels (to %d)\n",
-			    DATUM(inst), scan_x );
-	    }
-	    break;
+            case RSkipPixelsOp:
+                if (LONGP(inst))
+                {
+                    BREAD2(long_data);
+                    scan_x += long_data;
+                    scanc += long_data;
+                    if (debug_f)
+                        fprintf(stderr,
+                                "Skip %d pixels (to %d)\n",
+                                long_data,
+                                scan_x);
+                }
+                else
+                {
+                    scan_x += DATUM(inst);
+                    scanc += DATUM(inst);
+                    if (debug_f)
+                        fprintf(stderr,
+                                "Skip %d pixels (to %d)\n",
+                                DATUM(inst),
+                                scan_x);
+                }
+                break;
 
-	case RByteDataOp:
-	    if ( LONGP(inst) )
-	    {
-	        BREAD2( long_data );
-		nc = (int)long_data;
-	    }
-	    else
-		nc = DATUM(inst);
-	    nc++;
-	    if ( SV_BIT( *globals, channel ) )
-	    {
-		zread( infile, (byte *)scanc, nc );
-		if ( nc & 1 )
-		    (void)zgetc( infile );	/* throw away odd byte */
-	    }
-	    else
-	    {		/* Emulate a forward fseek */
-		register int ii;
-		for ( ii = ((nc + 1) / 2) * 2; ii > 0; ii-- )
-		    (void) zgetc( infile );	/* discard it */
-	    }
+            case RByteDataOp:
+                if (LONGP(inst))
+                {
+                    BREAD2(long_data);
+                    nc = (int)long_data;
+                }
+                else nc = DATUM(inst);
+                nc++;
+                if (SV_BIT(*globals, channel))
+                {
+                    zread(infile, (byte *)scanc, nc);
+                    if (nc & 1) (void)zgetc(infile); /* throw away odd byte */
+                }
+                else
+                {  /* Emulate a forward fseek */
+                    register int ii;
+                    for (ii = ((nc + 1) / 2) * 2; ii > 0; ii--)
+                        (void)zgetc(infile); /* discard it */
+                }
 
-	    scanc += nc;
-	    scan_x += nc;
-	    if ( debug_f ) {
-			if ( SV_BIT( *globals, channel ) ) {
-				rle_pixel * cp = scanc - nc;
-				fprintf( stderr, "Pixel data %d (to %d):", nc, scan_x );
-				for ( ; nc > 0; nc-- )
-				fprintf( stderr, "%02x", *cp++ );
-				putc( '\n', stderr );
-			}
-			else {
-				fprintf( stderr, "Pixel data %d (to %d)\n", nc, scan_x );
-			}
-		}
-	    break;
+                scanc += nc;
+                scan_x += nc;
+                if (debug_f)
+                {
+                    if (SV_BIT(*globals, channel))
+                    {
+                        rle_pixel *cp = scanc - nc;
+                        fprintf(stderr, "Pixel data %d (to %d):", nc, scan_x);
+                        for (; nc > 0; nc--)
+                            fprintf(stderr, "%02x", *cp++);
+                        putc('\n', stderr);
+                    }
+                    else
+                    {
+                        fprintf(stderr, "Pixel data %d (to %d)\n", nc, scan_x);
+                    }
+                }
+                break;
 
-	case RRunDataOp:
-	    if ( LONGP(inst) )
-	    {
-	        BREAD2( long_data );
-		nc = long_data;
-	    }
-	    else
-		nc = DATUM(inst);
-	    scan_x += nc + 1;
+            case RRunDataOp:
+                if (LONGP(inst))
+                {
+                    BREAD2(long_data);
+                    nc = long_data;
+                }
+                else nc = DATUM(inst);
+                scan_x += nc + 1;
 
-	    BREAD2( word );
-	    if ( debug_f )
-		fprintf( stderr, "Run length %d (to %d), data %02x\n",
-			    nc + 1, scan_x, word );
-	    if ( SV_BIT( *globals, channel ) )
-	    {
-		if ( nc >= 10 )		/* break point for 785, anyway */
-		{
-		    bfill( (char *)scanc, nc + 1, word );
-		    scanc += nc + 1;
-		}
-		else
-		    for ( ; nc >= 0; nc--, scanc++ )
-			*scanc = word;
-	    }
-	    break;
+                BREAD2(word);
+                if (debug_f)
+                    fprintf(stderr,
+                            "Run length %d (to %d), data %02x\n",
+                            nc + 1,
+                            scan_x,
+                            word);
+                if (SV_BIT(*globals, channel))
+                {
+                    if (nc >= 10)  /* break point for 785, anyway */
+                    {
+                        bfill((char *)scanc, nc + 1, word);
+                        scanc += nc + 1;
+                    }
+                    else
+                        for (; nc >= 0; nc--, scanc++)
+                            *scanc = word;
+                }
+                break;
 
-	case REOFOp:
-	    if (debug_f)
-		fprintf(stderr, "Got eof op code\n");
-	    globals->sv_private.get.is_eof = 1;
-	    break;
+            case REOFOp:
+                if (debug_f) fprintf(stderr, "Got eof op code\n");
+                globals->sv_private.get.is_eof = 1;
+                break;
 
-	default:
-	    fprintf( stderr,
-		     "rle_getrow: Unrecognized opcode: %d\n", inst.opcode );
-		return (-1);
-	}
-	if ( OPCODE(inst) == RSkipLinesOp || OPCODE(inst) == REOFOp )
-	    break;			/* <--- the other loop exit */
+            default:
+                fprintf(stderr,
+                        "rle_getrow: Unrecognized opcode: %d\n",
+                        inst.opcode);
+                return (-1);
+        }
+        if (OPCODE(inst) == RSkipLinesOp || OPCODE(inst) == REOFOp)
+            break;   /* <--- the other loop exit */
     }
 
     return globals->sv_private.get.scan_y;
@@ -1049,20 +1035,20 @@ int rle_getrow(struct sv_globals *globals, rle_pixel **scanline)
  * Outputs:
  *  Changes gamma array entries.
  */
-void make_gamma(double gamma, int *gammamap)
+void
+make_gamma(double gamma, int *gammamap)
 {
-	register int i;
+    register int i;
 
-    for ( i = 0; i < 256; i++ )
-		{
+    for (i = 0; i < 256; i++)
+    {
 #ifdef BYTEBUG
-		int byteb1;
-		
-		byteb1 = (int)(0.5 + 255 * pow( i / 255.0, 1.0/gamma ));
-		gammamap[i] = byteb1;
-#else
-		gammamap[i] = (int)(0.5 + 255 * pow( i / 255.0, 1.0/gamma ));
-#endif
-		}
-}
+        int byteb1;
 
+        byteb1      = (int)(0.5 + 255 * pow(i / 255.0, 1.0 / gamma));
+        gammamap[i] = byteb1;
+#else
+        gammamap[i] = (int)(0.5 + 255 * pow(i / 255.0, 1.0 / gamma));
+#endif
+    }
+}

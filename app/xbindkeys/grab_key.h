@@ -18,15 +18,13 @@
 #ifndef __GRABKEY_H
 #define __GRABKEY_H
 
-extern void grab_keys (Display * dpy);
-extern void ungrab_all_keys (Display * dpy);
+extern void grab_keys(Display *dpy);
+extern void ungrab_all_keys(Display *dpy);
 
-extern void get_offending_modifiers (Display * dpy);
-
+extern void get_offending_modifiers(Display *dpy);
 
 extern unsigned int numlock_mask;
 extern unsigned int scrolllock_mask;
 extern unsigned int capslock_mask;
-
 
 #endif /* __GRABKEY_H */

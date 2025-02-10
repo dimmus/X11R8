@@ -7,27 +7,26 @@
  * jim frost 10.15.89
  */
 
-Image *facesLoad(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *pbmLoad(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *sunRasterLoad(char *fullname, ImageOptions * image_ops,
-	boolean verbose);
-Image *gifLoad(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *jpegLoad(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *rleLoad(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *bmpLoad(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *pcdLoad(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *xwdLoad(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *xbitmapLoad(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *xpixmapLoad(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *g3Load(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *fbmLoad(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *pcxLoad(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *imgLoad(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *macLoad(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *cmuwmLoad(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *mcidasLoad(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *tgaLoad(char *fullname, ImageOptions * image_ops, boolean verbose);
-Image *pngLoad(char *fullname, ImageOptions * opt, boolean verbose);
+Image *facesLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *pbmLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *sunRasterLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *gifLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *jpegLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *rleLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *bmpLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *pcdLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *xwdLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *xbitmapLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *xpixmapLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *g3Load(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *fbmLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *pcxLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *imgLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *macLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *cmuwmLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *mcidasLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *tgaLoad(char *fullname, ImageOptions *image_ops, boolean verbose);
+Image *pngLoad(char *fullname, ImageOptions *opt, boolean verbose);
 
 int facesIdent(char *fullname, char *name);
 int pbmIdent(char *fullname, char *name);

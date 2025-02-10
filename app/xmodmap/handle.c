@@ -1340,7 +1340,8 @@ exec_keycode(struct op_keycode *opk)
         {
             for (j = 0; j < opk->count; j++)
             {
-                if (XkbKeycodeToKeysym(dpy, (KeyCode)i, 0, j) != opk->keysyms[j])
+                if (XkbKeycodeToKeysym(dpy, (KeyCode)i, 0, j) !=
+                    opk->keysyms[j])
                     break;
             }
             if (j >= opk->count) return (0);

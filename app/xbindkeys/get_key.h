@@ -20,7 +20,6 @@
 
 #include <X11/Xlib.h>
 
-extern void get_key_binding (Display * dpy, char **argv, int argc);
-
+extern void get_key_binding(Display *dpy, char **argv, int argc);
 
 #endif /* __GET_KEY_H */

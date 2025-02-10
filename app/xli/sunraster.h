@@ -11,15 +11,16 @@
 
 #include "copyright.h"
 
-struct rheader {
-  unsigned char magic[4];   /* magic number */
-  unsigned char width[4];   /* width of image in pixels */
-  unsigned char height[4];  /* height of image in pixels */
-  unsigned char depth[4];   /* depth of each pixel */
-  unsigned char length[4];  /* length of the image in bytes */
-  unsigned char type[4];    /* format of file */
-  unsigned char maptype[4]; /* type of colormap */
-  unsigned char maplen[4];  /* length of colormap in bytes */
+struct rheader
+{
+    unsigned char magic[4]; /* magic number */
+    unsigned char width[4]; /* width of image in pixels */
+    unsigned char height[4]; /* height of image in pixels */
+    unsigned char depth[4]; /* depth of each pixel */
+    unsigned char length[4]; /* length of the image in bytes */
+    unsigned char type[4]; /* format of file */
+    unsigned char maptype[4]; /* type of colormap */
+    unsigned char maplen[4]; /* length of colormap in bytes */
 };
 
 /* following the header is the colormap (unless maplen is zero) then
@@ -48,4 +49,3 @@ struct rheader {
 #define RRAWMAP 2 /* raw colormap; good luck */
 
 #define RESC 128 /* run-length encoding escape character */
-

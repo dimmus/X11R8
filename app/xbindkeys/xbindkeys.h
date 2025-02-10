@@ -21,7 +21,7 @@
 #include <X11/Xlib.h>
 #include "config.h"
 
-extern void end_it_all (Display *);
+extern void     end_it_all(Display *);
 extern Display *current_display;
 
 #endif /* __XBINDKEYS_H */

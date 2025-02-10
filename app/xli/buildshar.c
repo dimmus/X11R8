@@ -19,105 +19,116 @@
 
 #define SHAR_SIZE 40000
 
-struct file {
-  char *name;
-  int size;
-  struct file *next;
+struct file
+{
+    char        *name;
+    int          size;
+    struct file *next;
 };
 
-struct shar {
-  struct file *file;
-  struct shar *next;
+struct shar
+{
+    struct file *file;
+    struct shar *next;
 };
 
 main(int argc, char **argv)
-{ int num_files, files_left;
-  struct file *files;
-  struct stat sbuf;
-  struct shar *shar_list;
-  struct shar *cur_shar;
-  struct file *cur_file;
-  int shar_size, shar_num, num_shars;
-  int a;
+{
+    int          num_files, files_left;
+    struct file *files;
+    struct stat  sbuf;
+    struct shar *shar_list;
+    struct shar *cur_shar;
+    struct file *cur_file;
+    int          shar_size, shar_num, num_shars;
+    int          a;
 
-  if (argc < 2) {
-    fprintf(stderr, "Usage: %s [files]\n", *argv);
-  }
-
-  /* build table of filenames
-   */
-
-  files= (struct file *)malloc(sizeof(struct file) * (argc - 1));
-  for (a= 0, num_files= 0; *(++argv); a++) {
-    if (stat(*argv, &sbuf) < 0) {
-      perror(*argv);
-      files[a].name= NULL;
-      continue;
+    if (argc < 2)
+    {
+        fprintf(stderr, "Usage: %s [files]\n", *argv);
     }
-    num_files++;
-    files[a].name= *argv;
-    files[a].size= sbuf.st_size;
-  }
 
-  /* try to fit files.  this is not a bright algorithm.
+    /* build table of filenames
    */
 
-  shar_list= cur_shar= (struct shar *)malloc(sizeof(struct shar));
-  cur_shar->file= NULL;
-  cur_file= NULL;
-  shar_size= 0;
+    files = (struct file *)malloc(sizeof(struct file) * (argc - 1));
+    for (a = 0, num_files = 0; *(++argv); a++)
+    {
+        if (stat(*argv, &sbuf) < 0)
+        {
+            perror(*argv);
+            files[a].name = NULL;
+            continue;
+        }
+        num_files++;
+        files[a].name = *argv;
+        files[a].size = sbuf.st_size;
+    }
 
-  for (files_left= num_files; files_left;) {
+    /* try to fit files.  this is not a bright algorithm.
+   */
 
-    /* look for a file that'll fit in the current shar
+    shar_list = cur_shar = (struct shar *)malloc(sizeof(struct shar));
+    cur_shar->file       = NULL;
+    cur_file             = NULL;
+    shar_size            = 0;
+
+    for (files_left = num_files; files_left;)
+    {
+        /* look for a file that'll fit in the current shar
      */
 
-    for (a= 0; a < num_files; a++)
-      if (files[a].name &&
-	  ((shar_size + files[a].size <= SHAR_SIZE) ||
-	   ((shar_size == 0) && (files[a].size > SHAR_SIZE)))) {
-	shar_size += files[a].size;
-	if (cur_file) {
-	  cur_file->next= (struct file *)malloc(sizeof(struct file));
-	  cur_file= cur_file->next;
-	}
-	else
-	  cur_shar->file= cur_file= (struct file *)malloc(sizeof(struct file));
-	cur_file->name= files[a].name;
-	cur_file->next= NULL;
-	files[a].name= NULL;
-	files_left--;
-	break;
-      }
+        for (a = 0; a < num_files; a++)
+            if (files[a].name &&
+                ((shar_size + files[a].size <= SHAR_SIZE) ||
+                 ((shar_size == 0) && (files[a].size > SHAR_SIZE))))
+            {
+                shar_size += files[a].size;
+                if (cur_file)
+                {
+                    cur_file->next = (struct file *)malloc(sizeof(struct file));
+                    cur_file       = cur_file->next;
+                }
+                else
+                    cur_shar->file = cur_file =
+                        (struct file *)malloc(sizeof(struct file));
+                cur_file->name = files[a].name;
+                cur_file->next = NULL;
+                files[a].name  = NULL;
+                files_left--;
+                break;
+            }
 
-    /* if nothing fit, make a new shar file
+        /* if nothing fit, make a new shar file
      */
 
-    if (a == num_files) {
-      cur_shar->next= (struct shar *)malloc(sizeof(struct shar));
-      cur_shar= cur_shar->next;
-      cur_shar->file= NULL;
-      cur_shar->next= NULL;
-      cur_file= NULL;
-      shar_size= 0;
+        if (a == num_files)
+        {
+            cur_shar->next = (struct shar *)malloc(sizeof(struct shar));
+            cur_shar       = cur_shar->next;
+            cur_shar->file = NULL;
+            cur_shar->next = NULL;
+            cur_file       = NULL;
+            shar_size      = 0;
+        }
     }
-  }
 
-  /* find out how many shar files we need for -e flag
+    /* find out how many shar files we need for -e flag
    */
 
-  for (num_shars= 0, cur_shar= shar_list; cur_shar; num_shars++)
-    cur_shar= cur_shar->next;
+    for (num_shars = 0, cur_shar = shar_list; cur_shar; num_shars++)
+        cur_shar = cur_shar->next;
 
-  /* output each shar command line
+    /* output each shar command line
    */
 
-  for (shar_num= 1, cur_shar= shar_list; cur_shar; shar_num++) {
-    printf("shar -n %d -e %d", shar_num, num_shars);
-    for (cur_file= cur_shar->file; cur_file; cur_file= cur_file->next)
-      printf(" %s", cur_file->name);
-    cur_shar= cur_shar->next;
-    printf(" > shar.%d\n", shar_num);
-  }
-  exit(0);
+    for (shar_num = 1, cur_shar = shar_list; cur_shar; shar_num++)
+    {
+        printf("shar -n %d -e %d", shar_num, num_shars);
+        for (cur_file = cur_shar->file; cur_file; cur_file = cur_file->next)
+            printf(" %s", cur_file->name);
+        cur_shar = cur_shar->next;
+        printf(" > shar.%d\n", shar_num);
+    }
+    exit(0);
 }

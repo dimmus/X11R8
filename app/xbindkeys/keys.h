@@ -21,65 +21,81 @@
 #include <X11/Xlib.h>
 
 typedef enum
-  { SYM, CODE, BUTTON }
-KeyType_t;
+{
+    SYM,
+    CODE,
+    BUTTON
+} KeyType_t;
 
 typedef enum
-  { PRESS, RELEASE}
-EventType_t;
+{
+    PRESS,
+    RELEASE
+} EventType_t;
 
 typedef struct
 {
-  KeyType_t type;
+    KeyType_t type;
 
-  EventType_t event_type;
+    EventType_t event_type;
 
-  union
-  {
-    KeySym sym;
-    KeyCode code;
-    unsigned int button;
-  }
-  key;
+    union {
+        KeySym       sym;
+        KeyCode      code;
+        unsigned int button;
+    } key;
 
-  unsigned int modifier;
-  char *command;
-}
-Keys_t;
+    unsigned int modifier;
+    char        *command;
+} Keys_t;
 
+extern int  init_keys(void);
+extern void close_keys(void);
 
-extern int init_keys (void);
-extern void close_keys (void);
+extern int add_key(KeyType_t    type,
+                   EventType_t  event_type,
+                   KeySym       keysym,
+                   KeyCode      keycode,
+                   unsigned int button,
+                   unsigned int modifier,
+                   char        *command);
 
-extern int add_key (KeyType_t type, EventType_t event_type, KeySym keysym, KeyCode keycode,
-		    unsigned int button, unsigned int modifier,
-		    char *command);
+extern int remove_key(KeyType_t    type,
+                      EventType_t  event_type,
+                      KeySym       keysym,
+                      KeyCode      keycode,
+                      unsigned int button,
+                      unsigned int modifier);
 
-extern int remove_key (KeyType_t type, EventType_t event_type, KeySym keysym, KeyCode keycode,
-		       unsigned int button, unsigned int modifier);
+extern void show_key_binding(Display *d);
 
+extern void print_key(Display *d, Keys_t *key);
 
-extern void show_key_binding (Display * d);
+extern void set_keysym(Keys_t      *key,
+                       EventType_t  event_type,
+                       KeySym       keysym,
+                       unsigned int modifier,
+                       char        *command);
+extern void set_keycode(Keys_t      *key,
+                        EventType_t  event_type,
+                        KeyCode      keycode,
+                        unsigned int modifier,
+                        char        *command);
+extern void set_button(Keys_t      *key,
+                       EventType_t  event_type,
+                       unsigned int button,
+                       unsigned int modifier,
+                       char        *command);
 
-extern void print_key (Display * d, Keys_t * key);
+extern void free_key(Keys_t *key);
 
-extern void set_keysym (Keys_t * key, EventType_t event_type, KeySym keysym,
-			unsigned int modifier, char *command);
-extern void set_keycode (Keys_t * key, EventType_t event_type, KeyCode keycode,
-			 unsigned int modifier, char *command);
-extern void set_button (Keys_t * key, EventType_t event_type, unsigned int button,
-			unsigned int modifier, char *command);
+extern void start_command_key(Keys_t *key);
 
-extern void free_key (Keys_t * key);
+extern void modifier_to_string(unsigned int modifier, char *str);
 
-extern void start_command_key (Keys_t * key);
+extern void run_command(char *command);
 
-extern void modifier_to_string (unsigned int modifier, char *str);
-
-extern void run_command (char * command);
-
-
-extern int nb_keys;
+extern int     nb_keys;
 extern Keys_t *keys;
 
 #endif /* __KEYS_H */
