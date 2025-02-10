@@ -548,32 +548,6 @@ visibleSelectionTarget(Display *d, Atom a)
     return result;
 }
 
-#  if OPT_TEK4014
-const char *
-visibleTekparse(int code)
-{
-    static const struct
-    {
-        int         code;
-        const char *name;
-    } table[] = {
-
-#    include "Tekparse.cin"
-    };
-    const char *result = "?";
-    Cardinal    n;
-    for (n = 0; n < XtNumber(table); ++n)
-    {
-        if (table[n].code == code)
-        {
-            result = table[n].name;
-            break;
-        }
-    }
-    return result;
-}
-#  endif
-
 const char *
 visibleVTparse(int code)
 {

@@ -391,14 +391,6 @@ static XtActionsRec actionsList[] = {
 #if OPT_SUN_FUNC_KEYS
     { "set-sun-function-keys",    HandleSunFunctionKeys          },
 #endif
-#if OPT_TEK4014
-    { "set-terminal-type",        HandleSetTerminalType          },
-    { "set-visibility",           HandleVisibility               },
-    { "set-tek-text",             HandleSetTekText               },
-    { "tek-page",                 HandleTekPage                  },
-    { "tek-reset",                HandleTekReset                 },
-    { "tek-copy",                 HandleTekCopy                  },
-#endif
 #if OPT_TOOLBAR
     { "set-toolbar",              HandleToolbar                  },
 #endif
@@ -902,12 +894,6 @@ static XtResource xterm_resources[] = {
 
 #if OPT_SUNPC_KBD
     Ires(XtNctrlFKeys, XtCCtrlFKeys, misc.ctrl_fkeys, 10),
-#endif
-
-#if OPT_TEK4014
-    Bres(XtNtekInhibit, XtCTekInhibit, misc.tekInhibit, False),
-    Bres(XtNtekSmall, XtCTekSmall, misc.tekSmall, False),
-    Bres(XtNtekStartup, XtCTekStartup, misc.TekEmu, False),
 #endif
 
 #if OPT_TOOLBAR
@@ -4753,14 +4739,6 @@ doparsing(XtermWidget xw, unsigned c, struct ParseState *sp)
 #endif
                     dpmodes(xw, bitset);
                 ResetState(sp);
-#if OPT_TEK4014
-                if (TEK4014_ACTIVE(xw))
-                {
-                    TRACE(("Tek4014 is now active...\n"));
-                    if (sp->check_recur) sp->check_recur--;
-                    return False;
-                }
-#endif
                 break;
 
             case CASE_DECRST:
@@ -7708,17 +7686,6 @@ dpmodes(XtermWidget xw, BitFunc func)
                 set_bool_mode(xw->misc.shift_fonts);
                 break;
 #endif
-#if OPT_TEK4014
-            case srm_DECTEK:
-                if (IsSM() && !(screen->inhibit & I_TEK))
-                {
-                    FlushLog(xw);
-                    TEK4014_ACTIVE(xw) = True;
-                    TRACE(("Tek4014 is now active...\n"));
-                    update_vttekmode();
-                }
-                break;
-#endif
             case srm_132COLS: /* 132 column mode              */
                 set_bool_mode(screen->c132);
                 update_allow132();
@@ -8160,11 +8127,6 @@ savemodes(XtermWidget xw)
                 DoSM(DP_RXVT_FONTSIZE, xw->misc.shift_fonts);
                 break;
 #endif
-#if OPT_TEK4014
-            case srm_DECTEK:
-                DoSM(DP_DECTEK, TEK4014_ACTIVE(xw));
-                break;
-#endif
             case srm_132COLS: /* 132 column mode              */
                 DoSM(DP_X_DECCOLM, screen->c132);
                 break;
@@ -8505,18 +8467,6 @@ restoremodes(XtermWidget xw)
 #if OPT_SHIFT_FONTS
             case srm_RXVT_FONTSIZE:
                 DoRM(DP_RXVT_FONTSIZE, xw->misc.shift_fonts);
-                break;
-#endif
-#if OPT_TEK4014
-            case srm_DECTEK:
-                if (!(screen->inhibit & I_TEK) &&
-                    (TEK4014_ACTIVE(xw) !=
-                     (Boolean)screen->save_modes[DP_DECTEK]))
-                {
-                    FlushLog(xw);
-                    TEK4014_ACTIVE(xw) = (Boolean)screen->save_modes[DP_DECTEK];
-                    update_vttekmode();
-                }
                 break;
 #endif
             case srm_132COLS: /* 132 column mode              */
@@ -9662,16 +9612,6 @@ VTRun(XtermWidget xw)
     if (DoStartBlinking(screen)) StartBlinking(xw);
 #endif
 
-#if OPT_TEK4014
-    if (Tpushb > Tpushback)
-    {
-        fillPtyData(xw,
-                    VTbuffer,
-                    (char *)Tpushback,
-                    (size_t)(Tpushb - Tpushback));
-        Tpushb = Tpushback;
-    }
-#endif
     screen->is_running = True;
     if (screen->embed_high && screen->embed_wide)
     {
@@ -11058,12 +10998,6 @@ VTInitialize(Widget             wrequest,
 #if OPT_SUNPC_KBD
     init_Ires(misc.ctrl_fkeys);
 #endif
-#if OPT_TEK4014
-    TEK4014_SHOWN(wnew) = False; /* not a resource... */
-    init_Bres(misc.tekInhibit);
-    init_Bres(misc.tekSmall);
-    init_Bres(misc.TekEmu);
-#endif
 #if OPT_TCAP_QUERY
     screen->tc_query_code = -1;
 #endif
@@ -11493,19 +11427,6 @@ VTInitialize(Widget             wrequest,
             screen->hilite_color = True;
         }
     }
-#endif
-
-#if OPT_TEK4014
-    /*
-     * The Tek4014 window has no separate resources for foreground, background
-     * and cursor color.  Since xterm always creates the vt100 widget first, we
-     * can set the Tektronix colors here.  That lets us use escape sequences to
-     * set its dynamic colors and get consistent behavior whether or not the
-     * window is displayed.
-     */
-    screen->Tcolors[TEK_BG]     = screen->Tcolors[TEXT_BG];
-    screen->Tcolors[TEK_FG]     = screen->Tcolors[TEXT_FG];
-    screen->Tcolors[TEK_CURSOR] = screen->Tcolors[TEXT_CURSOR];
 #endif
 
 #ifdef SCROLLBAR_RIGHT
@@ -12133,14 +12054,6 @@ VTDestroy(Widget w GCC_UNUSED)
     {
         switch (n)
         {
-#  if OPT_TEK4014
-            case TEK_BG:
-                /* FALLTHRU */
-            case TEK_FG:
-                /* FALLTHRU */
-            case TEK_CURSOR:
-                break;
-#  endif
             default:
                 TRACE_FREE_LEAK(screen->Tcolors[n].resource);
                 break;
@@ -13083,9 +12996,6 @@ VTRealize(Widget w, XtValueMask *valuemask, XSetWindowAttributes *values)
        that the child process does not fork and exec with all the dynamic
        memory it will never use.  If we were to do it here, the
        swap space for new process would be huge for huge savelines. */
-#if OPT_TEK4014
-    if (!tekWidget) /* if not called after fork */
-#endif
     {
         screen->visbuf        = NULL;
         screen->saveBuf_index = NULL;

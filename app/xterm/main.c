@@ -985,9 +985,6 @@ static String fallback_resources[] =
     "*mainMenu.Label:  Main Options (no app-defaults)",
     "*vtMenu.Label:  VT Options (no app-defaults)",
     "*fontMenu.Label:  VT Fonts (no app-defaults)",
-#if OPT_TEK4014
-    "*tekMenu.Label:  Tek Options (no app-defaults)",
-#endif
     NULL
 };
 
@@ -1133,10 +1130,6 @@ DATA("-sl",		"*saveLines",	XrmoptionSepArg,	NULL),
 #if OPT_SUNPC_KBD
 DATA("-sp",		"*sunKeyboard", XrmoptionNoArg,		"on"),
 DATA("+sp",		"*sunKeyboard", XrmoptionNoArg,		"off"),
-#endif
-#if OPT_TEK4014
-DATA("-t",		"*tekStartup",	XrmoptionNoArg,		"on"),
-DATA("+t",		"*tekStartup",	XrmoptionNoArg,		"off"),
 #endif
 DATA("-ti",		"*decTerminalID",XrmoptionSepArg,	NULL),
 DATA("-tm",		"*ttyModes",	XrmoptionSepArg,	NULL),
@@ -1335,9 +1328,6 @@ static OptionHelp xtermOptions[] = {
 #if OPT_SUNPC_KBD
 { "-/+sp",                 "turn on/off Sun/PC Function/Keypad mapping" },
 #endif
-#if OPT_TEK4014
-{ "-/+t",                  "turn on/off Tek emulation window" },
-#endif
 #if OPT_TOOLBAR
 { "-/+tb",                 "turn on/off toolbar" },
 #endif
@@ -1372,9 +1362,6 @@ static OptionHelp xtermOptions[] = {
 #endif
 { "-/+wf",                 "turn on/off wait for map before command exec" },
 { "-e command args ...",   "command to execute" },
-#if OPT_TEK4014
-{ "%geom",                 "Tek window geometry" },
-#endif
 { "#geom",                 "icon window geometry" },
 { "-T string",             "title name for window" },
 { "-n string",             "icon name for window" },
@@ -1771,16 +1758,6 @@ DeleteWindow(Widget w,
 	     String *params GCC_UNUSED,
 	     Cardinal *num_params GCC_UNUSED)
 {
-#if OPT_TEK4014
-    if (w == toplevel) {
-	if (TEK4014_SHOWN(term))
-	    hide_vt_window();
-	else
-	    do_hangup(w, (XtPointer) 0, (XtPointer) 0);
-    } else if (TScreenOf(term)->Vshow)
-	hide_tek_window();
-    else
-#endif
 	do_hangup(w, (XtPointer) 0, (XtPointer) 0);
 }
 
@@ -2718,21 +2695,6 @@ main(int argc, char *argv[]ENVP_ARG)
 #endif
     if (term->misc.signalInhibit)
 	screen->inhibit |= I_SIGNAL;
-#if OPT_TEK4014
-    if (term->misc.tekInhibit)
-	screen->inhibit |= I_TEK;
-#endif
-
-    /*
-     * We might start by showing the tek4014 window.
-     */
-#if OPT_TEK4014
-    if (screen->inhibit & I_TEK)
-	TEK4014_ACTIVE(term) = False;
-
-    if (TEK4014_ACTIVE(term) && !TekInit())
-	SysError(ERROR_INIT);
-#endif
 
     /*
      * Start the toolbar at this point, after the first window has been setup.
@@ -2947,11 +2909,6 @@ main(int argc, char *argv[]ENVP_ARG)
 	RequestMaximize(term, True);
 #endif
     for (;;) {
-#if OPT_TEK4014
-	if (TEK4014_ACTIVE(term))
-	    TekRun();
-	else
-#endif
 	    VTRun(term);
     }
 }
@@ -3206,32 +3163,6 @@ pty_search(int *pty)
     return 1;
 }
 #endif /* USE_PTY_SEARCH */
-
-/*
- * The only difference in /etc/termcap between 4014 and 4015 is that
- * the latter has support for switching character sets.  We support the
- * 4015 protocol, but ignore the character switches.  Therefore, we
- * choose 4014 over 4015.
- *
- * Features of the 4014 over the 4012: larger (19") screen, 12-bit
- * graphics addressing (compatible with 4012 10-bit addressing),
- * special point plot mode, incremental plot mode (not implemented in
- * later Tektronix terminals), and 4 character sizes.
- * All of these are supported by xterm.
- */
-
-#if OPT_TEK4014
-static const char *const tekterm[] =
-{
-    "tek4014",
-    "tek4015",			/* 4014 with APL character set support */
-    "tek4012",			/* 4010 with lower case */
-    "tek4013",			/* 4012 with APL character set support */
-    "tek4010",			/* small screen, upper-case only */
-    "dumb",
-    0
-};
-#endif
 
 /* The VT102 is a VT100 with the Advanced Video Option included standard.
  * It also adds Escape sequences for insert/delete character/line.
@@ -4056,11 +3987,6 @@ spawnXTerm(XtermWidget xw, unsigned line_speed)
 		       ConvertConsoleSelection, NULL, NULL);
     }
 #endif
-#if OPT_TEK4014
-    if (TEK4014_ACTIVE(xw)) {
-	envnew = tekterm;
-    } else
-#endif
     {
 	envnew = vtterm;
     }
@@ -4142,13 +4068,6 @@ spawnXTerm(XtermWidget xw, unsigned line_speed)
 
 #ifdef TTYSIZE_STRUCT
     /* tell tty how big window is */
-#if OPT_TEK4014
-    if (TEK4014_ACTIVE(xw)) {
-	setup_winsize(ts, TDefaultRows, TDefaultCols,
-		      TFullHeight(TekScreenOf(tekWidget)),
-		      TFullWidth(TekScreenOf(tekWidget)));
-    } else
-#endif
     {
 	setup_winsize(ts, MaxRows(screen), MaxCols(screen),
 		      FullHeight(screen), FullWidth(screen));
@@ -4251,13 +4170,6 @@ spawnXTerm(XtermWidget xw, unsigned line_speed)
 
 #ifdef TTYSIZE_STRUCT
 	    /* tell tty how big window is */
-#if OPT_TEK4014
-	    if (TEK4014_ACTIVE(xw)) {
-		setup_winsize(ts, TDefaultRows, TDefaultCols,
-			      TFullHeight(TekScreenOf(tekWidget)),
-			      TFullWidth(TekScreenOf(tekWidget)));
-	    } else
-#endif /* OPT_TEK4014 */
 	    {
 		setup_winsize(ts, MaxRows(screen), MaxCols(screen),
 			      FullHeight(screen), FullWidth(screen));

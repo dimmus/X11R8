@@ -2956,21 +2956,6 @@ ChangeColors(XtermWidget xw, ScrnColors *pNew)
                           VWindow(screen),
                           screen->pointer_cursor);
         }
-#if OPT_TEK4014
-        if (TEK4014_SHOWN(xw))
-        {
-            TekScreen *tekscr = TekScreenOf(tekWidget);
-            Window     tekwin = TWindow(tekscr);
-            if (tekwin)
-            {
-                recolor_cursor(screen,
-                               tekscr->arrow,
-                               T_COLOR(screen, MOUSE_FG),
-                               T_COLOR(screen, MOUSE_BG));
-                XDefineCursor(screen->display, tekwin, tekscr->arrow);
-            }
-        }
-#endif
         /* no repaint needed */
     }
 
@@ -2982,20 +2967,7 @@ ChangeColors(XtermWidget xw, ScrnColors *pNew)
             repaint = True;
         }
     }
-#if OPT_TEK4014
-    if (COLOR_DEFINED(pNew, TEK_FG) || COLOR_DEFINED(pNew, TEK_BG))
-    {
-        ChangeTekColors(tekWidget, screen, pNew);
-        if (TEK4014_SHOWN(xw))
-        {
-            TekRepaint(tekWidget);
-        }
-    }
-    else if (COLOR_DEFINED(pNew, TEK_CURSOR))
-    {
-        ChangeTekColors(tekWidget, screen, pNew);
-    }
-#endif
+
     if (repaint) xtermRepaint(xw);
 }
 
@@ -3165,18 +3137,6 @@ ReverseVideo(XtermWidget xw)
     {
         xtermDisplayPointer(xw);
     }
-#if OPT_TEK4014
-    if (TEK4014_SHOWN(xw))
-    {
-        TekScreen *tekscr = TekScreenOf(tekWidget);
-        Window     tekwin = TWindow(tekscr);
-        recolor_cursor(screen,
-                       tekscr->arrow,
-                       T_COLOR(screen, MOUSE_FG),
-                       T_COLOR(screen, MOUSE_BG));
-        XDefineCursor(screen->display, tekwin, tekscr->arrow);
-    }
-#endif
 
     if (screen->scrollWidget) ScrollBarReverseVideo(screen->scrollWidget);
 
@@ -3184,19 +3144,12 @@ ReverseVideo(XtermWidget xw)
     {
         set_background(xw, -1);
     }
-#if OPT_TEK4014
-    TekReverseVideo(xw, tekWidget);
-#endif
+
     if (XtIsRealized((Widget)xw))
     {
         xtermRepaint(xw);
     }
-#if OPT_TEK4014
-    if (TEK4014_SHOWN(xw))
-    {
-        TekRepaint(tekWidget);
-    }
-#endif
+
     ReverseOldColors(xw);
     set_cursor_gcs(xw);
     update_reversevideo();
@@ -3748,11 +3701,6 @@ xtermFillCells(XTermDraw *params, GC gc, int x, int y, Cardinal len)
                 break;
             case gcWideReverse:
             case gcWBoldReverse:
-                /* FIXME */
-                break;
-#endif
-#if OPT_TEK4014
-            case gcTKcurs:
                 /* FIXME */
                 break;
 #endif

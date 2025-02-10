@@ -55,18 +55,6 @@
 
 Widget toplevel;  /* top-most widget in xterm */
 
-#if OPT_TEK4014
-Char     *Tpushb;
-Char     *Tpushback;
-TekLink  *tekRefreshList;
-TekWidget tekWidget;
-Widget    tekshellwidget;
-int       T_lastx  = -1;
-int       T_lasty  = -1;
-int       Ttoggled = 0;
-jmp_buf   Tekend;
-#endif
-
 char *ProgramName;
 char *ProgramPath;
 

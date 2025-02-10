@@ -586,16 +586,8 @@ get_tcap_buffer(XtermWidget xw)
     TScreen *screen = TScreenOf(xw);
     char    *buffer;
 
-#if OPT_TEK4014
-    if (TEK4014_ACTIVE(xw))
-    {
-        buffer = TekScreenOf(tekWidget)->tcapbuf;
-    }
-    else
-#endif
-    {
-        buffer = screen->tcapbuf;
-    }
+    buffer = screen->tcapbuf;
+
     return buffer;
 }
 

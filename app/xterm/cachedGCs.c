@@ -117,9 +117,6 @@ traceCgsEnum(CgsEnum value)
         CASE(VTcursFilled);
         CASE(VTcursReverse);
         CASE(VTcursOutline);
-#  if OPT_TEK4014
-        CASE(TKcurs);
-#  endif
         CASE(MAX);
     }
     return result;
@@ -200,14 +197,8 @@ tracePixel(XtermWidget xw, Pixel value)
     } t_colors[] = {
         CASE(TEXT_FG),      CASE(TEXT_BG),      CASE(TEXT_CURSOR),
         CASE(MOUSE_FG),     CASE(MOUSE_BG),
-#    if OPT_TEK4014
-        CASE(TEK_FG),       CASE(TEK_BG),
-#    endif
 #    if OPT_HIGHLIGHT_COLOR
         CASE(HIGHLIGHT_BG), CASE(HIGHLIGHT_FG),
-#    endif
-#    if OPT_TEK4014
-        CASE(TEK_CURSOR),
 #    endif
     };
     TScreen *screen = TScreenOf(xw);
@@ -386,10 +377,6 @@ newCache(XtermWidget xw, VTwin *cgsWin, CgsEnum cgsId, CgsCache *me)
         case gcVTcursReverse: /* FALLTHRU */
         case gcVTcursOutline: /* FALLTHRU */
             break;
-#if OPT_TEK4014
-        case gcTKcurs:  /* FALLTHRU */
-    /* FIXME */
-#endif
         case gcMAX:  /* should not happen */
             return 0;
     }

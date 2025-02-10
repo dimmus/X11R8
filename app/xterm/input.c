@@ -1359,18 +1359,6 @@ Input(XtermWidget xw, XKeyEvent *event, Bool eightbit)
     }
     else if (kd.nbytes > 0)
     {
-#if OPT_TEK4014
-        if (TEK4014_GIN(tekWidget))
-        {
-            TekEnqMouse(tekWidget, kd.strbuf[0]);
-            TekGINoff(tekWidget);
-            kd.nbytes--;
-            for (j = 0; j < kd.nbytes; ++j)
-            {
-                kd.strbuf[j] = kd.strbuf[j + 1];
-            }
-        }
-#endif
 #if OPT_MOD_FKEYS
         if ((keyboard->modify_now.other_keys > 0) &&
             ModifyOtherKeys(xw, evt_state, &kd, modify_parm) &&
@@ -1541,14 +1529,6 @@ StringInput(XtermWidget xw, const Char *string, size_t nbytes)
     TRACE(("InputString (%s,%lu)\n",
            visibleChars(string, (unsigned)nbytes),
            (unsigned long)nbytes));
-#if OPT_TEK4014
-    if (nbytes && TEK4014_GIN(tekWidget))
-    {
-        TekEnqMouse(tekWidget, *string++);
-        TekGINoff(tekWidget);
-        nbytes--;
-    }
-#endif
     while (nbytes-- != 0)
         unparseputc(xw, *string++);
     if (!TEK4014_ACTIVE(xw)) AdjustAfterInput(xw);

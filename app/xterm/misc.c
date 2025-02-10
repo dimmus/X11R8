@@ -118,16 +118,8 @@
 #  include <wctype.h>
 #endif
 
-#if OPT_TEK4014
-#  define OUR_EVENT(event, Type)                            \
-      (event.type == Type &&                                \
-       (event.xcrossing.window == XtWindow(XtParent(xw)) || \
-        (tekWidget &&                                       \
-         event.xcrossing.window == XtWindow(XtParent(tekWidget)))))
-#else
 #  define OUR_EVENT(event, Type) \
       (event.type == Type && (event.xcrossing.window == XtWindow(XtParent(xw))))
-#endif
 
 #define VB_DELAY    screen->visualBellDelay
 #define EVENT_DELAY TScreenOf(term)->nextEventDelay
@@ -192,15 +184,6 @@ selectwindow(XtermWidget xw, int flag)
 
     TRACE(("selectwindow(%d) flag=%d\n", screen->select, flag));
 
-#if OPT_TEK4014
-    if (TEK4014_ACTIVE(xw))
-    {
-        if (!Ttoggled) TCursorToggle(tekWidget, TOGGLE);
-        screen->select |= flag;
-        if (!Ttoggled) TCursorToggle(tekWidget, TOGGLE);
-    }
-    else
-#endif
     {
 #if OPT_INPUT_METHOD
         TInput *input = lookupTInput(xw, (Widget)xw);
@@ -231,23 +214,13 @@ unselectwindow(XtermWidget xw, int flag)
 
     if (!screen->always_highlight)
     {
-#if OPT_TEK4014
-        if (TEK4014_ACTIVE(xw))
-        {
-            if (!Ttoggled) TCursorToggle(tekWidget, TOGGLE);
-            if (!Ttoggled) TCursorToggle(tekWidget, TOGGLE);
-        }
-        else
-#endif
-        {
 #if OPT_INPUT_METHOD
-            TInput *input = lookupTInput(xw, (Widget)xw);
-            if (input && input->xic) XUnsetICFocus(input->xic);
+        TInput *input = lookupTInput(xw, (Widget)xw);
+        if (input && input->xic) XUnsetICFocus(input->xic);
 #endif
 
-            if (screen->cursor_state && CursorMoved(screen)) HideCursor(xw);
-            if (screen->cursor_state) ShowCursor(xw);
-        }
+        if (screen->cursor_state && CursorMoved(screen)) HideCursor(xw);
+        if (screen->cursor_state) ShowCursor(xw);
     }
 }
 
@@ -350,10 +323,6 @@ xtermShowPointer(XtermWidget xw, Bool enable)
 {
     static int tried  = -1;
     TScreen   *screen = TScreenOf(xw);
-
-#if OPT_TEK4014
-    if (TEK4014_SHOWN(xw)) enable = True;
-#endif
 
     /*
      * Whether we actually hide the pointer depends on the pointer-mode and
@@ -1600,25 +1569,11 @@ VisualBell(void)
         gcval.function   = GXxor;
         gcval.foreground = xorPixel;
         visualGC = XtGetGC((Widget)xw, GCFunction + GCForeground, &gcval);
-#if OPT_TEK4014
-        if (TEK4014_ACTIVE(xw))
-        {
-            TekScreen *tekscr = TekScreenOf(tekWidget);
-            flashWindow(screen,
-                        TWindow(tekscr),
-                        visualGC,
-                        TFullWidth(tekscr),
-                        TFullHeight(tekscr));
-        }
-        else
-#endif
-        {
-            flashWindow(screen,
-                        VWindow(screen),
-                        visualGC,
-                        FullWidth(screen),
-                        FullHeight(screen));
-        }
+        flashWindow(screen,
+                    VWindow(screen),
+                    visualGC,
+                    FullWidth(screen),
+                    FullHeight(screen));
         XtReleaseGC((Widget)xw, visualGC);
     }
 }
@@ -2273,16 +2228,6 @@ Redraw(void)
                 NULL);
         }
     }
-#if OPT_TEK4014
-    if (TEK4014_SHOWN(xw))
-    {
-        TekScreen *tekscr = TekScreenOf(tekWidget);
-        event.window      = TWindow(tekscr);
-        event.width       = tekWidget->core.width;
-        event.height      = tekWidget->core.height;
-        TekExpose((Widget)tekWidget, (XEvent *)&event, NULL);
-    }
-#endif
 }
 
 #ifdef VMS
@@ -3801,18 +3746,9 @@ typedef enum
     OSC_TEXT_CURSOR,
     OSC_MOUSE_FG,
     OSC_MOUSE_BG
-#if OPT_TEK4014
-    ,
-    OSC_TEK_FG = 15,
-    OSC_TEK_BG
-#endif
 #if OPT_HIGHLIGHT_COLOR
     ,
     OSC_HIGHLIGHT_BG = 17
-#endif
-#if OPT_TEK4014
-    ,
-    OSC_TEK_CURSOR = 18
 #endif
 #if OPT_HIGHLIGHT_COLOR
     ,
@@ -3897,14 +3833,6 @@ oppositeColor(XtermWidget xw, int n)
         case MOUSE_BG:
             n = MOUSE_FG;
             break;
-#if OPT_TEK4014
-        case TEK_FG:
-            n = reversed ? TEK_FG : TEK_BG;
-            break;
-        case TEK_BG:
-            n = reversed ? TEK_BG : TEK_FG;
-            break;
-#endif
 #if OPT_HIGHLIGHT_COLOR
         case HIGHLIGHT_FG:
             n = HIGHLIGHT_BG;
@@ -4008,16 +3936,9 @@ OscToColorIndex(OscTextColors mode)
         CASE(TEXT_CURSOR);
         CASE(MOUSE_FG);
         CASE(MOUSE_BG);
-#if OPT_TEK4014
-        CASE(TEK_FG);
-        CASE(TEK_BG);
-#endif
 #if OPT_HIGHLIGHT_COLOR
         CASE(HIGHLIGHT_BG);
         CASE(HIGHLIGHT_FG);
-#endif
-#if OPT_TEK4014
-        CASE(TEK_CURSOR);
 #endif
         case OSC_NCOLORS:
             break;
@@ -4517,11 +4438,6 @@ do_osc(XtermWidget xw, Char *oscbuf, size_t len, int final)
         case OSC_Reset(OSC_HIGHLIGHT_BG):
         case OSC_Reset(OSC_HIGHLIGHT_FG):
 #  endif
-#  if OPT_TEK4014
-        case OSC_Reset(OSC_TEK_FG):
-        case OSC_Reset(OSC_TEK_BG):
-        case OSC_Reset(OSC_TEK_CURSOR):
-#  endif
         case OSC_AllowedOps:
             need_data = False;
             break;
@@ -4664,11 +4580,6 @@ do_osc(XtermWidget xw, Char *oscbuf, size_t len, int final)
         case OSC_HIGHLIGHT_BG:
         case OSC_HIGHLIGHT_FG:
 #endif
-#if OPT_TEK4014
-        case OSC_TEK_FG:
-        case OSC_TEK_BG:
-        case OSC_TEK_CURSOR:
-#endif
             if (xw->misc.dynamicColors)
             {
                 ChangeColorsRequest(xw, mode, buf, final);
@@ -4682,11 +4593,6 @@ do_osc(XtermWidget xw, Char *oscbuf, size_t len, int final)
 #if OPT_HIGHLIGHT_COLOR
         case OSC_Reset(OSC_HIGHLIGHT_BG):
         case OSC_Reset(OSC_HIGHLIGHT_FG):
-#endif
-#if OPT_TEK4014
-        case OSC_Reset(OSC_TEK_FG):
-        case OSC_Reset(OSC_TEK_BG):
-        case OSC_Reset(OSC_TEK_CURSOR):
 #endif
             if (xw->misc.dynamicColors)
             {
@@ -5759,11 +5665,6 @@ do_dec_rqm(XtermWidget xw, int nparams, int *params)
                 result = MdBool(xw->misc.shift_fonts);
                 break;
 #  endif
-#  if OPT_TEK4014
-            case srm_DECTEK:
-                result = MdBool(TEK4014_ACTIVE(xw));
-                break;
-#  endif
             case srm_132COLS:
                 result = MdBool(screen->c132);
                 break;
@@ -6643,10 +6544,6 @@ ReverseOldColors(XtermWidget xw)
         EXCHANGE(pOld->colors[MOUSE_FG], pOld->colors[MOUSE_BG], tmpPix);
         EXCHANGE(pOld->names[MOUSE_FG], pOld->names[MOUSE_BG], tmpName);
 
-#if OPT_TEK4014
-        EXCHANGE(pOld->colors[TEK_FG], pOld->colors[TEK_BG], tmpPix);
-        EXCHANGE(pOld->names[TEK_FG], pOld->names[TEK_BG], tmpName);
-#endif
         FreeMarkGCs(xw);
     }
     return;
@@ -7221,17 +7118,6 @@ XStrCmp(char *s1, char *s2)
     return (0);
 }
 
-#if OPT_TEK4014
-static void
-withdraw_window(Display *dpy, Window w, int scr)
-{
-    TRACE(("withdraw_window %#lx\n", (long)w));
-    (void)XmuUpdateMapHints(dpy, w, NULL);
-    XWithdrawWindow(dpy, w, scr);
-    return;
-}
-#endif
-
 void
 set_vt_visibility(Bool on)
 {
@@ -7253,142 +7139,8 @@ set_vt_visibility(Bool on)
             screen->Vshow = True;
         }
     }
-#if OPT_TEK4014
-    else
-    {
-        if (screen->Vshow && xw)
-        {
-            withdraw_window(XtDisplay(xw),
-                            VShellWindow(xw),
-                            XScreenNumberOfScreen(XtScreen(xw)));
-            screen->Vshow = False;
-        }
-    }
-    set_vthide_sensitivity();
-    set_tekhide_sensitivity();
-    update_vttekmode();
-    update_tekshow();
-    update_vtshow();
-#endif
     return;
 }
-
-#if OPT_TEK4014
-void
-set_tek_visibility(Bool on)
-{
-    XtermWidget xw = term;
-
-    TRACE(("set_tek_visibility(%d)\n", on));
-
-    if (on)
-    {
-        if (!TEK4014_SHOWN(xw))
-        {
-            if (tekWidget == 0)
-            {
-                TekInit(); /* will exit on failure */
-            }
-            if (tekWidget != 0)
-            {
-                Widget tekParent = SHELL_OF(tekWidget);
-                XtRealizeWidget(tekParent);
-                XtMapWidget(XtParent(tekWidget));
-#  if OPT_TOOLBAR
-                /* we need both of these during initialization */
-                XtMapWidget(tekParent);
-                XtMapWidget(tekWidget);
-#  endif
-                XtOverrideTranslations(
-                    tekParent,
-                    XtParseTranslationTable(
-                        "<Message>WM_PROTOCOLS: DeleteWindow()"));
-                (void)XSetWMProtocols(XtDisplay(tekParent),
-                                      XtWindow(tekParent),
-                                      &wm_delete_window,
-                                      1);
-                TEK4014_SHOWN(xw) = True;
-            }
-        }
-    }
-    else
-    {
-        if (TEK4014_SHOWN(xw) && tekWidget)
-        {
-            withdraw_window(XtDisplay(tekWidget),
-                            TShellWindow,
-                            XScreenNumberOfScreen(XtScreen(tekWidget)));
-            TEK4014_SHOWN(xw) = False;
-        }
-    }
-    set_tekhide_sensitivity();
-    set_vthide_sensitivity();
-    update_vtshow();
-    update_tekshow();
-    update_vttekmode();
-    return;
-}
-
-void
-end_tek_mode(void)
-{
-    XtermWidget xw = term;
-
-    if (TEK4014_ACTIVE(xw))
-    {
-        FlushLog(xw);
-        TEK4014_ACTIVE(xw) = False;
-        xtermSetWinSize(xw);
-        longjmp(Tekend, 1);
-    }
-    return;
-}
-
-void
-end_vt_mode(void)
-{
-    XtermWidget xw = term;
-
-    if (!TEK4014_ACTIVE(xw))
-    {
-        FlushLog(xw);
-        set_tek_visibility(True);
-        TEK4014_ACTIVE(xw) = True;
-        TekSetWinSize(tekWidget);
-        longjmp(VTend, 1);
-    }
-    return;
-}
-
-void
-switch_modes(Bool tovt) /* if true, then become vt mode */
-{
-    if (tovt)
-    {
-        if (tekRefreshList) TekRefresh(tekWidget);
-        end_tek_mode(); /* WARNING: this does a longjmp... */
-    }
-    else
-    {
-        end_vt_mode(); /* WARNING: this does a longjmp... */
-    }
-}
-
-void
-hide_vt_window(void)
-{
-    set_vt_visibility(False);
-    if (!TEK4014_ACTIVE(term)) switch_modes(False); /* switch to tek mode */
-}
-
-void
-hide_tek_window(void)
-{
-    set_tek_visibility(False);
-    tekRefreshList = (TekLink *)0;
-    if (TEK4014_ACTIVE(term)) switch_modes(True); /* does longjmp to vt mode */
-}
-#endif /* OPT_TEK4014 */
 
 static const char *
 skip_punct(const char *s)
@@ -8321,20 +8073,17 @@ update_winsize(TScreen *screen, int rows, int cols, int height, int width)
 void
 xtermSetWinSize(XtermWidget xw)
 {
-#if OPT_TEK4014
-    if (!TEK4014_ACTIVE(xw))
-#endif
-        if (XtIsRealized((Widget)xw))
-        {
-            TScreen *screen = TScreenOf(xw);
+    if (XtIsRealized((Widget)xw))
+    {
+        TScreen *screen = TScreenOf(xw);
 
-            TRACE(("xtermSetWinSize\n"));
-            update_winsize(screen,
-                           MaxRows(screen),
-                           MaxCols(screen),
-                           Height(screen),
-                           Width(screen));
-        }
+        TRACE(("xtermSetWinSize\n"));
+        update_winsize(screen,
+                        MaxRows(screen),
+                        MaxCols(screen),
+                        Height(screen),
+                        Width(screen));
+    }
 }
 
 #if OPT_XTERM_SGR

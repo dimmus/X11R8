@@ -851,9 +851,9 @@ typedef enum
 #  define OPT_TCAP_QUERY 1 /* true for termcap query */
 #endif
 
-#ifndef OPT_TEK4014
-#  define OPT_TEK4014 1 /* true if we're using tek4014 emulation */
-#endif
+// #ifndef OPT_TEK4014
+// #  define OPT_TEK4014 1 /* true if we're using tek4014 emulation */
+// #endif
 
 #ifndef OPT_TOOLBAR
 #  define OPT_TOOLBAR 0 /* true if xterm supports toolbar menus */
@@ -3547,7 +3547,7 @@ typedef struct _Work
     Boolean doing_resize; /* currently in RequestResize */
 #if OPT_MAXIMIZE
 #  define MAX_EWMH_MODE 3
-#  define MAX_EWMH_DATA (1 + OPT_TEK4014)
+#  define MAX_EWMH_DATA 1
 
     struct
     {

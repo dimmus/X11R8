@@ -170,8 +170,6 @@ src = files(
     'scrollbar.c',
     'svg.c',
     'tabs.c',
-    'Tekproc.c',
-    'TekPrsTbl.c',
     'util.c',
     'version.c',
     'VTPrsTbl.c',

@@ -3306,15 +3306,7 @@ FullScreen(XtermWidget xw, int new_ewmh_mode)
     int    which = 0;
     Window window;
 
-#  if OPT_TEK4014
-    if (TEK4014_ACTIVE(xw))
-    {
-        which  = 1;
-        window = TShellWindow;
-    }
-    else
-#  endif
-        window = VShellWindow(xw);
+    window = VShellWindow(xw);
 
     old_ewmh_mode = xw->work.ewmh[which].mode;
     oldprop       = ewmhProperty(old_ewmh_mode);
