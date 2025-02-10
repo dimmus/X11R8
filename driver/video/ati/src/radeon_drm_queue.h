@@ -1,6 +1,6 @@
 /*
- * Copyright © 2007 Red Hat, Inc.
- * Copyright © 2015 Advanced Micro Devices, Inc.
+ * Copyright 2007 Red Hat, Inc.
+ * Copyright 2015 Advanced Micro Devices, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),

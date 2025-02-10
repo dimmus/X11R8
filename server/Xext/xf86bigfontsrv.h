@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Yaakov Selkowitz
+ * Copyright 2010 Yaakov Selkowitz
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the

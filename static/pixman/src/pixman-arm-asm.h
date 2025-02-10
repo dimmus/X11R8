@@ -1,6 +1,6 @@
 /*
- * Copyright © 2008 Mozilla Corporation
- * Copyright © 2010 Nokia Corporation
+ * Copyright 2008 Mozilla Corporation
+ * Copyright 2010 Nokia Corporation
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2000, 2008 Keith Packard
+ * Copyright 2000, 2008 Keith Packard
  *             2004 Eric Anholt
  *             2005 Zack Rusin
  *

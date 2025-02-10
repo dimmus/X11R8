@@ -1,8 +1,8 @@
 /* -*- Mode: c; c-basic-offset: 4; tab-width: 8; indent-tabs-mode: t; -*- */
 /*
- * Copyright © 2010, 2012 Soren Sandmann Pedersen
- * Copyright © 2010, 2012 Red Hat, Inc.
- * Copyright © 2024 Filip Wasil, Samsung Electronics
+ * Copyright 2010, 2012 Soren Sandmann Pedersen
+ * Copyright 2010, 2012 Red Hat, Inc.
+ * Copyright 2024 Filip Wasil, Samsung Electronics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),

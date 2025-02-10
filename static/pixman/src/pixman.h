@@ -44,7 +44,7 @@ SOFTWARE.
 
 ******************************************************************/
 /*
- * Copyright © 1998, 2004 Keith Packard
+ * Copyright 1998, 2004 Keith Packard
  * Copyright   2007 Red Hat, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and its

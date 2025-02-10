@@ -1,7 +1,7 @@
 #ifndef __XCB_ERRORS_H__
 #define __XCB_ERRORS_H__
 
-/* Copyright © 2015 Uli Schlachter
+/* Copyright 2015 Uli Schlachter
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),

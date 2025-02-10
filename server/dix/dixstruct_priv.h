@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: MIT OR X11
  *
  * Copyright 1987 by Digital Equipment Corporation, Maynard, Massachusetts.
- * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+ * Copyright 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
 #ifndef _XSERVER_DIXSTRUCT_PRIV_H
 #define _XSERVER_DIXSTRUCT_PRIV_H

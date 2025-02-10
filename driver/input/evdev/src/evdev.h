@@ -1,6 +1,6 @@
 /*
- * Copyright © 2004-2008 Red Hat, Inc.
- * Copyright © 2008 University of South Australia
+ * Copyright 2004-2008 Red Hat, Inc.
+ * Copyright 2008 University of South Australia
  *
  * Permission to use, copy, modify, distribute, and sell this software
  * and its documentation for any purpose is hereby granted without

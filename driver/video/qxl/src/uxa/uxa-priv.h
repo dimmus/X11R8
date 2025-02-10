@@ -1,6 +1,6 @@
 /*
  *
- * Copyright © 2000,2008 Keith Packard
+ * Copyright 2000,2008 Keith Packard
  *             2005 Zack Rusin, Trolltech
  *
  * Permission to use, copy, modify, distribute, and sell this software and its

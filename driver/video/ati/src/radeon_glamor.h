@@ -1,5 +1,5 @@
 /*
- * Copyright © 2011 Intel Corporation.
+ * Copyright 2011 Intel Corporation.
  *             2012 Advanced Micro Devices, Inc.
  *
  * Permission is hereby granted, free of charge, to any person

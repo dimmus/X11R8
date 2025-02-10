@@ -1,6 +1,6 @@
 /*
- * Copyright © 2013 Keith Packard
- * Copyright © 2013 Jung-uk Kim <jkim@FreeBSD.org>
+ * Copyright 2013 Keith Packard
+ * Copyright 2013 Jung-uk Kim <jkim@FreeBSD.org>
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that

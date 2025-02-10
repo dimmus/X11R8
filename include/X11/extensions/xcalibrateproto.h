@@ -1,5 +1,5 @@
 /*
- * Copyright © 2003 Philip Blundell
+ * Copyright 2003 Philip Blundell
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that

@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: MIT OR X11
  *
- * Copyright © 1987, 1998  The Open Group
- * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+ * Copyright 1987, 1998  The Open Group
+ * Copyright 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
 /***********************************************************
 

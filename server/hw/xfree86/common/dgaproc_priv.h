@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT OR X11
  *
- * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+ * Copyright 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
 #ifndef __XSERVER_XFREE86_DGAPROC_H
 #define __XSERVER_XFREE86_DGAPROC_H
