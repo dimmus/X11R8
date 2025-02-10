@@ -8,11 +8,9 @@ modesetting_srcs = [
     'vblank.c',
 ]
 
-shared_module(
-    'modesetting_drv',
+shared_module('modesetting_drv',
     modesetting_srcs,
     name_prefix: '',
-
     include_directories: inc_server,
     c_args: xorg_c_args,
     dependencies: [
@@ -21,7 +19,6 @@ shared_module(
         dep_drm,
         dep_gbm,
     ],
-
     install: true,
     install_dir: dir_xorg_module / 'drivers',
 )

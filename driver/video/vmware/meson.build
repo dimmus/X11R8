@@ -47,7 +47,8 @@ src = files(
 
 subdir('vmwgfx')
 
-shared_module('vmware_drv', [src + src_vmwgfx],
+shared_module('vmware_drv',
+	src + src_vmwgfx,
 	name_prefix: '',
 	include_directories: inc_vmware,
 	dependencies: [dep_int_vmware, dep_ext_vmware],

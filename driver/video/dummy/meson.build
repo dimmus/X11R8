@@ -13,7 +13,8 @@ src = files(
     'dummy_driver.c',
 )
 
-shared_module('dummy_drv', src,
+shared_module('dummy_drv',
+	src,
 	name_prefix: '',
 	include_directories: [include_directories('.'), inc_server, inc_lib],
 	dependencies: dep_int_dummy,

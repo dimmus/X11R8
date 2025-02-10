@@ -10,7 +10,8 @@ conf.set('HAVE_ISA', false)
 
 dep_int_vesa = [xproto, xserver]
 
-shared_module('vesa_drv', 'vesa.c',
+shared_module('vesa_drv',
+	'vesa.c',
 	name_prefix: '',
 	include_directories: [include_directories('.'), inc_server, inc_lib],
 	dependencies: dep_int_vesa,

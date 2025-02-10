@@ -4,10 +4,8 @@ glamoregl_src = [
     'glamor_xf86_xv.c',
 ]
 
-shared_module(
-    'glamoregl',
+shared_module('glamoregl',
     glamoregl_src,
-
     include_directories: inc_server,
     c_args: xorg_c_args,
     dependencies: [
@@ -16,7 +14,6 @@ shared_module(
         dep_gbm,
     ],
     link_with: [glamor, libxserver_glx],
-
     install: true,
     install_dir: dir_xorg_module,
 )

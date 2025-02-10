@@ -19,58 +19,58 @@ dep_ext_ati = [dep_drm, dep_drm_radeon, dep_gbm, dep_udev]
 
 inc_ati = [
     include_directories('.'),
-    include_directories('src'),
     inc_config,
     inc_server,
     inc_lib,
 ]
 
 src_kms = files(
-    'src/radeon_dri2.c',
-    'src/radeon_dri3.c',
-    'src/radeon_drm_queue.c',
-    'src/radeon_kms.c',
-    'src/radeon_present.c',
-    'src/radeon_sync.c',
-    'src/radeon_vbo.c',
-    'src/radeon_bo_helper.c',
-    'src/drmmode_display.c',
+    'radeon_dri2.c',
+    'radeon_dri3.c',
+    'radeon_drm_queue.c',
+    'radeon_kms.c',
+    'radeon_present.c',
+    'radeon_sync.c',
+    'radeon_vbo.c',
+    'radeon_bo_helper.c',
+    'drmmode_display.c',
 )
 
 src_exa = files(
-    'src/radeon_exa.c',
-    'src/r600_exa.c',
-    'src/r6xx_accel.c',
-    'src/r600_textured_videofuncs.c',
-    'src/r600_shader.c',
-    'src/radeon_exa_shared.c',
-    'src/evergreen_exa.c',
-    'src/evergreen_accel.c',
-    'src/evergreen_shader.c',
-    'src/evergreen_textured_videofuncs.c',
-    'src/cayman_accel.c',
-    'src/cayman_shader.c',
+    'radeon_exa.c',
+    'r600_exa.c',
+    'r6xx_accel.c',
+    'r600_textured_videofuncs.c',
+    'r600_shader.c',
+    'radeon_exa_shared.c',
+    'evergreen_exa.c',
+    'evergreen_accel.c',
+    'evergreen_shader.c',
+    'evergreen_textured_videofuncs.c',
+    'cayman_accel.c',
+    'cayman_shader.c',
 )
 
 src_radeon = files(
-    'src/radeon_accel.c',
-    'src/radeon_video.c',
-    'src/radeon_misc.c',
-    'src/radeon_probe.c',
-    'src/radeon_textured_video.c',
-    'src/radeon_xvmc.c',
-    'src/radeon_glamor_wrappers.c',
-	'src/radeon_glamor.c',
+    'radeon_accel.c',
+    'radeon_video.c',
+    'radeon_misc.c',
+    'radeon_probe.c',
+    'radeon_textured_video.c',
+    'radeon_xvmc.c',
+    'radeon_glamor_wrappers.c',
+	'radeon_glamor.c',
 )
 
 src_radeon += src_kms + src_exa
 
 src_ati = files(
-    'src/ati.c',
-    'src/atimodule.c',
+    'ati.c',
+    'atimodule.c',
 )
 
-shared_module('ati_drv', src_ati,
+shared_module('ati_drv',
+    src_ati,
 	name_prefix: '',
 	include_directories: inc_ati,
 	dependencies: [dep_int_ati, dep_ext_ati],
@@ -78,7 +78,8 @@ shared_module('ati_drv', src_ati,
 	install_dir: dir_xorg_module / 'drivers',
 )
 
-shared_module('radeon_drv', src_radeon,
+shared_module('radeon_drv',
+    src_radeon,
 	name_prefix: '',
 	include_directories: inc_ati,
 	dependencies: [dep_int_ati, dep_ext_ati],

@@ -2,8 +2,7 @@ inputtestdrv_srcs = [
     'xf86-input-inputtest.c',
 ]
 
-shared_module(
-    'inputtest_drv',
+shared_module('inputtest_drv',
     inputtestdrv_srcs,
     name_prefix: '',
     include_directories: inc_server,

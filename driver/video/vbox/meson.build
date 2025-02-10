@@ -31,7 +31,8 @@ src = files(
     'vbva.c',
 )
 
-shared_module('vboxvideo_drv', src,
+shared_module('vboxvideo_drv',
+    src,
     c_args: lib_args,
 	name_prefix: '',
 	include_directories: [include_directories('.'), inc_config, inc_server],

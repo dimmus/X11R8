@@ -46,7 +46,8 @@ src = files(
     'vl_hwmc.c',
 )
 
-shared_module('nouveau_drv', src,
+shared_module('nouveau_drv',
+    src,
 	name_prefix: '',
 	include_directories: [
         include_directories('.'),
