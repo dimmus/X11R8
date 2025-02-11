@@ -88,12 +88,16 @@ _XFUNCPROTOBEGIN
 #    define XAU_MALLOC_ATTRIBUTE(X)
 #  endif
 
+#if __has_attribute(dealloc)
+#  define XAU_DEALLOC_ATTRIBUTE(X) __attribute__((dealloc(X)))
+#else
+#  define XAU_DEALLOC_ATTRIBUTE(X)
+#endif
+
+void XauDisposeAuth(Xauth *auth) XAU_DEALLOC_ATTRIBUTE(1);
+
 char *XauFileName(void);
 
-void XauDisposeAuth(Xauth *  /* auth */
-);
-
-XAU_MALLOC_ATTRIBUTE((XauDisposeAuth, 1))
 Xauth *XauReadAuth(FILE * /* auth_file */
 );
 
