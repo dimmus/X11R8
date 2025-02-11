@@ -25,7 +25,7 @@ meson install -C build
 - Monolithic X Window System package
 - Meson build system
 - Scripted Linux dependencies installation
-- Enabled 3D acceleration by default
+- Enabled accelerations by default
 - Integrated XCB
 - Integrated X drivers
 - Integrated X apps like `twm`, `xinit`, `xclock`, `xterm`
@@ -33,7 +33,7 @@ meson install -C build
 - Revived font server
 - No XWin support
 - No XWayland support
-- No XQuarz support
+- No XQuartz support
 - Oriented to modern Linux systems
 
 <!-- `*` - work in progress -->
