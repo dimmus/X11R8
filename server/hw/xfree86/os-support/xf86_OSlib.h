@@ -86,7 +86,7 @@
 #if defined(__SVR4) && defined(__sun)
 #include <sys/ioctl.h>
 #include <signal.h>
-#include <termio.h>
+#include <termios.h>
 #include <sys/types.h>
 
 #include <errno.h>
