@@ -86,7 +86,7 @@ add_project_arguments(
 add_project_link_arguments(
   '-fvisibility=hidden',
   '-fno-strict-aliasing',
-  '-Wl,-z,lazy',
+  '-Wl,-z,lazy', # explicitly enable lazy binding for shared libraries
   language: 'c'
 )
 
