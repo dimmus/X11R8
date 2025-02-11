@@ -39,7 +39,6 @@ if get_option('buildtype').startswith('debug')
       '-Werror=sequence-point',
       '-Werror=return-type',
       '-Werror=trigraphs',
-      '-Werror=array-bounds',
       # '-Werror=write-strings', # initialization discards ‘const’ qualifier from pointer target type
       '-Werror=address',
       '-Werror=int-to-pointer-cast',
@@ -48,6 +47,7 @@ if get_option('buildtype').startswith('debug')
   endif
 else
   test_wflags = [
+    '-Wno-error=array-bounds',      # 32-bit fails otherwise
     '-Wno-use-after-free',          # gcc
     '-Wno-stringop-truncation',     # gcc
     '-Wno-maybe-uninitialized',     # gcc
@@ -79,12 +79,14 @@ add_project_arguments(
   '-DHAVE_DIX_CONFIG_H',
   '-D__USE_MISC', # test/xfont (used if HAVE_REALPATH true)
   '-D__USE_XOPEN_EXTENDED', # test/xfont (used if HAVE_REALPATH true)
+  '-fno-plt', # disable the use of the Procedure Linkage Table for external function calls
   language: 'c'
 )
 
 add_project_link_arguments(
   '-fvisibility=hidden',
   '-fno-strict-aliasing',
+  '-Wl,-z,lazy',
   language: 'c'
 )
 
