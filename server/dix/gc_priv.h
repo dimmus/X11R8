@@ -1,8 +1,8 @@
 /* SPDX-License-Identifier: MIT OR X11
  *
- * Copyright 2024 Enrico Weigelt, metux IT consult <info@metux.net>
- * Copyright 1987 by Digital Equipment Corporation, Maynard, Massachusetts.
- * Copyright 1987, 1998  The Open Group
+ * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+ * Copyright © 1987 by Digital Equipment Corporation, Maynard, Massachusetts.
+ * Copyright © 1987, 1998  The Open Group
  */
 #ifndef _XSERVER_DIX_GC_PRIV_H
 #define _XSERVER_DIX_GC_PRIV_H

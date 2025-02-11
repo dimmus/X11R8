@@ -51,7 +51,7 @@ SOFTWARE.
 #include "regionstr.h"
 #include "privates.h"
 #include "damage.h"
-#include "X11/extensions/randr.h"
+#include <X11/extensions/randr.h>
 #include "picturestr.h"
 
 typedef struct _Drawable {

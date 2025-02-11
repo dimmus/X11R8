@@ -52,8 +52,8 @@ SOFTWARE.
 
 #include <dix-config.h>
 
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
 
 #include "dix/dix_priv.h"
 
@@ -76,7 +76,6 @@ int _X_COLD
 SProcXGetDeviceDontPropagateList(ClientPtr client)
 {
     REQUEST(xGetDeviceDontPropagateListReq);
-    swaps(&stuff->length);
     REQUEST_SIZE_MATCH(xGetDeviceDontPropagateListReq);
     swapl(&stuff->window);
     return (ProcXGetDeviceDontPropagateList(client));

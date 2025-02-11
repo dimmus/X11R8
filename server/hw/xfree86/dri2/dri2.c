@@ -1,5 +1,5 @@
 /*
- * Copyright 2007, 2008 Red Hat, Inc.
+ * Copyright © 2007, 2008 Red Hat, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Soft-
@@ -42,7 +42,7 @@
 #include "scrnintstr.h"
 #include "windowstr.h"
 #include "dixstruct.h"
-#include "dri2.h"
+#include "dri2_priv.h"
 #include "dri2int.h"
 #include "damage.h"
 #include "xf86.h"

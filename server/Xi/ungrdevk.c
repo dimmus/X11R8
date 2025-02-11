@@ -52,8 +52,8 @@ SOFTWARE.
 
 #include <dix-config.h>
 
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
 
 #include "dix/dix_priv.h"
 #include "dix/dixgrabs_priv.h"
@@ -79,7 +79,6 @@ int _X_COLD
 SProcXUngrabDeviceKey(ClientPtr client)
 {
     REQUEST(xUngrabDeviceKeyReq);
-    swaps(&stuff->length);
     REQUEST_SIZE_MATCH(xUngrabDeviceKeyReq);
     swapl(&stuff->grabWindow);
     swaps(&stuff->modifiers);

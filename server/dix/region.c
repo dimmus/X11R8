@@ -78,8 +78,8 @@ Equipment Corporation.
 #include <dix-config.h>
 
 #include "regionstr.h"
-#include "X11/Xprotostr.h"
-#include "X11/Xfuncproto.h"
+#include <X11/Xprotostr.h>
+#include <X11/Xfuncproto.h>
 #include "gc.h"
 #include <pixman.h>
 

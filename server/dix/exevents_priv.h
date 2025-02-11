@@ -1,12 +1,12 @@
 /* SPDX-License-Identifier: MIT OR X11
  *
- * Copyright 1996 Thomas E. Dickey <dickey@clark.net>
- * Copyright 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+ * Copyright © 1996 Thomas E. Dickey <dickey@clark.net>
+ * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
 #ifndef _XSERVER_EXEVENTS_PRIV_H
 #define _XSERVER_EXEVENTS_PRIV_H
 
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XIproto.h>
 #include "exevents.h"
 
 /**

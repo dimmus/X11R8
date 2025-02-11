@@ -1,7 +1,7 @@
 /*
- * Copyright 2016 Broadcom
- * Copyright 2009 Intel Corporation
- * Copyright 1998 Keith Packard
+ * Copyright © 2016 Broadcom
+ * Copyright © 2009 Intel Corporation
+ * Copyright © 1998 Keith Packard
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -244,12 +244,12 @@ glamor_get_converted_image(PictFormatShort dst_format,
     pixman_image_t *dst_image;
     pixman_image_t *src_image;
 
-    dst_image = pixman_image_create_bits((pixman_format_code_t)dst_format, w, h, NULL, 0);
+    dst_image = pixman_image_create_bits(dst_format, w, h, NULL, 0);
     if (dst_image == NULL) {
         return NULL;
     }
 
-    src_image = pixman_image_create_bits((pixman_format_code_t)src_format, w, h, src_bits, src_stride);
+    src_image = pixman_image_create_bits(src_format, w, h, src_bits, src_stride);
 
     if (src_image == NULL) {
         pixman_image_unref(dst_image);

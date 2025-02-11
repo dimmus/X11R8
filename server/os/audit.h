@@ -1,12 +1,12 @@
 /* SPDX-License-Identifier: MIT OR X11
  *
- * Copyright 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+ * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
 #ifndef _XSERVER_OS_AUDIT_H
 #define _XSERVER_OS_AUDIT_H
 
 #include <stdarg.h>
-#include "X11/Xfuncproto.h"
+#include <X11/Xfuncproto.h>
 
 extern int auditTrailLevel;
 

@@ -33,7 +33,7 @@ from The Open Group.
 
 #include <dix-config.h>
 
-#include "X11/X.h"
+#include <X11/X.h>
 #include "os.h"
 #include "osdep.h"
 #include "mitauth.h"

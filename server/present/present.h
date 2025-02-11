@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Keith Packard
+ * Copyright © 2013 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -23,7 +23,7 @@
 #ifndef _PRESENT_H_
 #define _PRESENT_H_
 
-#include "X11/extensions/presentproto.h"
+#include <X11/extensions/presentproto.h>
 #include "randrstr.h"
 #include "presentext.h"
 

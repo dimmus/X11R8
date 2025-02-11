@@ -52,8 +52,8 @@ SOFTWARE.
 
 #include <dix-config.h>
 
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
 
 #include "dix/exevents_priv.h"
 
@@ -71,7 +71,6 @@ int _X_COLD
 SProcXGetDeviceMotionEvents(ClientPtr client)
 {
     REQUEST(xGetDeviceMotionEventsReq);
-    swaps(&stuff->length);
     REQUEST_SIZE_MATCH(xGetDeviceMotionEventsReq);
     swapl(&stuff->start);
     swapl(&stuff->stop);

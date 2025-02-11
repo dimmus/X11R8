@@ -47,9 +47,9 @@ SOFTWARE.
 
 #include <dix-config.h>
 
-#include "X11/X.h"
-#include "X11/Xproto.h"
-#include "X11/extensions/XI2.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/extensions/XI2.h>
 
 #include "dix/cursor_priv.h"
 #include "dix/dix_priv.h"

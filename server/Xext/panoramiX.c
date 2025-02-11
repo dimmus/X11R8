@@ -26,10 +26,10 @@ Equipment Corporation.
 #include <dix-config.h>
 
 #include <stdio.h>
-#include "X11/X.h"
-#include "X11/Xproto.h"
-#include "X11/Xarch.h"
-#include "X11/extensions/panoramiXproto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/Xarch.h>
+#include <X11/extensions/panoramiXproto.h>
 
 #include "dix/dix_priv.h"
 
@@ -62,6 +62,9 @@ Equipment Corporation.
 extern VisualPtr glxMatchVisual(ScreenPtr pScreen,
                                 VisualPtr pVisual, ScreenPtr pMatchScreen);
 #endif
+
+/* Xinerama is disabled by default unless enabled via +xinerama */
+Bool noPanoramiXExtension = TRUE;
 
 /*
  *	PanoramiX data declarations

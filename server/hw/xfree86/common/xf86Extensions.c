@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Daniel Stone
+ * Copyright © 2011 Daniel Stone
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -43,13 +43,18 @@
 #endif
 
 #ifdef XFreeXDGA
-#include "X11/extensions/xf86dgaproto.h"
+#include <X11/extensions/xf86dgaproto.h>
 #endif
 
 #ifdef XF86VIDMODE
-#include "X11/extensions/xf86vmproto.h"
+#include <X11/extensions/xf86vmproto.h>
 #include "vidmodestr.h"
 #endif
+
+Bool noXFree86VidModeExtension = FALSE;
+Bool noXFree86DGAExtension = FALSE;
+Bool noXFree86DRIExtension = FALSE;
+Bool noDRI2Extension = FALSE;
 
 /*
  * DDX-specific extensions.

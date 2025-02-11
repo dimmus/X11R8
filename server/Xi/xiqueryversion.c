@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Red Hat, Inc.
+ * Copyright © 2009 Red Hat, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -33,9 +33,9 @@
 
 #include "inputstr.h"
 
-#include "X11/Xmd.h"
-#include "X11/X.h"
-#include "X11/extensions/XI2proto.h"
+#include <X11/Xmd.h>
+#include <X11/X.h>
+#include <X11/extensions/XI2proto.h>
 
 #include "dix/exevents_priv.h"
 
@@ -133,7 +133,6 @@ int _X_COLD
 SProcXIQueryVersion(ClientPtr client)
 {
     REQUEST(xXIQueryVersionReq);
-    swaps(&stuff->length);
     REQUEST_AT_LEAST_SIZE(xXIQueryVersionReq);
     swaps(&stuff->major_version);
     swaps(&stuff->minor_version);

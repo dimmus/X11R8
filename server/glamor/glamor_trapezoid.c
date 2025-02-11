@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Intel Corporation
+ * Copyright © 2009 Intel Corporation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -119,7 +119,7 @@ glamor_trapezoids(CARD8 op,
     if (!picture)
         return;
 
-    image = pixman_image_create_bits((pixman_format_code_t)picture->format,
+    image = pixman_image_create_bits(picture->format,
                                      width, height, NULL, stride);
     if (!image) {
         FreePicture(picture, 0);

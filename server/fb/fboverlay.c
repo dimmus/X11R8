@@ -1,6 +1,6 @@
 /*
  *
- * Copyright 2000 SuSE, Inc.
+ * Copyright © 2000 SuSE, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -25,6 +25,8 @@
 #include <dix-config.h>
 
 #include <stdlib.h>
+
+#include "mi/mi_priv.h"
 
 #include "fb.h"
 #include "fboverlay.h"

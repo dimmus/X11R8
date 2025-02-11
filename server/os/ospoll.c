@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Keith Packard
+ * Copyright © 2016 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -24,8 +24,8 @@
 
 #include <stdlib.h>
 #include <unistd.h>
-#include "X11/X.h"
-#include "X11/Xproto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
 
 #include "os/xserver_poll.h"
 

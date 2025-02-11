@@ -122,12 +122,13 @@ foreach h: h_check_server
 endforeach
 
 f_check_server = [
-    'arc4random_buf', 'backtrace', 'cbrt', 'epoll_create1', 'getuid', 'geteuid',
-    'isastream', 'getifaddrs', 'getpeereid', 'getpeerucred', 'getprogname', 'getzoneid',
-    'memfd_create', 'mkostemp', 'mmap', 'open_device', 'poll', 'pollset_create', 'posix_fallocate',
-    'port_create', 'seteuid', 'setitimer', 'shmctl64', 'sigaction', 'sigprocmask',
-    'strcasecmp', 'strcasestr', 'strlcat', 'strlcpy', 'strncasecmp', 'timingsafe_memcmp',
-    'vasprintf', 'vsnprintf', 'walkcontext',
+    'backtrace', 'cbrt', 'epoll_create1', 'getuid', 'geteuid', 'isastream',
+    'issetugid', 'getaddrinfo', 'getifaddrs', 'getpeereid', 'getpeerucred',
+    'getprogname', 'getzoneid', 'inet_ntop', 'memfd_create', 'mkostemp',
+    'mmap', 'open_device', 'poll', 'pollset_create', 'posix_fallocate',
+    'port_create', 'reallocarray', 'seteuid', 'setitimer', 'shmctl64',
+    'sigaction', 'sigprocmask', 'strcasecmp', 'strcasestr', 'strncasecmp',
+    'timingsafe_memcmp', 'vasprintf', 'vsnprintf', 'walkcontext', 
 ]
 
 foreach f: f_check_server
@@ -137,6 +138,9 @@ endforeach
 conf_server.set('HAVE_REALLOCARRAY',  cc.has_function('reallocarray', dependencies: dep_libbsd))
 conf_server.set('HAVE_STRNDUP',       cc.has_function('strndup') and cc.has_header_symbol('string.h', 'strndup'))
 conf_server.set('HAVE_XUCRED_CR_PID', cc.has_member('struct xucred', 'cr_pid', prefix: '#include <sys/ucred.h>'))
+conf_server.set('HAVE_STRLCAT',       cc.has_function('strlcat', dependencies: dep_libbsd))
+conf_server.set('HAVE_STRLCPY',       cc.has_function('strlcpy', dependencies: dep_libbsd))
+conf_server.set('HAVE_SOCKLEN_T',     cc.has_type('socklen_t', prefix: '#include <sys/socket.h>') ? '1' : false)
 conf_server.set('LOCK_SERVER', '1')
 
 # Don't let X dependencies typedef 'pointer'

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Intel Corporation
+ * Copyright © 2014 Intel Corporation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -28,7 +28,7 @@
 #include "ephyr.h"
 #include "glamor_priv.h"
 
-#include "X11/extensions/Xv.h"
+#include <X11/extensions/Xv.h>
 #include "fourcc.h"
 
 #define NUM_FORMATS 3

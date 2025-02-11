@@ -1,6 +1,6 @@
 /*
  *
- * Copyright 2006-2009 Simon Thum             simon dot thum at gmx dot de
+ * Copyright © 2006-2009 Simon Thum             simon dot thum at gmx dot de
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -30,7 +30,7 @@
 
 #include <ptrveloc.h>
 #include <exevents.h>
-#include "X11/Xatom.h"
+#include <X11/Xatom.h>
 #include <os.h>
 
 #include <xserver-properties.h>
@@ -78,7 +78,7 @@ DeletePredictableAccelerationProperties(DeviceIntPtr,
 /*#define PTRACCEL_DEBUGGING*/
 
 #ifdef PTRACCEL_DEBUGGING
-#define DebugAccelF(...) ErrorFSigSafe("dix/ptraccel: " __VA_ARGS__)
+#define DebugAccelF(...) ErrorF("dix/ptraccel: " __VA_ARGS__)
 #else
 #define DebugAccelF(...)        /* */
 #endif

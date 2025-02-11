@@ -52,8 +52,8 @@ SOFTWARE.
 
 #include <dix-config.h>
 
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
 
 #include "dix/dix_priv.h"
 
@@ -74,7 +74,6 @@ int _X_COLD
 SProcXGetSelectedExtensionEvents(ClientPtr client)
 {
     REQUEST(xGetSelectedExtensionEventsReq);
-    swaps(&stuff->length);
     REQUEST_SIZE_MATCH(xGetSelectedExtensionEventsReq);
     swapl(&stuff->window);
     return (ProcXGetSelectedExtensionEvents(client));

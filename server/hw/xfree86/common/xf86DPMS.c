@@ -33,18 +33,18 @@
 #include <xorg-config.h>
 #endif
 
-#include "X11/X.h"
+#include <X11/X.h>
 #include "os.h"
 #include "globals.h"
 #include "windowstr.h"
 #include "xf86.h"
 #include "xf86Priv.h"
 #ifdef DPMSExtension
-#include "X11/extensions/dpmsconst.h"
+#include <X11/extensions/dpmsconst.h>
 #include "dpmsproc.h"
 #endif
 #ifdef XSERVER_LIBPCIACCESS
-#include "xf86VGAarbiter.h"
+#include "xf86VGAarbiter_priv.h"
 #endif
 
 #ifdef DPMSExtension

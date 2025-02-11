@@ -45,8 +45,8 @@ SOFTWARE.
 ********************************************************/
 
 /*
- * Copyright 2010 Collabora Ltd.
- * Copyright 2011 Red Hat, Inc.
+ * Copyright © 2010 Collabora Ltd.
+ * Copyright © 2011 Red Hat, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -82,19 +82,20 @@ SOFTWARE.
 
 #include "dix/cursor_priv.h"
 
-#include "X11/X.h"
-#include "X11/Xproto.h"
-#include "X11/extensions/geproto.h"
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
-#include "X11/extensions/XI2proto.h"
-#include "X11/extensions/XKBproto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/extensions/geproto.h>
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
+#include <X11/extensions/XI2proto.h>
+#include <X11/extensions/XKBproto.h>
 
 #include "dix/dix_priv.h"
 #include "dix/dixgrabs_priv.h"
 #include "dix/eventconvert.h"
 #include "dix/exevents_priv.h"
 #include "dix/input_priv.h"
+#include "mi/mi_priv.h"
 
 #include "inputstr.h"
 #include "windowstr.h"
@@ -110,7 +111,6 @@ SOFTWARE.
 #include "xiquerydevice.h"      /* For List*Info */
 #include "eventstr.h"
 #include "inpututils.h"
-#include "mi.h"
 #include "xkbsrv.h"
 
 #define WID(w) ((w) ? ((w)->drawable.id) : 0)

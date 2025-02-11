@@ -23,16 +23,16 @@
  * in this Software without prior written authorization from the XFree86 Project.
  */
 
-#ifndef GLX_EXTINIT_H
-#define GLX_EXTINIT_H
+#ifndef GLX_EXT_INIT_H
+#define GLX_EXT_INIT_H
 
 /* this is separate due to sdksyms pulling in extinit.h */
 /* XXX this comment no longer makes sense i think */
 #ifdef GLXEXT
 typedef struct __GLXprovider __GLXprovider;
-typedef struct __GLXscreen __GLXscreenNew;
+typedef struct __GLXscreen __GLXscreen;
 struct __GLXprovider {
-    __GLXscreenNew *(*screenProbe) (ScreenPtr pScreen);
+    __GLXscreen *(*screenProbe) (ScreenPtr pScreen);
     const char *name;
     __GLXprovider *next;
 };

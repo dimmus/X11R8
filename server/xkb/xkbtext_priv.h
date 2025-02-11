@@ -1,11 +1,11 @@
 /* SPDX-License-Identifier: MIT OR X11
  *
- * Copyright 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+ * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
 #ifndef _XSERVER_XKB_XKBTEXT_PRIV_H
 #define _XSERVER_XKB_XKBTEXT_PRIV_H
 
-#include "X11/X.h"
+#include <X11/X.h>
 
 #include "xkbstr.h"
 
@@ -24,7 +24,7 @@ char *XkbModMaskText(unsigned mask, unsigned format);
 char *XkbVModIndexText(XkbDescPtr xkb, unsigned ndx, unsigned format);
 char *XkbVModMaskText(XkbDescPtr xkb, unsigned modMask, unsigned mask,
                       unsigned format);
-const char *XkbConfigText(unsigned config, unsigned format);
+char *XkbConfigText(unsigned config, unsigned format);
 const char *XkbSIMatchText(unsigned type, unsigned format);
 char *XkbIMWhichStateMaskText(unsigned use_which, unsigned format);
 char *XkbControlsMaskText(unsigned ctrls, unsigned format);

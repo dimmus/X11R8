@@ -31,7 +31,7 @@ SOFTWARE.
 #include "gc.h"
 #include "pixmap.h"
 #include "privates.h"
-#include "X11/Xmd.h"
+#include <X11/Xmd.h>
 
 /*
  * 	direct-mapped hash table, used by resource manager to store

@@ -29,10 +29,10 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
-#include "X11/Xos.h"
-#include "X11/X.h"
-#include "X11/Xproto.h"
-#include "X11/extensions/XKMformat.h"
+#include <X11/Xos.h>
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/extensions/XKMformat.h>
 
 #include "xkb/xkbtext_priv.h"
 
@@ -301,15 +301,12 @@ XkbModMaskText(unsigned mask, unsigned format)
 
 /***====================================================================***/
 
- /*ARGSUSED*/ const char *
+ /*ARGSUSED*/ char *
 XkbConfigText(unsigned config, unsigned format)
 {
-    static char *buf = NULL;
+    static char *buf;
 
     buf = tbGetBuffer(32);
-    if (!buf) {
-        return "Error: Buffer allocation failed";
-    }
     switch (config) {
     case XkmSemanticsFile:
         strcpy(buf, "Semantics");
@@ -343,7 +340,7 @@ XkbConfigText(unsigned config, unsigned format)
         strcpy(buf, "VirtualMods");
         break;
     default:
-        snprintf(buf, 32, "unknown(%d)", config);
+        sprintf(buf, "unknown(%d)", config);
         break;
     }
     return buf;
@@ -622,20 +619,17 @@ XkbGeomFPText(int val, unsigned format)
     int whole, frac;
     char *buf;
 
-    buf = tbGetBuffer(14);
-    if (!buf) {
-        return "Error: Buffer allocation failed";
-    }
+    buf = tbGetBuffer(12);
     if (format == XkbCFile) {
-        snprintf(buf, 14, "%d", val);
+        sprintf(buf, "%d", val);
     }
     else {
         whole = val / XkbGeomPtsPerMM;
         frac = val % XkbGeomPtsPerMM;
         if (frac != 0)
-            snprintf(buf, 14, "%d.%d", whole, frac);
+            sprintf(buf, "%d.%d", whole, frac);
         else
-            snprintf(buf, 14, "%d", whole);
+            sprintf(buf, "%d", whole);
     }
     return buf;
 }
@@ -658,13 +652,10 @@ XkbDoodadTypeText(unsigned type, unsigned format)
         else if (type == XkbLogoDoodad)
             strcpy(buf, "XkbLogoDoodad");
         else
-            snprintf(buf, 24, "UnknownDoodad%d", type);
+            sprintf(buf, "UnknownDoodad%d", type);
     }
     else {
         buf = tbGetBuffer(12);
-        if (!buf) {
-            return "Error: Buffer allocation failed";
-        }
         if (type == XkbOutlineDoodad)
             strcpy(buf, "outline");
         else if (type == XkbSolidDoodad)
@@ -676,7 +667,7 @@ XkbDoodadTypeText(unsigned type, unsigned format)
         else if (type == XkbLogoDoodad)
             strcpy(buf, "logo");
         else
-            snprintf(buf, 24, "unknown%d", type);
+            sprintf(buf, "unknown%d", type);
     }
     return buf;
 }

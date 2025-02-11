@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 Daniel Stone
+ * Copyright © 2006-2007 Daniel Stone
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -26,9 +26,11 @@
 #include <dix-config.h>
 
 #include <unistd.h>
+
+#include "config/hotplug_priv.h"
+
 #include "os.h"
 #include "inputstr.h"
-#include "hotplug.h"
 #include "config-backends.h"
 #include "systemd-logind.h"
 

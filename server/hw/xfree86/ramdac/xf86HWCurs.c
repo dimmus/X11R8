@@ -4,7 +4,7 @@
 #endif
 
 #include <string.h>
-#include "X11/X.h"
+#include <X11/X.h>
 
 #include "dix/colormap_priv.h"
 

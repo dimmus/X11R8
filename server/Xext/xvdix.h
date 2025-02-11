@@ -53,7 +53,7 @@ SOFTWARE.
 */
 
 #include "scrnintstr.h"
-#include "X11/extensions/Xvproto.h"
+#include <X11/extensions/Xvproto.h>
 
 typedef struct {
     int numerator;
@@ -168,6 +168,15 @@ typedef struct _XvPortRec {
     TimeStamp time;
     DevUnion devPriv;
 } XvPortRec, *XvPortPtr;
+
+typedef struct {
+    int version, revision;
+    int nAdaptors;
+    XvAdaptorPtr pAdaptors;
+    DestroyWindowProcPtr DestroyWindow;
+    DestroyPixmapProcPtr DestroyPixmap;
+    CloseScreenProcPtr CloseScreen;
+} XvScreenRec, *XvScreenPtr;
 
 extern _X_EXPORT int XvScreenInit(ScreenPtr);
 extern _X_EXPORT DevPrivateKey XvGetScreenKey(void);

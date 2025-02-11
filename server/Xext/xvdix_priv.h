@@ -1,10 +1,10 @@
 /* SPDX-License-Identifier: MIT OR X11
  *
- * Copyright 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+ * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
 #ifndef _XORG_XVDIX_PRIV_H
 
-#include "X11/Xdefs.h"
+#include <X11/Xdefs.h>
 
 #include "include/pixmap.h"
 #include "include/regionstr.h"
@@ -21,15 +21,6 @@
 /* Errors */
 
 #define _XvBadPort (XvBadPort+XvErrorBase)
-
-typedef struct {
-    int version, revision;
-    int nAdaptors;
-    XvAdaptorPtr pAdaptors;
-    DestroyWindowProcPtr DestroyWindow;
-    DestroyPixmapProcPtr DestroyPixmap;
-    CloseScreenProcPtr CloseScreen;
-} XvScreenRec, *XvScreenPtr;
 
 typedef struct _XvPortNotifyRec {
     struct _XvPortNotifyRec *next;

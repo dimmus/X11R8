@@ -73,8 +73,8 @@
 #ifndef _XF86_OSLIB_H
 #define _XF86_OSLIB_H
 
-#include "X11/Xos.h"
-#include "X11/Xfuncproto.h"
+#include <X11/Xos.h>
+#include <X11/Xfuncproto.h>
 
 #include <stdio.h>
 #include <ctype.h>
@@ -196,6 +196,10 @@ struct pcvtid {
 #if defined(__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(__DragonFly__)
 #include <sys/mouse.h>
 #endif
+    /* Include these definitions in case ioctl_pc.h didn't get included */
+#ifndef CONSOLE_X_BELL
+#define CONSOLE_X_BELL _IOW('t',123,int[2])
+#endif
 
 #define CLEARDTR_SUPPORT
 
@@ -225,10 +229,6 @@ struct pcvtid {
 #endif                          /* !MAXHOSTNAMELEN */
 
 #include <limits.h>
-
-#ifndef DEV_MEM
-#define DEV_MEM "/dev/mem"
-#endif
 
 #ifndef MAP_FAILED
 #define MAP_FAILED ((void *)-1)

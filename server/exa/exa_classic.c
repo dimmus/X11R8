@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Maarten Maathuis
+ * Copyright © 2009 Maarten Maathuis
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -97,7 +97,8 @@ exaCreatePixmap_classic(ScreenPtr pScreen, int w, int h, int depth,
 
     if (pExaPixmap->fb_pitch > 131071) {
         swap(pExaScr, pScreen, DestroyPixmap);
-        pScreen->DestroyPixmap(pPixmap);
+        if (pScreen->DestroyPixmap)
+            pScreen->DestroyPixmap(pPixmap);
         swap(pExaScr, pScreen, DestroyPixmap);
         return NULL;
     }
@@ -109,7 +110,8 @@ exaCreatePixmap_classic(ScreenPtr pScreen, int w, int h, int depth,
 
     if (pExaPixmap->pDamage == NULL) {
         swap(pExaScr, pScreen, DestroyPixmap);
-        pScreen->DestroyPixmap(pPixmap);
+        if (pScreen->DestroyPixmap)
+            pScreen->DestroyPixmap(pPixmap);
         swap(pExaScr, pScreen, DestroyPixmap);
         return NULL;
     }
@@ -212,7 +214,7 @@ exaDestroyPixmap_classic(PixmapPtr pPixmap)
     ScreenPtr pScreen = pPixmap->drawable.pScreen;
 
     ExaScreenPriv(pScreen);
-    Bool ret;
+    Bool ret = TRUE;
 
     if (pPixmap->refcnt == 1) {
         ExaPixmapPriv(pPixmap);
@@ -234,7 +236,8 @@ exaDestroyPixmap_classic(PixmapPtr pPixmap)
     }
 
     swap(pExaScr, pScreen, DestroyPixmap);
-    ret = pScreen->DestroyPixmap(pPixmap);
+    if (pScreen->DestroyPixmap)
+        ret = pScreen->DestroyPixmap(pPixmap);
     swap(pExaScr, pScreen, DestroyPixmap);
 
     return ret;

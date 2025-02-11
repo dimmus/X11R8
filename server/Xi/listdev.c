@@ -52,10 +52,10 @@ SOFTWARE.
 
 #include <dix-config.h>
 
-#include "X11/X.h"              /* for inputstr.h    */
-#include "X11/Xproto.h"         /* Request macro     */
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/X.h>              /* for inputstr.h    */
+#include <X11/Xproto.h>         /* Request macro     */
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
 
 #include "dix/input_priv.h"
 
@@ -67,20 +67,6 @@ SOFTWARE.
 #include "xkbsrv.h"
 #include "xkbstr.h"
 #include "listdev.h"
-
-/***********************************************************************
- *
- * This procedure lists the input devices available to the server.
- *
- */
-
-int _X_COLD
-SProcXListInputDevices(ClientPtr client)
-{
-    REQUEST(xListInputDevicesReq);
-    swaps(&stuff->length);
-    return (ProcXListInputDevices(client));
-}
 
 /***********************************************************************
  *

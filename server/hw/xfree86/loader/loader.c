@@ -56,10 +56,12 @@
 #include "loaderProcs.h"
 
 #ifdef HAVE_DLFCN_H
-# include <dlfcn.h>
-# include "X11/Xos.h"
+
+#include <dlfcn.h>
+#include <X11/Xos.h>
+
 #else
-# error i have no dynamic linker and i must scream
+#error i have no dynamic linker and i must scream
 #endif
 
 #ifndef XORG_NO_SDKSYMS
@@ -139,7 +141,7 @@ LoaderSymbolFromModule(void *handle, const char *name)
 void
 LoaderUnload(const char *name, void *handle)
 {
-    LogMessageVerbSigSafe(X_INFO, 1, "Unloading %s\n", name);
+    LogMessageVerb(X_INFO, 1, "Unloading %s\n", name);
     if (handle)
         dlclose(handle);
 }

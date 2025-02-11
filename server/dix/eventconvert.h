@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Red Hat, Inc.
+ * Copyright © 2009 Red Hat, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -25,8 +25,8 @@
 #ifndef _XSERVER_EVENTCONVERT_H_
 #define _XSERVER_EVENTCONVERT_H_
 
-#include "X11/X.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/X.h>
+#include <X11/extensions/XIproto.h>
 
 #include "input.h"
 #include "events.h"

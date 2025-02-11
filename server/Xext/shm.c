@@ -37,10 +37,10 @@ in this Software without prior written authorization from The Open Group.
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include "X11/X.h"
-#include "X11/Xproto.h"
-#include "X11/extensions/shmproto.h"
-#include "X11/Xfuncproto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/extensions/shmproto.h>
+#include <X11/Xfuncproto.h>
 
 #include "dix/dix_priv.h"
 #include "os/auth.h"
@@ -89,16 +89,18 @@ in this Software without prior written authorization from The Open Group.
 #define SHMPERM_MODE(p)		p->mode
 #endif
 
-#ifdef PANORAMIX
+#ifdef XINERAMA
 #include "panoramiX.h"
 #include "panoramiXsrv.h"
-#endif
+#endif /* XINERAMA */
 
 typedef struct _ShmScrPrivateRec {
     CloseScreenProcPtr CloseScreen;
     ShmFuncsPtr shmFuncs;
     DestroyPixmapProcPtr destroyPixmap;
 } ShmScrPrivateRec;
+
+Bool noMITShmExtension = FALSE;
 
 static PixmapPtr fbShmCreatePixmap(XSHM_CREATE_PIXMAP_ARGS);
 static int ShmDetachSegment(void *value, XID shmseg);
@@ -250,13 +252,14 @@ ShmDestroyPixmap(PixmapPtr pPixmap)
     ScreenPtr pScreen = pPixmap->drawable.pScreen;
     ShmScrPrivateRec *screen_priv = ShmGetScreenPriv(pScreen);
     void *shmdesc = NULL;
-    Bool ret;
+    Bool ret = TRUE;
 
     if (pPixmap->refcnt == 1)
         shmdesc = dixLookupPrivate(&pPixmap->devPrivates, shmPixmapPrivateKey);
 
     pScreen->DestroyPixmap = screen_priv->destroyPixmap;
-    ret = (*pScreen->DestroyPixmap) (pPixmap);
+    if (pScreen->DestroyPixmap)
+        ret = pScreen->DestroyPixmap(pPixmap);
     screen_priv->destroyPixmap = pScreen->DestroyPixmap;
     pScreen->DestroyPixmap = ShmDestroyPixmap;
 
@@ -730,7 +733,7 @@ ProcShmGetImage(ClientPtr client)
     return Success;
 }
 
-#ifdef PANORAMIX
+#ifdef XINERAMA
 static int
 ProcPanoramiXShmPutImage(ClientPtr client)
 {
@@ -1026,7 +1029,7 @@ ProcPanoramiXShmCreatePixmap(ClientPtr client)
 
     return result;
 }
-#endif
+#endif /* XINERAMA */
 
 static PixmapPtr
 fbShmCreatePixmap(ScreenPtr pScreen,
@@ -1346,22 +1349,22 @@ ProcShmDispatch(ClientPtr client)
     case X_ShmDetach:
         return ProcShmDetach(client);
     case X_ShmPutImage:
-#ifdef PANORAMIX
+#ifdef XINERAMA
         if (!noPanoramiXExtension)
             return ProcPanoramiXShmPutImage(client);
-#endif
+#endif /* XINERAMA */
         return ProcShmPutImage(client);
     case X_ShmGetImage:
-#ifdef PANORAMIX
+#ifdef XINERAMA
         if (!noPanoramiXExtension)
             return ProcPanoramiXShmGetImage(client);
-#endif
+#endif /* XINERAMA */
         return ProcShmGetImage(client);
     case X_ShmCreatePixmap:
-#ifdef PANORAMIX
+#ifdef XINERAMA
         if (!noPanoramiXExtension)
             return ProcPanoramiXShmCreatePixmap(client);
-#endif
+#endif /* XINERAMA */
         return ProcShmCreatePixmap(client);
 #ifdef SHM_FD_PASSING
     case X_ShmAttachFd:
@@ -1387,19 +1390,9 @@ SShmCompletionEvent(xShmCompletionEvent * from, xShmCompletionEvent * to)
 }
 
 static int _X_COLD
-SProcShmQueryVersion(ClientPtr client)
-{
-    REQUEST(xShmQueryVersionReq);
-
-    swaps(&stuff->length);
-    return ProcShmQueryVersion(client);
-}
-
-static int _X_COLD
 SProcShmAttach(ClientPtr client)
 {
     REQUEST(xShmAttachReq);
-    swaps(&stuff->length);
     REQUEST_SIZE_MATCH(xShmAttachReq);
     swapl(&stuff->shmseg);
     swapl(&stuff->shmid);
@@ -1410,7 +1403,6 @@ static int _X_COLD
 SProcShmDetach(ClientPtr client)
 {
     REQUEST(xShmDetachReq);
-    swaps(&stuff->length);
     REQUEST_SIZE_MATCH(xShmDetachReq);
     swapl(&stuff->shmseg);
     return ProcShmDetach(client);
@@ -1420,7 +1412,6 @@ static int _X_COLD
 SProcShmPutImage(ClientPtr client)
 {
     REQUEST(xShmPutImageReq);
-    swaps(&stuff->length);
     REQUEST_SIZE_MATCH(xShmPutImageReq);
     swapl(&stuff->drawable);
     swapl(&stuff->gc);
@@ -1441,7 +1432,6 @@ static int _X_COLD
 SProcShmGetImage(ClientPtr client)
 {
     REQUEST(xShmGetImageReq);
-    swaps(&stuff->length);
     REQUEST_SIZE_MATCH(xShmGetImageReq);
     swapl(&stuff->drawable);
     swaps(&stuff->x);
@@ -1458,7 +1448,6 @@ static int _X_COLD
 SProcShmCreatePixmap(ClientPtr client)
 {
     REQUEST(xShmCreatePixmapReq);
-    swaps(&stuff->length);
     REQUEST_SIZE_MATCH(xShmCreatePixmapReq);
     swapl(&stuff->pid);
     swapl(&stuff->drawable);
@@ -1475,7 +1464,6 @@ SProcShmAttachFd(ClientPtr client)
 {
     REQUEST(xShmAttachFdReq);
     SetReqFds(client, 1);
-    swaps(&stuff->length);
     REQUEST_SIZE_MATCH(xShmAttachFdReq);
     swapl(&stuff->shmseg);
     return ProcShmAttachFd(client);
@@ -1485,7 +1473,6 @@ static int _X_COLD
 SProcShmCreateSegment(ClientPtr client)
 {
     REQUEST(xShmCreateSegmentReq);
-    swaps(&stuff->length);
     REQUEST_SIZE_MATCH(xShmCreateSegmentReq);
     swapl(&stuff->shmseg);
     swapl(&stuff->size);
@@ -1499,7 +1486,7 @@ SProcShmDispatch(ClientPtr client)
     REQUEST(xReq);
 
     if (stuff->data == X_ShmQueryVersion)
-        return SProcShmQueryVersion(client);
+        return ProcShmQueryVersion(client);
 
     if (!client->local)
         return BadRequest;

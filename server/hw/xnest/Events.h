@@ -15,7 +15,7 @@ is" without express or implied warranty.
 #ifndef XNESTEVENTS_H
 #define XNESTEVENTS_H
 
-#include "X11/Xmd.h"
+#include <X11/Xmd.h>
 
 #define ProcessedExpose (LASTEvent + 1)
 

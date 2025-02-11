@@ -58,20 +58,20 @@ SOFTWARE.
 #include "dixstruct_priv.h"
 
 #ifdef WIN32
-#include "X11/Xwinsock.h"
+#include <X11/Xwinsock.h>
 #endif
 #include <stdio.h>
 #define XSERV_t
 #define TRANS_SERVER
 #define TRANS_REOPEN
-#include "X11/Xtrans/Xtrans.h"
-#include "X11/Xmd.h"
+#include <X11/Xtrans/Xtrans.h>
+#include <X11/Xmd.h>
 #include <errno.h>
 #if !defined(WIN32)
 #include <sys/uio.h>
 #endif
-#include "X11/X.h"
-#include "X11/Xproto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
 
 #include "dix/dix_priv.h"
 
@@ -113,7 +113,7 @@ static OsCommPtr AvailableInput = (OsCommPtr) NULL;
 #define get_req_len(req,cli) ((cli)->swapped ? \
 			      bswap_16((req)->length) : (req)->length)
 
-#include "X11/extensions/bigreqsproto.h"
+#include <X11/extensions/bigreqsproto.h>
 
 #define get_big_req_len(req,cli) ((cli)->swapped ? \
 				  bswap_32(((xBigReq *)(req))->length) : \

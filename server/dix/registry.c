@@ -21,8 +21,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <stdlib.h>
 #include <string.h>
-#include "X11/X.h"
-#include "X11/Xproto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
 
 #include "dix/registry_priv.h"
 

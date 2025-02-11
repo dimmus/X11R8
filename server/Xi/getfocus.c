@@ -54,25 +54,11 @@ SOFTWARE.
 
 #include "windowstr.h"          /* focus struct      */
 #include "inputstr.h"           /* DeviceIntPtr      */
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
 #include "exglobals.h"
 
 #include "getfocus.h"
-
-/***********************************************************************
- *
- * This procedure gets the focus for a device.
- *
- */
-
-int _X_COLD
-SProcXGetDeviceFocus(ClientPtr client)
-{
-    REQUEST(xGetDeviceFocusReq);
-    swaps(&stuff->length);
-    return (ProcXGetDeviceFocus(client));
-}
 
 /***********************************************************************
  *

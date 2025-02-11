@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Keith Packard
+ * Copyright © 2006 Keith Packard
  * Copyright 2010 Red Hat, Inc
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
@@ -25,7 +25,7 @@
 #include "swaprep.h"
 #include "mipointer.h"
 
-#include "X11/Xatom.h"
+#include <X11/Xatom.h>
 
 RESTYPE RRCrtcType = 0;
 
@@ -1305,7 +1305,7 @@ ProcRRSetCrtcConfig(ClientPtr client)
     CARD8 status;
 
     REQUEST_AT_LEAST_SIZE(xRRSetCrtcConfigReq);
-    numOutputs = (stuff->length - bytes_to_int32(SIZEOF(xRRSetCrtcConfigReq)));
+    numOutputs = (client->req_len - bytes_to_int32(sizeof(xRRSetCrtcConfigReq)));
 
     VERIFY_RR_CRTC(stuff->crtc, crtc, DixSetAttrAccess);
 

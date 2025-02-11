@@ -20,7 +20,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * Copyright 2003 Keith Packard
+ * Copyright © 2003 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -46,9 +46,9 @@
 #include "compint.h"
 #include "xace.h"
 
-#ifdef PANORAMIX
+#ifdef XINERAMA
 #include "panoramiXsrv.h"
-#endif
+#endif /* XINERAMA */
 
 /*
  * Delete the given overlay client list element from its screen list.
@@ -133,14 +133,14 @@ compCreateOverlayWindow(ScreenPtr pScreen)
     int h = pScreen->height;
     int x = 0, y = 0;
 
-#ifdef PANORAMIX
+#ifdef XINERAMA
     if (!noPanoramiXExtension) {
         x = -pScreen->x;
         y = -pScreen->y;
         w = PanoramiXPixWidth;
         h = PanoramiXPixHeight;
     }
-#endif
+#endif /* XINERAMA */
 
     pWin = cs->pOverlayWin =
         CreateWindow(cs->overlayWid, pRoot, x, y, w, h, 0,

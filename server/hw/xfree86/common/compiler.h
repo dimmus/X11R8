@@ -52,7 +52,7 @@
 #define _COMPILER_H
 
 #ifndef _X_EXPORT
-#include "X11/Xfuncproto.h"
+#include <X11/Xfuncproto.h>
 #endif
 
 #include <pixman.h>             /* for uint*_t types */

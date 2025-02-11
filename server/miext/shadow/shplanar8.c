@@ -1,6 +1,6 @@
 /*
  *
- * Copyright 2000 Keith Packard
+ * Copyright © 2000 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -25,12 +25,12 @@
 
 #include <stdlib.h>
 
-#include    "X11/X.h"
+#include    <X11/X.h>
 #include    "scrnintstr.h"
 #include    "windowstr.h"
-#include    "X11/fonts/font.h"
+#include    <X11/fonts/font.h>
 #include    "dixfontstr.h"
-#include    "X11/fonts/fontstruct.h"
+#include    <X11/fonts/fontstruct.h>
 #include    "mi.h"
 #include    "regionstr.h"
 #include    "globals.h"

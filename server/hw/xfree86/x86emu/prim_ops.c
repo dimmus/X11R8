@@ -2591,10 +2591,10 @@ Implements the IN string instruction and side effects.
 void
 ins(int size)
 {
-    int inc_server = size;
+    int inc = size;
 
     if (ACCESS_FLAG(F_DF)) {
-        inc_server = -size;
+        inc = -size;
     }
     if (M.x86.mode & (SYSMODE_PREFIX_REPE | SYSMODE_PREFIX_REPNE)) {
         /* don't care whether REPE or REPNE */
@@ -2606,7 +2606,7 @@ ins(int size)
             while (count--) {
                 store_data_byte_abs(M.x86.R_ES, M.x86.R_DI,
                                     (*sys_inb) (M.x86.R_DX));
-                M.x86.R_DI += inc_server;
+                M.x86.R_DI += inc;
             }
             break;
 
@@ -2614,14 +2614,14 @@ ins(int size)
             while (count--) {
                 store_data_word_abs(M.x86.R_ES, M.x86.R_DI,
                                     (*sys_inw) (M.x86.R_DX));
-                M.x86.R_DI += inc_server;
+                M.x86.R_DI += inc;
             }
             break;
         case 4:
             while (count--) {
                 store_data_long_abs(M.x86.R_ES, M.x86.R_DI,
                                     (*sys_inl) (M.x86.R_DX));
-                M.x86.R_DI += inc_server;
+                M.x86.R_DI += inc;
             }
             break;
         }
@@ -2646,7 +2646,7 @@ ins(int size)
                                 (*sys_inl) (M.x86.R_DX));
             break;
         }
-        M.x86.R_DI += inc_server;
+        M.x86.R_DI += inc;
     }
 }
 
@@ -2657,10 +2657,10 @@ Implements the OUT string instruction and side effects.
 void
 outs(int size)
 {
-    int inc_server = size;
+    int inc = size;
 
     if (ACCESS_FLAG(F_DF)) {
-        inc_server = -size;
+        inc = -size;
     }
     if (M.x86.mode & (SYSMODE_PREFIX_REPE | SYSMODE_PREFIX_REPNE)) {
         /* don't care whether REPE or REPNE */
@@ -2672,7 +2672,7 @@ outs(int size)
             while (count--) {
                 (*sys_outb) (M.x86.R_DX,
                              fetch_data_byte_abs(M.x86.R_ES, M.x86.R_SI));
-                M.x86.R_SI += inc_server;
+                M.x86.R_SI += inc;
             }
             break;
 
@@ -2680,14 +2680,14 @@ outs(int size)
             while (count--) {
                 (*sys_outw) (M.x86.R_DX,
                              fetch_data_word_abs(M.x86.R_ES, M.x86.R_SI));
-                M.x86.R_SI += inc_server;
+                M.x86.R_SI += inc;
             }
             break;
         case 4:
             while (count--) {
                 (*sys_outl) (M.x86.R_DX,
                              fetch_data_long_abs(M.x86.R_ES, M.x86.R_SI));
-                M.x86.R_SI += inc_server;
+                M.x86.R_SI += inc;
             }
             break;
         }
@@ -2712,7 +2712,7 @@ outs(int size)
                          fetch_data_long_abs(M.x86.R_ES, M.x86.R_SI));
             break;
         }
-        M.x86.R_SI += inc_server;
+        M.x86.R_SI += inc;
     }
 }
 

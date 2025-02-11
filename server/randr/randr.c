@@ -1,8 +1,8 @@
 /*
- * Copyright 2000 Compaq Computer Corporation
- * Copyright 2002 Hewlett-Packard Company
- * Copyright 2006 Intel Corporation
- * Copyright 2017 Keith Packard
+ * Copyright © 2000 Compaq Computer Corporation
+ * Copyright © 2002 Hewlett-Packard Company
+ * Copyright © 2006 Intel Corporation
+ * Copyright © 2017 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -35,6 +35,8 @@
 #ifndef SubPixelUnknown
 #define SubPixelUnknown 0
 #endif
+
+Bool noRRExtension = FALSE;
 
 #define RR_VALIDATE
 static int RRNScreens;
@@ -444,9 +446,9 @@ RRExtensionInit(void)
     RRCrtcInitErrorValue();
     RROutputInitErrorValue();
     RRProviderInitErrorValue();
-#ifdef PANORAMIX
+#ifdef XINERAMA
     RRXineramaExtensionInit();
-#endif
+#endif /* XINERAMA */
 }
 
 void

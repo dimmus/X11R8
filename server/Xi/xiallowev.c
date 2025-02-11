@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Red Hat, Inc.
+ * Copyright © 2009 Red Hat, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -31,8 +31,8 @@
 
 #include <dix-config.h>
 
-#include "X11/extensions/XI2.h"
-#include "X11/extensions/XI2proto.h"
+#include <X11/extensions/XI2.h>
+#include <X11/extensions/XI2proto.h>
 
 #include "dix/dix_priv.h"
 #include "dix/exevents_priv.h"
@@ -51,10 +51,9 @@ SProcXIAllowEvents(ClientPtr client)
     REQUEST(xXIAllowEventsReq);
     REQUEST_AT_LEAST_SIZE(xXIAllowEventsReq);
 
-    swaps(&stuff->length);
     swaps(&stuff->deviceid);
     swapl(&stuff->time);
-    if (stuff->length > 3) {
+    if (client->req_len > 3) {
         xXI2_2AllowEventsReq *req_xi22 = (xXI2_2AllowEventsReq *) stuff;
 
         REQUEST_AT_LEAST_SIZE(xXI2_2AllowEventsReq);

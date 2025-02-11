@@ -1,12 +1,12 @@
 /* SPDX-License-Identifier: MIT OR X11
  *
- * Copyright 2024 Enrico Weigelt, metux IT consult <info@metux.net>
- * Copyright 2000 SuSE, Inc.
+ * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+ * Copyright © 2000 SuSE, Inc.
  */
 #ifndef _XSERVER_GLYPHSTR_PRIV_H_
 #define _XSERVER_GLYPHSTR_PRIV_H_
 
-#include "X11/extensions/renderproto.h"
+#include <X11/extensions/renderproto.h>
 #include "glyphstr.h"
 #include "picture.h"
 #include "screenint.h"

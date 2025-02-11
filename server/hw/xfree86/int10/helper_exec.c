@@ -21,7 +21,7 @@
 #define PRINT_PORT 0
 
 #include <unistd.h>
-#include "X11/Xos.h"
+#include <X11/Xos.h>
 
 #include "os/osdep.h"
 
@@ -30,7 +30,7 @@
 #include "compiler.h"
 #define _INT10_PRIVATE
 #include "int10Defines.h"
-#include "xf86int10.h"
+#include "xf86int10_priv.h"
 #include "Pci.h"
 #ifdef _X86EMU
 #include "x86emu/x86emui.h"
@@ -211,7 +211,7 @@ stack_trace(xf86Int10InfoPtr pInt)
     if (stack >= tail)
         return;
 
-    xf86MsgVerb(X_INFO, 3, "stack at 0x%8.8lx:\n", stack);
+    LogMessageVerb(X_INFO, 3, "stack at 0x%8.8lx:\n", stack);
     for (; stack < tail; stack++) {
         xf86ErrorFVerb(3, " %2.2x", MEM_RB(pInt, stack));
         i = (i + 1) % 0x10;
@@ -226,7 +226,7 @@ int
 port_rep_inb(xf86Int10InfoPtr pInt,
              uint16_t port, uint32_t base, int d_f, uint32_t count)
 {
-    register int inc_server = d_f ? -1 : 1;
+    register int inc = d_f ? -1 : 1;
     uint32_t dst = base;
 
     if (PRINT_PORT && DEBUG_IO_TRACE())
@@ -234,7 +234,7 @@ port_rep_inb(xf86Int10InfoPtr pInt,
                port, (unsigned) count, (unsigned) base, d_f ? "up" : "down");
     while (count--) {
         MEM_WB(pInt, dst, x_inb(port));
-        dst += inc_server;
+        dst += inc;
     }
     return dst - base;
 }
@@ -243,7 +243,7 @@ int
 port_rep_inw(xf86Int10InfoPtr pInt,
              uint16_t port, uint32_t base, int d_f, uint32_t count)
 {
-    register int inc_server = d_f ? -2 : 2;
+    register int inc = d_f ? -2 : 2;
     uint32_t dst = base;
 
     if (PRINT_PORT && DEBUG_IO_TRACE())
@@ -251,7 +251,7 @@ port_rep_inw(xf86Int10InfoPtr pInt,
                port, (unsigned) count, (unsigned) base, d_f ? "up" : "down");
     while (count--) {
         MEM_WW(pInt, dst, x_inw(port));
-        dst += inc_server;
+        dst += inc;
     }
     return dst - base;
 }
@@ -260,7 +260,7 @@ int
 port_rep_inl(xf86Int10InfoPtr pInt,
              uint16_t port, uint32_t base, int d_f, uint32_t count)
 {
-    register int inc_server = d_f ? -4 : 4;
+    register int inc = d_f ? -4 : 4;
     uint32_t dst = base;
 
     if (PRINT_PORT && DEBUG_IO_TRACE())
@@ -268,7 +268,7 @@ port_rep_inl(xf86Int10InfoPtr pInt,
                port, (unsigned) count, (unsigned) base, d_f ? "up" : "down");
     while (count--) {
         MEM_WL(pInt, dst, x_inl(port));
-        dst += inc_server;
+        dst += inc;
     }
     return dst - base;
 }
@@ -277,7 +277,7 @@ int
 port_rep_outb(xf86Int10InfoPtr pInt,
               uint16_t port, uint32_t base, int d_f, uint32_t count)
 {
-    register int inc_server = d_f ? -1 : 1;
+    register int inc = d_f ? -1 : 1;
     uint32_t dst = base;
 
     if (PRINT_PORT && DEBUG_IO_TRACE())
@@ -285,7 +285,7 @@ port_rep_outb(xf86Int10InfoPtr pInt,
                port, (unsigned) count, (unsigned) base, d_f ? "up" : "down");
     while (count--) {
         x_outb(port, MEM_RB(pInt, dst));
-        dst += inc_server;
+        dst += inc;
     }
     return dst - base;
 }
@@ -294,7 +294,7 @@ int
 port_rep_outw(xf86Int10InfoPtr pInt,
               uint16_t port, uint32_t base, int d_f, uint32_t count)
 {
-    register int inc_server = d_f ? -2 : 2;
+    register int inc = d_f ? -2 : 2;
     uint32_t dst = base;
 
     if (PRINT_PORT && DEBUG_IO_TRACE())
@@ -302,7 +302,7 @@ port_rep_outw(xf86Int10InfoPtr pInt,
                port, (unsigned) count, (unsigned) base, d_f ? "up" : "down");
     while (count--) {
         x_outw(port, MEM_RW(pInt, dst));
-        dst += inc_server;
+        dst += inc;
     }
     return dst - base;
 }
@@ -311,7 +311,7 @@ int
 port_rep_outl(xf86Int10InfoPtr pInt,
               uint16_t port, uint32_t base, int d_f, uint32_t count)
 {
-    register int inc_server = d_f ? -4 : 4;
+    register int inc = d_f ? -4 : 4;
     uint32_t dst = base;
 
     if (PRINT_PORT && DEBUG_IO_TRACE())
@@ -319,7 +319,7 @@ port_rep_outl(xf86Int10InfoPtr pInt,
                port, (unsigned) count, (unsigned) base, d_f ? "up" : "down");
     while (count--) {
         x_outl(port, MEM_RL(pInt, dst));
-        dst += inc_server;
+        dst += inc;
     }
     return dst - base;
 }

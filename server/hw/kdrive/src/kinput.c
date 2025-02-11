@@ -1,6 +1,6 @@
 /*
- * Copyright 1999 Keith Packard
- * Copyright 2006 Nokia Corporation
+ * Copyright © 1999 Keith Packard
+ * Copyright © 2006 Nokia Corporation
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -27,17 +27,21 @@
 #include "inputstr.h"
 
 #define XK_PUBLISHING
-#include "X11/keysym.h"
+#include <X11/keysym.h>
 #if HAVE_X11_XF86KEYSYM_H
-#include "X11/XF86keysym.h"
+#include <X11/XF86keysym.h>
 #endif
 #include <stdio.h>
 #include <sys/file.h>           /* needed for FNONBLOCK & FASYNC */
 
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
 
+#include "config/hotplug_priv.h"
 #include "dix/input_priv.h"
+#include "mi/mi_priv.h"
+#include "mi/mipointer_priv.h"
+#include "os/cmdline.h"
 
 #include "xkbsrv.h"
 #include "XIstubs.h"            /* even though we don't use stubs.  cute, no? */
@@ -48,12 +52,6 @@
 #include "xserver-properties.h"
 #include "inpututils.h"
 #include "optionstr.h"
-
-#include "os/cmdline.h"
-
-#if defined(CONFIG_UDEV) || defined(CONFIG_HAL)
-#include <hotplug.h>
-#endif
 
 #define AtomFromName(x) MakeAtom(x, strlen(x), 1)
 

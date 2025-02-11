@@ -1,11 +1,11 @@
 /* SPDX-License-Identifier: MIT OR X11
  *
- * Copyright 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+ * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
 #ifndef _XSERVER_DIXGRABS_PRIV_H_
 #define _XSERVER_DIXGRABS_PRIV_H_
 
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XIproto.h>
 
 #include "misc.h"
 #include "window.h"

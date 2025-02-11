@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT OR X11
  *
- * Copyright 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+ * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
 
 /* prototypes for the os-support layer of xfree86 DDX */
@@ -8,7 +8,7 @@
 #ifndef _XSERVER_XF86_OS_SUPPORT
 #define _XSERVER_XF86_OS_SUPPORT
 
-#include "X11/Xdefs.h"
+#include <X11/Xdefs.h>
 
 #include "os.h"
 #include "dix/dix_priv.h"
@@ -53,6 +53,9 @@ void xf86OSInitVidMem(VidMemInfoPtr);
 
 #ifdef XSERVER_PLATFORM_BUS
 #include "hotplug.h"
+
+struct OdevAttributes;
+
 void
 xf86PlatformDeviceProbe(struct OdevAttributes *attribs);
 

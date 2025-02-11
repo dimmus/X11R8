@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 NVIDIA Corporation
+ * Copyright © 2015 NVIDIA Corporation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -35,6 +35,8 @@ typedef struct _XF86MatchedDrivers {
  * prototypes
  */
 void xf86AddMatchedDriver(XF86MatchedDrivers *, const char *);
+
+void xf86PlatformMatchDriver(XF86MatchedDrivers *);
 
 #endif                          /* _xf86_match_drivers_h */
 

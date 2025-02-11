@@ -7,9 +7,9 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
-#include "X11/X.h"
-#include "X11/Xproto.h"
-#include "X11/extensions/XResproto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/extensions/XResproto.h>
 
 #include "dix/registry_priv.h"
 #include "os/client_priv.h"
@@ -33,6 +33,8 @@
 #ifdef COMPOSITE
 #include "compint.h"
 #endif
+
+Bool noResExtension = FALSE;
 
 /** @brief Holds fragments of responses for ConstructClientIds.
  *
@@ -1078,7 +1080,6 @@ static int _X_COLD
 SProcResDispatch (ClientPtr client)
 {
     REQUEST(xReq);
-    swaps(&stuff->length);
 
     switch (stuff->data) {
     case X_XResQueryVersion:

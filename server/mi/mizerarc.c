@@ -35,12 +35,14 @@ Author:  Bob Scheifler, MIT X Consortium
 #include <dix-config.h>
 
 #include <math.h>
-#include "X11/X.h"
-#include "X11/Xprotostr.h"
+#include <X11/X.h>
+#include <X11/Xprotostr.h>
+
+#include "mi/mi_priv.h"
+
 #include "regionstr.h"
 #include "gcstruct.h"
 #include "pixmapstr.h"
-#include "mi.h"
 #include "mizerarc.h"
 
 #define FULLCIRCLE (360 * 64)

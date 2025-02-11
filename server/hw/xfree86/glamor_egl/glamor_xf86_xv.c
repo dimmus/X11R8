@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Red Hat
+ * Copyright © 2013 Red Hat
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -39,7 +39,7 @@
 #define GLAMOR_FOR_XORG
 #include "glamor_priv.h"
 
-#include "X11/extensions/Xv.h"
+#include <X11/extensions/Xv.h>
 #include "fourcc.h"
 
 #define NUM_FORMATS 4

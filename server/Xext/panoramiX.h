@@ -39,7 +39,7 @@ Equipment Corporation.
 #ifndef _PANORAMIX_H_
 #define _PANORAMIX_H_
 
-#include "X11/extensions/panoramiXproto.h"
+#include <X11/extensions/panoramiXproto.h>
 
 #include "gcstruct.h"
 #include "dixstruct.h"

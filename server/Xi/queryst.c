@@ -34,8 +34,8 @@ from The Open Group.
 
 #include <dix-config.h>
 
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
 
 #include "dix/exevents_priv.h"
 #include "dix/input_priv.h"
@@ -46,20 +46,6 @@ from The Open Group.
 #include "xkbsrv.h"
 #include "xkbstr.h"
 #include "queryst.h"
-
-/***********************************************************************
- *
- * This procedure allows a client to query the state of a device.
- *
- */
-
-int _X_COLD
-SProcXQueryDeviceState(ClientPtr client)
-{
-    REQUEST(xQueryDeviceStateReq);
-    swaps(&stuff->length);
-    return (ProcXQueryDeviceState(client));
-}
 
 /***********************************************************************
  *

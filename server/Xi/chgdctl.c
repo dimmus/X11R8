@@ -52,8 +52,8 @@ SOFTWARE.
 
 #include <dix-config.h>
 
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"     /* control constants */
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>     /* control constants */
 
 #include "dix/exevents_priv.h"
 #include "dix/input_priv.h"
@@ -76,7 +76,6 @@ SProcXChangeDeviceControl(ClientPtr client)
     xDeviceCtl *ctl;
 
     REQUEST(xChangeDeviceControlReq);
-    swaps(&stuff->length);
     REQUEST_AT_LEAST_EXTRA_SIZE(xChangeDeviceControlReq, sizeof(xDeviceCtl));
     swaps(&stuff->control);
     ctl = (xDeviceCtl *) &stuff[1];
@@ -116,7 +115,7 @@ ProcXChangeDeviceControl(ClientPtr client)
     REQUEST(xChangeDeviceControlReq);
     REQUEST_AT_LEAST_EXTRA_SIZE(xChangeDeviceControlReq, sizeof(xDeviceCtl));
 
-    len = stuff->length - bytes_to_int32(sizeof(xChangeDeviceControlReq));
+    len = client->req_len - bytes_to_int32(sizeof(xChangeDeviceControlReq));
     ret = dixLookupDevice(&dev, stuff->deviceid, client, DixManageAccess);
     if (ret != Success)
         goto out;

@@ -53,26 +53,11 @@ SOFTWARE.
 #include <dix-config.h>
 
 #include "inputstr.h"           /* DeviceIntPtr      */
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
 #include "exglobals.h"
 
 #include "getfctl.h"
-
-/***********************************************************************
- *
- * This procedure gets the control attributes for an extension device,
- * for clients on machines with a different byte ordering than the server.
- *
- */
-
-int _X_COLD
-SProcXGetFeedbackControl(ClientPtr client)
-{
-    REQUEST(xGetFeedbackControlReq);
-    swaps(&stuff->length);
-    return (ProcXGetFeedbackControl(client));
-}
 
 /***********************************************************************
  *

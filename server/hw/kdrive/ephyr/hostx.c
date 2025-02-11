@@ -2,7 +2,7 @@
  * Xephyr - A kdrive X server that runs in a host X window.
  *          Authored by Matthew Allum <mallum@o-hand.com>
  *
- * Copyright 2004 Nokia
+ * Copyright © 2004 Nokia
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -42,20 +42,20 @@
 #include "hostx.h"
 
 #define X_INCLUDE_STRING_H
-#include "X11/Xos_r.h"
-#include "X11/keysym.h"
-#include "xcb/xcb.h"
-#include "xcb/xproto.h"
-#include "xcb/xcb_icccm.h"
-#include "xcb/xcb_aux.h"
-#include "xcb/shm.h"
-#include "xcb/xcb_image.h"
-#include "xcb/shape.h"
-#include "xcb/xcb_keysyms.h"
-#include "xcb/randr.h"
-#include "xcb/xkb.h"
+#include <X11/Xos_r.h>
+#include <X11/keysym.h>
+#include <xcb/xcb.h>
+#include <xcb/xproto.h>
+#include <xcb/xcb_icccm.h>
+#include <xcb/xcb_aux.h>
+#include <xcb/shm.h>
+#include <xcb/xcb_image.h>
+#include <xcb/shape.h>
+#include <xcb/xcb_keysyms.h>
+#include <xcb/randr.h>
+#include <xcb/xkb.h>
 #ifdef GLAMOR
-#include "xcb/glx.h"
+#include <xcb/glx.h>
 #include <epoxy/common.h>
 #include <epoxy/gl.h>
 #include "glamor.h"

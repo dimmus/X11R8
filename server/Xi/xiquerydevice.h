@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Red Hat, Inc.
+ * Copyright © 2009 Red Hat, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -31,7 +31,7 @@
 #ifndef QUERYDEV_H
 #define QUERYDEV_H 1
 
-#include "X11/extensions/XI2proto.h"
+#include <X11/extensions/XI2proto.h>
 
 int SProcXIQueryDevice(ClientPtr client);
 int ProcXIQueryDevice(ClientPtr client);

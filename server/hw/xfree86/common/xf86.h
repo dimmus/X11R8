@@ -43,10 +43,10 @@
 
 #include "xf86str.h"
 #include "xf86Opt.h"
-#include "X11/Xfuncproto.h"
+#include <X11/Xfuncproto.h>
 #include <stdarg.h>
 #ifdef RANDR
-#include "X11/extensions/randr.h"
+#include <X11/extensions/randr.h>
 #endif
 
 #include "propertyst.h"
@@ -126,13 +126,7 @@ extern _X_EXPORT ScrnInfoPtr xf86ConfigPciEntity(ScrnInfoPtr pScrn,
                                                  EntityProc leave,
                                                  void *private);
 #else
-#define xf86VGAarbiterInit() do {} while (0)
-#define xf86VGAarbiterFini() do {} while (0)
-#define xf86VGAarbiterLock(x) do {} while (0)
-#define xf86VGAarbiterUnlock(x) do {} while (0)
-#define xf86VGAarbiterScrnInit(x) do {} while (0)
 #define xf86VGAarbiterDeviceDecodes() do {} while (0)
-#define xf86VGAarbiterWrapFunctions() do {} while (0)
 #endif
 
 /* xf86Bus.c */

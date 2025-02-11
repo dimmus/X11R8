@@ -2,7 +2,7 @@
  * Xephyr - A kdrive X server that runs in a host X window.
  *          Authored by Matthew Allum <mallum@o-hand.com>
  *
- * Copyright 2004 Nokia
+ * Copyright © 2004 Nokia
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -26,10 +26,10 @@
 #ifndef _XLIBS_STUFF_H_
 #define _XLIBS_STUFF_H_
 
-#include "X11/X.h"
-#include "X11/Xmd.h"
-#include "xcb/xcb.h"
-#include "xcb/render.h"
+#include <X11/X.h>
+#include <X11/Xmd.h>
+#include <xcb/xcb.h>
+#include <xcb/render.h>
 #include "ephyr.h"
 
 #define EPHYR_WANT_DEBUG 0

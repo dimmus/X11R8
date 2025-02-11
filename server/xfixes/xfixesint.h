@@ -21,7 +21,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * Copyright 2002 Keith Packard
+ * Copyright © 2002 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -49,13 +49,13 @@
 #ifndef _XFIXESINT_H_
 #define _XFIXESINT_H_
 
-#include "X11/X.h"
-#include "X11/Xproto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
 #include "misc.h"
 #include "os.h"
 #include "dixstruct.h"
 #include "extnsionst.h"
-#include "X11/extensions/xfixesproto.h"
+#include <X11/extensions/xfixesproto.h>
 #include "windowstr.h"
 #include "selection.h"
 #include "xfixes.h"
@@ -310,10 +310,10 @@ Bool
  XFixesShouldDisconnectClient(ClientPtr client);
 
 /* Xinerama */
-#ifdef PANORAMIX
+#ifdef XINERAMA
 extern int (*PanoramiXSaveXFixesVector[XFixesNumberRequests]) (ClientPtr);
 void PanoramiXFixesInit(void);
 void PanoramiXFixesReset(void);
-#endif
+#endif /* XINERAMA */
 
 #endif                          /* _XFIXESINT_H_ */

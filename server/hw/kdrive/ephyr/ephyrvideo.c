@@ -2,7 +2,7 @@
  * Xephyr - A kdrive X server that runs in a host X window.
  *          Authored by Matthew Allum <mallum@openedhand.com>
  *
- * Copyright 2007 OpenedHand Ltd
+ * Copyright © 2007 OpenedHand Ltd
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -28,10 +28,10 @@
 
 #include <dix-config.h>
 #include <string.h>
-#include "X11/extensions/Xv.h"
-#include "xcb/xcb.h"
-#include "xcb/xcb_aux.h"
-#include "xcb/xv.h"
+#include <X11/extensions/Xv.h>
+#include <xcb/xcb.h>
+#include <xcb/xcb_aux.h>
+#include <xcb/xv.h>
 #include "ephyrlog.h"
 #include "kdrive.h"
 #include "kxv.h"

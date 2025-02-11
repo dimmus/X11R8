@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Broadcom
+ * Copyright © 2016 Broadcom
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -23,7 +23,7 @@
 
 #include <dix-config.h>
 
-#include "X11/Xfuncproto.h"
+#include <X11/Xfuncproto.h>
 
 #include <errno.h>
 #include <signal.h>

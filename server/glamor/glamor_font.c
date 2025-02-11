@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Keith Packard
+ * Copyright © 2014 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -23,8 +23,8 @@
 #include <dix-config.h>
 
 #include <stddef.h>
-#include "X11/fonts/fontstruct.h" // libxfont2.h missed to include that
-#include "X11/fonts/libxfont2.h"
+#include <X11/fonts/fontstruct.h> // libxfont2.h missed to include that
+#include <X11/fonts/libxfont2.h>
 
 #include "glamor_priv.h"
 #include "glamor_font.h"

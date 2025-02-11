@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Keith Packard
+ * Copyright © 2006 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -487,7 +487,7 @@ ProcRRConfigureProviderProperty(ClientPtr client)
     VERIFY_RR_PROVIDER(stuff->provider, provider, DixReadAccess);
 
     num_valid =
-        stuff->length - bytes_to_int32(sizeof(xRRConfigureProviderPropertyReq));
+        client->req_len - bytes_to_int32(sizeof(xRRConfigureProviderPropertyReq));
     return RRConfigureProviderProperty(provider, stuff->property, stuff->pending,
                                      stuff->range, FALSE, num_valid,
                                      (INT32 *) (stuff + 1));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Red Hat, Inc.
+ * Copyright © 2009 Red Hat, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -31,8 +31,8 @@
 
 #include <dix-config.h>
 
-#include "X11/extensions/XI2.h"
-#include "X11/extensions/XI2proto.h"
+#include <X11/extensions/XI2.h>
+#include <X11/extensions/XI2proto.h>
 
 #include "dix/dix_priv.h"
 #include "dix/dixgrabs_priv.h"
@@ -55,7 +55,6 @@ SProcXIPassiveGrabDevice(ClientPtr client)
     REQUEST(xXIPassiveGrabDeviceReq);
     REQUEST_AT_LEAST_SIZE(xXIPassiveGrabDeviceReq);
 
-    swaps(&stuff->length);
     swaps(&stuff->deviceid);
     swapl(&stuff->grab_window);
     swapl(&stuff->cursor);
@@ -280,7 +279,6 @@ SProcXIPassiveUngrabDevice(ClientPtr client)
     REQUEST(xXIPassiveUngrabDeviceReq);
     REQUEST_AT_LEAST_SIZE(xXIPassiveUngrabDeviceReq);
 
-    swaps(&stuff->length);
     swapl(&stuff->grab_window);
     swaps(&stuff->deviceid);
     swapl(&stuff->detail);

@@ -28,19 +28,18 @@ from The Open Group.
 
 #include <dix-config.h>
 
-#include "X11/X.h"
+#include <X11/X.h>
 
 #include "mi/mi_priv.h"
 
 #include "servermd.h"
 #include "misc.h"
-#include "mi.h"
 #include "scrnintstr.h"
 #include "pixmapstr.h"
 #include "dix.h"
 #include "miline.h"
 #ifdef MITSHM
-#include "X11/extensions/shm.h"
+#include <X11/extensions/shm.h>
 #include "shmint.h"
 #endif
 
@@ -59,6 +58,8 @@ typedef struct {
     int xsize;
     int ysize;
 } miScreenInitParmsRec, *miScreenInitParmsPtr;
+
+#define DEFAULTZEROLINEBIAS (OCTANT2 | OCTANT3 | OCTANT4 | OCTANT5)
 
 /* this plugs into pScreen->ModifyPixmapHeader */
 Bool

@@ -53,9 +53,9 @@
 #ifndef _LOADER_H
 #define _LOADER_H
 
-#include "X11/Xosdefs.h"
-#include "X11/Xfuncproto.h"
-#include "X11/Xmd.h"
+#include <X11/Xosdefs.h>
+#include <X11/Xfuncproto.h>
+#include <X11/Xmd.h>
 
 /* Compiled-in version information */
 typedef struct {

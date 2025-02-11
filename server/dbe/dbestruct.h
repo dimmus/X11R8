@@ -35,7 +35,7 @@
 
 /* INCLUDES */
 
-#include "X11/extensions/dbeproto.h"
+#include <X11/extensions/dbeproto.h>
 #include "windowstr.h"
 #include "privates.h"
 

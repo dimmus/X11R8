@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 Keith Packard
+ * Copyright © 2003 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -23,7 +23,7 @@
 #ifndef _SHMINT_H_
 #define _SHMINT_H_
 
-#include "X11/extensions/shmproto.h"
+#include <X11/extensions/shmproto.h>
 
 #include "screenint.h"
 #include "pixmap.h"

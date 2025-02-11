@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 Red Hat, Inc.
+ * Copyright © 2008 Red Hat, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -26,10 +26,10 @@
 
 #include <dix-config.h>
 
-#include "X11/X.h"
-#include "X11/extensions/XI2.h"
-#include "X11/extensions/XIproto.h"
-#include "X11/extensions/XI2proto.h"
+#include <X11/X.h>
+#include <X11/extensions/XI2.h>
+#include <X11/extensions/XIproto.h>
+#include <X11/extensions/XI2proto.h>
 
 #include "dix/dix_priv.h"
 #include "dix/eventconvert.h"
@@ -1251,10 +1251,10 @@ CoreFocusPointerRootNoneSwitch(DeviceIntPtr dev,
     int i;
     int nscreens = screenInfo.numScreens;
 
-#ifdef PANORAMIX
+#ifdef XINERAMA
     if (!noPanoramiXExtension)
         nscreens = 1;
-#endif
+#endif /* XINERAMA */
 
     for (i = 0; i < nscreens; i++) {
         root = screenInfo.screens[i]->root;
@@ -1295,10 +1295,10 @@ CoreFocusToPointerRootOrNone(DeviceIntPtr dev, WindowPtr A,
     int i;
     int nscreens = screenInfo.numScreens;
 
-#ifdef PANORAMIX
+#ifdef XINERAMA
     if (!noPanoramiXExtension)
         nscreens = 1;
-#endif
+#endif /* XINERAMA */
 
     if (!HasFocus(A)) {
         WindowPtr child = FirstFocusChild(A);
@@ -1342,10 +1342,10 @@ CoreFocusFromPointerRootOrNone(DeviceIntPtr dev,
     int i;
     int nscreens = screenInfo.numScreens;
 
-#ifdef PANORAMIX
+#ifdef XINERAMA
     if (!noPanoramiXExtension)
         nscreens = 1;
-#endif
+#endif /* XINERAMA */
 
     for (i = 0; i < nscreens; i++) {
         root = screenInfo.screens[i]->root;
@@ -1432,10 +1432,10 @@ DeviceFocusEvents(DeviceIntPtr dev, WindowPtr from, WindowPtr to, int mode)
     in = (to == NoneWin) ? NotifyDetailNone : NotifyPointerRoot;
     /* wrong values if neither, but then not referenced */
 
-#ifdef PANORAMIX
+#ifdef XINERAMA
     if (!noPanoramiXExtension)
         nscreens = 1;
-#endif
+#endif /* XINERAMA */
 
     if ((to == NullWindow) || (to == PointerRootWin)) {
         if ((from == NullWindow) || (from == PointerRootWin)) {

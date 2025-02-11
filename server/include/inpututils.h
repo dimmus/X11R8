@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Red Hat, Inc.
+ * Copyright © 2010 Red Hat, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -31,7 +31,7 @@
 
 #include "input.h"
 #include "eventstr.h"
-#include "X11/extensions/XI2proto.h"
+#include <X11/extensions/XI2proto.h>
 
 extern Mask event_filters[MAXDEVICES][MAXEVENTS];
 

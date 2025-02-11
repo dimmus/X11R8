@@ -1,6 +1,6 @@
 /*
- * Copyright 2013-2017 Red Hat, Inc.
- * Copyright 2020 Povilas Kanapickas <povilas@radix.lt>
+ * Copyright © 2013-2017 Red Hat, Inc.
+ * Copyright © 2020 Povilas Kanapickas <povilas@radix.lt>
  *
  * Permission to use, copy, modify, distribute, and sell this software
  * and its documentation for any purpose is hereby granted without
@@ -37,7 +37,7 @@
 #include "xorgVersion.h"
 #include <xserver-properties.h>
 #include <os.h>
-#include "X11/Xatom.h"
+#include <X11/Xatom.h>
 
 #include <sys/socket.h>
 #include <sys/stat.h>
@@ -126,9 +126,9 @@ notify_sync_finished(ClientPtr ptr, void *closure)
         already shut down and the descriptor is closed.
     */
     if (write(fd, &response, response.header.length) != response.header.length) {
-        LogMessageVerbSigSafe(X_ERROR, 0,
-                              "inputtest: Failed to write sync response: %s\n",
-                              strerror(errno));
+        LogMessageVerb(X_ERROR, 0,
+                       "inputtest: Failed to write sync response: %s\n",
+                       strerror(errno));
     }
     input_unlock();
     return TRUE;

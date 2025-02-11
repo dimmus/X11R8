@@ -53,26 +53,11 @@ SOFTWARE.
 #include <dix-config.h>
 
 #include "inputstr.h"           /* DeviceIntPtr      */
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"     /* Request macro     */
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>     /* Request macro     */
 #include "exglobals.h"
 
 #include "getmmap.h"
-
-/***********************************************************************
- *
- * This procedure gets the modifier mapping for an extension device,
- * for clients on machines with a different byte ordering than the server.
- *
- */
-
-int _X_COLD
-SProcXGetDeviceModifierMapping(ClientPtr client)
-{
-    REQUEST(xGetDeviceModifierMappingReq);
-    swaps(&stuff->length);
-    return (ProcXGetDeviceModifierMapping(client));
-}
 
 /***********************************************************************
  *

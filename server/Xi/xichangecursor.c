@@ -31,10 +31,10 @@
 
 #include <dix-config.h>
 
-#include "X11/X.h"              /* for inputstr.h    */
-#include "X11/Xproto.h"         /* Request macro     */
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XI2proto.h"
+#include <X11/X.h>              /* for inputstr.h    */
+#include <X11/Xproto.h>         /* Request macro     */
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XI2proto.h>
 
 #include "dix/cursor_priv.h"
 #include "dix/dix_priv.h"
@@ -59,7 +59,6 @@ SProcXIChangeCursor(ClientPtr client)
 {
     REQUEST(xXIChangeCursorReq);
     REQUEST_SIZE_MATCH(xXIChangeCursorReq);
-    swaps(&stuff->length);
     swapl(&stuff->win);
     swapl(&stuff->cursor);
     swaps(&stuff->deviceid);

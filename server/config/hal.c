@@ -1,6 +1,6 @@
 /*
- * Copyright 2007 Daniel Stone
- * Copyright 2007 Red Hat, Inc.
+ * Copyright © 2007 Daniel Stone
+ * Copyright © 2007 Red Hat, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -26,16 +26,17 @@
 
 #include <dix-config.h>
 
-#include <dbus/dbus.h>
-#include <hal/libhal.h>
 #include <string.h>
 #include <sys/select.h>
+#include <dbus/dbus.h>
+#include <hal/libhal.h>
+
+#include "config/hotplug_priv.h"
 
 #include "config/dbus-core.h"
 
 #include "input.h"
 #include "inputstr.h"
-#include "hotplug.h"
 #include "config-backends.h"
 #include "os.h"
 

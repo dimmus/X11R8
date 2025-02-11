@@ -71,11 +71,11 @@ OF THIS SOFTWARE.
  *
  */
 
-#include "X11/Xosdefs.h"
-#include "X11/Xfuncproto.h"
-#include "X11/Xmd.h"
-#include "X11/X.h"
-#include "X11/Xdefs.h"
+#include <X11/Xosdefs.h>
+#include <X11/Xfuncproto.h>
+#include <X11/Xmd.h>
+#include <X11/X.h>
+#include <X11/Xdefs.h>
 
 #include <stddef.h>
 #include <stdint.h>
@@ -117,7 +117,7 @@ typedef struct _CallbackList *CallbackListPtr;  /* also in dix.h */
 typedef struct _xReq *xReqPtr;
 
 #include "os.h"                 /* for ALLOCATE_LOCAL and DEALLOCATE_LOCAL */
-#include "X11/Xfuncs.h"         /* for bcopy, bzero, and bcmp */
+#include <X11/Xfuncs.h>         /* for bcopy, bzero, and bcmp */
 
 #define NullBox ((BoxPtr)0)
 #define MILLI_PER_MIN (1000 * 60)
@@ -413,10 +413,10 @@ extern _X_EXPORT unsigned long serverGeneration;
 /* Don't use this directly, use BUG_WARN or BUG_WARN_MSG instead */
 #define __BUG_WARN_MSG(cond, with_msg, ...)                                \
           do { if (cond) {                                                \
-              ErrorFSigSafe("BUG: triggered 'if (" #cond ")'\n");          \
-              ErrorFSigSafe("BUG: %s:%u in %s()\n",                        \
-                           __FILE__, __LINE__, __func__);                 \
-              if (with_msg) ErrorFSigSafe(__VA_ARGS__);                    \
+              ErrorF("BUG: triggered 'if (" #cond ")'\n");          \
+              ErrorF("BUG: %s:%u in %s()\n",                        \
+                     __FILE__, __LINE__, __func__);                 \
+              if (with_msg) ErrorF(__VA_ARGS__);                    \
               xorg_backtrace();                                           \
           } } while(0)
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 Red Hat, Inc.
+ * Copyright © 2011 Red Hat, Inc.
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a
  *  copy of this software and associated documentation files (the "Software"),
@@ -30,9 +30,9 @@
  * Protocol testing for XIPassiveGrab request.
  */
 #include <stdint.h>
-#include "X11/X.h"
-#include "X11/Xproto.h"
-#include "X11/extensions/XI2proto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/extensions/XI2proto.h>
 
 #include "dix/exevents_priv.h"
 
@@ -144,7 +144,17 @@ request_XIPassiveGrabDevice(ClientPtr client, xXIPassiveGrabDeviceReq * req,
         assert(client_request.errorValue == errval);
 
     client_request.swapped = TRUE;
-    swaps(&req->length);
+
+    /* MUST NOT swap req->length here !
+
+       The handler proc's don't use that field anymore, thus also SProc's
+       wont swap it. But this test program uses that field to initialize
+       client->req_len (see above). We previously had to swap it here, so
+       that SProcXIPassiveGrabDevice() will swap it back. Since that's gone
+       now, still swapping itself would break if this function is called
+       again and writing back a errornously swapped value
+    */
+
     swapl(&req->time);
     swapl(&req->grab_window);
     swapl(&req->cursor);

@@ -48,18 +48,19 @@ in this Software without prior written authorization from The Open Group.
 
 #include <dix-config.h>
 
-#include   "X11/X.h"
-#include   "X11/Xmd.h"
-#include   "X11/Xproto.h"
+#include   <X11/X.h>
+#include   <X11/Xmd.h>
+#include   <X11/Xproto.h>
 
 #include   "dix/cursor_priv.h"
 #include   "dix/dix_priv.h"
 #include   "dix/input_priv.h"
+#include   "mi/mi_priv.h"
+#include   "mi/mipointer_priv.h"
 
 #include   "misc.h"
 #include   "windowstr.h"
 #include   "pixmapstr.h"
-#include   "mi.h"
 #include   "scrnintstr.h"
 #include   "mipointrst.h"
 #include   "cursorstr.h"
@@ -114,6 +115,10 @@ static void miPointerMoveNoEvent(DeviceIntPtr pDev, ScreenPtr pScreen, int x,
                                  int y);
 
 static InternalEvent *mipointermove_events;   /* for WarpPointer MotionNotifies */
+
+static void
+miRecolorCursor(DeviceIntPtr pDev, ScreenPtr pScr,
+                CursorPtr pCurs, Bool displayed);
 
 Bool
 miPointerInitialize(ScreenPtr pScreen,
@@ -288,7 +293,7 @@ miPointerSetCursorPosition(DeviceIntPtr pDev, ScreenPtr pScreen,
     return TRUE;
 }
 
-void
+static void
 miRecolorCursor(DeviceIntPtr pDev, ScreenPtr pScr,
                 CursorPtr pCurs, Bool displayed)
 {
@@ -397,9 +402,9 @@ miPointerWarpCursor(DeviceIntPtr pDev, ScreenPtr pScreen, int x, int y)
      * updated to the second screen, and we never receive any events.
      * (FDO bug #18668) */
     if (changedScreen
-#ifdef PANORAMIX
+#ifdef XINERAMA
         && noPanoramiXExtension
-#endif
+#endif /* XINERAMA */
         ) {
             DeviceIntPtr master = GetMaster(pDev, MASTER_POINTER);
             /* Hack for CVE-2023-5380: if we're moving
@@ -592,7 +597,7 @@ miPointerMoveNoEvent(DeviceIntPtr pDev, ScreenPtr pScreen, int x, int y)
  * Set the devices' cursor position to the given x/y position.
  *
  * This function is called during the pointer update path in
- * GetPointerEvents and friends.
+ * GetPointerEvents and friends (and the same in the xwin DDX).
  *
  * The coordinates provided are always absolute. The parameter mode whether
  * it was relative or absolute movement that landed us at those coordinates.

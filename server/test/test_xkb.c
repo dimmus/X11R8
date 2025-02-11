@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 Red Hat, Inc.
+ * Copyright © 2009 Red Hat, Inc.
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a
  *  copy of this software and associated documentation files (the "Software"),
@@ -33,18 +33,17 @@
 #include <ctype.h>
 #include <unistd.h>
 #include <math.h>
-#include "X11/X.h"
-#include "X11/Xproto.h"
-#include "X11/keysym.h"
-#include "X11/Xatom.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/keysym.h>
+#include <X11/Xatom.h>
 #include "misc.h"
 #include "inputstr.h"
 #include "opaque.h"
 #include "property.h"
 #include <xkbsrv.h>
 #include "../xkb/xkbgeom.h"
-#include "X11/extensions/XKMformat.h"
-#include "xkbfile.h"
+#include <X11/extensions/XKMformat.h>
 #include <assert.h>
 
 #include "tests-common.h"

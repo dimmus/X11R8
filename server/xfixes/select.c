@@ -1,5 +1,5 @@
 /*
- * Copyright 2002 Keith Packard
+ * Copyright © 2002 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -202,9 +202,7 @@ int _X_COLD
 SProcXFixesSelectSelectionInput(ClientPtr client)
 {
     REQUEST(xXFixesSelectSelectionInputReq);
-
     REQUEST_SIZE_MATCH(xXFixesSelectSelectionInputReq);
-    swaps(&stuff->length);
     swapl(&stuff->window);
     swapl(&stuff->selection);
     swapl(&stuff->eventMask);

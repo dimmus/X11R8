@@ -32,8 +32,8 @@
 
 #include "exa.h"
 
-#include "X11/X.h"
-#include "X11/Xproto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
 #ifdef MITSHM
 #include "shmint.h"
 #endif

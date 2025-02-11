@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 Intel Corporation
+ * Copyright © 2008 Intel Corporation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -29,7 +29,7 @@
 
 #include "dix-config.h"
 
-#include "X11/Xfuncproto.h"
+#include <X11/Xfuncproto.h>
 
 #include "glamor.h"
 #include "xvdix.h"
@@ -39,11 +39,11 @@
 #include "misyncstr.h"
 #endif
 
-#include "epoxy/gl.h"
+#include <epoxy/gl.h>
 #ifdef GLAMOR_HAS_GBM
 #define MESA_EGL_NO_X11_HEADERS
 #define EGL_NO_X11
-#include "epoxy/egl.h"
+#include <epoxy/egl.h>
 #endif
 
 #define GLAMOR_DEFAULT_PRECISION  \

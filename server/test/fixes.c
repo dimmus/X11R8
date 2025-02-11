@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 Red Hat, Inc.
+ * Copyright © 2011 Red Hat, Inc.
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a
  *  copy of this software and associated documentation files (the "Software"),
@@ -28,9 +28,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "X11/X.h"
+#include <X11/X.h>
 #include <xfixesint.h>
-#include "X11/extensions/xfixeswire.h"
+#include <X11/extensions/xfixeswire.h>
 
 #include "tests-common.h"
 

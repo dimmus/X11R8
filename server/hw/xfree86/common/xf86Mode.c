@@ -84,7 +84,7 @@
 #include <xorg-config.h>
 #endif
 
-#include "X11/X.h"
+#include <X11/X.h>
 #include "xf86Modes.h"
 #include "xf86Crtc.h"
 #include "os.h"
@@ -1627,10 +1627,10 @@ xf86ValidateModes(ScrnInfoPtr scrp, DisplayModePtr availModes,
     }
 
     /* Lookup each mode */
-#ifdef PANORAMIX
+#ifdef XINERAMA
     if (noPanoramiXExtension)
         validateAllDefaultModes = TRUE;
-#endif
+#endif /* XINERAMA */
 
     for (p = scrp->modes;; p = p->next) {
         Bool repeat;

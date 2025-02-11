@@ -47,7 +47,7 @@ SOFTWARE.
 #ifndef __MIFPOLY_H__
 #define __MIFPOLY_H__
 
-#include "X11/Xfuncproto.h"
+#include <X11/Xfuncproto.h>
 
 static _X_INLINE int
 ICEIL(double x)

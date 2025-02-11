@@ -21,7 +21,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * Copyright 2002 Keith Packard
+ * Copyright © 2002 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -47,6 +47,8 @@
 #include "xfixesint.h"
 #include "protocol-versions.h"
 #include "extinit_priv.h"
+
+Bool noXFixesExtension = FALSE;
 
 static unsigned char XFixesReqCode;
 int XFixesEventBase;
@@ -164,7 +166,6 @@ SProcXFixesQueryVersion(ClientPtr client)
     REQUEST(xXFixesQueryVersionReq);
     REQUEST_SIZE_MATCH(xXFixesQueryVersionReq);
 
-    swaps(&stuff->length);
     swapl(&stuff->majorVersion);
     swapl(&stuff->minorVersion);
     return (*ProcXFixesVector[stuff->xfixesReqType]) (client);
@@ -252,7 +253,7 @@ XFixesExtensionInit(void)
     }
 }
 
-#ifdef PANORAMIX
+#ifdef XINERAMA
 
 int (*PanoramiXSaveXFixesVector[XFixesNumberRequests]) (ClientPtr);
 
@@ -282,4 +283,4 @@ PanoramiXFixesReset(void)
         ProcXFixesVector[i] = PanoramiXSaveXFixesVector[i];
 }
 
-#endif
+#endif /* XINERAMA */

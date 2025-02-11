@@ -51,17 +51,17 @@ SOFTWARE.
 #ifndef _OSDEP_H_
 #define _OSDEP_H_ 1
 
-#include "X11/Xdefs.h"
+#include <X11/Xdefs.h>
 
 #if defined(XDMCP) || defined(HASXDMAUTH)
-#include "X11/Xdmcp.h"
+#include <X11/Xdmcp.h>
 #endif
 
 #include <limits.h>
 #include <stddef.h>
-#include "X11/Xos.h"
-#include "X11/Xmd.h"
-#include "X11/Xdefs.h"
+#include <X11/Xos.h>
+#include <X11/Xmd.h>
+#include <X11/Xdefs.h>
 
 #ifndef __has_builtin
 # define __has_builtin(x) 0     /* Compatibility with older compilers */
@@ -142,7 +142,7 @@ void TimerInit(void);
 Bool TimerForce(OsTimerPtr timer);
 
 #ifdef WIN32
-#include "X11/Xwinsock.h"
+#include <X11/Xwinsock.h>
 struct utsname {
     char nodename[512];
 };
@@ -176,10 +176,6 @@ int os_move_fd(int fd);
    depending on whether multithreading is used */
 int xthread_sigmask(int how, const sigset_t *set, sigset_t *oldest);
 
-/* callback for DDX specific error printing, if any (may be NULL) */
-extern void (*OsVendorVErrorFProc) (const char *, va_list args)
-    _X_ATTRIBUTE_PRINTF(1, 0);
-
 typedef void (*OsSigHandlerPtr) (int sig);
 
 /* install signal handler */
@@ -193,6 +189,7 @@ void OsBlockSignals(void);
 void OsReleaseSignals(void);
 void OsResetSignals(void);
 void OsAbort(void) _X_NORETURN;
+void AbortServer(void) _X_NORETURN;
 
 void MakeClientGrabPervious(ClientPtr client);
 void MakeClientGrabImpervious(ClientPtr client);

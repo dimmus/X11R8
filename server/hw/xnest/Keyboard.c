@@ -11,17 +11,16 @@ the suitability of this software for any purpose.  It is provided "as
 is" without express or implied warranty.
 
 */
-
-#include <xnest-config.h>
+#include <dix-config.h>
 
 #ifdef WIN32
-#include "X11/Xwindows.h"
+#include <X11/Xwindows.h>
 #endif
 
-#include "X11/X.h"
-#include "X11/Xdefs.h"
-#include "X11/Xproto.h"
-#include "X11/keysym.h"
+#include <X11/X.h>
+#include <X11/Xdefs.h>
+#include <X11/Xproto.h>
+#include <X11/keysym.h>
 
 #include "screenint.h"
 #include "inputstr.h"
@@ -37,7 +36,7 @@ is" without express or implied warranty.
 #include "Args.h"
 #include "Events.h"
 
-#include "X11/extensions/XKB.h"
+#include <X11/extensions/XKB.h>
 #include "xkbsrv.h"
 
 extern Bool

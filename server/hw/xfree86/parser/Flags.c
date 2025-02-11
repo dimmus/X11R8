@@ -58,7 +58,7 @@
 #include "xf86Parser.h"
 #include "xf86tokens.h"
 #include "Configint.h"
-#include "X11/Xfuncproto.h"
+#include <X11/Xfuncproto.h>
 #include "Xprintf.h"
 #include "optionstr.h"
 

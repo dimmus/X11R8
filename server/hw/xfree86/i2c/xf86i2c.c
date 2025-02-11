@@ -17,9 +17,9 @@
 #include "xf86.h"
 #include "xf86_OSproc.h"
 
-#include "X11/X.h"
-#include "X11/Xos.h"
-#include "X11/Xproto.h"
+#include <X11/X.h>
+#include <X11/Xos.h>
+#include <X11/Xproto.h>
 #include "scrnintstr.h"
 #include "regionstr.h"
 #include "windowstr.h"
@@ -752,9 +752,9 @@ xf86DestroyI2CBusRec(I2CBusPtr b, Bool unalloc, Bool devs_too)
             }
             else {
                 if (unalloc) {
-                    xf86Msg(X_ERROR,
-                            "i2c bug: Attempt to remove I2C bus \"%s\", "
-                            "but device list is not empty.\n", b->BusName);
+                    LogMessageVerb(X_ERROR, 1,
+                                   "i2c bug: Attempt to remove I2C bus \"%s\", "
+                                   "but device list is not empty.\n", b->BusName);
                     return;
                 }
             }

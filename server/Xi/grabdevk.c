@@ -52,8 +52,8 @@ SOFTWARE.
 
 #include <dix-config.h>
 
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
 
 #include "dix/exevents_priv.h"
 
@@ -74,7 +74,6 @@ int _X_COLD
 SProcXGrabDeviceKey(ClientPtr client)
 {
     REQUEST(xGrabDeviceKeyReq);
-    swaps(&stuff->length);
     REQUEST_AT_LEAST_SIZE(xGrabDeviceKeyReq);
     swapl(&stuff->grabWindow);
     swaps(&stuff->modifiers);
@@ -104,7 +103,7 @@ ProcXGrabDeviceKey(ClientPtr client)
     REQUEST(xGrabDeviceKeyReq);
     REQUEST_AT_LEAST_SIZE(xGrabDeviceKeyReq);
 
-    if (stuff->length !=
+    if (client->req_len !=
         bytes_to_int32(sizeof(xGrabDeviceKeyReq)) + stuff->event_count)
         return BadLength;
 

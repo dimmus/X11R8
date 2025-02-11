@@ -1,14 +1,29 @@
 /* SPDX-License-Identifier: MIT OR X11
  *
- * Copyright 1996 Thomas E. Dickey <dickey@clark.net>
- * Copyright 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+ * Copyright © 1996 Thomas E. Dickey <dickey@clark.net>
+ * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
 #ifndef _XSERVER_EXTINIT_PRIV_H
 #define _XSERVER_EXTINIT_PRIV_H
 
 #include "extinit.h"
 
+extern Bool noDamageExtension;
+extern Bool noDbeExtension;
+extern Bool noDPMSExtension;
 extern Bool noGEExtension;
+extern Bool noGlxExtension;
+extern Bool noMITShmExtension;
+extern Bool noRenderExtension;
+extern Bool noResExtension;
+extern Bool noRRExtension;
+extern Bool noScreenSaverExtension;
+extern Bool noSecurityExtension;
+extern Bool noSELinuxExtension;
+extern Bool noShapeExtension;
+extern Bool noTestExtensions;
+extern Bool noXFixesExtension;
+extern Bool noXFree86BigfontExtension;
 
 void CompositeExtensionInit(void);
 void DamageExtensionInit(void);

@@ -29,16 +29,17 @@ from The Open Group.
 #include <dix-config.h>
 
 #if defined(WIN32)
-#include "X11/Xwinsock.h"
+#include <X11/Xwinsock.h>
 #endif
 #include <stdio.h>
-#include "X11/X.h"
-#include "X11/Xproto.h"
-#include "X11/Xos.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/Xos.h>
 
 #include "dix/colormap_priv.h"
 #include "dix/dix_priv.h"
 #include "dix/screenint_priv.h"
+#include "mi/mipointer_priv.h"
 #include "os/cmdline.h"
 #include "os/ddx_priv.h"
 #include "os/osdep.h"
@@ -64,7 +65,7 @@ from The Open Group.
 #ifndef WIN32
 #include <sys/param.h>
 #endif
-#include "X11/XWDFile.h"
+#include <X11/XWDFile.h>
 #ifdef MITSHM
 #include <sys/ipc.h>
 #include <sys/shm.h>
@@ -224,6 +225,14 @@ void
 OsVendorFatalError(const char *f, va_list args)
 {
 }
+
+#if defined(DDXBEFORERESET)
+void
+ddxBeforeReset(void)
+{
+    return;
+}
+#endif
 
 #if INPUTTHREAD
 /** This function is called in Xserver/os/inputthread.c when starting

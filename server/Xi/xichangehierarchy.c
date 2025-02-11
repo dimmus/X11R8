@@ -32,11 +32,11 @@
 
 #include <dix-config.h>
 
-#include "X11/X.h"              /* for inputstr.h    */
-#include "X11/Xproto.h"         /* Request macro     */
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XI2proto.h"
-#include "X11/extensions/geproto.h"
+#include <X11/X.h>              /* for inputstr.h    */
+#include <X11/Xproto.h>         /* Request macro     */
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XI2proto.h>
+#include <X11/extensions/geproto.h>
 
 #include "dix/dix_priv.h"
 #include "dix/exevents_priv.h"
@@ -127,14 +127,6 @@ XISendDeviceHierarchyEvent(int flags[MAXDEVICES])
  * adding new master devices, removing them, etc.
  *
  */
-
-int _X_COLD
-SProcXIChangeHierarchy(ClientPtr client)
-{
-    REQUEST(xXIChangeHierarchyReq);
-    swaps(&stuff->length);
-    return (ProcXIChangeHierarchy(client));
-}
 
 static int
 add_master(ClientPtr client, xXIAddMasterInfo * c, int flags[MAXDEVICES])

@@ -27,11 +27,11 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include <dix-config.h>
 
 #include <stdio.h>
-#include "X11/X.h"
-#include "X11/Xproto.h"
-#include "X11/keysym.h"
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/keysym.h>
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
 
 #include "dix/exevents_priv.h"
 

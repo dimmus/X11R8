@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Red Hat, Inc.
+ * Copyright © 2009 Red Hat, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -156,9 +156,5 @@
 /* Resource */
 #define SERVER_XRES_MAJOR_VERSION		1
 #define SERVER_XRES_MINOR_VERSION		2
-
-/* XvMC */
-#define SERVER_XVMC_MAJOR_VERSION		1
-#define SERVER_XVMC_MINOR_VERSION		1
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Yaakov Selkowitz
+ * Copyright © 2010 Yaakov Selkowitz
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -25,7 +25,7 @@
 #ifndef _XF86BIGFONTSRV_H_
 #define _XF86BIGFONTSRV_H_
 
-#include "X11/fonts/font.h"
+#include <X11/fonts/font.h>
 
 extern void XF86BigfontFreeFontShm(FontPtr);
 extern void XF86BigfontCleanup(void);

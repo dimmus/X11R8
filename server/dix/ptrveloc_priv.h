@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: MIT OR X11
  *
- * Copyright 2024 Enrico Weigelt, metux IT consult <info@metux.net>
- * Copyright 2006-2011 Simon Thum             simon dot thum at gmx dot de
+ * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+ * Copyright © 2006-2011 Simon Thum             simon dot thum at gmx dot de
  */
 #ifndef _XSERVER_POINTERVELOCITY_PRIV_H
 #define _XSERVER_POINTERVELOCITY_PRIV_H

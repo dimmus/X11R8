@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Keith Packard
+ * Copyright © 2013 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -25,7 +25,7 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <unistd.h>
-#include "X11/xshmfence.h"
+#include <X11/xshmfence.h>
 
 #include "os/osdep.h"
 

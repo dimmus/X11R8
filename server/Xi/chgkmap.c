@@ -52,8 +52,8 @@ SOFTWARE.
 
 #include <dix-config.h>
 
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
 
 #include "dix/exevents_priv.h"
 
@@ -75,7 +75,6 @@ SProcXChangeDeviceKeyMapping(ClientPtr client)
     unsigned int count;
 
     REQUEST(xChangeDeviceKeyMappingReq);
-    swaps(&stuff->length);
     REQUEST_AT_LEAST_SIZE(xChangeDeviceKeyMappingReq);
     count = stuff->keyCodes * stuff->keySymsPerKeyCode;
     REQUEST_FIXED_SIZE(xChangeDeviceKeyMappingReq, count * sizeof(CARD32));
@@ -106,7 +105,7 @@ ProcXChangeDeviceKeyMapping(ClientPtr client)
     ret = dixLookupDevice(&dev, stuff->deviceid, client, DixManageAccess);
     if (ret != Success)
         return ret;
-    len = stuff->length - bytes_to_int32(sizeof(xChangeDeviceKeyMappingReq));
+    len = client->req_len - bytes_to_int32(sizeof(xChangeDeviceKeyMappingReq));
 
     ret = ChangeKeyMapping(client, dev, len, DeviceMappingNotify,
                            stuff->firstKeyCode, stuff->keyCodes,

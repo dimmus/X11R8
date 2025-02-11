@@ -31,13 +31,14 @@
 
 #include <dix-config.h>
 
-#include "X11/X.h"              /* for inputstr.h    */
-#include "X11/Xproto.h"         /* Request macro     */
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XI2proto.h"
+#include <X11/X.h>              /* for inputstr.h    */
+#include <X11/Xproto.h>         /* Request macro     */
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XI2proto.h>
 
 #include "dix/cursor_priv.h"
 #include "dix/dix_priv.h"
+#include "mi/mipointer_priv.h"
 
 #include "inputstr.h"           /* DeviceIntPtr      */
 #include "windowstr.h"          /* window structure  */
@@ -60,7 +61,6 @@ SProcXIWarpPointer(ClientPtr client)
     REQUEST(xXIWarpPointerReq);
     REQUEST_SIZE_MATCH(xXIWarpPointerReq);
 
-    swaps(&stuff->length);
     swapl(&stuff->src_win);
     swapl(&stuff->dst_win);
     swapl(&stuff->src_x);

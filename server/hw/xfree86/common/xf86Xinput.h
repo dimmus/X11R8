@@ -51,13 +51,13 @@
 #ifndef _xf86Xinput_h
 #define _xf86Xinput_h
 
-#include "X11/Xfuncproto.h"
+#include <X11/Xfuncproto.h>
 
 #include "xf86.h"
 #include "xf86str.h"
 #include "inputstr.h"
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
 
 /* Input device flags */
 #define XI86_ALWAYS_CORE	0x04    /* device always controls the pointer */
@@ -113,9 +113,6 @@ struct _InputInfoRec {
     XF86OptionPtr options;
     InputAttributes *attrs;
 };
-
-/* xf86Globals.c */
-extern InputInfoPtr xf86InputDevs;
 
 /* xf86Xinput.c */
 extern _X_EXPORT void xf86PostMotionEvent(DeviceIntPtr device, int is_absolute,
@@ -189,10 +186,6 @@ extern _X_EXPORT void xf86RemoveEnabledDevice(InputInfoPtr pInfo);
 extern _X_EXPORT void xf86DisableDevice(DeviceIntPtr dev, Bool panic);
 extern _X_EXPORT void xf86EnableDevice(DeviceIntPtr dev);
 extern _X_EXPORT void xf86InputEnableVTProbe(void);
-
-/* not exported */
-int xf86NewInputDevice(InputInfoPtr pInfo, DeviceIntPtr *pdev, BOOL is_auto);
-InputInfoPtr xf86AllocateInput(void);
 
 /* xf86Helper.c */
 extern _X_EXPORT void xf86AddInputDriver(InputDriverPtr driver, void *module,

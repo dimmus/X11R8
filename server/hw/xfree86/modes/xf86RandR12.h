@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Keith Packard
+ * Copyright © 2006 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -23,7 +23,7 @@
 #ifndef _XF86_RANDR_H_
 #define _XF86_RANDR_H_
 #include <randrstr.h>
-#include "X11/extensions/render.h"
+#include <X11/extensions/render.h>
 
 extern _X_EXPORT Bool xf86RandR12CreateScreenResources(ScreenPtr pScreen);
 extern _X_EXPORT Bool xf86RandR12Init(ScreenPtr pScreen);
@@ -39,10 +39,5 @@ extern _X_EXPORT void xf86RandR12GetOriginalVirtualSize(ScrnInfoPtr pScrn,
                                                         int *x, int *y);
 extern _X_EXPORT Bool xf86RandR12PreInit(ScrnInfoPtr pScrn);
 extern _X_EXPORT void xf86RandR12TellChanged(ScreenPtr pScreen);
-
-extern void xf86RandR12LoadPalette(ScrnInfoPtr pScrn, int numColors,
-                                   int *indices, LOCO *colors,
-                                   VisualPtr pVisual);
-extern Bool xf86RandR12InitGamma(ScrnInfoPtr pScrn, unsigned gammaSize);
 
 #endif                          /* _XF86_RANDR_H_ */

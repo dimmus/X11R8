@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Red Hat Inc.
+ * Copyright © 2012 Red Hat Inc.
  * Copyright 2019 DisplayLink (UK) Ltd.
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
@@ -24,7 +24,7 @@
  */
 #include <dix-config.h>
 
-#include "X11/Xatom.h"
+#include <X11/Xatom.h>
 
 #include "dix/dix_priv.h"
 #include "randr/randrstr_priv.h"

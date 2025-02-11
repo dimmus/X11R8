@@ -54,9 +54,9 @@
 #include <errno.h>
 #endif
 
-#include "X11/X.h"
-#include "X11/Xproto.h"
-#include "X11/extensions/xf86bigfproto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/extensions/xf86bigfproto.h>
 #include "X11/fonts/libxfont2.h"
 
 #include "misc.h"
@@ -69,6 +69,8 @@
 #include "protocol-versions.h"
 
 #include "xf86bigfontsrv.h"
+
+Bool noXFree86BigfontExtension = FALSE;
 
 static void XF86BigfontResetProc(ExtensionEntry *extEntry );
 
@@ -652,9 +654,6 @@ ProcXF86BigfontDispatch(ClientPtr client)
 static int _X_COLD
 SProcXF86BigfontQueryVersion(ClientPtr client)
 {
-    REQUEST(xXF86BigfontQueryVersionReq);
-
-    swaps(&stuff->length);
     return ProcXF86BigfontQueryVersion(client);
 }
 
@@ -662,8 +661,6 @@ static int _X_COLD
 SProcXF86BigfontQueryFont(ClientPtr client)
 {
     REQUEST(xXF86BigfontQueryFontReq);
-
-    swaps(&stuff->length);
     REQUEST_SIZE_MATCH(xXF86BigfontQueryFontReq);
     swapl(&stuff->id);
     return ProcXF86BigfontQueryFont(client);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2002 Keith Packard
+ * Copyright © 2002 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -64,7 +64,6 @@ SProcXFixesChangeSaveSet(ClientPtr client)
     REQUEST(xXFixesChangeSaveSetReq);
     REQUEST_SIZE_MATCH(xXFixesChangeSaveSetReq);
 
-    swaps(&stuff->length);
     swapl(&stuff->window);
     return (*ProcXFixesVector[stuff->xfixesReqType]) (client);
 }

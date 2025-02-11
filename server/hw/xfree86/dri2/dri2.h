@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Red Hat, Inc.
+ * Copyright © 2007 Red Hat, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Soft-
@@ -33,7 +33,7 @@
 #ifndef _DRI2_H_
 #define _DRI2_H_
 
-#include "X11/extensions/dri2tokens.h"
+#include <X11/extensions/dri2tokens.h>
 
 /* Version 2 structure (with format at the end) */
 typedef struct {
@@ -45,9 +45,6 @@ typedef struct {
     unsigned int format;
     void *driverPrivate;
 } DRI2BufferRec, *DRI2BufferPtr;
-
-extern CARD8 dri2_major;        /* version of DRI2 supported by DDX */
-extern CARD8 dri2_minor;
 
 typedef DRI2BufferRec DRI2Buffer2Rec, *DRI2Buffer2Ptr;
 typedef void (*DRI2SwapEventPtr) (ClientPtr client, void *data, int type,

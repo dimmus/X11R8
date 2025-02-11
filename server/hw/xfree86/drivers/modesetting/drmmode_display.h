@@ -1,6 +1,6 @@
 /*
- * Copyright 2007 Red Hat, Inc.
- * Copyright 2019 NVIDIA CORPORATION
+ * Copyright © 2007 Red Hat, Inc.
+ * Copyright © 2019 NVIDIA CORPORATION
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),

@@ -36,7 +36,7 @@
  * \author Ian Romanick <idr@us.ibm.com>
  */
 
-#include "X11/Xfuncproto.h"
+#include <X11/Xfuncproto.h>
 
 #if defined(__GNUC__)
 #define PURE __attribute__((pure))

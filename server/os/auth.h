@@ -1,7 +1,7 @@
 #ifndef _XSERVER_OS_AUTH_H
 #define _XSERVER_OS_AUTH_H
 
-#include "X11/X.h"
+#include <X11/X.h>
 
 #include "dix.h"
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Intel Corporation
+ * Copyright © 2013 Intel Corporation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -30,8 +30,8 @@
 
 #include <stdlib.h>
 #include <stdint.h>
-#include "xcb/xcb.h"
-#include "xcb/xcb_aux.h"
+#include <xcb/xcb.h>
+#include <xcb/xcb_aux.h>
 #include <pixman.h>
 #include "glamor_context.h"
 #include "glamor_egl.h"

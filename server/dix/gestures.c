@@ -1,7 +1,7 @@
 /*
- * Copyright 2011 Collabra Ltd.
- * Copyright 2011 Red Hat, Inc.
- * Copyright 2020 Povilas Kanapickas  <povilas@radix.lt>
+ * Copyright © 2011 Collabra Ltd.
+ * Copyright © 2011 Red Hat, Inc.
+ * Copyright © 2020 Povilas Kanapickas  <povilas@radix.lt>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -29,6 +29,7 @@
 #include "dix/dixgrabs_priv.h"
 #include "dix/eventconvert.h"
 #include "dix/input_priv.h"
+#include "mi/mi_priv.h"
 
 #include "inputstr.h"
 #include "scrnintstr.h"
@@ -37,7 +38,6 @@
 #include "exglobals.h"
 #include "inpututils.h"
 #include "windowstr.h"
-#include "mi.h"
 
 #define GESTURE_HISTORY_SIZE 100
 

@@ -53,26 +53,11 @@ SOFTWARE.
 #include <dix-config.h>
 
 #include "inputstr.h"           /* DeviceIntPtr      */
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
 #include "exglobals.h"
 
 #include "devbell.h"
-
-/***********************************************************************
- *
- * This procedure is invoked to swap the request bytes if the server and
- * client have a different byte order.
- *
- */
-
-int _X_COLD
-SProcXDeviceBell(ClientPtr client)
-{
-    REQUEST(xDeviceBellReq);
-    swaps(&stuff->length);
-    return (ProcXDeviceBell(client));
-}
 
 /***********************************************************************
  *

@@ -47,7 +47,7 @@ SOFTWARE.
 #ifndef CMAP_H
 #define CMAP_H 1
 
-#include "X11/Xproto.h"
+#include <X11/Xproto.h>
 #include "screenint.h"
 #include "window.h"
 

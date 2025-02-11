@@ -104,6 +104,7 @@ Equipment Corporation.
 #include "dix/exevents_priv.h"
 #include "dix/input_priv.h"
 #include "dix/property_priv.h"
+#include "mi/mi_priv.h"         /* miPaintWindow */
 #include "os/auth.h"
 #include "os/client_priv.h"
 #include "os/screensaver.h"
@@ -123,13 +124,12 @@ Equipment Corporation.
 #include "gcstruct.h"
 #include "servermd.h"
 #include "mivalidate.h"
-#ifdef PANORAMIX
+#ifdef XINERAMA
 #include "panoramiX.h"
 #include "panoramiXsrv.h"
-#endif
+#endif /* XINERAMA */
 #include "dixevents.h"
 #include "globals.h"
-#include "mi.h"                 /* miPaintWindow */
 #ifdef COMPOSITE
 #include "compint.h"
 #endif
@@ -138,7 +138,7 @@ Equipment Corporation.
 #include "privates.h"
 #include "xace.h"
 
-#include "X11/Xatom.h"          /* must come after server includes */
+#include <X11/Xatom.h>          /* must come after server includes */
 
 /******
  * Window stuff for server
@@ -2303,12 +2303,12 @@ ConfigureWindow(WindowPtr pWin, Mask mask, XID *vlist, ClientPtr client)
         };
         event.u.u.type = ConfigureRequest;
         event.u.u.detail = (mask & CWStackMode) ? smode : Above;
-#ifdef PANORAMIX
+#ifdef XINERAMA
         if (!noPanoramiXExtension && (!pParent || !pParent->parent)) {
             event.u.configureRequest.x += screenInfo.screens[0]->x;
             event.u.configureRequest.y += screenInfo.screens[0]->y;
         }
-#endif
+#endif /* XINERAMA */
         if (MaybeDeliverEventsToClient(pParent, &event, 1,
                                        SubstructureRedirectMask, client) == 1)
             return Success;
@@ -2386,12 +2386,12 @@ ConfigureWindow(WindowPtr pWin, Mask mask, XID *vlist, ClientPtr client)
             .u.configureNotify.override = pWin->overrideRedirect
         };
         event.u.u.type = ConfigureNotify;
-#ifdef PANORAMIX
+#ifdef XINERAMA
         if (!noPanoramiXExtension && (!pParent || !pParent->parent)) {
             event.u.configureNotify.x += screenInfo.screens[0]->x;
             event.u.configureNotify.y += screenInfo.screens[0]->y;
         }
-#endif
+#endif /* XINERAMA */
         DeliverEvents(pWin, &event, 1, NullWindow);
     }
     if (mask & CWBorderWidth) {
@@ -2531,12 +2531,12 @@ ReparentWindow(WindowPtr pWin, WindowPtr pParent,
         .u.reparent.override = pWin->overrideRedirect
     };
     event.u.u.type = ReparentNotify;
-#ifdef PANORAMIX
+#ifdef XINERAMA
     if (!noPanoramiXExtension && !pParent->parent) {
         event.u.reparent.x += screenInfo.screens[0]->x;
         event.u.reparent.y += screenInfo.screens[0]->y;
     }
-#endif
+#endif /* XINERAMA */
     DeliverEvents(pWin, &event, 1, pParent);
 
     /* take out of sibling chain */
@@ -2795,7 +2795,7 @@ UnrealizeTree(WindowPtr pWin, Bool fromConfigure)
         if (pChild->realized) {
             pChild->realized = FALSE;
             pChild->visibility = VisibilityNotViewable;
-#ifdef PANORAMIX
+#ifdef XINERAMA
             if (!noPanoramiXExtension && !pChild->drawable.pScreen->myNum) {
                 PanoramiXRes *win;
                 int rc = dixLookupResourceByType((void **) &win,
@@ -2806,7 +2806,7 @@ UnrealizeTree(WindowPtr pWin, Bool fromConfigure)
                 if (rc == Success)
                     win->u.win.visibility = VisibilityNotViewable;
             }
-#endif
+#endif /* XINERAMA */
             (*Unrealize) (pChild);
             DeleteWindowFromAnyEvents(pChild, FALSE);
             if (pChild->viewable) {
@@ -3023,7 +3023,7 @@ SendVisibilityNotify(WindowPtr pWin)
     xEvent event;
     unsigned int visibility = pWin->visibility;
 
-#ifdef PANORAMIX
+#ifdef XINERAMA
     /* This is not quite correct yet, but it's close */
     if (!noPanoramiXExtension) {
         PanoramiXRes *win;
@@ -3084,7 +3084,7 @@ SendVisibilityNotify(WindowPtr pWin)
 
         win->u.win.visibility = visibility;
     }
-#endif
+#endif /* XINERAMA */
 
     event = (xEvent) {
         .u.visibility.window = pWin->drawable.id,

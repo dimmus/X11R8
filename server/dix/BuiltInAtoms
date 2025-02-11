@@ -214,7 +214,7 @@ WM_ICON_SIZE								      @
 	Property type:
 		minWidth, min-height:	CARD32
 		maxWidth, max-height:	CARD32
-		widthInc, height-inc_server:	CARD32
+		widthInc, height-inc:	CARD32
 	Property name:	(type: ICON_SIZE)
 		The window manager may set this property on the root window
 		to specify the icon sizes it allows.
@@ -233,7 +233,7 @@ WM_SIZE_HINTS								      @
 		width, height:			CARD32
 		min-width, min-height:		CARD32
 		max-width, max-height:		CARD32
-		width-inc_server, height-inc_server:		CARD32
+		width-inc, height-inc:		CARD32
 		min-aspect-x, min-aspect-y:	CARD32
 		max-aspect-x, max-aspect-y:	CARD32
 		    flags contains the following bits

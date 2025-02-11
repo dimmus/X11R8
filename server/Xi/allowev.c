@@ -53,8 +53,8 @@ SOFTWARE.
 #include <dix-config.h>
 
 #include "inputstr.h"           /* DeviceIntPtr      */
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
 
 #include "dix/dix_priv.h"
 
@@ -72,7 +72,6 @@ int _X_COLD
 SProcXAllowDeviceEvents(ClientPtr client)
 {
     REQUEST(xAllowDeviceEventsReq);
-    swaps(&stuff->length);
     REQUEST_SIZE_MATCH(xAllowDeviceEventsReq);
     swapl(&stuff->time);
     return (ProcXAllowDeviceEvents(client));

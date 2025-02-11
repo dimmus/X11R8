@@ -1,5 +1,5 @@
 /*
- * Copyright 2002 Keith Packard, member of The XFree86 Project, Inc.
+ * Copyright © 2002 Keith Packard, member of The XFree86 Project, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -24,7 +24,7 @@
 #include <xorg-config.h>
 #endif
 
-#include "X11/extensions/render.h"
+#include <X11/extensions/render.h>
 
 #include "dix/input_priv.h"
 #include "dix/screenint_priv.h"
@@ -42,7 +42,7 @@
 
 #include "xf86cmap.h"
 #include "xf86Crtc.h"
-#include "xf86RandR12.h"
+#include "xf86RandR12_priv.h"
 
 typedef struct _xf86RandR12Info {
     int virtualX;
@@ -759,11 +759,11 @@ xf86RandR12CreateScreenResources(ScreenPtr pScreen)
     int width, height;
     int mmWidth, mmHeight;
 
-#ifdef PANORAMIX
+#ifdef XINERAMA
     /* XXX disable RandR when using Xinerama */
     if (!noPanoramiXExtension)
         return TRUE;
-#endif
+#endif /* XINERAMA */
 
     config = XF86_CRTC_CONFIG_PTR(pScrn);
     randrp = XF86RANDRINFO(pScreen);
@@ -849,7 +849,7 @@ xf86RandR12Init(ScreenPtr pScreen)
     rrScrPrivPtr rp;
     XF86RandRInfoPtr randrp;
 
-#ifdef PANORAMIX
+#ifdef XINERAMA
     /* XXX disable RandR when using Xinerama */
     if (!noPanoramiXExtension) {
         if (xf86NumScreens == 1)
@@ -857,7 +857,7 @@ xf86RandR12Init(ScreenPtr pScreen)
         else
             return TRUE;
     }
-#endif
+#endif /* XINERAMA */
 
     if (xf86RandR12Generation != serverGeneration)
         xf86RandR12Generation = serverGeneration;

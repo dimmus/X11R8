@@ -30,7 +30,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef EXEVENTS_H
 #define EXEVENTS_H
 
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XIproto.h>
 #include "inputstr.h"
 
 /***************************************************************

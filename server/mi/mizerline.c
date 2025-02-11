@@ -45,7 +45,7 @@ SOFTWARE.
 ******************************************************************/
 #include <dix-config.h>
 
-#include "X11/X.h"
+#include <X11/X.h>
 
 #include "misc.h"
 #include "scrnintstr.h"

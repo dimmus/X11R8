@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 Red Hat, Inc.
+ * Copyright © 2009 Red Hat, Inc.
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a
  *  copy of this software and associated documentation files (the "Software"),
@@ -27,16 +27,17 @@
 #include <dix-config.h>
 
 #include <stdint.h>
-#include "X11/X.h"
-#include "X11/Xproto.h"
-#include "X11/extensions/XI2proto.h"
-#include "X11/Xatom.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/extensions/XI2proto.h>
+#include <X11/Xatom.h>
 
 #include "dix/dix_priv.h"
 #include "dix/dixgrabs_priv.h"
 #include "dix/eventconvert.h"
 #include "dix/exevents_priv.h"
 #include "dix/input_priv.h"
+#include "mi/mi_priv.h"
 
 #include "misc.h"
 #include "resource.h"
@@ -45,7 +46,6 @@
 #include "exglobals.h"
 #include "eventstr.h"
 #include "inpututils.h"
-#include "mi.h"
 #include "assert.h"
 
 #include "tests-common.h"

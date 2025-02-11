@@ -1,6 +1,6 @@
 /*
- * Copyright 2006 Keith Packard
- * Copyright 2008 Red Hat, Inc.
+ * Copyright © 2006 Keith Packard
+ * Copyright © 2008 Red Hat, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -30,7 +30,7 @@
 #include <stdio.h>
 
 #include "xf86.h"
-#include "xf86DDC.h"
+#include "xf86DDC_priv.h"
 #include "xf86Crtc.h"
 #include "xf86Modes.h"
 #include "xf86Priv.h"

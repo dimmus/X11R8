@@ -3,8 +3,8 @@
  *
  * This version is for Solaris.
  *
- * Copyright 2000 VA Linux Systems, Inc.
- * Copyright 2001 The XFree86 Project, Inc.
+ * Copyright © 2000 VA Linux Systems, Inc.
+ * Copyright © 2001 The XFree86 Project, Inc.
  */
 /* Copyright (c) 2005, Oracle and/or its affiliates.
  *
@@ -33,7 +33,7 @@
 #endif
 
 #include <errno.h>
-#include "X11/X.h"
+#include <X11/X.h>
 
 #include "xf86.h"
 #include "xf86Priv.h"

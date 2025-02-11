@@ -6,7 +6,7 @@
 #include "extinit.h"
 #ifdef DPMSExtension
 /* sigh, too many drivers assume this */
-#include "X11/extensions/dpmsconst.h"
+#include <X11/extensions/dpmsconst.h>
 #endif
 
 /* Global X server variables that are visible to mi, dix, os, and ddx */
@@ -25,13 +25,12 @@ extern _X_EXPORT int monitorResolution;
 extern _X_EXPORT int defaultColorVisualClass;
 
 extern _X_EXPORT int GrabInProgress;
-extern _X_EXPORT Bool noTestExtensions;
 extern _X_EXPORT char *SeatId;
 extern _X_EXPORT char *ConnectionInfo;
 extern _X_EXPORT sig_atomic_t inSignalContext;
 
-#ifdef PANORAMIX
+#ifdef XINERAMA
 extern _X_EXPORT Bool PanoramiXExtensionDisabledHack;
-#endif
+#endif /* XINERAMA */
 
 #endif                          /* !_XSERV_GLOBAL_H_ */

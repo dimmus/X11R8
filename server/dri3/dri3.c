@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Keith Packard
+ * Copyright © 2013 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -85,10 +85,10 @@ dri3_extension_init(void)
     if (dri3_screen_generation != serverGeneration)
         return;
 
-#ifdef PANORAMIX
+#ifdef XINERAMA
     if (!noPanoramiXExtension)
         return;
-#endif
+#endif /* XINERAMA */
 
     extension = AddExtension(DRI3_NAME, DRI3NumberEvents, DRI3NumberErrors,
                              proc_dri3_dispatch, sproc_dri3_dispatch,

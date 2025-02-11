@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 Red Hat, Inc.
+ * Copyright © 2009 Red Hat, Inc.
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a
  *  copy of this software and associated documentation files (the "Software"),
@@ -30,9 +30,9 @@
  * Protocol testing for XIQueryPointer request.
  */
 #include <stdint.h>
-#include "X11/X.h"
-#include "X11/Xproto.h"
-#include "X11/extensions/XI2proto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/extensions/XI2proto.h>
 #include "inputstr.h"
 #include "windowstr.h"
 #include "scrnintstr.h"

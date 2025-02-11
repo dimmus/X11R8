@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Keith Packard
+ * Copyright © 2006 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -304,7 +304,7 @@ ProcRRCreateMode(ClientPtr client)
 
     modeInfo = &stuff->modeInfo;
     name = (char *) (stuff + 1);
-    units_after = (stuff->length - bytes_to_int32(sizeof(xRRCreateModeReq)));
+    units_after = (client->req_len - bytes_to_int32(sizeof(xRRCreateModeReq)));
 
     /* check to make sure requested name fits within the data provided */
     if (bytes_to_int32(modeInfo->nameLength) > units_after)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Keith Packard
+ * Copyright © 2006 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -21,7 +21,7 @@
  */
 #include <dix-config.h>
 
-#include "X11/Xatom.h"
+#include <X11/Xatom.h>
 
 #include "dix/dix_priv.h"
 
@@ -520,7 +520,7 @@ ProcRRConfigureOutputProperty(ClientPtr client)
         return BadAccess;
 
     num_valid =
-        stuff->length - bytes_to_int32(sizeof(xRRConfigureOutputPropertyReq));
+        client->req_len - bytes_to_int32(sizeof(xRRConfigureOutputPropertyReq));
     return RRConfigureOutputProperty(output, stuff->property, stuff->pending,
                                      stuff->range, FALSE, num_valid,
                                      (INT32 *) (stuff + 1));

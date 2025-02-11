@@ -61,9 +61,9 @@ __stdcall unsigned long GetTickCount(void);
 #endif
 
 #if defined(WIN32) && !defined(__CYGWIN__)
-#include "X11/Xwinsock.h"
+#include <X11/Xwinsock.h>
 #endif
-#include "X11/Xos.h"
+#include <X11/Xos.h>
 #include <stdio.h>
 #include <time.h>
 #if !defined(WIN32) || !defined(__MINGW32__)
@@ -71,17 +71,17 @@ __stdcall unsigned long GetTickCount(void);
 #include <sys/resource.h>
 #endif
 #include "misc.h"
-#include "X11/X.h"
+#include <X11/X.h>
 #define XSERV_t
 #define TRANS_SERVER
 #define TRANS_REOPEN
-#include "X11/Xtrans/Xtrans.h"
+#include <X11/Xtrans/Xtrans.h>
 
 #include "os/audit.h"
 
 #include "input.h"
 #include "dixfont.h"
-#include "X11/fonts/libxfont2.h"
+#include <X11/fonts/libxfont2.h>
 #include "osdep.h"
 #include "xdmcp.h"
 #include "extension.h"
@@ -117,71 +117,15 @@ __stdcall unsigned long GetTickCount(void);
 #include "miinitext.h"
 #include "present.h"
 #include "dixstruct_priv.h"
-
-Bool noTestExtensions;
-
-#ifdef COMPOSITE
-Bool noCompositeExtension = FALSE;
-#endif
-
-#ifdef DAMAGE
-Bool noDamageExtension = FALSE;
-#endif
-#ifdef DBE
-Bool noDbeExtension = FALSE;
-#endif
-#ifdef DPMSExtension
 #include "dpmsproc.h"
-Bool noDPMSExtension = FALSE;
-#endif
-#ifdef GLXEXT
-Bool noGlxExtension = FALSE;
-#endif
-#ifdef SCREENSAVER
-Bool noScreenSaverExtension = FALSE;
-#endif
-#ifdef MITSHM
-Bool noMITShmExtension = FALSE;
-#endif
-#ifdef RANDR
-Bool noRRExtension = FALSE;
-#endif
-Bool noRenderExtension = FALSE;
-Bool noShapeExtension = FALSE;
-
-#ifdef XCSECURITY
-Bool noSecurityExtension = FALSE;
-#endif
-#ifdef RES
-Bool noResExtension = FALSE;
-#endif
-#ifdef XF86BIGFONT
-Bool noXFree86BigfontExtension = FALSE;
-#endif
-#ifdef XFreeXDGA
-Bool noXFree86DGAExtension = FALSE;
-#endif
-#ifdef XF86DRI
-Bool noXFree86DRIExtension = FALSE;
-#endif
-#ifdef XF86VIDMODE
-Bool noXFree86VidModeExtension = FALSE;
-#endif
-Bool noXFixesExtension = FALSE;
-#ifdef PANORAMIX
-/* Xinerama is disabled by default unless enabled via +xinerama */
-Bool noPanoramiXExtension = TRUE;
-#endif
-#ifdef DRI2
-Bool noDRI2Extension = FALSE;
-#endif
-
-Bool noGEExtension = FALSE;
+#include "extinit_priv.h"
 
 #define X_INCLUDE_NETDB_H
-#include "X11/Xos_r.h"
+#include <X11/Xos_r.h>
 
 #include <errno.h>
+
+#include "xf86bigfontsrv.h"
 
 Bool CoreDump;
 
@@ -189,9 +133,9 @@ Bool enableIndirectGLX = FALSE;
 
 Bool AllowByteSwappedClients = FALSE;
 
-#ifdef PANORAMIX
+#ifdef XINERAMA
 Bool PanoramiXExtensionDisabledHack = FALSE;
-#endif
+#endif /* XINERAMA */
 
 char *SeatId = NULL;
 
@@ -391,10 +335,10 @@ UseMsg(void)
     ErrorF("-v                     screen-saver without video blanking\n");
     ErrorF("-wr                    create root window with white background\n");
     ErrorF("-maxbigreqsize         set maximal bigrequest size \n");
-#ifdef PANORAMIX
+#ifdef XINERAMA
     ErrorF("+xinerama              Enable XINERAMA extension\n");
     ErrorF("-xinerama              Disable XINERAMA extension\n");
-#endif
+#endif /* XINERAMA */
     ErrorF("-dumbSched             Disable smart scheduling and threaded input, enable old behavior\n");
     ErrorF("-schedInterval int     Set scheduler interval in msec\n");
     ErrorF("-sigstop               Enable SIGSTOP based startup\n");
@@ -790,7 +734,7 @@ ProcessCommandLine(int argc, char *argv[])
                 UseMsg();
             }
         }
-#ifdef PANORAMIX
+#ifdef XINERAMA
         else if (strcmp(argv[i], "+xinerama") == 0) {
             noPanoramiXExtension = FALSE;
         }
@@ -800,7 +744,7 @@ ProcessCommandLine(int argc, char *argv[])
         else if (strcmp(argv[i], "-disablexineramaextension") == 0) {
             PanoramiXExtensionDisabledHack = TRUE;
         }
-#endif
+#endif /* XINERAMA */
         else if (strcmp(argv[i], "-I") == 0) {
             /* ignore all remaining arguments */
             break;
@@ -887,7 +831,7 @@ set_font_authorizations(char **authorizations, int *authlen, void *client)
         char hname[1024], *hnameptr;
         unsigned int len;
 
-#if defined(IPv6)
+#if defined(HAVE_GETADDRINFO)
         struct addrinfo hints, *ai = NULL;
 #else
         struct hostent *host;
@@ -898,7 +842,7 @@ set_font_authorizations(char **authorizations, int *authlen, void *client)
 #endif
 
         gethostname(hname, 1024);
-#if defined(IPv6)
+#if defined(HAVE_GETADDRINFO)
         memset(&hints, 0, sizeof(hints));
         hints.ai_flags = AI_CANONNAME;
         if (getaddrinfo(hname, NULL, &hints, &ai) == 0) {
@@ -928,7 +872,7 @@ set_font_authorizations(char **authorizations, int *authlen, void *client)
         p += sizeof(AUTHORIZATION_NAME);
         memcpy(p, hnameptr, len);
         p += len;
-#if defined(IPv6)
+#if defined(HAVE_GETADDRINFO)
         if (ai) {
             freeaddrinfo(ai);
         }
@@ -1275,7 +1219,7 @@ Fclose(void *iop)
 
 #ifdef WIN32
 
-#include "X11/Xwindows.h"
+#include <X11/Xwindows.h>
 
 const char *
 Win32TempDir(void)
@@ -1437,6 +1381,12 @@ enum BadCode {
     InternalError
 };
 
+#if defined(BUILDERADDR)
+#define BUGADDRESS BUILDERADDR
+#else
+#define BUGADDRESS "xorg@freedesktop.org"
+#endif
+
 void
 CheckUserParameters(int argc, char **argv, char **envp)
 {
@@ -1594,3 +1544,19 @@ os_move_fd(int fd)
     return newfd;
 }
 #endif
+
+void
+AbortServer(void)
+{
+#ifdef XF86BIGFONT
+    XF86BigfontCleanup();
+#endif
+    CloseWellKnownConnections();
+    OsCleanup(TRUE);
+    AbortDevices();
+    ddxGiveUp(EXIT_ERR_ABORT);
+    fflush(stderr);
+    if (CoreDump)
+        OsAbort();
+    exit(1);
+}

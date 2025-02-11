@@ -16,14 +16,14 @@
 #include <dix-config.h>
 
 #ifdef WIN32
-#include "X11/Xwinsock.h"
+#include <X11/Xwinsock.h>
 #define XSERV_t
 #define TRANS_SERVER
 #define TRANS_REOPEN
-#include "X11/Xtrans/Xtrans.h"
+#include <X11/Xtrans/Xtrans.h>
 #endif
 
-#include "X11/Xos.h"
+#include <X11/Xos.h>
 
 #if !defined(WIN32)
 #include <sys/param.h>
@@ -35,8 +35,8 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "X11/X.h"
-#include "X11/Xmd.h"
+#include <X11/X.h>
+#include <X11/Xmd.h>
 
 #include "dix/dix_priv.h"
 #include "os/auth.h"
@@ -51,7 +51,7 @@
 #define XSERV_t
 #define TRANS_SERVER
 #define TRANS_REOPEN
-#include "X11/Xtrans/Xtrans.h"
+#include <X11/Xtrans/Xtrans.h>
 
 #ifdef XDMCP
 #undef REQUEST
@@ -60,10 +60,10 @@
 #undef IPv6
 #endif
 
-#include "X11/Xdmcp.h"
+#include <X11/Xdmcp.h>
 
 #define X_INCLUDE_NETDB_H
-#include "X11/Xos_r.h"
+#include <X11/Xos_r.h>
 
 static const char *defaultDisplayClass = "MIT-unspecified";
 
@@ -89,10 +89,12 @@ static char *xdmAuthCookie;
 
 static XdmcpBuffer buffer;
 
-#if defined(IPv6)
-
+#if defined(HAVE_GETADDRINFO)
 static struct addrinfo *mgrAddr;
 static struct addrinfo *mgrAddrFirst;
+#endif
+
+#if defined(IPv6)
 
 #define SOCKADDR_TYPE		struct sockaddr_storage
 #define SOCKADDR_FAMILY(s)	((struct sockaddr *)&(s))->sa_family
@@ -836,15 +838,19 @@ timeout(void)
         return;
     }
 
-#if defined(IPv6)
+#if defined(HAVE_GETADDRINFO)
     if (state == XDM_COLLECT_QUERY || state == XDM_COLLECT_INDIRECT_QUERY) {
         /* Try next address */
         for (mgrAddr = mgrAddr->ai_next;; mgrAddr = mgrAddr->ai_next) {
             if (mgrAddr == NULL) {
                 mgrAddr = mgrAddrFirst;
             }
-            if (mgrAddr->ai_family == AF_INET || mgrAddr->ai_family == AF_INET6)
+            if (mgrAddr->ai_family == AF_INET)
                 break;
+#if defined(IPv6)
+            if (mgrAddr->ai_family == AF_INET6)
+                break;
+#endif
         }
 #ifndef SIN6_LEN
         ManagerAddressLen = mgrAddr->ai_addrlen;
@@ -1351,12 +1357,12 @@ get_addr_by_name(const char *argtype,
                  const char *namestr,
                  int port,
                  int socktype, SOCKADDR_TYPE * addr, SOCKLEN_TYPE * addrlen
-#if defined(IPv6)
+#if defined(HAVE_GETADDRINFO)
                  , struct addrinfo **aip, struct addrinfo **aifirstp
 #endif
     )
 {
-#if defined(IPv6)
+#if defined(HAVE_GETADDRINFO)
     struct addrinfo *ai;
     struct addrinfo hints;
     char portstr[6];
@@ -1383,8 +1389,12 @@ get_addr_by_name(const char *argtype,
 
     if ((gaierr = getaddrinfo(namestr, pport, &hints, aifirstp)) == 0) {
         for (ai = *aifirstp; ai != NULL; ai = ai->ai_next) {
-            if (ai->ai_family == AF_INET || ai->ai_family == AF_INET6)
+            if (ai->ai_family == AF_INET)
                 break;
+#if defined(IPv6)
+            if (ai->ai_family == AF_INET6)
+                break;
+#endif
         }
         if ((ai == NULL) || (ai->ai_addrlen > sizeof(SOCKADDR_TYPE))) {
             FatalError("Xserver: %s host %s not on supported network type\n",
@@ -1400,7 +1410,7 @@ get_addr_by_name(const char *argtype,
         FatalError("Xserver: %s: %s %s\n", gai_strerror(gaierr), argtype,
                    namestr);
     }
-#else
+#else /* HAVE_GETADDRINFO */
     struct hostent *hep;
 
 #ifdef XTHREADS_NEEDS_BYNAMEPARAMS
@@ -1422,7 +1432,7 @@ get_addr_by_name(const char *argtype,
         FatalError("Xserver: %s host on strange network %s\n", argtype,
                    namestr);
     }
-#endif
+#endif /* HAVE_GETADDRINFO */
 }
 
 static void
@@ -1435,7 +1445,7 @@ get_manager_by_name(int argc, char **argv, int i)
 
     get_addr_by_name(argv[i], argv[i + 1], xdm_udp_port, SOCK_DGRAM,
                      &ManagerAddress, &ManagerAddressLen
-#if defined(IPv6)
+#if defined(HAVE_GETADDRINFO)
                      , &mgrAddr, &mgrAddrFirst
 #endif
         );
@@ -1444,7 +1454,7 @@ get_manager_by_name(int argc, char **argv, int i)
 static void
 get_fromaddr_by_name(int argc, char **argv, int i)
 {
-#if defined(IPv6)
+#if defined(HAVE_GETADDRINFO)
     struct addrinfo *ai = NULL;
     struct addrinfo *aifirst = NULL;
 #endif
@@ -1452,11 +1462,11 @@ get_fromaddr_by_name(int argc, char **argv, int i)
         FatalError("Xserver: missing -from host name in command line\n");
     }
     get_addr_by_name("-from", argv[i], 0, 0, &FromAddress, &FromAddressLen
-#if defined(IPv6)
+#if defined(HAVE_GETADDRINFO)
                      , &ai, &aifirst
 #endif
         );
-#if defined(IPv6)
+#if defined(HAVE_GETADDRINFO)
     if (aifirst != NULL)
         freeaddrinfo(aifirst);
 #endif

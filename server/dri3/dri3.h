@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Keith Packard
+ * Copyright © 2013 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -25,7 +25,7 @@
 
 #ifdef DRI3
 
-#include "X11/extensions/dri3proto.h"
+#include <X11/extensions/dri3proto.h>
 #include <randrstr.h>
 
 #define DRI3_SCREEN_INFO_VERSION        4

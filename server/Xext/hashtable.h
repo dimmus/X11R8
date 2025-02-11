@@ -2,8 +2,8 @@
 #define HASHTABLE_H 1
 
 #include <dix-config.h>
-#include "X11/Xfuncproto.h"
-#include "X11/Xdefs.h"
+#include <X11/Xfuncproto.h>
+#include <X11/Xdefs.h>
 #include "list.h"
 
 /** @brief A hashing function.

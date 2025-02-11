@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 Peter Hutterer
+ * Copyright © 2008 Peter Hutterer
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -36,7 +36,6 @@ int ProcXDeleteDeviceProperty(ClientPtr client);
 int ProcXGetDeviceProperty(ClientPtr client);
 
 /* request swapping */
-int SProcXListDeviceProperties(ClientPtr client);
 int SProcXChangeDeviceProperty(ClientPtr client);
 int SProcXDeleteDeviceProperty(ClientPtr client);
 int SProcXGetDeviceProperty(ClientPtr client);

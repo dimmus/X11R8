@@ -54,7 +54,7 @@ SOFTWARE.
 #include "cursor.h"
 #include "geext.h"
 #include "events.h"
-#include "X11/extensions/XI.h"
+#include <X11/extensions/XI.h>
 
 #define EARLIER -1
 #define SAMETIME 0

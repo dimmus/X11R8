@@ -12,6 +12,9 @@
 #include <dix-config.h>
 #include <xkb-config.h>
 
+/* Building Xorg server. */
+#mesondefine XORGSERVER
+
 /* Current X.Org version. */
 #mesondefine XORG_VERSION_CURRENT
 
@@ -26,6 +29,9 @@
 
 /* Built-in input drivers. */
 #mesondefine IDRIVERS
+
+/* Path to configuration file. */
+#mesondefine XF86CONFIGFILE
 
 /* Path to configuration file. */
 #mesondefine XCONFIGFILE
@@ -69,6 +75,9 @@
 /* Define to 1 if you have the `walkcontext' function (used on Solaris for
    xorg_backtrace in hw/xfree86/common/xf86Events.c */
 #mesondefine HAVE_WALKCONTEXT
+
+/* Building vgahw module */
+#mesondefine WITH_VGAHW
 
 /* NetBSD PIO alpha IO */
 #mesondefine USE_ALPHA_PIO

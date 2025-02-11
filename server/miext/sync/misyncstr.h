@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 NVIDIA Corporation
+ * Copyright © 2010 NVIDIA Corporation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -32,7 +32,7 @@
 #include "dix.h"
 #include "misync.h"
 #include "scrnintstr.h"
-#include "X11/extensions/syncconst.h"
+#include <X11/extensions/syncconst.h>
 
 /* Sync object types */
 #define SYNC_COUNTER		0

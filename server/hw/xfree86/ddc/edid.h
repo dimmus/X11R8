@@ -12,10 +12,10 @@
 #ifndef _EDID_H_
 #define _EDID_H_
 
-#include "X11/Xmd.h"
+#include <X11/Xmd.h>
 
 #ifndef _X_EXPORT
-#include "X11/Xfuncproto.h"
+#include <X11/Xfuncproto.h>
 #endif
 
 /* read complete EDID record */

@@ -21,7 +21,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * Copyright 2002 Keith Packard
+ * Copyright © 2002 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -76,9 +76,6 @@ int _X_COLD
 SProcXFixesSetClientDisconnectMode(ClientPtr client)
 {
     REQUEST(xXFixesSetClientDisconnectModeReq);
-
-    swaps(&stuff->length);
-
     REQUEST_AT_LEAST_SIZE(xXFixesSetClientDisconnectModeReq);
 
     swapl(&stuff->disconnect_mode);
@@ -113,9 +110,6 @@ int _X_COLD
 SProcXFixesGetClientDisconnectMode(ClientPtr client)
 {
     REQUEST(xXFixesGetClientDisconnectModeReq);
-
-    swaps(&stuff->length);
-
     REQUEST_SIZE_MATCH(xXFixesGetClientDisconnectModeReq);
 
     return (*ProcXFixesVector[stuff->xfixesReqType]) (client);

@@ -66,7 +66,7 @@
 #include <string.h>
 #include "xf86Optionstr.h"
 
-#include "X11/Xfuncproto.h"
+#include <X11/Xfuncproto.h>
 
 extern _X_EXPORT XF86OptionPtr xf86addNewOption(XF86OptionPtr head, char *name,
                                                 char *val);

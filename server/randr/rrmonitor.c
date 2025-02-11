@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Keith Packard
+ * Copyright © 2014 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -672,7 +672,7 @@ ProcRRSetMonitor(ClientPtr client)
 
     REQUEST_AT_LEAST_SIZE(xRRSetMonitorReq);
 
-    if (stuff->monitor.noutput != stuff->length - (SIZEOF(xRRSetMonitorReq) >> 2))
+    if (stuff->monitor.noutput != client->req_len - (sizeof(xRRSetMonitorReq) >> 2))
         return BadLength;
 
     r = dixLookupWindow(&window, stuff->window, client, DixGetAttrAccess);

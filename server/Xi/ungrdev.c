@@ -54,7 +54,7 @@ SOFTWARE.
 
 #include "inputstr.h"           /* DeviceIntPtr      */
 #include "windowstr.h"          /* window structure  */
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XIproto.h>
 #include "exglobals.h"
 
 #include "ungrdev.h"
@@ -69,7 +69,6 @@ int _X_COLD
 SProcXUngrabDevice(ClientPtr client)
 {
     REQUEST(xUngrabDeviceReq);
-    swaps(&stuff->length);
     REQUEST_SIZE_MATCH(xUngrabDeviceReq);
     swapl(&stuff->time);
     return (ProcXUngrabDevice(client));

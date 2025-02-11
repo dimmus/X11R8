@@ -26,7 +26,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
-#include "X11/Xfuncproto.h"
+#include <X11/Xfuncproto.h>
 
 #ifndef _X_RESTRICT_KYWD
 #if defined(restrict) /* assume autoconf set it correctly */ || \

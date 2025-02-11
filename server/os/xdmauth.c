@@ -36,11 +36,11 @@ from The Open Group.
 #include <dix-config.h>
 
 #include <stdio.h>
-#include "X11/X.h"
+#include <X11/X.h>
 #define XSERV_t
 #define TRANS_SERVER
 #define TRANS_REOPEN
-#include "X11/Xtrans/Xtrans.h"
+#include <X11/Xtrans/Xtrans.h>
 
 #include "os/auth.h"
 
@@ -55,9 +55,9 @@ from The Open Group.
 static Bool authFromXDMCP;
 
 #ifdef XDMCP
-#include "X11/Xmd.h"
+#include <X11/Xmd.h>
 #undef REQUEST
-#include "X11/Xdmcp.h"
+#include <X11/Xdmcp.h>
 
 /* XDM-AUTHENTICATION-1 */
 

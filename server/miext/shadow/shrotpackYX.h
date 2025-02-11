@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 Philip Blundell
+ * Copyright © 2004 Philip Blundell
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -20,7 +20,7 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include    "X11/X.h"
+#include    <X11/X.h>
 #include    "scrnintstr.h"
 #include    "windowstr.h"
 #include    "dixfontstr.h"

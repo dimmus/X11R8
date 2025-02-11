@@ -82,7 +82,7 @@
 #include <string.h>                          /* string functions */
 
 #if defined(WIN32) && !defined(__CYGWIN__)
-#include "X11/Xwinsock.h"
+#include <X11/Xwinsock.h>
 #endif
 
 #include "os/xserver_poll.h"

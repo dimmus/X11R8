@@ -1,6 +1,6 @@
 #include <dix-config.h>
 
-#include "X11/Xfuncproto.h"
+#include <X11/Xfuncproto.h>
 
 #define TRANS_REOPEN
 #define TRANS_SERVER

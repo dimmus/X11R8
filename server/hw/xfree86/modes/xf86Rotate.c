@@ -1,6 +1,6 @@
 /*
- * Copyright 2006 Keith Packard
- * Copyright 2011 Aaron Plattner
+ * Copyright © 2006 Keith Packard
+ * Copyright © 2011 Aaron Plattner
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -28,13 +28,13 @@
 #include <stddef.h>
 #include <string.h>
 #include <stdio.h>
-#include "X11/Xatom.h"
-#include "X11/extensions/render.h"
-#include "X11/extensions/dpmsconst.h"
+#include <X11/Xatom.h>
+#include <X11/extensions/render.h>
+#include <X11/extensions/dpmsconst.h>
 
 #include "dix/dix_priv.h"
+#include "mi/mi_priv.h"
 
-#include "mi.h"
 #include "xf86.h"
 #include "xf86DDC.h"
 #include "windowstr.h"

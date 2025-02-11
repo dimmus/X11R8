@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013 Geert Uytterhoeven
+ *  Copyright © 2013 Geert Uytterhoeven
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a
  *  copy of this software and associated documentation files (the "Software"),
@@ -20,19 +20,19 @@
  *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  *  DEALINGS IN THE SOFTWARE.
  *
- *  Based on shpacked.c, which is Copyright 2000 Keith Packard
+ *  Based on shpacked.c, which is Copyright © 2000 Keith Packard
  */
 
 #include <dix-config.h>
 
 #include <stdlib.h>
 
-#include    "X11/X.h"
+#include    <X11/X.h>
 #include    "scrnintstr.h"
 #include    "windowstr.h"
-#include    "X11/fonts/font.h"
+#include    <X11/fonts/font.h>
 #include    "dixfontstr.h"
-#include    "X11/fonts/fontstruct.h"
+#include    <X11/fonts/fontstruct.h>
 #include    "mi.h"
 #include    "regionstr.h"
 #include    "globals.h"

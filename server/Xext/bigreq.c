@@ -28,9 +28,9 @@ from The Open Group.
 
 #include <dix-config.h>
 
-#include "X11/X.h"
-#include "X11/Xproto.h"
-#include "X11/extensions/bigreqsproto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/extensions/bigreqsproto.h>
 
 #include "dix/dix_priv.h"
 
@@ -47,9 +47,6 @@ ProcBigReqDispatch(ClientPtr client)
     REQUEST(xBigReqEnableReq);
     xBigReqEnableReply rep;
 
-    if (client->swapped) {
-        swaps(&stuff->length);
-    }
     if (stuff->brReqType != X_BigReqEnable)
         return BadRequest;
     REQUEST_SIZE_MATCH(xBigReqEnableReq);

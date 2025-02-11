@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Intel Corporation
+ * Copyright © 2013 Intel Corporation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -24,7 +24,7 @@
 #ifndef GLAMOR_CONTEXT_H
 #define GLAMOR_CONTEXT_H
 
-#include "epoxy/egl.h"
+#include <epoxy/egl.h>
 
 /**
  * @file glamor_context.h

@@ -5,7 +5,7 @@
  *    - This code was inspired by Scout's C2P tutorial
  *    - It assumes to run on a big endian system
  *
- *  Copyright 2003-2008 Geert Uytterhoeven
+ *  Copyright © 2003-2008 Geert Uytterhoeven
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a
  *  copy of this software and associated documentation files (the "Software"),

@@ -48,18 +48,19 @@ SOFTWARE.
 
 #include <math.h>
 #include <pixman.h>
-#include "X11/X.h"
-#include "X11/Xproto.h"
-#include "X11/Xatom.h"
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XI2.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/Xatom.h>
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XI2.h>
+#include <X11/extensions/XIproto.h>
 
 #include "dix/dix_priv.h"
 #include "dix/dixgrabs_priv.h"
 #include "dix/exevents_priv.h"
 #include "dix/input_priv.h"
 #include "dix/ptrveloc_priv.h"
+#include "mi/mi_priv.h"
 #include "os/osdep.h"
 #include "xkb/xkbsrv_priv.h"
 
@@ -73,7 +74,6 @@ SOFTWARE.
 #include "ptrveloc.h"
 #include "privates.h"
 #include "xace.h"
-#include "mi.h"
 #include "dispatch.h"
 #include "swaprep.h"
 #include "dixevents.h"

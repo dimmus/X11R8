@@ -53,8 +53,8 @@ SOFTWARE.
 #include <dix-config.h>
 
 #include "inputstr.h"           /* DeviceIntPtr      */
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"     /* control constants */
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>     /* control constants */
 
 #include "exglobals.h"
 
@@ -73,7 +73,6 @@ int _X_COLD
 SProcXChangeFeedbackControl(ClientPtr client)
 {
     REQUEST(xChangeFeedbackControlReq);
-    swaps(&stuff->length);
     REQUEST_AT_LEAST_SIZE(xChangeFeedbackControlReq);
     swapl(&stuff->mask);
     return (ProcXChangeFeedbackControl(client));
@@ -436,7 +435,7 @@ ProcXChangeFeedbackControl(ClientPtr client)
     REQUEST(xChangeFeedbackControlReq);
     REQUEST_AT_LEAST_SIZE(xChangeFeedbackControlReq);
 
-    len = stuff->length - bytes_to_int32(sizeof(xChangeFeedbackControlReq));
+    len = client->req_len - bytes_to_int32(sizeof(xChangeFeedbackControlReq));
     rc = dixLookupDevice(&dev, stuff->deviceid, client, DixManageAccess);
     if (rc != Success)
         return rc;

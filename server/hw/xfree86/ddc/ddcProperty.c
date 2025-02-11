@@ -28,7 +28,7 @@
 #include "xf86.h"
 #include "xf86DDC.h"
 #include "xf86Priv.h"
-#include "X11/Xatom.h"
+#include <X11/Xatom.h>
 #include "property.h"
 #include "propertyst.h"
 #include <string.h>

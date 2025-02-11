@@ -30,8 +30,8 @@
 
 #include <dix-config.h>
 
-#include "X11/extensions/XI2.h"
-#include "X11/extensions/XI2proto.h"
+#include <X11/extensions/XI2.h>
+#include <X11/extensions/XI2proto.h>
 
 #include "dix/dix_priv.h"
 
@@ -46,7 +46,6 @@ SProcXISetFocus(ClientPtr client)
     REQUEST(xXISetFocusReq);
     REQUEST_AT_LEAST_SIZE(xXISetFocusReq);
 
-    swaps(&stuff->length);
     swaps(&stuff->deviceid);
     swapl(&stuff->focus);
     swapl(&stuff->time);
@@ -60,7 +59,6 @@ SProcXIGetFocus(ClientPtr client)
     REQUEST(xXIGetFocusReq);
     REQUEST_AT_LEAST_SIZE(xXIGetFocusReq);
 
-    swaps(&stuff->length);
     swaps(&stuff->deviceid);
 
     return ProcXIGetFocus(client);

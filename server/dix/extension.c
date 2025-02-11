@@ -46,8 +46,8 @@ SOFTWARE.
 
 #include <dix-config.h>
 
-#include "X11/X.h"
-#include "X11/Xproto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
 
 #include "dix/registry_priv.h"
 

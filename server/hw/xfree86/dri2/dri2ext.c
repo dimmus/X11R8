@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 Red Hat, Inc.
+ * Copyright © 2008 Red Hat, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Soft-
@@ -34,10 +34,10 @@
 #include <xorg-config.h>
 #endif
 
-#include "X11/X.h"
-#include "X11/Xproto.h"
-#include "X11/extensions/dri2proto.h"
-#include "X11/extensions/xfixeswire.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/extensions/dri2proto.h>
+#include <X11/extensions/xfixeswire.h>
 
 #include "dix/dix_priv.h"
 
@@ -46,7 +46,7 @@
 #include "pixmapstr.h"
 #include "extnsionst.h"
 #include "xfixes.h"
-#include "dri2.h"
+#include "dri2_priv.h"
 #include "dri2int.h"
 #include "protocol-versions.h"
 
@@ -75,7 +75,6 @@ validDrawable(ClientPtr client, XID drawable, Mask access_mode,
 static int
 ProcDRI2QueryVersion(ClientPtr client)
 {
-    REQUEST(xDRI2QueryVersionReq);
     xDRI2QueryVersionReply rep = {
         .type = X_Reply,
         .sequenceNumber = client->sequence,
@@ -83,9 +82,6 @@ ProcDRI2QueryVersion(ClientPtr client)
         .majorVersion = dri2_major,
         .minorVersion = dri2_minor
     };
-
-    if (client->swapped)
-        swaps(&stuff->length);
 
     REQUEST_SIZE_MATCH(xDRI2QueryVersionReq);
 
@@ -651,7 +647,6 @@ SProcDRI2Connect(ClientPtr client)
 
     /* If the client is swapped, it's not local.  Talk to the hand. */
 
-    swaps(&stuff->length);
     if (sizeof(*stuff) / 4 != client->req_len)
         return BadLength;
 
@@ -686,10 +681,10 @@ DRI2ExtensionInit(void)
 {
     ExtensionEntry *dri2Extension;
 
-#ifdef PANORAMIX
+#ifdef XINERAMA
     if (!noPanoramiXExtension)
         return;
-#endif
+#endif /* XINERAMA */
 
     dri2Extension = AddExtension(DRI2_NAME,
                                  DRI2NumberEvents,

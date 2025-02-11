@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: MIT OR X11
  *
- + Copyright 1987, 1998  The Open Group
- * Copyright 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+ + Copyright © 1987, 1998  The Open Group
+ * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
 /************************************************************
 
@@ -53,8 +53,8 @@ SOFTWARE.
 
 #include "input.h"
 
-typedef struct _InputOption InputOptionNew;
-typedef struct _XI2Mask XI2MaskNew;
+typedef struct _InputOption InputOption;
+typedef struct _XI2Mask XI2Mask;
 
 void InitCoreDevices(void);
 void InitXTestDevices(void);

@@ -30,26 +30,28 @@
 #endif
 
 #include <math.h>
-#include "X11/X.h"
-#include "X11/Xproto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
 
 #include "misc.h"
 
 #include "dix/colormap_priv.h"
+#include "mi/mi_priv.h"
+
+#include "misc.h"
 #include "colormapst.h"
 #include "scrnintstr.h"
-
 #include "resource.h"
 
 #include "xf86.h"
 #include "xf86_OSproc.h"
 #include "xf86str.h"
 #include "micmap.h"
-#include "xf86RandR12.h"
+#include "xf86RandR12_priv.h"
 #include "xf86Crtc.h"
 
 #ifdef XFreeXDGA
-#include "X11/extensions/xf86dgaproto.h"
+#include <X11/extensions/xf86dgaproto.h>
 #include "dgaproc.h"
 #include "dgaproc_priv.h"
 #endif

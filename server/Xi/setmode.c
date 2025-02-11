@@ -52,8 +52,8 @@ SOFTWARE.
 
 #include <dix-config.h>
 
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
 
 #include "dix/input_priv.h"
 
@@ -61,20 +61,6 @@ SOFTWARE.
 #include "XIstubs.h"
 #include "exglobals.h"
 #include "setmode.h"
-
-/***********************************************************************
- *
- * Handle a request from a client with a different byte order.
- *
- */
-
-int _X_COLD
-SProcXSetDeviceMode(ClientPtr client)
-{
-    REQUEST(xSetDeviceModeReq);
-    swaps(&stuff->length);
-    return (ProcXSetDeviceMode(client));
-}
 
 /***********************************************************************
  *

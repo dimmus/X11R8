@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Intel Corporation
+ * Copyright © 2011 Intel Corporation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -114,7 +114,7 @@ __glXDisp_CreateContextAttribsARB(__GLXclientState * cl, GLbyte * pc)
     /* Verify that the size of the packet matches the size inferred from the
      * sizes specified for the various fields.
      */
-    const unsigned expected_size = (sz_xGLXCreateContextAttribsARBReq
+    const unsigned expected_size = (sizeof(xGLXCreateContextAttribsARBReq)
                                     + (req->numAttribs * 8)) / 4;
 
     if (req->length != expected_size)

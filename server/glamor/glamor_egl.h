@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Red Hat, Inc.
+ * Copyright © 2016 Red Hat, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -29,9 +29,9 @@
 
 #define MESA_EGL_NO_X11_HEADERS
 #define EGL_NO_X11
-#include "epoxy/gl.h"
-#include "epoxy/egl.h"
-#include "glamor_egl_ext.h"
+#include <epoxy/gl.h>
+#include <epoxy/egl.h>
+#include <glamor_egl_ext.h>
 
 /*
  * Create an EGLDisplay from a native display type. This is a little quirky

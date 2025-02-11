@@ -3,7 +3,7 @@
 #include <xorg-config.h>
 #endif
 
-#include "X11/X.h"
+#include <X11/X.h>
 
 #include "input.h"
 #include "scrnintstr.h"

@@ -1,5 +1,5 @@
 /*
- * Copyright 1999 Keith Packard
+ * Copyright © 1999 Keith Packard
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -25,9 +25,9 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "X11/X.h"
-#include "X11/Xproto.h"
-#include "X11/Xos.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/Xos.h>
 #include "scrnintstr.h"
 #include "pixmapstr.h"
 #include "windowstr.h"

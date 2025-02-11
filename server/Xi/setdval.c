@@ -52,8 +52,8 @@ SOFTWARE.
 
 #include <dix-config.h>
 
-#include "X11/extensions/XI.h"
-#include "X11/extensions/XIproto.h"
+#include <X11/extensions/XI.h>
+#include <X11/extensions/XIproto.h>
 
 #include "dix/input_priv.h"
 
@@ -61,20 +61,6 @@ SOFTWARE.
 #include "XIstubs.h"
 #include "exglobals.h"
 #include "setdval.h"
-
-/***********************************************************************
- *
- * Handle a request from a client with a different byte order.
- *
- */
-
-int _X_COLD
-SProcXSetDeviceValuators(ClientPtr client)
-{
-    REQUEST(xSetDeviceValuatorsReq);
-    swaps(&stuff->length);
-    return (ProcXSetDeviceValuators(client));
-}
 
 /***********************************************************************
  *
@@ -100,7 +86,7 @@ ProcXSetDeviceValuators(ClientPtr client)
         .status = Success
     };
 
-    if (stuff->length != bytes_to_int32(sizeof(xSetDeviceValuatorsReq)) +
+    if (client->req_len != bytes_to_int32(sizeof(xSetDeviceValuatorsReq)) +
         stuff->num_valuators)
         return BadLength;
 

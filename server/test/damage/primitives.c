@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Broadcom
+ * Copyright © 2018 Broadcom
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -40,7 +40,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
-#include "xcb/damage.h"
+#include <xcb/damage.h>
 
 struct test_setup {
     xcb_connection_t *c;

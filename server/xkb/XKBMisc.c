@@ -27,11 +27,14 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include <dix-config.h>
 
 #include <stdio.h>
-#include "X11/X.h"
-#include "X11/Xproto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
+#include <X11/keysym.h>
+
+#include "xkb/xkbfmisc_priv.h"
+
 #include "misc.h"
 #include "inputstr.h"
-#include "X11/keysym.h"
 #include <xkbsrv.h>
 
 /***====================================================================***/

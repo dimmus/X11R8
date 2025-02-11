@@ -28,7 +28,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <unistd.h>
-#include "X11/X.h"
+#include <X11/X.h>
 #include "os.h"
 #include "xf86.h"
 #include "xf86Priv.h"
@@ -224,7 +224,7 @@ xf86SbusProbe(void)
                 break;
             }
 
-            xf86Msg(X_PROBED, "SBUS:(0x%08x) %s", psdp->node.node, psdp->descr);
+            LogMessageVerb(X_PROBED, 1, "SBUS:(0x%08x) %s", psdp->node.node, psdp->descr);
             promPath = sparcPromNode2Pathname(&psdp->node);
             if (promPath) {
                 xf86ErrorF(" at %s", promPath);
@@ -232,7 +232,7 @@ xf86SbusProbe(void)
             }
         }
         else
-            xf86Msg(X_PROBED, "SBUS: %s", psdp->descr);
+            LogMessageVerb(X_PROBED, 1, "SBUS: %s", psdp->descr);
         xf86ErrorF("\n");
     }
     if (useProm)
@@ -244,7 +244,7 @@ xf86SbusProbe(void)
  * in the correct format for a SBUS bus id.
  */
 
-Bool
+static Bool
 xf86ParseSbusBusString(const char *busID, int *fbNum)
 {
     /*
@@ -316,7 +316,7 @@ xf86ParseSbusBusString(const char *busID, int *fbNum)
  * Compare a BUS ID string with a SBUS bus id.  Return TRUE if they match.
  */
 
-Bool
+static Bool
 xf86CompareSbusBusString(const char *busID, int fbNum)
 {
     int iFbNum;
@@ -333,7 +333,7 @@ xf86CompareSbusBusString(const char *busID, int fbNum)
  * Check if the slot requested is free.  If it is already in use, return FALSE.
  */
 
-Bool
+static Bool
 xf86CheckSbusSlot(int fbNum)
 {
     int i;
@@ -354,7 +354,7 @@ xf86CheckSbusSlot(int fbNum)
  * Otherwise, claim the slot for the screen requesting it.
  */
 
-int
+static int
 xf86ClaimSbusSlot(sbusDevicePtr psdp, DriverPtr drvp, GDevPtr dev, Bool active)
 {
     EntityPtr p = NULL;
@@ -464,11 +464,11 @@ xf86MatchSbusInstances(const char *driverName, int sbusDevId,
             if (devList[j]->busID && *devList[j]->busID) {
                 if (xf86CompareSbusBusString(devList[j]->busID, psdp->fbNum)) {
                     if (devBus)
-                        xf86MsgVerb(X_WARNING, 0,
-                                    "%s: More than one matching Device section for "
-                                    "instance (BusID: %s) found: %s\n",
-                                    driverName, devList[j]->identifier,
-                                    devList[j]->busID);
+                        LogMessageVerb(X_WARNING, 0,
+                                      "%s: More than one matching Device section for "
+                                      "instance (BusID: %s) found: %s\n",
+                                      driverName, devList[j]->identifier,
+                                      devList[j]->busID);
                     else
                         devBus = devList[j];
                 }
@@ -476,34 +476,34 @@ xf86MatchSbusInstances(const char *driverName, int sbusDevId,
             else {
                 if (!dev && !devBus) {
                     if (promPath)
-                        xf86Msg(X_PROBED,
-                                "Assigning device section with no busID to SBUS:%s\n",
-                                promPath);
+                        LogMessageVerb(X_PROBED, 1,
+                                       "Assigning device section with no busID to SBUS:%s\n",
+                                       promPath);
                     else
-                        xf86Msg(X_PROBED,
-                                "Assigning device section with no busID to SBUS:fb%d\n",
-                                psdp->fbNum);
+                        LogMessageVerb(X_PROBED, 1,
+                                       "Assigning device section with no busID to SBUS:fb%d\n",
+                                       psdp->fbNum);
                     dev = devList[j];
                 }
                 else
-                    xf86MsgVerb(X_WARNING, 0,
-                                "%s: More than one matching Device section "
-                                "found: %s\n", driverName,
-                                devList[j]->identifier);
+                    LogMessageVerb(X_WARNING, 0,
+                                  "%s: More than one matching Device section "
+                                  "found: %s\n", driverName,
+                                  devList[j]->identifier);
             }
         }
         if (devBus)
             dev = devBus;       /* busID preferred */
         if (!dev && psdp->fd != -2) {
             if (promPath) {
-                xf86MsgVerb(X_WARNING, 0, "%s: No matching Device section "
-                            "for instance (BusID SBUS:%s) found\n",
-                            driverName, promPath);
+                LogMessageVerb(X_WARNING, 0, "%s: No matching Device section "
+                              "for instance (BusID SBUS:%s) found\n",
+                              driverName, promPath);
             }
             else
-                xf86MsgVerb(X_WARNING, 0, "%s: No matching Device section "
-                            "for instance (BusID SBUS:fb%d) found\n",
-                            driverName, psdp->fbNum);
+                LogMessageVerb(X_WARNING, 0, "%s: No matching Device section "
+                              "for instance (BusID SBUS:fb%d) found\n",
+                              driverName, psdp->fbNum);
         }
         else if (dev) {
             numClaimedInstances++;
@@ -740,6 +740,7 @@ void
 xf86SbusConfigureNewDev(void *busData, sbusDevicePtr sBus, GDevRec * GDev)
 {
     char *promPath = NULL;
+    char *tmp;
 
     sBus = (sbusDevicePtr) busData;
     GDev->identifier = sBus->descr;
@@ -748,10 +749,11 @@ xf86SbusConfigureNewDev(void *busData, sbusDevicePtr sBus, GDevRec * GDev)
         sparcPromClose();
     }
     if (promPath) {
-        XNFasprintf(&GDev->busID, "SBUS:%s", promPath);
+        XNFasprintf(&tmp, "SBUS:%s", promPath);
         free(promPath);
     }
     else {
-        XNFasprintf(&GDev->busID, "SBUS:fb%d", sBus->fbNum);
+        XNFasprintf(&tmp, "SBUS:fb%d", sBus->fbNum);
     }
+    GDev->busID = tmp;
 }

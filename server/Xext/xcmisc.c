@@ -28,14 +28,14 @@ from The Open Group.
 
 #include <dix-config.h>
 
-#include "X11/X.h"
-#include "X11/Xproto.h"
+#include <X11/X.h>
+#include <X11/Xproto.h>
 #include "misc.h"
 #include "os.h"
 #include "dixstruct.h"
 #include "extnsionst.h"
 #include "swaprep.h"
-#include "X11/extensions/xcmiscproto.h"
+#include <X11/extensions/xcmiscproto.h>
 #include "extinit_priv.h"
 
 #include <stdint.h>
@@ -144,21 +144,10 @@ static int _X_COLD
 SProcXCMiscGetVersion(ClientPtr client)
 {
     REQUEST(xXCMiscGetVersionReq);
-
-    swaps(&stuff->length);
     REQUEST_SIZE_MATCH(xXCMiscGetVersionReq);
     swaps(&stuff->majorVersion);
     swaps(&stuff->minorVersion);
     return ProcXCMiscGetVersion(client);
-}
-
-static int _X_COLD
-SProcXCMiscGetXIDRange(ClientPtr client)
-{
-    REQUEST(xReq);
-
-    swaps(&stuff->length);
-    return ProcXCMiscGetXIDRange(client);
 }
 
 static int _X_COLD
@@ -167,7 +156,6 @@ SProcXCMiscGetXIDList(ClientPtr client)
     REQUEST(xXCMiscGetXIDListReq);
     REQUEST_SIZE_MATCH(xXCMiscGetXIDListReq);
 
-    swaps(&stuff->length);
     swapl(&stuff->count);
     return ProcXCMiscGetXIDList(client);
 }
@@ -180,7 +168,7 @@ SProcXCMiscDispatch(ClientPtr client)
     case X_XCMiscGetVersion:
         return SProcXCMiscGetVersion(client);
     case X_XCMiscGetXIDRange:
-        return SProcXCMiscGetXIDRange(client);
+        return ProcXCMiscGetXIDRange(client);
     case X_XCMiscGetXIDList:
         return SProcXCMiscGetXIDList(client);
     default:
