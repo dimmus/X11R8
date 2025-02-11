@@ -424,7 +424,7 @@ VESAValidMode(SCRN_ARG_TYPE arg, DisplayModePtr p, Bool flag, int pass)
     {
         mode = xf86GTFMode(p->HDisplay, p->VDisplay, v, 0, 0);
         ret  = xf86CheckModeForMonitor(mode, mon);
-        free(mode->name);
+        free((char *)mode->name);
         free(mode);
         if (ret == MODE_OK) break;
     }
