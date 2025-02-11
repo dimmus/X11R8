@@ -1,34 +1,46 @@
-headers = [ 'common.h' ]
+# headers = [ 'common.h' ]
 
-generated_headers  = [ 
-  [ 'gl.h',  'gl_generated.h',  gl_registry  ],
-  [ 'egl.h', 'egl_generated.h', egl_registry ],
-  [ 'glx.h', 'glx_generated.h', glx_registry ]
-]
+# generated_headers  = [ 
+#   [ 'gl.h',  'gl_generated.h',  gl_registry  ],
+#   [ 'egl.h', 'egl_generated.h', egl_registry ],
+#   [ 'glx.h', 'glx_generated.h', glx_registry ]
+# ]
 
-gen_headers = []
+# gen_headers = []
 
-foreach g: generated_headers
-  header = g[0]
-  gen_header = g[1]
-  registry = g[2]
-  generated = custom_target(gen_header,
-                            input: registry,
-                            output: [ gen_header ],
-                            command: [
-                              gen_dispatch_py,
-                              '--header',
-                              '--no-source',
-                              '--outputdir=@OUTDIR@',
-                              '@INPUT@',
-                            ],
-                            install: true,
-                            install_dir: dir_include / 'epoxy')
+# foreach g: generated_headers
+#   header = g[0]
+#   gen_header = g[1]
+#   registry = g[2]
+#   generated = custom_target(gen_header,
+#                             input: registry,
+#                             output: [ gen_header ],
+#                             command: [
+#                               gen_dispatch_py,
+#                               '--header',
+#                               '--no-source',
+#                               '--outputdir=@OUTDIR@',
+#                               '@INPUT@',
+#                             ],
+#                             install: true,
+#                             install_dir: dir_include / 'epoxy')
 
-  gen_headers += [ generated ]
-  headers += [ header ]
-endforeach
+#   gen_headers += [ generated ]
+#   headers += [ header ]
+# endforeach
 
-epoxy_headers += files(headers) + gen_headers
+# epoxy_headers += files(headers) + gen_headers
+
+# XXX: regenerate *_generated.h files if have changes in registry/*.xml files
+# XXX: hardcoded in general
+epoxy_headers += files(
+  'common.h',
+  'egl.h',
+  'egl_generated.h',
+  'gl.h',
+  'gl_generated.h',
+  'glx.h',
+  'glx_generated.h',
+)
 
 install_headers(headers, subdir: 'epoxy')

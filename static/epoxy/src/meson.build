@@ -7,34 +7,44 @@ configure_file(output: 'config_epoxy.h', configuration: conf_epoxy)
 #   - name of the generated file
 #   - registry source file
 #   - additional sources
-generated_sources  = [ [ 'gl_generated_dispatch.c',  gl_registry,  ['dispatch_common.c', 'dispatch_common.h'] ] ]
-generated_sources += [ [ 'egl_generated_dispatch.c', egl_registry, 'dispatch_egl.c' ] ]
-generated_sources += [ [ 'glx_generated_dispatch.c', glx_registry, 'dispatch_glx.c' ] ]
+# generated_sources  = [ [ 'gl_generated_dispatch.c',  gl_registry,  ['dispatch_common.c', 'dispatch_common.h'] ] ]
+# generated_sources += [ [ 'egl_generated_dispatch.c', egl_registry, 'dispatch_egl.c' ] ]
+# generated_sources += [ [ 'glx_generated_dispatch.c', glx_registry, 'dispatch_glx.c' ] ]
 
-gen_sources = []
-sources = []
+# gen_sources = []
+# sources = []
 
-foreach g: generated_sources
-  gen_source = g[0]
-  registry = g[1]
-  source = g[2]
+# foreach g: generated_sources
+#   gen_source = g[0]
+#   registry = g[1]
+#   source = g[2]
 
-  generated = custom_target(gen_source,
-                            input: registry,
-                            output: [ gen_source ],
-                            command: [
-                              gen_dispatch_py,
-                              '--source',
-                              '--no-header',
-                              '--outputdir=@OUTDIR@',
-                              '@INPUT@',
-                            ])
+#   generated = custom_target(gen_source,
+#                             input: registry,
+#                             output: [ gen_source ],
+#                             command: [
+#                               gen_dispatch_py,
+#                               '--source',
+#                               '--no-header',
+#                               '--outputdir=@OUTDIR@',
+#                               '@INPUT@',
+#                             ])
 
-  gen_sources += [ generated ]
-  sources += [ source ]
-endforeach
+#   gen_sources += [ generated ]
+#   sources += [ source ]
+# endforeach
 
-epoxy_sources = sources + gen_sources
+# epoxy_sources = sources + gen_sources
+
+# XXX: hardcoded here generated above files
+epoxy_sources = files(
+  'dispatch_common.c',
+  'dispatch_egl.c',
+  'dispatch_glx.c',
+  'gl_generated_dispatch.c',
+  'egl_generated_dispatch.c',
+  'glx_generated_dispatch.c',
+)
 
 common_ldflags = []
 if host_machine.system() == 'linux' and cc.get_id() == 'gcc'
