@@ -1,5 +1,6 @@
 if WITH_APP
 subdir('xinit')
+subdir('xauth')
 subdir('twm')
 subdir('xclock')
 subdir('xterm')
