@@ -209,6 +209,7 @@ subdir('server')
 subdir('driver')
 subdir('app')
 subdir('demo')
+subdir('data')
 
 f_unique = []
 foreach f: f_check
