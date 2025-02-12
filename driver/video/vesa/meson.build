@@ -15,6 +15,7 @@ shared_module('vesa_drv',
 	name_prefix: '',
 	include_directories: [include_directories('.'), inc_server, inc_lib],
 	dependencies: dep_int_vesa,
+	link_with: libxserver_miext_shadow,
 	install: true,
 	install_dir: dir_xorg_module / 'drivers',
 )
