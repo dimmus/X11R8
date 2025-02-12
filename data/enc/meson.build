@@ -33,5 +33,5 @@ install_data(
     'tis620-2.enc.gz',
     'viscii1.1-1.enc.gz',
     'encodings.dir',
-    install_dir: dir_data / 'fonts' / 'encodings'
+    install_dir: dir_data / 'fonts' / 'X11' / 'encodings'
 )

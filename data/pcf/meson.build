@@ -17,5 +17,5 @@ install_data(
     'fonts.alias',
     'fonts.dir',
     'fonts.scale',
-    install_dir: dir_data / 'fonts' / 'misc'
+    install_dir: dir_data / 'fonts' / 'X11' / 'misc'
 )
