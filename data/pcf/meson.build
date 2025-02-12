@@ -1,0 +1,21 @@
+install_data(
+    '5x7.pcf.gz',
+    '5x8.pcf.gz',
+    '6x10.pcf.gz',
+    '6x12.pcf.gz',
+    '6x13.pcf.gz',
+    '6x9.pcf.gz',
+    '7x13.pcf.gz',
+    '7x14.pcf.gz',
+    '8x13.pcf.gz',
+    '8x16.pcf.gz',
+    '9x15.pcf.gz',
+    '9x18.pcf.gz',
+    '10x20.pcf.gz',
+    '12x24.pcf.gz',
+    'cursor.pcf.gz',
+    'fonts.alias',
+    'fonts.dir',
+    'fonts.scale',
+    install_dir: dir_data / 'fonts' / 'misc'
+)
