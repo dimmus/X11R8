@@ -136,15 +136,14 @@ executable('gtf',
     install: true,
 )
 
-# For symbol presence testing only
-xorgserver_lib = shared_library('xorgserver',
+lib = library('xorgserver',
     srcs_xorg,
     include_directories: inc_server,
     link_whole: xorg_link,
     dependencies: dep_xorg,
     link_args: linker_export_flags,
     c_args: xorg_c_args,
-    install: false,
+    install: true,
 )
 
-dep_xorgserver = declare_dependency(link_with: xorgserver_lib)
+libxserver = declare_dependency(link_with: lib)

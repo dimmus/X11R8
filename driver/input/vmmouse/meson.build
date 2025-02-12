@@ -24,7 +24,7 @@ lib_args = [
     '-DNO_MOUSE_MODULE', # Do not include built-in mouse module fallback
 ]
 
-dep_int_vmmouse = [xproto, libx11, libxrandr, xserver, dep_xorgserver]
+dep_int_vmmouse = [xproto, libx11, libxrandr, xserver, libxserver]
 dep_ext_vmmouse = dep_udev
 
 inc_vmmouse = [
