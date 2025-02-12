@@ -27,7 +27,7 @@
 
  ********************************************************/
 
-// #include "XKBui.h"
+#include "X11/extensions/XKBui.h"
 #include "X11/Xlib.h"
 #include "X11/extensions/XKB.h"
 #include "X11/extensions/XKBgeom.h"

@@ -988,7 +988,8 @@ WriteCHdrGeomSections(FILE *file, XkbDescPtr xkb, XkbGeometryPtr geom)
         fprintf(file, "	    %4d, /* sz_overlays */\n", section->num_overlays);
         if (section->num_rows > 0) fprintf(file, "	    rows_s%02d,\n", s);
         else fprintf(file, "	    NULL, /* rows */\n");
-        if (section->num_doodads > 0) fprintf(file, "	    doodads_s%02d,\n", s);
+        if (section->num_doodads > 0)
+            fprintf(file, "	    doodads_s%02d,\n", s);
         else fprintf(file, "	    NULL, /* doodads */\n");
         fprintf(file,
                 "	    { %4d, %4d, %4d, %4d }, /* bounds */\n",

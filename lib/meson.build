@@ -18,10 +18,11 @@ subdir('src' / 'xaw')     # <- ext/xext
 subdir('src' / 'xaw3dxft')
 subdir('ext' / 'xrandr')
 subdir('ext' / 'xdamage')
+subdir('ext' / 'xevie')
 subdir('ext' / 'xcomposite')
 subdir('ext' / 'xinerama')
 subdir('ext' / 'xkbfile')
-# subdir('ext' / 'xkbui') # TODO: needs to find "XKBui.h"
+subdir('ext' / 'xkbui')
 subdir('ext' / 'xss')
 subdir('ext' / 'xi')
 subdir('ext' / 'xres')
@@ -30,8 +31,10 @@ subdir('ext' / 'xv')
 subdir('ext' / 'xvmc')
 subdir('ext' / 'xf86dga')
 subdir('ext' / 'xf86vm')
+subdir('ext' / 'xf86misc')
 subdir('ext' / 'dmx')
 subdir('ext' / 'xtrap')
+subdir('ext' / 'xp')
 if WITH_TESTS
 subdir('test')
 endif

@@ -179,16 +179,16 @@ XRenderComputeTrapezoids(Edge       *edges,
             if (en && e->edge.p2.x > en->edge.p2.x)
             {
                 intersect = XRenderComputeIntersect(&e->edge, &e->next->edge);
-        /* make sure this point is below the actual intersection */
+                /* make sure this point is below the actual intersection */
                 intersect = intersect + 1;
                 if (intersect < next_y && intersect > y) next_y = intersect;
             }
         }
-    /* check next inactive point */
+        /* check next inactive point */
         if (inactive < nedges && edges[inactive].edge.p1.y < next_y)
             next_y = edges[inactive].edge.p1.y;
 
-    /* walk the list generating trapezoids */
+        /* walk the list generating trapezoids */
         for (e = active; e && (en = e->next); e = en->next)
         {
             traps->top    = y;
@@ -206,7 +206,7 @@ XRenderComputeTrapezoids(Edge       *edges,
 
         y = next_y;
 
-    /* delete inactive edges from list */
+        /* delete inactive edges from list */
         for (e = active; e; e = next)
         {
             next = e->next;
@@ -282,7 +282,7 @@ XRenderCompositeDoublePoly(Display                   *dpy,
                 edges[nedges].clockWise = False;
                 nedges++;
             }
-        /* drop horizontal edges */
+            /* drop horizontal edges */
         }
         else
         {
@@ -301,7 +301,7 @@ XRenderCompositeDoublePoly(Display                   *dpy,
                                  &ntraps,
                                  npoints * npoints))
     {
-       /* XXX adjust xSrc/xDst */
+        /* XXX adjust xSrc/xDst */
         XRenderCompositeTrapezoids(dpy,
                                    op,
                                    src,

@@ -80,6 +80,8 @@ xcvt:
 xdamage:
     Copyright 2001, 2003 Keith Packard
     Copyright 2007 Eric Anholt
+xevie:
+    Copyright 2003-2005 Sun Microsystems, Inc
 xdmcp:
     Copyright 1989, 1998  The Open Group
     Author: Keith Packard, MIT X Consortium
@@ -100,18 +102,20 @@ xext:
     Copyright 1994, 1995 X Consortium, Inc. and Hewlett-Packard Company
     Copyright 2008 Otto Moerbeek
 xf86dga:
-    Copyright 1995  Jon Tombs
-    Copyright 1995, 1996  The XFree86 Project, Inc
+    Copyright 1995 Jon Tombs
+    Copyright 1995,1996  The XFree86 Project, Inc
 xf86vm:
-    Copyright 1995  Kaleb S. KEITHLEY
+    Copyright 1995 Kaleb S. KEITHLEY
+xf86misc:
+    Copyright 1995-1996 The XFree86 Project, Inc
 xfixes:
-    Copyright 2001, 2003 Keith Packard
-    Copyright 2006, Oracle and/or its affiliates
+    Copyright 2001,03 Keith Packard
+    Copyright 2006 Oracle and/or its affiliates
 xfs:
-    Copyright 1987, 1990, 1991, 1998  The Open Group
-    Copyright 1990, 1991 Network Computing Devices
+    Copyright 1987,90,91,98 The Open Group
+    Copyright 1990-1991 Network Computing Devices
     Portions Copyright 1987 by Digital Equipment Corporation
-    Copyright 1987, 1988  X Consortium
+    Copyright 1987-1988 X Consortium
     Copyright 1999 The XFree86 Project, Inc
     Copyright 1998 by Thomas E. Dickey
     Copyright 2003 Keith Packard
@@ -136,11 +140,11 @@ xkbfile:
 xlsfonts:
     Copyright 1989, 1993, 1998  The Open Group
 xmodmap:
-    Copyright 1987, 2010 Oracle and/or its affiliates
-    Copyright 1988, 1989, 1990, 1998  The Open Group
+    Copyright 1987,10 Oracle and/or its affiliates
+    Copyright 1988,89,90,98  The Open Group
 xmu:
     Copyright 1988-1991, 1994, 1998  The Open Group
-    Copyright 1987, 1988 by Digital Equipment Corporation, Maynard, Massachusetts
+    Copyright 1987,88 by Digital Equipment Corporation, Maynard, Massachusetts
     Copyright 1998 by The XFree86 Project, Inc
     Copyright 1999 by Thomas E. Dickey
     Copyright 2008 Otto Moerbeek
@@ -149,6 +153,8 @@ xpm:
     Copyright 1996 Lorens Younes
     Copyright 1998 Arnaud LE HORS
     Copyright 2023 Oracle and/or its affiliates
+xp:
+    Copyright 2001,03 Keith Packard
 xrandr:
     Copyright 2000 Compaq Computer Corporation, Inc
     Copyright 2002 Hewlett-Packard Company, Inc
@@ -158,7 +164,7 @@ xrandr:
     Copyright 2011 Dave Airlie
 xrdb:
     Copyright 1991 Digital Equipment Corporation
-    Copyright 1991, 1994, 1998 The Open Group
+    Copyright 1991,94,98 The Open Group
 xrender:
     Copyright 2001, 2003 Keith Packard
     Copyright 2000 SuSE, Inc
@@ -169,26 +175,28 @@ xshmfence:
 xss:
     Copyright 1992 X Consortium
     Copyright 2003 The XFree86 Project, Inc
+xtrap:
+    Copyright 2001,03 Keith Packard
 xt:
-    Copyright 2003, 2019, 2022 Thomas E. Dickey
-    Copyright 2001, 2003 Keith Packard
-    Copyright 1993, 2023, Oracle and/or its affiliates
-    Copyright 1987, 1988 by Digital Equipment Corporation, Maynard, Massachusetts
-    Copyright 1987, 1988, 1998  The Open Group
-    Copyright 1993, 1994  X Consortium
+    Copyright 2003,19,22 Thomas E. Dickey
+    Copyright 2001,03 Keith Packard
+    Copyright 1993,23 Oracle and/or its affiliates
+    Copyright 1987,88 by Digital Equipment Corporation, Maynard, Massachusetts
+    Copyright 1987,88,98 The Open Group
+    Copyright 1993,94 X Consortium
 xtrans:
-    Copyright 1993, 1994, 1998, 2002 The Open Group
-    Copyright 1993, 1994 NCR Corporation - Dayton, Ohio, USA
-    Copyright 2002, 2005, Oracle and/or its affiliates
+    Copyright 1993,94,98,02 The Open Group
+    Copyright 1993,94 NCR Corporation - Dayton, Ohio, USA
+    Copyright 2002,05 Oracle and/or its affiliates
     Copyright 1996 by Sebastien Marineau and Holger Veit
     Copyright 2003 Keith Packard, Noah Levitt
 xtst:
     Copyright 1990, 1991 by UniSoft Group Limited
     Copyright 1992, 1993, 1995, 1998  The Open Group
     Copyright 1995 Network Computing Devices
-    Copyright 2005  Red Hat, Inc
+    Copyright 2005 Red Hat, Inc
     Copyright 1992 by UniSoft Group Ltd
-    Copyright 1992, 1994, 1995 X Consortium
+    Copyright 1992,1994,1995 X Consortium
     Copyright 1994 Network Computing Devices, Inc
 xv:
     Copyright 1991 by Digital Equipment Corporation, Maynard, Massachusetts,

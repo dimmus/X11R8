@@ -16,7 +16,7 @@ libdmx = declare_dependency(
 meson.override_dependency('dmx', libdmx)
 
 pkg.generate(lib,
-  description: 'The dmx Library',
+  description: 'The DMX Library',
   version: ver_dmx,
   filebase: 'dmx',
   requires: 'xproto',

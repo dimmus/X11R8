@@ -1,10 +1,9 @@
-ver_xkbui = '0.0.1'
-
-dep_int_xkbui = [xproto, libx11, libxkb]
+dep_int_xkbui = [xproto, libx11, libxkb, libxkbfile]
+dep_ext_xkbui = dep_m
 
 lib = library('xkbui', 'XKBui.c',
   include_directories: inc_lib,
-  dependencies: dep_int_xkbui,
+  dependencies: [dep_int_xkbui, dep_ext_xkbui],
   version: '0.0.1',
   install: true,
 )
@@ -15,7 +14,7 @@ libxkbui = declare_dependency(
 )
 
 pkg.generate(lib,
-  description: 'The xkbui Library',
+  description: 'The XKBui Library',
   version: ver_xkbui,
   filebase: 'xkbui',
   requires: 'xproto',
