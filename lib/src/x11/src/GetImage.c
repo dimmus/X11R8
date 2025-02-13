@@ -166,10 +166,72 @@ XGetSubImage(register Display *dpy,
              int               dest_x,
              int               dest_y)
 {
-    XImage *temp_image;
-    temp_image = XGetImage(dpy, d, x, y, width, height, plane_mask, format);
-    if (!temp_image) return (XImage *)NULL;
-    _XSetImage(temp_image, dest_image, dest_x, dest_y);
-    XDestroyImage(temp_image);
+    register xGetImageReq *req;
+    xGetImageReply rep;
+    char *data;
+    unsigned long subimage_bytes_per_line;
+    unsigned long nbytes_in_reply;
+    unsigned long nbytes_necessary;
+
+    /* if the destination image is not the right format, convert it */
+    if(dest_image->format != format)
+    {
+        XImage *temp_image;
+        temp_image = XGetImage(dpy, d, x, y, width, height,
+                    plane_mask, format);
+        if (!temp_image)
+            return (XImage *)NULL;
+        _XSetImage(temp_image, dest_image, dest_x, dest_y);
+        XDestroyImage(temp_image);
+        return (dest_image);
+    }
+
+    if(dest_x < 0) dest_x = -dest_x;
+    if(dest_x < 0) dest_y = -dest_y;
+
+    width = dest_x + width < dest_image->width ? width : dest_image->width - dest_x;
+    height = dest_y + height < dest_image->height ? height : dest_image->height - dest_y;
+
+    subimage_bytes_per_line = width * (unsigned long)(dest_image->bits_per_pixel / 8);
+
+    LockDisplay(dpy);
+    GetReq (GetImage, req);
+
+    req->drawable = d;
+    req->x = x;
+    req->y = y;
+    req->width = width;
+    req->height = height;
+    req->planeMask = plane_mask;
+    req->format = format;
+
+    if (_XReply (dpy, (xReply *) &rep, 0, xFalse) == 0 ||
+        rep.length == 0) {
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return (XImage *)NULL;
+    }
+
+    if (rep.length < (INT_MAX >> 2)) {
+        nbytes_in_reply = (unsigned long)rep.length << 2;
+        nbytes_necessary = width * height * (unsigned long)(dest_image->bits_per_pixel / 8);
+        data = dest_image->data + (unsigned long)(dest_y * dest_image->width + dest_x) * (unsigned long)(dest_image->bits_per_pixel / 8);
+    } else {
+        _XEatDataWords(dpy, rep.length);
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return (XImage *) NULL;
+    }
+
+    for (char *row = data, *end = data + height * dest_image->bytes_per_line;
+        row < end; 
+        row += dest_image->bytes_per_line) {
+        _XRead (dpy, row, subimage_bytes_per_line);
+    }
+
+    _XEatData (dpy, nbytes_in_reply - nbytes_necessary);
+    UnlockDisplay(dpy);
+    SyncHandle();
+
     return (dest_image);
 }
