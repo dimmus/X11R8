@@ -83,7 +83,7 @@ dep_xorg = [
     libxrender,
     libxfixes,
     libxdmcp,
-    libxfont,
+    libxfont
 ]
 
 exe_xorg = executable('Xorg',
@@ -136,11 +136,11 @@ executable('gtf',
     install: true,
 )
 
-lib = library('xorgserver',
+lib = shared_library('xorgserver',
     srcs_xorg,
     include_directories: inc_server,
     link_whole: xorg_link,
-    dependencies: dep_xorg,
+    dependencies: [dep_xorg, libxcvt],
     link_args: linker_export_flags,
     c_args: xorg_c_args,
     install: true,
