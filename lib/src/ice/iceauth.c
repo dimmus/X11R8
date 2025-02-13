@@ -79,13 +79,13 @@ emulate_getrandom_buf(char *auth, int len)
 static void
 arc4random_buf(char *auth, int len)
 {
-#  if HAVE_GETENTROPY
+#ifdef HAVE_GETENTROPY
     int ret;
 
     /* weak emulation of arc4random through the entropy libc */
     ret = getentropy(auth, len);
     if (ret == 0) return;
-#  endif /* HAVE_GETENTROPY */
+#endif /* HAVE_GETENTROPY */
 
     emulate_getrandom_buf(auth, len);
 }
