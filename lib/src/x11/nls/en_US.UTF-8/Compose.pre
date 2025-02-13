@@ -150,6 +150,15 @@ XCOMM Quotation marks
 <Multi_key> <comma> <quotedbl>		: "„"	U201e # DOUBLE LOW-9 QUOTATION MARK
 <Multi_key> <quotedbl> <comma>		: "„"	U201e # DOUBLE LOW-9 QUOTATION MARK
 
++XCOMM Prime symbols
++<Multi_key> <slash> <apostrophe>		: "′"   U2032 # PRIME
++<Multi_key> <quotedbl> <slash>			: "″"   U2033 # DOUBLE PRIME
++<Multi_key> <slash> <quotedbl>			: "″"   U2033 # DOUBLE PRIME
++<Multi_key> <apostrophe> <backslash>	: "‵"   U2035 # REVERSED PRIME
++<Multi_key> <backslash> <apostrophe>	: "‵"   U2035 # REVERSED PRIME
++<Multi_key> <quotedbl> <backslash>		: "‶"   U2036 # REVERSED DOUBLE PRIME
++<Multi_key> <backslash> <quotedbl>		: "‶"   U2036 # REVERSED DOUBLE PRIME
+
 XCOMM Currencies
 <Multi_key> <S> <bar>			: "$"	dollar # DOLLAR SIGN
 <Multi_key> <bar> <S>			: "$"	dollar # DOLLAR SIGN
