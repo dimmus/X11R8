@@ -104,6 +104,7 @@ pixman_files = files(
   'pixman-trap.c',
   'pixman-utils.c',
   'pixman-x86.c',
+  'srgb.c'
 )
 
 # Android cpu-features
@@ -119,8 +120,7 @@ if cpu_features_path != ''
   cpu_features_inc = include_directories(cpu_features_path)
 endif
 
-libpixman = static_library(
-  'pixman-1',
+libpixman = static_library('pixman-1',
   [pixman_files, config_h, version_h, cpu_features_sources],
   link_with: pixman_simd_libs,
   c_args : libpixman_extra_cargs,
@@ -132,3 +132,5 @@ pixman = declare_dependency(
   link_with: libpixman,
   include_directories : include_directories('.'),
 )
+
+subdir('dither')
