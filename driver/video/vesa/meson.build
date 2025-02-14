@@ -8,13 +8,14 @@ conf.set('VESA_PACKAGE_VERSION_MINOR', driver_version[1])
 conf.set('VESA_PACKAGE_VERSION_PATCHLEVEL', driver_version[2])
 conf.set('HAVE_ISA', false)
 
-dep_int_vesa = [xproto, xserver, libint10]
+dep_int_vesa = [xproto, xserver]
 
 shared_module('vesa_drv',
 	'vesa.c',
 	name_prefix: '',
 	include_directories: [include_directories('.'), inc_server, inc_lib],
 	dependencies: dep_int_vesa,
+	link_depends: mod_int10,
 	link_with: libxserver_miext_shadow,
 	install: true,
 	install_dir: dir_xorg_module / 'drivers',
