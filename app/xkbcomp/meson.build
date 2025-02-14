@@ -35,7 +35,7 @@ pgen = generator(
 pfiles = pgen.process('xkbparse.y')
 src += pfiles
 
-executable('xkbcomp',
+exe_xkbcomp = executable('xkbcomp',
     src,
     c_args: [
         '-DDFLT_XKB_CONFIG_ROOT="@0@"'.format(dir_data / 'X11' / 'xkb'),

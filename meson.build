@@ -130,7 +130,6 @@ dep_gettext      = dependency('gettext',        required: false) # xpm
 dep_null         = dependency('',               required: false)
 dep_pixman       = dependency('pixman-1',       required: not WITH_INT_PIXMAN)
 dep_libbsd       = dependency('libbsd-overlay', required: false)
-dep_xkbcomp      = dependency('xkbcomp',        required: false)
 dep_dbus         = dependency('dbus-1',         required: get_option('systemd_logind') == 'true', version: '>= 1.0')
 dep_fontutil     = dependency('fontutil',       required: false)
 dep_drm          = dependency('libdrm',         required: true, version: '>= 2.4.116') # server/hw/xfree86, driver/video/intel

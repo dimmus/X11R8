@@ -11,16 +11,7 @@ endif
 
 build_hashtable = false
 
-# Resolve default values of some options
-xkb_dir = get_option('xkb_dir')
-if xkb_dir == ''
-    if dep_xkbcomp.found() and dep_xkbcomp.type_name() == 'pkgconfig'
-        xkb_dir = dep_xkbcomp.get_variable(pkgconfig: 'xkbconfigdir')
-    endif
-    if xkb_dir == ''
-        xkb_dir = dir_prefix / 'share' / 'X11' / 'xkb'
-    endif
-endif
+xkb_dir = dir_prefix / 'share' / 'X11' / 'xkb'
 
 xkb_output_dir = get_option('xkb_output_dir')
 if xkb_output_dir == ''
@@ -29,12 +20,7 @@ endif
 
 xkb_bin_dir = get_option('xkb_bin_dir')
 if xkb_bin_dir == ''
-    if dep_xkbcomp.found() and dep_xkbcomp.type_name() == 'pkgconfig'
-        xkb_bin_dir = dep_xkbcomp.get_variable(pkgconfig: 'bindir')
-    endif
-    if xkb_bin_dir == ''
-        xkb_bin_dir = dir_bin
-    endif
+    xkb_bin_dir = dir_bin
 endif
 
 dfp = get_option('default_font_path')
