@@ -44,7 +44,7 @@ if int10 == 'vm86'
     int10_c_args += '-D_VM86_LINUX'
 endif
 
-mod_int10 = shared_module('int10',
+mod = shared_module('int10',
     srcs_xorg_int10,
     include_directories: [
         inc_server,
@@ -55,6 +55,11 @@ mod_int10 = shared_module('int10',
     c_args: int10_c_args,
     install: true,
     install_dir: dir_xorg_module,
+)
+
+mod_int10 = declare_dependency(
+    link_with: mod,
+    include_directories: inc_server,
 )
 
 install_data('xf86int10.h', install_dir: dir_xorg)
