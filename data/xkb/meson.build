@@ -7,6 +7,6 @@ dirs = [
     'types',
 ]
 
-foreach dir: ['compat', 'geometry', 'keycodes', 'types']
+foreach dir: dirs
     install_subdir(dir, install_dir: dir_data / 'X11' / 'xkb')
 endforeach
