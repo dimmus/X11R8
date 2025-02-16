@@ -4,7 +4,7 @@ option('build-input-evdev',     type: 'boolean', value: false) # replaced by lib
 option('build-input-synaptics', type: 'boolean', value: false) # replaced by libinput
 option('build-video-intel',     type: 'boolean', value: true )
 option('build-static-epoxy',    type: 'boolean', value: true )
-option('build-static-pixman',   type: 'boolean', value: true )
+option('build-static-pixman',   type: 'boolean', value: false)
 option('build-xproto-legacy',   type: 'boolean', value: false)
 option('build-demo',            type: 'boolean', value: false)
 option('build-app',             type: 'boolean', value: true )
