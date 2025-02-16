@@ -46,15 +46,15 @@ src = files(
 )
 
 subdir('vmwgfx')
+subdir('vmwarectrl')
 
 shared_module('vmware_drv',
 	src + src_vmwgfx,
 	name_prefix: '',
 	include_directories: inc_vmware,
 	dependencies: [dep_int_vmware, dep_ext_vmware, mod_vgahw, mod_shadowfb],
-	link_with: libsaa,
+	link_whole: libsaa,
+	link_with: exe_vmwctrl,
 	install: true,
 	install_dir: dir_xorg_module / 'drivers',
 )
-
-subdir('vmwarectrl')
