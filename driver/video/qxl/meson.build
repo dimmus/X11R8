@@ -10,8 +10,8 @@ conf.set('HAVE_XFONT2',  true)
 conf.set('XF86DRM_MODE', true) # DRM kernel modesetting
 conf.set('HAVE_LIBUDEV', true)
 
-dep_ext_qxl = [dep_drm, dep_pciaccess, dep_udev]
-dep_int_qxl = [xserver]
+dep_ext_qxl = [dep_drm, dep_pciaccess, dep_udev, dep_pixman]
+dep_int_qxl = xserver
 
 inc_qxl = [
     include_directories('uxa'),

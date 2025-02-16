@@ -15,10 +15,10 @@ conf.set('HAVE_LIBDRM_2_4_74', true)
 conf.set('HAVE_LIBDRM_2_4_96', true)
 conf.set('BUILD_VMWGFX', true)
 conf.set('HAVE_LIBUDEV', true)
-# conf.set('HAVE_XA_2', true) # mesa
+conf.set('HAVE_XA_2', true) # mesa
 
 dep_int_vmware = [xproto, libx11, libxext, xserver, libxserver]
-dep_ext_vmware = [dep_drm, dep_udev, dep_xa]
+dep_ext_vmware = [dep_drm, dep_udev, dep_xa, dep_pixman]
 
 inc_vmware = [
 	inc_lib,

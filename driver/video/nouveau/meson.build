@@ -11,7 +11,7 @@ conf.set('HAVE_LIBUDEV', true)
 conf.set_quoted('NV_DRIVER_DATE', '25/01/27')
 
 dep_int_nouveau = [xproto, xserver]
-dep_ext_nouveau = [dep_drm, dep_drm_nouveau, dep_gbm, dep_udev, dep_pciaccess]
+dep_ext_nouveau = [dep_drm, dep_drm_nouveau, dep_gbm, dep_udev, dep_pciaccess, dep_pixman]
 
 src = files(
     'nouveau_copy.c',

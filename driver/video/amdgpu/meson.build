@@ -17,7 +17,7 @@ conf.set('HAVE_GLAMOR_EGL_DESTROY_TEXTURED_PIXMAP', true)
 conf.set('HAVE_GLAMOR_FINISH', true)
 
 dep_int_amdgpu = [xproto, xserver]
-dep_ext_amdgpu = [dep_drm, dep_gbm, dep_udev, dep_gl]
+dep_ext_amdgpu = [dep_drm, dep_gbm, dep_udev, dep_gl, dep_pixman]
 
 src_kms = files(
     'amdgpu_bo_helper.c',

@@ -9,12 +9,13 @@ conf.set('VESA_PACKAGE_VERSION_PATCHLEVEL', driver_version[2])
 conf.set('HAVE_ISA', false)
 
 dep_int_vesa = [xproto, xserver, mod_int10]
+dep_ext_vesa = dep_pixman
 
 shared_module('vesa_drv',
 	'vesa.c',
 	name_prefix: '',
 	include_directories: [include_directories('.'), inc_server, inc_lib],
-	dependencies: dep_int_vesa,
+	dependencies: [dep_int_vesa, dep_ext_vesa],
 	link_with: libxserver_miext_shadow,
 	install: true,
 	install_dir: dir_xorg_module / 'drivers',

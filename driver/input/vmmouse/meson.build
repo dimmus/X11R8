@@ -25,7 +25,7 @@ lib_args = [
 ]
 
 dep_int_vmmouse = [xproto, libx11, libxrandr, xserver, libxserver]
-dep_ext_vmmouse = dep_udev
+dep_ext_vmmouse = [dep_udev, dep_pixman]
 
 inc_vmmouse = [
     include_directories('.'),   

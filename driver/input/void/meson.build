@@ -12,8 +12,8 @@ src_driver = files(
 shared_module('libvoid_drv',
 	src_driver,
 	name_prefix: '',
-	include_directories: [inc_config, inc_server],
-	dependencies: xserver,
+	include_directories: inc_server,
+	dependencies: [xserver, dep_pixman],
 	install: true,
 	install_dir: dir_xorg_module / 'input',
 )

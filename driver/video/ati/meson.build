@@ -15,7 +15,7 @@ conf.set('HAVE_FBGLYPHS', true)
 conf.set('HAVE_XF86_CURSOR_RESET_CURSOR', true)
 
 dep_int_ati = [xproto, xserver]
-dep_ext_ati = [dep_drm, dep_drm_radeon, dep_gbm, dep_udev]
+dep_ext_ati = [dep_drm, dep_drm_radeon, dep_gbm, dep_udev, dep_pixman]
 
 inc_ati = [
     include_directories('.'),
