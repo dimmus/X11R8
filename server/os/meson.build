@@ -48,7 +48,7 @@ endif
 libxlibc = static_library('libxlibc',
     srcs_libc,
     include_directories: inc_server,
-    dependencies: xproto,
+    dependencies: [xproto, dep_pixman],
 )
 
 if enable_input_thread
