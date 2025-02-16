@@ -133,7 +133,7 @@ src += files(
   'util/reallocarray.c',
 )
 
-lib_xfont = library('Xfont', src,
+lib_xfont = library('Xfont2', src,
   c_args: lib_args,
   include_directories: [inc_lib, inc_font_xfont],
   dependencies: [dep_int_xfont, dep_ext_xfont],
