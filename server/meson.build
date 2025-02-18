@@ -223,6 +223,17 @@ endif
 
 build_modesetting = dep_drm.found()
 
+build_vgahw = false
+if get_option('vgahw') == 'auto'
+    if (host_machine.system() != 'darwin' and
+        host_machine.system() != 'windows' and
+        host_machine.system() != 'cygwin')
+        build_vgahw = true
+    endif
+else
+    build_vgahw = get_option('vgahw') == 'true'
+endif
+
 build_dpms = get_option('dpms')
 build_xf86bigfont = get_option('xf86bigfont')
 build_screensaver = get_option('screensaver')
@@ -348,26 +359,28 @@ subdir('config')
 subdir('dix')
 subdir('dri3')
 subdir('glx')
-subdir('os')
-subdir('mi')
-subdir('render')
 subdir('fb')
-
+subdir('mi')
+subdir('os')
 # X extensions
 subdir('composite')
 subdir('damageext')
 subdir('dbe')
-subdir('miext' / 'damage')
-subdir('miext' / 'shadow')
-subdir('miext' / 'sync')
+subdir('miext/damage')
+subdir('miext/shadow')
+subdir('miext/sync')
+subdir('miext/rootless')
 subdir('present')
+# if build_xwin or build_xquartz
+#     subdir('pseudoramiX')
+# endif
 subdir('randr')
 subdir('record')
+subdir('render')
 subdir('xfixes')
 subdir('xkb')
 subdir('Xext')
 subdir('Xi')
-
 # other
 subdir('glamor')
 subdir('exa')
@@ -376,6 +389,7 @@ subdir('exa')
 libxserver = [
     libxserver_mi,
     libxserver_dix,
+
     libxserver_composite,
     libxserver_damageext,
     libxserver_dbe,
@@ -389,13 +403,14 @@ libxserver = [
     libxserver_xi,
     libxserver_xkb,
     libxserver_record,
+
     libxserver_os,
-    libxserver_dri3,
 ]
 
-xserver = declare_dependency(link_with: libxserver)
+libxserver += libxserver_dri3
 
 subdir('hw')
+
 if WITH_TESTS
     subdir('test')
 endif
@@ -407,7 +422,7 @@ sdkconfig.set('includedir',  dir_include)
 sdkconfig.set('datarootdir', dir_data)
 sdkconfig.set('moduledir',   dir_xorg_module)
 sdkconfig.set('sdkdir',      dir_include / 'xorg')
-sdkconfig.set('sysconfigdir', '${datarootdir}' / 'X11' / 'xorg.conf.d')
+sdkconfig.set('sysconfigdir', dir_data / 'X11' / 'xorg.conf.d')
 sdkconfig.set('abi_ansic',
     run_command(exe_awk, '-F', '[(,)]',
                 '/^#define ABI_ANSIC.*SET/ { printf "%d.%d", $2, $3 }',
@@ -439,7 +454,7 @@ sdkconfig.set('abi_extension',
 
 # XXX this isn't trying very hard, but hard enough.
 sdkconfig.set('PACKAGE_VERSION', ver_xserver)
-sdkconfig.set('SDK_REQUIRED_MODULES', 'pixman xproto')
+sdkconfig.set('SDK_REQUIRED_MODULES', 'pixman-1 xproto')
 sdkconfig.set('symbol_visibility', '-fvisibility=hidden')
 sdkconfig.set('XORG_DRIVER_LIBS', '')
 

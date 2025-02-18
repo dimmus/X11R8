@@ -69,7 +69,7 @@ if build_glx
     libglxvnd = static_library('libglxvnd',
         srcs_vnd,
         include_directories: inc_server,
-        dependencies: [dep_common, dep_dl],
+        dependencies: [dep_common, dep_dl, dep_gl],
     )
 
     install_data(hdrs_vnd, install_dir: dir_xorg)

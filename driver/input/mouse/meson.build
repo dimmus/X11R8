@@ -38,7 +38,7 @@ shared_module('libmouse_drv',
 	src,
 	name_prefix: '',
 	include_directories: [include_directories('.'), inc_server, inc_lib],
-	dependencies: [xserver, dep_pixman],
+	dependencies: [dep_pixman, libxorg],
 	install: true,
 	install_dir: dir_xorg_module / 'input',
 )

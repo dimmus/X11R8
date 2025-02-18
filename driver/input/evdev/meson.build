@@ -1,7 +1,7 @@
 ver_evdev = '2.11.0'
 
 dep_ext_evdev = [dep_udev, dep_evdev]
-dep_int_evdev = [xserver]
+dep_int_evdev = libxorg
 
 src = files(
     'emuMB.c',
@@ -10,10 +10,6 @@ src = files(
     'draglock.c',
 	'evdev.c'
 )
-
-# if APPLE
-# src += fiels('apple.c',)
-# endif
 
 shared_module('libevdev_drv', src,
 	name_prefix: '',

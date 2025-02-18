@@ -79,14 +79,13 @@ add_project_arguments(
   '-DHAVE_DIX_CONFIG_H',
   '-D__USE_MISC', # test/xfont (used if HAVE_REALPATH true)
   '-D__USE_XOPEN_EXTENDED', # test/xfont (used if HAVE_REALPATH true)
-  '-fno-plt', # disable the use of the Procedure Linkage Table for external function calls
   language: 'c'
 )
 
 add_project_link_arguments(
   '-fvisibility=hidden',
-  '-fno-strict-aliasing',
-  '-Wl,-z,lazy', # explicitly enable lazy binding for shared libraries
+  '-fno-plt', # disable the use of the Procedure Linkage Table for external function calls
+  '-Wl,-z,now', # -z,lazy - explicitly enable lazy binding for shared libraries
   language: 'c'
 )
 

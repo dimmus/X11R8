@@ -19,9 +19,9 @@ cc.compiles('''
     #error CLOCK_MONOTONIC not defined
     #endif
 ''',
-    name: 'CLOCK_MONOTONIC') ? '1': false)
+    name: 'CLOCK_MONOTONIC') ? '1' : false)
 
-conf_server.set('XSERVER_DTRACE', WITH_DTRACE ? '1': false)
+conf_server.set('XSERVER_DTRACE', WITH_DTRACE ? '1' : false)
 conf_server.set('X_BYTE_ORDER', host_machine.endian() == 'little' ? 'X_LITTLE_ENDIAN' : 'X_BIG_ENDIAN')
 
 # Defining _XSERVER64 on 64bit builds is VITAL, since otherwise Xlib headers
@@ -37,10 +37,10 @@ endif
 # autoconf checks for /dev/xf86 here, but the test should be based on
 # the target, not the build system.  Could we get rid of this and just
 # ifdef for openbsd?
-conf_server.set('HAS_APERTURE_DRV', host_machine.system() == 'openbsd' ? '1': false)
+conf_server.set('HAS_APERTURE_DRV', host_machine.system() == 'openbsd' ? '1' : false)
 
 enable_input_thread = cc.has_header_symbol('pthread.h', 'PTHREAD_MUTEX_RECURSIVE')
-conf_server.set('INPUTTHREAD', enable_input_thread ? '1': false)
+conf_server.set('INPUTTHREAD', enable_input_thread ? '1' : false)
 
 if cc.compiles('''
     #define _GNU_SOURCE 1
@@ -60,81 +60,33 @@ elif cc.compiles('''
     conf_server.set('HAVE_PTHREAD_SETNAME_NP_WITHOUT_TID', 1)
 endif
 
-conf_server.set('HAVE_LIBBSD', dep_libbsd.found() ? '1': false)
-# Note: this symbol is used by libXtrans.
-conf_server.set('HAVE_SYSTEMD_DAEMON', build_systemd_notify ? '1': false)
-conf_server.set('CONFIG_UDEV', build_udev ? '1': false)
-conf_server.set('CONFIG_UDEV_KMS', build_udev_kms ? '1': false)
-conf_server.set('HAVE_DBUS', build_dbus ? '1': false)
-conf_server.set('CONFIG_HAL', build_hal ? '1': false)
-conf_server.set('SYSTEMD_LOGIND', build_systemd_logind ? '1': false)
-conf_server.set('NEED_DBUS', build_systemd_logind or build_hal ? '1': false)
-conf_server.set('CONFIG_WSCONS', host_machine.system() in ['openbsd', 'netbsd'] ? '1': false)
-
+conf_server.set('HAVE_LIBBSD', dep_libbsd.found() ? '1' : false)
+conf_server.set('HAVE_SYSTEMD_DAEMON', build_systemd_notify ? '1' : false)
+conf_server.set('CONFIG_UDEV', build_udev ? '1' : false)
+conf_server.set('CONFIG_UDEV_KMS', build_udev_kms ? '1' : false)
+conf_server.set('HAVE_DBUS', build_dbus ? '1' : false)
+conf_server.set('CONFIG_HAL', build_hal ? '1' : false)
+conf_server.set('SYSTEMD_LOGIND', build_systemd_logind ? '1' : false)
+conf_server.set('NEED_DBUS', build_systemd_logind or build_hal ? '1' : false)
+conf_server.set('CONFIG_WSCONS', host_machine.system() in ['openbsd', 'netbsd'] ? '1' : false)
 conf_server.set('HAVE_XSHMFENCE', '1')
 conf_server.set('WITH_LIBDRM', '1')
-conf_server.set('GLXEXT', build_glx ? '1': false)
+conf_server.set('GLXEXT', build_glx ? '1' : false)
 conf_server.set('GLAMOR', '1')
-conf_server.set('GLAMOR_HAS_EGL_QUERY_DMABUF', dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.4.4') ? '1': false)
-conf_server.set('GLAMOR_HAS_EGL_QUERY_DRIVER', dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.5.4') ? '1': false)
-conf_server.set('GLAMOR_HAS_GBM', dep_gbm.found() ? '1': false)
-conf_server.set('GLAMOR_HAS_GBM_LINEAR',  dep_gbm.found() and dep_gbm.version().version_compare('>= 10.6') ? '1': false)
-conf_server.set('GBM_BO_WITH_MODIFIERS',  dep_gbm.found() and dep_gbm.version().version_compare('>= 17.1') ? '1': false)
-conf_server.set('GBM_BO_FD_FOR_PLANE',    dep_gbm.found() and dep_gbm.version().version_compare('>= 21.1') ? '1': false)
-conf_server.set('GBM_BO_WITH_MODIFIERS2', dep_gbm.found() and dep_gbm.version().version_compare('>= 21.3') ? '1': false)
-
+conf_server.set('GLAMOR_HAS_EGL_QUERY_DMABUF', dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.4.4') ? '1' : false)
+conf_server.set('GLAMOR_HAS_EGL_QUERY_DRIVER', dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.5.4') ? '1' : false)
+conf_server.set('GLAMOR_HAS_GBM', dep_gbm.found() ? '1' : false)
+conf_server.set('GLAMOR_HAS_GBM_LINEAR',  dep_gbm.found() and dep_gbm.version().version_compare('>= 10.6') ? '1' : false)
+conf_server.set('GBM_BO_WITH_MODIFIERS',  dep_gbm.found() and dep_gbm.version().version_compare('>= 17.1') ? '1' : false)
+conf_server.set('GBM_BO_FD_FOR_PLANE',    dep_gbm.found() and dep_gbm.version().version_compare('>= 21.1') ? '1' : false)
+conf_server.set('GBM_BO_WITH_MODIFIERS2', dep_gbm.found() and dep_gbm.version().version_compare('>= 21.3') ? '1' : false)
+conf_server.set('XORG_VERSION_CURRENT', release)
+conf_server.set('HASXDMAUTH', '1')
 conf_server.set_quoted('SERVER_MISC_CONFIG_PATH', serverconfigdir)
 conf_server.set_quoted('PROJECTROOT', dir_prefix)
 conf_server.set_quoted('SYSCONFDIR', dir_sysconf)
 conf_server.set_quoted('SUID_WRAPPER_DIR', dir_libexec)
 conf_server.set_quoted('COMPILEDDEFAULTFONTPATH', default_font_path)
-
-conf_server.set('XORG_VERSION_CURRENT', release)
-conf_server.set('HASXDMAUTH', '1')
-
-summary_srv += {'XSERVER_DTRACE':         WITH_DTRACE}
-summary_srv += {'X_BYTE_ORDER':           conf_server.get('X_BYTE_ORDER')}
-summary_srv += {'INPUTTHREAD':            enable_input_thread}
-summary_srv += {'HAVE_LIBBSD':            dep_libbsd.found()}
-summary_srv += {'SYSTEMD_DAEMON':         build_systemd_notify}
-summary_srv += {'SYSTEMD_LOGIND':         build_systemd_logind}
-summary_srv += {'CONFIG_UDEV':            build_udev}
-summary_srv += {'CONFIG_UDEV_KMS':        build_udev_kms}
-summary_srv += {'HAVE_DBUS':              build_dbus}
-summary_srv += {'CONFIG_HAL':             build_hal}
-summary_srv += {'NEED_DBUS':              build_systemd_logind or build_hal}
-summary_srv += {'GLXEXT':                 build_glx}
-summary_srv += {'EGL_QUERY_DMABUF':       dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.4.4')}
-summary_srv += {'EGL_QUERY_DRIVER':       dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.5.4')}
-summary_srv += {'GBM':                    dep_gbm.found()}
-summary_srv += {'GBM_LINEAR':             dep_gbm.found() and dep_gbm.version().version_compare('>= 10.6')}
-summary_srv += {'GBM_BO_WITH_MODIFIERS':  dep_gbm.found() and dep_gbm.version().version_compare('>= 17.1')}
-summary_srv += {'GBM_BO_FD_FOR_PLANE':    dep_gbm.found() and dep_gbm.version().version_compare('>= 21.1')}
-summary_srv += {'GBM_BO_WITH_MODIFIERS2': dep_gbm.found() and dep_gbm.version().version_compare('>= 21.3')}
-
-h_check_server = [
-    'dlfcn.h', 'execinfo.h', 'fnmatch.h', 'linux/agpgart.h', 'strings.h',
-    'sys/agpgart.h', 'sys/ucred.h', 'sys/un.h', 'sys/utsname.h', 'sys/sysmacros.h',
-]
-
-foreach h: h_check_server
-    conf_server.set('HAVE_@0@'.format(h.underscorify().to_upper()), cc.has_header(h))
-endforeach
-
-f_check_server = [
-    'backtrace', 'cbrt', 'epoll_create1', 'getuid', 'geteuid', 'isastream',
-    'issetugid', 'getaddrinfo', 'getifaddrs', 'getpeereid', 'getpeerucred',
-    'getprogname', 'getzoneid', 'inet_ntop', 'memfd_create', 'mkostemp',
-    'mmap', 'open_device', 'poll', 'pollset_create', 'posix_fallocate',
-    'port_create', 'reallocarray', 'seteuid', 'setitimer', 'shmctl64',
-    'sigaction', 'sigprocmask', 'strcasecmp', 'strcasestr', 'strncasecmp',
-    'timingsafe_memcmp', 'vasprintf', 'vsnprintf', 'walkcontext', 
-]
-
-foreach f: f_check_server
-    conf_server.set('HAVE_@0@'.format(f.to_upper()), cc.has_function(f))
-endforeach
-
 conf_server.set('HAVE_REALLOCARRAY',  cc.has_function('reallocarray', dependencies: dep_libbsd))
 conf_server.set('HAVE_STRNDUP',       cc.has_function('strndup') and cc.has_header_symbol('string.h', 'strndup'))
 conf_server.set('HAVE_XUCRED_CR_PID', cc.has_member('struct xucred', 'cr_pid', prefix: '#include <sys/ucred.h>'))
@@ -142,35 +94,25 @@ conf_server.set('HAVE_STRLCAT',       cc.has_function('strlcat', dependencies: d
 conf_server.set('HAVE_STRLCPY',       cc.has_function('strlcpy', dependencies: dep_libbsd))
 conf_server.set('HAVE_SOCKLEN_T',     cc.has_type('socklen_t', prefix: '#include <sys/socket.h>') ? '1' : false)
 conf_server.set('LOCK_SERVER', '1')
-
-# Don't let X dependencies typedef 'pointer'
-conf_server.set('_XTYPEDEF_POINTER', true)
+conf_server.set('_XTYPEDEF_POINTER', true) # Don't let X dependencies typedef 'pointer'
 conf_server.set('_XITYPEDEF_POINTER', '1')
-
 conf_server.set('LISTEN_TCP',   get_option('listen_tcp'))
 conf_server.set('LISTEN_UNIX',  get_option('listen_unix'))
 conf_server.set('LISTEN_LOCAL', get_option('listen_local'))
-
 conf_server.set('XTRANS_SEND_FDS', cc.has_header_symbol('sys/socket.h', 'SCM_RIGHTS') ? '1' : false)
-
-if not cc.has_header_symbol('sys/socket.h', 'SO_PEERCRED', args: '-D_GNU_SOURCE')
-    conf_server.set('NO_LOCAL_CLIENT_CRED', 1)
-endif
-
+conf_server.set('NO_LOCAL_CLIENT_CRED', cc.has_header_symbol('sys/socket.h', 'SO_PEERCRED', args: '-D_GNU_SOURCE'))
 conf_server.set('TCPCONN',       '1')
 conf_server.set('UNIXCONN',      '1')
 conf_server.set('BIGREQS',       '1')
 conf_server.set('COMPOSITE',     '1')
 conf_server.set('DAMAGE',        '1')
 conf_server.set('DBE',           '1')
-conf_server.set('IPv6',          build_ipv6 ? '1': false)
-conf_server.set('DGA',           build_dga  ? '1': false)
-conf_server.set('DPMSExtension', build_dpms ? '1': false)
-conf_server.set('DRI2',          build_dri2 ? '1': false)
-conf_server.set('DRI3',          build_dri3 ? '1': false)
-if build_glx
-    conf_server.set_quoted('DRI_DRIVER_PATH', dep_dri.get_variable(pkgconfig: 'dridriverdir'))
-endif
+conf_server.set('IPv6',          build_ipv6 ? '1' : false)
+conf_server.set('DGA',           build_dga  ? '1' : false)
+conf_server.set('DPMSExtension', build_dpms ? '1' : false)
+conf_server.set('DRI2',          build_dri2 ? '1' : false)
+conf_server.set('DRI3',          build_dri3 ? '1' : false)
+conf_server.set_quoted('DRI_DRIVER_PATH', build_glx ? dep_dri.get_variable(pkgconfig: 'dridriverdir') : '')
 conf_server.set('PRESENT',       '1')
 conf_server.set('RANDR',         '1')
 conf_server.set('RENDER',        '1')
@@ -197,24 +139,59 @@ conf_server.set('XSELINUX',      build_xselinux)
 conf_server.set('XV',            build_xv)
 conf_server.set('XvExtension',   build_xv)
 conf_server.set('XvMCExtension', build_xvmc)
-
-# needed by several extensions
-build_registry_resource = (build_xselinux or build_res)
-conf_server.set('X_REGISTRY_RESOURCE', build_registry_resource ? '1': false)
-build_registry_request = (build_xselinux or build_xsecurity or WITH_DTRACE)
-conf_server.set('X_REGISTRY_REQUEST', build_registry_request ? '1': false)
-
+conf_server.set('X_REGISTRY_RESOURCE', (build_xselinux or build_res) ? '1' : false)
+conf_server.set('X_REGISTRY_REQUEST', (build_xselinux or build_xsecurity or WITH_DTRACE) ? '1' : false)
 conf_server.set('HAVE_SHA1_IN_' + sha1.to_upper(), '1', description: 'Use @0@ SHA1 functions'.format(sha1))
 conf_server.set('HAVE_LIBUNWIND', get_option('libunwind'))
-conf_server.set('HAVE_APM', (build_apm or build_acpi) ? '1': false)
-conf_server.set('HAVE_ACPI', build_acpi ? '1': false)
-
-conf_server.set('DEBUG', get_option('buildtype') == 'debug' ? '1': false)
-
+conf_server.set('HAVE_APM', (build_apm or build_acpi) ? '1' : false)
+conf_server.set('HAVE_ACPI', build_acpi ? '1' : false)
+conf_server.set('DEBUG', get_option('buildtype') == 'debug' ? '1' : false)
 conf_server.set_quoted('XVENDORNAME',           get_option('vendor_name'))
 conf_server.set_quoted('XVENDORNAMESHORT',      get_option('vendor_name_short'))
 conf_server.set_quoted('__VENDORDWEBSUPPORT__', get_option('vendor_web'))
 
+h_check_server = [
+    'dlfcn.h', 'execinfo.h', 'fnmatch.h', 'linux/agpgart.h', 'strings.h',
+    'sys/agpgart.h', 'sys/ucred.h', 'sys/un.h', 'sys/utsname.h', 'sys/sysmacros.h',
+]
+
+foreach h: h_check_server
+    conf_server.set('HAVE_@0@'.format(h.underscorify().to_upper()), cc.has_header(h))
+endforeach
+
+f_check_server = [
+    'backtrace', 'cbrt', 'epoll_create1', 'getuid', 'geteuid', 'isastream',
+    'issetugid', 'getaddrinfo', 'getifaddrs', 'getpeereid', 'getpeerucred',
+    'getprogname', 'getzoneid', 'inet_ntop', 'memfd_create', 'mkostemp',
+    'mmap', 'open_device', 'poll', 'pollset_create', 'posix_fallocate',
+    'port_create', 'reallocarray', 'seteuid', 'setitimer', 'shmctl64',
+    'sigaction', 'sigprocmask', 'strcasecmp', 'strcasestr', 'strncasecmp',
+    'timingsafe_memcmp', 'vasprintf', 'vsnprintf', 'walkcontext', 
+]
+
+foreach f: f_check_server
+    conf_server.set('HAVE_@0@'.format(f.to_upper()), cc.has_function(f))
+endforeach
+
+summary_srv += {'XSERVER_DTRACE':         WITH_DTRACE}
+summary_srv += {'X_BYTE_ORDER':           conf_server.get('X_BYTE_ORDER')}
+summary_srv += {'INPUTTHREAD':            enable_input_thread}
+summary_srv += {'HAVE_LIBBSD':            dep_libbsd.found()}
+summary_srv += {'SYSTEMD_DAEMON':         build_systemd_notify}
+summary_srv += {'SYSTEMD_LOGIND':         build_systemd_logind}
+summary_srv += {'CONFIG_UDEV':            build_udev}
+summary_srv += {'CONFIG_UDEV_KMS':        build_udev_kms}
+summary_srv += {'HAVE_DBUS':              build_dbus}
+summary_srv += {'CONFIG_HAL':             build_hal}
+summary_srv += {'NEED_DBUS':              build_systemd_logind or build_hal}
+summary_srv += {'GLXEXT':                 build_glx}
+summary_srv += {'EGL_QUERY_DMABUF':       dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.4.4')}
+summary_srv += {'EGL_QUERY_DRIVER':       dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.5.4')}
+summary_srv += {'GBM':                    dep_gbm.found()}
+summary_srv += {'GBM_LINEAR':             dep_gbm.found() and dep_gbm.version().version_compare('>= 10.6')}
+summary_srv += {'GBM_BO_WITH_MODIFIERS':  dep_gbm.found() and dep_gbm.version().version_compare('>= 17.1')}
+summary_srv += {'GBM_BO_FD_FOR_PLANE':    dep_gbm.found() and dep_gbm.version().version_compare('>= 21.1')}
+summary_srv += {'GBM_BO_WITH_MODIFIERS2': dep_gbm.found() and dep_gbm.version().version_compare('>= 21.3')}
 summary_srv += {'IPv6': build_ipv6}
 summary_srv += {'DGA': build_dga}
 summary_srv += {'DPMSExtension': build_dpms}
@@ -236,8 +213,6 @@ summary_srv += {'XSELINUX': build_xselinux}
 summary_srv += {'XV': build_xv}
 summary_srv += {'XvExtension': build_xv}
 summary_srv += {'XvMCExtension': build_xvmc}
-summary_srv += {'X_REGISTRY_RESOURCE': build_registry_resource}
-summary_srv += {'X_REGISTRY_REQUEST': build_registry_request}
 summary_srv += {'HAVE_APM': build_apm or build_acpi}
 summary_srv += {'HAVE_ACPI': build_acpi}
 
@@ -280,17 +255,17 @@ if host_machine.system() == 'darwin'
   csrg_based = true
 endif
 
-conf_server.set('SVR4', cc.compiles(defines_svr4) ? '1': false)
+conf_server.set('SVR4', cc.compiles(defines_svr4) ? '1' : false)
 conf_server.set_quoted('XKB_DFLT_RULES', get_option('xkb_default_rules'))
 conf_server.set_quoted('XCONFIGFILE', 'xorg.conf')
 conf_server.set_quoted('__XSERVERNAME__', 'Xorg')
-conf_server.set('CSRG_BASED', csrg_based ? '1': false)
-conf_server.set('PCCONS_SUPPORT', supports_pccons ? '1': false)
-conf_server.set('PCVT_SUPPORT', supports_pcvt ? '1': false)
-conf_server.set('SYSCONS_SUPPORT', supports_syscons ? '1': false)
-conf_server.set('WSCONS_SUPPORT', supports_wscons ? '1': false)
-conf_server.set('XSERVER_LIBPCIACCESS', get_option('pciaccess') ? '1': false)
-conf_server.set('XSERVER_PLATFORM_BUS', build_udev_kms ? '1': false)
+conf_server.set('CSRG_BASED', csrg_based ? '1' : false)
+conf_server.set('PCCONS_SUPPORT', supports_pccons ? '1' : false)
+conf_server.set('PCVT_SUPPORT', supports_pcvt ? '1' : false)
+conf_server.set('SYSCONS_SUPPORT', supports_syscons ? '1' : false)
+conf_server.set('WSCONS_SUPPORT', supports_wscons ? '1' : false)
+conf_server.set('XSERVER_LIBPCIACCESS', get_option('pciaccess') ? '1' : false)
+conf_server.set('XSERVER_PLATFORM_BUS', build_udev_kms ? '1' : false)
 conf_server.set('HAVE_OPENSSL3', dep_openssl.version().version_compare('>= 3'))
 
 summary_srv += {'XKB_DFLT_RULES': get_option('xkb_default_rules')}
@@ -341,14 +316,14 @@ xorg_data.set_quoted('DEFAULT_LOGPREFIX', 'Xorg.')
 xorg_data.set_quoted('DEFAULT_MODULE_PATH', dir_xorg_module)
 xorg_data.set_quoted('DEFAULT_LIBRARY_PATH', dir_lib)
 xorg_data.set_quoted('__XSERVERNAME__', 'Xorg')
-xorg_data.set('XSERVER_LIBPCIACCESS', get_option('pciaccess') ? '1': false)
+xorg_data.set('XSERVER_LIBPCIACCESS', get_option('pciaccess') ? '1' : false)
 xorg_data.set_quoted('PCI_TXT_IDS_PATH', '')
-xorg_data.set('XSERVER_PLATFORM_BUS', build_udev_kms ? '1': false)
-xorg_data.set('WSCONS_SUPPORT', host_machine.system() == 'netbsd' or host_machine.system() == 'openbsd' ? '1': false)
-xorg_data.set('HAVE_STROPTS_H', cc.has_header('stropts.h') ? '1': false)
-xorg_data.set('HAVE_SYS_KD_H', cc.has_header('sys/kd.h') ? '1': false)
-xorg_data.set('HAVE_SYS_VT_H', cc.has_header('sys/vt.h') ? '1': false)
-xorg_data.set('HAVE_MODESETTING_DRIVER', build_modesetting ? '1': false)
+xorg_data.set('XSERVER_PLATFORM_BUS', build_udev_kms ? '1' : false)
+xorg_data.set('WSCONS_SUPPORT', host_machine.system() == 'netbsd' or host_machine.system() == 'openbsd' ? '1' : false)
+xorg_data.set('HAVE_STROPTS_H', cc.has_header('stropts.h') ? '1' : false)
+xorg_data.set('HAVE_SYS_KD_H', cc.has_header('sys/kd.h') ? '1' : false)
+xorg_data.set('HAVE_SYS_VT_H', cc.has_header('sys/vt.h') ? '1' : false)
+xorg_data.set('HAVE_MODESETTING_DRIVER', build_modesetting ? '1' : false)
 
 if host_machine.system() == 'freebsd' or host_machine.system() == 'dragonfly'
     if host_machine.cpu_family() == 'x86' or host_machine.cpu_family() == 'x86_64' or host_machine.cpu_family() == 'aarch64'
@@ -390,7 +365,7 @@ if WITH_DTRACE
     dtrace_hdr += dtrace_header.process(dtrace_tmpl)
 endif
 
-install_headers(
+install_data(
     'Xprintf.h',
     'callback.h',
     'client.h',
@@ -448,5 +423,5 @@ install_headers(
     'xkbrules.h',
     'Xprintf.h',
     'xserver-properties.h',
-    subdir: 'xorg',
+    install_dir: dir_xorg,
 )

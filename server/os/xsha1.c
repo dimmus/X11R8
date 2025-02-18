@@ -149,6 +149,7 @@ x_sha1_final(void *ctx, unsigned char result[20])
     free(ctx);
     return 1;
 }
+
 #elif defined(HAVE_SHA1_IN_LIBNETTLE)   /* Use libnettle for SHA1 */
 
 #include <nettle/sha.h>

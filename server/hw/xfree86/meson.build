@@ -18,9 +18,8 @@ xorg_c_args = ['-DHAVE_XORG_CONFIG_H', '-DXORG_NO_SDKSYMS']
 # subdirs for convenience libraries statically linked into Xorg
 subdir('common')
 subdir('ddc')
-if build_dri2
-    subdir('dri2')
-endif
+subdir('dri')
+subdir('dri2')
 subdir('i2c')
 subdir('loader')
 subdir('modes')
@@ -56,9 +55,8 @@ xorg_link = [
     libxserver_main,
     libxserver_config,
 ]
-if build_dri2
-    xorg_link += xorg_dri2
-endif
+xorg_link += xorg_dri
+xorg_link += xorg_dri2
 
 if host_machine.system() == 'cygwin'
     linker_export_flags = '-Wl,--export-all-symbols'
@@ -83,10 +81,18 @@ dep_xorg = [
     libxrender,
     libxfixes,
     libxdmcp,
-    libxfont
+    libxfont,
+    libxcvt,
 ]
 
-exe_xorg = executable('Xorg',
+if get_option('suid_wrapper')
+    xorg_install_dir = get_option('libexecdir')
+else
+    xorg_install_dir = get_option('bindir')
+endif
+
+exe_xorg = executable(
+    'Xorg',
     srcs_xorg,
     include_directories: inc_server,
     dependencies: dep_xorg,
@@ -94,7 +100,7 @@ exe_xorg = executable('Xorg',
     link_args: linker_export_flags,
     c_args: xorg_c_args,
     install: true,
-    install_dir: dir_bin,
+    install_dir: xorg_install_dir,
     implib: true,
 )
 
@@ -112,7 +118,9 @@ if int10 != 'false'
     subdir('int10')
 endif
 subdir('shadowfb')
-subdir('vgahw')
+if build_vgahw
+    subdir('vgahw')
+endif
 if build_modesetting
    subdir('drivers/modesetting')
 endif
@@ -128,6 +136,33 @@ meson.add_install_script(
     )
 )
 
+if get_option('suid_wrapper')
+    executable('Xorg.wrap',
+        'xorg-wrapper.c',
+        include_directories: inc_server,
+        dependencies: dep_xorg,
+        c_args: xorg_c_args,
+        install: true,
+        install_dir: get_option('libexecdir'),
+        install_mode: ['r-sr-xr-x', 0, 0],
+    )
+
+    # meson gets confused when there are two targets of the same name
+    # within the same directory, so we use a different intermediate name.
+    xorg_sh = configure_file(
+        input: 'Xorg.sh.in',
+        output: 'Xorg.sh',
+        configuration: conf_server,
+    )
+
+    install_data(
+        xorg_sh,
+        install_mode: 'rwxr-xr-x',
+        install_dir: join_paths(get_option('prefix'), get_option('bindir')),
+        rename: ['Xorg']
+    )
+endif
+
 executable('gtf',
     'utils/gtf/gtf.c',
     include_directories: inc_server,
@@ -140,10 +175,10 @@ lib = shared_library('xorgserver',
     srcs_xorg,
     include_directories: inc_server,
     link_whole: xorg_link,
-    dependencies: [dep_xorg, libxcvt],
+    dependencies: dep_xorg,
     link_args: linker_export_flags,
     c_args: xorg_c_args,
-    install: true,
+    install: false,
 )
 
-libxserver = declare_dependency(link_with: lib)
+libxorg = declare_dependency(link_with: lib)

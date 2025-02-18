@@ -21,7 +21,7 @@ h_check += ['unistd.h']
 #     XAU_CFLAGS="$XAU_CFLAGS $XTHREAD_CFLAGS"
 # fi
 
-lib = library('Xau',
+lib = shared_library('Xau',
   [
     'AuDispose.c',
     'AuFileName.c',

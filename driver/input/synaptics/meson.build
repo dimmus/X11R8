@@ -33,7 +33,7 @@ shared_module('synaptics_drv',
 		inc_server,
 		inc_lib
 	],
-	dependencies: [xproto, xserver, dep_evdev, libxi, libxtst],
+	dependencies: [xproto, libxorg, libxi, libxtst] + dep_evdev,
 	install: true,
 	install_dir: dir_xorg_module / 'input',
 )
@@ -41,14 +41,14 @@ shared_module('synaptics_drv',
 executable('synclient',
     sources : 'synclient.c',
     include_directories: include_directories('.'),
-    dependencies : [xproto, libx11, xserver, dep_evdev, libxi, libxtst],
+    dependencies : [xproto, libx11, libxorg, libxi, libxtst] + dep_evdev,
     install : true
 )
 
 executable('syndaemon',
     sources : 'syndaemon.c',
     include_directories: include_directories('.'),
-    dependencies : [xproto, libx11, xserver, dep_evdev, libxi, libxtst],
+    dependencies : [xproto, libx11, libxorg, libxi, libxtst] + dep_evdev,
     install : true
 )
 

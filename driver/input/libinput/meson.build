@@ -39,12 +39,11 @@ libdraglock = static_library('draglock', ['draglock.c', 'draglock.h'], include_d
 draglock = declare_dependency(link_with: libdraglock, include_directories: inc_config)
 
 dep_drivers = [
-	xproto,
-	xserver,
-  	dep_input,
-	dep_pixman,
-  	bezier,
+	bezier,
   	draglock,
+	xproto,
+	dep_input,
+	dep_pixman,
 ]
 
 driver_src = ['xf86libinput.c', 'util-strings.c']

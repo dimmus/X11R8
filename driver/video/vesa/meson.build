@@ -8,7 +8,7 @@ conf.set('VESA_PACKAGE_VERSION_MINOR', driver_version[1])
 conf.set('VESA_PACKAGE_VERSION_PATCHLEVEL', driver_version[2])
 conf.set('HAVE_ISA', false)
 
-dep_int_vesa = [xproto, xserver, mod_int10]
+dep_int_vesa = [xproto, libxorg]
 dep_ext_vesa = dep_pixman
 
 shared_module('vesa_drv',

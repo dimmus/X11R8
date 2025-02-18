@@ -71,7 +71,7 @@ option('xvmc',                  type: 'boolean', value: true,   description: 'Xv
 option('linux_apm',             type: 'boolean', value: true,   description: 'APM support on Linux')
 option('linux_acpi',            type: 'boolean', value: true,   description: 'ACPI support on Linux')
 option('xf86-input-inputtest',  type: 'boolean', value: true,   description: 'Test input driver support on Xorg')
-
+option('suid_wrapper',          type: 'boolean', value: false,  description: 'SUID wrapper for legacy driver support')                                                                                                    
 option('int10',                 type: 'combo',   value: 'auto', choices: ['stub', 'x86emu', 'vm86', 'auto', 'false'], 
                                                                                                       description: 'Xorg int10 backend (default: usually x86emu)')
 option('hal',                   type: 'combo',   value: 'auto', choices: ['true', 'false', 'auto'],   description: 'Enable HAL integration')
@@ -83,6 +83,8 @@ option('mitshm',                type: 'combo',   value: 'auto', choices: ['true'
 option('agp',                   type: 'combo',   value: 'auto', choices: ['true', 'false', 'auto'],   description: 'AGP support')
 option('sha1',                  type: 'combo',   value: 'auto', choices: ['libc', 'CommonCrypto', 'CryptoAPI', 'libmd', 'libsha1', 'libnettle', 'libgcrypt', 'libcrypto', 'auto'], 
                                                                                                       description: 'SHA1 implementation')
+option('vgahw',                 type: 'combo',   value: 'auto', choices: ['true', 'false', 'auto'],   description: 'Xorg VGA access module')
+
 # xcb
 option('composite',             type: 'boolean', value: true)
 option('damage',                type: 'boolean', value: true)

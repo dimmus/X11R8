@@ -11,8 +11,6 @@ inc_font_xfont = include_directories(
   'util',
 )
 
-lib_args = ['-fvisibility=hidden']
-
 f_check += ['poll', 'readlink', 'strlcat']
 h_check += ['endian.h', 'poll.h', 'sys/poll.h', 'err.h', 'float.h']
 # TODO: AC_REPLACE_FUNCS([reallocarray realpath strlcat strlcpy])
@@ -133,8 +131,8 @@ src += files(
   'util/reallocarray.c',
 )
 
-lib_xfont = library('Xfont2', src,
-  c_args: lib_args,
+lib = shared_library('Xfont2', src,
+  c_args: '-fvisibility=hidden',
   include_directories: [inc_lib, inc_font_xfont],
   dependencies: [dep_int_xfont, dep_ext_xfont],
   version: '2.0.0',
@@ -142,7 +140,7 @@ lib_xfont = library('Xfont2', src,
 )
 
 libxfont = declare_dependency(
-  link_with: lib_xfont,
+  link_with: lib,
   include_directories: [inc_lib, inc_font_xfont],
 )
 

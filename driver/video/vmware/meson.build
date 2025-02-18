@@ -17,7 +17,7 @@ conf.set('BUILD_VMWGFX', true)
 conf.set('HAVE_LIBUDEV', true)
 conf.set('HAVE_XA_2', true) # mesa
 
-dep_int_vmware = [xproto, libx11, libxext, xserver, libxserver]
+dep_int_vmware = [xproto, libx11, libxext, libxorg]
 dep_ext_vmware = [dep_drm, dep_udev, dep_xa, dep_pixman]
 
 inc_vmware = [
@@ -52,7 +52,7 @@ shared_module('vmware_drv',
 	src + src_vmwgfx,
 	name_prefix: '',
 	include_directories: inc_vmware,
-	dependencies: [dep_int_vmware, dep_ext_vmware, mod_vgahw, mod_shadowfb],
+	dependencies: [dep_int_vmware, dep_ext_vmware],
 	link_whole: libsaa,
 	link_with: exe_vmwctrl,
 	install: true,

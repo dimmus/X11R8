@@ -19,10 +19,10 @@ endif
 sna_deps = [
   dep_m,
   dep_threads,
-  xserver,
-  libxcb,
   dep_drm,
-  dep_rt
+  dep_rt,
+  libxorg,
+  libxcb,
 ]
 
 sna_sources = [

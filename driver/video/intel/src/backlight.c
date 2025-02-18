@@ -363,7 +363,7 @@ __backlight_helper_init(struct backlight *b, char *iface)
     if ((st.st_mode & (S_IFREG | S_ISUID | S_IXUSR)) !=
         (S_IFREG | S_ISUID | S_IXUSR))
     {
-        if (System("pkexec --version")) return 0;
+        if (system("pkexec --version")) return 0;
 
         use_pkexec = 1;
     }

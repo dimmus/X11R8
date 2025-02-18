@@ -3099,7 +3099,7 @@ xf86libinput_handle_event(struct libinput_event *event)
                 libinput_event_get_tablet_pad_event(event));
             break;
         case LIBINPUT_EVENT_TABLET_PAD_KEY:
-        case LIBINPUT_EVENT_TABLET_PAD_DIAL:
+        /* case LIBINPUT_EVENT_TABLET_PAD_DIAL: */
             /* TODO: handle this */
             break;
         case LIBINPUT_EVENT_SWITCH_TOGGLE:

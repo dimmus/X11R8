@@ -10,8 +10,8 @@ h_check += ['zlib.h']
 # TODO: add checking for gzclose in -lz. Need?
 # TODO: AC_REPLACE_FUNCS([reallocarray])
 
-dep_ext_fontenc = [dep_zlib]
-dep_int_fontenc = [xproto]
+dep_ext_fontenc = dep_zlib
+dep_int_fontenc = xproto
 
 src = files(
   'encparse.c',
@@ -19,7 +19,7 @@ src = files(
   'reallocarray.c',
 )
 
-lib = library('fontenc', src,
+lib = shared_library('fontenc', src,
   include_directories: [inc_lib, inc_font],
   dependencies: [dep_int_fontenc, dep_ext_fontenc],
   version: '1.0.0',

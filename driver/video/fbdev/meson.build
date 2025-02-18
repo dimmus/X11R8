@@ -5,7 +5,7 @@ conf.set('FBDEV_PACKAGE_VERSION_MAJOR', driver_version[0])
 conf.set('FBDEV_PACKAGE_VERSION_MINOR', driver_version[1])
 conf.set('FBDEV_PACKAGE_VERSION_PATCHLEVEL', driver_version[2])
 
-dep_int_fbdev = [xproto, xserver, mod_fbdevhw]
+dep_int_fbdev = [xproto, libxorg]
 dep_ext_fbdev = [dep_pciaccess, dep_pixman]
 
 shared_module('fbdev_drv',

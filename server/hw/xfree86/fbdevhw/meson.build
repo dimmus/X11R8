@@ -6,7 +6,7 @@ else
     srcs_fbdevhw = 'fbdevhwstub.c'
 endif
 
-mod = shared_module('fbdevhw',
+shared_module('fbdevhw',
     srcs_fbdevhw,
     include_directories: inc_server,
     dependencies: dep_common,
@@ -14,11 +14,6 @@ mod = shared_module('fbdevhw',
     install: true,
     install_dir: dir_xorg_module,
     link_with: exe_xorg,
-)
-
-mod_fbdevhw = declare_dependency(
-    link_with: mod,
-    include_directories: inc_server,
 )
 
 install_data('fbdevhw.h', install_dir: dir_xorg)
