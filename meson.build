@@ -83,9 +83,8 @@ add_project_arguments(
 )
 
 add_project_link_arguments(
-  '-fvisibility=hidden',
-  '-fno-plt', # disable the use of the Procedure Linkage Table for external function calls
-  '-Wl,-z,now', # -z,lazy - explicitly enable lazy binding for shared libraries
+  # '-fno-plt', # disable the use of the Procedure Linkage Table for external function calls
+  '-Wl,-z,lazy', # -z,lazy - explicitly enable lazy binding for shared libraries
   language: 'c'
 )
 
