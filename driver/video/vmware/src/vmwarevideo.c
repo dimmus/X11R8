@@ -66,6 +66,12 @@ static CONST_ABI_16_0 char xv_image_name[] = "XV_IMAGE";
  */
 #define PACKED __attribute__((__packed__))
 
+
+/*
+ * Used to pack and align structs
+ */
+#define PACKED_ALIGNED __attribute__((__packed__, __aligned__(4)))
+
 /*
  * Number of videos that can be played simultaneously
  */
@@ -916,7 +922,7 @@ vmwareVideoPlay(ScrnInfoPtr    pScrn,
         struct _item items[SVGA_VIDEO_DATA_GMRID];
     };
 
-    struct PACKED _cmdSetRegs
+    struct PACKED_ALIGNED _cmdSetRegs
     {
         uint32       cmd;
         uint32       nsid;
@@ -1062,13 +1068,13 @@ vmwareVideoPlay(ScrnInfoPtr    pScrn,
 static void
 vmwareVideoFlush(VMWAREPtr pVMWARE, uint32 streamId)
 {
-    struct PACKED _body
+    struct PACKED_ALIGNED _body
     {
         uint32 escape;
         uint32 streamId;
     };
 
-    struct PACKED _cmdFlush
+    struct PACKED_ALIGNED _cmdFlush
     {
         uint32       cmd;
         uint32       nsid;
@@ -1127,7 +1133,7 @@ vmwareVideoSetOneReg(VMWAREPtr pVMWARE,
         struct _item item;
     };
 
-    struct PACKED _cmdSetRegs
+    struct PACKED_ALIGNED _cmdSetRegs
     {
         uint32       cmd;
         uint32       nsid;
