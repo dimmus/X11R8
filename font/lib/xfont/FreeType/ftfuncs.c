@@ -3320,11 +3320,15 @@ ft_compute_bounds(FTFontPtr font, FontInfoPtr pinfo, FontScalablePtr vals)
     force_c_outside = instance->ttcap.flags & TTCAP_FORCE_C_OUTSIDE;
 
     minchar.ascent = minchar.descent = minchar.leftSideBearing =
-        minchar.rightSideBearing = minchar.characterWidth = minchar.attributes =
+        minchar.rightSideBearing = minchar.characterWidth =
             32767;
     maxchar.ascent = maxchar.descent = maxchar.leftSideBearing =
-        maxchar.rightSideBearing = maxchar.characterWidth = maxchar.attributes =
+        maxchar.rightSideBearing = maxchar.characterWidth =
             -32767;
+    
+    minchar.attributes = 32767;
+    maxchar.attributes = 0; /* CARD16 */
+
     maxOverlap = -32767;
 
     /* Parse all glyphs */
