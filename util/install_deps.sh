@@ -43,18 +43,18 @@ install_deps()
             gettext libcairo2-dev libbsd-dev libepoxy-dev
             
             # XXX: If you system lack bzip2.pc, run command below:
-            sudo tee /usr/lib/x86_64-linux-gnu/pkgconfig/bzip2.pc > /dev/null <<'EOF'
-            prefix=/usr
-            exec_prefix=/usr
-            libdir=/usr/lib/x86_64-linux-gnu
-            includedir=/usr/include
+            # sudo tee /usr/lib/x86_64-linux-gnu/pkgconfig/bzip2.pc > /dev/null <<'EOF'
+            # prefix=/usr
+            # exec_prefix=/usr
+            # libdir=/usr/lib/x86_64-linux-gnu
+            # includedir=/usr/include
 
-            Name: bzip2
-            Description: Some shit
-            Version: 1.0.8-5build1
-            Libs: -L${libdir} -lbz2
-            Cflags: -I${includedir}
-            EOF
+            # Name: bzip2
+            # Description: Some shit
+            # Version: 1.0.8-5build1
+            # Libs: -L${libdir} -lbz2
+            # Cflags: -I${includedir}
+            # EOF
             ;;
         "Arch Linux")
             sudo pacman -S meson libdrm libunwind libinput freetype2 fontconfig
