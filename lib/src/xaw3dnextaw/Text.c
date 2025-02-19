@@ -2550,7 +2550,7 @@ Cardinal nelems;
   if (nelems == 1 && !strcmp (list[0], "none"))
     return;
   if (nelems == 0) {
-    String defaultSel = "PRIMARY";
+    static String defaultSel = "PRIMARY";
     list = &defaultSel;
     nelems = 1;
   }
