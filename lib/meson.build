@@ -1,6 +1,6 @@
 subdir('src' / 'xau')
 subdir('src' / 'xdmcp')
-subdir('xcb')
+subdir('xcb')             # <- xau, xdmcp
 subdir('src' / 'x11')     # <- xcb
 subdir('src' / 'ice')
 subdir('src' / 'sm')
@@ -14,7 +14,9 @@ subdir('ext' / 'xext')
 subdir('src' / 'xpm')     # <- ext/xext
 subdir('src' / 'xmu')     # <- ext/xext
 subdir('src' / 'xaw')     # <- ext/xext
-# subdir('src' / 'xaw3d')
+subdir('src' / 'xaw3d')
+subdir('src' / 'xaw3dnextaw')
+# subdir('src' / 'xaw3dmowitz') # <- src/xaw3dnextaw
 subdir('src' / 'xaw3dxft')
 subdir('ext' / 'xrandr')
 subdir('ext' / 'xdamage')

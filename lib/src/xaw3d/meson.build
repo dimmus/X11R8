@@ -1,16 +1,14 @@
-lib_args = [
-  '-DXAW_INTERNATIONALIZATION',
-  '-DXAW_MULTIPLANE_PIXMAPS',
-  '-DXAW_GRAY_BLKWHT_STIPPLES',
-  '-DXAW_ARROW_SCROLLBARS',
-]
-
 inc_xaw3d = [inc_config, include_directories('.')]
 
 f_check += ['iswspace']
 h_check += ['wctype.h', 'wchar.h', 'widec.h']
 
 dep_int_xaw3d = [libx11, xproto, libxext, libxt, libxmu, libxpm, libi18n]
+
+conf.set('XAW_ARROW_SCROLLBARS', true)
+conf.set('XAW_MULTIPLANE_PIXMAPS', true)
+conf.set('XAW_INTERNATIONALIZATION', true)
+conf.set('XAW_GRAY_BLKWHT_STIPPLES', true)
 
 src = files(
   'MultiSrc.c',
@@ -80,7 +78,6 @@ pfiles = pgen.process('laygram.y')
 src += pfiles
 
 lib = library('xaw3d', src,
-  c_args: lib_args,
   include_directories: inc_xaw3d,
   dependencies: dep_int_xaw3d,
   version: '8.0.0',

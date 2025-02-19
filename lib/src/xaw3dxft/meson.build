@@ -1,22 +1,12 @@
 h_check += ['wctype.h', 'wchar.h', 'widec.h']
 f_check += 'iswspace'
 
-inc_xaw3dxft = [inc_config, inc_lib, include_directories('.')]
+inc_xaw3dxft = [inc_lib, include_directories('.')]
 
 dep_int_xaw3dxft = [libx11, libxt, libxmu, libxext, libxft, libxpm, libi18n]
 dep_ext_xaw3dxft = dep_freetype2
 
-lib_args = [
-  '-DXAW_INTERNATIONALIZATION',
-  '-DXAW_GRAY_BLKWHT_STIPPLES',
-  '-DXAW_ARROW_SCROLLBARS',
-]
-
 src = files(
-  'MultiSrc.c',
-  'MultiSink.c',
-  'XawIm.c',
-  'XawI18n.c',
   'AllWidgets.c',
   'AsciiSink.c',
   'AsciiSrc.c',
@@ -59,6 +49,14 @@ src = files(
   'XawInit.c',
 )
 
+# XAW_INTERNATIONALIZATION
+src += files(
+  'MultiSrc.c',
+  'MultiSink.c',
+  'XawIm.c',
+  'XawI18n.c',
+)
+
 lgen = generator(
   exe_flex,
   output: '@PLAINNAME@.yy.c',
@@ -81,7 +79,6 @@ lib = library('Xaw3dxft', src,
   include_directories: inc_xaw3dxft,
   dependencies: [dep_int_xaw3dxft, dep_ext_xaw3dxft],
   version: '8.5.0',
-  c_args: lib_args,
   install: true,
 )
 

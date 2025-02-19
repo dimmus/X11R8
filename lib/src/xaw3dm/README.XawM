@@ -1,0 +1,373 @@
+                   Modern-look Athena Widgets (XawM)
+                          Edward A. Falk
+                   falk@falconer.vip.best.com
+		   $Id: README.XawM,v 1.4 2000/08/31 17:12:18 falk Exp $
+
+
+TOPICS:
+	Features
+	Compiling
+	Installing (important)
+	Bugs
+	New Features
+	Security
+	Y2K
+	Credits
+
+
+
+Features:
+
+This is YAAC (Yet Another Athena Clone).  Based primarily on the Xaw3d
+widget set, v1.5, by Kaleb Keithly.  This version is an attempt to adhere as
+closely as possible with what is becoming the modern standard graphics
+interface.  When finished, this toolkit should produce applications
+that share the look-and-feel of other modern toolkits, such as Motif,
+Tk, Qt, windows-95 and so on.
+
+This version is based on Xaw3d for the following reasons:
+
+	Xaw3d is "almost there" -- only a few things need to be changed.
+
+	Xaw3d is highly standard -- it is the most widely distributed
+	and widely supported of the Athena clones..
+
+Minimal changes should be needed to convert Xaw3d to XawM.  It is hoped
+that XawM will be accepted as a replacement of Xaw3d.
+
+
+Compiling:
+
+	It should be sufficient to unpack the sources and type
+
+		xmkmf
+		make
+
+	To build all the libraries.
+
+
+
+Installing:
+
+    This is beta software, so I haven't yet made installation
+    trivial.  However, it's not too hard.
+
+    Note: I make several references to "/usr/X11R6" as your X-windows
+    directory.  This may vary, depending on your system.  For instance,
+    if you have Solaris, use "/usr/openwin" instead.
+
+    *	Create the directory /usr/X11R6/include/XawM.  Copy all the
+	header files from here to there.  Alternative:  Make
+	/usr/X11R6/include/XawM a symlink to this directory.
+
+    *	Copy libXawM* to /usr/X11R6/lib.
+
+    *	Get rid of the original libXaw and libXaw3d libraries.
+	Preferably back them up somehow.
+
+    *   Get rid of the original libXaw and libXaw3d header files.
+	Preferably back them up somehow.
+
+	This is my preferred method:
+
+	  Create backup directories:
+
+		# mkdir /usr/X11R6/include-orig/X11
+		# mkdir /usr/X11R6/lib-orig
+		# mkdir /usr/X11R6/bin-orig
+
+	  Move header files and libraries:
+
+		# mv /usr/X11R6/include/X11/Xaw /usr/X11R6/include-orig/X11
+		# mv /usr/X11R6/include/X11/Xaw3d /usr/X11R6/include-orig/X11
+		# mv /usr/X11R6/lib/libXaw.* /usr/X11R6/lib-orig
+		# mv /usr/X11R6/lib/libXaw3d.* /usr/X11R6/lib-orig
+
+    *	Make these symlinks:
+
+    	/usr/X11R6/lib/libXaw.a -> libXawM.a
+	/usr/X11R6/lib/libXaw.so -> libXaw.so.6.1
+	/usr/X11R6/lib/libXaw.so.6 -> libXaw.so.6.1
+	/usr/X11R6/lib/libXaw.so.6.1 -> libXawM.so.6.1
+
+	/usr/X11R6/lib/libXaw3d.a -> libXawM.a
+	/usr/X11R6/lib/libXaw3d.so -> libXaw3d.so.6.1
+	/usr/X11R6/lib/libXaw3d.so.6 -> libXaw3d.so.6.1
+	/usr/X11R6/lib/libXaw3d.so.6.1 -> libXawM.so.6.1
+
+    	/usr/X11R6/include/Xaw -> XawM
+    	/usr/X11R6/include/Xaw3d -> XawM
+
+	  (here are the commands:)
+
+		# cd /usr/X11R6/lib
+		# ln -s libXawM.a libXaw.a
+		# ln -s libXaw.so.6.1 libXaw.so
+		# ln -s libXaw.so.6.1 libXaw.so.6
+		# ln -s libXawM.so.6.1 libXaw.so.6.1
+		# ln -s libXawM.a libXaw3d.a
+		# ln -s libXaw.so.6.1 libXaw3d.so
+		# ln -s libXaw.so.6.1 libXaw3d.so.6
+		# ln -s libXawM.so.6.1 libXaw3d.so.6.1
+
+		# cd /usr/X11R6/include/X11
+		# ln -s XawM Xaw
+		# ln -s XawM Xaw3d
+
+    *	At this point, all your old applications that used Athena
+	should start using XawM.
+
+    *	You can further improve the look of XawM by adding these
+	to your .Xdefaults file:
+
+		*BeNiceToColormap: False
+		*background: grey
+		*highlightThickness: 1
+		*Toggle.ToggleStyle: Auto
+
+
+    See README.XAW3D for more information.
+
+
+
+
+Known Bugs:
+
+	I would like to stress that the problems listed here are common
+	to all Athena clones, and are not specific to XawM.  Each
+	variant of XawM has different header files, which can break
+	binary compatibility in some cases.
+
+	Applications that depend on knowledge of widget internals, such
+	as viewres and listres will fail unless linked to the original
+	Xaw libraries or recompiled with the new header files.
+
+	Applications which use custom widgets subclassed from Athena
+	widgets will die is mysterious ways.  If you see error messages
+	about resources being the wrong size, that's a dead giveaway.
+
+	In most cases, it is sufficient to recompile these applications.
+	You will need source code to do this.
+
+	GV, the ghostscript viewer, and bitmap, the bitmap editor
+	are known to exhibit this problem.
+
+	  IMPORTANT:  It is vitally important when recompiling widgets
+	  subclassed from Athena that the header files match the
+	  libraries.  Failure to ensure this is the cause of almost
+	  all problems.  Make sure that the Xaw and Xaw3d header
+	  directories are symlinks to XawM.
+
+	  (I find it helpful to compile with '-E' (or do "make Foo.i").
+	  This will generate a .i file which shows where the header
+	  files originated.)
+
+	Xapm, which displays power level, depends on the Athena Classic
+	scrollbar, which it uses as a display widget.  It will look
+	really weird linked to Xaw3d or XawM.  You may wish to rebuild
+	it, and link explicitly to Xaw-orig.
+
+
+	Another way to get around this problem is to take failing applications
+	and run them with LD_LIBRARY_PATH set to use /usr/X11R6/lib-orig
+	before /usr/X11R6/lib.
+
+	  Here is my preferred method:
+
+	    * Move problem application to /usr/X11R6/bin-orig
+	    * Replace the original program with a shell script that
+	      sets LD_LIBRARY_PATH.
+
+	    For example, /usr/X11R6/bin/gv looks like this:
+
+	    	#!/bin/sh
+		LD_LIBRARY_PATH=/usr/X11R6/lib-orig ; export LD_LIBRARY_PATH
+		/usr/X11R6/bin-orig/gv $*
+
+
+
+
+New Resources with this version:
+
+    ThreeD:
+    	armPixel		color when widget is "armed"
+	topShadowPixmap		pixmap for top shadow
+	bottomShadowPixmap	pixmap for bottom shadow
+	armPixmap		pixmap for "armed" widgets.
+	insensitiveContrast	contrast for widgets in "insensitive" state
+	insensitivePixel	color for widgets in "insensitive" state
+	ridgeShadow		boolean: widget drawn with a ridge shadow.
+
+    Scrollbar:
+    	arrowScrollbar		enables or disables end arrows
+
+    Toggle:
+    	toggleStyle		one of Simple, Check, Radio, Auto
+
+
+New Functions with this version:
+
+    ThreeD:
+    	Several new internal functions to export ThreeD functionality.
+	See ThreeDP.h
+
+    Traversal:
+    	Keyboard traversal has been added to XawM.  Functions exported
+	in Traversal.h allow you to add traversal to 3rd-party widgets
+	which will be used with Athena.
+
+
+
+
+
+
+
+Goals:
+
+	Binary & source compatibility with existing Athena applications.
+	You should be able to simply plug this library in place of the
+	existing Xaw (or Xaw3d) library.
+
+	Source compatibility with existing widgets subclassed from Xaw3d.
+
+	Integrate updates made to Xaw since Xaw3d was created.
+
+	Integrate nifty features from XawXpm, Xaw95, neXtaw that I deem
+	fit.  This is *not* intended to be a kitchen-sink release.
+
+	Upgrade text widgets as follows:
+	  Single-line text widgets have horizontal scrolling.
+	  Uses erase, word-erase and kill as indicated by tty settings.
+	  Handles primary selection and cut/paste buffers both.
+	  Selected text is "pending-delete"; meaning that if characters are
+	  typed while text is selected, the selected text is replaced by
+	  the new characters.
+
+	Pass lint and gcc -Wall -pedantic compile tests.
+
+	It is not expected to expand the capabilities of XawM much beyond
+	the basics of Xaw -- this is left to the lessTif project.
+
+New Features:
+
+	(This is only a wish list at this time; features will be added as
+	time permits, and only if they cause no unreasonable increase in
+	library size or execution time.)
+
+	Pixmap backgrounds, as with XawXpm
+	Use of Xpm or Imlib or None for pixmap converter.
+
+	"Ridge" and "Groove" borders as with XawXpm
+
+	Alternate toggle button styles, as with neXtaw
+
+	Alternate menu button styles, as with neXtaw.
+
+	Arrow buttons on scrollbar:  automatic or fixed.
+
+	Underlines in labels and menu items, so that keyboard accelerators
+	may be displayed.
+
+	Addition of spot help and long help to widgets, as with Motif.
+
+	Addition of Help() action in widgets to display long help.  Default
+	translation table will call this action when user hits help key
+	or widget receives a help message(?).
+
+	Improved keyboard focus control.  Goal is to allow a user to
+	navigate an application with the keyboard alone, as with Motif.
+
+	Focus policy is set by setting the global resource "focusPolicy"
+	to one of:
+
+	  XawFocusPointer
+		The default.  Focus follows mouse and may be changed
+		with the tab key.  This is the most flexible setting.
+
+	  XawFocusExplicit
+		like Motif -- focus set by clicking in a widget
+		or with the tab key.  Focus does not follow the mouse.
+		This method may cause trouble when non-XawM widgets are
+		mixed into the application, as these widgets may not
+		receive or relinquish focus properly.
+
+	  XawFocusOld
+		Xaw Classic behavior.  Keyboard traversal does not work.
+
+
+	Addition of keyboard activation for widgets:
+	  All widgets: Tab, backtab to move from widget to widget
+	  Command, toggle, etc.: space, return activates.
+	  Scrollbar: arrow keys act like presses in arrow buttons.
+	  	Page up/down act like press in bar background
+		shift-arrow: ?
+		ctrl-arrow: ?
+		alt-arrow: ?
+
+
+New Features for widget authoring:
+
+	ThreeD class to formally export convenience routines for creation
+	of shadow GCs, and for rendering of 3-d borders.
+
+	Label class to formally export convenience routines for display
+	of text.
+
+
+
+
+Security:
+
+	This software includes the RedHat security patches.  I am not
+	a security expert and as far as I know, this software has not
+	been audited by a security expert, so this software should not
+	be considered secure.  All we know is that there were real
+	security problems in Athena Classic.
+
+	Therefore:
+
+	  NO PROGRAM LINKED TO THIS LIBRARY SHOULD BE INSTALLED
+	  WITH SETUID-ROOT PERMISSIONS.
+
+
+Y2K:
+
+	I have no clue as to whether or not XawM is Y2K-compliant.
+	I don't believe that XawM uses dates or times in any way.
+	I'll know more in a few weeks.
+
+	There may be a problem with event timestamps from the X server
+	for applications running past midnight on 31 Dec, but if you're
+	sitting at a computer at that time, you are in more need of a
+	life than I am.
+
+	Should this software exhibit any Y2K problems, simply return the
+	unused portion of this software, and I will cheerfully refund
+	the unused portion of your money.
+
+
+Credits (in chronological order of their contribution):
+
+          All the people at the X Consortium
+
+	  Kaleb S. Keithley <kaleb@opengroup.org>
+
+          Achille Hui (eillihca@drizzle.stanford.edu)
+          Robert Withrow (witr@rwwa.com)
+          Malcolm Strickland (chuck-strickland@orl.mmc.com
+          David Flanagan (david@ora.com)
+          Jamie Zawinski (jwz%thalidomide@lucid.com
+          Frank Terhaar-Yonkers (fty@bizarre.trpnc.epa.gov)
+          Mike Schulze (mike@cs.curtin.edu.au)
+          Gustaf Neumann (neumann@dec4.wu-wien.ac.at)
+          Jerry Whelan (guru@stasi.bradley.edu)
+          Mark Rawling (mwr@mel.dit.csiro.au)
+          Tim Theisen (tim@cs.wisc.edu)
+          Mitch Trachtenberg (mitch@mta.com)
+          Keith Packard (keithp@ncd.com)
+	  Ed Falk (falk@falconer.vip.best.com)
+
+
+Comments, fixes, etc. to: 
+	  Ed Falk (falk@falconer.vip.best.com)
+

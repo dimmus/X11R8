@@ -1,0 +1,16 @@
+$Id: README.bin-orig,v 1.1 2002/04/09 06:26:56 falk Exp $
+
+This directory contains executables which need to be linked against
+the original Xaw widget library.
+
+This directory was created when XawM was installed.
+
+Explanation:  Some binaries compiled for Xaw do not work when linked
+against XawM.
+
+Examples include the xapm program which depends on the old-fashioned
+way scrollbars look under Xaw, and several applications which use
+widgets which were subclassed from Xaw widgets.  Those applications
+need to be recompiled to use XawM.  If they are not recompiled, then
+they should be moved to this directory and executed from a script which
+sets LD_LIBRARY_PATH to link the original Xaw libraries instead of XawM.

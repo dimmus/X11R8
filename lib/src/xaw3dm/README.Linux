@@ -1,0 +1,72 @@
+ $Id: README.Linux,v 1.1 1997/07/28 18:32:05 falk Exp $
+ Based on Xaw3d v1.3
+
+ ******************************************
+
+  Please read the README.XAW3D file first.
+
+ ******************************************
+
+  The following are a few instructions on how to use this port of Xaw3d-1.3
+ under Linux, and a helpful tip on customizing this 3-D replacement of Xaw.
+
+  After you unpack the binary distribution file, i.e., Xaw3d-1.3La-bin.tar.gz,
+ in a termporary sub-directory (e.g., /tmp), or make your own libraries from
+ the sources provided, you must do something like the following in order for
+ your X-window applications to use libXaw3d rather than libXaw:
+
+  1. rename libXaw.so.6.1 to (for example) hidden_libXaw.so.6.1:
+     mv libXaw.so.6.1 hidden_libXaw.so.6.1
+
+  2. move the libXaw* files from the temporary sub-directory to your
+     XFree86 3.2 lib directory (most likely /usr/X11R6/lib)
+
+  3. run ldconfig
+
+ The libXaw3d.so.6.1 and libXaw.so.6.1 are identical; the only difference is
+ the name in the library ELF header. This is a work-around for ld.so's reading
+ the real library name from the file and not "buying" the symbolic link
+ libXaw.so.6.1 -> libXaw3d.so.6.1 trick.
+
+ To customize the 3-D look of Xaw3d, use the following as a starting point
+ by inserting it in your .Xdefaults file, and tailor colors, settings and
+ sizes to taste:
+
+!------------------
+! Xaw3d Defaults
+!------------------
+*background: gray80
+*Form.background: bisque3
+*TransientShell*Dialog.background: bisque3
+*Command.background: gray80
+*Menubutton.background: gray80
+*ScrollbarBackground: gray40
+*Scrollbar*background: bisque4
+*Scrollbar*width: 16
+*Scrollbar*height: 16
+*Scrollbar*shadowWidth: 2
+*Scrollbar*cursorName: top_left_arrow
+*Scrollbar*pushThumb: false
+*ShapeStyle: Rectangle
+*beNiceToColormap: false
+*shadowWidth: 3
+*SmeBSB*shadowWidth: 3
+*highlightThickness: 0
+*topShadowContrast: 20
+*bottomShadowContrast: 40
+
+ To see what Xaw3d can do for your Xaw applications, look through
+ the examples in the app-defaults directory included in this binary
+ distribution. It contains a collection of Xaw3d resource files for
+ common Xaw applications, which I've put together over the past few
+ years. Please read the README file included therein.
+
+
+ As a last note, I've left the original sources before patching with the
+ enhancements and bug-fixes I've collected so far (all the *.orig files),
+ so that whoever likes to, can read through the changes.
+
+ That's about it! Enjoy :)
+
+ Dimitri (dbouras@hol.gr, dimitri@ee.ubc.ca)
+

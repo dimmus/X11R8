@@ -1,0 +1,11 @@
+#! /bin/sh
+#
+# $Id: legacy,v 1.1 2002/04/09 06:29:51 falk Exp $
+#
+# This script takes binaries which were linked against xaw classic, and sets
+# LD_LIBRARY_PATH so that they're linked against the proper libraries.  This
+# is used for a very few legacy applications which will not run with XawM.
+
+program=`basename $0`
+LD_LIBRARY_PATH=/usr/X11R6/pre-xawm/lib:/usr/X11R6/lib
+exec /usr/X11R6/pre-xawm/bin/$program $*

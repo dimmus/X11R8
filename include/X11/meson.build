@@ -13,6 +13,7 @@ inc_lib += [
         'Xft',
         'Xmu',
         'Xtrans',
+        'neXtaw',
     )
 ]
 
@@ -21,6 +22,7 @@ subdir('extensions')
 subdir('fonts')
 subdir('Xaw3d')
 subdir('Xaw3dxft')
+subdir('neXtaw')
 
 install_headers(
     'ap_keysym.h',

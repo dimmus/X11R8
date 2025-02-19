@@ -1,0 +1,10 @@
+$Id: README.include-orig,v 1.1 2002/04/09 06:26:56 falk Exp $
+
+This directory contains the original include files from the Xaw library.
+This directory was created when XawM was installed.
+
+Place this directory ahead of /usr/X11R6/include when building applications
+which you wish to link to the original Xaw library instead of XawM.
+
+You only need to do this when your application uses widgets which are
+subclassed from Xaw widgets.

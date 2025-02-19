@@ -1,0 +1,197 @@
+Bugs:
+	Text:
+	  Initial cursor not drawn
+	  deleted text does not disappear until redraw
+	  most text not redrawn on redraw
+	  cursor not redrawn on redraw
+
+
+	scrollbar jumps when selected
+	change modes in bitmap -- dump core
+	Use bitmap for button label, inverts incorrectly
+
+	Text widgets draw opaque text with wrong bg color
+
+	Change an SmeBSB label, gadget does not request a resize.
+
+	keyboard accelerators for buttons:  space bar only
+
+	text delete-selection() doesn't test to see if there *is* a
+	selection.  Results are very bad.  Cursor is moved randomly.
+
+	SmeThreeD.c: values out of range.
+	Vendor.c: includes ExtAgent.h which does not always exist.
+	Viewport forgets to deduct scrollbar width properly; see faxtool
+
+	Viewport has bad code:
+
+	    if (xoff > 1.0)		/* scroll to right */
+	       x = child->core.width;
+	    else if (xoff < 0.0)	/* if the offset is < 0.0 nothing */ 
+	       x = child->core.x;
+	    else
+	       x = (Position) (((float) child->core.width) * xoff);
+
+	  Are we supposed to scroll to zero or to child->core.x?
+
+	  Even worse: this dumps core if widget not yet realized.
+
+
+
+Text Notes:
+
+  Data structures:
+
+	XawTextLineTableEntry:
+		holds position, y, textWidth
+
+	XawTextLineTable
+		top of displayed text, #lines, array of XawTextLineTableEntry
+
+	XawTextSelection:
+		left, right,
+		type:  null,position,char,word,line,paragraph,all
+		selections[]
+
+	XawTextSelectionSalt:
+		stores a selection (salts it away)
+		next, XawTextSelection s, char *contents, length
+
+	XawTextMargin:
+		left, right, top, bottom
+
+	TextPart:
+		Widget	source, sink
+		insertPos
+		XawTextSelection s
+		XawTextSelectType *sarray	/* to cycle for selections */
+		XawTextSelectionSalt *salt	/* salted away selections */
+		options				/* wordbreak, scroll, etc. */
+		display_caret, auto_fill, scrollbar types, ...
+		margin, line table, scan direction
+		XawTextSelection origSel	/* selection being modified */
+		scrollbars,
+		search-and-replace structure
+		file insert popup
+
+	TextRec:
+		core
+		simple
+		text
+
+
+  Functions:
+  	_XawTextZapSelection(ctx, event, kill)
+		_DeleteOrKill(selection.left, right, kill)
+		_XawTextSetScrollBars(ctx)
+
+	_DeleteOrKill(ctx, from,to, kill)
+		If kill is True, create a "SECONDARY" selection.
+		replace [from to] with ""
+
+
+Todo:
+	Scrollbars:  control-arrow produces finer movement.
+
+	Grab 3d stuff from lesstif:
+	  TopShadowPixmap, HighlightPixmap, etc.
+
+	BeNiceToColormap:  don't use patterns, just use black/white.
+	InsensitiveContrast instead of patterns.
+
+	Pixmap caching; client-wide at least, possibly screen-wide via
+	root properties.  Possibly not worth it; the property names
+	could take up more storage than the pixmaps.
+
+	Note: Xmu has a function that does this.
+
+	  To write:
+	    XawGetPixmapByDepth(screen, image_name, fg, bg, depth)
+	    XawGetPixmap(screen, image_name, fg, bg)
+		Screen	*screen ;
+		char	*image_name ;
+		Pixel	fg, bg ;
+		int	depth ;
+
+	    XawInstallImage(XImage *image, char *image_name) ;
+
+	    where image_name is either a filename or an imagename registered
+	    with XawInstallImage or pre-defined.
+
+	    Algorithm: search pixmap cache for match, return that pixmap.
+	    Else, search image cache for match, generate & return pixmap.
+	    Else, load file, create image, create pixmap.
+
+
+	    Predefined:
+	      background	solid background tile
+	      25_foreground	25% fg, 75% bg
+	      50_foreground
+	      75_foreground
+	      horizontal	horizontal lines
+	      vertical		vertical lines
+	      slant_left
+	      slant_right
+
+	      question_image	'?' in a head
+	      warn_image	'!'
+	      error_image	circle/slash
+	      information_image	'i'
+	      working_image	hourglass
+
+	keyboard activates menubutton
+	Right click brings up menu and leaves it up.
+
+	arrow keys navigate menu, space selects
+
+	scroll & arrow keys pan viewport
+
+	arrow keys pan panner
+
+	Integrate updates made to Xaw since Xaw3d was created.
+
+	Full-color pixmaps
+	Use of Xpm or Imlib or None for pixmap converter.
+
+	Automatically generate shadow pixmaps from background?
+
+	Upgrade text widgets as follows:
+	  _DeleteOrKill makes a "CLIPBOARD" selection.
+	  Single-line text widgets have horizontal scrolling.
+	  Uses erase, word-erase and kill as indicated by tty settings.
+	  Handles primary selection and cut/paste buffers both.
+	  Selected text is "pending-delete"; meaning that if characters are
+	  typed while text is selected, the selected text is replaced by
+	  the new characters.
+	  New actions:
+	    kill-to-start-of-line()
+	    insert-char(c)
+	    insert-string
+
+	Alternate menu button styles, as with neXtaw.
+
+	Arrow buttons on scrollbar:  automatic or fixed.
+
+	Underlines in labels and menu items, so that keyboard accelerators
+	may be displayed.  See how this is done with motif
+
+	Improved keyboard focus control.  Goal is to allow a user to
+	navigate an application with the keyboard alone, as with Motif.
+
+	Addition of keyboard activation for widgets:
+	  All widgets: Tab, backtab to move from widget to widget
+	  Command, toggle, etc.: space, return activates.
+	  Scrollbar: arrow keys act like presses in arrow buttons.
+	  	Page up/down act like press in bar background
+		shift-arrow: ?
+		ctrl-arrow: ?
+		alt-arrow: ?
+
+	Label class to formally export convenience routines for display
+	of text.
+
+	Pass lint and gcc -Wall -pedantic compile tests.
+
+	Verify source compatibility with existing widgets subclassed from Xaw3d.
+
+
