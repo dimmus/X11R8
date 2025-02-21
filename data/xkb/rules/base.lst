@@ -22,6 +22,7 @@
   benqx           BenQ X-Touch
   benqx730        BenQ X-Touch 730
   benqx800        BenQ X-Touch 800
+  abnt2           Brazilian ABNT2
   brother         Brother Internet
   btc5090         BTC 5090
   btc5113rf       BTC 5113RF Multimedia
@@ -95,8 +96,10 @@
   thinkpad        IBM ThinkPad 560Z/600/600E/A22E
   thinkpad60      IBM ThinkPad R60/T60/R61/T61
   thinkpadz60     IBM ThinkPad Z60m/Z60t/Z61m/Z61t
+  jp106           Japanese 106-key
   flexpro         Keytronic FlexPro
   kinesis         Kinesis
+  kr106           Korean 106-key
   logitech_base   Logitech
   logiaccess      Logitech Access
   logicd          Logitech Cordless Desktop
@@ -837,6 +840,7 @@
   lv3:ralt_alt         Right Alt never chooses 3rd level
   lv3:enter_switch     Enter on keypad
   lv3:caps_switch      Caps Lock
+  lv3:caps_switch_capslock_with_ctrl Caps Lock; Ctrl+Caps Lock for original Caps Lock action
   lv3:bksl_switch      Backslash
   lv3:lsgt_switch      The "&lt; &gt;" key
   lv3:caps_switch_latch Caps Lock; acts as onetime lock when pressed together with another 3rd-level chooser
@@ -893,12 +897,15 @@
   caps:escape          Make Caps Lock an additional Esc
   caps:escape_shifted_capslock Make Caps Lock an additional Esc, but Shift + Caps Lock is the regular Caps Lock
   caps:backspace       Make Caps Lock an additional Backspace
+  caps:return          Make Caps Lock an additional Return key
   caps:super           Make Caps Lock an additional Super
   caps:hyper           Make Caps Lock an additional Hyper
   caps:menu            Make Caps Lock an additional Menu key
   caps:numlock         Make Caps Lock an additional Num Lock
+  caps:ctrl_shifted_capslock Make Caps Lock an additional Ctrl and Shift + Caps Lock the regular Caps Lock
   caps:ctrl_modifier   Make Caps Lock act as an additional Ctrl modifier, but keep identifying as Caps Lock
   caps:digits_row      Caps Lock gives digits on the digits row (Azerty layouts)
+  caps:digits_row_independent_lock Shift + Caps locks the digits on the digits row, Caps Lock alone behaves as usual (Azerty layouts)
   caps:none            Caps Lock is disabled
   altwin               Alt and Win behavior
   altwin:menu          Add the standard behavior to Menu key
@@ -913,6 +920,7 @@
   altwin:hyper_win     Hyper is mapped to Win
   altwin:alt_super_win Alt is mapped to Right Win, Super to Menu
   altwin:swap_lalt_lwin Left Alt is swapped with Left Win
+  altwin:swap_ralt_rwin Right Alt is swapped with Right Win
   altwin:swap_alt_win  Alt is swapped with Win
   altwin:prtsc_rwin    Win is mapped to PrtSc and the usual Win
   Compose key          Position of Compose key
@@ -1003,5 +1011,7 @@
   solaris:sun_compat   Sun key compatibility
   terminate            Key sequence to kill the X server
   terminate:ctrl_alt_bksp Ctrl+Alt+Backspace
+  fkeys                Function keys
+  fkeys:basic_13-24    Use F13-F24 as usual function keys
   custom               Miscellaneous options
   custom:types         Use user-defined custom XKB types

@@ -519,3 +519,18 @@ xkb_symbols "ergoarabic" {
     key <AB09> {[            period,                  less,                    any,     any ]};
     key <AB10> {[             slash,  Arabic_question_mark,                  U066D,   U200C ]};
 };
+
+// Compatibility mapping
+partial xkb_symbols "qwerty" {
+    include "ara(basic)"
+};
+
+// Compatibility mapping
+partial xkb_symbols "qwerty_digits" {
+    include "ara(digits)"
+};
+
+// Compatibility mapping
+partial xkb_symbols "uga" {
+    include "ancient(uga)"
+};

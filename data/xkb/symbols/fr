@@ -835,7 +835,7 @@ xkb_symbols "dvorak" {
   key <SPCE> { [            space,            space,    nobreakspace,     nobreakspace ] };
 };
 
-// C'WHERTY: Breton keyboard. Ar c'hlavier brezhoneg.
+// C'HWERTY: Breton keyboard. Ar c'hlavier brezhoneg.
 // Copyright © 2009 Dominique Pellé <dominique.pelle@gmail.com>
 // Version: 0.1
 //
