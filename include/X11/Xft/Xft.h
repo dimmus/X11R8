@@ -24,10 +24,6 @@
 #ifndef _XFT_H_
 #define _XFT_H_
 
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
-
 /*
  * Current Xft version number, set from version in the config.h file.
  */
