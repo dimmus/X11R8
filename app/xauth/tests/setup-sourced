@@ -14,13 +14,13 @@ rm -f $XAUTHORITY ; touch $XAUTHORITY
 xauth()
 {
   echo "> xauth" "$@"
-  ../xauth "$@"
+  ../../build/app/xauth/xauth "$@"
   echo "  exits with $?"
 }
 
 xauth_silent()
 {
   echo "> xauth" "some silent commands which should not be logged..."
-  ../xauth "$@"
+  ./../build/app/xauth/xauth "$@"
   echo "  exits with $?"
 }

@@ -2,3 +2,5 @@
 .vscode
 build
 .clang*
+app/xauth/tests/out.stderr
+app/xauth/tests/out.stdout
