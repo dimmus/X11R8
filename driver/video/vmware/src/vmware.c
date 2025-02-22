@@ -37,7 +37,7 @@ char rcsId_vmware[] = "Id: vmware.c,v 1.11 2001/02/23 02:10:39 yoel Exp $";
 #include "vmware_common.h"
 #include "common_compat.h"
 
-#if (GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) >= 5)
+/* #if (GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) >= 5) */
 
 #  define xf86LoaderReqSymLists(...) \
       do                             \
@@ -49,9 +49,8 @@ char rcsId_vmware[] = "Id: vmware.c,v 1.11 2001/02/23 02:10:39 yoel Exp $";
       {                          \
       }                          \
       while (0)
-
-#else
-
+/* #else */
+#if 0
 const char *vgahwSymbols[] = { "vgaHWGetHWRec", "vgaHWGetIOBase",
                                "vgaHWGetIndex", "vgaHWInit",
                                "vgaHWProtect",  "vgaHWRestore",
