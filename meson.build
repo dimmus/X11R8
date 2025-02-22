@@ -84,7 +84,7 @@ add_project_arguments(
 )
 
 add_project_link_arguments(
-  '-Wl,-z,now', # -z,lazy - explicitly enable lazy binding for shared libraries
+  '-Wl,-z,lazy', # -z,lazy - explicitly enable lazy binding for shared libraries
   language: 'c'
 )
 
