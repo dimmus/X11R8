@@ -1,7 +1,6 @@
 ver_evdev = '2.11.0'
 
 dep_ext_evdev = [dep_udev, dep_evdev]
-dep_int_evdev = libxorg
 
 src = files(
     'emuMB.c',
@@ -14,7 +13,7 @@ src = files(
 shared_module('libevdev_drv', src,
 	name_prefix: '',
 	include_directories: [include_directories('.'), inc_server, inc_lib],
-	dependencies: [dep_int_evdev, dep_ext_evdev],
+	dependencies: dep_ext_evdev,
 	install: true,
 	install_dir: dir_xorg_module / 'input',
 )

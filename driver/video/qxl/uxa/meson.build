@@ -8,7 +8,7 @@ src = files(
 )
 
 libqxl_uxa = static_library('uxa', src,
-    dependencies: [dep_int_qxl, dep_ext_qxl],
+    dependencies: dep_ext_qxl,
     include_directories: inc_qxl,
     install: false,
 )

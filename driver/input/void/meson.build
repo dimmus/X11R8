@@ -13,7 +13,7 @@ shared_module('libvoid_drv',
 	src_driver,
 	name_prefix: '',
 	include_directories: inc_server,
-	dependencies: [libxorg, dep_pixman],
+	dependencies: dep_pixman,
 	install: true,
 	install_dir: dir_xorg_module / 'input',
 )

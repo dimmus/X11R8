@@ -11,7 +11,6 @@ conf.set('XF86DRM_MODE', true) # DRM kernel modesetting
 conf.set('HAVE_LIBUDEV', true)
 
 dep_ext_qxl = [dep_drm, dep_pciaccess, dep_udev, dep_pixman]
-dep_int_qxl = libxorg
 
 inc_qxl = [
     include_directories('uxa'),
@@ -44,7 +43,7 @@ shared_module('qxl_drv',
     src,
 	name_prefix: '',
 	include_directories: inc_qxl,
-	dependencies: [dep_int_qxl, dep_ext_qxl],
+	dependencies: dep_ext_qxl,
     link_with: libqxl_uxa,
 	install: true,
 	install_dir: dir_xorg_module / 'drivers',

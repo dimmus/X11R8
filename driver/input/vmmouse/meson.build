@@ -24,7 +24,7 @@ lib_args = [
     '-DNO_MOUSE_MODULE', # Do not include built-in mouse module fallback
 ]
 
-dep_int_vmmouse = [xproto, libx11, libxrandr, libxorg]
+dep_int_vmmouse = [xproto, libx11, libxrandr]
 dep_ext_vmmouse = [dep_udev, dep_pixman]
 
 inc_vmmouse = [
@@ -44,6 +44,7 @@ shared_module('libvmmouse_drv',
 	name_prefix: '',
 	include_directories: inc_vmmouse,
 	dependencies: [dep_int_vmmouse, dep_ext_vmmouse],
+    link_with: [xorg_loader, libxserver_os],
     c_args: lib_args,
 	install: true,
 	install_dir: dir_xorg_module / 'input',
@@ -61,6 +62,7 @@ executable('vmmouse_detect',
     ],   
     include_directories: inc_vmmouse,
 	dependencies: [dep_int_vmmouse, dep_ext_vmmouse],
+    link_with: xorg_os_support,
     install: true,
 )
 

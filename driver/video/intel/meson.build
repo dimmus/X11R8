@@ -33,7 +33,6 @@ dep_int_intel = [
   libxext,
   libxfixes,
   libxcb,
-  libxorg,
 ]
 
 dep_ext_intel = [

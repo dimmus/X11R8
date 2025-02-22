@@ -7,7 +7,7 @@ conf.set('ARMSOC_PACKAGE_VERSION_MAJOR', driver_version[0])
 conf.set('ARMSOC_PACKAGE_VERSION_MINOR', driver_version[1])
 conf.set('ARMSOC_PACKAGE_VERSION_PATCHLEVEL', driver_version[2])
 
-dep_int_armsoc = [xproto, libxorg]
+dep_int_armsoc = xproto
 dep_ext_armsoc = [dep_drm, dep_pixman]
 
 src = files(

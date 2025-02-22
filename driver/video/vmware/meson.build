@@ -17,7 +17,7 @@ conf.set('BUILD_VMWGFX', true)
 conf.set('HAVE_LIBUDEV', true)
 conf.set('HAVE_XA_2', true) # mesa
 
-dep_int_vmware = [xproto, libx11, libxext, libxorg]
+dep_int_vmware = [xproto, libx11, libxext]
 dep_ext_vmware = [dep_drm, dep_udev, dep_xa, dep_pixman]
 
 inc_vmware = [

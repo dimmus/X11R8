@@ -21,7 +21,6 @@ sna_deps = [
   dep_threads,
   dep_drm,
   dep_rt,
-  libxorg,
   libxcb,
 ]
 

@@ -1,6 +1,6 @@
 subdir('libinput')
 subdir('mouse')
-subdir('vmmouse')
+# subdir('vmmouse')
 subdir('void')
 if get_option('build-input-evdev')
 subdir('evdev')

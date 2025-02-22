@@ -25,7 +25,6 @@ uxa_sources = [
 ]
 
 uxa_deps = [
-  libxorg,
   dep_pixman,
   dep_drm,
   dep_drm_intel,

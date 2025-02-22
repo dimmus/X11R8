@@ -36,7 +36,7 @@ shared_module('vboxvideo_drv',
     c_args: lib_args,
 	name_prefix: '',
 	include_directories: [include_directories('.'), inc_config, inc_server],
-	dependencies: [xproto, libxorg],
+	dependencies: xproto,
 	install: true,
 	install_dir: dir_xorg_module,
 )

@@ -6,7 +6,7 @@ conf.set('DUMMY_PACKAGE_VERSION_MINOR', driver_version[1])
 conf.set('DUMMY_PACKAGE_VERSION_PATCHLEVEL', driver_version[2])
 conf.set('XFree86LOADER', true)
 
-dep_int_dummy = [xproto, libxorg]
+dep_int_dummy = xproto
 dep_ext_dummy = dep_pixman
 
 src = files(
