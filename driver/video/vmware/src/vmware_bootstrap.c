@@ -249,7 +249,11 @@ VMwarePreinitStub(ScrnInfoPtr pScrn, int flags)
     xf86DrvMsg(pScrn->scrnIndex, X_WARNING, "Disabling RandR12+ support.\n");
 
     pScrn->driverPrivate = NULL;
+#  ifdef BUILD_VMWGFX
+    vmwgfx_hookup(pScrn);
+#  else
     vmwlegacy_hookup(pScrn);
+#  endif
 
     pEnt    = xf86GetEntityInfo(pScrn->entityList[0]);
     pciInfo = xf86GetPciInfoForEntity(pEnt->index);
