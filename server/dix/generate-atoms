@@ -1,18 +1,21 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # SPDX-License-Identifier: MIT OR X11
 #
-# Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+# Copyright 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+# Copyright 2025 Dmitri Chudinov, <dmitri.chudinov@gmail.com>
 
 INPUT="$1"
 OUTPUT="$2"
 
 do_line() {
-    local name="$1"
+    # Use global variables instead of local for POSIX-compliance
+    name="$1"
     [ "$2" != "@" ] && return 0
     echo "    if (MakeAtom(\"$name\", ${#name}, 1) != XA_$name)"
     echo "        AtomError();"
 }
 
+# Write initial output to file
 cat > "$OUTPUT" << __END__
 /* THIS IS A GENERATED FILE
  *
@@ -32,6 +35,10 @@ MakePredeclaredAtoms(void)
 {
 __END__
 
-( grep '@' < "$INPUT" ) | ( while read l ; do do_line $l ; done ) >> "$OUTPUT"
+# Process the input
+grep '@' "$INPUT" | while read l ; do
+    do_line $l
+done >> "$OUTPUT"
 
+# Final output
 echo "}" >> "$OUTPUT"
