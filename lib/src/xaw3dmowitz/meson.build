@@ -2,7 +2,7 @@ ver_xaw3dm = '0.3.1'
 
 inc_xaw3dm = [inc_lib, include_directories('.')]
 
-dep_int_xaw3dm = [libx11, xproto, libxext, libxt, libxmu, libxpm, libi18n, libxaw3dn]
+dep_int_xaw3dm = [libx11, xproto, libxext, libxt, libxmu, libxpm, Wlibxaw3dn]
 
 src = files(
   'MwApplicationShell.c',
@@ -60,6 +60,7 @@ lib = library('Mowitz', src,
   c_args: ['-Wno-discarded-qualifiers', '-Wno-unused-function'],
   include_directories: inc_xaw3dm,
   dependencies: dep_int_xaw3dm,
+  link_with: lib_i18n,
   version: '0.0.1',
   install: true,
 )

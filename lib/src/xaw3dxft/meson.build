@@ -3,7 +3,7 @@ f_check += 'iswspace'
 
 inc_xaw3dxft = [inc_lib, include_directories('.')]
 
-dep_int_xaw3dxft = [libx11, libxt, libxmu, libxext, libxft, libxpm, libi18n]
+dep_int_xaw3dxft = [libx11, libxt, libxmu, libxext, libxft, libxpm]
 dep_ext_xaw3dxft = dep_freetype2
 
 src = files(
@@ -78,6 +78,7 @@ src += pfiles
 lib = library('Xaw3dxft', src,
   include_directories: inc_xaw3dxft,
   dependencies: [dep_int_xaw3dxft, dep_ext_xaw3dxft],
+  link_with: lib_i18n,
   version: '8.5.0',
   install: true,
 )

@@ -2,7 +2,7 @@ ver_xaw3dn = '0.15.1'
 
 inc_xaw3dn = [inc_lib, include_directories('.')]
 
-dep_int_xaw3dn = [libx11, xproto, libxext, libxt, libxmu, libxpm, libi18n]
+dep_int_xaw3dn = [libx11, xproto, libxext, libxt, libxmu, libxpm]
 
 src = files(
   'AllWidgets.c',
@@ -75,6 +75,7 @@ lib = library('neXtaw', src,
   c_args: ['-Wno-discarded-qualifiers', '-Wno-unused-function'],
   include_directories: inc_xaw3dn,
   dependencies: dep_int_xaw3dn,
+  link_with: lib_i18n,
   version: '0.0.1',
   install: true,
 )

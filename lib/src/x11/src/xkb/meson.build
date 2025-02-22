@@ -23,14 +23,14 @@ src = files(
   'XKBlibint.h',
 )
 
-lib = static_library('xkb', src,
+lib_xkb = static_library('xkb', src,
   c_args: lib_args,
   include_directories: inc_lib,
   dependencies: dep_int_x11,
   install: true,
 )
 
-libxkb = declare_dependency(
-  link_with: lib,
-  include_directories: inc_lib,
-)
+# libxkb = declare_dependency(
+#   link_with: lib,
+#   include_directories: inc_lib,
+# )

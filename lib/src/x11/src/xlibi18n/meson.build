@@ -90,14 +90,9 @@ src = files(
 	'lcUniConv/cjk_tab_to_h.c',
 )
 
-lib = static_library('i18n', src,
+lib_i18n = static_library('i18n', src,
   c_args: lib_args,
   include_directories: inc_lib,
   dependencies: dep_mod_x11,
   install: true,
-)
-
-libi18n = declare_dependency(
-  link_with: lib,
-  include_directories: inc_lib,
 )

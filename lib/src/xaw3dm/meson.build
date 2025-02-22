@@ -2,7 +2,7 @@ ver_xaw3dm = '1.6'
 
 inc_xaw3dm = [inc_config, include_directories('.')]
 
-dep_int_xaw3dm = [libx11, xproto, libxext, libxt, libxmu, libxpm, libi18n]
+dep_int_xaw3dm = [libx11, xproto, libxext, libxt, libxmu, libxpm]
 
 src = files(
     'AllWidgets.c',
@@ -156,6 +156,7 @@ lib = library('XawM', src,
   c_args: lib_args,
   include_directories: inc_xaw3dm,
   dependencies: dep_int_xaw3dm,
+  link_with: lib_i18n,
   version: '0.0.1',
   install: true,
 )

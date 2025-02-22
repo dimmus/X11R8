@@ -68,14 +68,14 @@ src = files(
 
 conf.set_quoted('XCMSDIR', meson.project_source_root() / 'src' / 'lib' / 'x11' / 'src' / 'xcms')
 
-lib = static_library('xcms', src,
+lib_xcms = static_library('xcms', src,
   c_args: lib_args,
   include_directories: inc_lib,
   dependencies: dep_int_x11,
   install: true,
 )
 
-libxcms = declare_dependency(
-  link_with: lib,
-  include_directories: inc_lib,
-)
+# libxcms = declare_dependency(
+#   link_with: lib,
+#   include_directories: inc_lib,
+# )

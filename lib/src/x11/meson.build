@@ -98,7 +98,8 @@ subdir('src')
 lib_x11 = library('X11', src_x11,
   c_args: lib_args,
   include_directories: inc_lib,
-  dependencies: [dep_int_x11, ks_table, libxcms, libxkb, libi18n],
+  dependencies: [dep_int_x11, ks_table],
+  link_with: [lib_xcms, lib_xkb, lib_i18n],
   version: '6.4.0',
   install: true,
 )

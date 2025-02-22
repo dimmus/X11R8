@@ -3,7 +3,7 @@ inc_xaw3d = [inc_config, include_directories('.')]
 f_check += ['iswspace']
 h_check += ['wctype.h', 'wchar.h', 'widec.h']
 
-dep_int_xaw3d = [libx11, xproto, libxext, libxt, libxmu, libxpm, libi18n]
+dep_int_xaw3d = [libx11, xproto, libxext, libxt, libxmu, libxpm]
 
 conf.set('XAW_ARROW_SCROLLBARS', true)
 conf.set('XAW_MULTIPLANE_PIXMAPS', true)
@@ -80,6 +80,7 @@ src += pfiles
 lib = library('xaw3d', src,
   include_directories: inc_xaw3d,
   dependencies: dep_int_xaw3d,
+  link_with: lib_i18n,
   version: '8.0.0',
   install: true,
 )

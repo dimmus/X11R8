@@ -235,7 +235,7 @@ XkbFreeGeomShapes(XkbGeometryPtr geom, int first, int count, Bool freeAll)
 }
 
 /***====================================================================***/
-
+#if 0
 void
 XkbFreeGeomOverlayKeys(XkbOverlayRowPtr row, int first, int count, Bool freeAll)
 {
@@ -244,7 +244,7 @@ XkbFreeGeomOverlayKeys(XkbOverlayRowPtr row, int first, int count, Bool freeAll)
                           (char **) &row->keys, sizeof(XkbOverlayKeyRec));
     return;
 }
-
+#endif
 /***====================================================================***/
 
 void

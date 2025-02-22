@@ -7,7 +7,7 @@ BUILD_XAW7 = true
 f_check += 'malloc_usable_size'
 h_check += 'malloc.h'
 
-dep_int_xaw = [libx11, xproto, libxext, libxt, libxmu, libxpm, libi18n]
+dep_int_xaw = [libx11, xproto, libxext, libxt, libxmu, libxpm]
 
 src = files(
   'Actions.c',
@@ -59,6 +59,7 @@ src = files(
 lib = library('Xaw', src,
   include_directories: inc_lib,
   dependencies: dep_int_xaw,
+  link_with: lib_i18n,
   version: '7.0.0',
   install: true,
 )

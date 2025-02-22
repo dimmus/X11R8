@@ -140,7 +140,6 @@ dep_int_xterm = [
     libice,
     libxft,
     libxinerama,
-    libxkb,
 ]
 
 src = files(
@@ -180,5 +179,6 @@ src = files(
 executable('xterm', src,
     include_directories: [inc_xterm, inc_lib],
     dependencies: [dep_ext_xterm, dep_int_xterm],
+    link_with: lib_xkb,
     install: true,
 )

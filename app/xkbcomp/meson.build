@@ -2,7 +2,7 @@ ver_xkbcomp = '1.4.7'
 
 f_check += ['asprintf', 'reallocarray', 'recallocarray']
 
-dep_int_xkbcomp = [xproto, libx11, libxkbfile, libxkb]
+dep_int_xkbcomp = [xproto, libx11, libxkbfile]
 
 src = files(
     'action.c',
@@ -42,6 +42,7 @@ exe_xkbcomp = executable('xkbcomp',
         '-DXKBCOMP_PACKAGE_VERSION="@0@"'.format(ver_xkbcomp),
     ],
     dependencies: dep_int_xkbcomp,
+    link_with: lib_xkb,
     install: true,
 )
 

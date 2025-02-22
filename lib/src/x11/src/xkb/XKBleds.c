@@ -25,9 +25,11 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ********************************************************/
 
 #define NEED_MAP_READERS
+
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
+
 #include "Xlibint.h"
 #include "X11/extensions/XKBproto.h"
 #include "XKBlibint.h"

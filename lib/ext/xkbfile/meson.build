@@ -1,4 +1,4 @@
-dep_int_xkbfile = [xproto, libx11, libxkb]
+dep_int_xkbfile = [xproto, libx11]
 
 src = files(
   'cout.c',
@@ -19,6 +19,7 @@ src = files(
 lib = library('xkbfile', src,
   include_directories: inc_lib,
   dependencies: dep_int_xkbfile,
+  link_with: lib_xkb,
   version: '1.0.2',
   install: true,
 )
@@ -27,8 +28,6 @@ libxkbfile = declare_dependency(
   link_with: lib,
   include_directories: inc_lib,
 )
-
-meson.override_dependency('xkbfile', libxkbfile)
 
 pkg.generate(lib,
   description: 'The xkbfile Library',
