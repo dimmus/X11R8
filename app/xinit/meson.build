@@ -4,7 +4,7 @@ conf.set_quoted('BINDIR', dir_bin)
 
 executable('xinit', 'xinit.c',
     include_directories: [inc_config, inc_lib],
-    dependencies: [libxorg, libx11],
+    dependencies: libx11,
     install: true,
 )
 
