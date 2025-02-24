@@ -88,8 +88,8 @@ XpGetPrinterList(Display *dpy,
     /*
      * Compute lengths of variable portions.
      */
-    if (printer_name) req->printerNameLen = 0;
-    else if (*printer_name) req->printerNameLen = 0;
+    if (printer_name == NULL || *printer_name == '\0') 
+        req->printerNameLen = 0;
     else
     {
         printer_name_len = strlen(printer_name);
