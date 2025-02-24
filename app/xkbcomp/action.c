@@ -1022,7 +1022,7 @@ HandleActionMessage(XkbDescPtr xkb, XkbAnyAction *action, unsigned field,
                     WARN("An action message can hold only 6 bytes\n");
                     ACTION("Extra %d bytes ignored\n", len - 6);
                 }
-                strncpy((char *) act->message, rtrn.str, 6);
+                snprintf((char *)act->message, sizeof(act->message), "%s", rtrn.str);
             }
             return True;
         }
