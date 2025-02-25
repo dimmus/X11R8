@@ -704,7 +704,7 @@ SizeNegotiation(XawIcTableList p, Dimension width, Dimension height)
     XVaNestedList pe_attr = NULL, st_attr = NULL;
     int           ic_cnt = 0, pe_cnt = 0, st_cnt = 0;
     XRectangle   *pe_area_needed = NULL, *st_area_needed = NULL;
-    XPointer      ic_a[5];
+    XPointer      ic_a[5] = {NULL};
 
     if (p->input_style & XIMPreeditArea)
     {

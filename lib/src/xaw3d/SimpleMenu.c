@@ -1385,7 +1385,7 @@ SetMarginWidths(Widget w)
     SimpleMenuWidget smw = (SimpleMenuWidget)w;
     SmeObject       *entry;
     SmeBSBObject     bsb_entry;
-    Dimension        l_mrgn, l_bmw, r_mrgn, r_bmw;
+    Dimension        l_mrgn = 0, l_bmw = 0, r_mrgn = 0, r_bmw = 0;
 
     if (smw->simple_menu.left_whitespace || smw->simple_menu.right_whitespace)
     {

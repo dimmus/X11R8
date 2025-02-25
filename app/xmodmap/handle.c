@@ -67,9 +67,13 @@ reallocfarray(void *old, size_t num, size_t size)
 
     if (size > 0 && num > (SIZE_MAX / size)) /* overflow would happen */
         new = NULL;
-    else new = realloc(old, num * size);
+    else 
+        new = realloc(old, num * size);
 
-    if (new == NULL) free(old);
+    if (new == NULL) {
+        free(old);
+        return NULL;
+    }
 
     return new;
 }

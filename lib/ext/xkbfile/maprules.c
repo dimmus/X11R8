@@ -1110,7 +1110,7 @@ Bool
 XkbRF_LoadRulesByName(char *base, char *locale, XkbRF_RulesPtr rules)
 {
     FILE *file;
-    char  buf[PATH_MAX];
+    char  buf[PATH_MAX * 2];
     Bool  ok;
 
     if ((!base) || (!rules)) return False;
