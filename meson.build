@@ -2,9 +2,9 @@ project('X Window System', 'c',
     license: 'MIT', 
     version: '11.8.1',
     default_options : [
-      'buildtype=debug', # plain,debug,debugoptimized,release,minsize,custom
+      'buildtype=debugoptimized', # plain,debug,debugoptimized,release,minsize,custom
       'c_std=gnu99', # we use typeof in server
-      # 'optimization=g',  # 0,g,1,2,3,s
+      'optimization=2',  # 0,g,1,2,3,s
       # 'b_sanitize=none   # none,address,thread,undefined,memory,leak,address,undefined',
       # 'b_coverage=true',
       # 'b_lto=false',
@@ -81,7 +81,6 @@ add_project_arguments(
   '-D__USE_XOPEN_EXTENDED', # test/xfont (used if HAVE_REALPATH true)
   '-march=x86-64',
   '-mtune=generic',
-  '-O2',
   '-pipe',
   '-fstack-protector-strong',
   language: 'c'
