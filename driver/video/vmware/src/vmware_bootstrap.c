@@ -88,7 +88,7 @@ static char vmware_driver_name[] = VMWARE_DRIVER_NAME;
     "." VMW_STRING(VMWARE_PACKAGE_VERSION_MINOR) "." VMW_STRING( \
         VMWARE_PACKAGE_VERSION_PATCHLEVEL)
 
-#if !XSERVER_LIBPCIACCESS
+#ifndef XSERVER_LIBPCIACCESS
 static const char VMWAREBuildStr[] =
     "VMware Guest X Server " VMWARE_DRIVER_VERSION_STRING " - build=$Name$\n";
 #else
@@ -123,7 +123,7 @@ static resRange vmwareLegacyRes[] = {
 #  define vmwareLegacyRes NULL
 #endif
 
-#if XSERVER_LIBPCIACCESS
+#ifdef XSERVER_LIBPCIACCESS
 #  define VENDOR_ID(p)     (p)->vendor_id
 #  define DEVICE_ID(p)     (p)->device_id
 #  define SUBVENDOR_ID(p)  (p)->subvendor_id
@@ -137,7 +137,7 @@ static resRange vmwareLegacyRes[] = {
 #  define CHIP_REVISION(p) (p)->chipRev
 #endif
 
-#if XSERVER_LIBPCIACCESS
+#ifdef XSERVER_LIBPCIACCESS
 
 #  define VMWARE_DEVICE_MATCH(d, i) \
       { PCI_VENDOR_ID_VMWARE, (d), PCI_MATCH_ANY, PCI_MATCH_ANY, 0, 0, (i) }
@@ -218,7 +218,7 @@ void *vmwgfx_hosted_detect(void);
 static Bool
 VMwarePreinitStub(ScrnInfoPtr pScrn, int flags)
 {
-#if XSERVER_LIBPCIACCESS
+#ifdef XSERVER_LIBPCIACCESS
     struct pci_device *pciInfo;
 #else
     pciVideoPtr pciInfo;
@@ -266,7 +266,7 @@ VMwarePreinitStub(ScrnInfoPtr pScrn, int flags)
     return (*pScrn->PreInit)(pScrn, flags);
 }
 
-#if XSERVER_LIBPCIACCESS
+#ifdef XSERVER_LIBPCIACCESS
 static Bool
 VMwarePciProbe(DriverPtr          drv,
                int                entity_num,
@@ -545,7 +545,7 @@ _X_EXPORT DriverRec vmware = {
     VMWARE_DRIVER_VERSION,
     vmware_driver_name,
     VMWAREIdentify,
-#if XSERVER_LIBPCIACCESS
+#ifdef XSERVER_LIBPCIACCESS
     NULL,
 #else
     VMWAREProbe,
@@ -557,7 +557,7 @@ _X_EXPORT DriverRec vmware = {
     VMWareDriverFunc,
 #endif
 #if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) >= 4
-#  if XSERVER_LIBPCIACCESS
+#  ifdef XSERVER_LIBPCIACCESS
     VMwareDeviceMatch,
     VMwarePciProbe,
 #  else

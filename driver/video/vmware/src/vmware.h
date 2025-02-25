@@ -89,7 +89,7 @@ typedef xXineramaScreenInfo VMWAREXineramaRec, *VMWAREXineramaPtr;
 typedef struct
 {
     EntityInfoPtr pEnt;
-#if XSERVER_LIBPCIACCESS
+#ifdef XSERVER_LIBPCIACCESS
     struct pci_device *PciInfo;
 #else
     pciVideoPtr PciInfo;
@@ -219,7 +219,7 @@ typedef struct
 /* Undefine this to kill all acceleration */
 #define ACCELERATE_OPS
 
-#if XSERVER_LIBPCIACCESS
+#ifdef XSERVER_LIBPCIACCESS
 #  define VENDOR_ID(p)     (p)->vendor_id
 #  define DEVICE_ID(p)     (p)->device_id
 #  define SUBVENDOR_ID(p)  (p)->subvendor_id

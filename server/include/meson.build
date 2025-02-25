@@ -8,6 +8,8 @@ release = 1 * 10000000 + major * 100000 + minor * 1000 + patch
 conf.set('XORG_VERSION_CURRENT', release)
 
 conf_server = configuration_data()
+xorg_data = configuration_data()
+
 conf_server.set('_DIX_CONFIG_H_', '1')
 
 conf_server.set('MONOTONIC_CLOCK', cc.has_function('clock_gettime') and
@@ -69,8 +71,8 @@ conf_server.set('CONFIG_HAL', build_hal ? '1' : false)
 conf_server.set('SYSTEMD_LOGIND', build_systemd_logind ? '1' : false)
 conf_server.set('NEED_DBUS', build_systemd_logind or build_hal ? '1' : false)
 conf_server.set('CONFIG_WSCONS', host_machine.system() in ['openbsd', 'netbsd'] ? '1' : false)
-conf_server.set('HAVE_XSHMFENCE', '1')
-conf_server.set('WITH_LIBDRM', '1')
+conf_server.set('HAVE_XSHMFENCE', true)
+conf_server.set('WITH_LIBDRM', true)
 conf_server.set('GLXEXT', build_glx ? '1' : false)
 conf_server.set('GLAMOR', '1')
 conf_server.set('GLAMOR_HAS_EGL_QUERY_DMABUF', dep_epoxy.found() and dep_epoxy.version().version_compare('>= 1.4.4') ? '1' : false)
@@ -110,7 +112,7 @@ conf_server.set('DBE',           '1')
 conf_server.set('IPv6',          build_ipv6 ? '1' : false)
 conf_server.set('DGA',           build_dga  ? '1' : false)
 conf_server.set('DPMSExtension', build_dpms ? '1' : false)
-conf_server.set('DRI2',          build_dri2 ? '1' : false)
+conf_server.set('DRI2',          true)
 conf_server.set('DRI3',          build_dri3 ? '1' : false)
 conf_server.set_quoted('DRI_DRIVER_PATH', build_glx ? dep_dri.get_variable(pkgconfig: 'dridriverdir') : '')
 conf_server.set('PRESENT',       '1')
@@ -132,7 +134,7 @@ conf_server.set('SCREENSAVER',   build_screensaver)
 conf_server.set('XACE',          build_xace)
 conf_server.set('XCSECURITY',    build_xsecurity)
 conf_server.set('XF86BIGFONT',   build_xf86bigfont)
-conf_server.set('XF86DRI',       false) # DRI1 support removed
+conf_server.set('XF86DRI',       true) # DRI1 support removed
 conf_server.set('XFreeXDGA',     build_dga)
 conf_server.set('XINERAMA',      build_xinerama)
 conf_server.set('XSELINUX',      build_xselinux)
@@ -157,6 +159,7 @@ h_check_server = [
 
 foreach h: h_check_server
     conf_server.set('HAVE_@0@'.format(h.underscorify().to_upper()), cc.has_header(h))
+    xorg_data.set('HAVE_@0@'.format(h.underscorify().to_upper()), cc.has_header(h))
 endforeach
 
 f_check_server = [
@@ -171,6 +174,7 @@ f_check_server = [
 
 foreach f: f_check_server
     conf_server.set('HAVE_@0@'.format(f.to_upper()), cc.has_function(f))
+    xorg_data.set('HAVE_@0@'.format(f.to_upper()), cc.has_function(f))
 endforeach
 
 summary_srv += {'XSERVER_DTRACE':         WITH_DTRACE}
@@ -195,7 +199,7 @@ summary_srv += {'GBM_BO_WITH_MODIFIERS2': dep_gbm.found() and dep_gbm.version().
 summary_srv += {'IPv6': build_ipv6}
 summary_srv += {'DGA': build_dga}
 summary_srv += {'DPMSExtension': build_dpms}
-summary_srv += {'DRI2': build_dri2}
+summary_srv += {'DRI2': true}
 summary_srv += {'DRI3': build_dri3}
 if build_glx
 summary_srv += {'DRI_DRIVER_PATH': dir_lib / 'dri'}
@@ -264,8 +268,8 @@ conf_server.set('PCCONS_SUPPORT', supports_pccons ? '1' : false)
 conf_server.set('PCVT_SUPPORT', supports_pcvt ? '1' : false)
 conf_server.set('SYSCONS_SUPPORT', supports_syscons ? '1' : false)
 conf_server.set('WSCONS_SUPPORT', supports_wscons ? '1' : false)
-conf_server.set('XSERVER_LIBPCIACCESS', get_option('pciaccess') ? '1' : false)
-conf_server.set('XSERVER_PLATFORM_BUS', build_udev_kms ? '1' : false)
+conf_server.set('XSERVER_LIBPCIACCESS', get_option('pciaccess'))
+conf_server.set('XSERVER_PLATFORM_BUS', build_udev_kms)
 conf_server.set('HAVE_OPENSSL3', dep_openssl.version().version_compare('>= 3'))
 
 summary_srv += {'XKB_DFLT_RULES': get_option('xkb_default_rules')}
@@ -304,7 +308,6 @@ xkb_data.set_quoted('XKB_DFLT_OPTIONS', get_option('xkb_default_options'))
 xkb_data.set_quoted('XKM_OUTPUT_DIR', xkb_output_dir + '/')
 configure_file(output: 'xkb-config.h', configuration: xkb_data)
 
-xorg_data = configuration_data()
 xorg_data.set_quoted('XORG_BIN_DIRECTORY', dir_bin)
 xorg_data.set('XORG_VERSION_CURRENT', release)
 xorg_data.set_quoted('XCONFIGFILE', 'xorg.conf')
@@ -316,14 +319,20 @@ xorg_data.set_quoted('DEFAULT_LOGPREFIX', 'Xorg.')
 xorg_data.set_quoted('DEFAULT_MODULE_PATH', dir_xorg_module)
 xorg_data.set_quoted('DEFAULT_LIBRARY_PATH', dir_lib)
 xorg_data.set_quoted('__XSERVERNAME__', 'Xorg')
-xorg_data.set('XSERVER_LIBPCIACCESS', get_option('pciaccess') ? '1' : false)
+xorg_data.set('XSERVER_LIBPCIACCESS', get_option('pciaccess'))
 xorg_data.set_quoted('PCI_TXT_IDS_PATH', '')
-xorg_data.set('XSERVER_PLATFORM_BUS', build_udev_kms ? '1' : false)
+xorg_data.set('XSERVER_PLATFORM_BUS', build_udev_kms)
 xorg_data.set('WSCONS_SUPPORT', host_machine.system() == 'netbsd' or host_machine.system() == 'openbsd' ? '1' : false)
 xorg_data.set('HAVE_STROPTS_H', cc.has_header('stropts.h') ? '1' : false)
 xorg_data.set('HAVE_SYS_KD_H', cc.has_header('sys/kd.h') ? '1' : false)
 xorg_data.set('HAVE_SYS_VT_H', cc.has_header('sys/vt.h') ? '1' : false)
-xorg_data.set('HAVE_MODESETTING_DRIVER', build_modesetting ? '1' : false)
+xorg_data.set('HAVE_MODESETTING_DRIVER', build_modesetting)
+xorg_data.set_quoted('FALLBACK_INPUT_DRIVER', 'libinput')
+xorg_data.set('XF86DRI', true)
+xorg_data.set('DRI2', true)
+xorg_data.set('WITH_LIBDRM', true)
+xorg_data.set('', true)
+xorg_data.set('', true)
 
 if host_machine.system() == 'freebsd' or host_machine.system() == 'dragonfly'
     if host_machine.cpu_family() == 'x86' or host_machine.cpu_family() == 'x86_64' or host_machine.cpu_family() == 'aarch64'
@@ -342,18 +351,18 @@ configure_file(output: 'xorg-config.h',
                input:  'xorg-config.h.meson.in',
                configuration: xorg_data)
 
-summary_org += {'XORG_BIN_DIRECTORY': xorg_data.get('XORG_BIN_DIRECTORY')}
-summary_org += {'XORG_VERSION_CURRENT': xorg_data.get('XORG_VERSION_CURRENT')}
-summary_org += {'XCONFIGFILE': xorg_data.get('XCONFIGFILE')}
-summary_org += {'XCONFIGDIR': xorg_data.get('XCONFIGDIR')}
-summary_org += {'XDG_DATA_HOME': xorg_data.get('DEFAULT_XDG_DATA_HOME')}
-summary_org += {'XDG_DATA_HOME_LOGDIR': xorg_data.get('DEFAULT_XDG_DATA_HOME_LOGDIR')}
-summary_org += {'LOGDIR': xorg_data.get('DEFAULT_LOGDIR')}
-summary_org += {'LOGPREFIX': xorg_data.get('DEFAULT_LOGPREFIX')}
-summary_org += {'MODULE_PATH': xorg_data.get('DEFAULT_MODULE_PATH')}
-summary_org += {'LIBRARY_PATH': xorg_data.get('DEFAULT_LIBRARY_PATH')}
-summary_org += {'__XSERVERNAME__': xorg_data.get('__XSERVERNAME__')}
-summary_org += {'MODESETTING_DRIVER': build_modesetting}
+# summary_org += {'XORG_BIN_DIRECTORY': xorg_data.get('XORG_BIN_DIRECTORY')}
+# summary_org += {'XORG_VERSION_CURRENT': xorg_data.get('XORG_VERSION_CURRENT')}
+# summary_org += {'XCONFIGFILE': xorg_data.get('XCONFIGFILE')}
+# summary_org += {'XCONFIGDIR': xorg_data.get('XCONFIGDIR')}
+# summary_org += {'XDG_DATA_HOME': xorg_data.get('DEFAULT_XDG_DATA_HOME')}
+# summary_org += {'XDG_DATA_HOME_LOGDIR': xorg_data.get('DEFAULT_XDG_DATA_HOME_LOGDIR')}
+# summary_org += {'LOGDIR': xorg_data.get('DEFAULT_LOGDIR')}
+# summary_org += {'LOGPREFIX': xorg_data.get('DEFAULT_LOGPREFIX')}
+# summary_org += {'MODULE_PATH': xorg_data.get('DEFAULT_MODULE_PATH')}
+# summary_org += {'LIBRARY_PATH': xorg_data.get('DEFAULT_LIBRARY_PATH')}
+# summary_org += {'__XSERVERNAME__': xorg_data.get('__XSERVERNAME__')}
+# summary_org += {'MODESETTING_DRIVER': build_modesetting}
 
 dtrace_hdr = []
 dtrace_tmpl = files('Xserver.d')
