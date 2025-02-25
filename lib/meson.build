@@ -14,10 +14,11 @@ subdir('ext' / 'xext')
 subdir('src' / 'xpm')     # <- ext/xext
 subdir('src' / 'xmu')     # <- ext/xext
 subdir('src' / 'xaw')     # <- ext/xext
+subdir('src' / 'xawplus')
 subdir('src' / 'xaw3d')
-subdir('src' / 'xaw3dnextaw')
-# subdir('src' / 'xaw3dmowitz') # <- src/xaw3dnextaw
-subdir('src' / 'xaw3dxft')
+# subdir('src' / 'xaw3dxft')
+# subdir('src' / 'nextaw')
+# subdir('src' / 'mowitz') # <- src/nextaw
 subdir('ext' / 'xrandr')
 subdir('ext' / 'xdamage')
 subdir('ext' / 'xevie')

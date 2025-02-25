@@ -797,7 +797,7 @@ CreateIC(Widget w, XawVendorShellExtPart *ve)
     XPoint         position;
     XRectangle     pe_area, st_area;
     XVaNestedList  pe_attr = NULL, st_attr = NULL;
-    XPointer       ic_a[20], pe_a[20], st_a[20];
+    XPointer       ic_a[20] = {NULL}, pe_a[20] = {NULL}, st_a[20] = {NULL};
     Dimension      height = 0;
     int            ic_cnt = 0, pe_cnt = 0, st_cnt = 0;
     XawTextMargin *margin;
@@ -1058,7 +1058,7 @@ SetICValues(Widget w, XawVendorShellExtPart *ve, Boolean focus)
     XPoint         position;
     XRectangle     pe_area;
     XVaNestedList  pe_attr = NULL, st_attr = NULL;
-    XPointer       ic_a[20], pe_a[20], st_a[20];
+    XPointer       ic_a[20] = {NULL}, pe_a[20] = {NULL}, st_a[20] = {NULL};
     int            ic_cnt = 0, pe_cnt = 0, st_cnt = 0;
     XawTextMargin *margin;
     int            height;
