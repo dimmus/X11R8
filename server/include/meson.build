@@ -1,10 +1,10 @@
-version_split = meson.project_version().split('.')
+version_split = '21.0.99'.split('.')
 major = version_split[0].to_int()
 minor = version_split[1].to_int()
 patch = version_split[2].to_int()
 
 # convert to the old-style 1.x.y version scheme used up to 1.20.x for backwards compatibility
-release = 1 * 10000000 + major * 100000 + minor * 1000 + patch
+release = 10000000 + (major * 100000) + (minor * 1000) + patch
 conf.set('XORG_VERSION_CURRENT', release)
 
 conf_server = configuration_data()
@@ -32,7 +32,8 @@ conf_server.set('X_BYTE_ORDER', host_machine.endian() == 'little' ? 'X_LITTLE_EN
 # the xlib headers will typedef them exactly to CARD32.
 glx_align64 = []
 if cc.sizeof('unsigned long') == 8
-   conf_server.set('_XSERVER64', '1')
+   conf_server.set('_XSERVER64', true)
+   xorg_data.set('_XSERVER64', true)
    glx_align64 = '-D__GLX_ALIGN64'
 endif
 
@@ -331,7 +332,6 @@ xorg_data.set_quoted('FALLBACK_INPUT_DRIVER', 'libinput')
 xorg_data.set('XF86DRI', true)
 xorg_data.set('DRI2', true)
 xorg_data.set('WITH_LIBDRM', true)
-xorg_data.set('', true)
 xorg_data.set('', true)
 
 if host_machine.system() == 'freebsd' or host_machine.system() == 'dragonfly'
