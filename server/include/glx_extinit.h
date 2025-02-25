@@ -26,6 +26,8 @@
 #ifndef GLX_EXT_INIT_H
 #define GLX_EXT_INIT_H
 
+#include <dix-config.h>
+
 /* this is separate due to sdksyms pulling in extinit.h */
 /* XXX this comment no longer makes sense i think */
 #ifdef GLXEXT
@@ -41,7 +43,7 @@ extern __GLXprovider __glXDRISWRastProvider;
 void GlxPushProvider(__GLXprovider * provider);
 Bool xorgGlxCreateVendor(void);
 #else
-static inline Bool xorgGlxCreateVendor(void) { return TRUE; }
+/* static inline Bool xorgGlxCreateVendor(void) { return TRUE; } */
 #endif
 
 

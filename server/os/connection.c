@@ -403,7 +403,7 @@ AuthAudit(ClientPtr client, Bool letin,
             snprintf(addr, sizeof(addr), "IP %s", ipaddr);
         }
             break;
-#if defined(IPv6)
+#ifdef IPv6
         case AF_INET6:{
             char ipaddr[INET6_ADDRSTRLEN];
 

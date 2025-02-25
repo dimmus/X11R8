@@ -130,7 +130,7 @@ TRANS(ReopenFail)(XtransConnInfo ciptr _X_UNUSED,
 
 #endif /* TRANS_REOPEN */
 
-#if XTRANS_SEND_FDS
+#ifdef XTRANS_SEND_FDS
 static int
 TRANS(LocalRecvFdInvalid)(XtransConnInfo ciptr)
 {
@@ -1404,7 +1404,7 @@ Xtransport TRANS(LocalFuncs) = {
     TRANS(LocalWrite),
     TRANS(LocalReadv),
     TRANS(LocalWritev),
-#if XTRANS_SEND_FDS
+#ifdef XTRANS_SEND_FDS
     TRANS(LocalSendFdInvalid),
     TRANS(LocalRecvFdInvalid),
 #endif
@@ -1443,7 +1443,7 @@ Xtransport TRANS(NAMEDFuncs) = {
     TRANS(LocalWrite),
     TRANS(LocalReadv),
     TRANS(LocalWritev),
-#  if XTRANS_SEND_FDS
+#  ifdef XTRANS_SEND_FDS
     TRANS(LocalSendFdInvalid),
     TRANS(LocalRecvFdInvalid),
 #  endif
@@ -1480,7 +1480,7 @@ Xtransport TRANS(PIPEFuncs) = {
     TRANS(LocalWrite),
     TRANS(LocalReadv),
     TRANS(LocalWritev),
-#  if XTRANS_SEND_FDS
+#  ifdef XTRANS_SEND_FDS
     TRANS(LocalSendFdInvalid),
     TRANS(LocalRecvFdInvalid),
 #  endif

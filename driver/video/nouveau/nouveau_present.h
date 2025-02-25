@@ -8,7 +8,7 @@
 #  include "config.h"
 #endif
 
-#if defined(DRI3)
+#ifdef DRI3
 #  include "present.h"
 Bool nouveau_present_init(ScreenPtr pScreen);
 void nouveau_present_fini(ScreenPtr pScreen);

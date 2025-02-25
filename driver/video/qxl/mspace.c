@@ -759,7 +759,7 @@ static struct malloc_params mparams;
 #define segment_holds(S, A) \
     ((char *)(A) >= S->base && (char *)(A) < S->base + S->size)
 
-#if DEBUG
+#ifdef DEBUG
 /* Return segment holding given address */
 static msegmentptr
 segment_holding(mstate m, char *addr)
@@ -1200,7 +1200,7 @@ change_mparam(int param_number, int value)
     }
 }
 
-#if DEBUG
+#ifdef DEBUG
 /* ------------------------- Debugging Support --------------------------- */
 
 /* Check properties of any chunk, whether free, inuse, mmapped etc  */

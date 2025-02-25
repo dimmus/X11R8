@@ -2119,7 +2119,7 @@ TRANS(SocketBytesReadable)(XtransConnInfo ciptr, BytesReadable_t *pend)
 #endif /* WIN32 */
 }
 
-#if XTRANS_SEND_FDS
+#ifdef XTRANS_SEND_FDS
 
 static void
 appendFd(struct _XtransConnFd **prev, int fd, int do_close)
@@ -2244,7 +2244,7 @@ TRANS(SocketRead)(XtransConnInfo ciptr, char *buf, int size)
         return ret;
     }
 #else
-#  if XTRANS_SEND_FDS
+#  ifdef XTRANS_SEND_FDS
     {
         struct iovec  iov = { .iov_base = buf, .iov_len = size };
         union fd_pass cmsgbuf;
@@ -2289,7 +2289,7 @@ TRANS(SocketReadv)(XtransConnInfo ciptr, struct iovec *buf, int size)
 {
     prmsg(2, "SocketReadv(%d,%p,%d)\n", ciptr->fd, buf, size);
 
-#if XTRANS_SEND_FDS
+#ifdef XTRANS_SEND_FDS
     {
         union fd_pass cmsgbuf;
         struct msghdr msg = { .msg_name    = NULL,
@@ -2332,7 +2332,7 @@ TRANS(SocketWritev)(XtransConnInfo ciptr, struct iovec *buf, int size)
 {
     prmsg(2, "SocketWritev(%d,%p,%d)\n", ciptr->fd, buf, size);
 
-#if XTRANS_SEND_FDS
+#ifdef XTRANS_SEND_FDS
     if (ciptr->send_fds)
     {
         union fd_pass         cmsgbuf;
@@ -2383,7 +2383,7 @@ TRANS(SocketWrite)(XtransConnInfo ciptr, char *buf, int size)
         return ret;
     }
 #else
-#  if XTRANS_SEND_FDS
+#  ifdef XTRANS_SEND_FDS
     if (ciptr->send_fds)
     {
         struct iovec iov;
@@ -2448,7 +2448,7 @@ TRANS(SocketUNIXClose)(XtransConnInfo ciptr)
 
     prmsg(2, "SocketUNIXClose(%p,%d)\n", ciptr, ciptr->fd);
 
-#  if XTRANS_SEND_FDS
+#  ifdef XTRANS_SEND_FDS
     cleanupFds(ciptr);
 #  endif
     ret = close(ciptr->fd);
@@ -2476,7 +2476,7 @@ TRANS(SocketUNIXCloseForCloning)(XtransConnInfo ciptr)
 
     prmsg(2, "SocketUNIXCloseForCloning(%p,%d)\n", ciptr, ciptr->fd);
 
-#  if XTRANS_SEND_FDS
+#  ifdef XTRANS_SEND_FDS
     cleanupFds(ciptr);
 #  endif
     ret = close(ciptr->fd);
@@ -2523,7 +2523,7 @@ Xtransport TRANS(SocketTCPFuncs) = {
     TRANS(SocketWrite),
     TRANS(SocketReadv),
     TRANS(SocketWritev),
-#  if XTRANS_SEND_FDS
+#  ifdef XTRANS_SEND_FDS
     TRANS(SocketSendFdInvalid),
     TRANS(SocketRecvFdInvalid),
 #  endif
@@ -2560,7 +2560,7 @@ Xtransport TRANS(SocketINETFuncs) = {
     TRANS(SocketWrite),
     TRANS(SocketReadv),
     TRANS(SocketWritev),
-#  if XTRANS_SEND_FDS
+#  ifdef XTRANS_SEND_FDS
     TRANS(SocketSendFdInvalid),
     TRANS(SocketRecvFdInvalid),
 #  endif
@@ -2598,7 +2598,7 @@ Xtransport TRANS(SocketINET6Funcs) = {
     TRANS(SocketWrite),
     TRANS(SocketReadv),
     TRANS(SocketWritev),
-#    if XTRANS_SEND_FDS
+#    ifdef XTRANS_SEND_FDS
     TRANS(SocketSendFdInvalid),
     TRANS(SocketRecvFdInvalid),
 #    endif
@@ -2643,7 +2643,7 @@ Xtransport TRANS(SocketLocalFuncs) = {
     TRANS(SocketWrite),
     TRANS(SocketReadv),
     TRANS(SocketWritev),
-#    if XTRANS_SEND_FDS
+#    ifdef XTRANS_SEND_FDS
     TRANS(SocketSendFd),
     TRANS(SocketRecvFd),
 #    endif
@@ -2694,7 +2694,7 @@ Xtransport TRANS(SocketUNIXFuncs) = {
     TRANS(SocketWrite),
     TRANS(SocketReadv),
     TRANS(SocketWritev),
-#  if XTRANS_SEND_FDS
+#  ifdef XTRANS_SEND_FDS
     TRANS(SocketSendFd),
     TRANS(SocketRecvFd),
 #  endif

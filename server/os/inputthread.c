@@ -40,7 +40,7 @@
 #include "opaque.h"
 #include "osdep.h"
 
-#if INPUTTHREAD
+#ifdef INPUTTHREAD
 
 Bool InputThreadEnable = TRUE;
 
@@ -323,7 +323,7 @@ InputThreadDoWork(void *arg)
 
     inputThreadInfo->running = TRUE;
 
-#if defined(HAVE_PTHREAD_SETNAME_NP_WITH_TID)
+#ifdef HAVE_PTHREAD_SETNAME_NP_WITH_TID
     pthread_setname_np (pthread_self(), "InputThread");
 #elif defined(HAVE_PTHREAD_SETNAME_NP_WITHOUT_TID)
     pthread_setname_np ("InputThread");
@@ -444,7 +444,7 @@ InputThreadPreInit(void)
     hotplugPipeWrite = hotplugPipe[1];
 
 #ifndef __linux__ /* Linux does not deal well with renaming the main thread */
-#if defined(HAVE_PTHREAD_SETNAME_NP_WITH_TID)
+#ifdef HAVE_PTHREAD_SETNAME_NP_WITH_TID
     pthread_setname_np (pthread_self(), "MainThread");
 #elif defined(HAVE_PTHREAD_SETNAME_NP_WITHOUT_TID)
     pthread_setname_np ("MainThread");

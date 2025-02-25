@@ -1339,7 +1339,7 @@ ddxBeforeReset(void)
 }
 #endif
 
-#if INPUTTHREAD
+#ifdef INPUTTHREAD
 /** This function is called in Xserver/os/inputthread.c when starting
     the input thread. */
 void

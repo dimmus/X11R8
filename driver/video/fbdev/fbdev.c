@@ -858,7 +858,7 @@ FBDevScreenInit(ScreenPtr pScreen, int argc, char **argv)
 
     TRACE_ENTER("FBDevScreenInit");
 
-#if DEBUG
+#ifdef DEBUG
     ErrorF("\tbitsPerPixel=%d, depth=%d, defaultVisual=%s\n"
            "\tmask: %x,%x,%x, offset: %d,%d,%d\n",
            pScrn->bitsPerPixel,

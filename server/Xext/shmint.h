@@ -56,7 +56,7 @@ typedef struct _ShmFuncs {
     void (*PutImage) (XSHM_PUT_IMAGE_ARGS);
 } ShmFuncs, *ShmFuncsPtr;
 
-#if XTRANS_SEND_FDS
+#ifdef XTRANS_SEND_FDS
 #define SHM_FD_PASSING  1
 #endif
 

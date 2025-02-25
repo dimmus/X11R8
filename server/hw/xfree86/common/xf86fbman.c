@@ -38,10 +38,6 @@
 #include "regionstr.h"
 #include "xf86fbman.h"
 
-/*
-#define DEBUG
-*/
-
 static DevPrivateKeyRec xf86FBManagerKeyRec;
 static DevPrivateKey xf86FBManagerKey;
 

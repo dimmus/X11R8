@@ -23,7 +23,7 @@
  */
 
 #include "nouveau_present.h"
-#if defined(DRI3)
+#ifdef DRI3
 #  include "nv_include.h"
 #  include "xf86drmMode.h"
 

@@ -123,7 +123,7 @@ from The Open Group.
 #  define X_TCP_PORT 6000
 #endif
 
-#if XTRANS_SEND_FDS
+#ifdef XTRANS_SEND_FDS
 
 struct _XtransConnFd
 {
@@ -244,7 +244,7 @@ typedef struct _Xtransport
                   int   /* size */
     );
 
-#if XTRANS_SEND_FDS
+#ifdef XTRANS_SEND_FDS
     int (*SendFd)(XtransConnInfo,  /* connection */
                   int,                    /* fd */
                   int                     /* do_close */

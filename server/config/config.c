@@ -61,7 +61,7 @@ config_init(void)
 void
 config_fini(void)
 {
-#if defined(CONFIG_UDEV)
+#ifdef CONFIG_UDEV
     config_udev_fini();
 #elif defined(CONFIG_HAL)
     config_hal_fini();

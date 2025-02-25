@@ -96,7 +96,7 @@ LoaderOpen(const char *module, int *errmaj)
 {
     void *ret;
 
-#if defined(DEBUG)
+#ifdef DEBUG
     ErrorF("LoaderOpen(%s)\n", module);
 #endif
 

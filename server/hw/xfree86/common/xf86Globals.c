@@ -127,7 +127,7 @@ xf86InfoRec xf86Info = {
     .autoAddDevices = FALSE,
     .autoEnableDevices = FALSE,
 #endif
-#if defined(CONFIG_UDEV_KMS)
+#ifdef CONFIG_UDEV_KMS
     .autoAddGPU = TRUE,
 #else
     .autoAddGPU = FALSE,
