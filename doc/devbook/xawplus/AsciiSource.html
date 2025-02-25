@@ -1,0 +1,336 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux (vers 25 March 2009), see www.w3.org">
+
+  <title>The Ascii Source and Multi Source Objects</title>
+  <meta name="Author" content=
+  "Roland Krause 2002, roland_krause@freenet.de">
+  <meta name="Description" content="Documentation to XawPlus">
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink=
+"#55188A" alink="#FF0000">
+  <h3><i><font color=
+  "#FF0000">_________________________________________________________Xaw</font><font color="#008000">Plus</font></i></h3>
+
+  <h3><i>The Ascii Source and Multi Source Objects</i></h3>
+
+  <table summary="">
+    <tr>
+      <td align="left" valign="top">Application Header file</td>
+
+      <td>&lt;X11/XawPlus/AsciiSrc.h&gt; or<br>
+      &lt;X11/XawPlus/MultiSrc.h&gt;</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">Class Header file</td>
+
+      <td>&lt;X11/XawPlus/AsciiSrcP.h&gt; or<br>
+      &lt;X11/XawPlus/MultiSrcP.h&gt;</td>
+    </tr>
+
+    <tr>
+      <td>Class</td>
+
+      <td>asciiSrcObjectClass or multiSrcObjectClass</td>
+    </tr>
+
+    <tr>
+      <td>Class Name</td>
+
+      <td>AsciiSrc or MultiSrc</td>
+    </tr>
+
+    <tr>
+      <td>Superclass</td>
+
+      <td>TextSource</td>
+    </tr>
+  </table>
+
+  <p>The AsciiSrc or MultiSrc object is used by a text widget to
+  read the text from a file or string in memory. Depending on its
+  <b>international</b> resource an AsciiText widget will create one
+  or the other of thesewhen the AsciiText itself is created. Both
+  types are nearly identical; the following discussion applies to
+  both, with MultiSrc differences noted only if the occur.</p>
+
+  <p>The AdciiSrc understands all Latin1 characters plus Tab and
+  Carriage Return. The MultiSrc understands all any set of
+  character sets that the underlying X implementation's
+  internationalization handles.</p>
+
+  <p>The AsciiSrc can be either of two types: <i>XawAsciiFile</i>
+  or <i>XawAsciiString</i>. AsciiSrc objects of type
+  <i>XawAsciiFile</i> read the text from a file and store it into
+  an internal buffer. This buffer may then be modified, provided
+  the text widget is in the correct edit mode, just as if it were a
+  source of type <i>XawAsciiString</i>. Unlike R3 and earlier
+  versions of the AsciiSrc, it is now possible to specify an
+  editable disk source. The file is not updated, however, until a
+  call to <i>XawAsciiSave</i> is made. When the source is in this
+  mode the <i>useStringInPlace</i> resource is ignored.</p>
+
+  <p>AsciiSrc objects of type <i>XawAsciiString</i> have the text
+  buffer implemented as a string. The string owner is responsible
+  for allocating and managing storage for the string.</p>
+
+  <p>In the default case for AsciiSrc objects of type
+  <i>XawAsciiString</i>, the resource <i>useStringInPlace</i> is
+  false, and the widget owns the string. The initial value of the
+  string resource, and any update made by the application
+  programmer to the string resource with <i>XtSetValues()</i>, is
+  copied into memory private to the widget, and managed internally
+  by the widget. The application writer does not need to worry
+  about running out of buffer space (subject to the total memory
+  available to the application). The performance does not decay
+  linearly as the buffer grows large, as is necessarily the case
+  when the text buffer is used in place. The application writer
+  must use <i>XtGetValues()</i> to determine the contents of the
+  text buffer, which will return a copy of the widget's text buffer
+  as it existed at the time of the <i>XtGetValues()</i> call. This
+  copy is not affected by subsequent updates to the text buffer,
+  i.e., it is not updated as the user types input into the text
+  buffer. This copy is freed upon the next call to
+  <i>XtGetValues()</i> to retrieve the string resource; however, to
+  conserve memory, there is a convenience routine,
+  <i>XawAsciiSrcFreeString</i>, allowing the application programmer
+  to direct the widget to free the copy.</p>
+
+  <p>When the resource <i>useStringInPlace</i> is true and the
+  AsciiSrc object is of type <i>XawAsciiString</i>, the application
+  is the string owner. The widget will take the value of the string
+  resource as its own text buffer, and the <i>length</i> resource
+  indicates the buffer size. In this case the buffer contents
+  change as the user types at the widget; it is not necessary to
+  call <i>XtGetValues()</i> on the string resource to determine the
+  contents of the buffer -- it will simply return the address of
+  the application's implementation of the text buffer.</p>
+
+  <h3>Differences between Xaw and XawPlus</h3>
+
+  <p>None.</p>
+
+  <h3>Resources</h3>
+
+  <p>When creating a AsciiSrc object instance, the following
+  resources are retrieved from the argument list of
+  <i>XtSetValues()</i> or <i>XtVaSetValues()</i> or from the
+  resource database:</p>
+
+  <table border="1" cellspacing="0" cellpadding="0" width="90%"
+  summary="">
+    <tr>
+      <td bgcolor="#E0E0E0"><b>Name</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Class</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Type</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Default Value</b></td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">OBJECT:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>destroyCallback</td>
+
+      <td>Callback</td>
+
+      <td>Pointer</td>
+
+      <td>NULL</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">TEXTSRC OBJECT:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>editType</td>
+
+      <td>EditType</td>
+
+      <td>XawTextEditType</td>
+
+      <td>XawtextRead</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">ASCIISRC OBJECT:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>callback<br>
+      dataCompression<br>
+      length<br>
+      pieceSize<br>
+      string<br>
+      type<br>
+      useStringInPlace</td>
+
+      <td>Callback<br>
+      DataCompression<br>
+      Length<br>
+      PieceSize<br>
+      String<br>
+      Type<br>
+      UseStringInPlace</td>
+
+      <td>Callback<br>
+      Boolean<br>
+      int<br>
+      int<br>
+      String<br>
+      XawAsciiType<br>
+      Boolean</td>
+
+      <td>(none)<br>
+      True<br>
+      (internal)<br>
+      BUFSIZ<br>
+      NULL<br>
+      XawAsciiString<br>
+      False</td>
+    </tr>
+  </table>
+
+  <h3>Convenience Routines</h3>
+
+  <p>The AsciiSrc has a few convenience routines that allow the
+  application programmer quicker or easier access to some of the
+  commonly used functionality of the AsciiSrc.</p>
+
+  <h3>Conserving Memory</h3>
+
+  <p>When the AsciiSrc widget is not in <i>useStringInPlace</i>
+  mode space must be allocated whenever the file is saved, or the
+  string is requested with a call to <i>XtGetValues()</i>. This
+  memory is allocated on the fly, and remains valid until the next
+  time a string needs to be allocated. You may save memory by
+  freeing this string as soon as you are done with it by calling
+  XawAsciiSrcFreeString():</p>
+
+  <blockquote>
+    <p><i>void XawAsciiSourceFreeString(w)<br>
+    Widget w;</i></p>
+
+    <table cellspacing="0" cellpadding="0" width="80%" summary="">
+      <tr>
+        <td align="left" valign="top"><b>w</b></td>
+
+        <td>Specifies the AsciiSrc object.</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <p>This function will free the memory that contains the string
+  pointer returned by <i>XtGetValues()</i>. This will normally
+  happen automatically when the next call to <i>XtGetValues()</i>
+  occurs, or when the widget is destroyed.</p>
+
+  <h3>Saving Files</h3>
+
+  <p>To save the changes made in the current text source into a
+  file use XawAsciiSave():</p>
+
+  <blockquote>
+    <p><i>Boolean XawAsciiSave(w)<br>
+    Widget w;</i></p>
+
+    <table cellspacing="0" cellpadding="0" width="80%" summary="">
+      <tr>
+        <td align="left" valign="top"><b>w</b></td>
+
+        <td>Specifies the AsciiSrc object.</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <p><i>XawAsciiSave()</i> returns <b>True</b> if the save was
+  successful. It will update the file named in the <i>string</i>
+  resource. If the buffer has not been changed, no action will be
+  taken. This function only works on an AsciiSrc of type
+  <i>XawAsciiFile</i>.</p>
+
+  <p>To save the contents of the current text buffer into a named
+  file use XawAsciiSaveAsFile().</p>
+
+  <blockquote>
+    <p><i>Boolean XawAsciiSaveAsFile(w, name)<br>
+    Widget w;<br>
+    String name;</i></p>
+
+    <table cellspacing="0" cellpadding="0" width="80%" summary="">
+      <tr>
+        <td align="left" valign="top"><b>w</b></td>
+
+        <td>Specifies the AsciiSrc object.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>name</b></td>
+
+        <td>The name of the file to save the current buffer
+        into.</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <p>This function returns <b>True</b> if the save was successful.
+  <i>XawAsciiSaveAsFile</i> will work with a buffer of either type
+  <i>XawAsciiString</i> or type <i>XawAsciiFile</i>.</p>
+
+  <h3>Seeing if the Source has Changed</h3>
+
+  <p>To find out if the text buffer in an AsciiSrc object has
+  changed since the last time it was saved with
+  <i>XawAsciiSave()</i> or queried use XawAsciiSourceChanged().</p>
+
+  <blockquote>
+    <p><i>Boolean XawAsciiSourceChanged(w)<br>
+    Widget w;</i></p>
+
+    <table cellspacing="0" cellpadding="0" width="80%" summary="">
+      <tr>
+        <td align="left" valign="top"><b>w</b></td>
+
+        <td>Specifies the AsciiSrc object.</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <p>This function will return <b>True</b> if the source has
+  changed since the last time it was saved or queried. The internal
+  change flag is reset whenever the string is queried via
+  <i>XtGetValues()</i> or the buffer is saved via
+  <i>XawAsciiSave()</i>.</p>
+
+  <h3><i><font color="#FF0000">Xaw</font><font color=
+  "#008000">Plus_________________________________________________________</font></i></h3>
+</body>
+</html>

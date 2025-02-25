@@ -1,0 +1,695 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux (vers 25 March 2009), see www.w3.org">
+
+  <title>The IconList Widget</title>
+  <meta name="Author" content=
+  "Roland Krause 2002, roland_krause@freenet.de">
+  <meta name="Description" content="Documentation to XawPlus">
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink=
+"#55188A" alink="#FF0000">
+  <h3><i><font color=
+  "#FF0000">_____________________________________________________Xaw</font><font color="#008000">Plus</font></i></h3>
+
+  <h3><i>The IconList Widget</i></h3>
+
+  <table width="60%" summary="">
+    <tr>
+      <td>Application Header file<br>
+      Class Header file<br>
+      Class<br>
+      Class Name<br>
+      Superclass</td>
+
+      <td>&lt;X11/XawPlus/IconList.h&gt;<br>
+      &lt;X11/XawPlus/ListP.h&gt;<br>
+      iconListWidgetClass<br>
+      List<br>
+      Simple</td>
+    </tr>
+  </table>
+
+  <p>The List widget contains a list of strings and/or bitmaps
+  formatted into rows and columns. When one of the strings is
+  selected, it is highlighted, and the List widget's <i>Notify</i>
+  action is invoked, calling all routines on its callback list.
+  Only one string may be selected at a time.</p>
+
+  <p>Since release 3.0 of XawPlus, this widget is only a IconList
+  compatible mapping to the List widget. Programmers may use
+  IconList as in previous versions for the future but a List widget
+  will be created.</p>
+
+  <h3>Resources</h3>
+
+  <p>When creating a List widget instance, the following resources
+  are retrieved from the argument list of <i>XtSetValues()</i> or
+  <i>XtVaSetValues()</i> or from the resource database:</p>
+
+  <table border="1" cellspacing="0" cellpadding="0" width="90%"
+  summary="">
+    <tr>
+      <td bgcolor="#E0E0E0"><b>Name</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Class</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Type</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Default Value</b></td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">OBJECT:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>destroyCallback</td>
+
+      <td>Callback</td>
+
+      <td>Pointer</td>
+
+      <td>NULL</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">RECTANGLE:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>borderWidth<br>
+      height<br>
+      sensitive<br>
+      width<br>
+      x<br>
+      y</td>
+
+      <td>BorderWidth<br>
+      Height<br>
+      Sensitive<br>
+      Width<br>
+      Position<br>
+      Position</td>
+
+      <td>Dimension<br>
+      Dimension<br>
+      Boolean<br>
+      Dimension<br>
+      Position<br>
+      Position</td>
+
+      <td>0<br>
+      12<br>
+      True<br>
+      12<br>
+      0<br>
+      0</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">CORE:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>border<br>
+      background<br>
+      mappedWhenManaged</td>
+
+      <td>BorderColor<br>
+      Background<br>
+      MappedWhenManaged</td>
+
+      <td>Pixel<br>
+      Pixel<br>
+      Boolean</td>
+
+      <td>XtDefaultForeground<br>
+      grey75<br>
+      True</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">ADD3DEXT:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>highlightColor<br>
+      shadowColor<br>
+      buttonBorderWidth</td>
+
+      <td>Background<br>
+      Background<br>
+      Width</td>
+
+      <td>Pixel<br>
+      Pixel<br>
+      Dimension</td>
+
+      <td>grey90<br>
+      grey40<br>
+      2</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">SIMPLE:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>cursor<br>
+      cursorName<br>
+      pointerColor<br>
+      pointerColorBackground<br>
+      insensitiveBorder</td>
+
+      <td>Cursor<br>
+      Cursor<br>
+      Foreground<br>
+      Background<br>
+      Insensitive</td>
+
+      <td>Cursor<br>
+      String<br>
+      Pixel<br>
+      Pixel<br>
+      Pixmap</td>
+
+      <td>left_ptr<br>
+      NULL<br>
+      XtDefaultForeground<br>
+      XtDefaultBackground<br>
+      NULL</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">ICONLIST:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>callback<br>
+      pasteBuffer<br>
+      foreground<br>
+      font<br>
+      internalHeight<br>
+      internalWidth<br>
+      defaultColumns<br>
+      columnSpacing<br>
+      rowSpacing<br>
+      forceColumns<br>
+      verticalList<br>
+      list<br>
+      longest<br>
+      numberStrings<br>
+      iconHeight<br>
+      iconWidth<br>
+      iconDepth</td>
+
+      <td>Callback<br>
+      Boolean<br>
+      Foreground<br>
+      Font<br>
+      Height<br>
+      Width<br>
+      Columns<br>
+      Spacing<br>
+      Spacing<br>
+      Columns<br>
+      Boolean<br>
+      List<br>
+      Longest<br>
+      NumberStrings<br>
+      Height<br>
+      Width<br>
+      Depth</td>
+
+      <td>XtCallbackList<br>
+      Boolean<br>
+      Pixel<br>
+      XFontStruct *<br>
+      Dimension<br>
+      Dimension<br>
+      int<br>
+      Dimension<br>
+      Dimension<br>
+      Boolean<br>
+      Boolean<br>
+      XawIconList[]<br>
+      int<br>
+      int<br>
+      Dimension<br>
+      Dimension<br>
+      Dimension</td>
+
+      <td>NULL<br>
+      False<br>
+      XtDefaultForeground<br>
+      XtDefaultFont<br>
+      2<br>
+      4<br>
+      2<br>
+      6<br>
+      4<br>
+      False<br>
+      False<br>
+      NULL<br>
+      0<br>
+      0<br>
+      0<br>
+      0<br>
+      1</td>
+    </tr>
+  </table>
+
+  <table cellspacing="4" cellpadding="0" width="90%" summary="">
+    <tr>
+      <td align="left" valign="top"><b>callback</b></td>
+
+      <td>All functions on this list are called whenever the
+      <i>notify</i> action is invoked. The <i>call_data</i>
+      argument contains information about the element selected and
+      is described in detail in the <i>IconList Callbacks</i>
+      section.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>columnSpacing<br>
+      rowSpacing</b></td>
+
+      <td>The amount of space, in pixels, between each of the rows
+      and columns in the list.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>defaultColumns</b></td>
+
+      <td>The default number of columns. This value is used when
+      neither the width nor the height of the IconList widget is
+      specified or when <i>forceColumns</i> is <i>True</i>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>forceColumns</b></td>
+
+      <td>Forces the default number of columns to be used
+      regardless of the IconList widget's current size.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>foreground</b></td>
+
+      <td>A pixel value which indexes the widget's colormap to
+      derive the color used to paint the text of the list
+      elements.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>internalHeight,<br>
+      internalWidth</b></td>
+
+      <td>The margin, in pixels, between the edges of the list and
+      the corresponding edge of the IconList widget's window.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>list</b></td>
+
+      <td>An array of text strings and icons displayed in the
+      IconList widget. If <i>numberStrings</i> is zero (the
+      default) then the <i>list</i> must be NULL terminated. If a
+      value is not specified for the <i>list</i>, then
+      <i>numberStrings</i> is set to 1, and the name of the widget
+      is used as the <i>list</i>, and <i>longest</i> is set to the
+      length of the name of the widget. The <i>list</i> is used in
+      place, and must be available to the IconList widget for the
+      lifetime of this widget, or until it is changed with
+      <i>XtSetValues()</i> or better with
+      <i>XawIconListChange()</i>. Note that <i>XtSetValues()</i>
+      only works well, if the memory location of the list structure
+      changes. It is a good idea to use always
+      <i>XawIconListChange()</i>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>longest</b></td>
+
+      <td>Specifies the width, in pixels, of the longest string in
+      the current list. The IconList widget will compute this value
+      if zero (the default) is specified. If this resource is not
+      correctly specified, selection of list items may not work
+      properly.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>numberStrings</b></td>
+
+      <td>The number of strings in the current list. If a value of
+      zero (the default) is specified, the IconList widget will
+      compute it. When computing the number of strings the IconList
+      widget assumes that the <i>list</i> is NULL terminated.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>pasteBuffer</b></td>
+
+      <td>If this resource is set to <i>True</i> then the name of
+      the currently selected list element will be put into
+      <i>CUT_BUFFER_0</i>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>verticalList</b></td>
+
+      <td>If this resource is set to <i>True</i> then the list
+      elements will be presented in column major order.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>iconHeight,<br>
+      iconWidth</b></td>
+
+      <td>Set this resources to the <i>width</i> and <i>height</i>
+      of your bitmap or pixmap icons. <i>iconWidth</i> and
+      <i>iconHeight</i> are used to reserve enough space in the
+      list entries.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>iconDepth</b></td>
+
+      <td>Use the value of 1 for traditional XBM bitmap icons or
+      the depth of your pixmaps for color icons like XPMs.</td>
+    </tr>
+  </table>
+
+  <h3>IconList Actions</h3>
+
+  <p>The IconList widget supports the following actions:</p>
+
+  <ul>
+    <li>Highlighting and unhighlighting the list element under the
+    pointer with <i>Set</i> and <i>Unset</i>.</li>
+
+    <li>Processing application callbacks with <i>Notify</i>.</li>
+  </ul>
+
+  <p>The following is the default translation table used by the
+  IconList Widget:</p>
+
+  <blockquote>
+    <table summary="">
+      <tr>
+        <td><i>&lt;Btn1Down&gt;,&lt;Btn1Up&gt;</i></td>
+
+        <td><i>Set(), Notify()</i></td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <p>The full list of actions supported by IconList widget is:</p>
+
+  <table cellspacing="4" cellpadding="0" width="90%" summary="">
+    <tr>
+      <td align="left" valign="top"><b>Set</b>()</td>
+
+      <td><i>Sets</i> the list element that is currently under the
+      pointer. To inform the user that this element is currently
+      set, it is drawn with is foreground and background colors
+      reversed. If this action is called when there is no list
+      element under the cursor, the currently <i>set</i> element
+      will be <i>unset</i>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>Unset</b>()</td>
+
+      <td>Cancels the <i>set</i> state of the element under the
+      pointer, and redraws it with normal foreground and background
+      colors.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>Notify</b>()</td>
+
+      <td>Calls all callbacks on the IconList widget's callback
+      list. Information about the currently selected list element
+      is passed in the <i>call_data</i> argument (see <i>IconList
+      Callback</i> below).</td>
+    </tr>
+  </table>
+
+  <h3>IconList Callbacks</h3>
+
+  <p>All procedures on the IconList widget's callback list will
+  have a <i>XawIconListReturnStruct</i> passed to them as
+  <i>call_data</i>. The structure is defined in the IconList
+  widget's application header file.</p>
+
+  <blockquote>
+    <pre>
+typedef struct _XawIconListReturnStruct
+{
+        String string;  /* string shown in the list. */
+        int list_index; /* index of the item selected. */
+}
+XawIconListReturnStruct;
+</pre>
+  </blockquote>
+
+  <p>The <i>list_index</i> item used to be called simply
+  <i>index</i>. Unfortunately, this name collided with a global
+  name defined on some operating systems, and had to be
+  changed.</p>
+
+  <h3>Changing the List</h3>
+
+  <p>To change the list that is displayed, use
+  XawIconListChange():</p>
+
+  <blockquote>
+    <p><i>void XawIconListChange(w, list, nitems, longest,
+    resize)<br>
+    Widget w;<br>
+    XawIconList *list;<br>
+    int nitems, longest;<br>
+    int width, height, depth;<br>
+    Boolean resize;</i></p>
+
+    <table cellspacing="4" cellpadding="0" width="80%" summary="">
+      <tr>
+        <td align="left" valign="top"><b>w</b></td>
+
+        <td>Specifies the IconList widget.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>list</b></td>
+
+        <td>Specifies the new list for the IconList widget to
+        display.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>nitems</b></td>
+
+        <td>Specifies the number of items in the <i>list</i>. If a
+        value less than 1 is specified, <i>list</i> must be NULL
+        terminated, and the number of items will be calculated by
+        the IconList widget.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>longest</b></td>
+
+        <td>Specifies the length of the longest item in the
+        <i>list</i> in pixels. If a value less than 1 is specified,
+        the IconList widget will calculate the value.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>width,<br>
+        height</b></td>
+
+        <td>Specifies the <i>width</i> and <i>height</i> of your
+        bitmap or pixmap icons. These values are used to reserve
+        enough space for the icons in the list entries.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>iconDepth</b></td>
+
+        <td>Use the value of 1 for traditional XBM bitmap icons or
+        the depth of your pixmaps for color icons like XPMs.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>resize</b></td>
+
+        <td>Specifies a Boolean value that if <i>True</i> indicates
+        that the IconList widget should try to resize itself after
+        making the change. The constraints of the IconList widget's
+        parent are always enforced, regardless of the value
+        specified here.</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <p>An XawIconList entry has the following structure:</p>
+
+  <blockquote>
+    <pre>
+typedef struct _XawIconList
+{
+        Pixmap bitmap;   /* the icon, used as left bitmap */
+        Pixmap clipMask; /* drawing mask for the icon */
+        String string;   /* text for the list entry */
+}
+XawIconList;
+</pre>
+  </blockquote>
+
+  <table cellspacing="4" cellpadding="0" width="90%" summary="">
+    <tr>
+      <td align="left" valign="top"><b>bitmap</b></td>
+
+      <td>A bitmap or pixmap displayed left of the string entry.
+      Use <i>XtUnspecifiedPixmap</i> if you don't want to display
+      an icon for a list entry. Use <i>XCreateBitmapFromData()</i>
+      to create a 1 bit depth XBM styled pixmap or
+      <i>XpmCreatePixmapFromData()</i> for XPMs included in your
+      source code. The XPM function returns in addition a clip mask
+      if one of the colors (normally the background color) used in
+      the XPM source is set to <i>None</i>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>clipMask</b></td>
+
+      <td>A clip mask is used to display nonrectagular icons. If
+      you don't want to use clip masks, set this entry to
+      <i>XtUnspecifiedPixmap</i>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>string</b></td>
+
+      <td>The string for a list entry.</td>
+    </tr>
+  </table>
+
+  <h3>Highlighting an Item</h3>
+
+  <p>To highlight an item in the list, use
+  XawIconListHighlight():</p>
+
+  <blockquote>
+    <p><i>void XawIconListHighlight(w, item)<br>
+    Widget w;<br>
+    int item;</i></p>
+
+    <table cellspacing="4" cellpadding="0" width="80%" summary="">
+      <tr>
+        <td align="left" valign="top"><b>w</b></td>
+
+        <td>Specifies the IconList widget.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>item</b></td>
+
+        <td>Specifies an index into the current list that indicates
+        the item to be highlighted.</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <p>Only one item can be highlighted at a time. If an item is
+  already highlighted when <i>XawIconListHighlight()</i> is called,
+  the highlighted item is unhighlighted before the new item is
+  highlighted.</p>
+
+  <h3>Unhighlighting an Item</h3>
+
+  <p>To unhighlight the currently highlighted item in the list, use
+  XawIconListUnhighlight():</p>
+
+  <blockquote>
+    <p><i>void XawIconListUnhighlight(w)<br>
+    Widget w;</i></p>
+
+    <table cellspacing="4" cellpadding="0" width="80%" summary="">
+      <tr>
+        <td align="left" valign="top"><b>w</b></td>
+
+        <td>Specifies the IconList widget.</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <h3>Retrieving the Currently Selected Item</h3>
+
+  <p>To retrieve the list element that is currently <i>set</i>, use
+  XawIconListShowCurrent().</p>
+
+  <blockquote>
+    <p><i>XawIconListReturnStruct *XawIconListShowCurrent(w)<br>
+    Widget w;</i></p>
+
+    <table cellspacing="4" cellpadding="0" width="80%" summary="">
+      <tr>
+        <td align="left" valign="top"><b>w</b></td>
+
+        <td>Specifies the IconList widget.</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <p>XawIconListShowCurrent() returns a pointer to an
+  <i>XawIconListReturnStruct</i> structure, containing the
+  currently highlighted item. If the value of the index member is
+  XAW_LIST_NONE, the string member is undefined, and no item is
+  currently selected.</p>
+
+  <h3><i><font color="#FF0000">Xaw</font><font color=
+  "#008000">Plus_____________________________________________________</font></i></h3>
+</body>
+</html>

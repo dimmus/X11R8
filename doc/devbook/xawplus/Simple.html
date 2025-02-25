@@ -1,0 +1,491 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux (vers 25 March 2009), see www.w3.org">
+
+  <title>The Simple Widget</title>
+  <meta name="Author" content=
+  "Roland Krause 2002, roland_krause@freenet.de">
+  <meta name="Description" content="Documentation to XawPlus">
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink=
+"#55188A" alink="#FF0000">
+  <h3><i><font color=
+  "#FF0000">_________________________________________________________Xaw</font><font color="#008000">Plus</font></i></h3>
+
+  <h3><i>The Simple Widget</i></h3>
+
+  <table summary="">
+    <tr>
+      <td>Application Header file<br>
+      Class Header file<br>
+      Class<br>
+      Class Name<br>
+      Superclass</td>
+
+      <td>&lt;X11/XawPlus/Simple.h&gt;<br>
+      &lt;X11/XawPlus/SimpleP.h&gt;<br>
+      simpleWidgetClass<br>
+      Simple<br>
+      Core</td>
+    </tr>
+  </table>
+
+  <p>The Simple widget is not very useful by itself, as it has no
+  semantics of its own. It main purpose is to be used as a common
+  superclass for the other <i>simple</i> Athena widgets. This
+  widget adds nine resources to the resource list provided by the
+  <i>Core</i> widget and their superclasses.</p>
+
+  <h3>Differences between Xaw and XawPlus</h3>
+
+  <p>With version 3.0 of XawPlus all resources and methods of
+  <i>Add3dExt</i> are moved to this widget class. <i>Add3dExt</i>
+  was removed for a better source compatibility to the original Xaw
+  library.</p>
+
+  <p>The <i>Simple</i> widget has the additional resources
+  <i>highlightColor,</i> <i>shadowColor</i> and
+  <i>buttonBorderWidth</i> and a set of drawing methods, used by
+  <i>Command</i>, <i>Scrollbar</i> and other widgets to draw 3D
+  shaped buttons, sliders etc.</p>
+
+  <p>The default <i>background</i> color of <i>Simple</i> and all
+  its children is now grey75.</p>
+
+  <h3>Resources</h3>
+
+  <p>When creating a Simple widget instance, the following
+  resources are retrieved from the argument list of
+  <i>XtSetValues()</i> or <i>XtVaSetValues()</i> or from the
+  resource database:</p>
+
+  <table border="1" cellspacing="0" cellpadding="0" width="90%"
+  summary="">
+    <tr>
+      <td bgcolor="#E0E0E0"><b>Name</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Class</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Type</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Default Value</b></td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">OBJECT:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>destroyCallback</td>
+
+      <td>Callback</td>
+
+      <td>Pointer</td>
+
+      <td>NULL</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">RECTANGLE:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>borderWidth<br>
+      height<br>
+      sensitive<br>
+      width<br>
+      x<br>
+      y</td>
+
+      <td>BorderWidth<br>
+      Height<br>
+      Sensitive<br>
+      Width<br>
+      Position<br>
+      Position</td>
+
+      <td>Dimension<br>
+      Dimension<br>
+      Boolean<br>
+      Dimension<br>
+      Position<br>
+      Position</td>
+
+      <td>0<br>
+      12<br>
+      True<br>
+      12<br>
+      0<br>
+      0</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">CORE:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>border<br>
+      background<br>
+      mappedWhenManaged</td>
+
+      <td>BorderColor<br>
+      Background<br>
+      MappedWhenManaged</td>
+
+      <td>Pixel<br>
+      Pixel<br>
+      Boolean</td>
+
+      <td>XtDefaultForeground<br>
+      grey75<br>
+      True</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">SIMPLE:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>cursor<br>
+      cursorName<br>
+      pointerColor<br>
+      pointerColorBackground<br>
+      insensitiveBorder<br>
+      international<br>
+      highlightColor<br>
+      shadowColor<br>
+      buttonBorderWidth</td>
+
+      <td>Cursor<br>
+      Cursor<br>
+      Foreground<br>
+      Background<br>
+      Insensitive<br>
+      International<br>
+      Background<br>
+      Background<br>
+      Width</td>
+
+      <td>Cursor<br>
+      String<br>
+      Pixel<br>
+      Pixel<br>
+      Pixmap<br>
+      Boolean<br>
+      Pixel<br>
+      Pixel<br>
+      Dimension</td>
+
+      <td>None<br>
+      NULL<br>
+      XtDefaultForeground<br>
+      XtDefaultBackground<br>
+      NULL<br>
+      False<br>
+      grey90<br>
+      grey40<br>
+      2</td>
+    </tr>
+  </table>
+
+  <table cellspacing="4" cellpadding="0" width="90%" summary="">
+    <tr>
+      <td align="left" valign="top"><b>cursor</b></td>
+
+      <td>The image that will be displayed as the pointer cursor
+      whenever it is in this widget. The use of this resource is
+      deprecated in favor of <i>cursorName</i>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>cursorName</b></td>
+
+      <td>The name of the symbol to use to represent the pointer
+      cursor. This resource will override the <i>cursor</i>
+      resource if both are specified.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>pointerColor</b></td>
+
+      <td>The foreground color used to draw the pointer
+      cursor.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">
+      <b>pointerColorBackground</b></td>
+
+      <td>The background color used to draw the pointer
+      cursor.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>insensitiveBorder</b></td>
+
+      <td>This pixmap will be tiled into the widgets border, if the
+      widget becomes insensitive.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>international</b></td>
+
+      <td>This is a boolean flag, only settable at widget creation
+      time. A value of false signals not to use the X11R6
+      internationalization facility. A value of true signals to use
+      font sets and support of multi byte code to display text etc.
+      This resource is used from widgets which has to handle text
+      input and output like <i>Label</i> and <i>AsciiText</i>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>highlightColor</b></td>
+
+      <td>The color used to draw highlighted borders. The default
+      value is <i>grey90</i>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>shadowColor</b></td>
+
+      <td>The color used to draw shadow borders. The default value
+      is <i>grey40</i>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>buttonBorderWidth</b></td>
+
+      <td>This resource is used to determine the width of
+      rectangular shapes, used to draw buttons, sliders etc. The
+      default value is <i>2</i>.</td>
+    </tr>
+  </table>
+
+  <h3>Convenience Routines</h3>
+
+  <p>The following methods are used from children of the
+  <i>Simple</i> widget to simplify the drawing of rectangular 3D
+  styled shapes, filled rectangular 3D styled areas like buttons or
+  sliders, or to remove them. All methods uses the color resources
+  <i>background</i>, <i>highlightColor</i> and <i>shadowColor</i>.
+  The resource <i>buttonBorderWidth</i> is used to determine the
+  width of the border.</p>
+
+  <p>To remove the shape of a pressed or highlighted button use
+  <i>XawFlatRectangle()</i>:</p>
+
+  <blockquote>
+    <p><i>XawFlatRectangle(w, x, y, width, height)<br>
+    Widget w;<br>
+    int x, y;<br>
+    unsigned int width, height;</i></p>
+
+    <table cellspacing="4" cellpadding="0" width="80%" summary="">
+      <tr>
+        <td align="left" valign="top"><b>w</b></td>
+
+        <td>Specifies the widget.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>x, y</b></td>
+
+        <td>The drawing position of the upper left corner inside
+        the widgets window.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>width, height</b></td>
+
+        <td>The width and height of the rectangle to draw.</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <p>To draw a visible raised button shape use
+  <i>XawRaisedRectangle()</i>:</p>
+
+  <blockquote>
+    <p><i>XawRaisedRectangle(w, x, y, width, height)<br>
+    Widget w;<br>
+    int x, y;<br>
+    unsigned int width, height;</i></p>
+
+    <table cellspacing="4" cellpadding="0" width="80%" summary="">
+      <tr>
+        <td align="left" valign="top"><b>w</b></td>
+
+        <td>Specifies the widget.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>x, y</b></td>
+
+        <td>The drawing position of the upper left corner inside
+        the widgets window.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>width, height</b></td>
+
+        <td>The width and height of the rectangle to draw.</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <p>To draw the shape of a pressed button use
+  <i>XawSunkenRectangle()</i>:</p>
+
+  <blockquote>
+    <p><i>XawSunkenRectangle(w, x, y, width, height)<br>
+    Widget w;<br>
+    int x, y;<br>
+    unsigned int width, height;</i></p>
+
+    <table cellspacing="4" cellpadding="0" width="80%" summary="">
+      <tr>
+        <td align="left" valign="top"><b>w</b></td>
+
+        <td>Specifies the widget.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>x, y</b></td>
+
+        <td>The drawing position of the upper left corner inside
+        the widgets window.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>width, height</b></td>
+
+        <td>The width and height of the rectangle to draw.</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <p>To draw a filled flat button using the internal resources of
+  <i>Simple</i> use <i>XawFlatButton()</i>:</p>
+
+  <blockquote>
+    <p><i>XawFlatButton(w, x, y, width, height)<br>
+    Widget w;<br>
+    int x, y;<br>
+    unsigned int width, height;</i></p>
+
+    <table cellspacing="4" cellpadding="0" width="80%" summary="">
+      <tr>
+        <td align="left" valign="top"><b>w</b></td>
+
+        <td>Specifies the widget.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>x, y</b></td>
+
+        <td>The drawing position of the upper left corner inside
+        the widgets window.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>width, height</b></td>
+
+        <td>The width and height of the rectangle to draw.</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <p>To draw a filled button using the internal resources of
+  <i>Simple</i> use <i>XawRaisedButton()</i>:</p>
+
+  <blockquote>
+    <p><i>XawRaisedButton(w, x, y, width, height)<br>
+    Widget w;<br>
+    int x, y;<br>
+    unsigned int width, height;</i></p>
+
+    <table cellspacing="4" cellpadding="0" width="80%" summary="">
+      <tr>
+        <td align="left" valign="top"><b>w</b></td>
+
+        <td>Specifies the widget.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>x, y</b></td>
+
+        <td>The drawing position of the upper left corner inside
+        the widgets window.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>width, height</b></td>
+
+        <td>The width and height of the rectangle to draw.</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <p>To draw a filled pressed button using the internal resources
+  of <i>Simple</i> use <i>XawSunkenButton()</i>:</p>
+
+  <blockquote>
+    <p><i>XawSunkenButton(w, x, y, width, height)<br>
+    Widget w;<br>
+    int x, y;<br>
+    unsigned int width, height;</i></p>
+
+    <table cellspacing="4" cellpadding="0" width="80%" summary="">
+      <tr>
+        <td align="left" valign="top"><b>w</b></td>
+
+        <td>Specifies the widget.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>x, y</b></td>
+
+        <td>The drawing position of the upper left corner inside
+        the widgets window.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>width, height</b></td>
+
+        <td>The width and height of the rectangle to draw.</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <h3><i><font color="#FF0000">Xaw</font><font color=
+  "#008000">Plus_________________________________________________________</font></i></h3>
+</body>
+</html>

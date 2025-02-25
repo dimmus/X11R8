@@ -9,6 +9,7 @@ inc_lib += [
         'ICE',
         'SM',
         'Xaw',
+        'XawPlus',
         'Xcursor',
         'Xft',
         'Xmu',
@@ -20,6 +21,7 @@ inc_lib += [
 subdir('dri')
 subdir('extensions')
 subdir('fonts')
+subdir('XawPlus')
 subdir('Xaw3d')
 subdir('Xaw3dxft')
 subdir('neXtaw')

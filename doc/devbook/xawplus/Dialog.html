@@ -1,0 +1,473 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux (vers 25 March 2009), see www.w3.org">
+
+  <title>The Dialog Widget</title>
+  <meta name="Author" content=
+  "Roland Krause 2002, roland_krause@freenet.de">
+  <meta name="Description" content="Documentation to XawPlus">
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink=
+"#55188A" alink="#FF0000">
+  <h3><i><font color=
+  "#FF0000">_________________________________________________________Xaw</font><font color="#008000">Plus</font></i></h3>
+
+  <h3><i>The Dialog Widget</i></h3>
+
+  <table summary="">
+    <tr>
+      <td>Application Header file<br>
+      Class Header file<br>
+      Class<br>
+      Class Name<br>
+      Superclass</td>
+
+      <td>&lt;X11/XawPlus/Dialog.h&gt;<br>
+      &lt;X11/XawPlus/DialogP.h&gt;<br>
+      dialogWidgetClass<br>
+      Dialog<br>
+      Form</td>
+    </tr>
+  </table>
+
+  <p>The Dialog widget implements a commonly used interaction
+  semantic to prompt for auxiliary input from a user. For example,
+  you can use a Dialog widget when an application requires a small
+  piece of information, such as a filename, from the user. A Dialog
+  widget, which is simply a special case of the Form widget,
+  provides a convenient way to create a preconfigured form.</p>
+
+  <p>The typical Dialog widget contains three areas. The first line
+  contains a description of the function of the Dialog widget, for
+  example, the string <i>Filename:</i>. The second line contains an
+  area into which the user types input. The third line can contain
+  buttons that let the user confirm or cancel the Dialog input. Any
+  of these areas may be omitted by the application.</p>
+
+  <h3>Differences between Xaw and XawPlus</h3>
+
+  <p>Since release 2.1 of XawPlus Dialog has installed pixmap
+  converters for the icon and a clip mask for nonrectangular color
+  icons. A new resource <i>clipMask</i> is added.</p>
+
+  <h3>Resources</h3>
+
+  <p>When creating a Dialog widget instance, the following
+  resources are retrieved from the argument list of
+  <i>XtSetValues()</i> or <i>XtVaSetValues()</i> or from the
+  resource database:</p>
+
+  <table border="1" cellspacing="0" cellpadding="0" width="90%"
+  summary="">
+    <tr>
+      <td bgcolor="#E0E0E0"><b>Name</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Class</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Type</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Default Value</b></td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">OBJECT:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>destroyCallback</td>
+
+      <td>Callback</td>
+
+      <td>Pointer</td>
+
+      <td>NULL</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">RECTANGLE:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>borderWidth<br>
+      height<br>
+      sensitive<br>
+      width<br>
+      x<br>
+      y</td>
+
+      <td>BorderWidth<br>
+      Height<br>
+      Sensitive<br>
+      Width<br>
+      Position<br>
+      Position</td>
+
+      <td>Dimension<br>
+      Dimension<br>
+      Boolean<br>
+      Dimension<br>
+      Position<br>
+      Position</td>
+
+      <td>1<br>
+      Space for all children<br>
+      True<br>
+      Space for all children<br>
+      0<br>
+      0</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">CORE:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>border<br>
+      background<br>
+      mappedWhenManaged</td>
+
+      <td>BorderColor<br>
+      Background<br>
+      MappedWhenManaged</td>
+
+      <td>Pixel<br>
+      Pixel<br>
+      Boolean</td>
+
+      <td>XtDefaultForeground<br>
+      grey75<br>
+      True</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">FORM:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>defaultDistance</td>
+
+      <td>Thickness</td>
+
+      <td>int</td>
+
+      <td>4</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">DIALOG:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>icon<br>
+      clipMask<br>
+      label<br>
+      value</td>
+
+      <td>Pixmap<br>
+      Pixmap<br>
+      Label<br>
+      Value</td>
+
+      <td>Bitmap<br>
+      ClipMask<br>
+      String<br>
+      String</td>
+
+      <td>None<br>
+      None<br>
+      NULL<br>
+      NULL</td>
+    </tr>
+  </table>
+
+  <table cellspacing="4" cellpadding="0" width="90%" summary="">
+    <tr>
+      <td align="left" valign="top"><b>icon</b></td>
+
+      <td>A pixmap image to be displayed immediately to the left of
+      the Dialog widget's label.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>label</b></td>
+
+      <td>A Latin1 string to be displayed at the top of the Dialog
+      widget.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>value</b></td>
+
+      <td>An initial value for the string field that the user will
+      enter text into. By default, no text entry field is available
+      to the user. Specifying an initial value for <b>value</b>
+      activates the text entry field. If string input is desired,
+      but no initial value is to be specified then set this
+      resource to "" (empty string).</td>
+    </tr>
+  </table>
+
+  <h3>Constraint Resources</h3>
+
+  <p>Each child of the Dialog widget may request special layout
+  resources be applied to it. These <i>constraint</i> resources
+  allow the Dialog widget's children to specify individual layout
+  requirements.</p>
+
+  <table border="1" cellspacing="0" cellpadding="0" width="90%"
+  summary="">
+    <tr>
+      <td bgcolor="#E0E0E0"><b>Name</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Class</b></td>
+
+      <td bgcolor="#E0E0E0"><b>RepType</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Default Value</b></td>
+    </tr>
+
+    <tr>
+      <td>bottom<br>
+      fromHoriz<br>
+      fromVert<br>
+      horizDistance<br>
+      left<br>
+      resizable<br>
+      right<br>
+      top<br>
+      vertDistance</td>
+
+      <td>Edge<br>
+      Widget<br>
+      Widget<br>
+      Thickness<br>
+      Edge<br>
+      Boolean<br>
+      Edge<br>
+      Edge<br>
+      Thickness</td>
+
+      <td>XtEdgeType<br>
+      Widget<br>
+      Widget<br>
+      int<br>
+      XtEdgeType<br>
+      Boolean<br>
+      XtEdgeType<br>
+      XtEdgeType<br>
+      int</td>
+
+      <td>XtRubber<br>
+      (left edge of form)<br>
+      (top of form)<br>
+      defaultDistance<br>
+      XtRubber<br>
+      False<br>
+      XtRubber<br>
+      XtRubber<br>
+      defaultDistance</td>
+    </tr>
+  </table>
+
+  <h3>Layout Semantics</h3>
+
+  <table border="1" cellspacing="0" cellpadding="0" width="90%"
+  summary="">
+    <tr>
+      <td bgcolor="#E0E0E0"><b>Edge Type</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Resource Name</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td>XawChainBottom</td>
+
+      <td>ChainBottom</td>
+
+      <td>Edge remains a fixed distance from bottom of Dialog</td>
+    </tr>
+
+    <tr>
+      <td>XawChainLeft</td>
+
+      <td>ChainLeft</td>
+
+      <td>Edge remains a fixed distance from left of Dialog</td>
+    </tr>
+
+    <tr>
+      <td>XawChainRight</td>
+
+      <td>ChainRight</td>
+
+      <td>Edge remains a fixed distance from right of Dialog</td>
+    </tr>
+
+    <tr>
+      <td>XawChainTop</td>
+
+      <td>ChainTop</td>
+
+      <td>Edge remains a fixed distance from top of Dialog</td>
+    </tr>
+
+    <tr>
+      <td>XawRubber</td>
+
+      <td>Rubber</td>
+
+      <td>Edges will move a proportional distance</td>
+    </tr>
+  </table>
+
+  <h3>Example</h3>
+
+  <p>If you wish to force the Dialog to never resize one or more of
+  its children then set <b>left</b> and <b>right</b> to
+  <i>XawChainLeft</i> and <b>top</b> and <b>bottom</b> to
+  <i>XawChainTop</i>. This will cause the child to remain a fixed
+  distance from the top and left edges of the Dialog, and to never
+  resize.</p>
+
+  <h3>Special Considerations</h3>
+
+  <p>The Dialog widget automatically sets the <i>top</i> and
+  <i>bottom</i> resources for all Children that are subclasses of
+  the Command widget, as well as the widget children that are used
+  to contain the <b>label</b>, <b>value</b>, and <b>icon</b>. This
+  policy allows the buttons at the bottom of the Dialog to interact
+  correctly with the predefined children, and makes it possible for
+  a client to simply create and manage a new Command button without
+  having to specify its constraints.</p>
+
+  <p>The Dialog will also set <i>fromLeft</i> to the last button in
+  the Dialog for each new button added to the Dialog widget.</p>
+
+  <p>The automatically added constraints cannot be overridden, as
+  they are policy decisions of the Dialog widget. If a more
+  flexible Dialog is desired, the application is free to use the
+  Form widget to create its own Dialog policy.</p>
+
+  <h3>Automatically Created Children</h3>
+
+  <p>The Dialog uses Label widgets to contain the <b>label</b> and
+  <b>icon</b>. These widgets are named <i>label</i> and <i>icon</i>
+  respectively. The Dialog <b>value</b> is contained in an
+  AsciiText widget whose name is <i>value</i>. Using
+  <i>XtNameToWidget</i> the application can change those resources
+  associated with each of these widgets that are not available
+  through the Dialog widget itself.</p>
+
+  <h3>Convenience Routines</h3>
+
+  <p>To return the character string in the text field, use
+  XawDialogGetValueString():</p>
+
+  <blockquote>
+    <p><i>String XawDialogGetValueString(w)<br>
+    Widget w;</i></p>
+
+    <table cellspacing="4" cellpadding="0" width="80%" summary="">
+      <tr>
+        <td align="left" valign="top"><b>w</b></td>
+
+        <td>Specifies the Dialog widget.</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <p>This function returns a copy of the value string of the Dialog
+  widget. This string is allocated by the AsciiText widget and will
+  remain valid and unchanged until another call to
+  <i>XawDialogGetValueString()</i> or an <i>XtGetValues()</i> call
+  on the <b>value</b> widget, when the string will be automatically
+  freed, and a new string is returned. This string may be freed
+  earlier by calling the function XawAsciiSourceFreeString().</p>
+
+  <p>To add a new button to the Dialog widget use
+  XawDialogAddButton().</p>
+
+  <blockquote>
+    <p><i>void XawDialogAddButton(w, name, func, client_data)<br>
+    Widget w;<br>
+    String name;<br>
+    XtCallbackProc func;<br>
+    XtPointer client_data;</i></p>
+
+    <table cellspacing="4" cellpadding="0" width="80%" summary="">
+      <tr>
+        <td align="left" valign="top"><b>w</b></td>
+
+        <td>Specifies the Dialog widget.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>name</b></td>
+
+        <td>Specifies the name of the new Command button to be
+        added to the Dialog.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>func</b></td>
+
+        <td>Specifies a callback function to be called when this
+        button is activated. If NULL is specified then no callback
+        is added.</td>
+      </tr>
+
+      <tr>
+        <td align="left" valign="top"><b>client_data</b></td>
+
+        <td>Specifies the client_data to be passed to the
+        <i>func</i>.</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <p>This function is merely a shorthand for the code sequence:</p>
+
+  <p><i>Widget button = XtCreateManagedWidget(name,
+  commandWidgetClass, w, NULL, ZERO);<br>
+  XtAddCallback(button, XtNcallback, func, client_data);</i></p>
+
+  <h3><i><font color="#FF0000">Xaw</font><font color=
+  "#008000">Plus_________________________________________________________</font></i></h3>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux (vers 25 March 2009), see www.w3.org">
+
+  <title>The Viewport Widget</title>
+  <meta name="Author" content=
+  "Roland Krause 2002, roland_krause@freenet.de">
+  <meta name="Description" content="Documentation to XawPlus">
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink=
+"#55188A" alink="#FF0000">
+  <h3><i><font color=
+  "#FF0000">_________________________________________________________Xaw</font><font color="#008000">Plus</font></i></h3>
+
+  <h3><i>The Viewport Widget</i></h3>
+
+  <table summary="">
+    <tr>
+      <td>Application Header file<br>
+      Class Header file<br>
+      Class<br>
+      Class Name<br>
+      Superclass</td>
+
+      <td>&lt;X11/XawPlus/Viewport.h&gt;<br>
+      &lt;X11/XawPlus/ViewportP.h&gt;<br>
+      viewportWidgetClass<br>
+      Viewport<br>
+      Form</td>
+    </tr>
+  </table>
+
+  <p>The Viewport widget consists of a frame window, one or two
+  Scrollbars, and an inner window. The size of the frame window is
+  determined by the viewing size of the data that is to be
+  displayed and the dimensions to which the Viewport is created.
+  The inner window is the full size of the data that is to be
+  displayed and is clipped by the frame window. The Viewport widget
+  controls the scrolling of the data directly. No application
+  callbacks are required for scrolling.</p>
+
+  <p>When the geometry of the frame window is equal in size to the
+  inner window, or when the data does not require scrolling, the
+  Viewport widget automatically removes any scrollbars. The
+  <i>forceBars</i> option causes the Viewport widget to display all
+  scrollbars permanently.</p>
+
+  <h3>Differences between Xaw and XawPlus</h3>
+
+  <p>Since XawPlus release 1.4 the scrollbars are placed at bottom
+  and right side of the window. The default values of the resources
+  <i>useBottom</i> and <i>useRight</i> changes from <b>False</b> to
+  <b>True</b>.</p>
+
+  <h3>Resources</h3>
+
+  <p>When creating a Viewport widget instance, the following
+  resources are retrieved from the argument list of
+  <i>XtSetValues()</i> or <i>XtVaSetValues()</i> or from the
+  resource database:</p>
+
+  <table border="1" cellspacing="0" cellpadding="0" width="90%"
+  summary="">
+    <tr>
+      <td bgcolor="#E0E0E0"><b>Name</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Class</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Type</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Default Value</b></td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">OBJECT:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>destroyCallback</td>
+
+      <td>Callback</td>
+
+      <td>Pointer</td>
+
+      <td>NULL</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">RECTANGLE:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>borderWidth<br>
+      height<br>
+      sensitive<br>
+      width<br>
+      x<br>
+      y</td>
+
+      <td>BorderWidth<br>
+      Height<br>
+      Sensitive<br>
+      Width<br>
+      Position<br>
+      Position</td>
+
+      <td>Dimension<br>
+      Dimension<br>
+      Boolean<br>
+      Dimension<br>
+      Position<br>
+      Position</td>
+
+      <td>1<br>
+      Space for all children<br>
+      True<br>
+      Space for all children<br>
+      0<br>
+      0</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">CORE:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>border<br>
+      background<br>
+      mappedWhenManaged</td>
+
+      <td>BorderColor<br>
+      Background<br>
+      MappedWhenManaged</td>
+
+      <td>Pixel<br>
+      Pixel<br>
+      Boolean</td>
+
+      <td>XtDefaultForeground<br>
+      grey75<br>
+      True</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">FORM:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>defaultDistance</td>
+
+      <td>Thickness</td>
+
+      <td>int</td>
+
+      <td>4</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">VIEWPORT:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>allowHoriz<br>
+      allowVert<br>
+      foreceBars<br>
+      reportCallback<br>
+      useBottom<br>
+      useRight</td>
+
+      <td>Boolean<br>
+      Boolean<br>
+      Boolean<br>
+      ReportCallback<br>
+      Boolean<br>
+      Boolean</td>
+
+      <td>Boolean<br>
+      Boolean<br>
+      Boolean<br>
+      Pointer<br>
+      Boolean<br>
+      Boolean</td>
+
+      <td>False<br>
+      False<br>
+      False<br>
+      NULL<br>
+      True<br>
+      True</td>
+    </tr>
+  </table>
+
+  <table cellspacing="4" cellpadding="0" width="90%" summary="">
+    <tr>
+      <td align="left" valign="top"><b>allowHoriz<br>
+      allowVert</b></td>
+
+      <td>If these resources are <i>False</i> then the Viewport
+      will never create a scrollbar in this direction. If it is
+      <i>True</i> then the scrollbar will only appear when it is
+      needed, unless <b>forceBars</b> is <i>True</i>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>forceBars</b></td>
+
+      <td>When this resource ist set to <i>True</i>, the scrollbars
+      that have been allowed will always be visible on the screen.
+      If <i>False</i> the scrollbars will be visible only when the
+      inner window is larger than the frame.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>reportCallback</b></td>
+
+      <td>These callbacks will be executed whenever the Viewport
+      adjusts the viewed area of the child. The call_data parameter
+      is a pointer to an <i>XawPannerReport</i> structure.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>useBottom<br>
+      useRight</b></td>
+
+      <td>By default the scrollbars appear on the right and bottom
+      of the screen. These resources allow the vertical scrollbar
+      to be placed on the left edge of the Viewport, and the
+      horizontal scrollbar on the top edge of the Viewport.</td>
+    </tr>
+  </table>
+
+  <h3>Layout Semantics</h3>
+
+  <p>The Viewport widget manages a single child widget. When the
+  size of the child is larger than the size of the Viewport, the
+  user can interactively move the child within the Viewport by
+  repositioning the scrollbars.</p>
+
+  <p>The default size of the Viewport before it is realized is the
+  width and/or height of the child. After it is realized, the
+  Viewport will allow its child to grow vertically or horizontally
+  if <b>allowVert</b> or <b>allowHoriz</b> are set, respectively.
+  If the corresponding vertical or horizontal scrollbar is not
+  enabled, the Viewport will propagate the geometry request to its
+  own parent and the child will be allowed to change size only if
+  the Viewport's parent allows it. Regardless of whether or not
+  scrollbars are enabled in the corresponding direction, if the
+  child requests a new size smaller than the Viewport size, the
+  change will be allowed only if the parent of the Viewport allows
+  the Viewport to shrink to the appropriate dimension.</p>
+
+  <p>The scrollbar children of the Viewport are named
+  <b>horizontal</b> and <b>vertical</b>. By using these names the
+  programmer can specify resources for the individual scrollbars.
+  <i>XtSetValues()</i> can be used to modify the resources
+  dynamically once the widget ID has been obtained with
+  <i>XtNameToWidget()</i>.</p>
+
+  <p>Although the Viewport is a Subclass of the Form, no resources
+  for the Form may be supplied for any of the children of the
+  Viewport. These constraints are managed internally, and are not
+  meant for public consumption.</p>
+
+  <h3><i><font color="#FF0000">Xaw</font><font color=
+  "#008000">Plus_________________________________________________________</font></i></h3>
+</body>
+</html>

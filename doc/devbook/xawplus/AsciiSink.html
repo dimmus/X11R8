@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux (vers 25 March 2009), see www.w3.org">
+
+  <title>The Ascii Sink and Mulit Sink Objects</title>
+  <meta name="Author" content=
+  "Roland Krause 2002, roland_krause@freenet.de">
+  <meta name="Description" content="Documentation to XawPlus">
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink=
+"#55188A" alink="#FF0000">
+  <h3><i><font color=
+  "#FF0000">_________________________________________________________Xaw</font><font color="#008000">Plus</font></i></h3>
+
+  <h3><i>The Ascii Sink and Multi Sink Objects</i></h3>
+
+  <table summary="">
+    <tr>
+      <td align="left" valign="top">Application Header file</td>
+
+      <td>&lt;X11/XawPlus/AsciiSink.h&gt; or<br>
+      &lt;X11/XawPlus/MultiSink.h&gt;</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">Class Header file</td>
+
+      <td>&lt;X11/XawPlus/AsciiSinkP.h&gt; or<br>
+      &lt;X11/XawPlus/MultiSinkP.h&gt;</td>
+    </tr>
+
+    <tr>
+      <td>Class</td>
+
+      <td>asciiSinkObjectClass or multiSinkObjectClass</td>
+    </tr>
+
+    <tr>
+      <td>Class Name</td>
+
+      <td>AsciiSink or MultiSink</td>
+    </tr>
+
+    <tr>
+      <td>Superclass</td>
+
+      <td>TextSink</td>
+    </tr>
+  </table>
+
+  <p>The AsciiSink or MultiSink object is used by a text widget to
+  render the text. Depending on its <i>international</i> resource,
+  a AsciiText will create one or the other of these when the
+  AsciiText itself is created. Both types are nearly identical; the
+  following discussion applies to both, with MultiSink differences
+  noted only as they occur.</p>
+
+  <p>The AsciiText will display all characters in an 8 bit font,
+  along with handling Tab and Carriage Return. The name has left as
+  <i>AsciiSink</i> for compatibility. The MultiSink will display
+  all printing characters in a font set, along with handling Tab
+  and Carriage Return. These objects also reports the text window
+  metrics to the text widgets.</p>
+
+  <h3>Differences between Xaw and XawPlus</h3>
+
+  <p>The background color is changed from
+  <i>XtDefaultBackground</i> to <i>grey75</i>.</p>
+
+  <h3>Resources</h3>
+
+  <p>When creating a AsciiSink or MultiSink object instance, the
+  following resources are retrieved from the argument list of
+  <i>XtSetValues()</i> or <i>XtVaSetValues()</i> or from the
+  resource database:</p>
+
+  <table border="1" cellspacing="0" cellpadding="0" width="90%"
+  summary="">
+    <tr>
+      <td bgcolor="#E0E0E0"><b>Name</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Class</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Type</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Default Value</b></td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">OBJECT:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>destroyCallback</td>
+
+      <td>Callback</td>
+
+      <td>Pointer</td>
+
+      <td>NULL</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">TEXTSINK OBJECT:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>foreground<br>
+      background</td>
+
+      <td>Foreground<br>
+      Background</td>
+
+      <td>Pixel<br>
+      Pixel</td>
+
+      <td>XtDefaultForeground<br>
+      grey75</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">ASCIISINK OBJECT:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>font<br>
+      fontSet<br>
+      echo<br>
+      displayNonprinting</td>
+
+      <td>Font<br>
+      FontSet<br>
+      Output<br>
+      Output</td>
+
+      <td>XFontStruct *<br>
+      XFontSet<br>
+      Boolean<br>
+      Boolean</td>
+
+      <td>XtDefaultFont<br>
+      XtDefaultFontSet<br>
+      True<br>
+      True</td>
+    </tr>
+  </table>
+
+  <table cellspacing="4" cellpadding="0" width="90%" summary="">
+    <tr>
+      <td align="left" valign="top"><b>font</b></td>
+
+      <td>Only in AsciiSink: The text <i>font</i> to use when
+      displaying the string.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>fontSet</b></td>
+
+      <td>Only in MultiSink: The text <i>font set</i> to use when
+      displaying the string.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>echo</b></td>
+
+      <td>Whether or not to echo characters to the screen. The
+      buffer can still be edited but nothing is displayed. This
+      mode is useful for entering passwords or other sensitive
+      information.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>displayNonprinting</b></td>
+
+      <td>If this resource is <b>True</b>, the Sink object will
+      display all non-printable characters as the string ^@.
+      Otherwise the Sink object will just leave a blank space.</td>
+    </tr>
+  </table>
+
+  <h3><i><font color="#FF0000">Xaw</font><font color=
+  "#008000">Plus_________________________________________________________</font></i></h3>
+</body>
+</html>

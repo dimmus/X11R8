@@ -1,0 +1,347 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux (vers 25 March 2009), see www.w3.org">
+
+  <title>The SmeBSB Object</title>
+  <meta name="Author" content=
+  "Roland Krause 2002, roland_krause@freenet.de">
+  <meta name="Description" content="Documentation to XawPlus">
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink=
+"#55188A" alink="#FF0000">
+  <h3><i><font color=
+  "#FF0000">_________________________________________________________Xaw</font><font color="#008000">Plus</font></i></h3>
+
+  <h3><i>The SmeBSB Object</i></h3>
+
+  <table summary="">
+    <tr>
+      <td>Application Header file<br>
+      Class Header file<br>
+      Class<br>
+      Class Name<br>
+      Superclass</td>
+
+      <td>&lt;X11/XawPlus/SmeBSB.h&gt;<br>
+      &lt;X11/XawPlus/SmeBSBP.h&gt;<br>
+      smeBSBObjectClass<br>
+      SmeBSB<br>
+      Sme</td>
+    </tr>
+  </table>
+
+  <p>The SmeBSB object is used to create a menu entry that contains
+  a string, and optional bitmaps in its left and right margins.
+  Since each menu entry is an independent object, the application
+  is able to change the font, color, height, and other attributes
+  of the menu entries, on an entry by entry basis.</p>
+
+  <h3>Differences between Xaw and XawPlus</h3>
+
+  <p>Insensitive entries are shown embossed using the color
+  resources inherited from the Sme object. The left and right
+  bitmaps may be color pixmaps. Support of clip masks for
+  nonrectangular pixmaps is available. Installed converters for the
+  left and right bitmaps and its clip masks are available.</p>
+
+  <p>With release 3.1 of XawPlus full UNICODE support is available
+  using the new <i>encoding</i> resource as in the label widget.
+  UNICODE support works independent of the locale settings and
+  requires UTF8 coded label strings. Since it is not possible to
+  put UNICODE directly in resource files, UTF8 code is used to
+  avoid problems with the resource manager.</p>
+
+  <h3>Resources</h3>
+
+  <p>The resources associated with the SmeBSB object are defined in
+  this section, and affect only the single menu entry specified by
+  this object.</p>
+
+  <table border="1" cellspacing="0" cellpadding="0" width="90%"
+  summary="">
+    <tr>
+      <td bgcolor="#E0E0E0"><b>Name</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Class</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Type</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Default Value</b></td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">OBJECT:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>destroyCallback</td>
+
+      <td>Callback</td>
+
+      <td>Pointer</td>
+
+      <td>NULL</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">RECTANGLE:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>borderWidth<br>
+      height<br>
+      sensitive<br>
+      width<br>
+      x<br>
+      y</td>
+
+      <td>BorderWidth<br>
+      Height<br>
+      Sensitive<br>
+      Width<br>
+      Position<br>
+      Position</td>
+
+      <td>Dimension<br>
+      Dimension<br>
+      Boolean<br>
+      Dimension<br>
+      Position<br>
+      Position</td>
+
+      <td>0<br>
+      0<br>
+      True<br>
+      0<br>
+      0<br>
+      0</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">SME:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>callback<br>
+      highlightColor<br>
+      shadowColor<br>
+      international</td>
+
+      <td>Callback<br>
+      Background<br>
+      Background<br>
+      International</td>
+
+      <td>Pointer<br>
+      Pixel<br>
+      Pixel<br>
+      Boolean</td>
+
+      <td>NULL<br>
+      grey90<br>
+      grey40<br>
+      False</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">SMEBSB:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>foreground<br>
+      font<br>
+      fontSet<br>
+      encoding<br>
+      label<br>
+      justify<br>
+      vertSpace<br>
+      leftMargin<br>
+      rightMargin<br>
+      leftBitmap<br>
+      leftClipMask<br>
+      rightBitmap<br>
+      rightClipMask</td>
+
+      <td>Foreground<br>
+      Font<br>
+      FontSet<br>
+      Encoding<br>
+      Label<br>
+      Justify<br>
+      VertSpace<br>
+      HorizontalMargins<br>
+      HorizontalMargins<br>
+      LeftBitmap<br>
+      LeftBitmap<br>
+      RightBitmap<br>
+      RightBitmap</td>
+
+      <td>Pixel<br>
+      XFontStruct *<br>
+      FontSet<br>
+      unsigned char<br>
+      String<br>
+      Justify<br>
+      int<br>
+      Dimension<br>
+      Dimension<br>
+      Bitmap<br>
+      ClipMask<br>
+      Bitmap<br>
+      ClipMask</td>
+
+      <td>XtDefaultForeground<br>
+      XtDefaultFont<br>
+      XtDefaultFontSet<br>
+      XawTextEncoding8bit<br>
+      Name of entry<br>
+      XtJustifyLeft<br>
+      25<br>
+      4<br>
+      4<br>
+      None<br>
+      None<br>
+      None<br>
+      None</td>
+    </tr>
+  </table>
+
+  <table cellspacing="4" cellpadding="0" width="90%" summary="">
+    <tr>
+      <td align="left" valign="top"><b>foreground</b></td>
+
+      <td>A pixel value which indexes the SimpleMenu's colormap to
+      derive the foreground color of the menu entry's window. This
+      color is also used to render all 1's in the left and right
+      <i>bitmaps</i>. Keep in mind that the SimpleMenu widget will
+      force the width of all menu entries to be the width of the
+      longest entry.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>font</b></td>
+
+      <td>The font used to display the text label.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>fontSet</b></td>
+
+      <td>The fontSet used to display the text label, if the
+      <i>international</i> resource is set.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>encoding</b></td>
+
+      <td>Two types of encoding are available, the default 8 bit
+      encoding and the 16 bit encoding (unicode). With 16 bit
+      encoding the label string is expected in UTF8 and displayed
+      with the font found in the <i>font</i> resource. The handling
+      of UNICODE is independent of the locale settings. Note that
+      the character codes from <i>0x00</i> to <i>0x7f</i> are also
+      valid as UTF8 code. For this range of characters every editor
+      is usable to edit label strings. If you need character codes
+      in the range from <i>0x80</i> to <i>0xffff</i> a special
+      editor like <b><i>yudit</i></b> is required.<br>
+      If any malformed UTF8 code is found, it is displayed as an
+      asterix <b>*</b>. If the UTF8 code of a character is out of
+      range (higher than 0xffff), it is displayed as a tilde
+      sign.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>justify</b></td>
+
+      <td>How the label is to be rendered between the left and
+      right margins when the space is wider than the actual text.
+      This resource may be specified with the values
+      <i>XtJustifyLeft</i>, <i>XtJustifyCenter</i>, or
+      <i>XtJustifyRight</i>. When specifying the justification from
+      a resource file the values <i>left</i>, <i>center</i>, or
+      <i>right</i> may be.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>label</b></td>
+
+      <td>This is a the string that will be displayed in the menu
+      entry. The exact location of this string within the bounds of
+      the menu entry is controlled by the <i>leftMargin</i>,
+      <i>rightMargin</i>, <i>vertSpace</i>, and <i>justify</i>
+      resources.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>vertSpace</b></td>
+
+      <td>This is the amount of vertical padding, expressed as a
+      percentage of the height of the font, that is to be placed
+      around the label of a menu entry. The label and bitmaps are
+      always centered vertically within the menu. The default value
+      for this resource (25) causes the default height to be 125%
+      of the height of the font.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>leftMargin,<br>
+      rightMargin</b></td>
+
+      <td>This is the amount of space (in pixels) that will be left
+      between the edge of the menu entry and the label string.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top"><b>leftBitmap,<br>
+      leftClipMask,<br>
+      rightBitmap,<br>
+      rightClipMask</b></td>
+
+      <td>This is a name of a bitmap or pixmap to display in the
+      left or right margin of the menu entry. All 1's of a bitmap
+      will be rendered in the foreground color, and all 0's will be
+      drawn in the background color of the SimpleMenu widget. Color
+      pixmaps support works a little different. The color values
+      are copied directly into the rectangular area, reserved for
+      the pixmap. Support of nonrectangular areas is available
+      using the left and right clip masks. These clip masks have no
+      meaning to normal bitmaps. It is the programmers
+      responsibility to make sure that the menu entry is tall
+      enough, and the appropriate margin wide enough to accept the
+      bitmap. If care is not taken the bitmap may extend into
+      another menu entry, or into this entry's label.</td>
+    </tr>
+  </table>
+
+  <h3><i><font color="#FF0000">Xaw</font><font color=
+  "#008000">Plus_________________________________________________________</font></i></h3>
+</body>
+</html>

@@ -1,0 +1,912 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux (vers 25 March 2009), see www.w3.org">
+
+  <title>The DrawingArea Widget</title>
+  <meta name="Author" content=
+  "Roland Krause 2002, roland_krause@freenet.de">
+  <meta name="Description" content="Documentation to XawPlus">
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink=
+"#55188A" alink="#FF0000">
+  <h3><i><font color=
+  "#FF0000">_________________________________________________________Xaw</font><font color="#008000">Plus</font></i></h3>
+
+  <h3><i>The DrawingArea Widget</i></h3>
+
+  <table summary="">
+    <tr>
+      <td>Application Header file<br>
+      Class Header file<br>
+      Class<br>
+      Class Name<br>
+      Superclass</td>
+
+      <td>&lt;X11/XawPlus/DrawingArea.h&gt;<br>
+      &lt;X11/XawPlus/DrawingAreaP.h&gt;<br>
+      drawingAreaWidgetClass<br>
+      drawingArea<br>
+      Simple</td>
+    </tr>
+  </table>
+
+  <p>The DrawingArea widget adds a backing store machanism to the
+  Simple widget, so it becomes usable as a drawing area. With this
+  backing store DrawingArea is able to handle resize and redisplay
+  events without any action from your application. A set of drawing
+  functions is provided which are equivalent to the <i>Xlib</i>
+  drawing functions, except that these functions work on a
+  DrawingArea widget.</p>
+
+  <p>It is possible to use DrawingArea directly, using the drawing
+  functions with their procedural interface. It is also possible
+  (and a good idea) to use this widget as superclass of an
+  application specific drawing widget.</p>
+
+  <h3>Differences between Xaw and XawPlus</h3>
+
+  <p>This widget is new in XawPlus and not available with the Xaw
+  widget set.</p>
+
+  <h3>Resources</h3>
+
+  <p>When creating a DrawingArea widget instance, the following
+  resources are retrieved from the argument list of
+  <i>XtSetValues()</i> or <i>XtVaSetValues()</i> or from the
+  resource database:</p><br>
+
+  <table border cellspacing="0" cellpadding="0" width="90%"
+  summary="">
+    <tr>
+      <td bgcolor="#E0E0E0"><b>Name</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Class</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Type</b></td>
+
+      <td bgcolor="#E0E0E0"><b>Default Value</b></td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">OBJECT:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>destroyCallback</td>
+
+      <td>Callback</td>
+
+      <td>Pointer</td>
+
+      <td>NULL</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">RECTANGLE:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>borderWidth<br>
+      height<br>
+      sensitive<br>
+      width<br>
+      x<br>
+      y</td>
+
+      <td>BorderWidth<br>
+      Height<br>
+      Sensitive<br>
+      Width<br>
+      Position<br>
+      Position</td>
+
+      <td>Dimension<br>
+      Dimension<br>
+      Boolean<br>
+      Dimension<br>
+      Position<br>
+      Position</td>
+
+      <td>0<br>
+      12<br>
+      True<br>
+      12<br>
+      0<br>
+      0</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">CORE:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>border<br>
+      background<br>
+      mappedWhenManaged</td>
+
+      <td>BorderColor<br>
+      Background<br>
+      MappedWhenManaged</td>
+
+      <td>Pixel<br>
+      Pixel<br>
+      Boolean</td>
+
+      <td>XtDefaultForeground<br>
+      grey75<br>
+      True</td>
+    </tr>
+
+    <tr>
+      <td bgcolor="#C0C0C0">SIMPLE:</td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+
+      <td bgcolor="#C0C0C0"></td>
+    </tr>
+
+    <tr>
+      <td>cursor<br>
+      cursorName<br>
+      pointerColor<br>
+      pointerColorBackground<br>
+      insensitiveBorder<br>
+      international<br>
+      highlightColor<br>
+      shadowColor<br>
+      buttonBorderWidth</td>
+
+      <td>Cursor<br>
+      Cursor<br>
+      Foreground<br>
+      Background<br>
+      Insensitive<br>
+      International<br>
+      Background<br>
+      Background<br>
+      Width</td>
+
+      <td>Cursor<br>
+      String<br>
+      Pixel<br>
+      Pixel<br>
+      Pixmap<br>
+      Boolean<br>
+      Pixel<br>
+      Pixel<br>
+      Dimension</td>
+
+      <td>None<br>
+      NULL<br>
+      XtDefaultForeground<br>
+      XtDefaultBackground<br>
+      NULL<br>
+      False<br>
+      grey90<br>
+      grey40<br>
+      2</td>
+    </tr>
+  </table><br>
+
+  <p>DrawingArea adds no new resources to the resource list.</p>
+
+  <h3>Drawing functions</h3>
+
+  <p>DrawingArea comes with a set of drawing functions. These
+  functions are known from the <i>Xlib</i>. The difference is, that
+  these function work directly on a DrawingArea widget including
+  support of the backing store. That is the reason why you never
+  should try to use the <i>Xlib</i> functions on a DrawingArea
+  widget.</p>
+
+  <p>This is not a complete description of the drawing functions.
+  To learn more about these functions take a look to the
+  <i>Xlib</i> reference. To find the equivalent function, replace
+  <b>Xaw</b> with <b>X</b> in the function name.</p>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawClearWindow</td>
+
+      <td>w</td>
+
+      <td>Drawing area widget</td>
+    </tr>
+  </table>
+
+  <p>Use this function to clear the drawing area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawDrawPoint</td>
+
+      <td>w<br>
+      gc<br>
+      x, y</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      coordinates of the point</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw a point using the given graphics
+  context <b>gc</b> in the drawing area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawDrawPoints</td>
+
+      <td>w<br>
+      gc<br>
+      points[]<br>
+      npoints<br>
+      mode</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      list of point coordinates<br>
+      number of points<br>
+      drawing mode: Relative to origin or previous point</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw a set of points using the given
+  <b>gc</b> in the drawing area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawDrawLine</td>
+
+      <td>w<br>
+      gc<br>
+      x1, y1<br>
+      x2, y2</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      starting point<br>
+      end point</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw a line using the given <b>gc</b> in
+  the drawing area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawDrawLines</td>
+
+      <td>w<br>
+      gc<br>
+      points[]<br>
+      npoints<br>
+      mode</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      list of point coordinates<br>
+      number of points<br>
+      drawing mode: Relative to origin or previous point</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw connected lines using the given
+  <b>gc</b> in the drawing area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawDrawSegments</td>
+
+      <td>w<br>
+      gc<br>
+      segments[]<br>
+      nsegments</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      list of line coordinates<br>
+      number of segments</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw <b>un</b>connected lines using the
+  given <b>gc</b> in the drawing area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawDrawRectangle</td>
+
+      <td>w<br>
+      gc<br>
+      x, y<br>
+      width, height</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      upper left edge of the rectangle<br>
+      widht and height of the rectangle</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw a rectangle using the given graphics
+  context <b>gc</b> in the drawing area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawDrawRectangles</td>
+
+      <td>w<br>
+      gc<br>
+      rectangles<br>
+      n</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      list of rectangle coordinates<br>
+      number of rectangles</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw a set of rectangles using the given
+  graphics context <b>gc</b> in the drawing area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawDrawArc</td>
+
+      <td>w<br>
+      gc<br>
+      x, y<br>
+      width, height<br>
+      angle1, angle2</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      center position of the circle/elipsoid<br>
+      widht and height of the circle/elipsoid<br>
+      draw from angle 1 to angle 2</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw a circle, an elpsoid or a part of it
+  using the given graphics context <b>gc</b> in the drawing
+  area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawDrawArcs</td>
+
+      <td>w<br>
+      gc<br>
+      arcs<br>
+      n</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      parameters of the circles/elipsoids<br>
+      number of circles</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw a set of circles using the given
+  graphics context <b>gc</b> in the drawing area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawFillRectangle</td>
+
+      <td>w<br>
+      gc<br>
+      x, y<br>
+      width, height</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      upper left edge of the rectangle<br>
+      widht and height of the rectangle</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw a <b>filled</b> rectangle using the
+  given graphics context <b>gc</b> in the drawing area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawFillRectangles</td>
+
+      <td>w<br>
+      gc<br>
+      rectangles<br>
+      n</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      list of rectangle coordinates<br>
+      number of rectangles</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw a set of filled rectangles using the
+  given graphics context <b>gc</b> in the drawing area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawFillArc</td>
+
+      <td>w<br>
+      gc<br>
+      x, y<br>
+      width, height<br>
+      angle1, angle2</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      center position of the circle/elipsoid<br>
+      widht and height of the circle/elipsoid<br>
+      draw from angle 1 to angle 2</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw a filled circle, a filled elpsoid or
+  a part of it using the given graphics context <b>gc</b> in the
+  drawing area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawFillArcs</td>
+
+      <td>w<br>
+      gc<br>
+      arcs<br>
+      n</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      parameters of the circles/elipsoids<br>
+      number of circles</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw a set of filled circles using the
+  given graphics context <b>gc</b> in the drawing area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawFillPolygon</td>
+
+      <td>w<br>
+      gc<br>
+      points[]<br>
+      npoints<br>
+      shape<br>
+      mode</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      list of point coordinates<br>
+      number of points<br>
+      drawing mode complex, convex or nonconvex<br>
+      relative or absolute coordinates</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw a filled polygon using the given
+  <b>gc</b> in the drawing area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawDrawString</td>
+
+      <td>w<br>
+      gc<br>
+      x, y<br>
+      str<br>
+      n</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      position of the string in the widget<br>
+      the text string<br>
+      number of characters</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw a string on a transparent background
+  using the given graphics context <b>gc</b> in the drawing
+  area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawDrawString16</td>
+
+      <td>w<br>
+      gc<br>
+      x, y<br>
+      str16<br>
+      n</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      position of the string in the widget<br>
+      the 2 byte text string<br>
+      number of characters</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw a 2 byte string on a transparent
+  background using the given graphics context <b>gc</b> in the
+  drawing area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawDrawImageString</td>
+
+      <td>w<br>
+      gc<br>
+      x, y<br>
+      str<br>
+      n</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      position of the string in the widget<br>
+      the text string<br>
+      number of characters</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw a string with a filled background
+  using the given graphics context <b>gc</b> in the drawing
+  area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawDrawImageString16</td>
+
+      <td>w<br>
+      gc<br>
+      x, y<br>
+      str16<br>
+      n</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      position of the string in the widget<br>
+      the 2 byte text string<br>
+      number of characters</td>
+    </tr>
+  </table>
+
+  <p>Use this function to draw a 2 byte string with a filled
+  background using the given graphics context <b>gc</b> in the
+  drawing area.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawDrawText</td>
+
+      <td>w<br>
+      gc<br>
+      x, y<br>
+      items<br>
+      nitems</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      position of the string in the widget<br>
+      array of <b>XTextItem</b>s<br>
+      number of <b>XTextItem</b>s</td>
+    </tr>
+  </table>
+
+  <p><b>XTextItem</b> is defined in <i>Xlib.h</i> as follows:</p>
+
+  <blockquote>
+    <table summary="">
+      <tr>
+        <td><b>Data Type</b></td>
+
+        <td><b>Variable</b></td>
+
+        <td><b>Description</b></td>
+      </tr>
+
+      <tr>
+        <td>char *<br>
+        int<br>
+        int<br>
+        Font</td>
+
+        <td>chars<br>
+        nchars<br>
+        delta<br>
+        font</td>
+
+        <td>a pointer to the string<br>
+        lenght of the string<br>
+        delta between the strings<br>
+        font to draw the string or <b>None</b> to use the
+        default</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <p>Use this function to draw a set of strings using the
+  parameters in the <b>XTextItem</b> array. Every string may use
+  its own font and its own spacing, defined in the corresponding
+  <b>XTextItem</b> entry. If there is no font defined, the default
+  font found in the <b>gc</b> is used.</p>
+  <hr>
+
+  <table summary="">
+    <tr>
+      <td><b>Function Name</b></td>
+
+      <td><b>Arguments</b></td>
+
+      <td><b>Description</b></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">XawDrawText16</td>
+
+      <td>w<br>
+      gc<br>
+      x, y<br>
+      items<br>
+      nitems</td>
+
+      <td>Drawing area widget<br>
+      graphics context<br>
+      position of the string in the widget<br>
+      array of <b>XTextItem16</b>s<br>
+      number of <b>XTextItem16</b>s</td>
+    </tr>
+  </table>
+
+  <p><b>XTextItem16</b> is defined in <i>Xlib.h</i> as follows:</p>
+
+  <blockquote>
+    <table summary="">
+      <tr>
+        <td><b>Data Type</b></td>
+
+        <td><b>Variable</b></td>
+
+        <td><b>Description</b></td>
+      </tr>
+
+      <tr>
+        <td>XChar2b *<br>
+        int<br>
+        int<br>
+        Font</td>
+
+        <td>chars<br>
+        nchars<br>
+        delta<br>
+        font</td>
+
+        <td>a pointer to the 2 byte string<br>
+        lenght of the string in characters (not in byte!)<br>
+        delta between the strings<br>
+        font to draw the string or <b>None</b> to use the
+        default</td>
+      </tr>
+    </table>
+  </blockquote>
+
+  <p>Use this function to draw a set of strings using the
+  parameters in the <b>XTextItem16</b> array. Every string may use
+  its own font and its own spacing, defined in the corresponding
+  <b>XTextItem16</b> entry. If there is no font defined, the
+  default font found in the <b>gc</b> is used.</p>
+
+  <h3><i><font color="#FF0000">Xaw</font><font color=
+  "#008000">Plus_________________________________________________________</font></i></h3>
+</body>
+</html>
