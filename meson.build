@@ -87,7 +87,7 @@ add_project_arguments(
 )
 
 add_project_link_arguments(
-  '-Wl,-O1,--sort-common,--as-needed,-z,relro',
+  '-Wl,-O1,--sort-common,--as-needed,--export-dynamic,-z,relro',
   language: 'c'
 )
 
