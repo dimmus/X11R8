@@ -150,7 +150,7 @@ XGetErrorDatabaseText(Display               *dpy,
     static XrmDatabase db = NULL;
     XrmString          type_str;
     XrmValue           result;
-    char               temp[BUFSIZ * 2];
+    char               temp[BUFSIZ * 4];
     char              *tptr;
     unsigned long      tlen;
 
