@@ -16,7 +16,7 @@ xorg_modes = static_library('xorg_modes',
     srcs_xorg_modes,
     include_directories: inc_server,
     dependencies: [ dep_common, libxcvt ],
-    c_args: xorg_c_args,
+    c_args: XFREE86_CFLAGS,
 )
 
 install_data(

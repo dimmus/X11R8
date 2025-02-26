@@ -7,7 +7,7 @@ srcs_xorg_int10 = [
     'xf86int10module.c',
 ]
 
-int10_c_args = [xorg_c_args]
+int10_c_args = [XFREE86_CFLAGS]
 int10_link = []
 
 if host_machine.cpu() == 'i386' or host_machine.cpu() == 'x86_64'

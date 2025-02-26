@@ -4,7 +4,7 @@ shared_module('vgahw',
     [ 'vgaHW.c', 'vgaHWmodule.c'],
     include_directories: inc_server,
     dependencies: dep_common,
-    c_args: xorg_c_args,
+    c_args: XFREE86_CFLAGS,
     install: true,
     install_dir: dir_xorg_module,
 )

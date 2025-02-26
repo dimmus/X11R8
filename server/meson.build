@@ -2,6 +2,11 @@ ver_xserver     = '21.1.99.1'
 libselinux_req  = '>= 2.0.86'
 gbm_req         = '>= 10.2'
 
+XSERVER_CFLAGS = [
+    '-fvisibility=hidden',
+    '-DHAVE_XORG_CONFIG_H',
+]
+
 build_systemd_notify = get_option('systemd_notify') == 'true'
 # libsystemd-daemon was moved into libsystemd in version 209
 dep_libsystemd_daemon = dep_systemd

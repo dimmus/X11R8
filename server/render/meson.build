@@ -1,4 +1,4 @@
-srcs_render = [
+srcs_render = files(
     'animcur.c',
     'filter.c',
     'glyph.c',
@@ -10,19 +10,20 @@ srcs_render = [
     'mitri.c',
     'picture.c',
     'render.c',
-]
+)
 
-hdrs_render = [
+hdrs_render = files(
     'glyphstr.h',
     'mipict.h',
     'picture.h',
     'picturestr.h',
-]
+)
 
 libxserver_render = static_library('libxserver_render',
     srcs_render,
     include_directories: inc_server,
     dependencies: dep_common,
+    c_args: XSERVER_CFLAGS,
 )
 
 install_data(hdrs_render, install_dir: dir_xorg)

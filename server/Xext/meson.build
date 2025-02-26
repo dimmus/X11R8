@@ -1,4 +1,4 @@
-srcs_xext = [
+srcs_xext = files(
     'bigreq.c',
     'geext.c',
     'shape.c',
@@ -6,13 +6,13 @@ srcs_xext = [
     'sync.c',
     'xcmisc.c',
     'xtest.c',
-]
+)
 
-hdrs_xext = [
+hdrs_xext = files(
     'geext.h',
     'geint.h',
     'syncsdk.h',
-]
+)
 
 if build_dpms
     srcs_xext += 'dpms.c'
@@ -52,25 +52,27 @@ if build_xf86bigfont
 endif
 
 if build_xinerama
-    srcs_xext += ['panoramiX.c', 'panoramiXprocs.c', 'panoramiXSwap.c']
-    hdrs_xext += ['panoramiX.h', 'panoramiXsrv.h']
+    srcs_xext += files('panoramiX.c', 'panoramiXprocs.c', 'panoramiXSwap.c')
+    hdrs_xext += files('panoramiX.h', 'panoramiXsrv.h')
 endif
 
 if build_xv
-    srcs_xext += ['xvmain.c', 'xvdisp.c', 'xvmc.c']
-    hdrs_xext += ['xvdix.h', 'xvmcext.h']
+    srcs_xext += files('xvmain.c', 'xvdisp.c', 'xvmc.c')
+    hdrs_xext += files('xvdix.h', 'xvmcext.h')
 endif
 
 libxserver_xext = static_library('libxserver_xext',
     srcs_xext,
     include_directories: inc_server,
     dependencies: dep_common,
+    c_args: XSERVER_CFLAGS,
 )
 
 libxserver_xext_vidmode = static_library('libxserver_xext_vidmode',
     'vidmode.c',
     include_directories: inc_server,
     dependencies: dep_common,
+    c_args: XSERVER_CFLAGS,
 )
 
 install_data(hdrs_xext, install_dir: dir_xorg)

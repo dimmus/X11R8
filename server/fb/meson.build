@@ -1,4 +1,4 @@
-srcs_fb = [
+srcs_fb = files(
 	'fballpriv.c',
 	'fbarc.c',
 	'fbbits.c',
@@ -27,28 +27,27 @@ srcs_fb = [
 	'fbtrap.c',
 	'fbutil.c',
 	'fbwindow.c',
-]
+)
 
-hdrs_fb = [
+hdrs_fb = files(
 	'fb.h',
 	'fboverlay.h',
 	'fbpict.h',
 	'fbrop.h',
 	'wfbrename.h'
-]
+)
 
 libxserver_fb = static_library('libxserver_fb',
 	srcs_fb,
 	include_directories: inc_server,
 	dependencies: dep_common,
+	c_args: XSERVER_CFLAGS,
 	pic: true,
 )
 
-wfb_args = '-DFB_ACCESS_WRAPPER'
-
 libxserver_wfb = static_library('libxserver_wfb',
 	srcs_fb,
-	c_args: wfb_args,
+	c_args: [XSERVER_CFLAGS, '-DFB_ACCESS_WRAPPER'],
 	include_directories: inc_server,
 	dependencies: dep_common,
 	pic: true,

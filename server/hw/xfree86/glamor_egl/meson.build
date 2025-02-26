@@ -7,7 +7,7 @@ glamoregl_src = [
 shared_module('glamoregl',
     glamoregl_src,
     include_directories: inc_server,
-    c_args: xorg_c_args,
+    c_args: XFREE86_CFLAGS,
     dependencies: [
         dep_common,
         dep_drm,

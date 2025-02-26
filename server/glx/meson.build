@@ -1,4 +1,4 @@
-srcs_glx = [
+srcs_glx = files(
     'indirect_dispatch.c',
     'indirect_dispatch_swap.c',
     'indirect_reqsize.c',
@@ -28,7 +28,7 @@ srcs_glx = [
     'singlesize.c',
     'swap_interval.c',
     'xfont.c',
-]
+)
 
 libxserver_glx = []
 if build_glx
@@ -42,6 +42,7 @@ if build_glx
             dep_gl,
         ],
         c_args: [
+            XSERVER_CFLAGS,
             glx_align64,
             '-Wno-unused-function',
         ]
@@ -53,16 +54,12 @@ if build_dri2 or build_dri3
     srcs_glxdri2 = files('glxdri2.c')
 endif
 
-srcs_vnd = [
+srcs_vnd = files(
     'vndcmds.c',
     'vndext.c',
     'vndservermapping.c',
     'vndservervendor.c',
-]
-
-hdrs_vnd = [
-    'vndserver.h',
-]
+)
 
 libglxvnd = []
 if build_glx
@@ -70,7 +67,8 @@ if build_glx
         srcs_vnd,
         include_directories: inc_server,
         dependencies: [dep_common, dep_dl, dep_gl],
+        c_args: XSERVER_CFLAGS,
     )
 
-    install_data(hdrs_vnd, install_dir: dir_xorg)
+    install_data('vndserver.h', install_dir: dir_xorg)
 endif

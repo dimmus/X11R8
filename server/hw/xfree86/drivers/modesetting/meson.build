@@ -12,7 +12,7 @@ shared_module('modesetting_drv',
     modesetting_srcs,
     name_prefix: '',
     include_directories: inc_server,
-    c_args: xorg_c_args,
+    c_args: XFREE86_CFLAGS,
     dependencies: [
         dep_common,
         dep_udev,

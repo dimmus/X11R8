@@ -13,7 +13,10 @@ inc_server += include_directories(
     'vgahw',
 )
 
-xorg_c_args = ['-DHAVE_XORG_CONFIG_H', '-DXORG_NO_SDKSYMS']
+XFREE86_CFLAGS = [
+    XSERVER_CFLAGS,
+    '-DXORG_NO_SDKSYMS'
+]
 
 # subdirs for convenience libraries statically linked into Xorg
 subdir('common')
@@ -28,10 +31,10 @@ subdir('parser')
 subdir('ramdac')
 subdir('xkb')
 
-srcs_xorg = [
+srcs_xorg = files(
     '../../mi/miinitext.c',
     '../../mi/miinitext.h',
-]
+)
 
 # Extract all the objects so that all symbols get brought into the
 # server.  This prevents us from needing a global table of all symbols
@@ -44,6 +47,8 @@ xorg_link = [
     xorg_common,
     xorg_loader,
     xorg_ddc,
+    xorg_dri,
+    xorg_dri2,
     xorg_xkb,
     xorg_i2c,
     xorg_modes,
@@ -55,8 +60,6 @@ xorg_link = [
     libxserver_main,
     libxserver_config,
 ]
-xorg_link += xorg_dri
-xorg_link += xorg_dri2
 
 if host_machine.system() == 'cygwin'
     linker_export_flags = '-Wl,--export-all-symbols'
@@ -98,7 +101,7 @@ exe_xorg = executable(
     dependencies: dep_xorg,
     link_whole: xorg_link,
     link_args: linker_export_flags,
-    c_args: xorg_c_args,
+    c_args: XFREE86_CFLAGS,
     install: true,
     install_dir: xorg_install_dir,
     implib: true,
@@ -141,9 +144,9 @@ if get_option('suid_wrapper')
         'xorg-wrapper.c',
         include_directories: inc_server,
         dependencies: dep_xorg,
-        c_args: xorg_c_args,
+        c_args: XFREE86_CFLAGS,
         install: true,
-        install_dir: get_option('libexecdir'),
+        install_dir: dir_libexec,
         install_mode: ['r-sr-xr-x', 0, 0],
     )
 
@@ -158,8 +161,8 @@ if get_option('suid_wrapper')
     install_data(
         xorg_sh,
         install_mode: 'rwxr-xr-x',
-        install_dir: join_paths(get_option('prefix'), get_option('bindir')),
-        rename: ['Xorg']
+        install_dir: dir_bin,
+        rename: 'Xorg',
     )
 endif
 
@@ -167,7 +170,7 @@ executable('gtf',
     'utils/gtf/gtf.c',
     include_directories: inc_server,
     dependencies: dep_xorg,
-    c_args: xorg_c_args,
+    c_args: XFREE86_CFLAGS,
     install: true,
 )
 
@@ -177,7 +180,7 @@ lib = shared_library('xorgserver',
     link_whole: xorg_link,
     dependencies: dep_xorg,
     link_args: linker_export_flags,
-    c_args: xorg_c_args,
+    c_args: XFREE86_CFLAGS,
     install: false,
 )
 

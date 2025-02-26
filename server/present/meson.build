@@ -1,4 +1,4 @@
-srcs_present = [
+srcs_present = files(
     'present.c',
     'present_event.c',
     'present_execute.c',
@@ -9,17 +9,18 @@ srcs_present = [
     'present_scmd.c',
     'present_screen.c',
     'present_vblank.c',
-]
+)
 
-hdrs_present = [
+hdrs_present = files(
     'present.h',
     'presentext.h',
-]
+)
 
 libxserver_present = static_library('libxserver_present',
     srcs_present,
     include_directories: inc_server,
-    dependencies: [dep_common, dep_epoll, xproto],
+    dependencies: [dep_common, dep_epoll],
+    c_args: XSERVER_CFLAGS,
 )
 
 install_data(hdrs_present, install_dir: dir_xorg)

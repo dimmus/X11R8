@@ -6,7 +6,7 @@ xorg_i2c = static_library('xorg_i2c',
     srcs_xorg_i2c,
     include_directories: inc_server,
     dependencies: dep_common,
-    c_args: xorg_c_args,
+    c_args: XFREE86_CFLAGS,
 )
 
 install_data(['xf86i2c.h', 'i2c_def.h'], install_dir: dir_xorg)

@@ -49,6 +49,7 @@ libxlibc = static_library('libxlibc',
     srcs_libc,
     include_directories: inc_server,
     dependencies: [xproto, dep_pixman],
+    c_args: XSERVER_CFLAGS,
 )
 
 if enable_input_thread
@@ -66,6 +67,9 @@ libxserver_os = static_library('libxserver_os',
         dep_os,
         libxau,
     ],
-    c_args: os_c_args,
+    c_args: [
+        os_c_args,
+        XSERVER_CFLAGS,
+    ],
     link_with: libxlibc,
 )

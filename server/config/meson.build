@@ -29,4 +29,5 @@ libxserver_config = static_library('libxserver_config',
     srcs_config,
     include_directories: inc_server,
     dependencies: dep_config,
+    c_args: XSERVER_CFLAGS,
 )

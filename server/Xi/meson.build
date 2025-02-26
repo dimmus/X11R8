@@ -1,4 +1,4 @@
-srcs_xi = [
+srcs_xi = files(
     'allowev.c',
     'chgdctl.c',
     'chgfctl.c',
@@ -51,17 +51,18 @@ srcs_xi = [
     'xisetclientpointer.c',
     'xisetdevfocus.c',
     'xiwarppointer.c',
-]
+)
 
 libxserver_xi = static_library('libxserver_xi',
     srcs_xi,
     include_directories: inc_server,
     dependencies: dep_common,
+    c_args: XSERVER_CFLAGS,
 )
 
-srcs_xi_stubs = ['stubs.c']
 libxserver_xi_stubs = static_library('libxserver_xi_stubs',
-    srcs_xi_stubs,
+    'stubs.c',
     include_directories: inc_server,
     dependencies: dep_common,
+    c_args: XSERVER_CFLAGS,
 )

@@ -1,10 +1,10 @@
-srcs = [
+srcs = files(
     'ephyr.c',
     'ephyrinit.c',
     'ephyrcursor.c',
     'ephyr_draw.c',
     'hostx.c',
-]
+)
 
 dep_xephyr = [
     dep_common,
@@ -17,9 +17,11 @@ dep_xephyr = [
 ]
 
 srcs += 'ephyr_glamor.c'
+
 if build_xv
     srcs += 'ephyr_glamor_xv.c'
 endif
+
 dep_xephyr += dep_epoxy
 
 if build_xv
@@ -46,5 +48,6 @@ xephyr_server = executable('Xephyr',
         libxserver_glx,
         libglxvnd,
     ],
+    c_args: XSERVER_CFLAGS,
     install: true,
 )

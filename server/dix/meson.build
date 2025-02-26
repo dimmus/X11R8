@@ -19,7 +19,6 @@ srcs_dix = [
     'globals.c',
     'glyphcurs.c',
     'grabs.c',
-    # 'initatoms.c',
     'inpututils.c',
     'pixmap.c',
     'privates.c',
@@ -39,7 +38,8 @@ srcs_dix = [
 atom_generator = generator(
     find_program('generate-atoms'),
     output: '@BASENAME@.c',
-    arguments : ['@INPUT@', '@OUTPUT@'])
+    arguments : ['@INPUT@', '@OUTPUT@']
+)
 
 builtinatoms_src = atom_generator.process('BuiltInAtoms')
 
@@ -58,13 +58,15 @@ dep_dtrace = declare_dependency(sources: [dtrace_src, dtrace_hdr])
 libxserver_dix = static_library('libxserver_dix',
     [srcs_dix, builtinatoms_src],
     include_directories: inc_server,
-    dependencies: [ dep_dtrace, dep_common, ]
+    dependencies: [ dep_dtrace, dep_common],
+    c_args: XSERVER_CFLAGS,
 )
 
 libxserver_main = static_library('libxserver_main',
     'stubmain.c',
     include_directories: inc_server,
     dependencies: dep_common,
+    c_args: XSERVER_CFLAGS,
 )
 
 install_data('protocol.txt', install_dir: serverconfigdir)

@@ -1,4 +1,4 @@
-srcs_kdrive = [
+srcs_kdrive = files(
     'kcmap.c',
     'kdrive.c',
     'kinfo.c',
@@ -6,7 +6,7 @@ srcs_kdrive = [
     'kshadow.c',
     '../../../mi/miinitext.c',
     '../../../mi/miinitext.h',
-]
+)
 
 if build_xv
     srcs_kdrive += 'kxv.c'

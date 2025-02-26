@@ -162,7 +162,7 @@ xorg_os_support = static_library('xorg_os_support',
         dep_drm,
         dep_os,
     ],
-    c_args: xorg_c_args + os_c_args,
+    c_args: XFREE86_CFLAGS + os_c_args,
 )
 
 install_data(hdrs_xorg_os_support, install_dir: dir_xorg)

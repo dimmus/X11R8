@@ -7,7 +7,7 @@ xorg_dri = static_library('xorg_dri',
     srcs_xorg_dri,
     include_directories: inc_server,
     dependencies: [dep_common, dep_drm],
-    c_args: xorg_c_args,
+    c_args: XFREE86_CFLAGS,
 )
 
 install_data(

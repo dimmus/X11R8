@@ -1,4 +1,4 @@
-srcs_xkb = [
+srcs_xkb = files(
     'ddxBeep.c',
     'ddxCtrls.c',
     'ddxLEDs.c',
@@ -21,22 +21,24 @@ srcs_xkb = [
     'XKBAlloc.c',
     'XKBGAlloc.c',
     'XKBMAlloc.c',
-]
+)
 
 libxserver_xkb = static_library('libxserver_xkb',
     srcs_xkb,
     include_directories: inc_server,
     dependencies: dep_common,
+    c_args: XSERVER_CFLAGS,
 )
 
-srcs_xkb_stubs = [
+srcs_xkb_stubs = files(
     'ddxKillSrv.c',
     'ddxPrivate.c',
     'ddxVT.c',
-]
+)
 
 libxserver_xkb_stubs = static_library('libxserver_xkb_stubs',
     srcs_xkb_stubs,
     include_directories: inc_server,
     dependencies: dep_common,
+    c_args: XSERVER_CFLAGS,
 )

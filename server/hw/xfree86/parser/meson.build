@@ -24,7 +24,7 @@ xorg_parser = static_library('xorg_parser',
     include_directories: inc_server,
     dependencies: dep_common,
     c_args: [
-        xorg_c_args,
+        XFREE86_CFLAGS,
         '-DDATADIR="' + dir_data + '"',
     ],
 )

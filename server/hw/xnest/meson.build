@@ -1,4 +1,4 @@
-srcs = [
+srcs = files(
     'Args.c',
     'Color.c',
     'Cursor.c',
@@ -17,7 +17,7 @@ srcs = [
     'Window.c',
     '../../mi/miinitext.c',
     '../../mi/miinitext.h',
-]
+)
 
 executable('Xnest',
     srcs,
@@ -33,6 +33,11 @@ executable('Xnest',
         libxserver_xkb_stubs,
         lib_xkb,
     ],
-    c_args: [ '-DHAVE_XNEST_CONFIG_H', '-DDISABLE_EXT_COMPOSITE', '-DDISABLE_EXT_DPMS', '-DISABLE_EXT_MITSHM' ],
+    c_args: [
+        '-DHAVE_XNEST_CONFIG_H',
+        '-DDISABLE_EXT_COMPOSITE',
+        '-DDISABLE_EXT_DPMS',
+        '-DDISABLE_EXT_MITSHM'
+    ],
     install: true,
 )

@@ -61,8 +61,8 @@ if build_dga
 endif
 
 if build_xv
-    srcs_xorg_common += ['xf86xv.c', 'xf86xvmc.c']
-    xorg_sdk_headers += ['xf86xv.h', 'xf86xvmc.h', 'xf86xvpriv.h']
+    srcs_xorg_common += files('xf86xv.c', 'xf86xvmc.c')
+    xorg_sdk_headers += files('xf86xv.h', 'xf86xvmc.h', 'xf86xvpriv.h')
 endif
 
 if build_udev
@@ -70,7 +70,7 @@ if build_udev
 endif
 
 if get_option('pciaccess')
-    srcs_xorg_common += ['xf86pciBus.c', 'xf86VGAarbiter.c']
+    srcs_xorg_common += files('xf86pciBus.c', 'xf86VGAarbiter.c')
     if host_machine.cpu() == 'sparc' or host_machine.cpu() == 'sparc64'
         srcs_xorg_common += 'xf86sbusBus.c'
     endif
@@ -93,7 +93,7 @@ xorg_common = static_library('xorg_common',
         dep_drm,
     ],
     c_args: [
-        xorg_c_args,
+        XFREE86_CFLAGS,
         '-DFALLBACK_INPUT_DRIVER="@0@"'.format(fallback_driver)
     ],
 )

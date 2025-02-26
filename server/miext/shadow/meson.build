@@ -1,4 +1,4 @@
-srcs_miext_shadow = [
+srcs_miext_shadow = files(
     'shadow.c',
     'sh3224.c',
     'shafb4.c',
@@ -23,16 +23,13 @@ srcs_miext_shadow = [
     'shrot8pack_90.c',
     'shrot8pack.c',
     'shrotate.c',
-]
-
-hdrs_miext_shadow = [
-    'shadow.h',
-]
+)
 
 libxserver_miext_shadow = static_library('libxserver_miext_shadow',
     srcs_miext_shadow,
     include_directories: inc_server,
     dependencies: dep_common,
+    c_args: XSERVER_CFLAGS,
 )
 
-install_data(hdrs_miext_shadow, install_dir: dir_xorg)
+install_data('shadow.h', install_dir: dir_xorg)

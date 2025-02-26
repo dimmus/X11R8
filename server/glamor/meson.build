@@ -1,4 +1,4 @@
-srcs_glamor = [
+srcs_glamor = files(
     'glamor.c',
     'glamor_copy.c',
     'glamor_core.c',
@@ -31,7 +31,7 @@ srcs_glamor = [
     'glamor_compositerects.c',
     'glamor_utils.c',
     'glamor_sync.c',
-]
+)
 
 if build_glx
     srcs_glamor += 'glamor_glx_provider.c'
@@ -44,6 +44,7 @@ glamor = static_library('glamor',
     srcs_glamor,
     include_directories: [inc_server, inc_server_glx, inc_epoxy],
     dependencies: [dep_common, dep_epoxy],
+    c_args: XSERVER_CFLAGS,
 )
 
 install_data('glamor.h', install_dir: dir_xorg)
