@@ -71,14 +71,8 @@ add_project_arguments(
 
 add_project_arguments(
   '-DHAVE_CONFIG_H',
-  '-D_GNU_SOURCE',
-  '-D_BSD_SOURCE',
-  '-D__EXTENSIONS__',
-  '-D_CONST_X_STRING',
-  '-D_DEFAULT_SOURCE',
   '-DHAVE_DIX_CONFIG_H',
-  '-D__USE_MISC', # test/xfont (used if HAVE_REALPATH true)
-  '-D__USE_XOPEN_EXTENDED', # test/xfont (used if HAVE_REALPATH true)
+  '-D_GNU_SOURCE',
   '-march=x86-64',
   '-mtune=generic',
   '-pipe',
