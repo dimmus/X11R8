@@ -5,9 +5,10 @@ inc_xfs = include_directories('include')
 h_check += 'stdint.h'
 f_check += 'daemon'
 
-lib_args  = ['-D_BSD_SOURCE', '-DFONT_t', '-DTRANS_SERVER', '-DTRANS_REOPEN', '-DTCPCONN']
-lib_args += ['-DXFS_INETD', '-DUSE_SYSLOG']
-lib_args +=  '-DXFSPIDDIR="/var/run"'
+lib_args  = [
+  '-DFONT_t', '-DTRANS_SERVER', '-DTRANS_REOPEN', '-DTCPCONN',
+  '-DXFS_INETD', '-DUSE_SYSLOG', '-DXFSPIDDIR="/var/run"',
+]
 
 dep_int_xfs = [xproto, libxfont]
 

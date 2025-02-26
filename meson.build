@@ -73,6 +73,7 @@ add_project_arguments(
   '-DHAVE_CONFIG_H',
   '-DHAVE_DIX_CONFIG_H',
   '-D_GNU_SOURCE',
+  '-D_DEFAULT_SOURCE', # use instead of deprecated _BSD_SOURCE and _SVID_SOURCE
   '-march=x86-64',
   '-mtune=generic',
   '-pipe',
