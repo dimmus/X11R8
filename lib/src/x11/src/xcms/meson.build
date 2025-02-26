@@ -74,8 +74,3 @@ lib_xcms = static_library('xcms', src,
   dependencies: dep_int_x11,
   install: true,
 )
-
-# libxcms = declare_dependency(
-#   link_with: lib,
-#   include_directories: inc_lib,
-# )
