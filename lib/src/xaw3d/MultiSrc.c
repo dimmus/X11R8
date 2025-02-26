@@ -164,7 +164,7 @@ static void    Destroy(Widget);
 static void    GetValuesHook(Widget, ArgList, Cardinal *);
 static String  StorePiecesInString(MultiSrcObject);
 static Boolean SetValues(Widget, Widget, Widget, ArgList, Cardinal *);
-static Boolean WriteToFile(String, String);
+static Boolean WriteToFile(String, _Xconst char *);
 
 #define MyWStrncpy(t, s, wcnt) (void)memmove((t), (s), (wcnt) * sizeof(wchar_t))
 
@@ -1053,7 +1053,7 @@ RemoveOldStringOrFile(MultiSrcObject src, Boolean checkString)
  */
 
 static Boolean
-WriteToFile(String string, String name)
+WriteToFile(String string, _Xconst char *name)
 {
     int  fd;
     Bool result = True;
