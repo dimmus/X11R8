@@ -153,7 +153,7 @@ dep_gles2        = dependency('glesv2',         required: WITH_INT_EPOXY) # epox
 dep_udev         = dependency('libudev',        required: false) # input/evdev
 dep_evdev        = dependency('libevdev',       required: false) # input/evdev
 dep_input        = dependency('libinput',       required: true, version: '>= 1.11.0') # input/libinput
-dep_cairo        = dependency('cairo',          required: false) # video/intel (test)
+dep_cairo        = dependency('cairo',          required: WITH_TESTS) # video/intel (test)
 dep_png          = dependency('libpng',         required: true ) # video/intel (test, tools)
 dep_drm_intel    = dependency('libdrm_intel',   required: true ) # video/intel
 dep_drm_nouveau  = dependency('libdrm_nouveau', required: true ) # video/nouveau

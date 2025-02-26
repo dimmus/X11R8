@@ -39,10 +39,13 @@ dep_ext_intel = [
   dep_threads,
   dep_pciaccess,
   dep_pixman,
-  # dep_cairo, # for test
   dep_png,
   dep_drm_intel,
 ]
+
+if WITH_TESTS
+  dep_ext_intel += dep_cairo
+endif
 
 dep_intel_drv = [dep_int_intel, dep_ext_intel]
 
