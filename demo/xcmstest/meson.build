@@ -9,7 +9,8 @@ src = files(
 )
 
 executable('xcmstest', src,
-    dependencies: [libxmu, libxext, libx11, libxt, dep_m, libxcms],
+    dependencies: [libxmu, libxext, libx11, libxt, dep_m],
     include_directories: inc_lib,
+    link_with: lib_xcms,
     install: false
 )
