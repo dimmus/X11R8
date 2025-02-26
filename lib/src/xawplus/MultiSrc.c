@@ -1117,10 +1117,10 @@ InitStringOrFile(
 	    src->multi_src.allocated_string = False;
 	    src->multi_src.string = fileName;
 
-	    if (tmpnam(src->multi_src.string) == NULL)
-		XtErrorMsg("NoFile", "multiSourceCreate", "XawError",
-			   "Creating a temporary file.",
-			   NULL, NULL);
+	    if (mkstemp(src->multi_src.string) == 0)
+			XtErrorMsg("NoFile", "multiSourceCreate", "XawError",
+				"Creating a temporary file.",
+				NULL, NULL);
 	    src->multi_src.is_tempfile = TRUE;
 	    open_mode = "w";
 	} else

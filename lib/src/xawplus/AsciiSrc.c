@@ -1017,7 +1017,7 @@ InitStringOrFile(
     case XawtextEdit:
 	if (src->ascii_src.string == NULL) {
 	    src->ascii_src.string = fileName;
-	    if (tmpnam(src->ascii_src.string) == NULL)
+	    if (mkstemp(src->ascii_src.string) == NULL)
 		XtErrorMsg("NoFile", "asciiSourceCreate", "XawError",
 			   "Creating a temporary file.",
 			   NULL, NULL);
