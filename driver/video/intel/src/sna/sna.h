@@ -255,7 +255,7 @@ enum
     FLUSH_TIMER = 0,
     THROTTLE_TIMER,
     EXPIRE_TIMER,
-#if DEBUG_MEMORY
+#ifdef DEBUG_MEMORY
     DEBUG_MEMORY_TIMER,
 #endif
     NUM_TIMERS
@@ -472,7 +472,7 @@ struct sna
 
     struct sna_render render;
 
-#if DEBUG_MEMORY
+#ifdef DEBUG_MEMORY
     struct
     {
         int    pixmap_allocs;

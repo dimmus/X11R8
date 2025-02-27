@@ -74,12 +74,12 @@
 #  define miCopyRegion fbCopyRegion
 #  define miDoCopy     fbDoCopy
 #endif
-
+/* 
 #define DEBUG_MIGRATE     0
 #define DEBUG_PIXMAP      0
 #define DEBUG_OFFSCREEN   0
 #define DEBUG_GLYPH_CACHE 0
-
+ */
 #define UXA_FALLBACK(x)                               \
     if (uxa_get_screen(screen)->fallback_debug)       \
     {                                                 \
@@ -89,7 +89,7 @@
 
 char uxa_drawable_location(DrawablePtr pDrawable);
 
-#if DEBUG_PIXMAP
+#ifdef DEBUG_PIXMAP
 #  define DBG_PIXMAP(a) ErrorF a
 #else
 #  define DBG_PIXMAP(a)

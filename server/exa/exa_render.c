@@ -30,7 +30,7 @@
 
 #include "mipict.h"
 
-#if DEBUG_TRACE_FALL
+#ifdef DEBUG_TRACE_FALL
 static void
 exaCompositeFallbackPictDesc(PicturePtr pict, char *string, int n)
 {
@@ -1033,7 +1033,7 @@ exaComposite(CARD8 op,
     }
 
  fallback:
-#if DEBUG_TRACE_FALL
+#ifdef DEBUG_TRACE_FALL
     exaPrintCompositeFallback(op, pSrc, pMask, pDst);
 #endif
 

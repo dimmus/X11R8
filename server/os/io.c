@@ -53,8 +53,6 @@ SOFTWARE.
 
 #include <dix-config.h>
 
-#undef DEBUG_COMMUNICATION
-
 #include "dixstruct_priv.h"
 
 #ifdef WIN32

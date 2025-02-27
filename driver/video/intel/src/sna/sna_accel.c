@@ -960,7 +960,7 @@ create_pixmap(struct sna *sna,
 #endif
 
     pixmap->usage_hint = usage_hint;
-#if DEBUG_MEMORY
+#ifdef DEBUG_MEMORY
     sna->debug_memory.pixmap_allocs++;
 #endif
 
@@ -993,7 +993,7 @@ __pop_freed_pixmap(struct sna *sna)
     assert(sna_pixmap(pixmap));
     assert(sna_pixmap(pixmap)->header);
 
-#if DEBUG_MEMORY
+#ifdef DEBUG_MEMORY
     sna->debug_memory.pixmap_cached--;
 #endif
 
@@ -1048,7 +1048,7 @@ create_pixmap_hdr(struct sna         *sna,
         pixmap->screen_y = 0;
 #endif
 
-#if DEBUG_MEMORY
+#ifdef DEBUG_MEMORY
         sna->debug_memory.pixmap_allocs++;
 #endif
 
@@ -1657,7 +1657,7 @@ __sna_free_pixmap(struct sna *sna, PixmapPtr pixmap, struct sna_pixmap *priv)
         assert(!priv->shm);
         pixmap->devPrivate.ptr = sna->freed_pixmap;
         sna->freed_pixmap      = pixmap;
-#if DEBUG_MEMORY
+#ifdef DEBUG_MEMORY
         sna->debug_memory.pixmap_cached++;
 #endif
     }
@@ -1677,7 +1677,7 @@ sna_destroy_pixmap(PixmapPtr pixmap)
     assert(pixmap->refcnt > 0);
     if (--pixmap->refcnt) return TRUE;
 
-#if DEBUG_MEMORY
+#ifdef DEBUG_MEMORY
     to_sna_from_pixmap(pixmap)->debug_memory.pixmap_allocs--;
 #endif
 

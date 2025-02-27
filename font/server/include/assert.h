@@ -46,6 +46,7 @@ in this Software without prior written authorization from The Open Group.
  */
 #ifdef DEBUG
 #  include <stdio.h>
+#  include <stdlib.h>
 #  define assert(ex)                                                           \
       {                                                                        \
           if (!(ex))                                                           \

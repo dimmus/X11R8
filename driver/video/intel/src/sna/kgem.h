@@ -448,7 +448,7 @@ kgem_set_mode(struct kgem *kgem, enum kgem_mode mode, struct kgem_bo *bo)
 {
     warn_unless(!kgem->wedged);
 
-#if DEBUG_FLUSH_BATCH
+#ifdef DEBUG_FLUSH_BATCH
     kgem_submit(kgem);
 #endif
 

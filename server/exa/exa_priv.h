@@ -59,7 +59,7 @@
 #define DEBUG_OFFSCREEN		0
 #define DEBUG_GLYPH_CACHE	0
 
-#if DEBUG_TRACE_FALL
+#ifdef DEBUG_TRACE_FALL
 #define EXA_FALLBACK(x)     					\
 do {								\
 	ErrorF("EXA fallback at %s: ", __FUNCTION__);		\
@@ -72,7 +72,7 @@ char
 #define EXA_FALLBACK(x)
 #endif
 
-#if DEBUG_PIXMAP
+#ifdef DEBUG_PIXMAP
 #define DBG_PIXMAP(a) ErrorF a
 #else
 #define DBG_PIXMAP(a)

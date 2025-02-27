@@ -10,6 +10,7 @@ conf.set('HAVE_LIBEVDEV_DEVICE_LOG_FUNCS', '1')
 conf.set('BUILD_PS2COMM', '1') # Optional backend
 conf.set('BUILD_EVENTCOMM', '1') # Optional backend
 conf.set_quoted('SYNAPTICS_VERSION', ver_synaptics)
+conf.set('HAVE_LIBEVDEV_DEVICE_LOG_FUNCS', false) # debug
 
 src = files(
 	'synaptics.c',

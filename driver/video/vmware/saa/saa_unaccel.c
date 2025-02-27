@@ -74,7 +74,7 @@ saa_check_fill_spans(DrawablePtr pDrawable,
     struct saa_gc_priv     *sgc     = saa_gc(pGC);
     saa_access_t            access;
 
-    SAA_FALLBACK(("to %p (%c)\n", pDrawable, saa_drawable_location(pDrawable)));
+    SAA_FALLBACK(("to %p (%c)\n", pDrawable, saa_drawable_loc(pDrawable)));
 
     sscreen->fallback_count++;
     if (saa_pad_write(pDrawable, NULL, FALSE, &access))

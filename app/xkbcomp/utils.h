@@ -33,11 +33,11 @@
 #include "config.h"
 #endif
 
-#include 	<stdio.h>
-#include 	<stdlib.h>
-#include	<X11/Xos.h>
-#include	<X11/Xfuncproto.h>
-#include	<X11/Xfuncs.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <X11/Xos.h>
+#include <X11/Xfuncproto.h>
+#include <X11/Xfuncs.h>
 
 #include <stddef.h>
 

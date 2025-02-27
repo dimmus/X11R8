@@ -49,7 +49,6 @@ typedef struct _damageGCPriv
     GCFuncs *funcs;
 } DamageGCPrivRec, *DamageGCPrivPtr;
 
-#define DAMAGE_VALIDATE_ENABLE 0
 #define DAMAGE_DEBUG_ENABLE    0
 #if DAMAGE_DEBUG_ENABLE
 #  define DAMAGE_DEBUG(x) ErrorF x

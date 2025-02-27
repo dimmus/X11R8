@@ -6,6 +6,8 @@ conf_intel.set('PACKAGE_VERSION_MAJOR', version[0])
 conf_intel.set('PACKAGE_VERSION_MINOR', version[1])
 conf_intel.set('PACKAGE_VERSION_PATCHLEVEL', version[2])
 conf_intel.set_quoted('LIBEXEC_PATH', dir_libexec)
+conf_intel.set('HAS_DEBUG_FULL', false)
+conf_intel.set('DEBUG_MEMORY', false)
 
 inc_intel = [
   include_directories(

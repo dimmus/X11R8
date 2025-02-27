@@ -101,6 +101,7 @@ dir_xorg_module  = dir_lib / 'xorg' / 'modules' # drivers
 dir_xorg_conf    = dir_data / 'X11' / 'xorg.conf.d' # drivers
 dir_xorg         = dir_include / 'xorg' # server
 
+WITH_DEBUG       = get_option('build-debug')
 WITH_FONT_SERVER = get_option('build-font-server')
 WITH_TESTS       = get_option('build-test')
 WITH_DOC         = get_option('build-doc')
@@ -110,7 +111,6 @@ WITH_INT_EPOXY   = get_option('build-static-epoxy')
 WITH_DEMO        = get_option('build-demo')
 WITH_APP         = get_option('build-app')
 WITH_DTRACE      = get_option('dtrace')
-WITH_XTHREAD_DBG = false
 
 dep_m            = cc.find_library('m',         required: true)  # libxcvt
 dep_dl           = cc.find_library('dl',        required: false) # xvmc, xserver, static/epoxy
@@ -243,9 +243,6 @@ conf.set('HAVE_UNLOCKED_STDIO', cc.has_function('getc_unlocked'))
 conf.set('XTHREADS',                '1')
 conf.set('XUSE_MTSAFE_API',         '1')
 conf.set('X_FORCE_USE_MTSAFE_API',  '1')
-conf.set('XTHREADS_WARN',           WITH_XTHREAD_DBG ? '1' : false)
-conf.set('XTHREADS_FILE_LINE',      WITH_XTHREAD_DBG ? '1' : false)
-conf.set('XTHREADS_DEBUG',          WITH_XTHREAD_DBG ? '1' : false)
 
 if WITH_DOC
 if WITH_DOC_MAN
@@ -255,6 +252,45 @@ exe_sed  = find_program('sed',      required: false)
 # fop      = find_program('fop',      required: false) # require_docs_pdf
 subdir('doc' / 'man')
 endif
+endif
+
+if WITH_DEBUG
+  conf.set('DEBUG', true)
+  
+  conf.set('XTHREADS_WARN', true)
+  conf.set('XTHREADS_DEBUG', true)
+  conf.set('XTHREADS_FILE_LINE', true)
+  
+  # twm
+  conf.set('DEBUG_EVENTS', true)
+  conf.set('DEBUG_ICONMGR', true)
+  conf.set('DEBUG_MENUS', true)
+
+  conf.set('XTRANSDEBUG', '5') # level 1-5
+  conf.set('XTRANSDEBUGTIMESTAMP', false)
+
+  # mowitz
+  conf.set('DEBUG_GEOM', true)
+  conf.set('DEBUG_TF', true)
+  
+  conf.set('FONTDEBUG', true)
+  conf.set('XNL_DEBUG', true)
+  conf.set('DEBUG_WO_TIMERS', true)
+  
+  # server
+  conf.set('COMPOSITE_DEBUG', true)
+  conf.set('SMART_DEBUG', true)
+  conf.set('DEBUG_EVENTS', true)
+  conf.set('PTRACCEL_DEBUGGING', true)
+  conf.set('DEBUG_GLYPH_CACHE', true)
+  conf.set('DEBUG_TRACE_FALL', false) # error in driver/video/vmeare (saa)
+  conf.set('FB_DEBUG', true)
+  conf.set('DEBUGOVERSCAN', true)
+  conf.set('SPRITE_DEBUG_ENABLE', true)
+  conf.set('DAMAGE_VALIDATE_ENABLE', true)
+  conf.set('ROOTLESSDEBUG', true)
+  conf.set('FAMILY_SI_DEBUG', true)
+  conf.set('DEBUG_COMMUNICATION', true)
 endif
 
 configure_file(output: 'config.h',  configuration: conf)

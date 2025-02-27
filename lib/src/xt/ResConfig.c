@@ -945,7 +945,7 @@ dump_widget_tree(Widget w, int indent)
 #endif
 
 /*
- * NAME: _XtResourceConfiguationEH
+ * NAME: _XtResourceConfigurationEH
  *
  * FUNCTION:
  *      This function is the event handler for the on-the-fly communication
@@ -993,7 +993,7 @@ _XtResourceConfigurationEH(Widget                        w,
 
 #ifdef DEBUG
     fprintf(stderr,
-            "in _XtResourceConfiguationEH atom = %u\n",
+            "in _XtResourceConfigurationEH atom = %u\n",
             (unsigned)event->xproperty.atom);
     fprintf(stderr, "    window = %x\n", (unsigned)XtWindow(w));
     if (XtIsWidget(w))

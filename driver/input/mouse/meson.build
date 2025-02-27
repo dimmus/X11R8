@@ -4,6 +4,7 @@ driver_version = ver_mouse.split('.')
 conf.set('MOUSE_VERSION_MAJOR',      driver_version[0])
 conf.set('MOUSE_VERSION_MINOR',      driver_version[1])
 conf.set('MOUSE_VERSION_PATCHLEVEL', driver_version[2])
+conf.set('EXTMOUSEDEBUG', false) # debug
 
 # OS_MOUSE_NAME = 'lnx'
 # OS_MOUSE_NAME = 'bsd'  # freebsd*|kfreebsd*-gnu|dragonfly*|netbsd*|openbsd*

@@ -89,7 +89,7 @@
 
 char uxa_drawable_location(DrawablePtr pDrawable);
 
-#if DEBUG_PIXMAP
+#ifdef DEBUG_PIXMAP
 #  define DBG_PIXMAP(a) ErrorF a
 #else
 #  define DBG_PIXMAP(a)

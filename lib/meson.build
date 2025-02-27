@@ -42,7 +42,6 @@ if WITH_TESTS
 subdir('test')
 endif
 
-summary_lib += {'XTHREADS_DBG': WITH_XTHREAD_DBG}
 summary_lib += {'XCMS': get_option('xcms')}
 summary_lib += {'XLOCALE': get_option('xlocale')}
 summary_lib += {'XF86BIGFONT': get_option('xf86bigfont')}

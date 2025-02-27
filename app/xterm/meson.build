@@ -121,8 +121,34 @@ h_check += [
 # conf_xterm.set_quoted('OWN_TERMINFO_DIR', '/usr/lib/terminfo') # Define to override default TERMINFO value
 # conf_xterm.set_quoted('PROCFS_ROOT', '/proc') # This is defined via the --enable-exec-xterm option
 
+# conf_xterm.set('DEBUG_ALPHABET_LOOKUP', true)
+# conf_xterm.set('DEBUG_ALPHABETS', true)
+# conf_xterm.set('DEBUG_ARC_CENTER', true)
+# conf_xterm.set('DEBUG_ARC_END', true)
+# conf_xterm.set('DEBUG_ARC_POINTS', true)
+# conf_xterm.set('DEBUG_ARC_START', true)
+# conf_xterm.set('DEBUG_BEZIER', true)
+# conf_xterm.set('DEBUG_COMPUTED_FONT_METRICS', true)
+# conf_xterm.set('DEBUG_FONT_NAME', true)
+# conf_xterm.set('DEBUG_FONT_SIZE_SEARCH', true)
+# conf_xterm.set('DEBUG_GLYPH_RETRIEVAL', true)
+# conf_xterm.set('DEBUG_LOAD', true)
+# conf_xterm.set('DEBUG_PALETTE', true)
+# conf_xterm.set('DEBUG_PARSING', true)
+# conf_xterm.set('DEBUG_PIXEL', true)
+# conf_xterm.set('DEBUG_REFRESH', true)
+# conf_xterm.set('DEBUG_SPECIFIC_CHAR_METRICS', true)
+# conf_xterm.set('DEBUG_SPLINE_POINTS', true)
+# conf_xterm.set('DEBUG_SPLINE_SEGMENTS', true)
+# conf_xterm.set('DEBUG_SPLINE_WITH_OVERDRAW', true)
+# conf_xterm.set('DEBUG_SPLINE_WITH_ROTATION', true)
+# conf_xterm.set('DEBUG_XFT', true)
+# conf_xterm.set('DEBUG_XFT_GLYPH', true)
+# conf_xterm.set('DEBUG_XFT_GLYPH_COPY', true)
+# conf_xterm.set('DEBUG_XFT_GLYPH_LOADING', true)
+
 # configure_file(
-#   output: 'config_xterm.h',
+#   output: 'xtermcfg.h',
 #   configuration: conf_xterm
 # )
 

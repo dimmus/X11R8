@@ -60,7 +60,7 @@ exaFinishAccessGC(GCPtr pGC)
         exaFinishAccess(&pGC->stipple->drawable, EXA_PREPARE_MASK);
 }
 
-#if DEBUG_TRACE_FALL
+#ifdef DEBUG_TRACE_FALL
 char
 exaDrawableLocation(DrawablePtr pDrawable)
 {

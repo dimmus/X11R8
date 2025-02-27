@@ -105,16 +105,16 @@ struct saa_screen_priv
 
 extern GCOps saa_gc_ops;
 
-#if DEBUG_TRACE_FALL
+#ifdef DEBUG_TRACE_FALL
 #  define SAA_FALLBACK(x)                               \
-      do                                                \
-      {                                                 \
-          ErrorF("SAA fallback at %s: ", __FUNCTION__); \
-          ErrorF x;                                     \
-      }                                                 \
-      while (0)
+    do                                                \
+    {                                                 \
+        ErrorF("SAA fallback at %s: ", __FUNCTION__); \
+        ErrorF x;                                     \
+    }                                                 \
+    while (0);
 
-#  define saa_drawable_location() ("u")
+#  define saa_drawable_loc() ("u")
 #else
 #  define SAA_FALLBACK(x)
 #endif

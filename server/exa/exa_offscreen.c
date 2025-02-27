@@ -32,13 +32,13 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#if DEBUG_OFFSCREEN
+#ifdef DEBUG_OFFSCREEN
 #define DBG_OFFSCREEN(a) ErrorF a
 #else
 #define DBG_OFFSCREEN(a)
 #endif
 
-#if DEBUG_OFFSCREEN
+#ifdef DEBUG_OFFSCREEN
 static void
 ExaOffscreenValidate(ScreenPtr pScreen)
 {
@@ -167,7 +167,7 @@ exaOffscreenAlloc(ScreenPtr pScreen, int size, int align,
     ExaScreenPriv(pScreen);
     int real_size = 0, largest_avail = 0;
 
-#if DEBUG_OFFSCREEN
+#ifdef DEBUG_OFFSCREEN
     static int number = 0;
 
     ErrorF("================= ============ allocating a new pixmap %d\n",
@@ -596,7 +596,7 @@ ExaOffscreenDefragment(ScreenPtr pScreen)
         if (!area->prev->next)
             pExaScr->info->offScreenAreas = area;
 
-#if DEBUG_OFFSCREEN
+#ifdef DEBUG_OFFSCREEN
         if (prev->prev == prev || prev->next == prev)
             ErrorF("Whoops, prev points to itself!\n");
 

@@ -25,10 +25,13 @@
    * software without specific, written prior permission.
    \*/
 
-#include 	"utils.h"
-#include	<ctype.h>
-#include	<stdlib.h>
-#include	<stdarg.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <stdarg.h>
+
+#include <X11/Xlib.h>
+
+#include "utils.h"
 
 
 /***====================================================================***/

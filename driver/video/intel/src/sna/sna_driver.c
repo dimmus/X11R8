@@ -1568,17 +1568,17 @@ describe_sna(ScrnInfoPtr scrn)
                X_INFO,
                "SNA compiled with assertions enabled\n");
 #endif
-#if DEBUG_SYNC
+#ifdef DEBUG_SYNC
     xf86DrvMsg(scrn->scrnIndex,
                X_INFO,
                "SNA compiled with synchronous rendering\n");
 #endif
-#if DEBUG_MEMORY
+#ifdef DEBUG_MEMORY
     xf86DrvMsg(scrn->scrnIndex,
                X_INFO,
                "SNA compiled with memory allocation reporting enabled\n");
 #endif
-#if DEBUG_PIXMAP
+#ifdef DEBUG_PIXMAP
     xf86DrvMsg(scrn->scrnIndex,
                X_INFO,
                "SNA compiled with extra pixmap/damage validation\n");

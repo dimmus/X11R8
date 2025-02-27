@@ -223,7 +223,7 @@ exaDestroyPixmap_classic(PixmapPtr pPixmap)
 
         if (pExaPixmap->area) {
             DBG_PIXMAP(("-- 0x%p (0x%x) (%dx%d)\n",
-                        (void *) pPixmap->drawable.id,
+                        (void *) (intptr_t) pPixmap->drawable.id,
                         ExaGetPixmapPriv(pPixmap)->area->offset,
                         pPixmap->drawable.width, pPixmap->drawable.height));
             /* Free the offscreen area */

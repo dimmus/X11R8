@@ -33,7 +33,7 @@
 #include "exa_priv.h"
 #include "exa.h"
 
-#if DEBUG_MIGRATE
+#ifdef DEBUG_MIGRATE
 #define DBG_MIGRATE(a) ErrorF a
 #else
 #define DBG_MIGRATE(a)
@@ -148,7 +148,7 @@ exaCopyDirty(ExaMigrationPtr migrate, RegionPtr pValidDst, RegionPtr pValidSrc,
         if (pExaScr->optimize_migration) {
             RegionPtr pending_damage = DamagePendingRegion(pExaPixmap->pDamage);
 
-#if DEBUG_MIGRATE
+#ifdef DEBUG_MIGRATE
             if (RegionNil(pending_damage)) {
                 static Bool firsttime = TRUE;
 
@@ -404,7 +404,7 @@ exaDoMoveOutPixmap(ExaMigrationPtr migrate)
     if (exaPixmapHasGpuCopy(pPixmap)) {
 
         DBG_MIGRATE(("<- %p (%p) (%dx%d) (%c)\n", pPixmap,
-                     (void *) (ExaGetPixmapPriv(pPixmap)->area ?
+                     (void *) (intptr_t) (ExaGetPixmapPriv(pPixmap)->area ?
                                ExaGetPixmapPriv(pPixmap)->area->offset : 0),
                      pPixmap->drawable.width,
                      pPixmap->drawable.height,

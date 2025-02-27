@@ -57,8 +57,6 @@
      (a)->x2 == (b)->x2 && \
      (a)->y2 == (b)->y2)
 
-#define DAMAGE_VALIDATE_ENABLE 0
-#define DAMAGE_DEBUG_ENABLE 0
 #if DAMAGE_DEBUG_ENABLE
 #define DAMAGE_DEBUG(x)	ErrorF x
 #else

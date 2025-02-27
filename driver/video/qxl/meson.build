@@ -9,6 +9,8 @@ f_check += 'inotify_init1'
 conf.set('HAVE_XFONT2',  true)
 conf.set('XF86DRM_MODE', true) # DRM kernel modesetting
 conf.set('HAVE_LIBUDEV', true)
+conf.set('DEBUG_QXL_MEM', false)
+conf.set('DEBUG_QXL_MEM_VERBOSE', false)
 
 dep_ext_qxl = [dep_drm, dep_pciaccess, dep_udev, dep_pixman]
 

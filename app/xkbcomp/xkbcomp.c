@@ -893,10 +893,6 @@ GetDisplay(const char *program, const char *dpyName)
 
 /***====================================================================***/
 
-#ifdef DEBUG
-extern int yydebug;
-#endif
-
 int
 main(int argc, char *argv[])
 {
@@ -916,10 +912,6 @@ main(int argc, char *argv[])
     XkbInitIncludePath();
     if (!parseArgs(argc, argv))
         exit(1);
-#ifdef DEBUG
-    if (debugFlags & 0x2)
-        yydebug = 1;
-#endif
     if (preErrorMsg)
         uSetPreErrorMessage(preErrorMsg);
     if (errorPrefix)

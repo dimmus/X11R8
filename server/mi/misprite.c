@@ -129,7 +129,6 @@ typedef struct {
 #define LINE_OVERLAP(pCbox,x1,y1,x2,y2,lw2) \
     BOX_OVERLAP((pCbox), (x1)-(lw2), (y1)-(lw2), (x2)+(lw2), (y2)+(lw2))
 
-#define SPRITE_DEBUG_ENABLE 0
 #if SPRITE_DEBUG_ENABLE
 #define SPRITE_DEBUG(x)	ErrorF x
 #else
