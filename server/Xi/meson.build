@@ -58,6 +58,7 @@ libxserver_xi = static_library('libxserver_xi',
     include_directories: inc_server,
     dependencies: dep_common,
     c_args: XSERVER_CFLAGS,
+    link_args: XSERVER_LDFLAGS,
 )
 
 libxserver_xi_stubs = static_library('libxserver_xi_stubs',
@@ -65,4 +66,5 @@ libxserver_xi_stubs = static_library('libxserver_xi_stubs',
     include_directories: inc_server,
     dependencies: dep_common,
     c_args: XSERVER_CFLAGS,
+    link_args: XSERVER_LDFLAGS,
 )

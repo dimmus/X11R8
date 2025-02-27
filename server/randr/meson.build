@@ -30,6 +30,7 @@ libxserver_randr = static_library('libxserver_randr',
     include_directories: inc_server,
     dependencies: dep_common,
     c_args: XSERVER_CFLAGS,
+    link_args: XSERVER_LDFLAGS,
 )
 
 install_data(hdrs_randr, install_dir: dir_xorg)

@@ -66,6 +66,7 @@ libxserver_xext = static_library('libxserver_xext',
     include_directories: inc_server,
     dependencies: dep_common,
     c_args: XSERVER_CFLAGS,
+    link_args: XSERVER_LDFLAGS,
 )
 
 libxserver_xext_vidmode = static_library('libxserver_xext_vidmode',
@@ -73,6 +74,7 @@ libxserver_xext_vidmode = static_library('libxserver_xext_vidmode',
     include_directories: inc_server,
     dependencies: dep_common,
     c_args: XSERVER_CFLAGS,
+    link_args: XSERVER_LDFLAGS,
 )
 
 install_data(hdrs_xext, install_dir: dir_xorg)

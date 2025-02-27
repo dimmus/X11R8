@@ -12,6 +12,7 @@ libxserver_miext_damage = static_library('libxserver_miext_damage',
 	include_directories: inc_server,
 	dependencies: dep_common,
 	c_args: XSERVER_CFLAGS,
+	link_args: XSERVER_LDFLAGS,
 )
 
 install_data(hdrs_miext_damage, install_dir: dir_xorg)

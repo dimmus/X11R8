@@ -49,5 +49,6 @@ xephyr_server = executable('Xephyr',
         libglxvnd,
     ],
     c_args: XSERVER_CFLAGS,
+    link_args: XSERVER_LDFLAGS,
     install: true,
 )

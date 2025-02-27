@@ -43,6 +43,7 @@ libxserver_mi = static_library('libxserver_mi',
   include_directories: inc_server,
   dependencies: [dep_common, dep_m],
   c_args: XSERVER_CFLAGS,
+  link_args: XSERVER_LDFLAGS,
 )
 
 install_data(hdrs_mi, install_dir: dir_xorg)

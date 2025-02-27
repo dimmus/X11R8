@@ -30,6 +30,7 @@ libxserver_miext_shadow = static_library('libxserver_miext_shadow',
     include_directories: inc_server,
     dependencies: dep_common,
     c_args: XSERVER_CFLAGS,
+    link_args: XSERVER_LDFLAGS,
 )
 
 install_data('shadow.h', install_dir: dir_xorg)

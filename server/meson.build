@@ -7,6 +7,10 @@ XSERVER_CFLAGS = [
     '-DHAVE_XORG_CONFIG_H',
 ]
 
+XSERVER_LDFLAGS = [
+    '-Wl,-z,lazy'
+]
+
 build_systemd_notify = get_option('systemd_notify') == 'true'
 # libsystemd-daemon was moved into libsystemd in version 209
 dep_libsystemd_daemon = dep_systemd

@@ -17,6 +17,7 @@ libxserver_exa = static_library('libxserver_exa',
     include_directories: inc_server,
     dependencies: dep_common,
     c_args: XSERVER_CFLAGS,
+    link_args: XSERVER_LDFLAGS,
 )
 
 install_data('exa.h', install_dir: dir_xorg)

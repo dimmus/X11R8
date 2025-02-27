@@ -15,6 +15,7 @@ libxserver_composite = static_library('libxserver_composite',
 	include_directories: inc_server,
 	dependencies: dep_common,
 	c_args: XSERVER_CFLAGS,
+	link_args: XSERVER_LDFLAGS,
 )
 
 install_data(hdrs_composite, install_dir: dir_xorg)

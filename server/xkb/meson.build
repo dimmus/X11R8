@@ -28,6 +28,7 @@ libxserver_xkb = static_library('libxserver_xkb',
     include_directories: inc_server,
     dependencies: dep_common,
     c_args: XSERVER_CFLAGS,
+    link_args: XSERVER_LDFLAGS,
 )
 
 srcs_xkb_stubs = files(
@@ -41,4 +42,5 @@ libxserver_xkb_stubs = static_library('libxserver_xkb_stubs',
     include_directories: inc_server,
     dependencies: dep_common,
     c_args: XSERVER_CFLAGS,
+    link_args: XSERVER_LDFLAGS,
 )

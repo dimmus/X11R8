@@ -45,6 +45,7 @@ glamor = static_library('glamor',
     include_directories: [inc_server, inc_server_glx, inc_epoxy],
     dependencies: [dep_common, dep_epoxy],
     c_args: XSERVER_CFLAGS,
+    link_args: XSERVER_LDFLAGS,
 )
 
 install_data('glamor.h', install_dir: dir_xorg)

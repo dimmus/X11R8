@@ -60,6 +60,7 @@ libxserver_dix = static_library('libxserver_dix',
     include_directories: inc_server,
     dependencies: [ dep_dtrace, dep_common],
     c_args: XSERVER_CFLAGS,
+    link_args: XSERVER_LDFLAGS,
 )
 
 libxserver_main = static_library('libxserver_main',
@@ -67,6 +68,7 @@ libxserver_main = static_library('libxserver_main',
     include_directories: inc_server,
     dependencies: dep_common,
     c_args: XSERVER_CFLAGS,
+    link_args: XSERVER_LDFLAGS,
 )
 
 install_data('protocol.txt', install_dir: serverconfigdir)

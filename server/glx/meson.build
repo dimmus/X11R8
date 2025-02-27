@@ -45,7 +45,8 @@ if build_glx
             XSERVER_CFLAGS,
             glx_align64,
             '-Wno-unused-function',
-        ]
+        ],
+        link_args: XSERVER_LDFLAGS,
     )
 endif
 
@@ -68,7 +69,7 @@ if build_glx
         include_directories: inc_server,
         dependencies: [dep_common, dep_dl, dep_gl],
         c_args: XSERVER_CFLAGS,
+        link_args: XSERVER_LDFLAGS,
     )
-
     install_data('vndserver.h', install_dir: dir_xorg)
 endif

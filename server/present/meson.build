@@ -21,6 +21,7 @@ libxserver_present = static_library('libxserver_present',
     include_directories: inc_server,
     dependencies: [dep_common, dep_epoll],
     c_args: XSERVER_CFLAGS,
+    link_args: XSERVER_LDFLAGS,
 )
 
 install_data(hdrs_present, install_dir: dir_xorg)

@@ -11,6 +11,7 @@ if build_dri3
         include_directories: inc_server,
         dependencies: [dep_common, dep_drm],
         c_args: XSERVER_CFLAGS,
+        link_args: XSERVER_LDFLAGS,
     )
 endif
 
