@@ -1,5 +1,5 @@
 ## BUILD
-option('build-debug',           type: 'boolean', value: true )
+option('build-debug',           type: 'boolean', value: false)
 option('build-font-server',     type: 'boolean', value: true )
 option('build-input-evdev',     type: 'boolean', value: false) # replaced by libinput
 option('build-input-synaptics', type: 'boolean', value: false) # replaced by libinput
