@@ -102,7 +102,7 @@ LoaderOpen(const char *module, int *errmaj)
 
     LogMessage(X_INFO, "Loading %s\n", module);
 
-    if (!(ret = dlopen(module, RTLD_LAZY | RTLD_GLOBAL))) {
+    if (!(ret = dlopen(module, RTLD_NOW | RTLD_GLOBAL))) {
         LogMessage(X_ERROR, "Failed to load %s: %s\n", module, dlerror());
         if (errmaj)
             *errmaj = LDR_NOLOAD;
@@ -123,7 +123,7 @@ LoaderSymbol(const char *name)
         return p;
 
     if (!global_scope)
-        global_scope = dlopen(NULL, RTLD_LAZY | RTLD_GLOBAL);
+        global_scope = dlopen(NULL, RTLD_NOW | RTLD_GLOBAL);
 
     if (global_scope)
         return dlsym(global_scope, name);

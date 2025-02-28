@@ -8,7 +8,7 @@ XSERVER_CFLAGS = [
 ]
 
 XSERVER_LDFLAGS = [
-    '-Wl,-z,lazy'
+    '-Wl,-z,now'
 ]
 
 build_systemd_notify = get_option('systemd_notify') == 'true'

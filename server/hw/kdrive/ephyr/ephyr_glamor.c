@@ -254,7 +254,7 @@ ephyr_glamor_connect(void)
             return NULL;
 
         if (x_get_xcb_connection == NULL) {
-            lib = dlopen("libX11-xcb.so.1", RTLD_LOCAL | RTLD_LAZY);
+            lib = dlopen("libX11-xcb.so.1", RTLD_LOCAL | RTLD_NOW);
             x_get_xcb_connection =
                 (void *) dlsym(lib, "XGetXCBConnection");
         }

@@ -619,7 +619,7 @@ XInitThreads(void)
 #  ifdef __UNIXWARE__
     else
     {
-        void *dl_handle = dlopen(NULL, RTLD_LAZY);
+        void *dl_handle = dlopen(NULL, RTLD_NOW);
         if (!dl_handle ||
             ((_x11_thr_self = (xthread_t(*)())dlsym(dl_handle, "thr_self")) ==
              0))

@@ -321,7 +321,7 @@ glxProbeDriver(const char *driverName,
         snprintf(filename, sizeof filename, "%.*s/%s_dri.so", path_len, path,
                  driverName);
 
-        driver = dlopen(filename, RTLD_LAZY | RTLD_LOCAL);
+        driver = dlopen(filename, RTLD_NOW | RTLD_LOCAL);
         if (driver != NULL)
             break;
 

@@ -305,7 +305,7 @@ get_dlopen_handle(void **handle, const char *lib_name, bool exit_on_fail, bool l
 #else
     pthread_mutex_lock(&api.mutex);
     if (!*handle) {
-        int flags = RTLD_LAZY | RTLD_LOCAL;
+        int flags = RTLD_NOW | RTLD_LOCAL;
         if (!load)
             flags |= RTLD_NOLOAD;
 

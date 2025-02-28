@@ -304,7 +304,7 @@ open_object(XI18NObjectsList object, char *lc_dir)
     {
         path = __lc_path(object->dl_name, lc_dir);
         if (!path) return False;
-        object->dl_module = dlopen(path, RTLD_LAZY);
+        object->dl_module = dlopen(path, RTLD_NOW);
         Xfree(path);
 
         if (!object->dl_module) return False;

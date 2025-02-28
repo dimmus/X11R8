@@ -328,7 +328,7 @@ preInitW(Display *dpy)
     wrapperPreInit    = 1;
     xW.preInitialised = 0;
     xW.initialised    = 0;
-    xvhandle = dlopenversion("libXv.so", XV_SOVERSION, RTLD_LAZY | RTLD_GLOBAL);
+    xvhandle = dlopenversion("libXv.so", XV_SOVERSION, RTLD_NOW | RTLD_GLOBAL);
     if (!xvhandle)
     {
         fprintf(stderr,
@@ -339,7 +339,7 @@ preInitW(Display *dpy)
                 dlerror());
     }
     handle2 =
-        dlopenversion("libXvMC.so", XVMC_SOVERSION, RTLD_LAZY | RTLD_GLOBAL);
+        dlopenversion("libXvMC.so", XVMC_SOVERSION, RTLD_NOW | RTLD_GLOBAL);
     if (!handle2)
     {
         fprintf(stderr,
@@ -414,7 +414,7 @@ initW(Display *dpy, XvPortID port)
         strncpy(nameBuffer + nameLen, ".so", BUFLEN - nameLen - 1);
         nameBuffer[BUFLEN - 1] = 0;
         XFree(clientName);
-        handle = dlopenversion(nameBuffer, XVMC_SOVERSION, RTLD_LAZY);
+        handle = dlopenversion(nameBuffer, XVMC_SOVERSION, RTLD_NOW);
     }
     else
     {
@@ -471,7 +471,7 @@ initW(Display *dpy, XvPortID port)
                 return;
             }
         }
-        handle = dlopen(nameBuffer, RTLD_LAZY);
+        handle = dlopen(nameBuffer, RTLD_NOW);
     }
     if (!handle)
     {

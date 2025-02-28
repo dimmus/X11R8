@@ -56,7 +56,7 @@ open_library(void)
     XModuleType module;
     for (;;)
     {
-        module = dlopen(library, RTLD_LAZY);
+        module = dlopen(library, RTLD_NOW);
         if (module) return module;
         dot = strrchr(library, '.');
         if (!dot) break;
